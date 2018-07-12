@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL  拆分单词  12String contents = new String(Files.readAllBytes(Paths.get(&quot;&quot;),StandardCharsets.U">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="busyman Notes">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/21/busyman/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL  拆分单词  12String contents = new String(Files.readAllBytes(Paths.get(&quot;&quot;),StandardCharsets.U">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/pl.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/throwable.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.316Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="busyman Notes">
+<meta name="twitter:description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL  拆分单词  12String contents = new String(Files.readAllBytes(Paths.get(&quot;&quot;),StandardCharsets.U">
+<meta name="twitter:image" content="https://iotaa.xyz/images/pl.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/21/busyman/"/>
+
+
+
+
+
+  <title>busyman Notes | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/21/busyman/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">busyman Notes</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T13:59:49+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>signature???<br>方法签名就由方法名+形参列表构成</p>
+<h2 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h2><ol>
+<li>计算很长数组的总和<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> sum = IntStream.of(a).parallel().sum();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><ol>
+<li><p>统计一本书中的长单词<br> \PL<br> <img src="/images/pl.jpg" alt="pl"><br> 拆分单词</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String contents = <span class="keyword">new</span> String(Files.readAllBytes(Paths.get(<span class="string">""</span>),StandardCharsets.UTF_8));</span><br><span class="line">List&lt;String&gt; words = Arrays.asList(contents.split(<span class="string">"\PL+"</span>));</span><br></pre></td></tr></table></figure>
+<p> stream代替迭代 </p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> count = aaa.stream().filter(w-&gt;w.length()&gt;<span class="number">12</span>).count();</span><br><span class="line">System.out.println(count);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所有单词转换成小写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;String&gt; lower = words.stream().map(String::toLowerCase);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>每个单词的第一个字母</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;String&gt; first = words.stream().map(s-&gt;s.substring(<span class="number">0</span>,<span class="number">1</span>));</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="创建流"><a href="#创建流" class="headerlink" title="创建流"></a>创建流</h3><ol>
+<li>集合-&gt;流：Collection.stream()</li>
+<li>数组-&gt;流：Stream.of</li>
+<li>Arrays.stream(array,from,to)</li>
+</ol>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><ol>
+<li><code>Stream&lt;Stream&lt;String&gt;&gt;</code>用<code>.flatMap(lambda)</code></li>
+<li><code>.limit(int)</code>前int N个元素；<code>.skip(n)</code>丢弃前n个元素；<code>.concat(stream,stream)</code>拼接流</li>
+<li><code>.distinct()</code>删除重复元素</li>
+<li><code>Optional</code>防止空指针引用，对null封装默认值</li>
+</ol>
+<h3 id="收集"><a href="#收集" class="headerlink" title="收集"></a>收集</h3><ol>
+<li><code>toArray</code></li>
+<li><code>stream.collect(Collectors.toList/toSet/toCollection(TreeSet::new))</code></li>
+<li>收集一个国家的语言<code>Map&lt;String,List&lt;Local&gt;&gt;&#39;</code>处理相同键<ol>
+<li>分类函数：<code>.collect(Collectors.groupingBy(Local::getCountry))</code></li>
+<li>当分类函数是布尔值<code>.partitioningBy(l-&gt;l.getLanguage().equal(&quot;en&quot;));</code></li>
+<li>groupingBy可以针对<code>List&lt;Local&gt;</code>加下游收集器参数<code>toSet()</code>等</li>
+</ol>
+</li>
+<li>求一个流所有字符串总长度,reduce要求(T,T)-&gt;T返回值和参数 类型一样<br>累加器函数：<code>(total,word)-&gt;total+word</code> reduce并行所以最后total要汇总（注意线程安全）<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> result = aaa.stream().reduce(<span class="number">0</span>,(total,word)-&gt;total+word.length(),</span><br><span class="line">    (total1,total2)-&gt;total1+total2);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>映射到一个数字流<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> m2i=aaa.stream().mapToInt(String::length).sum();</span><br></pre></td></tr></table></figure></p>
+<h3 id="避免装箱，基本类型流"><a href="#避免装箱，基本类型流" class="headerlink" title="避免装箱，基本类型流"></a>避免装箱，基本类型流</h3><ol>
+<li>byte\short\char\boolean使用<code>IntStream.of(1,2,3,4)</code>和Arrays.stream</li>
+</ol>
+<h3 id="并行流"><a href="#并行流" class="headerlink" title="并行流"></a>并行流</h3><ol>
+<li>不能使用<code>paralineStream.forEach</code> forEach中的函数会在多个线程中并发执行，更新共享的数组</li>
+<li>按长度将字符串进行分组并计数<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Long&gt; shortWordCount = aaa.parallelStream()</span><br><span class="line">    .filter(s-&gt;s.length()&lt;<span class="number">10</span>)</span><br><span class="line">    .collect(groupingBy(String::length,counting()));</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>并发收集<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,List&lt;String&gt;&gt; result = aaa.parallelStream()</span><br><span class="line">    .collect(Collectors</span><br><span class="line">        .groupingByConcurrent(String::length));</span><br></pre></td></tr></table></figure></p>
+<p>值是次数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Long&gt; result = aaa.parallelStream()</span><br><span class="line">    .collect(Collectors</span><br><span class="line">        .groupingByConcurrent(String::length,counting()));</span><br></pre></td></tr></table></figure></p>
+<h3 id="Properities"><a href="#Properities" class="headerlink" title="Properities"></a>Properities</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Properties st = <span class="keyword">new</span> Properties();</span><br><span class="line">st.put(<span class="string">""</span>,);</span><br><span class="line"><span class="keyword">try</span>(OutputStream out = Files.newOutputStream(path))&#123;</span><br><span class="line">    st.store(out,<span class="string">"name"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="EnumSet"><a href="#EnumSet" class="headerlink" title="EnumSet"></a>EnumSet</h3><p>EnumSet没有公共构造函数，使用静态工厂方法构造EnumSet：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Weekday&#123;MONDAY&#125;;</span><br><span class="line">Set&lt;Weekday&gt; alwarys = EnumSet.allof(Weekday.class);</span><br></pre></td></tr></table></figure></p>
+<p>EnumMap指定[键]类型<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EnumMap&lt;Weekday,String&gt; personInChange = <span class="keyword">new</span> EnumMap&lt;&gt;(Weekday.class);</span><br></pre></td></tr></table></figure></p>
+<h3 id="BitSet用户标识位序列-第i个位置位1表示i在集合内"><a href="#BitSet用户标识位序列-第i个位置位1表示i在集合内" class="headerlink" title="BitSet用户标识位序列 第i个位置位1表示i在集合内"></a>BitSet用户标识位序列 第i个位置位1表示i在集合内</h3><h3 id="栈、队列等"><a href="#栈、队列等" class="headerlink" title="栈、队列等"></a>栈、队列等</h3><ol>
+<li>栈<br>没有Stack接口，有Stack类，避免使用。<br>使用<code>ArrayDeque&lt;String&gt; stack = new ArrayDeque&lt;&gt;();</code></li>
+<li>优先队列和作业调度<br><code>PriorityQueue&lt;Job&gt; jobs = new PriorityQueue&lt;&gt;();</code><br>容纳实现了Comparable的类</li>
+</ol>
+<blockquote>
+<p>WeakHashMap:当键的唯一引用来自哈希表条目，删除键/值</p>
+</blockquote>
+<h3 id="视图-KeySet、values、asList方法生成视图"><a href="#视图-KeySet、values、asList方法生成视图" class="headerlink" title="视图 KeySet、values、asList方法生成视图"></a>视图 KeySet、values、asList方法生成视图</h3><ol>
+<li><p>范围range 任何子列表的添加删除都会影响原先列表</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; st = ;</span><br><span class="line">List&lt;String&gt; nextfive = st.subList(<span class="number">5</span>,<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<p>有序集合通过上下界 输出[1,2]</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> TreeSet&lt;String&gt; words = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">words.addAll(Arrays.asList(<span class="keyword">new</span> String[]&#123;<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>,<span class="string">"4"</span>,<span class="string">"5"</span>,<span class="string">"6"</span>&#125;));</span><br><span class="line">SortedSet&lt;String&gt; asOnly = words.subSet(<span class="string">"1"</span>,<span class="string">"3"</span>);</span><br><span class="line">System.out.println(asOnly);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>轻量级创建map类型的属性<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Collections.emptyMap()</span><br><span class="line">System.out.println(Collections.singletonMap(<span class="string">"id"</span>,<span class="string">"222"</span>));</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>检查视图，检查错误类型（堆污染）,监视ArrayList<string></string></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; strings = Collections.checkedList(<span class="keyword">new</span> ArrayList&lt;&gt;(),String.class);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不要使用Collections的同步视图，并发使用util.concurrent的数据结构</p>
+</li>
+</ul>
+<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><p><code>Iterator&lt;String&gt; iter= coll.iterator()</code></p>
+<ul>
+<li><code>coll.removeIf(e-&gt;e fulfill the condition</code></li>
+<li><code>iter.remove()</code>移除最后一个访问的元素，不是指向元素，不能两次连用remove</li>
+</ul>
+<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><h4 id="泛型方法："><a href="#泛型方法：" class="headerlink" title="泛型方法："></a>泛型方法：</h4><blockquote>
+<p>类型参数放在修饰符public static后，返回类型之前</p>
+</blockquote>
+<ol>
+<li>元素限定<code>&lt;T extends AutoCloseable&gt; void closeAll(ArrayList&lt;T&gt; elems)</code>确保Array的元素类型是AutoCloseable的子类；<code>extends</code>表示子类型、类型限定</li>
+</ol>
+<ul>
+<li>多个限定<code>T extends Runnable &amp; AutoCloseable</code>,只能有一个限定类，放在第一个，其它都是接口</li>
+</ul>
+<ol>
+<li>Manager是Employee子类但<code>ArrayList&lt;Manger&gt;</code>不是<code>ArrayList&lt;Employee&gt;</code>子类<br>因为<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Manger&gt; bosses = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">ArrayList&lt;Employee&gt; empls = bosses; <span class="comment">//非法</span></span><br><span class="line">empls.add(<span class="keyword">new</span> Employee(...)); <span class="comment">//可以在管理员列里添加普通成员</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果使用数组Manger[]和Employee[] 转型是合法的，但赋值会爆<code>ArrayStoreException</code></p>
+<blockquote>
+<p>如果不对ArrayList写操作，转换是安全的。可以用子类通配符</p>
+</blockquote>
+<ol>
+<li><code>&lt;? extends Employee&gt; staff</code>可以传Arraylist<manager><ol>
+<li>staff.get(i)可以 可以将<code>&lt;? extends Employee&gt;</code>转成<code>Employee</code></li>
+<li>staff.add(i)不行 不能将任何对象转成<code>&lt;? extends Employee&gt;</code></li>
+</ol>
+</manager></li>
+<li>父类通配符<code>&lt;? super Employee&gt;</code>常用于函数式对象参数（用lambda调用）</li>
+</ol>
+<h4 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h4><p>变成object/第一个限定</p>
+<h4 id="泛型约束"><a href="#泛型约束" class="headerlink" title="泛型约束"></a>泛型约束</h4><ol>
+<li><p>类型变量不能实例化 <code>T[] result = new T[n];</code>错误</p>
+<ol>
+<li>以【方法引用】方式提供数组的构造函数<code>Sting[]::new</code><br><code>IntFunction&lt;T[]&gt; constr</code> <code>T[] result = constr.apply(n)</code></li>
+<li><p>反射</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T[] repeat(<span class="keyword">int</span> n,T obj,Class&lt;T&gt; c1)&#123;</span><br><span class="line"><span class="comment">//编译器不知道类型，必须转换</span></span><br><span class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>) </span><br><span class="line">T[] result = (T[])java.lang.reflect.Array.newInstance(c1,n);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)result[i]=obj;</span><br><span class="line"><span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用<code>String[] greetings = repeat(10,&quot;Hi&quot;,String.class);</code></p>
+</li>
+<li>最简单的方法<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">ArrayList&lt;T&gt; <span class="title">repeat</span><span class="params">(<span class="keyword">int</span> n,T obj)</span></span>&#123;</span><br><span class="line">    ArrayList&lt;T&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;n;i++) result.add(obj);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>泛型类数组<code>Entry&lt;String,Integer&gt;[]</code>是合法的，但是初始化要@SuppressWarnings(“unchecked”)<br>正确方法：<code>ArrayList&lt;Entry&lt;String,Integer&gt;&gt;</code></p>
+</li>
+</ol>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p><img src="/images/throwable.jpg" alt="throwable"></p>
+<ol>
+<li><p>已检查错误：可提前预知 IOException。<br><code>Integer.parseInt(str)</code>检查str是否是整数是可能的</p>
+<ul>
+<li>覆盖方法时，不能抛出比父类方法中声明更多的已检查异常</li>
+<li><code>@throws</code>异常注释文档化</li>
+<li>实现了<code>AutoCloseable</code>/<code>Closeable</code>的类<br>  <code>try(PrintWriter out = new PrintWriter(&quot;out.txt&quot;)</code>{}保证了out.close()必会调用，替换finally{in.close()}因为close可能异常</li>
+<li>·<code>ex.getSuppressed()</code>捕获了主要异常时检测得到第二个异常</li>
+<li>可以catch到已检查异常后连接到未检查异常</li>
+<li><p>检测非空值<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(String directions)</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.directions = Object.requireNonNull(directions,<span class="string">"空指针"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>会抛出空指针异常</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="Logger代替print：7种级别"><a href="#Logger代替print：7种级别" class="headerlink" title="Logger代替print：7种级别"></a>Logger代替print：7种级别</h3><p>默认会记录INFO及更高级别。CONFIG/FINE/FINER.FINEST对用户无意义<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Logger.getGlobal().info(()-&gt;ex.getMessage());</span><br><span class="line">Logger logger = Logger.getLogger(<span class="string">"com.Logger"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>log输出到文件用户文件夹下java<code>n</code>.log<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FileHandler handler = <span class="keyword">new</span> FileHandler();</span><br><span class="line">logger.addHandler(handler);</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>未检查：逻辑错误：NullPointerExcepter<br><code>Class.forName(str)</code>不可能知道类能否成功加载。</li>
+</ol>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><ol>
+<li><p>要使用子类的方法，强制cast，先检查类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (a <span class="keyword">instanceof</span> B)&#123;</span><br><span class="line">	B b = (B)a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Collection/AbstractCollection/Collections,Path/Paths</p>
+</li>
+<li>default Stream<e> stream() 接口中添加了，为了保持兼容以前版本，写了默认方法</e></li>
+</ol>
+<h3 id="Comparable-接口"><a href="#Comparable-接口" class="headerlink" title="Comparable 接口"></a>Comparable 接口</h3><ol>
+<li>返回不一定是1,-1,0；</li>
+</ol>
+<ul>
+<li>当两个大负数相减可能变正，用Integer.compare()</li>
+<li>浮点数 Double.compare()</li>
+<li>Arrays.sort()可以对Comparable对象数组进行排序</li>
+</ul>
+<h3 id="Comparator-接口"><a href="#Comparator-接口" class="headerlink" title="Comparator 接口"></a>Comparator 接口</h3><p>不能更改String的compareTO,创建一个Comparator实现类。</p>
+<ol>
+<li>创建Comparator<string> comp 对象=new 实现了接口的对象();</string></li>
+<li>在Comparator对象上调用.compare(,)</li>
+<li>compare方法不是静态方法！ （？？？）</li>
+<li>Arrays.sort(obj,new Comparatorobj)</li>
+</ol>
+<h3 id="Runable-接口"><a href="#Runable-接口" class="headerlink" title="Runable 接口"></a>Runable 接口</h3><ol>
+<li><code>A implements Runnable{run(){}}</code></li>
+<li>new Thread(A).start</li>
+</ol>
+<h3 id="UI回调"><a href="#UI回调" class="headerlink" title="UI回调"></a>UI回调</h3><ol>
+<li>EventHandler<actionevent></actionevent></li>
+</ol>
+<h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><blockquote>
+<p>带有自由变量值的代码块是闭包。捕获闭合作用域中变量值</p>
+</blockquote>
+<ul>
+<li><p>lambda中只能引用值不变的量，不能捕获变量，也不能改变</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">	<span class="keyword">new</span> Thread( ()-&gt; sout(i) ).start(); <span class="comment">//报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>for(Sting arg:args)</code>中的变量是final的，作用域是单个迭代 可以捕获；每个底碟会创建新的arg变量；for(i)的作用域是整个循环。</p>
+</li>
+</ul>
+<ol>
+<li>只有一个抽象方法的接口对象，函数式接口</li>
+<li>将lambda表达式放入类型为函数式接口的变量中，转化成接口的实例</li>
+<li>ArrayList removeIf(Predictae) //e-&gt;e==null<br><code>removeIf(Object::isNull)</code><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">boolean</span> <span class="title">removeIf</span><span class="params">(Predicate&lt;? <span class="keyword">super</span> E&gt; filter)</span> </span>&#123;</span><br><span class="line">      Objects.requireNonNull(filter);</span><br><span class="line">      <span class="keyword">boolean</span> removed = <span class="keyword">false</span>;</span><br><span class="line">      <span class="keyword">final</span> Iterator&lt;E&gt; each = iterator();</span><br><span class="line">      <span class="keyword">while</span> (each.hasNext()) &#123;</span><br><span class="line">          <span class="keyword">if</span> (filter.test(each.next())) &#123;</span><br><span class="line">              each.remove();</span><br><span class="line">              removed = <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> removed;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h3><p><code>@FunctionalInterface</code> 单个方法的接口</p>
+<h3 id="高阶函数：返回函数的函数"><a href="#高阶函数：返回函数的函数" class="headerlink" title="高阶函数：返回函数的函数"></a>高阶函数：返回函数的函数</h3><h4 id="1-Comparator"><a href="#1-Comparator" class="headerlink" title="1. Comparator"></a>1. Comparator</h4><ol>
+<li>`public static &lt;T, U&gt; Comparator<t> comparing(<pre><code>Function&lt;? super T, ? extends U&gt; keyExtractor,
+Comparator&lt;? super U&gt; keyComparator)`
+</code></pre></t></li>
+</ol>
+<ul>
+<li>key提取器将类型T映射到可比较的类型</li>
+<li><code>comparingDouble</code>避免装箱</li>
+<li><code>nullsLast`</code>nullsFirst`避免null抛出异常</li>
+<li><code>naturalOrder()</code>适合实现了<code>Comparable</code>的类</li>
+</ul>
+<ol>
+<li>thenComparing</li>
+</ol>
+<hr>
+<ul>
+<li>局部内部类，实现接口的类。</li>
+<li><p>方法中的类，可以接受方法中的值，不需要构造函数和存储在实例变量中。</p>
+</li>
+<li><p>匿名</p>
+</li>
+</ul>
+<hr>
+<h3 id="继承和反射"><a href="#继承和反射" class="headerlink" title="继承和反射"></a>继承和反射</h3><ul>
+<li>代理对象实现接口，将所有方法路由到一个handler</li>
+<li>super() 因为子类不能访问父类的私有变量，所有要通过父类的构造函数初始化。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/16/DDB/" rel="next" title="DDB">
+                <i class="fa fa-chevron-left"></i> DDB
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/24/alg/" rel="prev" title="alg">
+                alg <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#并行"><span class="nav-number">1.</span> <span class="nav-text">并行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">2.</span> <span class="nav-text">Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建流"><span class="nav-number">2.1.</span> <span class="nav-text">创建流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法"><span class="nav-number">2.2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#收集"><span class="nav-number">2.3.</span> <span class="nav-text">收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#避免装箱，基本类型流"><span class="nav-number">2.4.</span> <span class="nav-text">避免装箱，基本类型流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行流"><span class="nav-number">2.5.</span> <span class="nav-text">并行流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Properities"><span class="nav-number">2.6.</span> <span class="nav-text">Properities</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EnumSet"><span class="nav-number">2.7.</span> <span class="nav-text">EnumSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BitSet用户标识位序列-第i个位置位1表示i在集合内"><span class="nav-number">2.8.</span> <span class="nav-text">BitSet用户标识位序列 第i个位置位1表示i在集合内</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈、队列等"><span class="nav-number">2.9.</span> <span class="nav-text">栈、队列等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#视图-KeySet、values、asList方法生成视图"><span class="nav-number">2.10.</span> <span class="nav-text">视图 KeySet、values、asList方法生成视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器"><span class="nav-number">2.11.</span> <span class="nav-text">迭代器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型"><span class="nav-number">3.</span> <span class="nav-text">泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#泛型方法："><span class="nav-number">3.0.1.</span> <span class="nav-text">泛型方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类型擦除"><span class="nav-number">3.0.2.</span> <span class="nav-text">类型擦除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泛型约束"><span class="nav-number">3.0.3.</span> <span class="nav-text">泛型约束</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常"><span class="nav-number">4.</span> <span class="nav-text">异常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Logger代替print：7种级别"><span class="nav-number">4.1.</span> <span class="nav-text">Logger代替print：7种级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">5.</span> <span class="nav-text">接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparable-接口"><span class="nav-number">5.1.</span> <span class="nav-text">Comparable 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparator-接口"><span class="nav-number">5.2.</span> <span class="nav-text">Comparator 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Runable-接口"><span class="nav-number">5.3.</span> <span class="nav-text">Runable 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI回调"><span class="nav-number">5.4.</span> <span class="nav-text">UI回调</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda表达式"><span class="nav-number">6.</span> <span class="nav-text">lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数式接口"><span class="nav-number">6.1.</span> <span class="nav-text">函数式接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高阶函数：返回函数的函数"><span class="nav-number">6.2.</span> <span class="nav-text">高阶函数：返回函数的函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Comparator"><span class="nav-number">6.2.1.</span> <span class="nav-text">1. Comparator</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承和反射"><span class="nav-number">6.3.</span> <span class="nav-text">继承和反射</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

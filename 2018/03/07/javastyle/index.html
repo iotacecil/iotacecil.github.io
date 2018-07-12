@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="String必用方法：1.char[] toCharArray()123456 public char[] toCharArray() &amp;#123;    // Cannot use Arrays.copyOf because of class initialization order issues    char result[] = new char[value.length];    Sys">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java风格练习">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/07/javastyle/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="String必用方法：1.char[] toCharArray()123456 public char[] toCharArray() &amp;#123;    // Cannot use Arrays.copyOf because of class initialization order issues    char result[] = new char[value.length];    Sys">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/doubleC.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.351Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java风格练习">
+<meta name="twitter:description" content="String必用方法：1.char[] toCharArray()123456 public char[] toCharArray() &amp;#123;    // Cannot use Arrays.copyOf because of class initialization order issues    char result[] = new char[value.length];    Sys">
+<meta name="twitter:image" content="https://iotaa.xyz/images/doubleC.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/07/javastyle/"/>
+
+
+
+
+
+  <title>java风格练习 | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/07/javastyle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java风格练习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-07T14:18:24+08:00">
+                2018-03-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>必用方法：<br>1.<code>char[] toCharArray()</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">char</span>[] toCharArray() &#123;</span><br><span class="line">    <span class="comment">// Cannot use Arrays.copyOf because of class initialization order issues</span></span><br><span class="line">    <span class="keyword">char</span> result[] = <span class="keyword">new</span> <span class="keyword">char</span>[value.length];</span><br><span class="line">    System.arraycopy(value, <span class="number">0</span>, result, <span class="number">0</span>, value.length);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>2.<code>String(char[]value)</code> //offset,count<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(<span class="keyword">char</span> value[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = Arrays.copyOf(value, value.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>3.每个字节对应的ASCII码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays.toString(str.getBytes())</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>4.<code>startsWith(String prefix,int toffset)</code>指定位置开始是否是prefix开头<br>5.<code>str.replaceAll(&quot;[0-9]&quot;,&quot;*&quot;)</code>,<code>str.replaceAll(&quot;\\d&quot;,&quot;*&quot;)</code><br>6.拆分返回String[]<code>System.out.println(Arrays.toString(c1.split(&quot;\\d&quot;,4)));</code><br>7.静态方法<code>valueOf()</code>转换各种类型为String</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> String b = <span class="string">"b"</span>;<span class="comment">//变成了常量</span></span><br><span class="line">String b1=b+<span class="string">"1"</span>;<span class="comment">//编译期确定 =&gt;String b2="b1" ==b1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">getString</span><span class="params">()</span></span>&#123;<span class="comment">//方法在运行期才能确定</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"c"</span>;&#125;</span><br><span class="line">main&#123;</span><br><span class="line"><span class="keyword">final</span> String c= getString();<span class="comment">//加不加final都false 方法一定在运行期确定</span></span><br><span class="line">String c1=c+<span class="number">1</span>;</span><br><span class="line">String c2=<span class="string">"c1"</span>;</span><br><span class="line">System.out.println(c1==c2);<span class="comment">//不等</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="源码："><a href="#源码：" class="headerlink" title="源码："></a>源码：</h4><p>1.final 的常量只能定义时赋值或在【默认】构造器里赋值一次<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(String original)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.value = original.value;<span class="comment">//将常量池中的值赋值给新创建的String</span></span><br><span class="line">    <span class="keyword">this</span>.hash = original.hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h3><p>1.<code>finalize</code> 对象被回收时调用 不建议重写<br>2.<code>public final native Class&lt;?&gt; getClass();</code> 获取对象的方法区的类信息</p>
+<p><code>Math.abs(Integer.MIN_VALUE+10085)</code>=-2147473563</p>
+<hr>
+<h3 id="DecimalFormat"><a href="#DecimalFormat" class="headerlink" title="DecimalFormat"></a>DecimalFormat</h3><p>保留两位小数System.out.println(<code>new DecimalFormat(&quot;0.00&quot;).format(pi)</code>);<br>百分比<code>new DecimalFormat(&quot;#.##%&quot;).format(pi)</code></p>
+<hr>
+<h3 id="StringBuffer"><a href="#StringBuffer" class="headerlink" title="StringBuffer"></a>StringBuffer</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String c = a+b+<span class="number">1</span>;<span class="comment">//常量变量相加会产生5个对象 编译器会优化</span></span><br><span class="line">String d = <span class="string">"a"</span>+<span class="number">1</span>+<span class="number">2</span>+<span class="string">"b"</span>;<span class="comment">//常量相加只有一个对象</span></span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StringBuffer sb = <span class="keyword">new</span> StringBuffer(<span class="number">32</span>);</span><br><span class="line">sb.append(a).append(b).append(<span class="number">1</span>);<span class="comment">//解决常量变量相加 产生3个对象</span></span><br><span class="line">sb.toString();</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="StringBuilder"><a href="#StringBuilder" class="headerlink" title="StringBuilder"></a>StringBuilder</h3><p><code>javap -c</code>查看编译后的指令<br>1.<code>String a =&quot;a&quot;+1;</code>会生成builder加入a1<br>2.<code>String b = a+&quot;b&quot;;</code>执行一次append<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String c=<span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">for</span>(i in <span class="number">5</span>)&#123;</span><br><span class="line">    c+=i;<span class="comment">//会创建5个StringBuilder 应该用append拼接</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="clone-不用创建过程-不用重新计算对象的大小"><a href="#clone-不用创建过程-不用重新计算对象的大小" class="headerlink" title="clone 不用创建过程 不用重新计算对象的大小"></a>clone 不用创建过程 不用重新计算对象的大小</h3><p>必须重写<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">    TreeNode newT = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        newT = (TreeNode)<span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;<span class="keyword">catch</span> (CloneNotSupportedException e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> newT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="Comparable-Comparator"><a href="#Comparable-Comparator" class="headerlink" title="Comparable Comparator"></a>Comparable<t> Comparator</t></h3><p>1.Arrys.sort:底层实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Comparable pivot = (Comparable) a[start];</span><br><span class="line"><span class="keyword">if</span> (pivot.compareTo(a[mid]) &lt; <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>2.Comparator面向对象，对修改关闭对扩展开放<br>新建类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xxxComparator implements Comparator&lt;T&gt;&#123;</span><br><span class="line">    compare(T o1,T o2)&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>sort传入比较器<br><code>Arrays.sort(t1,new xxxComparator())</code></p>
+<hr>
+<h3 id="System"><a href="#System" class="headerlink" title="System"></a>System</h3><p>1.时间<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Date nowtime  = <span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">DateFormat df = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"HH:mm:ss"</span>);</span><br><span class="line">String now = df.format(nowtime);</span><br></pre></td></tr></table></figure></p>
+<p>2.<code>.exit()</code>退出JVM<br>3.当前工作目录<code>System.getProperty(&quot;user.dir&quot;)</code><br>    os.name/os.version/user.name/user.home/java.home/java.version<br>4.安卓加载三方类库<code>System.loadLibrary</code></p>
+<hr>
+<h3 id="Runtime-不new靠静态方法获取对象"><a href="#Runtime-不new靠静态方法获取对象" class="headerlink" title="Runtime 不new靠静态方法获取对象"></a>Runtime 不new靠静态方法获取对象</h3><ol>
+<li><code>Runtime rt = Runtime.getRuntime();</code><br>可用处理器数量<code>rt.availableProcessors()</code><br>jvm总内存数<code>rt.totalMemory()</code><br>jvm空间内存<code>rt.freeMemory()</code><br>jvm最大可用内存<code>rt.maxMemory()</code></li>
+<li>执行命令行命令<br><code>rt.exec(&quot;notepad&quot;)</code></li>
+</ol>
+<hr>
+<h3 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h3><p>1.ArrayListhe和Vector在用法上完全相同<code>addElement(Object obj)</code>和<code>add(Object obj)</code>没什么区别<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">addElement</span><span class="params">(E obj)</span> </span>&#123;</span><br><span class="line">    modCount++;</span><br><span class="line">    ensureCapacityHelper(elementCount + <span class="number">1</span>);</span><br><span class="line">    elementData[elementCount++] = obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    modCount++;</span><br><span class="line">    ensureCapacityHelper(elementCount + <span class="number">1</span>);</span><br><span class="line">    elementData[elementCount++] = e;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Vector里有一些功能重复的方法,这些方法中方法名更短的是属于后来新增的方法.更长的是原先vector的方法.而后来ArrayList是作为List的主要实现类.</p>
+</blockquote>
+<p>线程同步不应该使用Vector 应该使用<br><code>java.util.concurrent.CopyOnWriteArrayList</code></p>
+<hr>
+<h3 id="class-Stack-lt-E-gt-extends-Vector-lt-E-gt"><a href="#class-Stack-lt-E-gt-extends-Vector-lt-E-gt" class="headerlink" title="class Stack&lt;E&gt; extends Vector&lt;E&gt;"></a><code>class Stack&lt;E&gt; extends Vector&lt;E&gt;</code></h3><blockquote>
+<p>Deque 接口及其实现提供了 LIFO 堆栈操作的更完整和更一致的 set</p>
+</blockquote>
+<p><code>Deque&lt;Integer&gt; stack = new ArrayDeque&lt;Integer&gt;();</code><br><code>LinkedList&lt;E&gt; implements List&lt;E&gt;, Deque&lt;E&gt;,</code></p>
+<hr>
+<h3 id="ArrayDeque循环数组"><a href="#ArrayDeque循环数组" class="headerlink" title="ArrayDeque循环数组"></a>ArrayDeque循环数组</h3><p><a href="https://github.com/CarpenterLee/JCFInternals/blob/master/markdown/4-Stack%20and%20Queue.md" target="_blank" rel="noopener">https://github.com/CarpenterLee/JCFInternals/blob/master/markdown/4-Stack%20and%20Queue.md</a></p>
+<p><code>head</code>指向首端第一个有效元素，<code>tail</code>指向尾端第一个可以插入元素的空位</p>
+<hr>
+<h4 id="void-addFirst-E-e"><a href="#void-addFirst-E-e" class="headerlink" title="void addFirst(E e)"></a>void addFirst(E e)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">elements[head = (head - <span class="number">1</span>) &amp; (elements.length - <span class="number">1</span>)] = e;<span class="comment">//越界处理</span></span><br><span class="line"><span class="keyword">if</span> (head == tail) doubleCapacity();</span><br></pre></td></tr></table></figure>
+<p>1.head前有空位 2.head是0，加到最后，如果最后是tail则扩容：</p>
+<ol>
+<li><strong>elements.length必需是2的指数倍，elements - 1就是二进制低位全1</strong></li>
+<li>跟head - 1相与之后就起到了<strong>【取模】</strong>的作用</li>
+<li>当head-1=-1;相当于对其取相对于elements.length的补码(正数就是本身)</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> head = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> length = <span class="number">8</span>;</span><br><span class="line"><span class="comment">//8-&gt;1000 ;7-&gt;0111;10-1=9-&gt;1001 ;-&gt;1</span></span><br><span class="line">head = (head - <span class="number">1</span>) &amp; (length - <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="addLast"><a href="#addLast" class="headerlink" title="addLast"></a>addLast</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">elements[tail] = e;</span><br><span class="line"><span class="keyword">if</span> ( (tail = (tail + <span class="number">1</span>) &amp; (elements.length - <span class="number">1</span>)) == head) doubleCapacity();</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="void-doubleCapacity"><a href="#void-doubleCapacity" class="headerlink" title="void doubleCapacity()"></a>void doubleCapacity()</h4><p><code>System.arraycopy</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">native</span> <span class="keyword">void</span> <span class="title">arraycopy</span><span class="params">(Object src, //原数组 </span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span>  srcPos,//原数组起始位置</span></span></span><br><span class="line"><span class="function"><span class="params">    Object dest, //目标数组</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span> destPos, //起始</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span> length)</span></span>; <span class="comment">//长度</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/doubleC.jpg" alt="doubleC"><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> p = head;</span><br><span class="line"><span class="keyword">int</span> n = elements.length;</span><br><span class="line"><span class="keyword">int</span> r = n - p; <span class="comment">// head右边元素的个数</span></span><br><span class="line"><span class="comment">//复制右半部分，对应上图中绿色部分</span></span><br><span class="line">System.arraycopy(elements, p, a, <span class="number">0</span>, r);</span><br><span class="line"><span class="comment">//复制左半部分，对应上图中灰色部分</span></span><br><span class="line">System.arraycopy(elements, <span class="number">0</span>, a, r, p);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="pollFirst-删除并返回Deque首端-head-元素"><a href="#pollFirst-删除并返回Deque首端-head-元素" class="headerlink" title="pollFirst()删除并返回Deque首端(head)元素"></a>pollFirst()删除并返回Deque首端(head)元素</h3><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> E <span class="title">pollFirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h = head;</span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    E result = (E) elements[h];</span><br><span class="line">    <span class="comment">// Element is null if deque empty</span></span><br><span class="line">    <span class="keyword">if</span> (result == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    elements[h] = <span class="keyword">null</span>;     <span class="comment">// Must null out slot</span></span><br><span class="line">    head = (h + <span class="number">1</span>) &amp; (elements.length - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+<hr>
+<h4 id="pollLast"><a href="#pollLast" class="headerlink" title="pollLast()"></a>pollLast()</h4><p><code>int t =(tail-1)&amp;(element.length-1);</code></p>
+<hr>
+<h4 id="E-peekFirst-amp-E-peekLast-返回但步删除"><a href="#E-peekFirst-amp-E-peekLast-返回但步删除" class="headerlink" title="E peekFirst()&amp;E peekLast 返回但步删除"></a>E peekFirst()&amp;E peekLast 返回但步删除</h4><hr>
+<h3 id="LinkedList-双向链表"><a href="#LinkedList-双向链表" class="headerlink" title="LinkedList 双向链表"></a>LinkedList 双向链表</h3><p><code>Queue queue = new LinkedList();</code><br>内部静态类Node</p>
+<hr>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>遍历：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Map.Entry&lt;String,String&gt; entry:map.entrySet())&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><a href="https://zhuanlan.zhihu.com/p/28016098" target="_blank" rel="noopener">java那些事</a><br><a href="https://www.ibm.com/support/knowledgecenter/zh/SSS28S_8.2.0/API/api_reference_holder_objects_java-filter_java.html" target="_blank" rel="noopener">ava API: Holder 对象</a></p>
+<ol>
+<li>1000_000编译器会直接删除_</li>
+<li>十六进制p表示指数</li>
+<li>$专门出现在自动产生的变量名中</li>
+<li>方法外声明常量 static final （因为和对象无关，声明成类变量）</li>
+<li>负数小心用%</li>
+<li>浮点寄存器优化 strictfp修饰符</li>
+<li><p>(int).. cast操作符警告 用Math.toIntExact会异常（越界or丢精度）</p>
+</li>
+<li><p>java不允许对象使用操作符 必须调用方法</p>
+</li>
+<li>input.split(“\s+”)以空格分割</li>
+<li>在null上调用方法会空指针异常，所以与字面量比较要将文字串放前<code>&quot;word&quot;.equals(word)</code></li>
+</ol>
+<ul>
+<li>code point 有效的unicode值</li>
+</ul>
+<hr>
+<h3 id="Random"><a href="#Random" class="headerlink" title="Random"></a>Random</h3><ol>
+<li>(1L &lt;&lt; 48) - 1</li>
+</ol>
+<hr>
+<h3 id="Integer"><a href="#Integer" class="headerlink" title="Integer"></a>Integer</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i3 =<span class="number">100</span>;Integer i4= <span class="number">100</span>;</span><br><span class="line">i3==i4;<span class="comment">//(true)同一个对象</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>享元模式：共享对象 将1字节以内的数缓存</p>
+</blockquote>
+<ul>
+<li>IntegerCache缓存数组 为避免重复创建对象</li>
+<li>private static 内部静态类 只能在该类中访问,static用来做缓存<br><code>new Integer(2)==new Integer(2)</code> false<br><code>Integer.valueOf(2)==Integer.valueOf(2)</code> true 变成1000的时候因为缓存不一样<br><code>Integer.valueOf(2).intValue()==2</code> true<br><code>new Integer(2).equals(new Integer(2))</code> true</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//缓存-128到127之间的值</span></span><br><span class="line"> cache = <span class="keyword">new</span> Integer[(high - low) + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">int</span> j = low;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cache.length; k++)</span><br><span class="line">                cache[k] = <span class="keyword">new</span> Integer(j++);</span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Integer i3 =<span class="number">1000</span>;Integer i4= <span class="number">1000</span>;</span><br><span class="line">i3==i4;<span class="comment">//(false)new了两个对象</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">valueOf</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">           <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">           <span class="comment">//没用cache返回了新对象</span></span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> Integer(i);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>结论：Integer要用equals</strong></p>
+<ul>
+<li>char2int: b.charAt(i–)-‘0’; </li>
+</ul>
+<hr>
+<h3 id="StringBuilder-1"><a href="#StringBuilder-1" class="headerlink" title="StringBuilder"></a>StringBuilder</h3><ol>
+<li><code>StingBuilder</code>线程不安全</li>
+<li>连接大量字符串 .append .toString()</li>
+</ol>
+<hr>
+<h3 id="StringBuffer-1"><a href="#StringBuffer-1" class="headerlink" title="StringBuffer"></a>StringBuffer</h3><ol>
+<li>线程安全<br>public <code>synchronized</code> StringBuffer append(String str) </li>
+</ol>
+<ul>
+<li>CharSequence字符序列类</li>
+</ul>
+<hr>
+<h3 id="euqals"><a href="#euqals" class="headerlink" title="euqals"></a>euqals</h3><ul>
+<li>没有实现equals的类：继承Object</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//是否指向同一对象，equal和==相同</span></span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Integer的实现</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//判断类型</span></span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Integer) &#123;</span><br><span class="line">    <span class="comment">//？？强制转型</span></span><br><span class="line">            <span class="keyword">return</span> value == ((Integer)obj).intValue();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">intValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>String实现</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object anObject)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//指向引用</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == anObject) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//类型 写法注意！！</span></span><br><span class="line">        <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">            String anotherString = (String)anObject;</span><br><span class="line">            <span class="keyword">int</span> n = value.length;</span><br><span class="line">            <span class="comment">//长度？？可以调用private的value</span></span><br><span class="line">            <span class="keyword">if</span> (n == anotherString.value.length) &#123;</span><br><span class="line">                <span class="keyword">char</span> v1[] = value;</span><br><span class="line">                <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line">                <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (v1[i] != v2[i])</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                    i++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><blockquote>
+<p>fianl修饰的变量，JVM也会提前给我们初始化好。???</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//变量</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"><span class="keyword">transient</span> Object[] elementData;</span><br><span class="line"></span><br><span class="line"><span class="comment">//构造函数，避免反复创建无用数组 指向同一个缓存Object[]数组</span></span><br><span class="line"><span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line"><span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li><code>.add(e)</code></li>
+</ul>
+<ol>
+<li>创建Object数组，并拷贝 -&gt;ensureCapacityInternal(size+1)<br>-&gt;ensureExplicitCapacity(size+1);<br>-&gt;grow(size+1)-&gt;Arrays.copyOf<br>-&gt;new Object[newLength]，System.arraycopy</li>
+<li>elementData[size++] = e;</li>
+</ol>
+<ul>
+<li>object的长度为10，size为逻辑长度，不是数组长度，<code>minCapacity = Math.max(DEFAULT_CAPACITY=10, minCapacity</code></li>
+<li>第一次扩容：就一个元素，在堆内存中占了10个位置</li>
+<li>之后扩容：<code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</code>//&gt;&gt;=/2</li>
+</ul>
+<hr>
+<ul>
+<li><code>.remove(index)</code></li>
+</ul>
+<p>1.将index+1后的numMoved个元素从index开始复制obj-&gt;obj<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.arraycopy(elementData, index+<span class="number">1</span>, elementData, index,</span><br><span class="line">                             numMoved);</span><br></pre></td></tr></table></figure></p>
+<p>2.长度-1，最后一个null <code>elementData[--size] = null;</code></p>
+<hr>
+<ul>
+<li><code>.romove(Object o)</code> 循环查找o==null！=null-&gt;fastremove(index)(基本同上)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当o！=null,按List规范重写equal!!</span></span><br><span class="line"><span class="keyword">if</span>(o.equal(elementData[index]))&#123;</span><br><span class="line">	fastRemove(index)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h3><ul>
+<li><code>@SuppressWarnings(&quot;unchecked&quot;)</code>编译器消除警告<ul>
+<li>unchecked:执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型。</li>
+</ul>
+</li>
+<li>Arrays.</li>
+</ul>
+<hr>
+<h3 id="native"><a href="#native" class="headerlink" title="native"></a>native</h3><blockquote>
+<p>native是由操作系统实现的，C/C++实现，java去调用。</p>
+</blockquote>
+<ul>
+<li><code>Arrays.copyOf-&gt;System.arraycopy(org,0,copy,0,len)</code></li>
+</ul>
+<hr>
+<h3 id="Java8"><a href="#Java8" class="headerlink" title="Java8"></a>Java8</h3><ul>
+<li>default方法：接口内部有方法实现；实现两个接口有同名default名字冲突-&gt;报错</li>
+</ul>
+<hr>
+<h3 id="package-java-util-里的常用类"><a href="#package-java-util-里的常用类" class="headerlink" title="package java.util;里的常用类"></a>package java.util;里的常用类</h3><ul>
+<li>Vector,Arraylist,LinkedList implements <strong>List</strong></li>
+<li>LinkedList implents <strong>Queue</strong></li>
+<li><strong><em>List,Queue,Set</em></strong> implememts Collection</li>
+</ul>
+<hr>
+<h3 id="Arraylist和Vector的区别"><a href="#Arraylist和Vector的区别" class="headerlink" title="Arraylist和Vector的区别"></a>Arraylist和Vector的区别</h3><blockquote>
+<ol>
+<li>Vector是线程安全的，ArrayList不是线程安全的。</li>
+<li>ArrayList在底层数组不够用时在原来的基础上扩展0.5倍，Vector是扩展1倍(可以改增量）。</li>
+</ol>
+</blockquote>
+<p>vector:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> newCapacity = oldCapacity + ((capacityIncrement &gt; <span class="number">0</span>) ?capacityIncrement : oldCapacity);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>加锁和释放锁,在单线程的环境中，Vector效率要差很多。</p>
+</blockquote>
+<ul>
+<li>和ArrayList和Vector一样，同样的类似关系的类还有HashMap和HashTable，StringBuilder和StringBuffer，后者是前者线程安全版本的实现。</li>
+</ul>
+<hr>
+<h3 id="synchronized-JVM实现"><a href="#synchronized-JVM实现" class="headerlink" title="synchronized JVM实现"></a>synchronized JVM实现</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/07/Front-end-questions/" rel="next" title="Front-end questions">
+                <i class="fa fa-chevron-left"></i> Front-end questions
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/08/Python-models/" rel="prev" title="Python modules">
+                Python modules <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">1.</span> <span class="nav-text">String</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#源码："><span class="nav-number">1.1.</span> <span class="nav-text">源码：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object"><span class="nav-number">2.</span> <span class="nav-text">Object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DecimalFormat"><span class="nav-number">3.</span> <span class="nav-text">DecimalFormat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#StringBuffer"><span class="nav-number">4.</span> <span class="nav-text">StringBuffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#StringBuilder"><span class="nav-number">5.</span> <span class="nav-text">StringBuilder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clone-不用创建过程-不用重新计算对象的大小"><span class="nav-number">6.</span> <span class="nav-text">clone 不用创建过程 不用重新计算对象的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparable-Comparator"><span class="nav-number">7.</span> <span class="nav-text">Comparable Comparator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#System"><span class="nav-number">8.</span> <span class="nav-text">System</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Runtime-不new靠静态方法获取对象"><span class="nav-number">9.</span> <span class="nav-text">Runtime 不new靠静态方法获取对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector"><span class="nav-number">10.</span> <span class="nav-text">vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#class-Stack-lt-E-gt-extends-Vector-lt-E-gt"><span class="nav-number">11.</span> <span class="nav-text">class Stack&lt;E&gt; extends Vector&lt;E&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayDeque循环数组"><span class="nav-number">12.</span> <span class="nav-text">ArrayDeque循环数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#void-addFirst-E-e"><span class="nav-number">12.1.</span> <span class="nav-text">void addFirst(E e)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#addLast"><span class="nav-number">12.2.</span> <span class="nav-text">addLast</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-doubleCapacity"><span class="nav-number">12.3.</span> <span class="nav-text">void doubleCapacity()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pollFirst-删除并返回Deque首端-head-元素"><span class="nav-number">13.</span> <span class="nav-text">pollFirst()删除并返回Deque首端(head)元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pollLast"><span class="nav-number">13.1.</span> <span class="nav-text">pollLast()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#E-peekFirst-amp-E-peekLast-返回但步删除"><span class="nav-number">13.2.</span> <span class="nav-text">E peekFirst()&amp;E peekLast 返回但步删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedList-双向链表"><span class="nav-number">14.</span> <span class="nav-text">LinkedList 双向链表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">15.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Random"><span class="nav-number">16.</span> <span class="nav-text">Random</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Integer"><span class="nav-number">17.</span> <span class="nav-text">Integer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#StringBuilder-1"><span class="nav-number">18.</span> <span class="nav-text">StringBuilder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#StringBuffer-1"><span class="nav-number">19.</span> <span class="nav-text">StringBuffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#euqals"><span class="nav-number">20.</span> <span class="nav-text">euqals</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayList"><span class="nav-number">21.</span> <span class="nav-text">ArrayList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Arrays"><span class="nav-number">22.</span> <span class="nav-text">Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#native"><span class="nav-number">23.</span> <span class="nav-text">native</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java8"><span class="nav-number">24.</span> <span class="nav-text">Java8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#package-java-util-里的常用类"><span class="nav-number">25.</span> <span class="nav-text">package java.util;里的常用类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Arraylist和Vector的区别"><span class="nav-number">26.</span> <span class="nav-text">Arraylist和Vector的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized-JVM实现"><span class="nav-number">27.</span> <span class="nav-text">synchronized JVM实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

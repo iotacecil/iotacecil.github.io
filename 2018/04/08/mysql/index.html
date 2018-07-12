@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="timestamp有时区datetime表示的时间范围更广，一般应用不会跨时区。 压力测试1mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mySQL">
+<meta property="og:url" content="https://iotaa.xyz/2018/04/08/mysql/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="timestamp有时区datetime表示的时间范围更广，一般应用不会跨时区。 压力测试1mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-a">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/weeken.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/left_join.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/left_only_join.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/full_join.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/JDBC_conn.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/zangdu.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/geli.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.358Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mySQL">
+<meta name="twitter:description" content="timestamp有时区datetime表示的时间范围更广，一般应用不会跨时区。 压力测试1mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-a">
+<meta name="twitter:image" content="https://iotaa.xyz/images/weeken.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/04/08/mysql/"/>
+
+
+
+
+
+  <title>mySQL | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/04/08/mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mySQL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-08T18:48:55+08:00">
+                2018-04-08
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="timestamp有时区"><a href="#timestamp有时区" class="headerlink" title="timestamp有时区"></a>timestamp有时区</h2><p>datetime表示的时间范围更广，一般应用不会跨时区。</p>
+<h2 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-add-autoincrement --engine=innodb --number-of-queries=5000 --debug-info</span><br></pre></td></tr></table></figure>
+<p>5000并发，6秒<br>10000并发每次10000查询 会提示 1w并发单集群的mysql不行，需要集群<br>2003 Can’t connect<br>1040Too many connections<br>mysql单表数据量小于2千万 mycat可以集群分片</p>
+<h2 id="mybatis逆向工程generatorConfig-xml"><a href="#mybatis逆向工程generatorConfig-xml" class="headerlink" title="mybatis逆向工程generatorConfig.xml"></a>mybatis逆向工程<code>generatorConfig.xml</code></h2><p><code>explain</code>执行计划 ：select,update,insert,replace,delete</p>
+<h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2><p><code>show plugins;</code><br>可以看到partition 则可以分区。逻辑上一个表，物理上多个文件中。<br>在create table的最后加上<code>partition by hash(id) partitions 4</code><br><code>.frm</code>存储表数据<br><code>.ibd</code>inndb数据文件<br>分区之后<code>.ibd</code>会有好几个</p>
+<p>hash分区 利用表中的int列或者<code>by hash(UNIX_TIMESTAMP(login_time))</code>将timestamp转成int<br>range分区 log推荐使用 日期/时间 查询的时候包含分区键 适合定期清理历史数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">partition by range(id)(</span><br><span class="line">    partition p0 values less than(10000),</span><br><span class="line">    partition p1 values less than(20000),</span><br><span class="line">    partition p3 values less than maxvalue);</span><br></pre></td></tr></table></figure></p>
+<p>list分区 按枚举<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">partition by list(type)(</span><br><span class="line">    partition p0 values in (1,3,5,7,9),</span><br><span class="line">    partition p1 values in (2,4,6,8));</span><br></pre></td></tr></table></figure></p>
+<p>到了新的一年添加分区<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t1 <span class="keyword">add</span> <span class="keyword">partition</span> (<span class="keyword">partition</span> p4 <span class="keyword">values</span> <span class="keyword">less</span> <span class="keyword">than</span>(<span class="number">2018</span>));</span><br></pre></td></tr></table></figure></p>
+<p>删除分区<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t1 <span class="keyword">drop</span> <span class="keyword">partition</span> p0;</span><br></pre></td></tr></table></figure></p>
+<p>归档新建一个和t1结构相同的 非分区表t2 .一般迁移后删除分区，切换归档表的存储引擎<br>分区表只能查询不能写 分区表梗适合用mysam引擎<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t1 <span class="keyword">exchange</span> <span class="keyword">partition</span> p0 <span class="keyword">with</span> <span class="keyword">table</span> t2;</span><br><span class="line">#--drop之后切换引擎</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t2 <span class="keyword">ENGINE</span>=<span class="keyword">ARCHIVE</span>;</span><br></pre></td></tr></table></figure></p>
+<p>password用char(32)<br><code>timestamp on update CURRENT_TIMESTAMP</code>字段会在表被修改时自动更新</p>
+<h2 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h2><ol>
+<li>mybatis-3-config.dtd: 可以用<code>&lt;properties&gt;</code>导入配置文件<br>在<code>&lt;mappers&gt;</code>里可以用<code>&lt;package&gt;</code>导入整个有mapper.xml的文件夹</li>
+<li>mybatis-3-mapper.dtd<br><code>&lt;typeAliases&gt;</code>中添加<code>&lt;package&gt;</code>自动扫描包，将类名作为别名</li>
+</ol>
+<p><code>PageHelper.orderBy(&quot;price desc&quot;)</code>按价格降序（sql中的order by 之后的格式）</p>
+<h3 id="mysql-like通配符"><a href="#mysql-like通配符" class="headerlink" title="mysql like通配符"></a>mysql like通配符</h3><p><code>%</code> 任意多个字符</p>
+<h3 id="ER图"><a href="#ER图" class="headerlink" title="ER图"></a>ER图</h3><p>矩形：实体<br>特化：自顶向下继承设计<br>概化：底向上<br>菱形：联系集：把多对多变成1对多 用虚线连接联系集的属性<br>    双线：全参与：表示在联系集中的参与度<code>&lt;advisor&gt;</code>=student表示每个学生都要有导师，<br>双边菱形：表示弱实体集和它依附的实体集。当弱实体集里放入依赖的实体集的id，则不需要联系集<br><img src="/images/weeken.jpg" alt="weeken"></p>
+<p>椭圆：属性<br>角色：&lt;先修课联系集&gt;和[课程]的联系通过course_id和prereq_id角色标识区分<br>派生属性：可以通过其它属性计算得到<br>复合型属性应该拆分成2个属性<br>多值型（一个老师对应多个电话）应该用另一个(id,phone)(1,phone1)(1,phone2)每个属性映射到单行<br>映射基数：1：1，1：n,n:1,n:n<br>基数约束：<code>导师&lt;-&lt;advisor&gt;-学生</code><br>    一对一：箭头从关系指向实体：导师&lt;-<code>&lt;advisor&gt;</code> 一名学生只有一名导师<br>     一对多：没有箭头表示多端，有箭头表示“一”端 <code>&lt;advisor&gt;</code>-学生 一名老师可以有多名学生。<br><code>导师 0..* &lt;advisor&gt; 1..1 学生</code> 参与的上限..下限，0表示老师参与的下线是0，不是全参与，是半参与。</p>
+<p>天然的三元关系 导师 项目 学生 通过一个联系集不能拆分成2个二元关系。</p>
+<ol>
+<li>什么时候作为实体:instructor/ins-phone/phone三张表什么时候作为属性instructor(phone)</li>
+</ol>
+<ul>
+<li>只对名字和单值（不是多值（对应多个电话））感兴趣则为属性：性别。</li>
+<li>一个对象除了名字意外，还有其它属性要描述则定义成实体：电话、住址、部门。</li>
+</ul>
+<ol>
+<li><p>是实体集还是用联系集（对象之间的动作）：考虑映射的基数<br>customer-<code>&lt;loan&gt;</code>-branch 但是当要表示一个客户在一个银行里多笔贷款<br>customer-<code>&lt;borrow&gt;</code>-loan(实体)-<code>&lt;Loan-bra&gt;</code>-branch<br>客户与贷款多对多，贷款对支行一对多。</p>
+</li>
+<li><p>用属性student(supervisior-id,supervisior-name)还是用联系集<code>&lt;stu-sub&gt;</code>,<code>&lt;stu-class&gt;</code></p>
+</li>
+</ol>
+<p>innodb有索引组织表</p>
+<p>IP地址字符串转int<br><code>INET_ATON(&#39;255,255,255,255&#39;)</code>=4292967295(无符号int最大值)<br><code>INET_NTOA(&#39;4292967295&#39;)</code>=’255,255,255,255’<br><code>Varchar(255)</code>utf-8汉字3个字节 总共765字节<br>避免使用<code>TEXT</code>64k,<code>BLOB</code> 可以用varchar  mysql内存映射表不持支，所以排序只能用磁盘映射表</p>
+<p>timestamp只能存到2038年01-19</p>
+<p><code>decimal</code>精确浮点类型</p>
+<p>预编译语句 每次执行只需要传递参数 节省带宽<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">prepare</span> stmt1 <span class="keyword">from</span> <span class="string">'select sqrt(pow(?,2)+pow(?,2)) as hypotenuse'</span>;</span><br><span class="line"><span class="keyword">set</span> @a=<span class="number">3</span>;</span><br><span class="line"><span class="keyword">set</span> @b=<span class="number">4</span>;</span><br><span class="line"><span class="keyword">execute</span> stmt1 <span class="keyword">using</span> @a,@b;</span><br><span class="line"><span class="keyword">deallocate</span> <span class="keyword">prepare</span> stmt1</span><br></pre></td></tr></table></figure></p>
+<p>将<code>where date(ctime)=&quot;20160901&quot;</code>改成<code>where ctime&gt;=&#39;20160901 and ctime&lt;&#39;20160902</code>可以使用索引</p>
+<p>第三范式 不存在 传递函数依赖关系 名字可以决定分类；分类可以决定分类描述 则存在非关键字段 分类描述 对名称的依赖</p>
+<p>范围查询会使联合索引失效 要把范围查询的表放到索引右侧<br>使用<code>leftjoin</code>/<code>not exists</code>代替 <code>not in</code>（会使索引失效</p>
+<p>索引列的循序 区分度(列中唯一值数量/总行数)高的放在联合索引左边<br>不使用外键 外键用于数据参照完整性（数据一致性）但是降低写性能，可以用其它方式保证一致性 但是要在表之间的关联键上建立索引</p>
+<h2 id="慢查询"><a href="#慢查询" class="headerlink" title="慢查询"></a>慢查询</h2><p>开启慢查询日志 SQL监控<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'slow_query_log'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>记录没有使用索引的sql<br>log_queries_not_using_indexes 变量<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%log%'</span>;</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> log_queries_not_using_indexe=<span class="keyword">on</span>;</span><br><span class="line"><span class="keyword">set</span> long_query_time = <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<p>long_query_time超过多少秒之后的查询记录在日志中<br>查看慢查询日志的位置<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'slow%'</span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="慢查询分析工具mysqldumpslow"><a href="#慢查询分析工具mysqldumpslow" class="headerlink" title="慢查询分析工具mysqldumpslow"></a>慢查询分析工具mysqldumpslow</h3><h3 id="count-1-和count-和count"><a href="#count-1-和count-和count" class="headerlink" title="count(1)和count(*)和count(*)"></a><code>count(1)</code>和<code>count(*)</code>和<code>count(*)</code></h3><p>count(1)比<code>count（*）</code>效率高一些<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t(<span class="keyword">id</span> <span class="built_in">int</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">value</span>(<span class="number">1</span>),<span class="keyword">value</span>(<span class="number">2</span>),(<span class="literal">null</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*),<span class="keyword">count</span>(<span class="keyword">id</span>),<span class="keyword">count</span>(<span class="number">1</span>) <span class="keyword">from</span> t;</span><br></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th><code>count(*)</code></th>
+<th><code>count(id)</code></th>
+<th><code>count(1)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h4 id="内置类型"><a href="#内置类型" class="headerlink" title="内置类型"></a>内置类型</h4><p>now()</p>
+<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><ol>
+<li><p><code>int(11)</code>和<code>int(21)</code>都占4个字节，区别在于补零位数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t(a <span class="built_in">int</span>(<span class="number">11</span>) zerofill, b <span class="built_in">int</span>(<span class="number">21</span>) zerofill);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t <span class="keyword">values</span> (<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>char</code>和<code>varchar</code>存储字符数。</p>
+<ol>
+<li>char 存储255个字符，varchar根据类型计算字符数，上限是65535个字节</li>
+<li>char会自动补空，varchar&lt;=255用一个字节&gt;255用两个字节存储长度length</li>
+<li></li>
+</ol>
+</li>
+</ol>
+<p><code>desc</code> 查看表结构</p>
+<h4 id="mysql-join"><a href="#mysql-join" class="headerlink" title="mysql join"></a>mysql join</h4><ol>
+<li><code>inner join</code>内连接，两张表的公共部分 数据库会先在每个表里先查条件再生成笛卡儿积<br><code>select a.name from a A inner join b B on A.name =B.name;</code></li>
+<li><code>left outer join</code>左外连接，以左表为基础 内链接当左表中查询条件是null的时候被忽略，外连接则有<br><img src="/images/left_join.jpg" alt="left_join"><br>用左外连接查询只存在A中不存在B中的where B.Key is NULL (优化not in不会使用索引)<br><img src="/images/left_only_join.jpg" alt="left_only_join"><br><code>select * from b left outer join a on a.name =b.name where a.Id is null;</code></li>
+<li><code>right outer join</code><br><code>select * from a right outer join b on a.name =b.name where a.Id is null;</code></li>
+<li><code>full join</code><br><img src="/images/full_join.jpg" alt="full_join"></li>
+</ol>
+<h3 id="count-min-p-39-price-39-group-by-p-quot-id-quot-quot-name-quot"><a href="#count-min-p-39-price-39-group-by-p-quot-id-quot-quot-name-quot" class="headerlink" title="count(*),min(p.&#39;price&#39;) group by p.&quot;id&quot;,&quot;name&quot;"></a><code>count(*),min(p.&#39;price&#39;) group by p.&quot;id&quot;,&quot;name&quot;</code></h3><h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>Myisam表锁 -&gt; Innodb 行锁 从大锁到小锁提升并行度<br>MyISAM引擎不持支事务，优点是读写快,列存储5.5之前的默认<br>Innodb支持事务ACID 行级锁，高并发场景好</p>
+<ol>
+<li><p>JDBC<br><code>static final String JDBC_DRIVER=&quot;com.mysql.jdbc.Driver&quot;;</code></p>
+<ol>
+<li>close放在finally里，保证执行</li>
+<li>防止空指针异常 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">finally</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)conn.close();</span><br><span class="line">         <span class="keyword">if</span>(stmt!=<span class="keyword">null</span>)stmt.close();</span><br><span class="line">         <span class="keyword">if</span>(rs!=<span class="keyword">null</span>) rs.close();</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>游标：读取记录太多，内存放不下。DB_URL:<code>useCursorFetch=true</code></p>
+<ol>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> String DB_URL =<span class="string">"jdbc:mysql://localhost/scraping?characterEncoding=utf8&amp;useCursorFetch=true&amp;useSSL=true"</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ptmt=conn.prepareStatement(sql);</code><br> 每次从服务器端取回记录的数量<code>ptmt.setFetchSize(1);</code><br> <code>rs = ptmt.executeQuery();</code></p>
+</li>
+</ol>
+</li>
+<li>流方式:记录中存在大字段内容：博文。读一条记录内存可能放不下。<br> 变成二进制流读取小区间<ol>
+<li><code>InputStream in = ResultSet.getBinaryStream(&quot;blog&quot;)</code></li>
+<li>在外部生成一个文件，每次读取一行输出到外部文件<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">File f = <span class="keyword">new</span> File(FILE_URL);</span><br><span class="line">OutputStream out = <span class="keyword">null</span>;</span><br><span class="line">out = <span class="keyword">new</span> FileOutputStream(f);</span><br><span class="line"><span class="keyword">int</span> tmp = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>((tmp= in.read)!==-<span class="number">1</span>)out.write(tmp);</span><br><span class="line">in.close();</span><br><span class="line">out.close();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<h4 id="连接池"><a href="#连接池" class="headerlink" title="连接池"></a>连接池</h4><ol>
+<li><code>DriverManager.getConnection</code>流程<br>客户端利用密码种子和自己保存的数据库密码按加密算法得到<code>加密密码</code><br><img src="/images/JDBC_conn.jpg" alt="JDBC_conn"></li>
+<li>每个线程使用数据库连接后不销毁，每个请求从连接池中【租借】连接</li>
+<li>数据库服务器端处理请求时要分配资源，请求结束后被释放。服务器设置最大并发连接数。抛toomanyConnection异常。应在客户端中实现业务线程排队获取数据库连接。</li>
+</ol>
+<h4 id="DBCP"><a href="#DBCP" class="headerlink" title="DBCP"></a>DBCP</h4><p>是一组jar包：<code>commons-dbcp,jar</code>,<code>commons-pool.jar</code>,<code>commons-logging.jar</code></p>
+<ol>
+<li><p>dbcp重写了Connection的close方法，把销毁数据库连接改成了归还给连接池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dbpoolInit</span><span class="params">()</span></span>&#123;</span><br><span class="line">    db = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    db.setUrl(DB_URL);</span><br><span class="line">    db.setDriverClassName(JDBC_DRIVER);</span><br><span class="line">    db.setUsername(USER);</span><br><span class="line">    db.setPassword(PASSWORD);</span><br><span class="line">    db.setMaxTotal(<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>优化连接池</p>
+<ol>
+<li>提高第一次访问数据库的速度，在连接池中预制一定数量的连接<code>.setInitialSize(1)</code></li>
+<li><code>.setMaxTotal()</code>设置客户端的最大连接数，超过的不创建新连接，而是进入等待队列</li>
+<li><code>.setMaxWaitMillis()</code>设置最大等待时间</li>
+<li><code>.setMaxIdel()</code>空闲连接数的最大值，超过则销毁</li>
+<li><code>setMinIdel()</code>空闲数低于则创建，建议于<code>MaxIdel</code>相同</li>
+</ol>
+</li>
+<li>DBCP定期检查，服务端会自动关闭空闲连接，连接池可能租借失效的连接<ol>
+<li>定期检查连接池中连接的空闲时间 开启<code>.setTestWhileIdel(True)</code></li>
+<li>应该销毁的最小空闲时间<code>.setMinEvictableIdleTimeMillis()</code></li>
+<li>检查的时间间隔,应小于服务器自动关闭连接的时间（Mysql 8小时)<code>.setTimeBetweenEvictionRunsMillis()</code></li>
+</ol>
+</li>
+<li>Mysql <code>show processlist;</code>查看连接数</li>
+</ol>
+<h3 id="防范SQL注入-39"><a href="#防范SQL注入-39" class="headerlink" title="防范SQL注入&#39;--"></a>防范SQL注入<code>&#39;--</code></h3><ol>
+<li><p>参数化sql  <code>conn.prepareStatement(sql)</code>传入格式化sql,需要传入的参数用？占位</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> userName = ? <span class="keyword">And</span> <span class="keyword">password</span>=?</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>传入参数<code>ptmt.setString(1,username)</code> 参数位置从左往右1开始</p>
+</li>
+<li>数据库权限、封装数据库异常</li>
+<li>mysql <code>AES_ENCRYPT/AES_DECRYPT</code>string加密/解密</li>
+</ol>
+<hr>
+<h3 id="事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID-原子、一致、隔离、持久-，并发控制的基本单位。"><a href="#事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID-原子、一致、隔离、持久-，并发控制的基本单位。" class="headerlink" title="事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID(原子、一致、隔离、持久) ，并发控制的基本单位。"></a>事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID(原子、一致、隔离、持久) ，并发控制的基本单位。</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">Connection.setAutoCommit(<span class="keyword">false</span>)<span class="comment">//开启事务</span></span><br><span class="line">Connection.commit()<span class="comment">//提交事务</span></span><br><span class="line">Connection.rollback()<span class="comment">//事务回滚</span></span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">    <span class="keyword">if</span>(Connection!=<span class="keyword">null</span>)Connection.rollback()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Savepoint sp = Connection.setSavepoint();</span><br><span class="line">Connection.rollback(sp);</span><br></pre></td></tr></table></figure>
+<h4 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h4><ul>
+<li><strong>脏读</strong>：一个事务读取了一个事务未提交的更新<br><img src="/images/zangdu.jpg" alt="zangdu"></li>
+<li>不可重复读：同一个事务，两次读取值不一样。</li>
+<li>幻读：同一个事务，两次读取行记录数目不一样。插入了新记录<br><img src="/images/geli.jpg" alt="geli"></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读未提交</td>
+<td>√</td>
+<td>X</td>
+<td>√</td>
+</tr>
+<tr>
+<td>读提交</td>
+<td>X</td>
+<td>X</td>
+<td>√</td>
+</tr>
+<tr>
+<td>可重复读</td>
+<td>X</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>串行化</td>
+<td>X</td>
+<td>√</td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>读未提交：允许脏读</li>
+<li>读提交：不允许脏读，可以不可重复读</li>
+<li><p>重复读：可能出现幻读。 MySQL的事务隔离级别。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>串行化：最高隔离级别，所有事务串行执行，不能幻读。</p>
+</li>
+</ol>
+<ul>
+<li>设置和获取事务隔离级别<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Connection.getTransactionIsolation()</span><br><span class="line">Connection.setTransactionIsolation()</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="MySQL的锁"><a href="#MySQL的锁" class="headerlink" title="MySQL的锁"></a>MySQL的锁</h4><ol>
+<li>排他锁X：与任何锁都冲突，等待。（写锁）</li>
+<li>共享锁S：多个事务共享一把锁。其它事务不会被阻塞。（读锁）<br>加锁方式</li>
+<li>外部加锁：SQL语句<ol>
+<li>共享 <code>select * from table lock in share mode</code></li>
+<li>排他 <code>select * from table for update</code></li>
+</ol>
+</li>
+<li>内部自动加锁</li>
+<li>加锁粒度和策略：表锁table lock：开销少；行锁（row lock): innoDB </li>
+</ol>
+<p>MySQL所有的select读都是快照读。存储引擎Innodb实现了多版本控制（MVCC)，不加锁快照读。<br>所以一个事务内部保证select数据一致要外部加锁</p>
+<ul>
+<li>MVCC 在每行记录后面保存两个隐藏的列：行创建时间，过期时间。通过版本号记录时间，每开始新的事务，系统版本递增。</li>
+</ul>
+<ol>
+<li>Update 对行加排他锁X</li>
+</ol>
+<ul>
+<li>分析MySQL处理死锁：<code>show engine innodb status</code></li>
+</ul>
+<h3 id="Mybatis-底层基于JDBC"><a href="#Mybatis-底层基于JDBC" class="headerlink" title="Mybatis 底层基于JDBC"></a>Mybatis 底层基于JDBC</h3><ol>
+<li>SqlSessionFactory实例能将对象操作转换成数据库操作<br>事务管理器<code>transactionManager type = &quot;jdbc</code><br><code>dataSource</code>驱动、url、用户名、密码</li>
+<li>对象类、操作接口</li>
+<li>映射文件<code>&lt;mapper namespace = &quot;操作接口&quot;&gt;</code></li>
+<li>将映射文件加载到配置文件<code>&lt;mappers&gt;&lt;mapper resource=&quot;&quot;&gt;</code></li>
+<li>测试<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;    </span><br><span class="line">     <span class="comment">// 1. 声明配置⽂文件的⺫⽬目录渎职   </span></span><br><span class="line">     String resource = <span class="string">"confAnnotation.xml"</span>;    </span><br><span class="line">     <span class="comment">// 2. 加载应⽤用配置⽂文件   </span></span><br><span class="line">     InputStream is = HelloMyBatisAnnotation.class.getClassLoader().getResourceAsStream(resource); </span><br><span class="line">     <span class="comment">// 3. 创建SqlSessonFactory   </span></span><br><span class="line">     SqlSessionFactory sessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder()  </span><br><span class="line">             .build(is);    </span><br><span class="line">     <span class="comment">// 4. 获取Session    </span></span><br><span class="line">     SqlSession session = sessionFactory.openSession(); </span><br><span class="line">     <span class="keyword">try</span> &#123;  </span><br><span class="line">             <span class="comment">// 5. 获取操作类（接口）    </span></span><br><span class="line">        GetUserInfo getUserInfo = session.getMapper(GetUserInfo.class); </span><br><span class="line">             <span class="comment">// 6. 完成查询操作   </span></span><br><span class="line">         User user = getUserInfo.getUser(<span class="number">11</span>);   </span><br><span class="line">         System.out.println(user.getId() + <span class="string">" "</span> + user.getUserName() + <span class="string">" "</span> + user.getCorp()); </span><br><span class="line">         &#125; <span class="keyword">finally</span> &#123;    </span><br><span class="line">             <span class="comment">// 7.关闭Session </span></span><br><span class="line">             session.close();   </span><br><span class="line">         &#125;  </span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>在操作接口上用注解@select</li>
+</ul>
+<h4 id="ResultMap"><a href="#ResultMap" class="headerlink" title="ResultMap"></a>ResultMap</h4><ol>
+<li>构造方法 mapper.xml<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">"UserMap"</span> <span class="attr">type</span>=<span class="string">"com.micro.profession.mybatis.resultMapTest.User"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">constructor</span>&gt;</span>  </span><br><span class="line">         <span class="tag">&lt;<span class="name">idArg</span> <span class="attr">column</span>=<span class="string">"userId"</span> <span class="attr">javaType</span>=<span class="string">"int"</span> /&gt;</span>   </span><br><span class="line">         <span class="tag">&lt;<span class="name">arg</span> <span class="attr">column</span>=<span class="string">"userName"</span> <span class="attr">javaType</span>=<span class="string">"String"</span> /&gt;</span>    </span><br><span class="line">         <span class="tag">&lt;<span class="name">arg</span> <span class="attr">column</span>=<span class="string">"corp"</span> <span class="attr">javaType</span>=<span class="string">"String"</span> /&gt;</span>    </span><br><span class="line">     <span class="tag">&lt;/<span class="name">constructor</span>&gt;</span> </span><br><span class="line">     <span class="tag">&lt;<span class="name">collection</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">association</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">association</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">collection</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/04/canvas/" rel="next" title="canvas">
+                <i class="fa fa-chevron-left"></i> canvas
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/11/webpack/" rel="prev" title="webpack">
+                webpack <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#timestamp有时区"><span class="nav-number">1.</span> <span class="nav-text">timestamp有时区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压力测试"><span class="nav-number">2.</span> <span class="nav-text">压力测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis逆向工程generatorConfig-xml"><span class="nav-number">3.</span> <span class="nav-text">mybatis逆向工程generatorConfig.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分区"><span class="nav-number">4.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis"><span class="nav-number">5.</span> <span class="nav-text">Mybatis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-like通配符"><span class="nav-number">5.1.</span> <span class="nav-text">mysql like通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ER图"><span class="nav-number">5.2.</span> <span class="nav-text">ER图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#慢查询"><span class="nav-number">6.</span> <span class="nav-text">慢查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#慢查询分析工具mysqldumpslow"><span class="nav-number">6.1.</span> <span class="nav-text">慢查询分析工具mysqldumpslow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-1-和count-和count"><span class="nav-number">6.2.</span> <span class="nav-text">count(1)和count(*)和count(*)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内置类型"><span class="nav-number">6.2.1.</span> <span class="nav-text">内置类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据类型"><span class="nav-number">6.2.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-join"><span class="nav-number">6.2.3.</span> <span class="nav-text">mysql join</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-min-p-39-price-39-group-by-p-quot-id-quot-quot-name-quot"><span class="nav-number">6.3.</span> <span class="nav-text">count(*),min(p.&#39;price&#39;) group by p.&quot;id&quot;,&quot;name&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库"><span class="nav-number">6.4.</span> <span class="nav-text">数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池"><span class="nav-number">6.4.1.</span> <span class="nav-text">连接池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBCP"><span class="nav-number">6.4.2.</span> <span class="nav-text">DBCP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防范SQL注入-39"><span class="nav-number">6.5.</span> <span class="nav-text">防范SQL注入&#39;--</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID-原子、一致、隔离、持久-，并发控制的基本单位。"><span class="nav-number">6.6.</span> <span class="nav-text">事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID(原子、一致、隔离、持久) ，并发控制的基本单位。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#检查点"><span class="nav-number">6.6.1.</span> <span class="nav-text">检查点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务的隔离级别"><span class="nav-number">6.6.2.</span> <span class="nav-text">事务的隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL的锁"><span class="nav-number">6.6.3.</span> <span class="nav-text">MySQL的锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis-底层基于JDBC"><span class="nav-number">6.7.</span> <span class="nav-text">Mybatis 底层基于JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ResultMap"><span class="nav-number">6.7.1.</span> <span class="nav-text">ResultMap</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

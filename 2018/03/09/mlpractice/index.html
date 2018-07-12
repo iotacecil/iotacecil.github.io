@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="alg," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="混淆矩阵：误差矩阵标签传播LP算法（基于图）1.半监督学习的假设： 1）Smoothness平滑假设：相似的数据具有相同的label。 2）Cluster聚类假设：处于同一个聚类下的数据具有相同label。 3）Manifold流形假设：处于同一流形结构下的数据具有相同label。 2.相似度矩阵数据点为节点，包括labeled和unlabeled数据。边表示两点的相似度。假设图是全连接.边ij的">
+<meta name="keywords" content="alg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mlpractice">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/09/mlpractice/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="混淆矩阵：误差矩阵标签传播LP算法（基于图）1.半监督学习的假设： 1）Smoothness平滑假设：相似的数据具有相同的label。 2）Cluster聚类假设：处于同一个聚类下的数据具有相同label。 3）Manifold流形假设：处于同一流形结构下的数据具有相同label。 2.相似度矩阵数据点为节点，包括labeled和unlabeled数据。边表示两点的相似度。假设图是全连接.边ij的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/logi.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/mapreduce.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/lance.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/FCM.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/distance.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.356Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mlpractice">
+<meta name="twitter:description" content="混淆矩阵：误差矩阵标签传播LP算法（基于图）1.半监督学习的假设： 1）Smoothness平滑假设：相似的数据具有相同的label。 2）Cluster聚类假设：处于同一个聚类下的数据具有相同label。 3）Manifold流形假设：处于同一流形结构下的数据具有相同label。 2.相似度矩阵数据点为节点，包括labeled和unlabeled数据。边表示两点的相似度。假设图是全连接.边ij的">
+<meta name="twitter:image" content="https://iotaa.xyz/images/logi.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/09/mlpractice/"/>
+
+
+
+
+
+  <title>mlpractice | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/09/mlpractice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mlpractice</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T23:45:20+08:00">
+                2018-03-09
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="混淆矩阵：误差矩阵"><a href="#混淆矩阵：误差矩阵" class="headerlink" title="混淆矩阵：误差矩阵"></a>混淆矩阵：误差矩阵</h3><h3 id="标签传播LP算法（基于图）"><a href="#标签传播LP算法（基于图）" class="headerlink" title="标签传播LP算法（基于图）"></a>标签传播LP算法（基于图）</h3><p>1.半监督学习的假设：<br> 1）Smoothness平滑假设：相似的数据具有相同的label。<br> 2）Cluster聚类假设：处于同一个聚类下的数据具有相同label。<br> 3）Manifold流形假设：处于同一流形结构下的数据具有相同label。</p>
+<p>2.相似度矩阵<br>数据点为节点，包括labeled和unlabeled数据。边表示两点的相似度。<br>假设图是全连接.边ij的权重$W_{ij}=exp(\frac{-||x_i-x_j||^2}{α^2})$ α是超参。<br>另外可以构建KNN图 稀疏相似矩阵，指保留每个节点的k近邻权重，其它为0。</p>
+<p>3.传播，权重越大传播概率越高<br> 转移概率$P_{ij}=P(i-&gt;j)=\frac{w_{ij}}{\sum_{k=1}^nw_{ik}}$ </p>
+<ul>
+<li>假设C个类，L个labeled的样本，则LxC矩阵$Y_L$i行是第i个样本的标签指示向量。如果第i个样本类别是j，则<code>[i][j]</code>为1，其它为0。</li>
+<li>建立unlabeled的矩阵$Y_U$UxC同理。</li>
+<li>合并得到NxC句矩阵。F=[Y_L;Y_U] (L+U=N行）保留样本i属于每个类别的概率。</li>
+</ul>
+<p>4.算法步骤 </p>
+<ul>
+<li>F=PF：每个节点以P的概率传播给其它节点。</li>
+<li>$F_L=Y_L$ (Y_L的标签是已知的，要保留，覆盖回原来的值)</li>
+<li>重复以上两步直到F收敛。<br>5.优化算法。$F_L$部分是不变的.浪费的计算。<br>将概率转移矩阵变成<br>$$<br>P=\begin{bmatrix}<br>  P_{LL} &amp; P_{LU} \\<br>  P_{UL} &amp; P_{uU} \\<br>\end{bmatrix}<br>$$<br>只计算$F_U=P_{UU}F_U+P_{UL}Y_{L}$ 取决于无标签转移概率、有标签的相似度矩阵、无标签当前标签的转移概率。<br>算法可以优化成并行的，切分F_U</li>
+</ul>
+<h3 id="1-Logistic"><a href="#1-Logistic" class="headerlink" title="1. Logistic"></a>1. Logistic</h3><blockquote>
+<p><font color="HotPink">损失函数L：单个训练样本</font></p>
+</blockquote>
+<p>$\hat{y}=p(y=1|x)$ 给定样本x的条件下，输出y=1的概率</p>
+<blockquote>
+<p>成本(cost)函数J:全体训练样本$\frac{1}{m}\sum_{i=1}^mL(\hat{y}^{(i)},y^{(i)})$</p>
+</blockquote>
+<p>cost：每个样本的乘积的最大似然估计 *1/m<br></p>
+<ul>
+<li><p>Logistic损失函数 $L(\hat{y},y) = -(ylog\hat{y}+(1-y)log(1-\hat{y}))$</p>
+<ul>
+<li>当y=1,$L =-log\hat{y}$ 让误差最小，则让$\hat{y}$大，$\hat{y}$经过sigmoid小于1</li>
+<li>当y=0,$L = -log(1-\hat{y})$,则$\hat{y}=0$</li>
+</ul>
+</li>
+<li>矩阵乘法：左向量组，列数是向量的维度；右线性空间；相乘：将向量组线性变换到新的线性空间。 右边的行数最少要满足由基地向量构成的线性空间维度。</li>
+<li>特征向量：向量值发生了伸缩变换，没有旋转。伸缩比例是特征值。</li>
+</ul>
+<ul>
+<li>梯度下降<br>  $w=w-\alpha\frac{dJ(w,b)}{dw}$<br>  $b=b-\alpha\frac{dJ(w,b)}{db}$</li>
+<li>反向传播<br>  计算loss对每个变量的梯度，通过链式法则<br><img src="\images\logi.jpg" alt="logi"><br>a=sigmoid($\hat{y}$)<br>正向传播:1.计算wx+b 2.经过sigmoid求出$\hat{y}$ 3.计算loss<br>反向传播:<ol>
+<li>da=loss对$\hat{y}$求导</li>
+<li>dz = da*sigmoid求导 </li>
+<li>dw1 =dz*z对w1求导</li>
+</ol>
+</li>
+<li>向量化：不用一个for循环<div class="note class_name"><ul>
+<li><strong>正向传播</strong><br>  1.$z=w^Tx+b$<br>  2.<code>np.dot(w.T,x)+b</code><br>  3.$\hat{y}$=simgmoid(z)</li>
+<li><strong>反向传播</strong><br>  4.$dz = \hat{y} - y$<br>  5.<code>dw = 1/m*np.dot(x,dz.T)</code><br>  6.<code>db = 1/m*np.sum(dz)</code></li>
+<li><strong>梯度下降</strong><br>  7.w = w-α<em>dw<br>  8.b = b-α</em>db<br>以上for 梯度下降多少次</li>
+</ul></div>
+dcost = 1/m*np.sum(dz)<br>-<blockquote>
+<p>创建一维向量不用要np.random.randn(5)因为a.shape=(5,)<br>用： 列向量np.random.randn(5,1);行向量np.random.randn(1,5)</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3 id="2-浅层NN"><a href="#2-浅层NN" class="headerlink" title="2. 浅层NN"></a>2. 浅层NN</h3><p>tanh是sigmoid的平移<br>tanh效果好因为 激活函数平均值接近0，tanh在所有场景几乎最优 不用sigmoid了<br>输出层用sigmoid：因为（0，1）之间的二分类问题</p>
+<ol>
+<li>tanh和sigmoid的问题是z很大时，梯度很小，梯度下降效率低<ol>
+<li>$g’(tanh(z))=1-(tanh(z))^2$ ,$1-a^2$</li>
+</ol>
+</li>
+<li><strong>ReLu</strong>:修正线性单元(rectified linear unit):ReLU:= $a=max(0,z)$<ol>
+<li>只要z&gt;0,导数=1；z&lt;0,导数=0<br>除了输出层，都用ReLU为激活函数</li>
+<li>Leaky-ReLU：z&lt;0时让导数不为零，有一个很小低梯度<code>max(0.01*z,z)</code></li>
+<li>虽然有一半导数=0，但因为有足够多的隐藏单元另z&gt;0</li>
+<li>$g’=1 if z&gt;0$</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>神经网络初始化：不能初始化为0，这样两个隐藏单元会相同。<br>$W^{[1]}$ = np.random.randn((2,2))<em>0.01 使梯度较大<br>$b^{[1]}$ = np.zero((2,1))<br>$W^{[1]}$ = np.random.randn((2,2))</em>0.01</li>
+<li>二分类问题时da 最后一层<br>$L(a,y) = -(ylog(a)+(1-y)log(1-a))$<br>$da^{[1]} = -y/a + (1-y)/(1-a)$</li>
+</ul>
+<hr>
+<h3 id="bias偏差-variance方差"><a href="#bias偏差-variance方差" class="headerlink" title="bias偏差/variance方差"></a>bias偏差/variance方差</h3><ol>
+<li>high bias -&gt; 欠拟合 -&gt;选择新的网络直到至少可以拟合训练集</li>
+<li>high variance -&gt; 过拟合 -&gt;更多数据/正则化/回到1换模型</li>
+</ol>
+<h3 id="正则化-高variance-过拟合"><a href="#正则化-高variance-过拟合" class="headerlink" title="正则化- 高variance 过拟合"></a>正则化- 高variance 过拟合</h3><ol>
+<li>L2正则:w通常是一个高维参数矢量已经可以表达high variance 问题<br>$+\frac{λ}2m||w||_2^2$</li>
+<li>L1正则:$\frac{λ}m||w||_1$ 使用<code>L1</code>正则化，<code>w</code>最终会稀疏,<code>w</code>向量有很多0</li>
+</ol>
+<hr>
+<h4 id="Dropout随机失活-多用于图像"><a href="#Dropout随机失活-多用于图像" class="headerlink" title="Dropout随机失活 多用于图像"></a>Dropout随机失活 多用于图像</h4><ol>
+<li>a3 表示三层网络各节点的值, $a3=[a^{[1]},a^{[2]},a^{[3]}]$</li>
+<li>权重转成0或1：d3=np.random.rand(a3.shape[0], a3.shape[1]) &lt; keepProb </li>
+<li>删除节点：a3 = np.multiply(a3, d3)</li>
+<li>为了不影响原来Z的期望，a3 /= keepProb</li>
+</ol>
+<ol>
+<li><a href="http://archive.ics.uci.edu/ml/" target="_blank" rel="noopener">http://archive.ics.uci.edu/ml/</a><br>——最有名的机器学习数据资源来自美国加州大学欧文分校</li>
+<li><a href="http://aws.amazon.com/publicdatasets/" target="_blank" rel="noopener">http://aws.amazon.com/publicdatasets/</a>美国人口普查数据、人类基因组注释的数据\维基百科的页面流量\维基百科的链接数据</li>
+<li><a href="http://www.data.gov" target="_blank" rel="noopener">http://www.data.gov</a>——Data.gov启动于2009年，目的是使公众可以更加方便地访问政府的数据<br>flavor 中加时间向量，对每一个flavor进行时序预测，sum<br>flavor 有序字典</li>
+</ol>
+<ul>
+<li>预测目标变量的值，则可以选择监督学习算法,需要进一步确定目标变量类型，如果目标变量是离散型，如是/否、1/2/3、A/B/C或者红/黄/黑等，则可以选择分类算法.<br>k-近邻算法    线性回归　<br>朴素贝叶斯算法    局部加权线性回归<br>支持向量机    Ridge 回归<br>决策树    Lasso 最小回归系数估计</li>
+</ul>
+<blockquote>
+<p>科学函数库SciPy和NumPy使用底层语言（C和Fortran）编写，提高了相关应用程序的计算性能。</p>
+</blockquote>
+<h4 id="8-1"><a href="#8-1" class="headerlink" title="8.1"></a>8.1</h4><ul>
+<li>NumPy提供一个线性代数的库linalg，其中包含很多有用的函数。可以直接调用linalg.det()来计算行列式<br>第9章 用分类算法来处理回归问题</li>
+</ul>
+<h4 id="15-MapReduce-数值型和标称型数据。"><a href="#15-MapReduce-数值型和标称型数据。" class="headerlink" title="15 MapReduce:数值型和标称型数据。"></a>15 MapReduce:数值型和标称型数据。</h4><ul>
+<li>过去100年国内最高气温：<br>每个mapper将产生一个温度，形如&lt;”max”&gt;<temp>，也就是所有的mapper都会产生相同的key：”max”字符串<br><img src="\images\mapreduce.jpg" alt="mapreduce"><br>集成算法<br>生成多个分类器再集成 全选分类器 求平均</temp></li>
+</ul>
+<h4 id="pandas"><a href="#pandas" class="headerlink" title="pandas"></a>pandas</h4><ol>
+<li>时间序列关键点：极大值，极小值or拐点 用关键点代替原始时间序列。</li>
+<li>合并关键点序列时间下标 得到等长序列</li>
+<li>Lance距离 无量纲。欧式距离缺点L:有量纲，变差大的变量在距离中贡献大。<br><img src="/images/lance.jpg" alt="lance"></li>
+<li>FCM算法 每条时间序列属于各个类的程度。<br><img src="/images/FCM.jpg" alt="fcm"></li>
+</ol>
+<p>ARIMA自回归综合移动平均<br>Auto-Regressive Integrated Moving Averages. </p>
+<ul>
+<li>Number of AR (Auto-Regressive) terms (p)： 现在点使用多少个过往数据计算。</li>
+<li>Number of MA (Moving Average) terms (q)：使用多少个过往的残余错误值。</li>
+<li>Number of Differences (d)：非季节性的个数（小编：其实是否求导数）。</li>
+</ul>
+<h5 id="日期范围"><a href="#日期范围" class="headerlink" title="日期范围"></a>日期范围</h5><ol>
+<li>pd.date_range(‘4/1/2012’,’6/1/2022’) 默认按天</li>
+<li>pd.date_range(start=’4/1/2012’,periods=20)</li>
+<li>每个月最后一个工作日 “BM”频率<br>pd.date_range(‘1/1/200’,’12/1/2000’,ferq=’BM’)</li>
+<li>规范化到午夜</li>
+</ol>
+<ul>
+<li>WOM日期 Week of Month freq=’WOM-3FRI’每月第3个星期五<br>5 时区 </li>
+</ul>
+<h4 id="numpy"><a href="#numpy" class="headerlink" title="numpy"></a>numpy</h4><ul>
+<li>random.rand(4,4) -&gt; 4x4的 array</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr_alice = arr[<span class="number">5</span>:<span class="number">8</span>]</span><br><span class="line">arr_alice[<span class="number">0</span>] =<span class="number">11</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>arr的值也会改变</strong><br>np 的切片和赋值不会copy arr[5:8].copy()<br><code>arr_alice = arr[5:8].copy()</code>显示复制，arr不会被改变</p>
+<ul>
+<li>多维数组 arr2d[0][2] == arr2d[0,2]</li>
+<li>np.random.randn(7,4)生成正态分布的随机数<br><code>names==&#39;bob&#39;</code> [True,Fales] list,<br><code>data[names==&#39;bob]</code> boolean数组可以用于索引<br><code>data[-(names==&#39;bob&#39;)]</code></li>
+</ul>
+<h5 id="花式索引"><a href="#花式索引" class="headerlink" title="花式索引"></a>花式索引</h5><p>arr[[4,3,0,6]] 获取第4、3、0、6 行</p>
+<h5 id="array-1-2-3"><a href="#array-1-2-3" class="headerlink" title="array([1,2,3])"></a>array([1,2,3])</h5><ul>
+<li>from numpy import array</li>
+<li>list对应元素相乘：<br>某个向量沿着另一个向量的移动量。<br><code>array(list)*array(list2)</code>对应元素相乘</li>
+<li>.dtype 同构数据元素的类型</li>
+<li>zeros(10) ones(10) 全0or全1数组</li>
+<li>empty((2,3,2)) 创建没有任何具体值的数组</li>
+<li>np.dot(arr.T,arr) 内积<h4 id="nonzero-array"><a href="#nonzero-array" class="headerlink" title="nonzero(array)"></a>nonzero(array)</h4></li>
+</ul>
+<ol>
+<li>nonzeros(a)返回数组a中值不为零(Flase)的元素的下标</li>
+<li>transpose([])转成array</li>
+</ol>
+<ul>
+<li>linspace(start,stop,num，endpoint=False)返回长为num的array 数值从start到stop渐变，endpoint=False递增</li>
+</ul>
+<h5 id="mat-matrix"><a href="#mat-matrix" class="headerlink" title="mat,matrix"></a>mat,matrix</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- <span class="keyword">from</span> numpy <span class="keyword">import</span> mat, matrix</span><br><span class="line">mat([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])/matrix([<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">mat([<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>])[<span class="number">0</span>,<span class="number">1</span>] <span class="comment">#=3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>矩阵相乘:<br><em>矩阵相乘，multiply内积<br>`mat(list)</em>mat(list2).T` 内积</li>
+<li><p>from numpy import shape 查看矩阵or数组的维数<br>矩阵第一行元素jj[1,:]<br>矩阵对应元素相乘:矩阵相乘还可以看成是列的加权求和<br>矩阵相乘的MapReduce版本。??<br>from numpy import multiply</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">multiply(mat(list),mat(list2))</span><br><span class="line">matrix([[ <span class="number">2</span>,  <span class="number">6</span>, <span class="number">12</span>]])</span><br><span class="line">array(list)*array(list2)</span><br><span class="line">array([ <span class="number">2</span>,  <span class="number">6</span>, <span class="number">12</span>])</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>矩阵数组排序 .sort() 原地排序 结果占用原始存储空间</p>
+</li>
+<li><p>每个元素的排序序号：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dd=mat([<span class="number">4</span>, <span class="number">5</span>, <span class="number">1</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dd.argsort()</span><br><span class="line">matrix([[<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>]])</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数组/矩阵均值 .mean()</p>
+</li>
+</ul>
+<h5 id="矩阵的逆-I"><a href="#矩阵的逆-I" class="headerlink" title="矩阵的逆.I"></a>矩阵的逆.I</h5><p><code>linalg.inv(A)</code></p>
+<blockquote>
+<p>矩阵要可逆必须要是方阵。如果某个矩阵不可逆，则称它为奇异（singular）或退化（degenerate）矩阵。</p>
+<ol>
+<li>一种方法是对矩阵进行重排然后每个元素除以行列式。如果行列式为0，就无逆矩阵。</li>
+<li><code>mat()*mat().I</code> ≠1 计算机处理误差产生的结果</li>
+</ol>
+<ul>
+<li>4×4的单位矩阵eye(4)/identity(4)</li>
+</ul>
+</blockquote>
+<h5 id="矩阵相关"><a href="#矩阵相关" class="headerlink" title="矩阵相关"></a>矩阵相关</h5><ol>
+<li>行列式<code>det(A)</code></li>
+<li>秩 linalg.matrix_rank(A)</li>
+<li>可逆矩阵求解 </li>
+</ol>
+<h5 id="矩阵范数"><a href="#矩阵范数" class="headerlink" title="矩阵范数:"></a>矩阵范数:</h5><blockquote>
+<p>给向量赋予一个正标量值 到原点的距离</p>
+<ol>
+<li>L1：Manhattan distance。z=[3,4] $||z||_1=3+4=7$各元素绝对值之和</li>
+<li>任意阶范数公式<br><img src="\images\distance.jpg" alt="distance"></li>
+<li>二阶linalg.norm([8,1,6])</li>
+<li>欧式距离 <code>sqrt((v1-v2)*(v1-v2.T))</code></li>
+<li>曼哈顿距离 <code>sum(abs(v1-v2))</code></li>
+<li>切比雪夫距离：国际象棋国王的步数<br><code>abs(v1-v2).max()</code></li>
+</ol>
+</blockquote>
+<h5 id="夹角cosθ"><a href="#夹角cosθ" class="headerlink" title="夹角cosθ"></a>夹角cosθ</h5><p><code>cos = dot(v1,v2)/(linalg.norm(v1)*linalg.norm(v2))</code></p>
+<h5 id="汉明距离"><a href="#汉明距离" class="headerlink" title="汉明距离"></a>汉明距离</h5><ol>
+<li>汉明距离：<code>shape(nonzero(v1-v2)[1])[0]</code></li>
+<li>？编辑距离：<br>A=”909”，B=”090”。A与B的汉明距离H(A, B) = 3，编辑距离ED(A, B) =2。</li>
+<li>？文本相似度simHash</li>
+</ol>
+<h5 id="Jaccard-杰卡德-集合-相似性系数：样本集交集与样本集并集的比值，即J-A∩B-÷-A∪B-：两个文档的共同都有的词除以两个文档所有的词"><a href="#Jaccard-杰卡德-集合-相似性系数：样本集交集与样本集并集的比值，即J-A∩B-÷-A∪B-：两个文档的共同都有的词除以两个文档所有的词" class="headerlink" title="Jaccard(杰卡德)  集合  相似性系数：样本集交集与样本集并集的比值，即J = |A∩B| ÷ |A∪B|：两个文档的共同都有的词除以两个文档所有的词"></a>Jaccard(杰卡德)  集合  相似性系数：样本集交集与样本集并集的比值，即J = |A∩B| ÷ |A∪B|：两个文档的共同都有的词除以两个文档所有的词</h5><ul>
+<li>杰卡德距离 1-J=（并-交）/并：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scipy.spatial.distance <span class="keyword">as</span> dist</span><br><span class="line">dist.pdist(mat,<span class="string">'jaccard'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="相关系数-相关距离（线性相关）"><a href="#相关系数-相关距离（线性相关）" class="headerlink" title="相关系数 相关距离（线性相关）"></a>相关系数 相关距离（线性相关）</h5><p>coefficient 系数；<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mv1= mean(mat[<span class="number">0</span>])</span><br><span class="line">mv2= mean(mat[<span class="number">1</span>])</span><br><span class="line">std1= std(mat[<span class="number">0</span>])</span><br><span class="line">std2= std(mat[<span class="number">1</span>])</span><br><span class="line">cor= mean(multiply(mat[<span class="number">0</span>]-mv1,mat[<span class="number">1</span>]-mv2))/(std1*std2)</span><br></pre></td></tr></table></figure></p>
+<h5 id="马氏距离"><a href="#马氏距离" class="headerlink" title="马氏距离"></a>马氏距离</h5><ol>
+<li>协方差是对角阵、单位矩阵（两个样本向量之间独立同分布） 马氏距离为欧式距离 </li>
+<li>马氏距离 量纲无关</li>
+</ol>
+<ul>
+<li><ol>
+<li>协方差矩阵的逆：<code>linalg.inv(cov(mat))</code><br>inv()矩阵求逆</li>
+</ol>
+</li>
+<li><ol>
+<li>tp =mat.T[0]-mat.T[1]</li>
+</ol>
+</li>
+<li><ol>
+<li><code>dis = sqrt(dot(dot(tp,covinv),tp.T))</code></li>
+</ol>
+</li>
+</ul>
+<h5 id="特征向量特征值"><a href="#特征向量特征值" class="headerlink" title="特征向量特征值"></a>特征向量特征值</h5><ol>
+<li>evals(特征值）,evecs（特征向量） = linalg.eig(mat)</li>
+<li><p>?手工求特征值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#求方程根</span></span><br><span class="line">roots(A)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还原矩阵 $A=Q∑Q^-1$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#特征值构成的对角阵</span></span><br><span class="line">sigma = 特征值*eye(m)</span><br><span class="line">特征向量*sigma*linalg.inv(特征向量)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>矩阵求导:<br>A向量（2·1）对B（3·1）求导，得到3·2的矩阵</li>
+</ul>
+<p>model = ARIMA(ts_log, order=(2, 1, 2))<br>！<a href="\image\juzhenqiudao.jpg">qiudao</a><br>results_ARIMA = model.fit(disp=-1)<br>plt.plot(ts_log_diff)<br>plt.plot(results_ARIMA.fittedvalues, color=’red’)<br>plt.title(‘RSS: %.4f’% sum((results_ARIMA.fittedvalues-ts_log_diff)**2))<br>plt.show()<br>dic:key不存在，就会触发KeyError错误</p>
+<ul>
+<li>假设验证 实验结果是否有统计显著性或随机性</li>
+</ul>
+<h5 id="归一化：转换成无量纲"><a href="#归一化：转换成无量纲" class="headerlink" title="归一化：转换成无量纲"></a>归一化：转换成无量纲</h5><ul>
+<li>标准化后的值= （标准化前的值-分量的均值）/分量的标准差</li>
+</ul>
+<ol>
+<li>标准化欧氏距离方差的倒数为权重的加权欧氏距离<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 欧氏距离</span></span><br><span class="line">mat([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line">v12 = vmat[<span class="number">0</span>]-vmat[<span class="number">1</span>]</span><br><span class="line">sqrt(v12*v12.T)</span><br><span class="line"><span class="comment"># 标准化</span></span><br><span class="line"><span class="comment">#1.方差</span></span><br><span class="line">vstd = std(mat.T,axis=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#2.（标准化前的值-所有值的均值/方差</span></span><br><span class="line">norm = (mat-mean(mat))/vstd.T</span><br><span class="line"><span class="comment">#3.欧式距离</span></span><br><span class="line">normv12 = norm[<span class="number">0</span>]-norm[<span class="number">1</span>]</span><br><span class="line">sqrt(normv12*nromv12.T)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/alg/" rel="tag"># alg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/09/problems/" rel="next" title="problems">
+                <i class="fa fa-chevron-left"></i> problems
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/11/javanet/" rel="prev" title="javanet">
+                javanet <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#混淆矩阵：误差矩阵"><span class="nav-number">1.</span> <span class="nav-text">混淆矩阵：误差矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标签传播LP算法（基于图）"><span class="nav-number">2.</span> <span class="nav-text">标签传播LP算法（基于图）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Logistic"><span class="nav-number">3.</span> <span class="nav-text">1. Logistic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-浅层NN"><span class="nav-number">4.</span> <span class="nav-text">2. 浅层NN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bias偏差-variance方差"><span class="nav-number">5.</span> <span class="nav-text">bias偏差/variance方差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化-高variance-过拟合"><span class="nav-number">6.</span> <span class="nav-text">正则化- 高variance 过拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dropout随机失活-多用于图像"><span class="nav-number">6.1.</span> <span class="nav-text">Dropout随机失活 多用于图像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-1"><span class="nav-number">6.2.</span> <span class="nav-text">8.1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-MapReduce-数值型和标称型数据。"><span class="nav-number">6.3.</span> <span class="nav-text">15 MapReduce:数值型和标称型数据。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pandas"><span class="nav-number">6.4.</span> <span class="nav-text">pandas</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#日期范围"><span class="nav-number">6.4.1.</span> <span class="nav-text">日期范围</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#numpy"><span class="nav-number">6.5.</span> <span class="nav-text">numpy</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#花式索引"><span class="nav-number">6.5.1.</span> <span class="nav-text">花式索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#array-1-2-3"><span class="nav-number">6.5.2.</span> <span class="nav-text">array([1,2,3])</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nonzero-array"><span class="nav-number">6.6.</span> <span class="nav-text">nonzero(array)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mat-matrix"><span class="nav-number">6.6.1.</span> <span class="nav-text">mat,matrix</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#矩阵的逆-I"><span class="nav-number">6.6.2.</span> <span class="nav-text">矩阵的逆.I</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#矩阵相关"><span class="nav-number">6.6.3.</span> <span class="nav-text">矩阵相关</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#矩阵范数"><span class="nav-number">6.6.4.</span> <span class="nav-text">矩阵范数:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#夹角cosθ"><span class="nav-number">6.6.5.</span> <span class="nav-text">夹角cosθ</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#汉明距离"><span class="nav-number">6.6.6.</span> <span class="nav-text">汉明距离</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Jaccard-杰卡德-集合-相似性系数：样本集交集与样本集并集的比值，即J-A∩B-÷-A∪B-：两个文档的共同都有的词除以两个文档所有的词"><span class="nav-number">6.6.7.</span> <span class="nav-text">Jaccard(杰卡德)  集合  相似性系数：样本集交集与样本集并集的比值，即J = |A∩B| ÷ |A∪B|：两个文档的共同都有的词除以两个文档所有的词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关系数-相关距离（线性相关）"><span class="nav-number">6.6.8.</span> <span class="nav-text">相关系数 相关距离（线性相关）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#马氏距离"><span class="nav-number">6.6.9.</span> <span class="nav-text">马氏距离</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#特征向量特征值"><span class="nav-number">6.6.10.</span> <span class="nav-text">特征向量特征值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#归一化：转换成无量纲"><span class="nav-number">6.6.11.</span> <span class="nav-text">归一化：转换成无量纲</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

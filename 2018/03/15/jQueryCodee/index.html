@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="browser sync自动刷新  npm install -g browser-sync 进入监听文件夹// 如果你的文件层级比较深，您可以考虑使用 **（表示任意目录）匹配，任意目录下任意.css 或 .html文件。  browser-sync start --server --files &amp;quot;**/*.css, **/*.html&amp;quot;  腻子？ JavaScript代码，能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQueryCode">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/15/jQueryCodee/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="browser sync自动刷新  npm install -g browser-sync 进入监听文件夹// 如果你的文件层级比较深，您可以考虑使用 **（表示任意目录）匹配，任意目录下任意.css 或 .html文件。  browser-sync start --server --files &amp;quot;**/*.css, **/*.html&amp;quot;  腻子？ JavaScript代码，能">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.339Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQueryCode">
+<meta name="twitter:description" content="browser sync自动刷新  npm install -g browser-sync 进入监听文件夹// 如果你的文件层级比较深，您可以考虑使用 **（表示任意目录）匹配，任意目录下任意.css 或 .html文件。  browser-sync start --server --files &amp;quot;**/*.css, **/*.html&amp;quot;  腻子？ JavaScript代码，能">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/15/jQueryCodee/"/>
+
+
+
+
+
+  <title>jQueryCode | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/15/jQueryCodee/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jQueryCode</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T11:13:05+08:00">
+                2018-03-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="browser-sync"><a href="#browser-sync" class="headerlink" title="browser sync"></a>browser sync</h2><p><a href="http://www.browsersync.cn/" target="_blank" rel="noopener">自动刷新</a></p>
+<ul>
+<li>npm install -g browser-sync</li>
+<li>进入监听文件夹<code>// 如果你的文件层级比较深，您可以考虑使用 **（表示任意目录）匹配，任意目录下任意.css 或 .html文件。 
+browser-sync start --server --files &quot;**/*.css, **/*.html&quot;</code></li>
+</ul>
+<h2 id="腻子？"><a href="#腻子？" class="headerlink" title="腻子？"></a>腻子？</h2><blockquote>
+<p>JavaScript代码，能够赋予浏览器未曾有过的功能</p>
+<ul>
+<li>HTML5shiv </li>
+<li>原理？</li>
+</ul>
+</blockquote>
+<h3 id="jq-目录"><a href="#jq-目录" class="headerlink" title="jq 目录"></a>jq 目录</h3><ol>
+<li>代码风格：<code>.editorconfig</code> 不同程序员和IDE协作文件</li>
+<li>代码规范：eslintrc- node(后端) -brower(前端);.eslintrc.json继承，便于替换</li>
+<li>项目版本：git</li>
+<li>基于nodejs开发</li>
+<li>使用grunt进行工程化管理</li>
+</ol>
+<h4 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h4><ol>
+<li><code>devDependencies</code>开发阶段依赖的包<ol>
+<li>转换规则<code>babel-plugin-transform-es2015-for-of&quot;: &quot;7.0.0-beta.0&quot;</code></li>
+<li>转换命令<code>grunt-babel</code>自动化任务</li>
+<li><code>husky</code>阻止git中不好的操作 .git/hooks</li>
+<li><code>commitplease</code>保证git提交注释的格式规则</li>
+<li><code>core-js</code>es5\6\7的腻子</li>
+<li><code>eslint-config-jquery</code> 代码规范的配置</li>
+<li><code>grunt-eslint</code> </li>
+<li><code>grunt</code>- <code>grunt-cli</code>(一般全局安装）控制台命令接口，安装对应的自动化插件</li>
+<li>测试相关</li>
+<li><code>require.js</code> AMD规范</li>
+<li><code>sizzle</code> 纯js选择器    </li>
+</ol>
+</li>
+<li><code>scripts</code>可以运行的脚本npm</li>
+<li><code>commitplease</code> 插件配置</li>
+</ol>
+<h3 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h3><ol>
+<li>install -g全局安装，操作系统任意路径都能找到<br> –save 本地安装 项目目录里<br> –save-dev 只在开发环境依赖 运行环境不依赖</li>
+<li><code>npm install grunt --save-dev</code> 加到devdependenceis</li>
+</ol>
+<h3 id="grunt-Gruntfile-js"><a href="#grunt-Gruntfile-js" class="headerlink" title="grunt Gruntfile.js"></a>grunt Gruntfile.js</h3><p>初始化grunt ，加载grunt插件的脚本文件，创建自动化任务</p>
+<h3 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h3><p>nodejs测试环境</p>
+<ol>
+<li>chrome://inspect</li>
+<li>控制台 <code>node --inspect-brk .\app.js</code> 第一行里加断点<br>浏览器测试环境</li>
+<li><code>&lt;script&gt;</code>插入require.js;并设置入口文件<code>data-main=&quot;index.js&quot;</code></li>
+<li><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">index.js </span><br><span class="line"><span class="number">1.</span> 默认路径配置</span><br><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    baseUrl:<span class="string">"../src"</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="number">2.</span> 声明依赖模块 路径是src/css.js(返回jqrery)</span><br><span class="line"><span class="built_in">require</span>([<span class="string">'css'</span>],<span class="function"><span class="keyword">function</span>(<span class="params">$</span>)</span>&#123;</span><br><span class="line">    $(<span class="string">'div'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="jquery-js"><a href="#jquery-js" class="headerlink" title="jquery.js"></a>jquery.js</h3><ul>
+<li>core.js<br>  define(依赖的模块,function(依赖模块返回的对象))</li>
+<li>toArray:<br>  return slice.call( this ); 关联的对象转成数组return [].slice<br>  .call(this) 绑定上下文<br>  <code>[].slice.call(this)</code>返回[window]类数组</li>
+<li>get:<br>  <code>return num &lt; 0 ? this[ num + this.length ] : this[ num ];</code>从后往前数数组</li>
+<li>pushStack:<br><code>jQuery.merge(</code>构建新的jQ对象</li>
+</ul>
+<h4 id="ES5普通的创建对象"><a href="#ES5普通的创建对象" class="headerlink" title="ES5普通的创建对象"></a>ES5普通的创建对象</h4><ul>
+<li>每个构造函数都有一个原型对象 </li>
+<li>constructor属性指向构造函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.创建构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Student</span>(<span class="params">name,sex</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//2. 创建构造函数原型对象</span></span><br><span class="line">Student.prototype=&#123;</span><br><span class="line">    <span class="keyword">constructor</span>:Student,</span><br><span class="line">    //添加实例共享的方法</span><br><span class="line">    study:function()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//3. 使用构造函数必须要用new 可以返回this</span></span><br><span class="line"><span class="keyword">var</span> stu = <span class="keyword">new</span> Student(a,b);</span><br><span class="line">stu.study();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="jquery-构造函数"><a href="#jquery-构造函数" class="headerlink" title="jquery 构造函数"></a>jquery 构造函数</h4><ol>
+<li>core.js:return <code>new</code> init(,) 避免使用new<br> 但return的是init类型，prototype的方法不能用</li>
+<li><p>init.js:<code>init = jQuery.fn.init = function</code>放到了jq的原型里；<br> <code>init.prototype = jQuery.fn;</code>两个原型相等，解决原型方法<br> 让两个构造函数引用同一个原型对象</p>
+</li>
+<li><p><code>jQuery.fn = jQuery.prototype</code>添加fn属性，其实是prototype的简写</p>
+</li>
+</ol>
+<h5 id="init-js"><a href="#init-js" class="headerlink" title="init.js"></a>init.js</h5><p>创建DOM对象</p>
+<ul>
+<li><code>if ( selector.nodeType )</code>DOM元素有nodetype属性</li>
+<li>slector不是string/DOM/function<code>return jQuery.makeArray( selector, this );</code>是js对象</li>
+</ul>
+<ol>
+<li><p>如果是string:判断是html标签</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( selector[ <span class="number">0</span> ] === <span class="string">"&lt;"</span> &amp;&amp;</span><br><span class="line">                selector[ selector.length - <span class="number">1</span> ] === <span class="string">"&gt;"</span> &amp;&amp;</span><br><span class="line">                selector.length &gt;= <span class="number">3</span> )</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>parseHTML.js</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/^&lt;([a-z][^\/\<span class="number">0</span>&gt;:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?&gt;(?:&lt;\/\<span class="number">1</span>&gt;|)$/i</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>^&lt;</code> 第一个符号是<code>&lt;</code></li>
+<li><code>[^\/\0&gt;:\x20\t\r\n\f]*</code>不是<code>/</code>,<code>\0</code>匹配NULL (U+0000) 字符,<code>&gt;</code>，<code>:</code>，<code>\x20</code>空格…</li>
+<li><code>[\x20\t\r\n\f]*</code>很多空格</li>
+<li><code>\/?</code>可以有一个<code>/</code></li>
+<li><code>(?:)</code>非捕获组。 捕获组：<code>([a-zA-Z])\1</code>:<code>\1</code>捕获组 <code>$1</code>捕获组的引用</li>
+<li><code>&lt;\/\1&gt;</code>:<code>\1</code>捕获前面<code>([a-z][^\/\0&gt;:\x20\t\r\n\f]*)</code>小括号中的内容</li>
+<li><code>/i</code> (忽略大小写)<br>添加属性</li>
+</ol>
+<ul>
+<li><code>$(html, props)</code> 添加属性props是js对象<code>this.attr( match, context[ match ] );</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>是string但不是<code>&lt;&gt;</code>开头结尾：<br> 正则html标签<code>rquickExpr = /^(?:\s*(&lt;[\w\W]+&gt;)[^&gt;]*|#([\w-]+))$/,</code><ol>
+<li>非捕获+很多空白+&lt;任意一个字母或数字或下划线\和所有字母、数字、下划线以外的字符&gt;<br><code>[^&gt;]*</code> 除了<code>&gt;</code>之外的符号可以有很多个</li>
+<li>或者 是id</li>
+</ol>
+</li>
+<li>是string 是css选择器 <code>.class</code>: findFilter.js<br> document.find(selector)-&gt;<code>jQuery.fn.extend( {
+ find: function( selector )</code> 使用了第三方的Filter库<br> ？？？？使用sizzle<ul>
+<li>$(“.face”,”#box”)在box找.face<code>return this.constructor( context ).find( selector );</code> 重新返回构造#box的jquery中查找.face</li>
+</ul>
+</li>
+<li>是string 是function 传给<code>jQuery.Deferred();</code> DOM加载完毕后执行<ol>
+<li><code>window.onload = function(){}</code><br> 所有资源加载完毕后执行,只能绑定一次事件处理函数，绑定多次会覆盖</li>
+<li><code>$(function(){});</code>只要dom加载好，图片,css,js等不需要，可以绑定多次</li>
+</ol>
+</li>
+</ol>
+<h4 id="callbacks-等待耗时操作执行完后自动执行的函数"><a href="#callbacks-等待耗时操作执行完后自动执行的函数" class="headerlink" title="callbacks 等待耗时操作执行完后自动执行的函数"></a>callbacks 等待耗时操作执行完后自动执行的函数</h4><ol>
+<li>字符串转对象 option可选参数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h5 id="sizzle"><a href="#sizzle" class="headerlink" title="sizzle"></a>sizzle</h5><p><a href="http://zhenhua-lee.github.io/framework/sizzle.html" target="_blank" rel="noopener">sizzle</a></p>
+<p>$().ready(function(){</p>
+<p>})</p>
+<blockquote>
+<p>Javascript 中的 undefined 并不是作为关键字，因此可以允许用户对其赋值。</p>
+</blockquote>
+<h4 id="门面接口"><a href="#门面接口" class="headerlink" title="门面接口"></a>门面接口</h4><h4 id="底层接口"><a href="#底层接口" class="headerlink" title="底层接口"></a>底层接口</h4><h4 id="快捷方法"><a href="#快捷方法" class="headerlink" title="快捷方法"></a>快捷方法</h4><h4 id="ready和load事件"><a href="#ready和load事件" class="headerlink" title="ready和load事件"></a>ready和load事件</h4><p>ready先执行，load后执行</p>
+<ul>
+<li>DOM文档加载的步骤：<blockquote>
+<p>(1) 解析HTML结构。<br>(2) 加载外部脚本和样式表文件。<br>(3) 解析并执行脚本代码。<br><strong>(4) 构造HTML DOM模型。//ready</strong><br>(5) 加载图片等外部文件。<br>(6) 页面加载完毕。//load</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.addEventListener( <span class="string">"DOMContentLoaded"</span>, completed, <span class="literal">false</span> );</span><br></pre></td></tr></table></figure>
+<h3 id="类数组对象"><a href="#类数组对象" class="headerlink" title="类数组对象"></a>类数组对象</h3><ul>
+<li><p>jquery实现了9种方法的重载</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> aQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//强制为对象</span></span><br><span class="line">	<span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> aQuery)) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> aQuery(selector);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> elem = <span class="built_in">document</span>.getElementById(<span class="regexp">/[^#].*/</span>.exec(selector)[<span class="number">0</span>]);</span><br><span class="line">	<span class="keyword">this</span>.length = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">this</span>[<span class="number">0</span>] = elem;</span><br><span class="line">	<span class="keyword">this</span>.context = <span class="built_in">document</span>;</span><br><span class="line">	<span class="keyword">this</span>.selector = selector;</span><br><span class="line">	<span class="keyword">this</span>.get = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>[num];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>属性与方法作为对象的key与value的方式给映射到this上</p>
+</li>
+</ul>
+<h3 id="立即调用表达式"><a href="#立即调用表达式" class="headerlink" title="立即调用表达式"></a>立即调用表达式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">window, undefined</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="built_in">window</span>.jQuery = <span class="built_in">window</span>.$ = jQuery; </span><br><span class="line">&#125;)(<span class="built_in">window</span>);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>减少变量查找所经过的scope作用域:当window通过传递给闭包内部之后，在闭包内部使用它的时候，可以把它当成一个局部变量</li>
+<li>挂在到window下执行 在外面就可以用$()执行函数</li>
+</ol>
+<ul>
+<li>自执行</li>
+<li>匿名函数，不存在外部引用.防止全局变量污染。</li>
+</ul>
+<ol>
+<li><p>jQuery使用()将匿名函数括起来，然后后面再加一对小括号（包含参数列表）<br>小括号把表达式组合分块，每个小伙好把匿名函数括起来返回一个匿名函数Function对象。<br><code>（function（）{})()</code>目的：使匿名函数像有名字一样，可以取得它的引用位置。（单利模式）在这个引用位置后面加参数列表，实现普通函数调用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">window</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> jQuery=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">"jqqqqqqq"</span>);&#125;</span><br><span class="line">    <span class="built_in">window</span>.aaa=jQuery<span class="comment">//保留jquery定义的变量，只暴露为aaa()</span></span><br><span class="line">    &#125;)(<span class="built_in">window</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>zepto的方式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Zepto=(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> Zepto= <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">    <span class="keyword">return</span> Zepto</span><br><span class="line">&#125;)();</span><br><span class="line">Zepto()</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/11/javanet/" rel="next" title="javanet">
+                <i class="fa fa-chevron-left"></i> javanet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/15/flowRecommend/" rel="prev" title="flowRecommend图计算">
+                flowRecommend图计算 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#browser-sync"><span class="nav-number">1.</span> <span class="nav-text">browser sync</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#腻子？"><span class="nav-number">2.</span> <span class="nav-text">腻子？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jq-目录"><span class="nav-number">2.1.</span> <span class="nav-text">jq 目录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#package-json"><span class="nav-number">2.1.1.</span> <span class="nav-text">package.json</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#npm"><span class="nav-number">2.2.</span> <span class="nav-text">npm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grunt-Gruntfile-js"><span class="nav-number">2.3.</span> <span class="nav-text">grunt Gruntfile.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试环境"><span class="nav-number">2.4.</span> <span class="nav-text">测试环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jquery-js"><span class="nav-number">2.5.</span> <span class="nav-text">jquery.js</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ES5普通的创建对象"><span class="nav-number">2.5.1.</span> <span class="nav-text">ES5普通的创建对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jquery-构造函数"><span class="nav-number">2.5.2.</span> <span class="nav-text">jquery 构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#init-js"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">init.js</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#callbacks-等待耗时操作执行完后自动执行的函数"><span class="nav-number">2.5.3.</span> <span class="nav-text">callbacks 等待耗时操作执行完后自动执行的函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#sizzle"><span class="nav-number">2.5.3.1.</span> <span class="nav-text">sizzle</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#门面接口"><span class="nav-number">2.5.4.</span> <span class="nav-text">门面接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#底层接口"><span class="nav-number">2.5.5.</span> <span class="nav-text">底层接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快捷方法"><span class="nav-number">2.5.6.</span> <span class="nav-text">快捷方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ready和load事件"><span class="nav-number">2.5.7.</span> <span class="nav-text">ready和load事件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#promise"><span class="nav-number">2.5.7.1.</span> <span class="nav-text">promise</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类数组对象"><span class="nav-number">2.6.</span> <span class="nav-text">类数组对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#立即调用表达式"><span class="nav-number">2.7.</span> <span class="nav-text">立即调用表达式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

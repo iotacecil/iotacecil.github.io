@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,javaNet," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="GradleTasks-build-jar/build apply plugin: &amp;#39;java 打包成jar包 ‘war’打包成war包-&amp;gt;build-&amp;gt;war 可以放到tomcat下的webapp-子项目依赖在dependencies添加compile project(&amp;quot;:model&amp;quot;)冒号加项目名在settings.gradle中include 日志级别">
+<meta name="keywords" content="java,javaNet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javanet">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/11/javanet/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="GradleTasks-build-jar/build apply plugin: &amp;#39;java 打包成jar包 ‘war’打包成war包-&amp;gt;build-&amp;gt;war 可以放到tomcat下的webapp-子项目依赖在dependencies添加compile project(&amp;quot;:model&amp;quot;)冒号加项目名在settings.gradle中include 日志级别">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/struts2.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/tomcat.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/git.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.349Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javanet">
+<meta name="twitter:description" content="GradleTasks-build-jar/build apply plugin: &amp;#39;java 打包成jar包 ‘war’打包成war包-&amp;gt;build-&amp;gt;war 可以放到tomcat下的webapp-子项目依赖在dependencies添加compile project(&amp;quot;:model&amp;quot;)冒号加项目名在settings.gradle中include 日志级别">
+<meta name="twitter:image" content="https://iotaa.xyz/images/struts2.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/11/javanet/"/>
+
+
+
+
+
+  <title>javanet | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/11/javanet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javanet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-11T23:05:52+08:00">
+                2018-03-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Gradle"><a href="#Gradle" class="headerlink" title="Gradle"></a>Gradle</h3><p>Tasks-build-jar/build</p>
+<p><code>apply plugin: &#39;java</code> 打包成jar包 ‘war’打包成war包-&gt;build-&gt;war 可以放到tomcat下的webapp-<br>子项目依赖在dependencies添加<code>compile project(&quot;:model&quot;)</code>冒号加项目名<br>在settings.gradle中include</p>
+<h3 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h3><p>service debug<br>controll info</p>
+<h3 id="JPA"><a href="#JPA" class="headerlink" title="JPA"></a>JPA</h3><p>实体对应表，实例对应行，类用<code>javax.presistence.Entity</code>注解</p>
+<p>EntityManager接口 定义与持久性上下文进行交互的方法<br>创建/删除实体，查找实体</p>
+<h3 id="Spring-Data-JPA"><a href="#Spring-Data-JPA" class="headerlink" title="Spring Data JPA"></a>Spring Data JPA</h3><p>自定义接口一定要实现<code>Repository&lt;T,ID&gt;</code>接口 T是操作的对象，ID是主键的类型，或者加上<code>@RepositoryDefinition</code>注解可以添加domainClass和idClass<br>三个子接口<br><code>curdRepository</code> CURD的接口<br><code>PagingAndSortingRepository</code> 分页和排序接口<br><code>JpaRepository</code> </p>
+<p>命名方式,索引参数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Query</span>(select o from Employee o where o.name like %:name%)</span><br><span class="line"><span class="keyword">public</span> List&lt;Employee&gt;query(<span class="meta">@Param</span>(<span class="string">"name"</span>) String name);</span><br><span class="line"><span class="meta">@Query</span>(select o from Employee o where o.name like %?<span class="number">1</span>%)</span><br><span class="line"><span class="keyword">public</span> List&lt;Employee&gt;query(String name);</span><br></pre></td></tr></table></figure></p>
+<p>使用原生sql语句<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Query</span>(nativeQuery = <span class="keyword">true</span>,value = <span class="string">"select count(1) from employee"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getCount</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>更新和删除必须和事务一起使用<br>事务<code>@Transactional</code>放在service里</p>
+<h3 id="JWT-单点登陆-登陆信息不是在session而是在浏览器"><a href="#JWT-单点登陆-登陆信息不是在session而是在浏览器" class="headerlink" title="JWT 单点登陆 登陆信息不是在session而是在浏览器"></a>JWT 单点登陆 登陆信息不是在session而是在浏览器</h3><p>变量表达式：<code>${}</code><br>消息表达式：<code>#{}</code> 文本外部化、国际化、i18n<br>选择表达式：<code>*{}</code> 一定要在<code>${}</code>的上下文中执行<br>链接表达式：<code>@{}</code><br>分段表达式</p>
+<p>spring中自建exception类要继承RuntimeException<br>只有RuntimeException才会事务回滚，继承Exception不会。</p>
+<p>使用PUT方式body要设置成<code>x-www-from-urlencoded</code></p>
+<p>过滤器：登陆、加密、解密、会话检查、图片转换。</p>
+<p>spring通知、事务传播行为</p>
+<p>maven依赖子类不用版本号</p>
+<p>抓包记得开隐身窗口<br>注意<code>dp[one++][two++]=dp[one-1][two-1];</code>的执行顺序 1,1不会等于0,0</p>
+<h2 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h2><ol>
+<li><code>List.subList(,)</code></li>
+<li>SQL的<code>limit</code>或者Oracle<code>rownum</code><br><code>select * from t_student limit 0,10</code>从0取10条<br>PostgerSQL：<br><code>select * from t_student limit 10 offset 0</code></li>
+<li>hibernate:<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String hql = <span class="string">"from Student"</span>;</span><br><span class="line"><span class="comment">//创建Query或者Criteria对象</span></span><br><span class="line">Query q = session.createQuery(hql);</span><br><span class="line">q.setFirstResult(<span class="number">0</span>);</span><br><span class="line">q.setMaxResults(<span class="number">10</span>);</span><br><span class="line">List l = q.list();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Pager</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    <span class="comment">//每页显示几条记录</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> pageSize;</span><br><span class="line">    <span class="comment">//当前页</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> currentPage;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> totalPage;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> totalRecord;</span><br><span class="line">    <span class="keyword">private</span> List&lt;T&gt; dataList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>InternalResourceViewResolver</code>bean配置页面的jsp路径和后缀名<code>JstlView</code><br>处理<code>?clouseID=123</code>用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="meta">@RequestParam</span>(<span class="string">"courseId"</span>) Integer courseId,Model model)</span><br><span class="line">model.addAttribute(course);</span><br></pre></td></tr></table></figure></p>
+<p>处理rest风格的<code>/{courseId}</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(value=<span class="string">"/view2/&#123;courseId&#125;"</span>)</span><br><span class="line">(<span class="meta">@PathVariable</span>(<span class="string">"courseId"</span>) Integer courseId,Map&lt;String,Object&gt;model)</span><br><span class="line">model.put(<span class="string">"course"</span>,course);</span><br></pre></td></tr></table></figure></p>
+<h3 id="在SpringMVC中使用HttpServletRequest等对象"><a href="#在SpringMVC中使用HttpServletRequest等对象" class="headerlink" title="在SpringMVC中使用HttpServletRequest等对象"></a>在SpringMVC中使用HttpServletRequest等对象</h3><p>引入<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.servlet<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>servlet-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">request.getParameter(<span class="string">"courseId"</span>);</span><br><span class="line">request.setAttribute(<span class="string">"course"</span>,course);</span><br></pre></td></tr></table></figure>
+<h3 id="ModelAttribute模型自动绑定"><a href="#ModelAttribute模型自动绑定" class="headerlink" title="@ModelAttribute模型自动绑定"></a><code>@ModelAttribute</code>模型自动绑定</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//请求重定向</span></span><br><span class="line"><span class="keyword">return</span> <span class="string">"redirect:view/"</span>+course.getCourseId();</span><br></pre></td></tr></table></figure>
+<h3 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h3><p>表单属性<code>enctype=&quot;multipart/from-data</code><br>action页面拦截<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自动转型</span></span><br><span class="line">(<span class="meta">@RequestParam</span>(<span class="string">"file"</span>) MultipartFile file)</span><br></pre></td></tr></table></figure></p>
+<p>common-io中的文件流操作<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FileUtils.copyInputStreamToFile(file.getInputStream,<span class="keyword">new</span> File(<span class="string">""</span>));</span><br></pre></td></tr></table></figure></p>
+<h3 id="Json-添加依赖"><a href="#Json-添加依赖" class="headerlink" title="Json 添加依赖"></a>Json 添加依赖</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span> <span class="function">Course <span class="title">getCourseInJson</span><span class="params">(@PathVariable Integer courseId)</span></span></span><br><span class="line"><span class="function">ResponseEntity&lt;Course&gt; <span class="title">getCourseInJson</span><span class="params">(@PathVariable Integer courseId)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;Course&gt;(course,HttpStatus.OK);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="数据绑定"><a href="#数据绑定" class="headerlink" title="数据绑定"></a>数据绑定</h3><ol>
+<li>基本类型int当参数不能为空，包装类型可以为null</li>
+<li><p>传数组<code>?name=tom&amp;name=jack&amp;name=lucy</code>用<code>String[] name</code>接收</p>
+</li>
+<li><p>横向越权<br>不同用户相同权限的数据，A可以查看B的订单</p>
+</li>
+<li>纵向：变成管理员</li>
+</ol>
+<h3 id="封装响应对象status-msg-T-data"><a href="#封装响应对象status-msg-T-data" class="headerlink" title="封装响应对象status,msg,T data"></a>封装响应对象<code>status</code>,<code>msg</code>,<code>T data</code></h3><h3 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h3><ol>
+<li>指令<br><code>&lt;%@ page属性=&quot;&quot; %&gt;</code>属性 language，import，contentType<br>include，taglib</li>
+<li>脚本元素<code>&lt;% out.println(&quot;&quot;) %&gt;</code></li>
+<li><p>声明</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;%! String s = <span class="string">" "</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;<span class="keyword">return</span> x+y;&#125;%&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>表达式<code>&lt;% =s %&gt;</code>不以分号结束</p>
+</li>
+</ol>
+<h4 id="JSP声明周期"><a href="#JSP声明周期" class="headerlink" title="JSP声明周期"></a>JSP声明周期</h4><ol>
+<li>第一次用户请求.jsp，JSP引擎转为Servelet类（.java)，生成字节码文件，执行jspInit()初始化</li>
+<li>解析执行字节码文件的<code>jspService()</code></li>
+<li><code>jspService()</code>处理客户端请求每个客户端一个线程。Servlet常驻内存。</li>
+</ol>
+<h4 id="JSP9大内置对象"><a href="#JSP9大内置对象" class="headerlink" title="JSP9大内置对象"></a>JSP9大内置对象</h4><ol>
+<li>out对象是<code>JspWriter</code>类实例。8k缓冲区</li>
+<li>表单get提交数据小于2k <code>action=&quot;.jsp&quot;</code></li>
+<li><code>request</code>是<code>HttpServletRequest</code>的实例，<br>接收action的js：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//修改接收的字符集 与表单页面的编码一致</span></span><br><span class="line">&lt;% request.setCharaterEncoding(<span class="string">"utf-8"</span>)%&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>URL传参，但这种方法设置request的字符集无效，<br>要修改tomcat的server.xml的Connetor标签<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"接收请求的.jsp?username=a"</span>&gt;</span>接收参数并跳转<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<ol>
+<li><code>response.sendRedirect(&quot;.jsp&quot;)</code>重定向</li>
+<li>response中的<code>.getWriter</code>得到的<code>PrintWriter</code>总是先于out对象输出，可以使用<code>out.flush</code>强制刷新输出</li>
+<li><code>session</code>对象是<code>HttpSession</code>类的实例。保存在服务器的内存中，保存一个用户访问一个服务器页面切换仍然是同一个用户。<br>用<code>&lt;a href=&quot;.jsp&quot;&gt;</code>后另一个页面仍能获得相同的session</li>
+<li><code>application</code>对象是ServletContext类的实例。服务器的启动和关闭。get/setAttribute(,)</li>
+<li><code>page</code>对象就是页面object</li>
+<li><code>pageContext</code>对象可以获得所有session，response等对象</li>
+<li><code>Config</code>对象servlet初始化要用到的参数</li>
+<li></li>
+</ol>
+<h4 id="请求重定向-请求转发"><a href="#请求重定向-请求转发" class="headerlink" title="请求重定向 请求转发"></a>请求重定向 请求转发</h4><p>重定向<code>.sendRedirect</code>：客户端行为<code>response</code>对象，两次请求，第一次请求对象不被保存（重定向到的页面无法获得原来的<code>request</code>内容。地址栏URL变化。 （登陆失败）<br>转发：服务器行为。<code>request.getRequestDispatcher().forward(req,resp)</code>一次请求，转发后请求对象被保存（把request也转发，再把response传回原jsp），URL地址不变。（登陆成功）<br>登陆成功<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">session.setAttribute(<span class="string">"loginUser"</span>,username);</span><br><span class="line">request.getRequestDispatcher(<span class="string">"success.jsp"</span>).forward(request,response);</span><br></pre></td></tr></table></figure></p>
+<p>在success.jsp获取<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%=session.getAttribute(<span class="string">"loginUser"</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="jsp动作标签和javaBean"><a href="#jsp动作标签和javaBean" class="headerlink" title="jsp动作标签和javaBean"></a>jsp动作标签和javaBean</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">jsp:useBean</span> <span class="attr">id</span>=<span class="string">"u"</span> <span class="attr">class</span>=<span class="string">"U"</span> <span class="attr">scope</span>=<span class="string">"page"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">jsp:setProperty</span> <span class="attr">name</span>=<span class="string">"u"</span> <span class="attr">property</span>=<span class="string">"*"</span>&gt;</span></span><br><span class="line">    根据表单name自动和javabean的类自动匹配</span><br><span class="line">传统的表达式方式：<span class="tag">&lt;<span class="name">%=</span> <span class="attr">u.getUsername</span>()%&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">jsp:getProperty</span> <span class="attr">name</span>=<span class="string">"u"</span> <span class="attr">property</span>=<span class="string">"username"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>还可以用property+value设置值，可以通过param获得url传的参数</p>
+<h5 id="bean的四个作用域：page，request，session，application"><a href="#bean的四个作用域：page，request，session，application" class="headerlink" title="bean的四个作用域：page，request，session，application"></a>bean的四个作用域：page，request，session，application</h5><h4 id="动作include、forward"><a href="#动作include、forward" class="headerlink" title="动作include、forward"></a>动作include、forward</h4><p><code>&lt;jsp:forward page=&quot;url&quot;/&gt;</code>等同于request.getRequestDispatcher(“/url”).forward(request,response);</p>
+<h3 id="mina"><a href="#mina" class="headerlink" title="mina"></a>mina</h3><h4 id="创建连接"><a href="#创建连接" class="headerlink" title="创建连接"></a>创建连接</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//服务端</span></span><br><span class="line">SocketAcceptor acceptor = <span class="keyword">new</span> NioSocketAcceptor();</span><br><span class="line"><span class="comment">//客户端</span></span><br><span class="line">NioSocketConnector connector = <span class="keyword">new</span> NioSocketConnector();</span><br></pre></td></tr></table></figure>
+<h4 id="设定过滤规则"><a href="#设定过滤规则" class="headerlink" title="设定过滤规则"></a>设定过滤规则</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DefaultIoFilterChainBuilder chain = acceptor.getFilterChain();</span><br><span class="line">chain.addLast(<span class="string">"obj"</span>,<span class="keyword">new</span> ProtocolCodecFilter(<span class="keyword">new</span> ObjectSerializationCodecFactory()));</span><br><span class="line"><span class="comment">//设置消息处理器 服务端</span></span><br><span class="line">acceptor.setHandler(<span class="keyword">new</span> minaHandler());</span><br><span class="line"><span class="comment">//服务器</span></span><br><span class="line">acceptor.bind(<span class="keyword">new</span> InetSocketAddress(port));</span><br><span class="line"><span class="comment">//客户端连接服务器</span></span><br><span class="line">ConnectFuture cf = connector.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"localhost"</span>,<span class="number">9999</span>));</span><br><span class="line"><span class="comment">//客户端等待连接成功</span></span><br><span class="line">cf.awaitUninterruptibly();</span><br><span class="line"><span class="comment">//客户端 发送</span></span><br><span class="line">cf.getSession().write(msg);</span><br></pre></td></tr></table></figure>
+<h4 id="消息处理器"><a href="#消息处理器" class="headerlink" title="消息处理器"></a>消息处理器</h4><p><code>extends IoHandlerAdapter</code><br>重写session接收的方法</p>
+<h3 id="Spring配置文件"><a href="#Spring配置文件" class="headerlink" title="Spring配置文件"></a>Spring配置文件</h3><p>读取bean declaration<br>tx声明式事务配置文件</p>
+<h3 id="struts2"><a href="#struts2" class="headerlink" title="struts2"></a>struts2</h3><ol>
+<li>加入jar包：asm 替代反射，字节码操控框架；ognl struts2的标签库；xwork和webwork整合的包</li>
+<li><font color="#FF98AA">sturts.xml</font>放入src负责Action映射和Result定义、拦截器；<ol>
+<li><code>&lt;include&gt;</code>把每个功能的配置放到不同的xml文件里导入<br><strong>动态方法调用：</strong> 解决action太多<code>&lt;constant name=&quot;struts.enable.DynamicMethodInvocation&quot; value = &quot;true&quot;&gt;</code></li>
+<li><code>&lt;action name = &quot;addAction&quot; method=&quot;add&quot; class=&quot;&quot;&gt;</code>遇到add.action时调用指定类中的add 方法</li>
+<li>通过!add.action访问<code>&lt;action&gt;&lt;result name=&quot;add&quot;&gt;/result.jsp&lt;/result&gt;</code>对应action的方法中<code>return &quot;add&quot;</code>对应result的name字符串</li>
+<li>通配符<code>name = &quot;{2}_*&quot; method={1} class=&quot;..{1}Action&quot;</code>访问<code>helloworld_add.action</code>可以匹配add和helloword<br><strong>默认错误路径</strong></li>
+<li><code>&lt;default-action-ref name=&quot;index&gt;</code>并配置名为index的action</li>
+<li>参数：<code>&lt;contant name=&quot;struts.action.extension value=&quot;&quot;&gt;</code>不用输入.action后缀</li>
+</ol>
+</li>
+<li>struts.properties 全局属性文件；可以不用，在struts.xml用constant元素</li>
+<li>在web.xml配置核心过滤器 core包下的;<code>/*</code>.jsp和.html不拦截<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>Struts2Filter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>...dispatcher.ng.filter.StrutsPrepareAndExecuteFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>Struts2Filter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>\*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="Struts原理"><a href="#Struts原理" class="headerlink" title="Struts原理"></a>Struts原理</h3><p><img src="/images/struts2.jpg" alt="struts2"><br><div class="note class_name"><ol>
+<li><code>HttpServltRequest</code>经过<code>ActionContextCleanUp</code>、各种<code>Filter</code> .action的请求会到ActionMapper返回Filter</li>
+<li>Filter发给<code>ActionProxy</code> 并读取struts的配置文件，找到具体的action类，通过<code>ActionProxy</code>代理创建Action实例</li>
+<li>经过拦截器执行到action返回result是字符串对象对应视图（JSP/FreeMaker）</li>
+<li>继续经过拦截器 通过<code>HttpServletResponse</code>返回到用户实例进行显示 </li>
+</ol></div></p>
+<ul>
+<li>Action搜索顺序: 顺着不存在的包名向上查，包名存在则查找action</li>
+<li>动态方法调用：</li>
+</ul>
+<h3 id="URL读取html"><a href="#URL读取html" class="headerlink" title="URL读取html"></a>URL读取html</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URLReader</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		URL cs = <span class="keyword">new</span> URL(<span class="string">"http://www.sina.com"</span>);</span><br><span class="line">        <span class="comment">//直接获得inputStream</span></span><br><span class="line">		BufferedReader in = <span class="keyword">new</span> BufferedReader(</span><br><span class="line">            <span class="keyword">new</span> InputStreamReader(cs.openStream()));</span><br><span class="line">		String inputLine;</span><br><span class="line">		<span class="keyword">while</span>((inputLine = in.readLine())!= <span class="keyword">null</span>)</span><br><span class="line">			sout(inputLine);</span><br><span class="line">		in.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>意外处理<br>try{}catch(MalformedURLexception e) 不符合URL常规的url异常<br>-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"https://baidu.com"</span>);</span><br><span class="line">HttpURLConnection conn = (HttpURLConnection)url.openConnection();</span><br><span class="line">BufferedInputStream in = <span class="keyword">new</span> BufferedInputStream(conn.getInputStream());</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="tomcat"><a href="#tomcat" class="headerlink" title="tomcat"></a>tomcat</h3><p><img src="/images/tomcat.jpg" alt="tomcat"></p>
+<ul>
+<li><p>server.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">server</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">service</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Connector</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Connector</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Engine</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">host</span>&gt;</span> 可以有多个host虚拟主机</span><br><span class="line">                <span class="tag">&lt;<span class="name">Context</span>&gt;</span></span><br><span class="line">                    web应用</span><br><span class="line">                <span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">host</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">server</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Connector 接收用户请求，Coyote实现(BIO)阻塞式IO<br>  adddress只监听的地址<br>  acceptCount 没有空闲线程时的排队长度默认100<br>  maxConnections 线程池的最大值 -1 不限制</p>
+<ul>
+<li>线程池：事先创建一定数目的线程，减少了线程创建与销毁的过程<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Executor</span> <span class="attr">name</span>=<span class="string">"tomcatThreadPool"</span> <span class="attr">namePrefix</span>=<span class="string">"catalina-exec-"</span></span></span><br><span class="line"><span class="tag">     <span class="attr">maxThreads</span>=<span class="string">"150"</span> <span class="attr">minSpareThreads</span>=<span class="string">"4"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Engine 处理Connector接收到的用户请求</p>
+</li>
+</ul>
+<h3 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h3><p>在webapp &gt; WEB-INF &gt; lib中加入的jar包，发布到服务器中自动加载<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifiactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifiactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.7<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.7<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">compilerArguments</span>&gt;</span>$&#123;project.basedir&#125;/src/main/webapp/WEB-INF/lib<span class="tag">&lt;/<span class="name">compilerArguments</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>pom 项目对象模型</strong></p>
+<ul>
+<li><code>&lt;properties&gt;</code>中配置的常量属性可以用${property}取</li>
+<li>子pom和父pom可以继承覆盖</li>
+<li>Super POM中有默认设置</li>
+<li>user/.m2/repository本地缓存的仓库</li>
+<li><a href="https://search.maven.org/" target="_blank" rel="noopener">中央仓库</a><br><strong>生命周期</strong><br>clean:清理项目pre-clean clean post-clean</li>
+<li>default: 构建项目 validate，process-resources<br>运行package会自动运行compile、test<br>site:生成站点文档<br><code>&lt;scope&gt;provided&lt;/scope&gt;</code>只在编译和测试时运行</li>
+</ul>
+<ol>
+<li>依赖范围：<code>&lt;scope&gt;</code>6种<ol>
+<li>compile：默认。编译测试运行都有效。</li>
+<li>provided在编译和测试时有效，运行无效。例如servlet-api因为web容器已经有api了</li>
+<li>runtime：运行、测试有效。例如jdbc驱动api</li>
+<li>test:测试时有效。例如junit</li>
+<li>system：编译和测试有效，不可移植，与系统相关联。例如引入本地的JAVA_HOME</li>
+<li>import:只用在dependencyManagement中，表示从其它pom中继承的依赖。</li>
+</ol>
+</li>
+</ol>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>mvn complie编译 test测试 package打包<br>    clean删除target<br>    install安装jar包到本地仓库</p>
+<h4 id="archetype插件-建立符合规定的目录骨架"><a href="#archetype插件-建立符合规定的目录骨架" class="headerlink" title="archetype插件 建立符合规定的目录骨架"></a>archetype插件 建立符合规定的目录骨架</h4><p><code>mvn archetype:generate</code></p>
+<h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><p><img src="/images/git.jpg" alt="git"><br><code>git push -u origin master</code></p>
+<h3 id="Servelet-运行在server端的java程序"><a href="#Servelet-运行在server端的java程序" class="headerlink" title="Servelet:运行在server端的java程序"></a>Servelet:运行在server端的java程序</h3><ul>
+<li>1.java类 没有main方法 2.运行于容器 提供请求-响应的web服务</li>
+</ul>
+<ol>
+<li><p><strong>servlet处理流程</strong></p>
+<ol>
+<li><p>pom.xml:tomcat:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">path</span>&gt;</span>/web_project_template<span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>servlet容器的配置文件web.xml找到对应的Servlet,转发到service方法</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>TestServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>..TestServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>TestServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/hello<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端请求http对象的时候service方法被调用</p>
+</li>
+<li>客户端使用get方法访问时doGet方法被调用<br>TestServlet.java<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"doGet method"</span>);</span><br><span class="line">        PrintWriter pw = resp.getWriter();</span><br><span class="line">        <span class="comment">//设置文件类型</span></span><br><span class="line">        response.setContentType(<span class="string">"text/html;charset=utf-8"</span>)</span><br><span class="line">        pw.print(<span class="string">"/hello"</span>);</span><br><span class="line">        pw.close();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>Servlet 生命周期<br><strong>生命周期方法由服务器调用</strong></p>
+<ol>
+<li>默认web客户端第一次请求容器，创建servlet实例 调用init(ServletConfig)</li>
+<li>请求处理 转发请求</li>
+<li>destory<blockquote>
+<p>get通过header传输数据，post通过body传输</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>ServletConfig：以servlet为单位</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>data1<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>value1<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>data2<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>value2<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span><span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span><span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServletConfig config = <span class="keyword">this</span>.getServletConfig();</span><br><span class="line">String v1 = config.getInitParameter(<span class="string">"data1"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>context-param ：全局配置</p>
+<ul>
+<li><p>ServletContext对象 web应用中全局唯一</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>globalData1<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>123<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServletContext ctx = <span class="keyword">this</span>.getServletContext();</span><br><span class="line">String v1 = ctx.getInitParameter(<span class="string">"data1"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>servletContext 可以CLUD共享不是事先知道的动态信息</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在context中设置属性</span></span><br><span class="line">ctx.setAttribute(<span class="string">"attribute1"</span>, <span class="string">"111"</span>);</span><br></pre></td></tr></table></figure>
+<p> 读取外部资源配置文件信息：<br> <code>ServletContext.getResource</code> :URL<br> <code>.getResourceAsStream</code><br> <code>.getRealPath</code>:File<br> ??? <code>Properties</code> 对象</p>
+<ul>
+<li><p>web.xml 部署描述符<br>为一个servlet配置多个url-pattern、<code>/*</code>模糊匹配</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span><span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/hello/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>匹配优先级规则</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="监听器"><a href="#监听器" class="headerlink" title="监听器"></a>监听器</h3><ol>
+<li>用途：<ol>
+<li>统计在线人数和在线用户 HttpSession</li>
+<li>系统启动时加载初始化信息 缓存、数据库链接ServletContext</li>
+<li>统计网站访问量</li>
+<li>spring相关</li>
+</ol>
+</li>
+<li><p>用法：</p>
+<ol>
+<li><code>impletemts ServletContextListener</code></li>
+<li><p>在web.xml注册</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span><span class="tag">&lt;<span class="name">listener-class</span>&gt;</span><span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上下文对象，web启动时创建，web销毁 销毁</p>
+</li>
+</ol>
+</li>
+<li>监听器的启动循序按注册顺序。<br> 优先级：监听器&gt;过滤器&gt;servlet加载</li>
+<li>监听器种类<ol>
+<li><code>ServletContext</code>监听应用程序环境对象</li>
+<li><code>HttpSession</code>用户会话对象</li>
+<li><code>ServletRequest</code>请求消息对象</li>
+</ol>
+</li>
+</ol>
+<h3 id="MIME-多用途-互联网-邮件-扩展-类型"><a href="#MIME-多用途-互联网-邮件-扩展-类型" class="headerlink" title="MIME 多用途 互联网 邮件 扩展 类型"></a>MIME 多用途 互联网 邮件 扩展 类型</h3><pre><code>设定某种扩展名的文件用什么应用打开
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mime-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">extension</span>&gt;</span>java<span class="tag">&lt;/<span class="name">extension</span>&gt;</span> 扩展名映射类型</span><br><span class="line">    <span class="tag">&lt;<span class="name">mime-type</span>&gt;</span>text/plain<span class="tag">&lt;/<span class="name">mime-type</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mime-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</code></pre><h3 id="Session-amp-Cookie"><a href="#Session-amp-Cookie" class="headerlink" title="Session &amp; Cookie"></a>Session &amp; Cookie</h3><ul>
+<li>Cookie 短时间，数据频繁访问 保存在客户端<ul>
+<li>V0: <ul>
+<li>Set-Cookie: userName= “”;</li>
+<li>Domain= “”</li>
+</ul>
+</li>
+<li>V1:<ul>
+<li>Max-Age= 1000</li>
+</ul>
+</li>
+<li>实际：<ul>
+<li>Version= “1”</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Session NANE为JSESIONID的 Cookie 保存在服务端</li>
+</ul>
+<h4 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h4><ol>
+<li>会话cookie 关闭浏览器消失，保存在内存中</li>
+<li>setMaxAge 设置cookie有效期，浏览器会把cookie保存到硬盘上</li>
+<li>一个站点最多能保存20个cookie，每个4k以内<br>cookie<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***第一次请求把cookie设置好**/</span></span><br><span class="line">Cookie userNameCookie = <span class="keyword">new</span> Cookie(<span class="string">"userName"</span>, userName);</span><br><span class="line">Cookie pwdCookie = <span class="keyword">new</span> Cookie(<span class="string">"pwd"</span>, userPassword);</span><br><span class="line"><span class="comment">/***设置时间**/</span></span><br><span class="line">userNameCookie.setMaxAge(<span class="number">10</span> * <span class="number">60</span>);</span><br><span class="line">pwdCookie.setMaxAge(<span class="number">10</span> * <span class="number">60</span>);</span><br><span class="line"><span class="comment">/***把cookie放到响应中**/</span></span><br><span class="line">response.addCookie(userNameCookie);</span><br><span class="line">response.addCookie(pwdCookie);</span><br><span class="line"><span class="comment">/***第二次从请求中获取cookies数组**/</span></span><br><span class="line">Cookie[] cookies = request.getCookies();</span><br><span class="line"><span class="comment">//第二次</span></span><br><span class="line"><span class="keyword">if</span> (cookies != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (Cookie cookie : cookies) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cookie.getName().equals(<span class="string">"userName"</span>)) &#123;</span><br><span class="line">            userName = cookie.getValue();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (cookie.getName().equals(<span class="string">"pwd"</span>)) &#123;</span><br><span class="line">            userPassword = cookie.getValue();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h4><ol>
+<li>默认有效期30分钟 <code>setMaxInactiveInterval</code>设置有效期</li>
+<li>部署描述符设置有效期</li>
+<li><code>invalidate</code> Session失效</li>
+</ol>
+<ul>
+<li><p>第一次请求：服务器创建session对象，把SessionID作为cookie发送给浏览器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建Session对象</span></span><br><span class="line">HttpSession session = request.getSession();</span><br><span class="line">session.setAttribute(<span class="string">"userName"</span>, userName);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二次请求</span></span><br><span class="line">String name = (String) session.getAttribute(<span class="string">"userName"</span>);</span><br><span class="line"><span class="keyword">if</span> (name != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">//服务器已经保存了session</span></span><br><span class="line">            System.out.println(<span class="string">"second login: "</span> + name);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>第二次 Request:<code>Cookie: JSESSIONID=B2980D3ABAB39EF6EA09F278F261C2A4;</code></p>
+</li>
+</ul>
+<h5 id="Session钝化：不不常使用的session对象序列化到文件-数据库"><a href="#Session钝化：不不常使用的session对象序列化到文件-数据库" class="headerlink" title="Session钝化：不不常使用的session对象序列化到文件/数据库"></a>Session钝化：不不常使用的session对象序列化到文件/数据库</h5><p>tomcat两种钝化管理器</p>
+<ol>
+<li><code>StandardManger</code><ol>
+<li>tomcat 关闭重启时，web应用重启时（覆盖了web.xml)，钝化到文件。<br>钝化到<code>/work/Catalina/hostname/applicationname/SESSION.ser</code>重启时加载删除</li>
+</ol>
+</li>
+<li>Persistentmanager</li>
+</ol>
+<h4 id="Servlet3-0"><a href="#Servlet3-0" class="headerlink" title="Servlet3.0"></a>Servlet3.0</h4><ol>
+<li><code>@WebListner</code>免注册声明为监听器<h4 id="转发与重定向"><a href="#转发与重定向" class="headerlink" title="转发与重定向"></a>转发与重定向</h4></li>
+<li>转发对象：<code>RequestDispatcher(&quot;.jsp&quot;).forward(request,response)</code></li>
+<li>重定向：是两次请求 获取不到原来的req</li>
+</ol>
+<p>tail -f 监视日志输出</p>
+<ul>
+<li>javax.servlet<ul>
+<li>Servlet 所有Servlet必须实现的方法</li>
+<li>Config Servlet配置信息</li>
+<li>Context 容器信息</li>
+</ul>
+<ul>
+<li>GenericServlet底层（实现了5个servlet中的方法）</li>
+</ul>
+</li>
+<li>javax.servlet.http<ul>
+<li>HttpSession标识并存储客户端信息</li>
+<li>HttpServletRequest<ul>
+<li>getParameter(String key)获得第一个name和key一样的表单控件的数据</li>
+<li>getParameterValues同上返回数组</li>
+<li>getParameterMap 返回kv</li>
+<li>getParameterNames 返回所有表单控件的name值</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>HttpServlet 扩展GenericServlet</li>
+<li>Cookie 存储Servlet发送给客户端的信息</li>
+</ul>
+</li>
+<li>javax.servlet.annotation 注解</li>
+</ul>
+<h5 id="javaWeb域对象：存、取数据（Map）"><a href="#javaWeb域对象：存、取数据（Map）" class="headerlink" title="javaWeb域对象：存、取数据（Map）"></a>javaWeb域对象：存、取数据（Map）</h5><ul>
+<li>Java Web四大域对象(PageContext、ServletRequest、HttpSession、ServletContext)</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/javaNet/" rel="tag"># javaNet</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/09/mlpractice/" rel="next" title="mlpractice">
+                <i class="fa fa-chevron-left"></i> mlpractice
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/15/jQueryCodee/" rel="prev" title="jQueryCode">
+                jQueryCode <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle"><span class="nav-number">1.</span> <span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志级别"><span class="nav-number">2.</span> <span class="nav-text">日志级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JPA"><span class="nav-number">3.</span> <span class="nav-text">JPA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Data-JPA"><span class="nav-number">4.</span> <span class="nav-text">Spring Data JPA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JWT-单点登陆-登陆信息不是在session而是在浏览器"><span class="nav-number">5.</span> <span class="nav-text">JWT 单点登陆 登陆信息不是在session而是在浏览器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页"><span class="nav-number"></span> <span class="nav-text">分页</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象"><span class="nav-number">1.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在SpringMVC中使用HttpServletRequest等对象"><span class="nav-number">2.</span> <span class="nav-text">在SpringMVC中使用HttpServletRequest等对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ModelAttribute模型自动绑定"><span class="nav-number">3.</span> <span class="nav-text">@ModelAttribute模型自动绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件上传"><span class="nav-number">4.</span> <span class="nav-text">文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Json-添加依赖"><span class="nav-number">5.</span> <span class="nav-text">Json 添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据绑定"><span class="nav-number">6.</span> <span class="nav-text">数据绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装响应对象status-msg-T-data"><span class="nav-number">7.</span> <span class="nav-text">封装响应对象status,msg,T data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP"><span class="nav-number">8.</span> <span class="nav-text">JSP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JSP声明周期"><span class="nav-number">8.1.</span> <span class="nav-text">JSP声明周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JSP9大内置对象"><span class="nav-number">8.2.</span> <span class="nav-text">JSP9大内置对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求重定向-请求转发"><span class="nav-number">8.3.</span> <span class="nav-text">请求重定向 请求转发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jsp动作标签和javaBean"><span class="nav-number">8.4.</span> <span class="nav-text">jsp动作标签和javaBean</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#bean的四个作用域：page，request，session，application"><span class="nav-number">8.4.1.</span> <span class="nav-text">bean的四个作用域：page，request，session，application</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动作include、forward"><span class="nav-number">8.5.</span> <span class="nav-text">动作include、forward</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mina"><span class="nav-number">9.</span> <span class="nav-text">mina</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建连接"><span class="nav-number">9.1.</span> <span class="nav-text">创建连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设定过滤规则"><span class="nav-number">9.2.</span> <span class="nav-text">设定过滤规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息处理器"><span class="nav-number">9.3.</span> <span class="nav-text">消息处理器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring配置文件"><span class="nav-number">10.</span> <span class="nav-text">Spring配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#struts2"><span class="nav-number">11.</span> <span class="nav-text">struts2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Struts原理"><span class="nav-number">12.</span> <span class="nav-text">Struts原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL读取html"><span class="nav-number">13.</span> <span class="nav-text">URL读取html</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat"><span class="nav-number">14.</span> <span class="nav-text">tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven"><span class="nav-number">15.</span> <span class="nav-text">maven</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命令"><span class="nav-number">15.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#archetype插件-建立符合规定的目录骨架"><span class="nav-number">15.2.</span> <span class="nav-text">archetype插件 建立符合规定的目录骨架</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-number">16.</span> <span class="nav-text">git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servelet-运行在server端的java程序"><span class="nav-number">17.</span> <span class="nav-text">Servelet:运行在server端的java程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监听器"><span class="nav-number">18.</span> <span class="nav-text">监听器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MIME-多用途-互联网-邮件-扩展-类型"><span class="nav-number">19.</span> <span class="nav-text">MIME 多用途 互联网 邮件 扩展 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session-amp-Cookie"><span class="nav-number">20.</span> <span class="nav-text">Session &amp; Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie"><span class="nav-number">20.1.</span> <span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Session"><span class="nav-number">20.2.</span> <span class="nav-text">Session</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Session钝化：不不常使用的session对象序列化到文件-数据库"><span class="nav-number">20.2.1.</span> <span class="nav-text">Session钝化：不不常使用的session对象序列化到文件/数据库</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Servlet3-0"><span class="nav-number">20.3.</span> <span class="nav-text">Servlet3.0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转发与重定向"><span class="nav-number">20.4.</span> <span class="nav-text">转发与重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#javaWeb域对象：存、取数据（Map）"><span class="nav-number">20.4.1.</span> <span class="nav-text">javaWeb域对象：存、取数据（Map）</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

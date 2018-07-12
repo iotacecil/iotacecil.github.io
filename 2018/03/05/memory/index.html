@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="os,memory," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="并行和并发的区别并行parallelism是并发concurrency的特例/子集。并发是一种逻辑结构的设计模式。并发是指逻辑上可以并行，并行是物理运行状态。编写一个多线程/进程的并发程序，没有多核处理器就不能并行。并行的两个进程一定是并发的。 文件/网络句柄handle 所有进程共有进程是容器 进程无法共享内存，通信通过TCP/IP端口实现/其它操作系统的方案线程：没有独立的地址空间，栈线程：P">
+<meta name="keywords" content="os,memory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存知识">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/05/memory/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="并行和并发的区别并行parallelism是并发concurrency的特例/子集。并发是一种逻辑结构的设计模式。并发是指逻辑上可以并行，并行是物理运行状态。编写一个多线程/进程的并发程序，没有多核处理器就不能并行。并行的两个进程一定是并发的。 文件/网络句柄handle 所有进程共有进程是容器 进程无法共享内存，通信通过TCP/IP端口实现/其它操作系统的方案线程：没有独立的地址空间，栈线程：P">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/eltfile.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/linuxmem.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/foo1.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/heep.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/registers.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/cposix.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.355Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内存知识">
+<meta name="twitter:description" content="并行和并发的区别并行parallelism是并发concurrency的特例/子集。并发是一种逻辑结构的设计模式。并发是指逻辑上可以并行，并行是物理运行状态。编写一个多线程/进程的并发程序，没有多核处理器就不能并行。并行的两个进程一定是并发的。 文件/网络句柄handle 所有进程共有进程是容器 进程无法共享内存，通信通过TCP/IP端口实现/其它操作系统的方案线程：没有独立的地址空间，栈线程：P">
+<meta name="twitter:image" content="https://iotaa.xyz/images/eltfile.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/05/memory/"/>
+
+
+
+
+
+  <title>内存知识 | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/05/memory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">内存知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T20:43:15+08:00">
+                2018-03-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="并行和并发的区别"><a href="#并行和并发的区别" class="headerlink" title="并行和并发的区别"></a>并行和并发的区别</h3><p>并行parallelism是并发concurrency的特例/子集。<br>并发是一种逻辑结构的设计模式。并发是指逻辑上可以并行，并行是物理运行状态。<br>编写一个多线程/进程的并发程序，没有多核处理器就不能并行。<br>并行的两个进程一定是并发的。</p>
+<h3 id="文件-网络句柄handle-所有进程共有"><a href="#文件-网络句柄handle-所有进程共有" class="headerlink" title="文件/网络句柄handle 所有进程共有"></a>文件/网络句柄handle 所有进程共有</h3><p>进程是容器 进程无法共享内存，通信通过TCP/IP端口实现/其它操作系统的方案<br>线程：没有独立的地址空间，栈<br>线程：PC指向进程的内存<br>缓冲区溢出：用户名过长没有判断就放进内存，写入程序的内存部分<br>TLS：Thread local strategy 线程的独立内存</p>
+<h3 id="缺页中断"><a href="#缺页中断" class="headerlink" title="缺页中断"></a>缺页中断</h3><p>MMU访问虚拟内存时，这页虚拟内存还没有分配物理内存。向cpu发出缺页中断。cpu初始化物理页的内容分配，在进程页表添加映射。<br><code>int n = *p</code>当p所指向的地址在虚拟内存中，不是将p的值复制给内存，而是将p所在的虚拟内存的分页放入物理内存</p>
+<h3 id="内存虚拟化方案"><a href="#内存虚拟化方案" class="headerlink" title="内存虚拟化方案"></a>内存虚拟化方案</h3><ol>
+<li>影子页表(shadow Page Table) VMM(KVM)在宿主机内核中保存 虚拟机虚拟地址到宿主机物理地址。代价在于保持影子页表和虚拟机页表同步</li>
+<li>EPT两次页表查找 不用同步。</li>
+</ol>
+<h3 id="可执行文件格式"><a href="#可执行文件格式" class="headerlink" title="可执行文件格式"></a>可执行文件格式</h3><p><img src="/images/eltfile.jpg" alt="eltfile"><br>通过<code>file</code> 查看文件类型</p>
+<h3 id="进程的虚地址空间"><a href="#进程的虚地址空间" class="headerlink" title="进程的虚地址空间"></a>进程的虚地址空间</h3><p>C语言指针的大小位数与虚拟空间的位数相同<br>0x000000000062FE44<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> *p = &amp;i;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"0x%p"</span>,p);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>进程访问了非法地址windows”进程因非法操作需要关闭”，linux “Segmentation fault”</p>
+<h3 id="Linux内存布局"><a href="#Linux内存布局" class="headerlink" title="Linux内存布局"></a>Linux内存布局</h3><p><img src="/images/linuxmem.jpg" alt="linuxmem"><br>windows默认将高2G分配给内核.Linux默认1G<br>栈：函数调用上下文<br>可执行文件映像 装载器<br>共享库 装载地址在linux2.6挪到了靠近栈的0xbfxxxxxx</p>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><p><code>ulimit –s</code> 8M<br>esp栈顶 esb活动记录（帧指针(frame pointer))不随函数执行变化，用于定位数据，函数返回时恢复<br><img src="/images/foo1.jpg" alt="foo"></p>
+<ol>
+<li>设置好ebp esp栈指针后 </li>
+<li>开辟栈空间，保存ebx（基地址(base)寄存器） esi, edi（源/目标索引寄存器”(source/destination index)）三个寄存器</li>
+<li>将开辟出的空间初始化为0xCC</li>
+<li>通过eax（累加器”(accumulator)）返回</li>
+<li>恢复5个寄存器</li>
+<li>ret返回<blockquote>
+<p>ECX 是计数器(counter), 是重复(REP)前缀指令和LOOP指令的内定计数器。</p>
+</blockquote>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;<span class="keyword">char</span> p[<span class="number">12</span>];&#125;</span><br></pre></td></tr></table></figure>
+<p>0xCCCC（即两个连续排列的0xCC）的汉字编码就是烫，所以0xCCCC如果被当作文本就是“烫”。<br>如果一个指针变量的值是0xCCCCCCCC就是没初始化</p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p>原因：1.栈上数据在函数返回时被释放，无法将数据传递函数外。2.全局变量无法动态产生。</p>
+<h4 id="malloc的实现"><a href="#malloc的实现" class="headerlink" title="malloc的实现"></a>malloc的实现</h4><p>程序向操作系统申请堆空间，由程序运行库自己管理。<br>linux两种堆空间分配的系统调用</p>
+<ol>
+<li><code>int brk(void* end_data_segment)</code> 设置进程数据段的结束地址,</li>
+<li><p><code>mmap()</code>与windows的<code>VirtualAlloc</code>相似</p>
+<ul>
+<li><p>起始地址和大小必须是系统页的整数倍</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmp</span><span class="params">(<span class="keyword">void</span> *start,<span class="keyword">size_t</span> length,<span class="keyword">int</span> prot,<span class="keyword">int</span> flags,<span class="keyword">int</span> fd,<span class="keyword">off_t</span> offset)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>flag映射类型（文件映射/匿名映射） 匿名映射可以作为堆空间<br>小于128k会在现有堆空间中分配，大于则使用mmap申请匿名空间</p>
+</li>
+</ul>
+<ul>
+<li>用mmap实现malloc<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">malloc</span><span class="params">(<span class="keyword">size_t</span> nbytes)</span></span>&#123;</span><br><span class="line">    <span class="keyword">void</span>* ret = mmap(<span class="number">0</span>,nbytes,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS,<span class="number">0</span>,<span class="number">0</span>);<span class="comment">//可读可写，匿名</span></span><br><span class="line">    <span class="keyword">if</span>(ret == MAP_FAILED)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>mmap申请空间不能超过 空闲内存+空闲swap空间</p>
+<h3 id="windows-虚拟地址空间"><a href="#windows-虚拟地址空间" class="headerlink" title="windows 虚拟地址空间"></a>windows 虚拟地址空间</h3><p><a href="https://msdn.microsoft.com/zh-cn/library/windows/hardware/hh439648.aspx" target="_blank" rel="noopener">虚拟地址空间</a><br>windows 每个线程默认栈大小1M<br><code>NTDLL.DLL</code>堆管理器API<br>windows的堆不是向上增长</p>
+<h3 id="堆分配算法"><a href="#堆分配算法" class="headerlink" title="堆分配算法"></a>堆分配算法</h3><ol>
+<li>空闲链表pre,next并有4个字节存储大小</li>
+<li>位图，划分成大小相同的块。用2位11表示head，10表示body，00表示空闲<br> int32个字节，2个字节表示一个块的状态，假设1M堆，一块128字节=&gt;1M/128=8K个块<br> 8K/(32/2)=512个int的数组存储<br> Head表示已分配区的头<br><img src="/images/heep.jpg" alt="heep"></li>
+<li>对象池</li>
+</ol>
+<ol>
+<li>io指令至少是没io的10^6倍<br>并发：一个cpu上程序交替执行<br>只有一个cpu只能执行一个进程<br>进程：运行中的程序</li>
+</ol>
+<p><a href="http://www.pceva.com.cn/article/223-2.html" target="_blank" rel="noopener">内存原理</a></p>
+<h3 id="cpp返回对象的临时对象"><a href="#cpp返回对象的临时对象" class="headerlink" title="cpp返回对象的临时对象"></a>cpp返回对象的临时对象</h3><ol>
+<li>输出： 经过了两次构造函数1次拷贝到栈上临时对象，1次拷贝到返回值<br>ctor（create）<br>ctor<br>before return //已经被优化了，本来之后会输出copy ctor<br>operator=<br>dtor<br>dtor（销毁）<div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cpp_obj</span>&#123;</span></span><br><span class="line">    cpp_obj()&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"ctor\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cpp_obj(<span class="keyword">const</span> cpp_obj&amp; c)&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"copy ctor\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cpp_obj&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> cpp_obj&amp; rhs)&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"operator=\n"</span>;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ~cpp_obj()&#123;</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">"dtor\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">cpp_obj <span class="title">return_test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cpp_obj b;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"before return\n"</span>;</span><br><span class="line">    <span class="keyword">return</span> b; <span class="comment">//return cpp_obj() </span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cpp_obj n;</span><br><span class="line">    n = return_test();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+</li>
+</ol>
+<h3 id="汇编寄存器-gcc-hellow-c-gt-a-out"><a href="#汇编寄存器-gcc-hellow-c-gt-a-out" class="headerlink" title="汇编寄存器 gcc hellow.c -&gt;./a.out"></a>汇编寄存器 gcc hellow.c -&gt;./a.out</h3><ol>
+<li>预编译：<code>gcc -E .\bigthingg.c -o .\bigthingg.i</code> 展开宏</li>
+<li>编译：链接生成汇编 <code>gcc -S hello.i -o hello.s</code></li>
+<li>汇编<code>gcc -c hello.s -o hello.o</code></li>
+<li>链接<code>ld</code>….<br><img src="/images/registers.jpg" alt="registers.jpg"><br><a href="http://abcdxyzk.github.io/blog/2012/11/23/assembly-args/" target="_blank" rel="noopener">64位汇编寄存器</a></li>
+</ol>
+<h3 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h3><p>CPU通过地址总线可以访问连接在地址总线上的所有外设，包括物理内存、IO设备等等，但从CPU发出的访问地址并非是这些外设在地址总线上的物理地址，而是一个虚拟地址，由MMU将虚拟地址转换成物理地址再从地址总线上发出.<br>CPU中含有一个被称为内存管理单元（Memory Management Unit, MMU）的硬件，它的功能是将虚拟地址转换为物理地址。MMU需要借助存放在内存中的页表来动态翻译虚拟地址，该页表由操作系统管理。<br>虚拟内存空间被组织为一个存放在硬盘上的M个连续的字节大小的单元组成的数组。<br>页表是一个元素为页表条目（Page Table Entry, PTE）的集合，有效位代表这个虚拟页是否被缓存在物理内存中。<br>处理缺页异常<code>do_page_fault()</code></p>
+<h3 id="inode"><a href="#inode" class="headerlink" title="inode"></a>inode</h3><p>文件读取磁盘的最小单位是多个扇区sector组成的 块block。一般4kb,8个sector<br>inode：文件系统的数据结构，文件元信息<br>查看inode<code>stat example.txt</code></p>
+<h3 id="系统调用、POSIX、C库、系统命令和内核函数"><a href="#系统调用、POSIX、C库、系统命令和内核函数" class="headerlink" title="系统调用、POSIX、C库、系统命令和内核函数"></a>系统调用、POSIX、C库、系统命令和内核函数</h3><ul>
+<li>POSIX（Portable Operating System Interface of UNIX，可移植操作系统接口）标准<br>基于UNIX的可移植 操作系统标准</li>
+<li>内核提供的每个系统调用在C库中都具有相应的封装函数。<blockquote>
+<p>比如malloc函数和free函数都是通过brk系统调用来扩大或缩小进程的堆栈，execl、execlp、execle、 execv、execvp和execve函数都是通过execve系统调用来执行一个可执行文件。<br><img src="\images\cposix.jpg" alt="cposix"><br>-系统命令位于C库的更上层，是利用C库实现的可执行程序，比如最为常用的ls、cd等命令。<br><code>$trace pwd</code> pwd调用了那些系统调用</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<ul>
+<li>2类寄存器：用户可见/控制和状态 寄存器</li>
+<li>？？3种I/O操作技术：可编程：处理器忙；中断驱动：；直接存储访问DMA</li>
+<li>空间局部性 ： 更大的缓冲块，存储器控制逻辑+预处理</li>
+<li>多道： 交错进程</li>
+<li>进程状态： 执行上下文；<blockquote>
+<p>操作系统信息不允许被进程直接访问</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>上下文包括操作系统管理进程以及处理器正确执行进程所需要的所有信息，包括各种处理器寄存器的内容，如程序计数器和数据寄存器。它还包括操作系统使用的信息，如进程优先级以及进程是否在等待特定I/O事件的完成。</p>
+</blockquote>
+<ul>
+<li>虚地址指的是存在于虚拟内存中的地址，它有时候在磁盘中有时候在主存中。</li>
+<li><p>实地址指的是主存中的地址。</p>
+</li>
+<li><p>??单体内核和微内核</p>
+</li>
+<li><p>os维护信息表： 内存,I/O,文件，进程</p>
+</li>
+<li>进程控制块：标识，？？处理器状态，进程控制信息</li>
+<li>陷阱： 当面进程的错误or异常</li>
+<li><p>中断例子： 时钟，I/O，内存失效</p>
+</li>
+<li><p>线程模式切换：？包含状态信息少</p>
+</li>
+</ul>
+<h4 id="第4章-线程、对称多处理和微内核"><a href="#第4章-线程、对称多处理和微内核" class="headerlink" title="第4章 线程、对称多处理和微内核"></a>第4章 线程、对称多处理和微内核</h4><h4 id="第7章-内存管理"><a href="#第7章-内存管理" class="headerlink" title="第7章 内存管理"></a>第7章 内存管理</h4><ul>
+<li>内存管理 ：<ul>
+<li>重定位进程-&gt;就绪进程池-&gt;处理器利用率</li>
+<li><strong>运行</strong>时内存保护</li>
+<li>进程共享内存</li>
+</ul>
+</li>
+<li>内部碎片、外部碎片：数据&lt;分区-&gt;浪费；？动态分区，分区外存储空间变多。</li>
+<li>页： 进程和磁盘划分块；帧：主存划分块；一页装入一帧。</li>
+<li>段： 长度可变</li>
+</ul>
+<h4 id="第8章-虚拟内存"><a href="#第8章-虚拟内存" class="headerlink" title="第8章    虚拟内存"></a>第8章    虚拟内存</h4><h4 id="第10章-多处理器和实时调度"><a href="#第10章-多处理器和实时调度" class="headerlink" title="第10章    多处理器和实时调度"></a>第10章    多处理器和实时调度</h4><h4 id="第11章-I-O管理和磁盘调度"><a href="#第11章-I-O管理和磁盘调度" class="headerlink" title="第11章   I/O管理和磁盘调度"></a>第11章   I/O管理和磁盘调度</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/os/" rel="tag"># os</a>
+          
+            <a href="/tags/memory/" rel="tag"># memory</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/03/markdown-Syntax/" rel="next" title="markdown Syntax">
+                <i class="fa fa-chevron-left"></i> markdown Syntax
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/05/CS224/" rel="prev" title="CS224">
+                CS224 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#并行和并发的区别"><span class="nav-number">1.</span> <span class="nav-text">并行和并发的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件-网络句柄handle-所有进程共有"><span class="nav-number">2.</span> <span class="nav-text">文件/网络句柄handle 所有进程共有</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺页中断"><span class="nav-number">3.</span> <span class="nav-text">缺页中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存虚拟化方案"><span class="nav-number">4.</span> <span class="nav-text">内存虚拟化方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可执行文件格式"><span class="nav-number">5.</span> <span class="nav-text">可执行文件格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的虚地址空间"><span class="nav-number">6.</span> <span class="nav-text">进程的虚地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内存布局"><span class="nav-number">7.</span> <span class="nav-text">Linux内存布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈"><span class="nav-number">8.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆"><span class="nav-number">9.</span> <span class="nav-text">堆</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#malloc的实现"><span class="nav-number">9.1.</span> <span class="nav-text">malloc的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-虚拟地址空间"><span class="nav-number">10.</span> <span class="nav-text">windows 虚拟地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆分配算法"><span class="nav-number">11.</span> <span class="nav-text">堆分配算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpp返回对象的临时对象"><span class="nav-number">12.</span> <span class="nav-text">cpp返回对象的临时对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编寄存器-gcc-hellow-c-gt-a-out"><span class="nav-number">13.</span> <span class="nav-text">汇编寄存器 gcc hellow.c -&gt;./a.out</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟内存"><span class="nav-number">14.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inode"><span class="nav-number">15.</span> <span class="nav-text">inode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统调用、POSIX、C库、系统命令和内核函数"><span class="nav-number">16.</span> <span class="nav-text">系统调用、POSIX、C库、系统命令和内核函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第4章-线程、对称多处理和微内核"><span class="nav-number">16.1.</span> <span class="nav-text">第4章 线程、对称多处理和微内核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第7章-内存管理"><span class="nav-number">16.2.</span> <span class="nav-text">第7章 内存管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第8章-虚拟内存"><span class="nav-number">16.3.</span> <span class="nav-text">第8章    虚拟内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第10章-多处理器和实时调度"><span class="nav-number">16.4.</span> <span class="nav-text">第10章    多处理器和实时调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第11章-I-O管理和磁盘调度"><span class="nav-number">16.5.</span> <span class="nav-text">第11章   I/O管理和磁盘调度</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

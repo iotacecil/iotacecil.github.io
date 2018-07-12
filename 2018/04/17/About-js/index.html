@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Web Component 用法Webview loadUrl浏览器由7部分组成用户界面网络：请求静态资源发起请求js引擎渲染引擎：DOM和CSS内容排版 WebKit中Html和CSS解析可以并行UI后端：选择框、按钮、输入框js解释器持久化数据存储 查看渲染计算后的CSS规则document.defaultView.getComputedStype(document.getElementByI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="About-js">
+<meta property="og:url" content="https://iotaa.xyz/2018/04/17/About-js/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="Web Component 用法Webview loadUrl浏览器由7部分组成用户界面网络：请求静态资源发起请求js引擎渲染引擎：DOM和CSS内容排版 WebKit中Html和CSS解析可以并行UI后端：选择框、按钮、输入框js解释器持久化数据存储 查看渲染计算后的CSS规则document.defaultView.getComputedStype(document.getElementByI">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/6tcp.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/closetcp.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/googletcp.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/typeof.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/reduce.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/returnreduce.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/bibao.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/prototype.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/BOM.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="About-js">
+<meta name="twitter:description" content="Web Component 用法Webview loadUrl浏览器由7部分组成用户界面网络：请求静态资源发起请求js引擎渲染引擎：DOM和CSS内容排版 WebKit中Html和CSS解析可以并行UI后端：选择框、按钮、输入框js解释器持久化数据存储 查看渲染计算后的CSS规则document.defaultView.getComputedStype(document.getElementByI">
+<meta name="twitter:image" content="https://iotaa.xyz/images/6tcp.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/04/17/About-js/"/>
+
+
+
+
+
+  <title>About-js | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/04/17/About-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">About-js</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T17:06:31+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Web-Component-用法"><a href="#Web-Component-用法" class="headerlink" title="Web Component 用法"></a>Web Component 用法</h2><h2 id="Webview-loadUrl"><a href="#Webview-loadUrl" class="headerlink" title="Webview loadUrl"></a>Webview loadUrl</h2><h2 id="浏览器由7部分组成"><a href="#浏览器由7部分组成" class="headerlink" title="浏览器由7部分组成"></a>浏览器由7部分组成</h2><p>用户界面<br>网络：请求静态资源发起请求<br>js引擎<br>渲染引擎：DOM和CSS内容排版 WebKit中Html和CSS解析可以并行<br>UI后端：选择框、按钮、输入框<br>js解释器<br>持久化数据存储</p>
+<h2 id="查看渲染计算后的CSS规则"><a href="#查看渲染计算后的CSS规则" class="headerlink" title="查看渲染计算后的CSS规则"></a>查看渲染计算后的CSS规则</h2><p><code>document.defaultView.getComputedStype(document.getElementById(&quot;id&quot;,null))</code><br>css计算权重：!important&gt;内联样式&gt;id选择器&gt;类选择器&gt;元素选择器</p>
+<h2 id="浏览器持久化"><a href="#浏览器持久化" class="headerlink" title="浏览器持久化"></a>浏览器持久化</h2><ol>
+<li><p>HTTP文件缓存<br>Application-Frames<br>Etag响应/if-Node-Match请求<br>同时设置Expire和Cache-Control只有Cache-Control生效</p>
+</li>
+<li><p>localStroage在chrome限制为2.6M 同域名一般共享<br>只有4个api：set/get/removeItem/clear</p>
+</li>
+<li><p>sessionStorage 浏览器关闭时会自动清空</p>
+</li>
+<li><p>cookie<br>单个域名持支的cookie个数。chrome50个，长度4k<br>与localStorage类似 不同域名独立。<br>可以设置cookie的path和domain相同父域共享</p>
+</li>
+</ol>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><p>http/1.1 字符串传输<br>持久链接：一个tcp链接里可以发送很多http请求。减少三次握手次数。<br>pipeline:<br>添加了host：</p>
+<p>http2：分帧传输二进制传输（不用连续）<br>信道复用 同一个链接多个请求<br>一个tcp链接并发http请求，不用等前一个请求接收到之后再发送。<br>server push推送。以前要先解析html再发送请求css/js。现在请求html就获取。</p>
+<p>nginx开启http2 开启https才能http2<br>ALPN转称http1.1传给服务器<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">  listen 443 http2;</span><br><span class="line">  server_name test.com;</span><br><span class="line">  http2_push_preload on;</span><br><span class="line">&#125;</span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
+<p>nodejs<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(request.url === <span class="string">'/'</span>)&#123;</span><br><span class="line">  response.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line">    <span class="string">'Content-Type'</span>:<span class="string">'text/html'</span>,</span><br><span class="line">    <span class="string">'Connection'</span>:<span class="string">'close'</span>,</span><br><span class="line">    <span class="comment">//http2的push</span></span><br><span class="line">    <span class="string">'Link'</span>:<span class="string">'&lt;/test.jpg&gt;;as=image;rel=preload'</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>协议变成h2<br><code>chrome://net-internals/#http2</code> 看pushed和 claimed 使用1个push到30个push的区别<br>https的握手过程</p>
+<p><a href="http2.akamai.com/demo/http2-lab.html">http2性能测试</a></p>
+<h3 id="nodejs跨域测试"><a href="#nodejs跨域测试" class="headerlink" title="nodejs跨域测试"></a>nodejs跨域测试</h3><ol>
+<li>被请求的添加<br>html里<br>type:xhr<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest()</span><br><span class="line">xhr.open(<span class="string">'GET'</span>,<span class="string">'http://127.0.0.1:8897'</span>)</span><br><span class="line">xhr.send()</span><br><span class="line">&lt;script&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>8897:任何服务都能访问这个服务<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">200</span>,&#123;<span class="string">'Access-Control-Allow-Origin'</span>:<span class="string">'*'</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>或者特定域名<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">200</span>,</span><br><span class="line">  &#123;<span class="string">'Access-Control-Allow-Origin'</span>:<span class="string">'http://localhost:8898'</span>&#125;)</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>jsonp标签里允许跨域不用添加allow-origin<br>type:script<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"http://127.0.0.1:8897"</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="CORS预请求-option"><a href="#CORS预请求-option" class="headerlink" title="CORS预请求 option"></a>CORS预请求 option</h3><p>跨域只允许get/head/post<br>content-type只允许 form表单三种数据类型<br><code>text/plain
+multipart/form-data
+application/x-www.form-urlencoded</code><br>html：报错<code>not allowed by Access-Control-Allow-Headers</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fetch(<span class="string">'http://localhost:8897/'</span>,&#123;</span><br><span class="line">  method:<span class="string">'POST'</span>,</span><br><span class="line">  headers:&#123;</span><br><span class="line">    <span class="string">'X-cors'</span>:<span class="string">'123'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header" target="_blank" rel="noopener">fetch允许跨域的header</a><br>允许的header 其它的都需要服务器端验证先发送option类型再发送post<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line">  <span class="string">'Access-Control-Allow-Header'</span>:<span class="string">'X-Test-Cors'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>同理可以添加<code>Allow-Methods</code>等<br>设置允许跨域的最长时间不需要再发送option预请求<br><code>&#39;Access-Control-Max-Age&#39;:&#39;1000&#39;</code></p>
+<h3 id="缓存Cache-Control"><a href="#缓存Cache-Control" class="headerlink" title="缓存Cache-Control"></a>缓存Cache-Control</h3><ol>
+<li>可缓存性<br>public：http经过的代理服务器、客户端都能缓存<br>private：只有发起请求的浏览器可以缓存(百度设置了privae)</li>
+<li>过期<br>max-age：客户端过期时间<br>s-maxage=代理服务器的过期时间<br>max-stale=使用过期缓存</li>
+<li>重新验证<br>must-revalidate</li>
+<li>其它对代理服务器nginx<br>no-cache 可以本地缓存。向服务器发起验证是否可以使用本地缓存<br>no-store 不能本地缓存。<br>no-transform 不压缩</li>
+</ol>
+<p>在请求服务器设置<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line"><span class="string">'Cache-Control'</span>:<span class="string">'max-age=200,public'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>服务端<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> etag = request.headers[<span class="string">'if-none-match'</span>]</span><br><span class="line"><span class="keyword">if</span>(etag === <span class="string">'777'</span>)&#123;</span><br><span class="line">  response.writeHead(<span class="number">304</span>,&#123;</span><br><span class="line">    <span class="string">'Content-Type'</span>:<span class="string">'text/javascript'</span>,</span><br><span class="line">    <span class="string">'Etag'</span>:<span class="string">'777'</span></span><br><span class="line">  &#125;)</span><br><span class="line">  response.end(<span class="string">'并不会显示，浏览器直接读了缓存'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="设置Cookie"><a href="#设置Cookie" class="headerlink" title="设置Cookie"></a>设置Cookie</h3><p>禁止javascript修改cookie<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line">  <span class="string">'Set-Cookie:['</span>id=<span class="number">123</span>;max-age=<span class="number">2</span><span class="string">','</span>abc=<span class="number">456</span>;HttpOnly<span class="string">']</span></span><br><span class="line"><span class="string">&#125;)</span></span><br><span class="line"><span class="string">response.end(html)</span></span><br></pre></td></tr></table></figure></p>
+<p><code>&#39;adc=456;domain=test.com&#39;</code> 不能跨域设置给a.test.com</p>
+<h3 id="长链接Network-Connection-ID（TCP链接的id）"><a href="#长链接Network-Connection-ID（TCP链接的id）" class="headerlink" title="长链接Network-Connection ID（TCP链接的id）"></a>长链接Network-Connection ID（TCP链接的id）</h3><p>http1.1发送请求有先后顺序。不能并发请求<br>chrome允许并发限制创建6个<br><img src="/images/6tcp.jpg" alt="6tcp"><br>保持长链接<code>Connect:Keep-Alive</code> 默认都是keep-alive<br>本地开发 把网速调慢：online-&gt;Fast 3G<br>可以设置<code>&#39;Connection&#39;:&#39;close&#39;</code><br><img src="/images/closetcp.jpg" alt="close"></p>
+<p>google 使用h2 都是一个connectID<br><img src="/images/googletcp.jpg" alt="googletcp"></p>
+<h3 id="数据协商"><a href="#数据协商" class="headerlink" title="数据协商"></a>数据协商</h3><p>Accept<br>Accept-Encoding<br>Accept-Language<br><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Basics_of_HTTP/MIME_types" target="_blank" rel="noopener">mimetype</a></p>
+<p><code>&#39;X-Content-Type-Options&#39;:&#39;nosniff&#39;</code> 禁止浏览器自动猜测返回类型</p>
+<p>使用gzip压缩<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> zlib = <span class="built_in">require</span>(<span class="string">'zlib'</span>)</span><br><span class="line"><span class="keyword">const</span> html = fs.readFileSync(<span class="string">'test.html'</span>)</span><br><span class="line">response.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line">  <span class="string">'Content-Encoding'</span>:<span class="string">'gzip'</span>,</span><br><span class="line">&#125;)</span><br><span class="line">response.end(zlib.gzipSync(html))</span><br></pre></td></tr></table></figure></p>
+<p>表单如果用ajax使用application/json或者application/xml<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span> =<span class="string">'/from'</span> <span class="attr">id</span> = <span class="string">"form"</span> <span class="attr">method</span> = <span class="string">"POST"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span> = <span class="string">"text"</span> <span class="attr">name</span> = <span class="string">"name"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span> = <span class="string">"password"</span> <span class="attr">name</span> = <span class="string">"password"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"file"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span> =<span class="string">"submit"</span> <span class="attr">name</span> = <span class="string">"submit"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>ajax发送<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> form = <span class="built_in">document</span>.getElementById(<span class="string">"form"</span>)</span><br><span class="line">form.addEventListener(<span class="string">'submit'</span>,fumction(e)&#123;</span><br><span class="line">  e.preventDefault()<span class="comment">//页面不会跳转</span></span><br><span class="line">  <span class="keyword">var</span> formData = <span class="keyword">new</span> FormData(form)</span><br><span class="line">  fetch(<span class="string">'/form'</span>,&#123;</span><br><span class="line">    method:<span class="string">'post'</span>,</span><br><span class="line">    body:formData</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>会自动带上Content-Type</p>
+<h3 id="redirect"><a href="#redirect" class="headerlink" title="redirect"></a>redirect</h3><p>只有302的头才表示跳转<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">302</span>,&#123;</span><br><span class="line">  <span class="string">'Location'</span>:<span class="string">'/new'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>改成301永久变更 浏览器会自动只发送/new的请求 /new的路由放到了缓存里。接下来改成200也读不到了。</p>
+<h3 id="CSP-content-security-policy-内容安全策略"><a href="#CSP-content-security-policy-内容安全策略" class="headerlink" title="CSP content-security-policy 内容安全策略"></a>CSP content-security-policy 内容安全策略</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'Content-Security-Policy'</span>:<span class="string">'default-src http:https'</span></span><br></pre></td></tr></table></figure>
+<p>考虑同一域名的浏览器请求上限将html放在admin.domain.com下,js+css放在s.下，将image放在image.下<br>前端访问后端api.发生跨域需要使用代理服务器</p>
+<p>304是协商缓存 还会和服务器通信一次<br>本地缓存(cache-control/expires) 通过html中引用css地址更新v1放弃缓存 用摘要算法当文件更新时更新css文件名<br>静态资源部署在cdn，动态网页部署在另一个节点。<br>1 先更新页面：加载旧缓存，页面样式错乱<br>2 先静态资源后页面：有缓存则不更新，第一次访问的没缓存用户 页面执行错误。<br>访问量小的网站可以先静态资源后页面<br>非覆盖式发布：新旧css同时存在cdn上，再更新html页面</p>
+<p>全局微软雅黑<br><code>document.getElementByTagName(&quot;body&quot;).sytle.fontFamily=&quot;微软雅黑&quot;</code><br><code>Array.from(document.getElementByTagName(&quot;p&quot;).forEach((item)=&gt;item.style.fontFamily=&quot;微软雅黑&quot;))</code></p>
+<ol>
+<li>import有无default ，default导出的只能一个，所以不用大括号</li>
+</ol>
+<h3 id="webpack-dev-server-开发模式"><a href="#webpack-dev-server-开发模式" class="headerlink" title="webpack-dev-server 开发模式"></a>webpack-dev-server 开发模式</h3><p>wepack.config.js:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isDev = process.env.NODE_ENV===<span class="string">'development'</span></span><br><span class="line"><span class="keyword">const</span> config=&#123;</span><br><span class="line">  target: <span class="string">'web'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(isDev)&#123;</span><br><span class="line">  config.devSever =&#123;</span><br><span class="line">  port:<span class="number">8888</span></span><br><span class="line">  host:<span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>,<span class="comment">//可以在内网中用内网ip用手机访问测试</span></span><br><span class="line">  overlay:&#123;</span><br><span class="line">    errors:<span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  historyFallback:<span class="string">"index.html"</span>,</span><br><span class="line">  hot:ture<span class="comment">//只渲染当前组件</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>安装corss-env在windows平台下设置NODE_ENV要用set和linux不同<br>package.json<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"script"</span>:&#123;</span><br><span class="line">  <span class="string">"build"</span>:<span class="string">"cross-env NODE_ENV=production webpack --config webpack.config.js"</span>,</span><br><span class="line">  <span class="string">"dev"</span>: <span class="string">"cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="html-webpack-plugin"><a href="#html-webpack-plugin" class="headerlink" title="html-webpack-plugin"></a>html-webpack-plugin</h3><h3 id="autoprefixer"><a href="#autoprefixer" class="headerlink" title="autoprefixer"></a>autoprefixer</h3><p>postcss.config.js<br>优化css代码 自动加webkit等前缀</p>
+<h3 id="mixin模式"><a href="#mixin模式" class="headerlink" title="mixin模式"></a>mixin模式</h3><h3 id="typeof一共有五种返回值"><a href="#typeof一共有五种返回值" class="headerlink" title="typeof一共有五种返回值"></a>typeof一共有五种返回值</h3><p>按存储方式只有值类型和引用类型（共用内存块）<br>只能区分值类型。无法区分引用类型：数组、对象、方法<br><img src="/images/typeof.jpg" alt="typeof"></p>
+<h3 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h3><h4 id=""><a href="#" class="headerlink" title="=="></a>==</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">100</span>==<span class="string">'100'</span><span class="comment">//true</span></span><br><span class="line"><span class="number">0</span>==<span class="string">''</span> <span class="comment">//true 都会转换成false</span></span><br><span class="line"><span class="literal">null</span>==undefine<span class="comment">//true 都会转换成false</span></span><br></pre></td></tr></table></figure>
+<h4 id="if和逻辑运算符"><a href="#if和逻辑运算符" class="headerlink" title="if和逻辑运算符"></a>if和逻辑运算符</h4><p>判断变量被当成true还是false<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span></span><br><span class="line"><span class="built_in">console</span>.log(!!a)<span class="comment">//true</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="何时使用-和"><a href="#何时使用-和" class="headerlink" title="何时使用===和=="></a>何时使用===和==</h3><p>除了<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">obj.a==<span class="literal">null</span></span><br><span class="line"><span class="comment">//相当于</span></span><br><span class="line">obj.a===<span class="literal">null</span>||obj.a===<span class="literal">undefined</span></span><br><span class="line"><span class="comment">//来自jquery</span></span><br></pre></td></tr></table></figure></p>
+<p>其它都用<code>===</code></p>
+<h3 id="12个js内置函数-（数据封装类对象）"><a href="#12个js内置函数-（数据封装类对象）" class="headerlink" title="12个js内置函数 （数据封装类对象）"></a>12个js内置函数 （数据封装类对象）</h3><p>JSON和Math也是内置对象<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">JSON</span>.stringify(&#123;<span class="attr">a</span>:<span class="number">10</span>,<span class="attr">b</span>:<span class="number">20</span>&#125;)</span><br><span class="line"><span class="built_in">JSON</span>.parse(<span class="string">'&#123;"a":10,"b":20&#125;'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h3><h3 id="js构造函数"><a href="#js构造函数" class="headerlink" title="js构造函数"></a>js构造函数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MathHandle</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.x=x;</span><br><span class="line">  <span class="keyword">this</span>.y=y;</span><br><span class="line">&#125;</span><br><span class="line">MathHandle.prototype.add=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.x+<span class="keyword">this</span>.y</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> m = <span class="keyword">new</span> MathHandle(<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">console</span>.log(m.add())</span><br></pre></td></tr></table></figure>
+<h3 id="Class语法"><a href="#Class语法" class="headerlink" title="Class语法"></a>Class语法</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MathHandle</span></span>&#123;</span><br><span class="line">  construct(x,y)&#123;</span><br><span class="line">    <span class="keyword">this</span>.x=x;</span><br><span class="line">    <span class="keyword">this</span>.y=y;</span><br><span class="line">  &#125;</span><br><span class="line">  add()&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> m = <span class="keyword">new</span> MathHandle(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line"><span class="built_in">console</span>.log(m.add())</span><br></pre></td></tr></table></figure>
+<h3 id="语法糖实现"><a href="#语法糖实现" class="headerlink" title="语法糖实现"></a>语法糖实现</h3><p><code>MathHandle===MathHandle.prototype.constructor</code> true</p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.eat = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"animal"</span>)&#125;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dog</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.bark = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"bark"</span>)&#125;&#125;</span><br><span class="line">Dog.prototype = <span class="keyword">new</span> Animal()</span><br><span class="line"><span class="keyword">var</span> hs = <span class="keyword">new</span> Dog()</span><br><span class="line"><span class="comment">//hs有了eat方法</span></span><br></pre></td></tr></table></figure>
+<h3 id="window-onload和DOMContentLoaded区别"><a href="#window-onload和DOMContentLoaded区别" class="headerlink" title="window.onload和DOMContentLoaded区别"></a>window.onload和DOMContentLoaded区别</h3><h4 id="zepto"><a href="#zepto" class="headerlink" title="zepto"></a>zepto</h4><p>rollup.js 比webpack小</p>
+<p>babel src/index.js</p>
+<p>zepto小型jquery专门移动端开发<br>Rivets.js数据绑定<br><a href="https://github.com/ecmadao/Coding-Guide/tree/master/Notes/JavaScript" target="_blank" rel="noopener">js</a><br>预处理器 pug webpack 模版处理器（jade）</p>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><ol>
+<li><code>arr.includes(4)</code> true/false</li>
+<li><p><code>.find</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> result = arr3.find(<span class="function"><span class="keyword">function</span> (<span class="params">item,index</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> item.toString().indexOf(<span class="number">5</span>)&gt;<span class="number">-1</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>.some</code>找到true后停止返回true</p>
+</li>
+<li><code>.every</code>找到false后停止返回false</li>
+<li><code>.reduce</code><br><img src="/images/reduce.jpg" alt="reduce"><br>变成undefined是因为没有写返回值<br><img src="/images/returnreduce.jpg" alt="reduce"></li>
+</ol>
+<ul>
+<li>对象求和：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//不报错，返回NaN 因为pre从对象变成了数 </span></span><br><span class="line">[&#123;<span class="attr">price</span>:<span class="number">30</span>,<span class="attr">count</span>:<span class="number">2</span>&#125;,&#123;<span class="attr">price</span>:<span class="number">20</span>,<span class="attr">count</span>:<span class="number">3</span>&#125;,&#123;<span class="attr">price</span>:<span class="number">40</span>,<span class="attr">count</span>:<span class="number">4</span>&#125;].reduce(<span class="function">(<span class="params">prev,next</span>)=&gt;</span>prev.price*prev.count+next.price*next.count)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>正确写法：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0</span>,&#123;<span class="attr">price</span>:<span class="number">30</span>,<span class="attr">count</span>:<span class="number">2</span>&#125;,&#123;<span class="attr">price</span>:<span class="number">20</span>,<span class="attr">count</span>:<span class="number">3</span>&#125;,&#123;<span class="attr">price</span>:<span class="number">40</span>,<span class="attr">count</span>:<span class="number">4</span>&#125;].reduce(<span class="function">(<span class="params">prev,next</span>)=&gt;</span>prev+next.price*next.count)</span><br><span class="line"><span class="comment">//或者添加默认参数</span></span><br><span class="line">[&#123;<span class="attr">price</span>:<span class="number">30</span>,<span class="attr">count</span>:<span class="number">2</span>&#125;,&#123;<span class="attr">price</span>:<span class="number">20</span>,<span class="attr">count</span>:<span class="number">3</span>&#125;,&#123;<span class="attr">price</span>:<span class="number">40</span>,<span class="attr">count</span>:<span class="number">4</span>&#125;].reduce(<span class="function">(<span class="params">prev,next</span>)=&gt;</span>prev+next.price*next.count,<span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>数组扁平化：二维数组变成一维<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]].reduce(<span class="function">(<span class="params">prev,next</span>)=&gt;</span>prev.concat(next))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h3><p><code>let a = b =&gt; c =&gt; b+c</code>a(1)(2)=3(return function(c){b+c})<br>闭包：返回的是引用数据类型，赋值给外界变量，不会被销毁。</p>
+<p>更改this指向</p>
+<h3 id="call和apply和bind"><a href="#call和apply和bind" class="headerlink" title="call和apply和bind"></a>call和apply和bind</h3><p><a href="https://github.com/lin-xin/blog/issues/7" target="_blank" rel="noopener">apply\call详解</a><br>绑定this上下文，call和apply使函数立即执行</p>
+<p>bind返回函数<br>自己实现bind<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="built_in">Function</span>.prototype.bind) &#123;</span><br><span class="line">        <span class="built_in">Function</span>.prototype.bind = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> self = <span class="keyword">this</span>,                        <span class="comment">// 保存原函数</span></span><br><span class="line">                context = [].shift.call(<span class="built_in">arguments</span>), <span class="comment">// 保存需要绑定的this上下文</span></span><br><span class="line">                args = [].slice.call(<span class="built_in">arguments</span>);    <span class="comment">// 剩余的参数转为数组</span></span><br><span class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;                    <span class="comment">// 返回一个新函数</span></span><br><span class="line">                self.apply(context,[].concat.call(args, [].slice.call(<span class="built_in">arguments</span>)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="文档碎片"><a href="#文档碎片" class="headerlink" title="文档碎片"></a>文档碎片</h3><h3 id="在赋值操作中"><a href="#在赋值操作中" class="headerlink" title="在赋值操作中"></a>在赋值操作中</h3><ol>
+<li><code>A||B</code> :A真返回A，A假返回B</li>
+<li><code>A&amp;&amp;B</code> :A假返回A，A真返回B &amp;&amp;优先于||<br>应用场景：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params">num,callBack</span>)</span>&#123;</span><br><span class="line">  num=num||<span class="number">0</span><span class="comment">//undefined会转换成false</span></span><br><span class="line">  callBack&amp;&amp;callBack();<span class="comment">//只要传了函数进来callBack为真</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p><img src="/images/bibao.jpg" alt="bibao"><br>里边的作用域被赋值给外面的变量占用了，不能释放。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">9</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  a=<span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">b</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b+a++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> f=fn()<span class="comment">//占用 function(b)</span></span><br><span class="line"><span class="built_in">console</span>.log(f(<span class="number">5</span>))<span class="comment">//输出5.f(5)执行后会销毁 全局a=1</span></span><br><span class="line"><span class="built_in">console</span>.log(f()(<span class="number">5</span>))<span class="comment">//修改全局a=0 输出5 执行完后a++ 全局a=1</span></span><br><span class="line"><span class="built_in">console</span>.log(f(<span class="number">5</span>))<span class="comment">//输出6 从fn到return之间的被保留</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="类数组-（arguments形参集合）"><a href="#类数组-（arguments形参集合）" class="headerlink" title="类数组 （arguments形参集合）"></a>类数组 （arguments形参集合）</h3><ol>
+<li>以0~n数字作索引</li>
+<li>length</li>
+<li>arguments.callee是函数本身 严格模式不使用</li>
+<li>arguments.caller 是fn 严格模式不使用</li>
+<li>Array.from()将类数组转换成数组<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="built_in">arguments</span>.callee.caller)&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;sum(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="立即执行函数IIFE"><a href="#立即执行函数IIFE" class="headerlink" title="立即执行函数IIFE"></a>立即执行函数IIFE</h3><p><code>function t (num){console.log(num)}(3)</code></p>
+<ol>
+<li>浏览器的【全局作用域】是window,nodejs的全局作用域是global<br>var a=1 给window加了属性</li>
+<li>对象数据类型：<ol>
+<li>浏览器开辟内存空间分配一个16进制的地址，</li>
+<li>内存空间存对象键值对</li>
+<li>给对象变量存地址</li>
+</ol>
+</li>
+</ol>
+<p>任意数求和<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="comment">//类数组转化成数组</span></span><br><span class="line">  <span class="keyword">var</span> ary = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">eval</span>(ary.join(<span class="string">'+'</span>))</span><br><span class="line">&#125;</span><br><span class="line">fn(<span class="number">12</span>,<span class="number">23</span>,<span class="number">34</span>)</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>函数与对象的创建相同也是地址，函数把js代码当作字符串存到空间中</li>
+<li>js中栈内存是作用域，用于执行代码，存放基本数据类型。堆内存用于存储键值对or函数字符串<br>调用栈是连续空间。后进先释放，要节约栈空间。堆是链表。</li>
+<li>变量提升：在当前作用域，浏览器把所有<ol>
+<li>带var的声明，</li>
+<li>带function的声明并定义（defined赋值(代码字符串的地址)）</li>
+</ol>
+</li>
+<li>全局作用域var相当于给window加了属性</li>
+</ol>
+<h3 id="单例模式：团队合作防止全局变量污染：封装到对象"><a href="#单例模式：团队合作防止全局变量污染：封装到对象" class="headerlink" title="单例模式：团队合作防止全局变量污染：封装到对象"></a>单例模式：团队合作防止全局变量污染：封装到对象</h3><h3 id="内置类"><a href="#内置类" class="headerlink" title="内置类"></a>内置类</h3><ol>
+<li><p>htmlCollection元素集合类</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">getElementByTagName</span><br><span class="line">getElementByClassName</span><br><span class="line">querySelectorAll</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>NodeList 节点集合类</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">getElementByTagName</span><br><span class="line">childNodes</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>proto</strong>:HTML[Div]Element元素对象-&gt;HTMLElement-&gt;ELement-&gt;Node-&gt;EventTarget-&gt;Object</p>
+</li>
+</ol>
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>构造函数执行方式<code>new</code> fn() 普通函数 <code>fn()</code></p>
+<ol>
+<li><p>this是window</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用构造函数时 this指向函数本身 输出：nfn的属性nnn:10<br>构造函数过程：创建this实例，对this赋值并返回this<br>并且每次new都是不同实例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">nfn</span>(<span class="params">nnn</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">    <span class="keyword">this</span>.nnn=nnn;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> ff = <span class="keyword">new</span> nfn(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="判断JS数据类型的4种方法"><a href="#判断JS数据类型的4种方法" class="headerlink" title="判断JS数据类型的4种方法"></a>判断JS数据类型的4种方法</h3><p><a href="https://www.cnblogs.com/onepixel/p/5126046.html" target="_blank" rel="noopener">js数据类型</a></p>
+<ol>
+<li>typeof 无法区分正则和array 都返回object</li>
+<li>instanceof 检测当前实例是否属于这个类</li>
+<li>.constructor（对象实例的constructor是类）</li>
+<li>Object.prototype.toString.call</li>
+</ol>
+<h3 id="in-hasOwnProperty"><a href="#in-hasOwnProperty" class="headerlink" title="in/hasOwnProperty"></a>in/hasOwnProperty</h3><p>hsOwnProperty是通过原型链检测是否是Constuctor的实例<br>区别：<br><code>Object.hasOwnProperty(&#39;hasOwnProperty&#39;)</code> false<br><code>&#39;hasOwnProperty&#39; in Object</code> true<br>hasOwnProperty用于检测私有属性<br>in 私有共有都返回true<br>共有：类提供，所有实例都能用 （静态方法）</p>
+<h3 id="原型和原型链"><a href="#原型和原型链" class="headerlink" title="原型和原型链"></a>原型和原型链</h3><p>类是函数，实例是对象。</p>
+<ol>
+<li>函数的<code>prototype</code>属性是对象</li>
+<li>实例的<code>__proto__</code>属性是对象</li>
+<li><code>typeof Object</code> “function” 所有的类都是函数类型<br><code>Function instanceof Object</code> -&gt;true</li>
+<li>所有内置类String/Number 也是”function”类型</li>
+</ol>
+<h4 id="原型-三个自带的属性"><a href="#原型-三个自带的属性" class="headerlink" title="原型 三个自带的属性"></a>原型 三个自带的属性</h4><p>原型链：实例的<code>__proto__</code>是类的<code>prototype</code> </p>
+<ol>
+<li><p>prototype对象（原型对象）是所有<code>函数</code>的属性。<br>存储了当前类给实例提供的公共属性和方法<br>通过prototype定义类：使用new Person获得实例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;<span class="comment">//function Person()&#123;&#125;</span></span><br><span class="line">Person.prototype = &#123;</span><br><span class="line">  name : <span class="string">'ecmadao'</span>,</span><br><span class="line">  sayName : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>prototype对象，带<code>constructor</code>属性存的值就是函数本身（类）</p>
+</li>
+<li>每个对象都带<code>__proto__</code>属性，值是当前对象所属类的原型(prototype)<br><img src="/images/prototype.jpg" alt="prototype"><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.num = num&#125;</span><br><span class="line"><span class="keyword">var</span> f1  = <span class="keyword">new</span> fun(<span class="number">10</span>)</span><br><span class="line">fun.prototype=== f1.__proto__ <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>对fun.prototype添加的方法<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fun.prototype.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">"prototypesay"</span>)&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对f1来说<code>f1.hasOwnProperty(&#39;say&#39;)</code> false . 是公共方法</p>
+<ol>
+<li><code>fun.prototype.__proto__</code>是Object.prototype</li>
+<li><code>Object.prototype</code>没有<code>__proto__</code> 有也指向自己</li>
+</ol>
+<h3 id="构造原型"><a href="#构造原型" class="headerlink" title="构造原型"></a>构造原型</h3><p><code>Fn.prototype = {}</code></p>
+<ol>
+<li>会没有constructor,使用<code>constructor:Fn</code></li>
+<li>会导致原来使用<code>Fn.prototype.c=function</code>的属性被替换（可以遍历原有的克隆）</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> jQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector,context</span>)</span>&#123;<span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init(,)&#125;</span><br><span class="line">jQuery.fn = jQuery.prototype=&#123;<span class="attr">constructor</span>:jQuery,<span class="attr">init</span>:<span class="function"><span class="keyword">function</span>(<span class="params">,</span>)</span>&#123;&#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="BOM"><a href="#BOM" class="headerlink" title="BOM"></a>BOM</h3><p><img src="/images/BOM.jpg" alt="BOM"></p>
+<ol>
+<li><code>document.querySelector(&quot;body&quot;).setAttribute(&quot;style&quot;,&quot;background-color:black&quot;);</code><br><code>document.querySelector(&quot;body&quot;).style.cssText=&quot;background-color:black&quot;;</code></li>
+</ol>
+<p><a href="https://chromium.googlesource.com/chromium/src/+/master/docs/es6_chromium.md" target="_blank" rel="noopener">https://chromium.googlesource.com/chromium/src/+/master/docs/es6_chromium.md</a></p>
+<h2 id="前端模块化-CommonJS"><a href="#前端模块化-CommonJS" class="headerlink" title="前端模块化 CommonJS"></a>前端模块化 CommonJS</h2><blockquote>
+<p>CommonJS是不适用于浏览器端,因为文件是从服务器请求过来，不能同步加载模块。</p>
+</blockquote>
+<ol>
+<li><p>浏览器模块化AMD规范：require.js<br>非同步，指定回调函数<br>浏览器中异步加载。可以并行加载多个模块。<br>???如何并行？</p>
+</li>
+<li><p>CMD规范：按需加载sea.js</p>
+</li>
+<li><p>ES6模块化</p>
+</li>
+</ol>
+<ul>
+<li>通过babel将不被支持的import编译为当前受到广泛支持的 require</li>
+</ul>
+<h3 id="加载过程"><a href="#加载过程" class="headerlink" title="加载过程"></a>加载过程</h3><p>defer 与相比普通 script，有两点区别：载入 JavaScript 文件时不阻塞 HTML 的解析，执行阶段被放到 HTML 标签解析完成之后</p>
+<h3 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h3><ol>
+<li>Virtual Node</li>
+</ol>
+<ul>
+<li>用json构建，type\props\children<br>{type:”div”,props:{“style:”},children:[]}<br>vnodes-&gt;vdom</li>
+</ul>
+<h3 id="柯里化currying：函数式编程风格，组合函数"><a href="#柯里化currying：函数式编程风格，组合函数" class="headerlink" title="柯里化currying：函数式编程风格，组合函数"></a>柯里化currying：函数式编程风格，组合函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//两数相乘</span></span><br><span class="line"><span class="keyword">var</span> multiple = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">b</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> +b*a+<span class="string">""</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//拼接</span></span><br><span class="line"><span class="keyword">var</span> concatArray = <span class="function"><span class="keyword">function</span>(<span class="params">list,fct</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> list.map(fct)</span><br><span class="line">            .reduce(<span class="function"><span class="keyword">function</span>(<span class="params">a,b</span>)</span>&#123;</span><br><span class="line">              <span class="keyword">return</span> a.concat(b)</span><br><span class="line">              &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//运行24</span></span><br><span class="line">concatArray([<span class="string">"1"</span>,<span class="string">"2"</span>],multiple(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="Object-defineProperty-为对象定义属性"><a href="#Object-defineProperty-为对象定义属性" class="headerlink" title="Object.defineProperty 为对象定义属性"></a>Object.defineProperty 为对象定义属性</h3><ol>
+<li>js对象or DOM对象</li>
+<li>属性名</li>
+<li><p>描述符：</p>
+<blockquote>
+<p>{value: “covergou”, writable: false, enumerable: true, configurable: false}</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj =&#123;&#125;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj,<span class="string">"school"</span>,&#123;<span class="attr">get</span>:,<span class="attr">set</span>:&#125;)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>value:”name”</li>
+</ul>
+<ol>
+<li><code>writable:true/false</code> 是否可写</li>
+<li><code>configurable:false</code> 删除属性、修改属性（writable, configurable, enumerable）的行为将被无效化</li>
+<li><code>enumerable: true</code> 是否能在for-in循环中遍历出来或在Object.keys中列举出来</li>
+<li><code>get/set:function(){}</code>使用get/set不能有writable和value属性</li>
+<li></li>
+</ol>
+</li>
+</ol>
+<h4 id="实现数据双向绑定"><a href="#实现数据双向绑定" class="headerlink" title="实现数据双向绑定"></a>实现数据双向绑定</h4><p>数据劫持<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty(dom, <span class="string">'translateX'</span>, &#123;</span><br><span class="line">set: <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> transformText = <span class="string">'translateX('</span> + value + <span class="string">'px)'</span>;</span><br><span class="line">        dom.style.webkitTransform = transformText;</span><br><span class="line">        dom.style.transform = transformText;</span><br><span class="line">&#125;</span><br><span class="line">&#125;)</span><br><span class="line">dom.scale = <span class="number">1.5</span>;</span><br></pre></td></tr></table></figure></p>
+<h3 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h3><h3 id="数组-1"><a href="#数组-1" class="headerlink" title="数组"></a>数组</h3><p>类方法：</p>
+<ol>
+<li><code>Array.form(1,2,3,4)</code>转成数组<code>.from(3)</code>生成空位</li>
+<li><code>Array.of(3)</code>与from用法相同，解决了单个值数组</li>
+<li><code>toArray(1,2,3,4)</code>转数组</li>
+</ol>
+<p>原型方法（用于实例）</p>
+<ol>
+<li><code>.copyWithin(target,start,end)</code></li>
+</ol>
+<ul>
+<li>cool()函数丢失了同this之间的绑定<br><strong>var self = this</strong></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123; </span><br><span class="line">       id: <span class="string">"awesome"</span>, </span><br><span class="line">       cool: <span class="function"><span class="keyword">function</span> <span class="title">coolFn</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">           <span class="built_in">console</span>.log( <span class="keyword">this</span>.id ); </span><br><span class="line">       &#125; </span><br><span class="line">   &#125;; </span><br><span class="line">    </span><br><span class="line">   <span class="keyword">var</span> id = <span class="string">"not awesome"</span> </span><br><span class="line">    </span><br><span class="line">   obj.cool(); <span class="comment">// 酷 </span></span><br><span class="line">    </span><br><span class="line">   setTimeout( obj.cool, <span class="number">100</span> ); <span class="comment">// 不酷</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>setTimeout中的this指向的是全局对象</li>
+</ul>
+<ol>
+<li>var self = this</li>
+<li>function(){}.bind(this),1000</li>
+</ol>
+<ul>
+<li>模板字符串</li>
+</ul>
+<h3 id="显示所有全局变量"><a href="#显示所有全局变量" class="headerlink" title="显示所有全局变量"></a>显示所有全局变量</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(name <span class="keyword">in</span> <span class="keyword">this</span>)&#123;</span><br><span class="line">    vars+=name+<span class="string">"\n"</span>&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="对象保护-对象代理"><a href="#对象保护-对象代理" class="headerlink" title="对象保护 对象代理"></a>对象保护 对象代理</h4><ol>
+<li><p>ES3,ES5</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明类</span></span><br><span class="line"><span class="keyword">var</span> Person= fuction()&#123;</span><br><span class="line">  <span class="keyword">var</span> data=&#123;</span><br><span class="line">    name=<span class="string">'es3'</span>,</span><br><span class="line">    sex:<span class="string">'male'</span>,</span><br><span class="line">    age:<span class="number">15</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">this</span>.get,<span class="keyword">this</span>.set = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>es5:对象的只读属性<br><code>Object.defineProperty(&quot;Person&quot;,&#39;sex&#39;,{
+writable:false,value:&#39;male&#39;
+})</code>只能读不能写</p>
+</li>
+<li>ES6用代理访问对象<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> Person=&#123;:,:,:&#125;</span><br><span class="line"><span class="keyword">let</span> person = <span class="keyword">new</span> <span class="built_in">Proxy</span>(Person,&#123;</span><br><span class="line">  get(target,key)&#123;</span><br><span class="line">    target[key]</span><br><span class="line">  &#125;,</span><br><span class="line">  set(target,key,value)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="箭头函数-1"><a href="#箭头函数-1" class="headerlink" title="箭头函数"></a>箭头函数</h4><p>import</p>
+<ol>
+<li>{}块状作用域</li>
+<li>.map(function(v){return v+1})<br>.map(v=&gt;v+1)</li>
+<li>箭头函数内的this指向是定义时this的指向<br>function中this指向是该函数被调用的对象</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/13/concurrent/" rel="next" title="concurrent并发多线程">
+                <i class="fa fa-chevron-left"></i> concurrent并发多线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/19/MVVM/" rel="prev" title="MVVM">
+                MVVM <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Component-用法"><span class="nav-number">1.</span> <span class="nav-text">Web Component 用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Webview-loadUrl"><span class="nav-number">2.</span> <span class="nav-text">Webview loadUrl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器由7部分组成"><span class="nav-number">3.</span> <span class="nav-text">浏览器由7部分组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看渲染计算后的CSS规则"><span class="nav-number">4.</span> <span class="nav-text">查看渲染计算后的CSS规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器持久化"><span class="nav-number">5.</span> <span class="nav-text">浏览器持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">6.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nodejs跨域测试"><span class="nav-number">6.1.</span> <span class="nav-text">nodejs跨域测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CORS预请求-option"><span class="nav-number">6.2.</span> <span class="nav-text">CORS预请求 option</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存Cache-Control"><span class="nav-number">6.3.</span> <span class="nav-text">缓存Cache-Control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置Cookie"><span class="nav-number">6.4.</span> <span class="nav-text">设置Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长链接Network-Connection-ID（TCP链接的id）"><span class="nav-number">6.5.</span> <span class="nav-text">长链接Network-Connection ID（TCP链接的id）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据协商"><span class="nav-number">6.6.</span> <span class="nav-text">数据协商</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redirect"><span class="nav-number">6.7.</span> <span class="nav-text">redirect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSP-content-security-policy-内容安全策略"><span class="nav-number">6.8.</span> <span class="nav-text">CSP content-security-policy 内容安全策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack-dev-server-开发模式"><span class="nav-number">6.9.</span> <span class="nav-text">webpack-dev-server 开发模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#html-webpack-plugin"><span class="nav-number">6.10.</span> <span class="nav-text">html-webpack-plugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#autoprefixer"><span class="nav-number">6.11.</span> <span class="nav-text">autoprefixer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mixin模式"><span class="nav-number">6.12.</span> <span class="nav-text">mixin模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typeof一共有五种返回值"><span class="nav-number">6.13.</span> <span class="nav-text">typeof一共有五种返回值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强制类型转换"><span class="nav-number">6.14.</span> <span class="nav-text">强制类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#"><span class="nav-number">6.14.1.</span> <span class="nav-text">==</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#if和逻辑运算符"><span class="nav-number">6.14.2.</span> <span class="nav-text">if和逻辑运算符</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#何时使用-和"><span class="nav-number">6.15.</span> <span class="nav-text">何时使用===和==</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12个js内置函数-（数据封装类对象）"><span class="nav-number">6.16.</span> <span class="nav-text">12个js内置函数 （数据封装类对象）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型"><span class="nav-number">6.17.</span> <span class="nav-text">原型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#js构造函数"><span class="nav-number">6.18.</span> <span class="nav-text">js构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Class语法"><span class="nav-number">6.19.</span> <span class="nav-text">Class语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法糖实现"><span class="nav-number">6.20.</span> <span class="nav-text">语法糖实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">6.21.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#window-onload和DOMContentLoaded区别"><span class="nav-number">6.22.</span> <span class="nav-text">window.onload和DOMContentLoaded区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#zepto"><span class="nav-number">6.22.1.</span> <span class="nav-text">zepto</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组"><span class="nav-number">6.23.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#箭头函数"><span class="nav-number">6.24.</span> <span class="nav-text">箭头函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call和apply和bind"><span class="nav-number">6.25.</span> <span class="nav-text">call和apply和bind</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文档碎片"><span class="nav-number">6.26.</span> <span class="nav-text">文档碎片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在赋值操作中"><span class="nav-number">6.27.</span> <span class="nav-text">在赋值操作中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包"><span class="nav-number">6.28.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类数组-（arguments形参集合）"><span class="nav-number">6.29.</span> <span class="nav-text">类数组 （arguments形参集合）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#立即执行函数IIFE"><span class="nav-number">6.30.</span> <span class="nav-text">立即执行函数IIFE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单例模式：团队合作防止全局变量污染：封装到对象"><span class="nav-number">6.31.</span> <span class="nav-text">单例模式：团队合作防止全局变量污染：封装到对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置类"><span class="nav-number">6.32.</span> <span class="nav-text">内置类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数"><span class="nav-number">6.33.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断JS数据类型的4种方法"><span class="nav-number">6.34.</span> <span class="nav-text">判断JS数据类型的4种方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#in-hasOwnProperty"><span class="nav-number">6.35.</span> <span class="nav-text">in/hasOwnProperty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原型和原型链"><span class="nav-number">6.36.</span> <span class="nav-text">原型和原型链</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原型-三个自带的属性"><span class="nav-number">6.36.1.</span> <span class="nav-text">原型 三个自带的属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造原型"><span class="nav-number">6.37.</span> <span class="nav-text">构造原型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BOM"><span class="nav-number">6.38.</span> <span class="nav-text">BOM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端模块化-CommonJS"><span class="nav-number">7.</span> <span class="nav-text">前端模块化 CommonJS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载过程"><span class="nav-number">7.1.</span> <span class="nav-text">加载过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟DOM"><span class="nav-number">7.2.</span> <span class="nav-text">虚拟DOM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#柯里化currying：函数式编程风格，组合函数"><span class="nav-number">7.3.</span> <span class="nav-text">柯里化currying：函数式编程风格，组合函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-defineProperty-为对象定义属性"><span class="nav-number">7.4.</span> <span class="nav-text">Object.defineProperty 为对象定义属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现数据双向绑定"><span class="nav-number">7.4.1.</span> <span class="nav-text">实现数据双向绑定</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES6"><span class="nav-number">7.5.</span> <span class="nav-text">ES6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组-1"><span class="nav-number">7.6.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示所有全局变量"><span class="nav-number">7.7.</span> <span class="nav-text">显示所有全局变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对象保护-对象代理"><span class="nav-number">7.7.1.</span> <span class="nav-text">对象保护 对象代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#箭头函数-1"><span class="nav-number">7.7.2.</span> <span class="nav-text">箭头函数</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

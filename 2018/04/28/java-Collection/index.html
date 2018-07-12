@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  guava组件 ImmutableList&amp;lt;String&amp;gt; ilist = ImmutableList.of(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;);不可变List 过滤器   工具类Lists  1List&amp;lt;String&amp;gt; lit = L">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java-Collection">
+<meta property="og:url" content="https://iotaa.xyz/2018/04/28/java-Collection/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  guava组件 ImmutableList&amp;lt;String&amp;gt; ilist = ImmutableList.of(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;);不可变List 过滤器   工具类Lists  1List&amp;lt;String&amp;gt; lit = L">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/collection.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/collection2.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/rotate.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.341Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java-Collection">
+<meta name="twitter:description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  guava组件 ImmutableList&amp;lt;String&amp;gt; ilist = ImmutableList.of(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;);不可变List 过滤器   工具类Lists  1List&amp;lt;String&amp;gt; lit = L">
+<meta name="twitter:image" content="https://iotaa.xyz/images/collection.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/04/28/java-Collection/"/>
+
+
+
+
+
+  <title>java-Collection | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/04/28/java-Collection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java-Collection</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T18:55:55+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="集合框架"><a href="#集合框架" class="headerlink" title="集合框架"></a>集合框架</h1><p><img src="/images/collection.jpg" alt="collection"><br><img src="/images/collection2.jpg" alt="collection2"></p>
+<ol>
+<li>三大接口：<code>Iterator</code>,<code>Collection</code>,<code>Map</code></li>
+<li>工具类：<code>Collections</code> <code>Arrays</code></li>
+</ol>
+<h2 id="guava组件"><a href="#guava组件" class="headerlink" title="guava组件"></a>guava组件</h2><ol>
+<li><code>ImmutableList&lt;String&gt; ilist = ImmutableList.of(&quot;a&quot;,&quot;b&quot;);</code>不可变List</li>
+<li>过滤器</li>
+</ol>
+<ul>
+<li>工具类<code>Lists</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; lit = Lists.newArrayList(<span class="string">"aaa"</span>,<span class="string">"ddd"</span>,<span class="string">"bbb"</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;String&gt; cl =Collections2.filter(lit,(e)-&gt;e.toUpperCase().startsWith(<span class="string">"a"</span>));</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>转换 (有问题)日期</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Long&gt; set = Sets.newHashSet(<span class="number">20170801L</span>,<span class="number">20980320L</span>,<span class="number">19950730L</span>);</span><br><span class="line">Collection&lt;String&gt; col = Collections2.transform(set,(e)-&gt;<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>).format(e));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组合函数<code>Functions.compose(f1,f2)</code> 用google的<code>Function</code></p>
+</li>
+</ol>
+<h3 id="集合操作"><a href="#集合操作" class="headerlink" title="集合操作"></a>集合操作</h3><ol>
+<li>交集<br><code>SetView&lt;Integer&gt; v1 = Sets.intersection(set, set2);</code></li>
+<li>差集：只是1中没有在2中的元素<br><code>.difference(s1,s2)</code></li>
+<li>并集：把重复的只留一份</li>
+</ol>
+<h3 id="Mutiset无序可重复"><a href="#Mutiset无序可重复" class="headerlink" title="Mutiset无序可重复"></a><code>Mutiset</code>无序可重复</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//输出[study, dayday, up, good x 2]</span></span><br><span class="line">String[] sp = s.split(<span class="string">" "</span>);</span><br><span class="line">HashMultiset&lt;String&gt; hms = HashMultiset.create();</span><br><span class="line"><span class="keyword">for</span>(String str:sp)&#123;</span><br><span class="line">    hms.add(str);&#125;</span><br></pre></td></tr></table></figure>
+<p>获取次数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> Set&lt;String&gt; ele = hms.elementSet();</span><br><span class="line"><span class="keyword">for</span>(String ss:ele)&#123;</span><br><span class="line">    System.out.println(ss+<span class="string">":"</span>+hms.count(ss));&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Multimap-Key-可以重复，一个键对应一个Collection"><a href="#Multimap-Key-可以重复，一个键对应一个Collection" class="headerlink" title="Multimap Key 可以重复，一个键对应一个Collection"></a><code>Multimap</code> Key 可以重复，一个键对应一个<code>Collection</code></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//输出：</span></span><br><span class="line"><span class="comment">// 作者2 [书3]</span></span><br><span class="line"><span class="comment">// 作者1 [书2, 书1]</span></span><br><span class="line">Multimap&lt;String,String&gt; mmap = ArrayListMultimap.create();</span><br><span class="line">Map&lt;String,String&gt; map = <span class="keyword">new</span> Hashtable&lt;&gt;();</span><br><span class="line">map.put(<span class="string">"书1"</span>,<span class="string">"作者1"</span>);</span><br><span class="line">map.put(<span class="string">"书2"</span>,<span class="string">"作者1"</span>);</span><br><span class="line">map.put(<span class="string">"书3"</span>,<span class="string">"作者2"</span>);</span><br><span class="line">Iterator&lt;Map.Entry&lt;String,String&gt;&gt; iter = map.entrySet().iterator();</span><br><span class="line"><span class="keyword">while</span>(iter.hasNext())&#123;</span><br><span class="line">    Map.Entry&lt;String,String&gt; entry = iter.next();</span><br><span class="line">    mmap.put(entry.getValue(),entry.getKey());</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(String key:mmap.keySet())&#123;</span><br><span class="line">    Collection&lt;String&gt; value = mmap.get(key);</span><br><span class="line">    System.out.println(key+<span class="string">" "</span>+value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="BiMap-双向map-键值都不能重复"><a href="#BiMap-双向map-键值都不能重复" class="headerlink" title="BiMap 双向map 键值都不能重复"></a><code>BiMap</code> 双向map 键值都不能重复</h3><p><code>BiMap&lt;String,String&gt; map = HashBiMap.create();</code><br>key和val可以反转<code>map.inverse()</code></p>
+<h3 id="双键Map-行，列，值"><a href="#双键Map-行，列，值" class="headerlink" title="双键Map 行，列，值"></a>双键Map 行，列，值</h3><p><code>Table&lt;String,String,Integer&gt; table = HashBasedTable.create();</code><br>获取条set<code>table.cellSet()</code></p>
+<h2 id="多对多"><a href="#多对多" class="headerlink" title="多对多"></a>多对多</h2><p>拆分成两个一对多Student和Course生成StudentAndCourse<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StudentAndCourse</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> cid;<span class="comment">//添加在Course</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> sid;<span class="comment">//添加在Student</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Collections工具类"><a href="#Collections工具类" class="headerlink" title="Collections工具类"></a>Collections工具类</h2><h3 id="排序类：针对List（set不用排序）"><a href="#排序类：针对List（set不用排序）" class="headerlink" title="排序类：针对List（set不用排序）"></a>排序类：针对List（set不用排序）</h3><ol>
+<li><code>shuffle(list)</code>随机打乱</li>
+<li><code>reverse(list)</code></li>
+<li><code>.sort()/(,Comparator c)</code></li>
+<li><p><code>.swap</code></p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(List&lt;?&gt; list, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;     </span><br><span class="line">       <span class="keyword">final</span> List l = list;</span><br><span class="line">       l.set(i, l.set(j, l.get(i)));&#125;</span><br></pre></td></tr></table></figure>
+<p> ArrayList: set返回旧值</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</span><br><span class="line">        rangeCheck(index);</span><br><span class="line">        E oldValue = elementData(index);</span><br><span class="line">        elementData[index] = element;</span><br><span class="line">        <span class="keyword">return</span> oldValue;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>rotate(list,int)</code>i移动到(i+d)%size</p>
+<ol>
+<li><code>rotate1(list, distance);</code> : 数组实现，并且长度小于100<br> if (list instanceof <code>RandomAccess</code> ||<code>list.size()</code> &lt; ROTATE_THRESHOLD)<br> <a href="https://leetcode.com/problems/rotate-array/solution/" target="_blank" rel="noopener">leetcode的算法3</a><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<p><img src="/images/rotate.jpg" alt="rotate"><br>直接放在正确的位置上<br>理解：把0位放到正确位置（distance)后，将这个位置继续当作0位，继续移动distance步，直到i回到0位<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">rotate1</span><span class="params">(List&lt;T&gt; list, <span class="keyword">int</span> distance)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> size = list.size();</span><br><span class="line">       <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       distance = distance % size;</span><br><span class="line">       <span class="keyword">if</span> (distance &lt; <span class="number">0</span>)</span><br><span class="line">           distance += size;</span><br><span class="line">       <span class="keyword">if</span> (distance == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       <span class="comment">/****以上得的了正确的distance size和distance有一个为零就不动***/</span></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> cycleStart = <span class="number">0</span>, nMoved = <span class="number">0</span>; nMoved != size; cycleStart++) &#123;</span><br><span class="line">           <span class="comment">//size = 5</span></span><br><span class="line">           T displaced = list.get(cycleStart);<span class="comment">//1.得到[0]</span></span><br><span class="line">           <span class="keyword">int</span> i = cycleStart;</span><br><span class="line">           <span class="keyword">do</span> &#123;</span><br><span class="line">               i += distance; <span class="comment">//向前走3步</span></span><br><span class="line">               <span class="keyword">if</span> (i &gt;= size)</span><br><span class="line">                   i -= size;<span class="comment">//对长度取模</span></span><br><span class="line">               displaced = list.set(i, displaced);<span class="comment">//2.赋值给[3],得到[3]的值</span></span><br><span class="line">               nMoved ++;<span class="comment">//3.每位放一次一共执行size次同时退出for循环</span></span><br><span class="line">           &#125; <span class="keyword">while</span> (i != cycleStart);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+
+</div></div></li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reverse(list.subList(<span class="number">0</span>, mid));</span><br><span class="line">reverse(list.subList(mid, size));</span><br><span class="line">reverse(list);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><ol>
+<li><code>binarySearch</code>,<code>max</code>,<code>min</code>(遍历compare/compareTo)</li>
+<li><code>fill(List,o)</code>填充 （遍历调用set）</li>
+<li><code>frequency(c,o)</code>c中与o相等元素数量（遍历equals)</li>
+<li><code>replaceAll(list,old,new)</code>遍历equals，set</li>
+</ol>
+<h3 id="同步重建，加上代码块的锁"><a href="#同步重建，加上代码块的锁" class="headerlink" title="同步重建，加上代码块的锁"></a>同步重建，加上代码块的锁</h3><p>只有vector/hashtable比较古老是安全的</p>
+<ol>
+<li><code>synchronizedList(list)</code>…</li>
+</ol>
+<h3 id="设置不可变的集合emptyXXX-singletonXXX-unmodifiableXXX"><a href="#设置不可变的集合emptyXXX-singletonXXX-unmodifiableXXX" class="headerlink" title="设置不可变的集合emptyXXX,singletonXXX,unmodifiableXXX"></a>设置不可变的集合emptyXXX,singletonXXX,unmodifiableXXX</h3><ol>
+<li><code>EmptyList</code>防空指针</li>
+<li><code>UnmodifiableCollection</code>重写了add、remove等方法，直接抛异常</li>
+<li><code>singletonMap</code>size=1</li>
+</ol>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ul>
+<li><code>disjoint(,)</code>没有相同元素返回true</li>
+<li><code>addAll(c,T...)</code>全部加入c</li>
+<li><code>reverseOrder(Comparator&lt;T&gt; cmp)</code>返回比较器<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//反转排序[5, 4, 3, 2, 1]       </span></span><br><span class="line">Collections.sort(list,Collections.reverseOrder());</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h2><p>创建：</p>
+<ol>
+<li><code>of</code>工厂方法<code>Optional.of(&quot;abb&quot;);</code></li>
+<li><code>ofNullable</code>:如果为空返回empty()空的optional<code>Optional.ofNullable(&quot;abb&quot;);</code></li>
+<li><p><code>.empty()</code></p>
+</li>
+<li><p><code>isPresent</code>..</p>
+</li>
+</ol>
+<h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><ol>
+<li>ListIterator</li>
+<li>Enumeration Vector使用<code>public Enumeration&lt;E&gt; elements()</code><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Enumeration&lt;Integer&gt; es = v.elements();</span><br><span class="line"><span class="keyword">while</span>(es.hasMoreElements())&#123;</span><br><span class="line">    System.out.println(es.nextElement());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="迭代器设计模式"><a href="#迭代器设计模式" class="headerlink" title="迭代器设计模式"></a>迭代器设计模式</h3><p>1.迭代器接口 2.迭代器的实现（用构造函数传入（3））3.抽象类 4.具体类（return new迭代器） </p>
+<h2 id="forEach-jdk1-8"><a href="#forEach-jdk1-8" class="headerlink" title="forEach jdk1.8"></a>forEach jdk1.8</h2><ol>
+<li>ArrayList:<code>public void forEach(Consumer&lt;? super E&gt; action)</code><br> <code>Consumer</code>接口：<code>void accept(T t);</code> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span> </span>&#123;</span><br><span class="line">    Objects.requireNonNull(action);</span><br><span class="line">    <span class="keyword">for</span> (T t : <span class="keyword">this</span>) &#123;</span><br><span class="line">        action.accept(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><ol>
+<li>键值set<code>Set&lt;Map.Entry&lt;Integer,String&gt;&gt; enry = map.entrySet();</code></li>
+<li>值<code>Collection&lt;String&gt; cl = map.values();</code></li>
+<li><code>forEach(BiConsumer&lt;? super K, ? super V&gt; action)</code></li>
+<li>权限查询<code>.containsKey()</code></li>
+</ol>
+<h3 id="Map接口中的新方法"><a href="#Map接口中的新方法" class="headerlink" title="Map接口中的新方法"></a>Map接口中的新方法</h3><ol>
+<li><p><code>getOrDefault(Object key, V defaultValue)</code>不存在返回默认值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (((v = get(key)) != <span class="keyword">null</span>) || containsKey(key))? v: defaultValue;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>V putIfAbsent(K key, V value)</code>不覆盖添加 原本的put覆盖并返回旧值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">V v = get(key);</span><br><span class="line"><span class="keyword">if</span> (v == <span class="keyword">null</span>) &#123;v = put(key, value);&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>boolean remove(Object key, Object value)</code>保证key和val都有</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> Object curValue = get(key);</span><br><span class="line"><span class="keyword">if</span> (!Objects.equals(curValue, value) ||</span><br><span class="line">    (curValue == <span class="keyword">null</span> &amp;&amp; !containsKey(key))) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line">remove(key);</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">true</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>boolean replace(K key, V oldValue, V newValue)</code></p>
+</li>
+<li><p><code>V compute</code>对key位置上的kv对用BiFunction最后更新并返回计算后的值<br><code>put(key, newValue);</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map.compute(<span class="number">1</span>,(k,v)-&gt;v+=<span class="string">"1"</span>);</span><br><span class="line">map.computeIfAbsent(<span class="number">5</span>,(k)-&gt;<span class="string">"空空空"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>merge</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map.merge(<span class="number">1</span>,<span class="string">"222"</span>,(oldv,newv)-&gt;oldv+newv);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h3><h3 id="HashMap-数组-链表-（链表长度达到8，会转化成红黑树）"><a href="#HashMap-数组-链表-（链表长度达到8，会转化成红黑树）" class="headerlink" title="HashMap 数组+链表+（链表长度达到8，会转化成红黑树）"></a>HashMap 数组+链表+（链表长度达到8，会转化成红黑树）</h3><ol>
+<li><p>计算hash值 【扰动函数】</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 65536(2^16)&gt;&gt;&gt;16 ==1</p>
+<ol>
+<li><strong><em>table uses power-of-two masking</em></strong><ul>
+<li>为了用<code>&amp;2^n-1</code>取模 2^n的table长不是素数很容易冲突</li>
+</ul>
+</li>
+<li><strong>*spreads the impact of higher bits downward</strong><ul>
+<li>int类型自带hashCode范围-2147483648到2147483648</li>
+<li><code>i = (n - 1) &amp; hash</code> 插入位置 n-1=15是1111低位掩码高位归零</li>
+<li>int长32<code>&gt;&gt;&gt;16</code>是int的高16位，低16与高16位<code>^</code>,混合hash的高位低位<div class="note "><p><code>key1=0ABC0000 &amp; (16-1) = 0</code>（8个16进制数，共32位）<br><code>key2=0DEF0000 &amp; (16-1) = 0</code><br>hashcode的1位全集中在前16位。key相差很大的pair，却存放在了同一个链表<br>把hashcode的“1位”变得“松散”，比如，经过hash函数处理后，0ABC0000变为A02188B，0DEF0000变为D2AFC70</p></div></li>
+</ul>
+</li>
+</ol>
+</li>
+<li><code>put(K key, V value) {return putVal(hash(key), key</code></li>
+<li><p><code>putVal</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)<span class="comment">//n=length=16</span></span><br><span class="line">           tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>putVal如果Node链表太长</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">//TREEIFY_THRESHOLD==8</span></span><br><span class="line">   treeifyBin(tab, hash);<span class="comment">//变成红黑树</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><code>TreeNode&lt;K,V&gt; extends LinkedHashMap.Entry&lt;K,V&gt;</code></p>
+<h3 id="Hashtable-数组加链表没用二叉树"><a href="#Hashtable-数组加链表没用二叉树" class="headerlink" title="Hashtable 数组加链表没用二叉树"></a>Hashtable 数组加链表没用二叉树</h3><p>数据结构一样的名字不同：<br>hashtable:<code>private transient Entry&lt;?,?&gt;[] table;</code> 默认大小11<br>hashmap: <code>transient Node&lt;K,V&gt;[] table;</code></p>
+<h3 id="LinkedHashMap-双重链表"><a href="#LinkedHashMap-双重链表" class="headerlink" title="LinkedHashMap 双重链表"></a>LinkedHashMap 双重链表</h3><h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><ol>
+<li>String、Path都有很好的hash函数</li>
+<li>顺序遍历集合<code>TreeSet</code>实现了<code>SortedSet</code>和<code>NavigableSet</code>接口</li>
+<li>set的元素必须实现<code>Comparable</code>接口或者构造函数中有Comparator</li>
+</ol>
+<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><ol>
+<li><p>HashMap实现,用空对象占位</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> HashMap&lt;E,Object&gt; map;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object PRESENT = <span class="keyword">new</span> Object();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> map.put(e, PRESENT)==<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>保持不重复 使用HashMap的 putVal</p>
+<ol>
+<li>比较hashCode相同不一定是同一个对象，再比较equals</li>
+</ol>
+</li>
+<li>重写放入hash的类的hashCode：</li>
+</ol>
+<h3 id="LinkedHashSet-用链表记录插入的位置"><a href="#LinkedHashSet-用链表记录插入的位置" class="headerlink" title="LinkedHashSet 用链表记录插入的位置"></a>LinkedHashSet 用链表记录插入的位置</h3><h3 id="TreeSet-排序"><a href="#TreeSet-排序" class="headerlink" title="TreeSet 排序"></a>TreeSet 排序</h3><ol>
+<li>需要实现<code>Comparatable</code>或传入<code>Comparator</code>，会根据compare的值覆盖，去重</li>
+</ol>
+<ul>
+<li><code>NavigableSet</code>使用元素自然顺序排序，or 用Comparator</li>
+</ul>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/23/JVM/" rel="next" title="JVM">
+                <i class="fa fa-chevron-left"></i> JVM
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/04/java-io-file/" rel="prev" title="java-io-file">
+                java-io-file <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集合框架"><span class="nav-number">1.</span> <span class="nav-text">集合框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#guava组件"><span class="nav-number">1.1.</span> <span class="nav-text">guava组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集合操作"><span class="nav-number">1.1.1.</span> <span class="nav-text">集合操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mutiset无序可重复"><span class="nav-number">1.1.2.</span> <span class="nav-text">Mutiset无序可重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multimap-Key-可以重复，一个键对应一个Collection"><span class="nav-number">1.1.3.</span> <span class="nav-text">Multimap Key 可以重复，一个键对应一个Collection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BiMap-双向map-键值都不能重复"><span class="nav-number">1.1.4.</span> <span class="nav-text">BiMap 双向map 键值都不能重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双键Map-行，列，值"><span class="nav-number">1.1.5.</span> <span class="nav-text">双键Map 行，列，值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多对多"><span class="nav-number">1.2.</span> <span class="nav-text">多对多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collections工具类"><span class="nav-number">1.3.</span> <span class="nav-text">Collections工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#排序类：针对List（set不用排序）"><span class="nav-number">1.3.1.</span> <span class="nav-text">排序类：针对List（set不用排序）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">1.3.2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步重建，加上代码块的锁"><span class="nav-number">1.3.3.</span> <span class="nav-text">同步重建，加上代码块的锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置不可变的集合emptyXXX-singletonXXX-unmodifiableXXX"><span class="nav-number">1.3.4.</span> <span class="nav-text">设置不可变的集合emptyXXX,singletonXXX,unmodifiableXXX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">1.3.5.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optional"><span class="nav-number">1.4.</span> <span class="nav-text">Optional</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Iterator"><span class="nav-number">1.5.</span> <span class="nav-text">Iterator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器设计模式"><span class="nav-number">1.5.1.</span> <span class="nav-text">迭代器设计模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forEach-jdk1-8"><span class="nav-number">1.6.</span> <span class="nav-text">forEach jdk1.8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">1.7.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Map接口中的新方法"><span class="nav-number">1.7.1.</span> <span class="nav-text">Map接口中的新方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TreeMap"><span class="nav-number">1.7.2.</span> <span class="nav-text">TreeMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap-数组-链表-（链表长度达到8，会转化成红黑树）"><span class="nav-number">1.7.3.</span> <span class="nav-text">HashMap 数组+链表+（链表长度达到8，会转化成红黑树）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hashtable-数组加链表没用二叉树"><span class="nav-number">1.7.4.</span> <span class="nav-text">Hashtable 数组加链表没用二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashMap-双重链表"><span class="nav-number">1.7.5.</span> <span class="nav-text">LinkedHashMap 双重链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set"><span class="nav-number">1.8.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashSet"><span class="nav-number">1.8.1.</span> <span class="nav-text">HashSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashSet-用链表记录插入的位置"><span class="nav-number">1.8.2.</span> <span class="nav-text">LinkedHashSet 用链表记录插入的位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TreeSet-排序"><span class="nav-number">1.8.3.</span> <span class="nav-text">TreeSet 排序</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

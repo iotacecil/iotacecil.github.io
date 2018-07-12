@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="grap," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="识别实体连接到知识库wikipediaminerDBpediaSpotilight:Lucene等语义搜索OpenCalais Bootstrapping通过实体对识别关系pattern-&amp;gt;识别pattern中的实体再识别pattern 迭代 共指消解Co-reference ResolutionTAC KBP(Knowledge Base Population)偏态系数 和 峰态系数中位数">
+<meta name="keywords" content="grap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flowRecommend图计算">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/15/flowRecommend/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="识别实体连接到知识库wikipediaminerDBpediaSpotilight:Lucene等语义搜索OpenCalais Bootstrapping通过实体对识别关系pattern-&amp;gt;识别pattern中的实体再识别pattern 迭代 共指消解Co-reference ResolutionTAC KBP(Knowledge Base Population)偏态系数 和 峰态系数中位数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iotaa.xyz/images/goalmodel.jpg">
+<meta property="og:image" content="https://iotaa.xyz/images/editdis.jpg">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flowRecommend图计算">
+<meta name="twitter:description" content="识别实体连接到知识库wikipediaminerDBpediaSpotilight:Lucene等语义搜索OpenCalais Bootstrapping通过实体对识别关系pattern-&amp;gt;识别pattern中的实体再识别pattern 迭代 共指消解Co-reference ResolutionTAC KBP(Knowledge Base Population)偏态系数 和 峰态系数中位数">
+<meta name="twitter:image" content="https://iotaa.xyz/images/goalmodel.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/15/flowRecommend/"/>
+
+
+
+
+
+  <title>flowRecommend图计算 | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/15/flowRecommend/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">flowRecommend图计算</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T12:17:32+08:00">
+                2018-03-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="识别实体连接到知识库"><a href="#识别实体连接到知识库" class="headerlink" title="识别实体连接到知识库"></a>识别实体连接到知识库</h3><p>wikipediaminer<br>DBpediaSpotilight:Lucene等语义搜索<br><strong>OpenCalais</strong></p>
+<h3 id="Bootstrapping"><a href="#Bootstrapping" class="headerlink" title="Bootstrapping"></a>Bootstrapping</h3><p>通过实体对识别关系pattern-&gt;识别pattern中的实体再识别pattern 迭代</p>
+<h3 id="共指消解Co-reference-Resolution"><a href="#共指消解Co-reference-Resolution" class="headerlink" title="共指消解Co-reference Resolution"></a>共指消解Co-reference Resolution</h3><h3 id="TAC-KBP-Knowledge-Base-Population"><a href="#TAC-KBP-Knowledge-Base-Population" class="headerlink" title="TAC KBP(Knowledge Base Population)"></a>TAC KBP(Knowledge Base Population)</h3><h3 id="偏态系数-和-峰态系数"><a href="#偏态系数-和-峰态系数" class="headerlink" title="偏态系数 和 峰态系数"></a>偏态系数 和 峰态系数</h3><p>中位数和均值的偏差，均值大叫正偏<br>分布集中强度，正太分布的峰态是3，如果有一个分布的峰态<1or>5则可以拒绝正太分布假设</1or></p>
+<h3 id="三大分布"><a href="#三大分布" class="headerlink" title="三大分布"></a>三大分布</h3><p>1.卡方分布：几个标准正太分布的平方和的分布<br>2.t分布：正太分布的随机变量/卡方分布的变量 用于小样本估计成正太分布方差未知的总体的均值<br>3.f分布：两个卡方分布的商</p>
+<h3 id="抽样误差"><a href="#抽样误差" class="headerlink" title="抽样误差"></a>抽样误差</h3><h3 id="数据分类"><a href="#数据分类" class="headerlink" title="数据分类"></a>数据分类</h3><p>定距（间隔）可以测量差值，但无绝对零点（温度）乘法，除法，比例是无意义的</p>
+<h3 id="判断正太分布"><a href="#判断正太分布" class="headerlink" title="判断正太分布"></a>判断正太分布</h3><p>84.5%的样本比 均值-标准差 大<br>正太分布+-1倍标准差之间的累计值占69%，其它两边各占15.5%<br>如果偏态系数绝对值大(0.x)，</p>
+<h4 id="极大似然"><a href="#极大似然" class="headerlink" title="极大似然"></a>极大似然</h4><ol>
+<li><a href="https://www.msra.cn/zh-cn/news/features/tux2-20170410" target="_blank" rel="noopener">TUX</a> </li>
+<li><a href="http://blog.sina.com.cn/s/blog_6de3aa8a0102wotb.html" target="_blank" rel="noopener">GraphChi</a></li>
+</ol>
+<h3 id="Preference-偏好"><a href="#Preference-偏好" class="headerlink" title="Preference 偏好"></a>Preference 偏好</h3><ul>
+<li>Goal model<br><img src="\images\goalmodel.jpg" alt="goalmodel"><br>系统：自然语言偏好表达-&gt;用目标模型解释的正式的偏好说明。<br>组成： 正则、统计语义相似性，基于语料库的偏好强度分级。<br>目标：基于优先级的软件个性化定制接口。</li>
+</ul>
+<p>流程推荐</p>
+<h3 id="流程结构相似度"><a href="#流程结构相似度" class="headerlink" title="流程结构相似度"></a>流程结构相似度</h3><ol>
+<li>相似度-&gt; 目的：检索、合并、重组<br>计算流程相似度 计算优化<br>分解策略 聚合策略 mapreduce <h4 id="建模【流程模型】：-用图-邻接矩阵、"><a href="#建模【流程模型】：-用图-邻接矩阵、" class="headerlink" title="建模【流程模型】： 用图 邻接矩阵、"></a>建模【流程模型】： 用图 邻接矩阵、</h4><h5 id="流程模型："><a href="#流程模型：" class="headerlink" title="流程模型："></a>流程模型：</h5></li>
+<li>PTN:probabilistic time Petri net</li>
+</ol>
+<h3 id="流程信息"><a href="#流程信息" class="headerlink" title="流程信息"></a>流程信息</h3><ol>
+<li>控制流、数据流、资源</li>
+<li>流程文本、流程结构、流程语义</li>
+</ol>
+<h5 id="相似度方法"><a href="#相似度方法" class="headerlink" title="相似度方法"></a>相似度方法</h5><h6 id="结构相似度"><a href="#结构相似度" class="headerlink" title="结构相似度"></a>结构相似度</h6><ol>
+<li>MDS：matrix distance similarity</li>
+<li>MWT最小加权时间 方法-&gt;时间效率最高</li>
+<li>图的编辑距离： greedyalgorithm､exhaustivealgorithm withpruning､processheuristicalgorithm､Astaralgorithm,其中平均性能最好的是 greedyalgorithm｡</li>
+<li>图挖掘算法：gSpan 频繁子图</li>
+</ol>
+<h6 id="流程相似度"><a href="#流程相似度" class="headerlink" title="流程相似度"></a>流程相似度</h6><ol>
+<li>执行轨迹 可达状态 因果关系</li>
+</ol>
+<ul>
+<li>原则路径：根据流程结构可能发生的路径表示成一个集合 变迁系统（节点空间爆炸）</li>
+<li>流程中的数据走向: 活动发生的概率。矩阵间距离<ol>
+<li>绝对值距离：非负、同一、对称、三角不等式-&gt;只比较部分对象</li>
+<li>差异矩阵的所有元素</li>
+<li></li>
+</ol>
+</li>
+</ul>
+<ol>
+<li>树的编辑距离<br>现状：基于图的相似度检测<br>复杂流程：<br>计算路径的相似度 匹配搜索的效率<br>并行！分解和合并得到拟合出来的相似度<br>与串行计算的准确度计算</li>
+</ol>
+<h3 id="编辑距离"><a href="#编辑距离" class="headerlink" title="编辑距离"></a>编辑距离</h3><p>(geeksforgeeks)[<a href="https://www.geeksforgeeks.org/dynamic-programming-set-5-edit-distance/]" target="_blank" rel="noopener">https://www.geeksforgeeks.org/dynamic-programming-set-5-edit-distance/]</a></p>
+<ol>
+<li><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">i=len(a);j=len(b);</span><br><span class="line">	d[i][j] 表示a转换成b的编辑距离</span><br><span class="line">	 <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= lena; i++) &#123;</span><br><span class="line">        d[i][<span class="number">0</span>] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    长度为j的字符串转换成长度为<span class="number">0</span>的字符串最小步数。</span><br><span class="line">	<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt;= lenb; j++) &#123;</span><br><span class="line">        d[<span class="number">0</span>][j] = j;</span><br><span class="line">    &#125; 表示a[<span class="number">0</span>]-a[j] -&gt;<span class="string">""</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">（<span class="number">1</span>）当a[i]==b[i],d[i][j]=d[i<span class="number">-1</span>][j<span class="number">-1</span>] <span class="comment">// fxy -&gt; fay 的编辑距离等于 fx -&gt; fa </span></span><br><span class="line">	(<span class="number">2</span>) 当≠，min（</span><br><span class="line">		&lt;<span class="number">1</span>&gt; fxy -&gt; fab 删除a[i] d[i<span class="number">-1</span>][j]+<span class="number">1</span> fx-&gt;fab</span><br><span class="line">		&lt;<span class="number">2</span>&gt; fxy -&gt; fab 插入b[j] d[i][j<span class="number">-1</span>]+<span class="number">1</span> fxyb-&gt;fab-&gt;(<span class="number">1</span>)-&gt;fxy-&gt;fa</span><br><span class="line">		&lt;<span class="number">3</span>&gt; fxy-&gt;fab 替换a[i]为b[j] d[i<span class="number">-1</span>][j<span class="number">-1</span>]-&gt;fxb-&gt;fab)</span><br><span class="line">	(<span class="number">3</span>) 边界：a[i][<span class="number">0</span>]=i</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>CART -&gt; MARCH</p>
+<ol>
+<li>c-&gt;m t-&gt;c +H</li>
+</ol>
+<ul>
+<li>[] a<br><img src="/images/editdis.jpg" alt="dynamicedit"><br>只需要d[i]一行</li>
+</ul>
+<h3 id="MPI"><a href="#MPI" class="headerlink" title="MPI"></a>MPI</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/grap/" rel="tag"># grap</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/15/jQueryCodee/" rel="next" title="jQueryCode">
+                <i class="fa fa-chevron-left"></i> jQueryCode
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/DDB/" rel="prev" title="DDB">
+                DDB <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#识别实体连接到知识库"><span class="nav-number">1.</span> <span class="nav-text">识别实体连接到知识库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bootstrapping"><span class="nav-number">2.</span> <span class="nav-text">Bootstrapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共指消解Co-reference-Resolution"><span class="nav-number">3.</span> <span class="nav-text">共指消解Co-reference Resolution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TAC-KBP-Knowledge-Base-Population"><span class="nav-number">4.</span> <span class="nav-text">TAC KBP(Knowledge Base Population)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏态系数-和-峰态系数"><span class="nav-number">5.</span> <span class="nav-text">偏态系数 和 峰态系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三大分布"><span class="nav-number">6.</span> <span class="nav-text">三大分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽样误差"><span class="nav-number">7.</span> <span class="nav-text">抽样误差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据分类"><span class="nav-number">8.</span> <span class="nav-text">数据分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断正太分布"><span class="nav-number">9.</span> <span class="nav-text">判断正太分布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#极大似然"><span class="nav-number">9.1.</span> <span class="nav-text">极大似然</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Preference-偏好"><span class="nav-number">10.</span> <span class="nav-text">Preference 偏好</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程结构相似度"><span class="nav-number">11.</span> <span class="nav-text">流程结构相似度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建模【流程模型】：-用图-邻接矩阵、"><span class="nav-number">11.1.</span> <span class="nav-text">建模【流程模型】： 用图 邻接矩阵、</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#流程模型："><span class="nav-number">11.1.1.</span> <span class="nav-text">流程模型：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程信息"><span class="nav-number">12.</span> <span class="nav-text">流程信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相似度方法"><span class="nav-number">12.0.1.</span> <span class="nav-text">相似度方法</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#结构相似度"><span class="nav-number">12.0.1.1.</span> <span class="nav-text">结构相似度</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#流程相似度"><span class="nav-number">12.0.1.2.</span> <span class="nav-text">流程相似度</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编辑距离"><span class="nav-number">13.</span> <span class="nav-text">编辑距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MPI"><span class="nav-number">14.</span> <span class="nav-text">MPI</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

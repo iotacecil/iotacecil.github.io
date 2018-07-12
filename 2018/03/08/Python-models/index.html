@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="deque GIL线程安全的 list不安全copy：shallow copy 浅拷贝 id不一样。看起来隔离了，但是如果deque里[2]是一个可变对象list，拷贝的是索引 深拷贝：12import copyuser_deque2 = copy.deepcopy(user_deque) 多线程 global interpreter lock 全局解释器锁，python线程对应c中的线程一次只有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python modules">
+<meta property="og:url" content="https://iotaa.xyz/2018/03/08/Python-models/index.html">
+<meta property="og:site_name" content="vue&amp;java Mark">
+<meta property="og:description" content="deque GIL线程安全的 list不安全copy：shallow copy 浅拷贝 id不一样。看起来隔离了，但是如果deque里[2]是一个可变对象list，拷贝的是索引 深拷贝：12import copyuser_deque2 = copy.deepcopy(user_deque) 多线程 global interpreter lock 全局解释器锁，python线程对应c中的线程一次只有">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-12T07:58:00.310Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python modules">
+<meta name="twitter:description" content="deque GIL线程安全的 list不安全copy：shallow copy 浅拷贝 id不一样。看起来隔离了，但是如果deque里[2]是一个可变对象list，拷贝的是索引 深拷贝：12import copyuser_deque2 = copy.deepcopy(user_deque) 多线程 global interpreter lock 全局解释器锁，python线程对应c中的线程一次只有">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://iotaa.xyz/2018/03/08/Python-models/"/>
+
+
+
+
+
+  <title>Python modules | vue&java Mark</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vue&java Mark</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/03/08/Python-models/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vue&java Mark">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python modules</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-08T10:50:38+08:00">
+                2018-03-08
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
+                2018-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="deque-GIL线程安全的-list不安全"><a href="#deque-GIL线程安全的-list不安全" class="headerlink" title="deque GIL线程安全的 list不安全"></a>deque GIL线程安全的 list不安全</h3><p>copy：shallow copy 浅拷贝 id不一样。<br>看起来隔离了，但是如果deque里[2]是一个可变对象list，拷贝的是索引</p>
+<p>深拷贝：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> copy</span><br><span class="line">user_deque2 = copy.deepcopy(user_deque)</span><br></pre></td></tr></table></figure></p>
+<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><ol>
+<li><p>global interpreter lock 全局解释器锁，<br>python线程对应c中的线程<br>一次只有一个线程在一个cpu上<br>同一时刻只有一个线程在一个cpu上执行字节码。<br>无法将多个线程映射到多个cpu上，并发受限</p>
+</li>
+<li><p>同时修改global变量的两个线程会不安全<br> py2和3不同。<br> 按字节码行数/时间片，会释放全局解释器锁。io操作也会释放</p>
+</li>
+</ol>
+<h4 id="Condition-条件变量"><a href="#Condition-条件变量" class="headerlink" title="Condition 条件变量"></a>Condition 条件变量</h4><p>两层锁：底层调用wait释放就能acquire。wait分配放入等待队列的锁，等notify。<br>实现了<code>__enter__</code>和<code>__exit__</code>可以用with语句<br><code>wait</code>：</p>
+<ol>
+<li>获得waitter锁</li>
+<li>放到Condition的waiters双端队列里</li>
+<li>会释放Condition的锁<br><code>notify</code>:从waiters队列弹出一个，释放waiter锁</li>
+</ol>
+<h4 id="Semaphore控制进入数量"><a href="#Semaphore控制进入数量" class="headerlink" title="Semaphore控制进入数量"></a>Semaphore控制进入数量</h4><h3 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h3><p>AF_IPX：linux进程间通信</p>
+<p>SOCK_DGRAM：UDP</p>
+<p>服务端<code>.bind((&quot;0.0.0.0&quot;,8888))</code>而不是127.0.0.1（本机局域网ip访问不到）<br>客户端直接访问<code>.connect((&#39;127.0.0.1&#39;,8888))</code>并且<code>send(&quot;&quot;.encode(&quot;utf-8&quot;))</code><br>send的时候一定要发送byte类型</p>
+<h3 id="socket模拟http请求"><a href="#socket模拟http请求" class="headerlink" title="socket模拟http请求"></a>socket模拟http请求</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">client.connect((host,<span class="number">80</span>))</span><br><span class="line">client.sent(<span class="string">"GET &#123;&#125; HTTP/1.1\r\nHost: &#123;&#125;\r\nConnection:close\r\n\r\n"</span></span><br><span class="line">    .format(path,host).encode(<span class="string">"utf8"</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h3><ol>
+<li>LEGB：<ol>
+<li>encloseing函数内部与内嵌函数之间 【闭包】</li>
+</ol>
+</li>
+</ol>
+<h4 id="装饰器与AOP"><a href="#装饰器与AOP" class="headerlink" title="装饰器与AOP"></a>装饰器与AOP</h4><ul>
+<li>reload</li>
+</ul>
+<h4 id="1-函数元数据"><a href="#1-函数元数据" class="headerlink" title="1. 函数元数据"></a>1. 函数元数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">()</span>:</span></span><br><span class="line">    cc = <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">lambda</span> kk:cc**kk <span class="comment">#不会因为f退出以后lambda访问不到a</span></span><br><span class="line">g = f()</span><br><span class="line">g.__closure__[<span class="number">0</span>].cell_contents</span><br><span class="line"><span class="comment">### 输出2 可以访问到cc</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-nonlocal"><a href="#2-nonlocal" class="headerlink" title="2. nonlocal"></a>2. nonlocal</h4><p>嵌套的def中。允许修改修改嵌套作用域变量。<br>把信息和回调函数联系起来：lambda or <strong>call</strong></p>
+<ol>
+<li>timeout 是闭包内的一个自由变量，在setTimeout中<br><code>timeout = k</code>会创建本地timeout.<br><code>nonlocal</code>声明嵌套作用域下的变量</li>
+<li>可修改参数的装饰器 为包裹函数添加一个属性函数，修改自由变量<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">warn</span><span class="params">(timeout)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args,**kargs)</span>:</span></span><br><span class="line">            start = time.time()</span><br><span class="line">            res = func(*args,**kargs)</span><br><span class="line">            used = time.time() -start</span><br><span class="line">            <span class="keyword">if</span> used &gt;timeout:</span><br><span class="line">                msg = <span class="string">'%s:%s&gt;%s'</span> % (func.__name__,used,timeout)</span><br><span class="line">                logging.warn(msg)</span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">	        <span class="comment">#作为wrapper的一个属性 </span></span><br><span class="line">	        <span class="function"><span class="keyword">def</span> <span class="title">setTimeout</span><span class="params">(k)</span>:</span></span><br><span class="line">	            <span class="keyword">nonlocal</span> timeout</span><br><span class="line">	            timeout = k</span><br><span class="line">	        <span class="comment"># 可以被调用</span></span><br><span class="line">	        wrapper.setTimeout = setTimeout</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>测试：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</span><br><span class="line"><span class="meta">@warn(1.5)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'int test'</span>)</span><br><span class="line">    <span class="keyword">while</span> randint(<span class="number">0</span>,<span class="number">1</span>):</span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">test.setTimeout(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">30</span>):</span><br><span class="line">    test()</span><br></pre></td></tr></table></figure></p>
+<h4 id="py2中没有nonnocal"><a href="#py2中没有nonnocal" class="headerlink" title="py2中没有nonnocal"></a>py2中没有nonnocal</h4><p>不能修改变量的引用，将timeout实现成一个可变对象<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">warn</span><span class="params">(timeout)</span>:</span></span><br><span class="line">	timeout = [timeout]</span><br><span class="line">		...</span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">setTimeout</span> <span class="params">(k)</span>:</span></span><br><span class="line">			timeout[<span class="number">0</span>]=k</span><br></pre></td></tr></table></figure></p>
+<h3 id="hashable"><a href="#hashable" class="headerlink" title="hashable"></a>hashable</h3><blockquote>
+<p>不可哈希的元素有：list、set、dict<br>可哈希的元素有：int、float、str、tuple</p>
+<ul>
+<li>unhashable type: ‘set’ ，<code>dicc = {set([1]):222}</code> set 不能当字典键 用frozenset<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#输出交集</span></span><br><span class="line">    <span class="keyword">if</span> item&amp;frozenset([<span class="string">'2'</span>]):</span><br><span class="line">        <span class="keyword">print</span> item</span><br><span class="line">    <span class="keyword">if</span> item.intersection(<span class="string">'2'</span>):</span><br><span class="line">        <span class="keyword">print</span> item</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<h3 id="frozenset"><a href="#frozenset" class="headerlink" title="frozenset"></a>frozenset</h3><p>不可变 存在hash值 没用add\remove<br>将集合作为字典的键值<br>dict.update()</p>
+<ul>
+<li><p>求并</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a =frozenset([<span class="number">3</span>])</span><br><span class="line">b =frozenset([<span class="number">2</span>])</span><br><span class="line">list=[]</span><br><span class="line">list.append(a|b)</span><br><span class="line">list</span><br><span class="line">Out[<span class="number">12</span>]: [frozenset(&#123;<span class="number">2</span>, <span class="number">3</span>&#125;)]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>s.issuperset(t)</code> 测试是否 t 中的每一个元素都在 s 中  </p>
+</li>
+<li><p>Python虚拟机是单线程（GIL）只有I/O密集型才能发挥Py的并发行，计算密集型值需要轮询。</p>
+<blockquote>
+<p> 配置utf-8输出环境<br>reload(sys)<br>sys.setdefaultencoding(‘utf-8’)</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><p><code>splitlines()</code> 按照行(‘\r’, ‘\r\n’, \n’)分隔<br><code>splitlines(True)</code>保留换行符</p>
+<h4 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">row = [p == <span class="string">'+'</span> <span class="keyword">for</span> p <span class="keyword">in</span> line.split()[<span class="number">0</span>]]<span class="comment">#转换成T,F序列</span></span><br><span class="line"><span class="comment">#对一个区间更改值</span></span><br><span class="line">row[i:j]=[<span class="keyword">not</span> p <span class="keyword">for</span> p <span class="keyword">in</span> row[i:j]]</span><br><span class="line">all(row)</span><br><span class="line"><span class="comment">#如果iterable的所有元素不为0、''、False或者iterable为空，all(iterable)返回True，否则返回False；</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回对象的内存地址。 id(a)==id(b)</li>
+<li>issubclass(AA,A) AA是否是A的子类</li>
+<li>python的=是引用 a=1,a=2 右值是int对象 id(a)改变<h4 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h4><code>&#39;{0:o},{1:x},{2:b}&#39;.format(64,64,64)</code><br>八进制、16进制、2进制</li>
+</ul>
+<h4 id="enumerate-偏移值-index-value"><a href="#enumerate-偏移值-index-value" class="headerlink" title="enumerate 偏移值(index,value)"></a>enumerate 偏移值(index,value)</h4><p><code>for (offset,item) in enumerate(&#39;apple&#39;):print(item,offset)</code><br>help(enumerate)</p>
+<h4 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h4><p>import sys<br>sys.path #模块搜索路径</p>
+<ol>
+<li>roload<h4 id="copy"><a href="#copy" class="headerlink" title="copy"></a>copy</h4><a href="https://blog.wqlin.me/2017/05/01/python-copy-and-deepcopy/" target="_blank" rel="noopener">python3 copy源码分析</a></li>
+</ol>
+<ul>
+<li>immutable类型: int,float,complex |string tuple frozen set</li>
+<li><p>mutable: <code>list,dict,set,byte arry</code> <strong>copy使用各自的copy函数</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">copy.py</span><br><span class="line">d[list] = list.copy</span><br><span class="line">d[dict] = dict.copy</span><br><span class="line">d[set] = set.copy</span><br><span class="line">d[bytearray] = bytearray.copy</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>a= (1,2,[3]) tuple中的list可变<br><code>a[1]=10</code> id(a) list的地址空间不变</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x= [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]] </span><br><span class="line">y= x.copy(x)//y=copy.deepcopy(x)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>.copy(x)</code> 浅<br>id(x)!=id(y) id(x[0])==id(y[0])</p>
+</li>
+<li><p><code>.deepcopy(x)</code> 深<br>id(x[0])==id(y[0])递归调用</p>
+</li>
+</ul>
+<h4 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h4><ol>
+<li><code>g = (x * x for x in range(10))</code></li>
+<li>每次调用next()遇到下一个yield返回</li>
+</ol>
+<h4 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h4><ol>
+<li><code>__getattr__</code> 点号运算 <code>__getattribute__</code>属性获取</li>
+<li><code>__getitem__</code> 列表解析、元组赋值，map、for循环，索引、分片运算；L[::]分片是L(slice(,,)分片对象)的语法糖，getitem接收了slice对象</li>
+<li><code>__get/setslice__</code>已移除</li>
+<li><code>__iter__</code> 迭代环境优先尝试iter</li>
+</ol>
+<h4 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h4><ol>
+<li>读文件的最佳方式<code>for line in open()</code>,readlines将整个文件加载到内存</li>
+<li>while True：line = f.readline()比迭代器的for慢，因为迭代器以C语言速度运行，while循环版本通过py虚拟机运行python字节码<h5 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h5></li>
+<li>for循环开始时，通过iter内置函数从迭代对象获得一个迭代器。返回的对象有<strong>next</strong>方法。</li>
+<li>文件对象就是自己的迭代器。有自己的next方法</li>
+<li>iter()启动迭代<h4 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h4><h4 id="内置作用域"><a href="#内置作用域" class="headerlink" title="内置作用域"></a>内置作用域</h4></li>
+</ol>
+<ul>
+<li>import builtins dir(builtins)<br>前一半是内置的异常，后一半是内置的函数</li>
+<li>LEGB法则python将最后扫描B模块 所以不需要导入</li>
+</ul>
+<h4 id="global"><a href="#global" class="headerlink" title="global"></a>global</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b=<span class="number">0</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update</span><span class="params">(item)</span>:</span></span><br><span class="line">	<span class="keyword">global</span> w</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在函数和类中对全局变量赋值，必须在该函数或者类中声明该变量为全局变量，否则经过赋值操作后，变量为本地变量。</li>
+</ul>
+<h4 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h4><ol>
+<li>.pyc保存py编译后的字节码（不是二进制码，py特定）</li>
+<li>PVM 虚拟机 py引擎编译得到的代码</li>
+</ol>
+<ul>
+<li>pandas.Series是以时间戳为索引的</li>
+<li>差分计算series.diff()切片</li>
+</ul>
+<p>滞后观察（lag observation）列以及预测观察（forecast observation）<br>resample 重采样、频率推断、生成固定频率日期范围</p>
+<h4 id="matplotlib动画"><a href="#matplotlib动画" class="headerlink" title="matplotlib动画"></a>matplotlib动画</h4><h4 id="lambda-匿名函数"><a href="#lambda-匿名函数" class="headerlink" title="lambda 匿名函数"></a>lambda 匿名函数</h4><p>返回函数对象</p>
+<h4 id="列表解析"><a href="#列表解析" class="headerlink" title="列表解析"></a>列表解析</h4><h5 id="map"><a href="#map" class="headerlink" title="map"></a>map</h5><p>ord()返回单个字符的ASCII整数编码</p>
+<ul>
+<li><code>map(f,list)</code>将传入的函数依次作用到序列的每个元素，并把结果作为新的list返回。</li>
+<li><p>reduce把一个函数作用在一个序列[x1, x2, x3…]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算<br><code>reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">res = list(map(ord,<span class="string">'spam'</span>))</span><br><span class="line">res = [ord(x) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">'spam'</span>]</span><br><span class="line"><span class="comment">#res =[115, 112, 97, 109]</span></span><br><span class="line"></span><br><span class="line">[line.rstrip() <span class="keyword">for</span> line <span class="keyword">in</span> open(<span class="string">'file'</span>).readlines()]</span><br><span class="line">list(map((<span class="keyword">lambda</span> line:line.rstrip()),open(<span class="string">'file'</span>)))</span><br><span class="line"><span class="comment">#['aaa','bbb']</span></span><br><span class="line"></span><br><span class="line">listoftuple=[(<span class="string">'bob'</span>,<span class="number">35</span>,<span class="string">'mgr'</span>),(<span class="string">'amy'</span>,<span class="number">40</span>,<span class="string">'dev'</span>)]</span><br><span class="line">list(map(<span class="keyword">lambda</span> row:row[<span class="number">1</span>]),listoftuple)</span><br><span class="line"><span class="comment">#[35,40]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#自己实现map </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mymap</span><span class="params">(func,*seqs)</span>:</span></span><br><span class="line">	res=[]</span><br><span class="line">	<span class="keyword">for</span> args <span class="keyword">in</span> zip(*seqs):</span><br><span class="line">	<span class="comment"># *args 参数传递语法 可以收集多个序列</span></span><br><span class="line">		res.append(func(*args))</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mymap</span><span class="params">(func,*seqs)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> [func(*args) <span class="keyword">for</span> args <span class="keyword">in</span> zip(*seqs)]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>reduce:累积求和:sum(list)string2int</p>
+</li>
+</ul>
+<h5 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h5><p>zip是map的一个基本嵌套操作<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">list[zip([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])]</span><br><span class="line"><span class="comment">#[(1,2),(2,3),(3,4)]</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>列表中是表；元组为行，列是元组中的元素</li>
+</ul>
+<p><strong>cmp</strong>已经移除<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tester</span><span class="params">(start)</span>:</span></span><br><span class="line">	state = start <span class="comment">#赋值过</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">nested</span><span class="params">(lasted)</span>:</span></span><br><span class="line">		<span class="keyword">nonlocal</span> state <span class="comment">#允许改变 必须已经在def作用域中赋值过</span></span><br><span class="line">		print(label,state)</span><br><span class="line">		state+=<span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> nested</span><br><span class="line">F= tester(<span class="number">0</span>)</span><br><span class="line">F(<span class="string">'abc'</span>) <span class="comment">#abc 0</span></span><br><span class="line"><span class="comment">#每次调用F state都会+1</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="用函数属性实现nonlocal"><a href="#用函数属性实现nonlocal" class="headerlink" title="用函数属性实现nonlocal??"></a>用函数属性实现nonlocal??</h5><p>P440<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tester</span><span class="params">(start)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">nested</span><span class="params">(label)</span>:</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="call让类看起来是一个可调用的函数"><a href="#call让类看起来是一个可调用的函数" class="headerlink" title="call让类看起来是一个可调用的函数"></a><strong>call</strong>让类看起来是一个可调用的函数</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">tester</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,start)</span>:</span></span><br><span class="line">		self.state =  start</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self,lable)</span>:</span></span><br><span class="line">		print(label,self,state)</span><br><span class="line">		self.state+=<span class="number">1</span></span><br><span class="line">M = tester(<span class="number">99</span>)</span><br><span class="line">M(<span class="string">'juice'</span>)<span class="comment">#juice 99</span></span><br><span class="line"><span class="comment">#每次调用M state+1</span></span><br></pre></td></tr></table></figure>
+<h4 id="operator"><a href="#operator" class="headerlink" title="operator"></a>operator</h4><ol>
+<li>b=operator.itemgetter(1) 获取对象的1索引</li>
+<li>b(a) 获取 list a 的1索引</li>
+<li>operator.itemgetter 定义了一个函数，作用到对象上获取值</li>
+<li>与sorted一起用：sorted(dict,key = lambda x:x.values())按字典的values排序<ul>
+<li>按二维list中子元素的第三项排序 key = lambda student:student[2]/key = operator.itemgetter(2) </li>
+<li>operator.itemgetter(1,2) 第二项和第三项</li>
+</ul>
+</li>
+</ol>
+<h4 id="panda-坑"><a href="#panda-坑" class="headerlink" title="panda 坑"></a>panda 坑</h4><p><code>data = pd.read_csv(&#39;.\a.csv&#39;, parse_dates=[&#39;Month&#39;], index_col=&#39;Month&#39;,date_parser=dateparse)</code></p>
+<ul>
+<li>Only booleans, lists, and dictionaries are accepted for the ‘parse_dates’ parameter <code>parse_dates=[&#39;Date&#39;]</code> instead of <code>parse_dates=&#39;Date&#39;</code></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/07/javastyle/" rel="next" title="java风格练习">
+                <i class="fa fa-chevron-left"></i> java风格练习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/08/About-CentOS/" rel="prev" title="About CentOS">
+                About CentOS <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#deque-GIL线程安全的-list不安全"><span class="nav-number">1.</span> <span class="nav-text">deque GIL线程安全的 list不安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程"><span class="nav-number">2.</span> <span class="nav-text">多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Condition-条件变量"><span class="nav-number">2.1.</span> <span class="nav-text">Condition 条件变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Semaphore控制进入数量"><span class="nav-number">2.2.</span> <span class="nav-text">Semaphore控制进入数量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket"><span class="nav-number">3.</span> <span class="nav-text">socket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket模拟http请求"><span class="nav-number">4.</span> <span class="nav-text">socket模拟http请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#装饰器"><span class="nav-number">5.</span> <span class="nav-text">装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰器与AOP"><span class="nav-number">5.1.</span> <span class="nav-text">装饰器与AOP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-函数元数据"><span class="nav-number">5.2.</span> <span class="nav-text">1. 函数元数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-nonlocal"><span class="nav-number">5.3.</span> <span class="nav-text">2. nonlocal</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#py2中没有nonnocal"><span class="nav-number">5.4.</span> <span class="nav-text">py2中没有nonnocal</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hashable"><span class="nav-number">6.</span> <span class="nav-text">hashable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#frozenset"><span class="nav-number">7.</span> <span class="nav-text">frozenset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#string"><span class="nav-number">8.</span> <span class="nav-text">string</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内置函数"><span class="nav-number">8.1.</span> <span class="nav-text">内置函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数字"><span class="nav-number">8.2.</span> <span class="nav-text">数字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#enumerate-偏移值-index-value"><span class="nav-number">8.3.</span> <span class="nav-text">enumerate 偏移值(index,value)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模块"><span class="nav-number">8.4.</span> <span class="nav-text">模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#copy"><span class="nav-number">8.5.</span> <span class="nav-text">copy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成器"><span class="nav-number">8.6.</span> <span class="nav-text">生成器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运算符重载"><span class="nav-number">8.7.</span> <span class="nav-text">运算符重载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读文件"><span class="nav-number">8.8.</span> <span class="nav-text">读文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#迭代"><span class="nav-number">8.8.1.</span> <span class="nav-text">迭代</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注解"><span class="nav-number">8.9.</span> <span class="nav-text">注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内置作用域"><span class="nav-number">8.10.</span> <span class="nav-text">内置作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#global"><span class="nav-number">8.11.</span> <span class="nav-text">global</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二章"><span class="nav-number">8.12.</span> <span class="nav-text">第二章</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#matplotlib动画"><span class="nav-number">8.13.</span> <span class="nav-text">matplotlib动画</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lambda-匿名函数"><span class="nav-number">8.14.</span> <span class="nav-text">lambda 匿名函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#列表解析"><span class="nav-number">8.15.</span> <span class="nav-text">列表解析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#map"><span class="nav-number">8.15.1.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#zip"><span class="nav-number">8.15.2.</span> <span class="nav-text">zip</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#用函数属性实现nonlocal"><span class="nav-number">8.15.3.</span> <span class="nav-text">用函数属性实现nonlocal??</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#call让类看起来是一个可调用的函数"><span class="nav-number">8.16.</span> <span class="nav-text">call让类看起来是一个可调用的函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#operator"><span class="nav-number">8.17.</span> <span class="nav-text">operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#panda-坑"><span class="nav-number">8.18.</span> <span class="nav-text">panda 坑</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
