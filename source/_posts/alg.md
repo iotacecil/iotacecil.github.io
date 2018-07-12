@@ -15,6 +15,7 @@ def isPrime(n):
 每加1位，时间翻倍
 857 ：‭‭001101011001‬
 421 ：‭‭000110100101‬
+
 ---
 ### 97 s1和s2是否交错组成s3
 [Solution](https://leetcode.com/problems/interleaving-string/solution/)
@@ -60,6 +61,7 @@ public boolean isInterleave(String s1, String s2, String s3) {
 }
 ```
 ---
+
 ### 62 从左上角走到右下角总共有多少种不同方式
 f[m][n] = f[m-1][n]+f[m][n-1]
 简化成一维dp
@@ -89,6 +91,7 @@ for(int i =0;i<Math.min(m-1,n-1);i++){
 return (int)rst;
 ```
 ---
+
 ### 63 有障碍物的左上到右下
 dp[i][j]定义为走到i,j的方法数，障碍物则为0
 ```java
@@ -98,11 +101,13 @@ if(obs[i][j]==1)continue;//dp[i][j]=0//res[j]=0;
 ### 64 从左上角走到右下角的最少sum
 grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
 ---
+
 ### 32 括号字符串中合法的括号对
 方法1. stack:栈底放-1，当栈空&&读到是')'将')'的index当栈底。每次读到')'弹栈，并更新i-peek()，因为peek为没消掉的'('的前一个位置
 方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
   从右向左扫描，同理更新max，当左括号>右括号重置0.
 ---
+
 ### ？96 不同的BST数量
 (为什么是乘)
 ```
@@ -193,6 +198,7 @@ for(int i =0;i<n;i++){
     out.println(dp[m+h]);
 }
 ```
+
 ---
 #### ！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。
 ```java
@@ -282,6 +288,7 @@ while(l<r){
 //如果l==r [1,1)表示空的
 return -1;
 ```
+
 ---
 ### 307 求数组范围和，并且带更新元素
 #### Binary Index Tree
@@ -398,6 +405,7 @@ return cnt;
 {{1,3},{2,5},{4,7},{6,9}}输出2还是3？
 ```
 ---
+
 ### 402 去掉数字串中k个数字留下最小的数字
 Input: num = "1432219", k = 3
 Output: "1219"
@@ -419,6 +427,7 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 }
 ```
 ---
+
 ### 欧拉图：一笔画
 经过所有顶点、所有边的**闭路径**（边不重复，允许顶点重复）
 
@@ -441,6 +450,7 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 充分条件：
 满足： 是哈密顿图
 ---
+
 ### 236 最低的二叉树公共祖先
 终止条件`root==null|root==q||root=p`
 1. 在左/右子树找p|q，两边都能找到一个值（因为值不重复） 则返回当前root
@@ -718,6 +728,7 @@ public List<List<Integer>> subsets(int[] nums) {
     return rst;
 }
 ```
+
 ---
 ### 815 换公交
 routes = [[1, 2, 7], [3, 6, 7]]
