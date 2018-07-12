@@ -3,6 +3,54 @@ title: Python modules
 date: 2018-03-08 10:50:38
 tags:
 ---
+### deque GIL线程安全的 list不安全
+copy：shallow copy 浅拷贝 id不一样。
+看起来隔离了，但是如果deque里[2]是一个可变对象list，拷贝的是索引
+
+深拷贝：
+```python
+import copy
+user_deque2 = copy.deepcopy(user_deque)
+```
+
+### 多线程
+1. global interpreter lock 全局解释器锁，
+python线程对应c中的线程
+一次只有一个线程在一个cpu上
+同一时刻只有一个线程在一个cpu上执行字节码。
+无法将多个线程映射到多个cpu上，并发受限
+
+2. 同时修改global变量的两个线程会不安全
+    py2和3不同。
+    按字节码行数/时间片，会释放全局解释器锁。io操作也会释放
+
+#### Condition 条件变量
+两层锁：底层调用wait释放就能acquire。wait分配放入等待队列的锁，等notify。
+实现了`__enter__`和`__exit__`可以用with语句 
+`wait`：
+1. 获得waitter锁
+2. 放到Condition的waiters双端队列里
+3. 会释放Condition的锁
+`notify`:从waiters队列弹出一个，释放waiter锁
+
+#### Semaphore控制进入数量
+
+### socket
+AF_IPX：linux进程间通信
+
+SOCK_DGRAM：UDP
+
+服务端`.bind(("0.0.0.0",8888))`而不是127.0.0.1（本机局域网ip访问不到）
+客户端直接访问`.connect(('127.0.0.1',8888))`并且`send("".encode("utf-8"))`
+send的时候一定要发送byte类型
+
+### socket模拟http请求
+```python
+client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+client.connect((host,80))
+client.sent("GET {} HTTP/1.1\r\nHost: {}\r\nConnection:close\r\n\r\n"
+    .format(path,host).encode("utf8"))
+```
 
 ### 装饰器
 1. LEGB：
@@ -163,14 +211,17 @@ id(x)!=id(y) id(x[0])==id(y[0])
 
 - `.deepcopy(x)` 深
 id(x[0])==id(y[0])递归调用
+
 #### 生成器
 1. `g = (x * x for x in range(10))`
 2. 每次调用next()遇到下一个yield返回
+
 #### 运算符重载
 1. `__getattr__` 点号运算 `__getattribute__`属性获取
 2. `__getitem__` 列表解析、元组赋值，map、for循环，索引、分片运算；L[::]分片是L(slice(,,)分片对象)的语法糖，getitem接收了slice对象
 3. `__get/setslice__`已移除
 4. `__iter__` 迭代环境优先尝试iter
+
 #### 读文件
 1. 读文件的最佳方式`for line in open()`,readlines将整个文件加载到内存
 2. while True：line = f.readline()比迭代器的for慢，因为迭代器以C语言速度运行，while循环版本通过py虚拟机运行python字节码
