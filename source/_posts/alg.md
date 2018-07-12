@@ -1,0 +1,1560 @@
+---
+title: alg
+date: 2018-03-24 03:07:34
+tags: [alg]
+---
+### 伪多项式时间
+一个整数是否是素数
+```python
+def isPrime(n):
+    for i in range(2,n):
+        if n mod i 
+```
+运行时间与数值n的二进制位数呈指数增长
+整数需要的bit位数x=logn 复杂度$O(2^{x})$
+每加1位，时间翻倍
+857 ：‭‭001101011001‬
+421 ：‭‭000110100101‬
+---
+### 97 s1和s2是否交错组成s3
+[Solution](https://leetcode.com/problems/interleaving-string/solution/)
+状态dp[len1][len2]表示s1长度len1，s2长度len2出现在s3[len1+len2]中
+任意位置s3[i]一定是由s1[m],s2[n]组成的
+```
+s1="aa  bc   c"
+s2="  db  bca"
+s3="aadbbcbcac"
+```
+dp行表示当前len1的匹配情况下，不断扩展len2与s3的匹配情况
+dp列表示当前len2的匹配情况下，不断扩展len1与s3的匹配情况
+```
+遍历s3的位置：
+  遍历s1的长度，s3+1-s1为s2的长度
+    如果s3当前位置与s2当前匹配&&dp[][s2-1]匹配了
+       ||s3当前与s1当前匹配并且dp[s1-1][s2]:
+         dp[s1][s2] = true
+```
+可以用滚动数组降成1维
+
+？？？按背包问题递减更新 99%
+ct的意义
+动态规划中的ct
+```java
+public boolean isInterleave(String s1, String s2, String s3) {
+    if (s1.length() + s2.length() != s3.length()) return false;
+    boolean[] dp = new boolean[s1.length() + 1];
+    dp[0] = true;
+    for (int i = 0; i < s3.length(); i++) {
+        boolean ct = true;
+        for (int j = Math.min(s1.length(), i + 1); j > 0; j--) {
+            if (dp[j] && (i-j)<s2.length() &&s2.charAt(i - j) == s3.charAt(i)) ct = false;
+            else if (dp[j - 1] && s1.charAt(j- 1) == s3.charAt(i)){
+                dp[j] = true;
+                ct = false;
+            }else dp[j] = false;
+        }
+        if(dp[0]&&i<s2.length()&&s2.charAt(i)==s3.charAt(i))ct = false;
+        if(ct)return false;
+    }
+    return true;
+}
+```
+---
+### 62 从左上角走到右下角总共有多少种不同方式
+f[m][n] = f[m-1][n]+f[m][n-1]
+简化成一维dp
+```java
+public int uniPath(int m,int n){
+    int[] res = new int[n];
+    for(int i =0;i<m;i++){
+        //一行一行扫下去，下一行的底数是上一行，表示从上一行走下来的走法
+        for(int j =1;j<n;j++){
+            //加上左边走过来的走法
+            res[j]+=res[j-1];
+        }
+    }
+    return res[n-1];
+}
+```
+
+#### !数学公式
+m行n列，左上到右下总共步数m+n-2步，可以选择m-1个时间点向下走。
+问题可以转换为有(m+n-2)位，可以赋值m-1次1和n-1次0有多少数字。
+$C_{m+n-2}^{m-1}$
+```java
+long rst=1;
+for(int i =0;i<Math.min(m-1,n-1);i++){
+    rst=rst*(m+n-2-i)/(i+1);
+}
+return (int)rst;
+```
+---
+### 63 有障碍物的左上到右下
+dp[i][j]定义为走到i,j的方法数，障碍物则为0
+```java
+if(obs[i][j]==1)continue;//dp[i][j]=0//res[j]=0;
+```
+
+### 64 从左上角走到右下角的最少sum
+grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
+---
+### 32 括号字符串中合法的括号对
+方法1. stack:栈底放-1，当栈空&&读到是')'将')'的index当栈底。每次读到')'弹栈，并更新i-peek()，因为peek为没消掉的'('的前一个位置
+方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
+  从右向左扫描，同理更新max，当左括号>右括号重置0.
+---
+### ？96 不同的BST数量
+(为什么是乘)
+```
+1个节点只有1种，2个节点1    2 一共两种
+                      \  /
+                      2  1
+3个节点1      2      3
+      / \    / \    / \
+   （0）(2) (1)(1) (2)(0)
+      1x2  + 1x1  + 2x1
+```
+左子树有j个节点，右子树有n-j-1个节点
+```java
+int[] dp = new int[n+1];
+dp[0] = 1;
+dp[1] = 1;
+//节点个数
+for(int i =2;i<=n;i++){
+    //左边j个
+    for(int j =0;j<i;j++){
+        dp[i]+=dp[j]*dp[i-j-1];
+    }
+}
+return dp[n];
+```
+
+### ！95 输出全部不同的BST
+[1~n]组成的BST
+```
+1.......k...n
+       / \
+[1~k-1]  [k+1,n] 与上一层的构建过程是一样的
+```
+
+### 背包9讲:
+#### 01背包
+N个物品，背包容量V
+F[i,v]前i件物品放入容量v的背包可获得的最大价值。
+如果放第i件，转化为前i-i件放入容量为v-Ci的背包中，最大价值是F[i-1,v-Ci]+Wi
+$F[i,v]=max{F[i-1,v],F[i-1,v-C_i]+W_i}$
+```c
+for i<- 1 to N
+  for v<- Ci to V
+    F[i,v]<-max{F[i-1,v],F[i-1,v-Ci]+Wi}
+```
+时间/空间复杂度O（VN)
+1.简化空间->O(V) 递减顺序计算F[v]，保证计算F[v]时F[v-Ci] 保存的是F[i-1,v-Ci] 
+```c
+for i<- 1 to N
+  for v <- V to Ci
+    F[v] <- max(F[v],F[v-Ci]+Wi)
+```
+第二个for可以优化
+for v<- V to max(V-$\sum_{i}^{N}W_i$,Ci)
+
+#### taotao要吃鸡
+1.方法1
+m+h容量背包，在m+h没装满时可以任意取一个超过重量的
+最外层遍历：最后一个超额的物品i.
+  计算m+h-1背包容量的最大val
+```cpp
+int ans = -1;
+for(int i =0;i<n;i++){
+    ans = max(ans,v[i]+slove(m+h-1),i);
+}
+int slove(int W,int index){
+    for(int i =0;i<n;i++){
+        if(i==index)continue;
+        for(int j = W;j>=w[i];j--){
+            dp[j] = max(dp[j],dp[j-w[i]]+v[i]);
+        }
+    }
+}
+```
+2.方法2直接dp
+    1.按重量排序
+```java
+for(int i =0;i<n;i++){
+    for(int j = m+h;j>=goods[i].w;j--){
+        dp[j] = Math.max(dp[j],dp[j-goods[i].w]+goods[i].v);
+    }
+    if(h>0){
+        //强行装的位置,不能填dp[0]，0表示装满了
+        for(int j = Math.min(m+h,goods[i].w-1)j>0;j--){
+            dp[j] = Math.max(dp[j],goods[i].v);
+        }
+    }
+    out.println(dp[m+h]);
+}
+```
+---
+#### ！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。
+```java
+public boolean canPartition(int[] nums){
+    int sum = 0;
+    for(int n : nums){
+        sum+=n;
+    }
+    if(sum%2!=0)return false;
+    int[] dp = new int[sum+1];
+    dp[0] = 1;
+    for(int n : nums){
+        for(int v = sum;v>=0;v--){
+            if(dp[v]==1)dp[v+n]=1;
+        }
+        if(dp[sum/2]==1)return true;
+    }
+    return false;
+}
+```
+
+2.初始化F
+- 恰好装满背包，F[0]=0 其余-∞
+  没有装任务物品时，只有容量为0的背包表示装满，其它容量为非法解。
+
+- 不用装满，F全部为0
+  任何容量的背包，什么都不装，价值F都为0也是合法解。
+---
+
+#### 完全背包 每个物品可用无限次
+简化1.如果Ci<=Cj,Wi>=Wj 则j可以不考虑。
+简化2.重量大于V的去掉。用计数排序算出v相同的物品中价值最高的那个O(V+N)
+转化成01背包：将第i种物品拆成重量$C_i2^k$价值为$W_i2^k$ 件数可写成若干个$2^k$件的组合
+用递增的循环O(VN)：
+ 01背包V<-V to Ci 因为保证选i件物品时F[i-1,v-Ci]是绝对没有选第i件物品的情况
+ 而完全背包的子结果F[i,v-Ci]是**加选一件第i种物品**
+```c
+for i<- 1 to N
+  for v<- Ci to V
+    F[v]<- max(F[v],F[v-Ci]+Wi)
+```
+- 两个状态转移方程
+$F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=kC_i<=v}$
+$F[i,v] = max(F[i-1,v],F[i,v-C_i]+W_i)$
+
+---
+#### 多重背包 第i种物品最多Mi件可用
+$F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}
+
+### 本福特定律
+以1为首位的数组数显的概率为30%
+
+### 正确二分查找的写法
+1.查找范围是 [0,len-1]
+```java
+int l = 0,r=n-1;
+while(l<=r){
+    int mid = l+(r-l)/2;
+    if(arr[mid]==target){
+        return mid;
+    }
+    else if(arr[mid]<target){
+        l=mid+1;//
+    }
+    else{
+        r=mid-1;
+    }
+}
+//如果l>r
+return -1;
+```
+2.[0,len) 保持len取不到 
+好处：len就是长度[a,a+len)，[a,b)+[b,c)=[a,c),[a,a)是空的
+```java
+int l = 0,r = n;
+while(l<r){
+    int mid = l+(r-l)/2;
+    if(arr[mid]==target)return mid;
+    if(arr[mid]>target){
+        //在左边，边界为取不到的数
+        r=mid;//[l,mid)
+    }else{
+        //左闭又开
+        l = mid+1;//[mid+1,r)
+    }
+}
+//如果l==r [1,1)表示空的
+return -1;
+```
+---
+### 307 求数组范围和，并且带更新元素
+#### Binary Index Tree
+与dp不同，dp[i]存储了前i个的总和 e只存部分
+[visualgo可视化](https://visualgo.net/bn/fenwicktree)
+1.update树
+每个叶子节点的父节点的计算方法i+lowbit(i)
+1的父节点=001+001=010
+2的父节点=010+010=100==4
+4的父节点=100+100 = 1000==8
+***
+最低位：lowbit(5) = 101&((010+1)==011)=001
+5的父节点=101+001=110==6
+沿着path向上更新，最多只会更新logn(树高个节点)
+```java
+void update(int i,int val){
+    int dif = val-nums[i];
+    nums[i++]=val;
+    while(i<e.length){
+        e[i]+=dif;
+        i+=(i&-i);
+    }
+}
+```
+![BIT](/images/BIT.jpg)
+2.sum树 前7个元素的和=7+11+10
+```java
+int query(int i){
+    int sum = 0;
+    while(i>0){
+        sum+=e[i];
+        i-=(i&-i);
+    }
+    return sum;
+}
+int rangeSum(int i,int j){
+    return query(j+1)-query(i);
+}
+```
+
+| k=末尾零个数 | 二进制末尾有k个0则e[i] 是2^k个元素的和 |
+| ---------| ------------------------ |
+| 1 -> 1   | e[1]=a[1]                |
+| 2 -> 10  | e[2]=a[1]+a[2]           |
+| 3 -> 11  | e[3]=a[3]                |
+| 4 -> 100 | e[4]=a[1]+a[2]+a[3]+a[4] = e[2]+e[3]+a[4] |
+| 5 -> 101 | e[5]=a[5] |
+| 6 -> 110 | e[6] = e[5]+e[6] |
+| 7 -> 111 | e[7] = a[7] |
+| 8 -> 1000 | e[8] = e[4]+e[6]+e[7]+a[8] |
+
+#### ？？？315 输出数组每个位置后有多少个数字比它小
+暴力n^2复杂度一般只能到1k数量级
+
+方法一：
+1.把input倒序，并映射到argsort的index
+2.建立unique frequence list 原数组中unique的元素+1
+3.逆序扫描input，更新相应的frequence[rank]++。
+    并求frequence rank-1前的sum #有几个元素比当前元素小
+4.依次读入的sum list 倒序就是结果
+
+方法2：BST
+1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
+
+方法3：归并排序
+
+---
+### 80 数组每个元素只保留<=2次
+cnt表示插入位置，i用于遍历
+```java
+int cnt=2;
+for(int i =2;i<nums.length;i++){
+    if(nums[i]!=nums[cnt-2]){
+        nums[cnt++] = nums[i];
+    }
+}
+```
+
+### 节点是随机变量的有向无环图=贝叶斯网络BN
+求联合概率会用到最小生成树
+1. 如果$84\*148=B6A8$成立，则公式采用的是__进制表示的
+$(8\*x+4)\*(x^2+4\*x+8)=11\*x^3+6\*x^2+10\*x+8$
+$=>(3x^2+6x+2)(x-12)=0$
+$=>x=12$
+- 快速算法：84和148末尾4\*8=32实际上是8，则32-8=24是12的倍数
+24表示在这种进制下个位应该为0
+
+逆邻接表：A->B->C->D：B,C,D指向A
+ 
+树的前/中/后序遍历本质都是DFS
+
+无向图的连通分量可以用并查集（集合）来做
+并查集：[12,3,4,5]->[6,2,3,4,5]位置存放的是根节点
+
+### 452 重叠线段
+```java
+int cnt =0;
+//按结束顺序排序不会出现
+//  |__|     只有：  |___| 和 |____|
+//|______|的情况  |____|       |_|
+Arrays.sort(points,(a,b)->a[1]>b[1])
+for(int i =0;i<points.length;i++){
+    int cur = points[i][1];
+    cnt++;
+    while(i+1<points.length&&points[i+1][0]<=cur&&cur<=points[i+1][1]){
+        i++;
+    }
+}
+return cnt;
+```
+前一个的end在i+1的线段中，则跳过。
+问题：
+```
+{{1,3},{2,5},{4,7},{6,9}}输出2还是3？
+```
+---
+### 402 去掉数字串中k个数字留下最小的数字
+Input: num = "1432219", k = 3
+Output: "1219"
+找最小数字：从高位，越高位越小的数。
+算法：从高位开始，如果去掉这个数用后面一位换上来，143->13变小了，则换掉
+用栈，下一个位置比栈顶小，则把栈顶换掉。
+注意点：如果下一个数字比栈顶小，k>0表示可以替换多少个，向前(栈里)找最多k个应该应该去掉的数，把top放在下一个覆盖的位置。
+```java
+num="1234567890";
+k=9;
+for(int i =0;i<len;i++){
+    // len=10,k=9  但是0比所有前9个都小，则
+while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
+    top--;
+    k--;   
+    }
+    //0覆盖掉1 之后截取stack中len-k=1长度并且去掉0
+    stack[top++]=num.charAt(i);
+}
+```
+---
+### 欧拉图：一笔画
+经过所有顶点、所有边的**闭路径**（边不重复，允许顶点重复）
+
+欧拉路径：
+经过所有顶点，所有边的路径（边不重复，顶点重复） 不是闭路径（不需要回到原地）。
+
+欧拉图判定条件：
+无向图：G是连通的，所有顶点的度都是偶数。
+有向图：G弱连通，每个顶点的出度和入度相等
+
+欧拉路径判定条件：
+无向图：G连通，恰有两个顶点的度是奇数。从一个奇数顶点出发，到另一个奇数度顶点结束。
+有向图：G连通，恰两个顶点出度入度不相等，其实于出度多1的终结与入度多1的。
+
+### 哈密顿图
+一条经过所有顶点的回路（不要求经过所有边）
+
+哈密顿通路：经过所有顶点的通路，不要求回路
+
+充分条件：
+满足： 是哈密顿图
+---
+### 236 最低的二叉树公共祖先
+终止条件`root==null|root==q||root=p`
+1. 在左/右子树找p|q，两边都能找到一个值（因为值不重复） 则返回当前root
+2. 如果左边没找到p|q，右边找到了p|q，最低的祖先就是找到的p|q，(因为保证p|q一定在树中)
+
+
+### 222 完全二叉树的节点数
+[83%](https://blog.csdn.net/jmspan/article/details/51056085)
+
+
+### DLS可以达到BFS一样空间的DFS
+
+---
+### 139 word break
+1.状态：boolean[n+1]长度为i的前缀能否由字典组成
+2.初始值：[0]=true 空字符串
+3.转移方程if(dp[i]==true&&dic.contains(sub(i,i+j)))dp[i+j]=true
+4.结果
+
+```java
+f[0]=true;
+for(int i =1;i<s.length();i++){
+    for(int j=0;j<i;j++){
+        if(f[j]&&dic.contains(s.substring(j,i))){
+            f[i]=true;
+            break;
+        }
+    }
+}
+return f[s.length()];
+```
+
+---
+### 55 ?jump game
+[jump game](https://leetcode.com/problems/jump-game/solution/)
+i+nums[i]大于lastp表示i位置可以跳到lastp位置。
+将lastp更新成现在的i。再向前直到lastp变成0，表示0位置可以到下一个lastp一直到len-1。
+```java
+lastp = len-1;
+for(int i =len-1;i>=0;i--)
+    if(i+nums[i]>=lastp)lastp==i;
+return lastp==0;
+```
+
+### 45 ?jump game最少跳跃次数
+1.在本次可跳跃的长度范围内如果不能达到len-1则表示一定要跳跃
+2.BFS
+
+### 322找钱最少硬币数
+贪心算法一般考举反例。
+不能用贪心的原因：如果coin={1,2,5,7,10}则使用2个7组成14是最少的，贪心不成立。
+满足贪心则需要coin满足倍数关系{1,5,10,20,100,200}
+
+输入：coins = [1, 2, 5], amount = 11
+输出：3 (11 = 5 + 5 + 1)
+1. 递归mincoins(coins,11)=mincoins(coins,11-1)+1=(mincoins,10-1)+1+1..=(mincoins,0)+n
+![coin](/images/coin.jpg)
+
+2. dp:
+    1. 初始化table[amount+1]={0,max,max...}
+    2. table[5]=table[0]对每个coin重填整行表格
+    3. if(amount>=coin)dp[amoun]+=dp[amount-coin]
+3. dfs分支限界
+    1.逆序coins数组 贪心从大硬币开始试
+
+定义dp[i][j]用前i种硬币达到amount[j]最少的硬币数量
+用1，2，5组成11的数量=只用1,2组成11的数量+1，2，5组成[11-5]
+1. ?dp[i][j]=min(dp[i][j],dp[i-1][j-k*coin[i]]+k)：[i-1]不用这枚硬币之前能够到加上k枚i硬币达到amount[J]。需要遍历n.复杂度n\*amount^2
+2.不需要遍历几枚硬币dp[i][j]=min(dp[i][j],dp[i][j-coin[i]]+1).复杂度n\*amount 降成了一维。dp[i]=dp[i-coin[i]]+1
+基础：dp[amount] 当amount=0时，dp=0;当coin有1时dp[i]=i
+
+---
+### 网络流
+1. 最小割 st-cut 去掉这几条边，源点S和终点T就会被分为两个不相交的set，S到不了T。这种边集的最小值
+断掉两点间的通信的最小代价。
+2. 最大流max-flow 边的流量小于capacity。每个点的入流和出流相等。除了源点S和终点T。求源点/终点能发出/接收的最大值。
+
+其实可以是一个问题。
+
+#### Ford-fulkerson算法
+1 先假设每条边的当前流量是0/capacity
+2 找到S到T的路径，并最大化这条路径上的空的边的当前流量 
+3 继续找路径，如果可以通过一条边的反向到达T，经过的是一条边的反向流，则减少这条边逆向流过去。
+4 每条边到达正向包和或者负向为0 不能remove from backward edge
+
+#### flow value lemma :最小cut上的流量 == 最大网络流
+flow <= capacity of cut
+max flw == min cut
+
+#### 已知最大流(cur/capacity) 求cut
+从S点 正向走最不满的正向流。走最满的逆向流，满正向流和空逆向流当作不存在。
+
+#### 如何找augmenting path BFS
+如果容量都是integer
+number of augemntation <= maxflow value 每次增加至少1
+
+---
+### TrieNode字典树 find/insert复杂度为字符串长度
+结点保存子节点（指针）的目录[26]下一个字符
+和结点是否终止boolean
+```java
+struct TrieNode{
+    TrieNode* children[26];
+    boolean terminal;
+}
+```
+可以把terminal变成int用`map<String,int>`表示字典树
+
+### 后缀树字典树 每层多一个字符的字典树
+### 后缀树 对字典树路径压缩，一层多个字符 生成需要O(N^2)
+
+### 后缀数组 A[]后缀的起始位置
+"alohomora"
+1.按字典序排序所有可能的后缀S[0]="a",[1]="alohomora",[2]="homora"..[len-1]="ra"
+2.A[i]是S[A[i]]的索引,是后缀的真实起始位置.A[i]是i包括i位以后的后缀
+  [0] ="alohomora"，[len-1]="a"，[len-2]="ra
+  A[i]的i是字典序的i，值是真实位置
+  例：S[A[0]]=S[8]=表示第一个字典序，实际位置是字符串substring(8);
+
+#### 生成后缀数组  
+Manber-Myers O(n)但是太复杂
+
+排序后缀目录：桶排序
+
+
+
+### Aho-Corasick
+1添加失败链接
+2缝衣针字符串序号数组
+
+---
+### A,B两人选k种可乐达到期望最大
+A选m个，B选(n-m)个
+每种可乐对A,B的满意度为a,b 如何使两人满意度期望和最大
+输出 买k种可乐的数量
+期望和：$m/n\*a+(m-n)/n\*b$的最大值 全部买期望最大那种
+输入：n=2 m=1 k=2；a=1 b=2；a=3 b=1
+m/n=.5
+0.5x1+0.5x2=0.5+1=1.5
+0.5x3+0.5x1 = 2  全部买第二种可乐
+输出:0 2
+
+---
+### ??火车换乘
+保证每个车错过能在30分钟以后换车
+输入：城市n 火车数m
+from1 to3 cost800 18:00 21:00
+...
+输出从1到n的最小花费
+
+---
+### 16支队伍两两获胜概率已知求冠军概率1/8->1/4->1/16
+A进入1/8只需要打败B，A进入1/4需要P(A进入1/8)*(P(C进入1/8)*P(A赢了C)+P(D进入1/8)*P(A赢了D))
+A进入1/2需要赢没比过的另外4个队
+A变成冠军需要赢没比过的另外8个队
+分组问题：如果1/4赛 1234 5678是一组4个是一组
+如果1/2赛  8个是一组
+![shijiebei](/images/shijiebei.jpg)
+{% fold %}
+```java
+for(int i =1;i<4;i++){
+ int inergroup = 1<<i;
+ int group= 1<<i+1;
+  for (int j = 0; j <16 ; j++) {
+   for(int k=0;k<16;k++) {
+    //在同一个大组
+    if(j/group==k/group) {
+    //不在同一个小组
+    if (j / inergroup != k / inergroup) {
+        dp[i][j] += dp[i - 1][j] * dp[i - 1][k] * p[j][k];
+}}}}}
+```
+第一轮：1进入1/8赢的概率是[1][2] 1打败2的概率=0.133
+第二轮：1赢了1/8进入1/4赢的概率是
+```
+1在第2轮的获胜概率是0加上1在上一轮胜利的概率0.133 ×3在上一轮获胜的概率0.335×1赢3的概率0.21
+1 2 0.00935655
+1在第2轮的获胜概率是0.00935655加上1在上一轮胜利的概率0.133 ×4在上一轮获胜的概率0.665×1赢4的概率0.292
+1 2 0.0351825```
+第三轮：1赢了1/4在1/2半决赛赢的概率是
+```
+1在第3轮的获胜概率是0加上1在上一轮胜利的概率0.0351825 ×5在上一轮获胜的概率0.336947×1赢5的概率0.67
+1 3 0.00794261
+1在第3轮的获胜概率是0.00794261加上1在上一轮胜利的概率0.0351825 ×6在上一轮获胜的概率0.198831×1赢6的概率0.27
+1 3 0.00983136
+1在第3轮的获胜概率是0.00983136加上1在上一轮胜利的概率0.0351825 ×7在上一轮获胜的概率0.0229419×1赢7的概率0.953
+1 3 0.0106006
+1在第3轮的获胜概率是0.0106006加上1在上一轮胜利的概率0.0351825 ×8在上一轮获胜的概率0.44128×1赢8的概率0.353
+1 3 0.016081
+```
+第四轮：1赢了1/2变成冠军的概率
+```
+1在第4轮的获胜概率是0加上1在上一轮胜利的概率0.016081 ×9在上一轮获胜的概率0.0606261×1赢9的概率0.328
+1 4 0.000319777
+1在第4轮的获胜概率是0.000319777加上1在上一轮胜利的概率0.016081 ×10在上一轮获胜的概率0.0113548×1赢10的概率0.128
+1 4 0.000343149
+1在第4轮的获胜概率是0.000343149加上1在上一轮胜利的概率0.016081 ×11在上一轮获胜的概率0.203126×1赢11的概率0.873
+1 4 0.00319478
+1在第4轮的获胜概率是0.00319478加上1在上一轮胜利的概率0.016081 ×12在上一轮获胜的概率0.147508×1赢12的概率0.082
+1 4 0.00338929
+1在第4轮的获胜概率是0.00338929加上1在上一轮胜利的概率0.016081 ×13在上一轮获胜的概率0.160952×1赢13的概率0.771
+1 4 0.00538485
+1在第4轮的获胜概率是0.00538485加上1在上一轮胜利的概率0.016081 ×14在上一轮获胜的概率0.0877648×1赢14的概率0.3
+1 4 0.00580826
+1在第4轮的获胜概率是0.00580826加上1在上一轮胜利的概率0.016081 ×15在上一轮获胜的概率0.240971×1赢15的概率0.405
+1 4 0.00737766
+1在第4轮的获胜概率是0.00737766加上1在上一轮胜利的概率0.016081 ×16在上一轮获胜的概率0.0876971×1赢16的概率0.455
+1 4 0.00801932
+```
+{% endfold %}
+
+---
+### KMP
+文本串T某个前缀的后缀是模式串P的前缀。取最长的后缀。
+1 子序列 不连续 2 字串 连续
+KMP:getIndexOf
+d之前【最长前缀】和【最长后缀】的匹配长度
+(abcabc)d 前缀：(a->ab->abc->...->abcab) 后缀:(c->bc->abc->...->bcabc)
+所以最长匹配是3：abc,记录在d位置上
+int[]next =  f("abcabcd")={-1,0,0,1，2，3}
+关键加速求解匹配
+
+---
+### ?90 有重复的subset[1,2,2,2]
+1. 选不同的2得到{1,2}是重复的
+2. 次序不同得到{1,2},{2,1}是重复的
+先排序，再去重。
+
+### 78 subset[1,2,3]->[1][1,2][1,2,3][2,3][2][3]
+回溯法：[[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]
+```java
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> rst = new ArrayList<>();
+    back(rst,new ArrayList<>(),nums,0);
+    return rst;
+    }
+private void back(List<List<Integer>> rst,List<Integer> item,int[] nums,int index){
+    rst.add(new ArrayList<>(item));
+    for(int i =index;i<nums.length;i++){
+        item.add(nums[i]);
+        //1.当i=2+1==nums.length 则回到上一层i=2,remove
+        back(rst,item,nums,i+1);
+        //2.结束了back(,,2)并去掉了{3} 
+        //3回到back(,,index=1)并去掉了[2] item里只有1，
+        //  i++ 添加[3]->rst.add({1,3})
+        //4.结束back(,,index=1)回到index=0 remove 0 index=1 add{2} back
+        item.remove(item.size()-1);
+    }
+}
+```
+位运算法 集合每一项可以用0，1表示取不取
+输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]] 从000到111的过程
+{A,B,C}=111=7
+{A,B}=110=6
+{A}=100=5...
+一共有2^3种
+A用100表示
+B用010表示
+C用001表示
+如果i=011=3,添加j=0,001,j=1,010到item；i=100=4,添加j==2,1<<2=4
+```java
+public List<List<Integer>> subsets(int[] nums) {
+  int setnum = 1<<nums.length;
+    List<List<Integer>> rst = new ArrayList<>();
+    for(int i =0;i<setnum;i++){
+        List<Integer> item = new ArrayList<>();
+        for(int j=0;j<nums.length;j++){
+            if((i&(1<<j))!=0)
+            {
+                item.add(nums[j]);
+            }
+        }
+        rst.add(item);
+    }
+    return rst;
+}
+```
+---
+### 815 换公交
+routes = [[1, 2, 7], [3, 6, 7]]
+把车routes[0]的路线当成一个连通分量，并分配一个颜色标记
+BFS相同连通分量标记的点跳过。
+
+数据结构：
+1. {站点：list<经过的公交车id>}
+2. list<公交车id> 标记已经乘过的公交
+3. BFS连通分量`while(!que.empty)`，
+    遍历一辆车的连通分量`while(que.size()>0)`
+    遍历当前节点相邻的busid是否乘过`for(int car:list)，`
+    并标记这个车的连通分量已乘过，遍历这个连通分量`for(int t:routes[car])`中有没有T，有则结束，没有则将整个连通分量入队。
+
+---
+### fib
+```java
+int fib(int n){
+    num++;//计数
+    if(n==0||n==1)return n;
+    if(memo[n] == -1)memo[n] = fib(n-1)+fib(n-2);
+    return memo[n];
+}
+```
+---
+### 11 数组index当底边，值当杯子两侧，最大面积
+
+---
+### ！30 字典中单词连续出现在字符串中的位置 AC自动机（？
+加入字典的常用写法`dict.put(word,dict.getOrDefault(word,0)+1)`
+{% fold %}
+```java
+class Solution {
+public List<Integer> findSubstring(String s, String[] words) {
+    List<Integer> res = new ArrayList<Integer>();
+    int n = s.length(), m = words.length, k;
+    if (n == 0 || m == 0 || (k = words[0].length()) == 0)
+        return res;
+
+    HashMap<String, Integer> wDict = new HashMap<String, Integer>();
+
+    for (String word : words) {
+        if (wDict.containsKey(word))
+            wDict.put(word, wDict.get(word) + 1);
+        else
+            wDict.put(word, 1);
+    }
+
+    int i, j, start, x, wordsLen = m * k;
+    HashMap<String, Integer> curDict = new HashMap<String, Integer>();
+    String test, temp;
+    for (i = 0; i < k; i++) {
+        curDict.clear();
+        start = i;
+        if (start + wordsLen > n)
+            return res;
+        for (j = i; j + k <= n; j += k) {
+            test = s.substring(j, j + k);
+
+            if (wDict.containsKey(test)) {
+                if (!curDict.containsKey(test)) {
+                    curDict.put(test, 1);
+
+                    start = checkFound(res, start, wordsLen, j, k, curDict, s);
+                    continue;
+                }
+
+                // curDict.containsKey(test)
+                x = curDict.get(test);
+                if (x < wDict.get(test)) {
+                    curDict.put(test, x + 1);
+
+                    start = checkFound(res, start, wordsLen, j, k, curDict, s);
+                    continue;
+                }
+
+                // curDict.get(test)==wDict.get(test), slide start to
+                // the next word of the first same word as test
+                while (!(temp = s.substring(start, start + k)).equals(test)) {
+                    decreaseCount(curDict, temp);
+                    start += k;
+                }
+                start += k;
+                if (start + wordsLen > n)
+                    break;
+                continue;
+            }
+
+            // totally failed up to index j+k, slide start and reset all
+            start = j + k;
+            if (start + wordsLen > n)
+                break;
+            curDict.clear();
+        }
+    }
+    return res;
+}
+
+public int checkFound(List<Integer> res, int start, int wordsLen, int j, int k,
+        HashMap<String, Integer> curDict, String s) {
+    if (start + wordsLen == j + k) {
+        res.add(start);
+        // slide start to the next word
+        decreaseCount(curDict, s.substring(start, start + k));
+        return start + k;
+    }
+    return start;
+}
+
+public void decreaseCount(HashMap<String, Integer> curDict, String key) {
+    // remove key if curDict.get(key)==1, otherwise decrease it by 1
+    int x = curDict.get(key);
+    if (x == 1)
+        curDict.remove(key);
+    else
+        curDict.put(key, x - 1);
+}
+}
+```
+{% endfold%}
+
+### ?3 连续最长不重复子序列
+两指针i从左向右遍历到最后
+j指示i之前不重复的最高位置。
+i-j+1为当前最长结果
+
+### ?409 string中字符组成回文串的最大长度
+1.开int[128]，直接用int[char]++计数
+2.奇数-1变偶数&(~1)
+3.判断奇数(&1)>0
+
+---
+### ！5 最长回文串
+bealen[i][j]表示[i]-[j]是回文串
+反转做法不行:abcxyzcba -> abczyxcba ->相同的abc并不是回文
+“cba”是“abc”的 reversed copy
+中心扩展法：回文的中心有奇数：n个，偶数：n-1个位置
+会输出靠后的abab->输出bab
+```java
+int len;
+public String longestPalindrome(String s) {
+    if(s==null||s.length()<2)return s;
+    len = s.length();
+    int start = 0;int end = 0;
+    // int max = 0;
+    for(int i =0;i<len;i++){
+        //"babad" ->"bab" ->i =1 len = 3   
+        //"cbbd" -> "bb" ->i=1 len = 2
+        int len1 = help(s,i,i);//奇数扩展
+        int len2 = help(s,i,i+1);//偶数扩展
+        int max = Math.max(len1,len2);
+        if(max>end-start){
+            start = i - (max-1)/2;//去掉中间那个左边长度的一半
+            end = i+max/2;//右边长度的一半
+        }//end-start= i+max/2-i+(max-1)/2 = max-1/2
+    }
+    return s.substring(start,end+1);     
+    
+}
+private int help(String s,int left,int right){
+    while(left>=0&&right<len&&s.charAt(left)==s.charAt(right)){
+        left--;
+        right++;
+        
+    }
+    return right-left-1;
+}
+```
+#### Manacher's 算法 O(n)
+前缀/
+
+#### 回文树
+`next[i][c]` 编号为i的节点表示的回文串两边添加c后变成的回文串编号。
+`fail[i]`节点i失配后
+`cnt[i]`
+
+---
+### ?347桶排序 int数组中最常出现的n个
+桶长度为数组长度，数字出现的最高次数为len，把频率相同的放在同一个桶。最后从桶序列高到低遍历。
+
+
+### 242 Anagram 相同字母的单词
+
+### 22 卡特兰数括号
+left括号数量小于n，right括号数量必须小于left不然(()))肯定不合理
+```java
+if(left>right)return;
+if(left==0&&right==0){rst.add(s);return;}
+if(left>0)help(rst,s+"(",left-1,right);
+if(right<0)help(rst,s+")",left,right+1);
+```
+
+### 树遍历
+1. 递归的每一帧不够小，尾递归->栈
+2. 先序迭代1：先放入栈右子树再入栈左子树。不能推广到中序、后序遍历qia
+```java
+while(!s.empty()){
+    x=s.pop();visit(x);
+   if(root.right!=null)stack.push(root.right);
+    if(root.left!=null) stack.push(root.left);
+}
+```
+
+### 344 reverse String 
+转成char数组/位运算做法77%比stringbuilder好
+
+### 238 [1,2,3,4]->返回1位置是除了1其它数的乘积 不用除法
+left数组：自己左边数的乘积[1,1,2,6]
+right数组:自己右边的乘积（包括自己）[24,12,4,1]
+left和right对应位置相乘
+不用extra space
+```java
+res[0]=1;
+for(1 to n-1){
+    res[i]=res[i-1]*nums[i-1];
+}
+int right=1;
+for(n-1 to 0){
+    res[i]*right;
+    right*=nums[i];
+}
+return res;
+```
+
+
+### 371 不用'+'用位运算完成求和
+```java
+public int getSum(int a, int b) {
+    int rst = a^b;//0^0=0,0^1=1,1^1=0 
+    int carry = (a&b)<<1;//当ab相等的时候需要进位
+    //a+b=（a xor b）+ （(a and b) << 1）
+    if(carry!=0)return getSum(rst,carry);
+    return rst;}
+```
+
+### 412 遇到3||5和3&5的倍数变成特定字符
+不用%最快方法!
+对于CPU取余数的运算相对来说效率很低
+```java
+  for(int i=1,fizz=0,buzz=0;i<=n ;i++){
+            fizz++;
+            buzz++;
+            if(fizz==3 && buzz==5){
+                ret.add("FizzBuzz");
+                fizz=0;
+                buzz=0;
+            }else if(fizz==3){
+                ret.add("Fizz");
+                fizz=0;
+            }else if(buzz==5){
+                ret.add("Buzz");
+                buzz=0;
+            }else{
+                ret.add(String.valueOf(i));
+            }
+        } 
+```
+
+
+### 15 3sum=0 荷兰国旗写法3指针
+1p：从0~len-2，3个数的和 右边至少留两个数 sum=0-nums[i]转化成2sum问题
+去重：当num[i]=num[i-1]:continue
+另外两个指针从1p往后从len-1往前。
+去重：预判：nums[low]=nums[low+1]:low++;nums[high]=nums[high-1]:high--;
+
+### 152 最大子列乘积 保留当前值之前的最大积和最小积
+负数的最小积有潜力变成最大积
+```java
+for(int i =1;i<nums.length;i++){
+    int nextmax = nums[i]*curmax;
+    int nextmin = nums[i]*curmin;
+    curmax=Math.max(Math.max(nextmax,nextmin),nums[i]);
+    curmin=Math.min(Math.min(nextmax,nextmin),nums[i]);
+    sum = Math.max(curmax,sum);
+}
+```
+
+### 818 A加速，R掉头并减速，到指定位置最少需要多少条指令
+
+### 551 出现两个以上A或者3个以上L为false
+```java
+return s.indexOf("A")==s.lastIndexOf("A") && s.indexOf("LLL") == -1; 
+```
+
+### 34
+二分查找获取最左/右边相等的
+```java
+//获取最右
+while(i<j){
+ int mid = (i+j)/2+1;
+ if(nums[mid]>target)j = mid-1;
+ //找到了继续向右找
+ else i =mid;}
+rst[1]=j;
+```
+
+### ？698 减枝？DP方法 
+
+### 239
+Monotonic queue 前后可以修改o(1)，并且可以随机访问
+维护一个单调递减的序列，读一个窗口输出单调队列的first
+
+### 476 
+前导0
+```java
+//找到左边第一个1，然后后面全置0
+public static int highestOneBit(int i) {
+    // HD, Figure 3-1
+    i |= (i >>  1);//高位为1的右1步，再|则第二高位肯定是1->00011xxxxx
+    i |= (i >>  2);//连续4个1 但是如果位数不够就只有3个1或者更少
+    i |= (i >>  4);
+    i |= (i >>  8);
+    i |= (i >> 16);
+    return i - (i >>> 1);//让全1的无符号右移1格1111-0111得到1000
+}
+```
+
+## 464 博弈
+A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。
+1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)
+2.因为1,2...和2,1...是一样的，所以可以降为$2^n$
+
+### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
+{3，9，1，2}
+1. 二维数组dp：`[i][j]`只用右上三角表示两个人都从list取1个数，2个数，3个数到list长能获得的最大差值
+1. 填对角线，如果两个人只身下一个数为3：{A取3，B取0}，剩下9：{A取9，B取0}...
+2. 如果剩下2个数，剩下{3,9}`[1][2]`：{A取9，B剩下{3}回到1的情况}...
+3. 如果剩下3个数，剩下{3,9,1}`[1][3]`:{A取3,B剩下{9,1}即表格`[2][3]`的情况}
+4. 剩下4个数，填`[1][4]`即为答案
+
+递归：但是会有很多重复计算复杂度$2^n$
+比如让对手选[3,9,1]后，自己选[9,1]和[3,9]/让对手选[9,1,2]后，自己选[9,1]和[1,2]
+[9,1]被计算了两次。可以进行存储
+```java
+//最大的分数差
+int dif(int[] nums,int left,int right){
+    //如果长度为1，获得的差值就是这个数
+    if(left==right)return nums[left];
+    //选一个数之后 交给对手用相同策略选
+    return max(nums[left]-dif(nums,left+1,right),nums[right]-dif(nums,left,right+1));
+}
+```
+用一个数组存储key是`left*len+right`
+{% fold %}
+```java
+int[] m;
+int len =0;
+public boolean PredictTheWinner(int[] nums) {
+    this.len = nums.length;
+    if(len==1)return true;
+    this.m= new int[len*len];
+  return help(nums,0,len-1)>=0;
+}
+private int help(int[] nums,int l,int r){
+    if(l==r)return nums[l];
+    int index = l*len+r;
+    if(m[index]>0)return m[index];
+    m[index]=Math.max(nums[l]-help(nums,l+1,r),nums[r]-help(nums,l,r-1));
+    return m[index];
+}
+```
+{% endfold %}
+
+### 292 
+
+
+
+##  lc538 O(1)空间 线索二叉树 Morris Inorder(中序) Tree Traversal
+### Morris Inorder(中序) Tree Traversal
+**先把每个中缀的前缀（左子树最右）指向中缀，遍历完后把这些链接都删除还原为 null**
+1. 找root的前趋：root 的中序前趋是左子树(第一个左结点)cur的最右标记为pre， pre.right = root
+```java
+//找前趋
+Node cur = root;
+if(cur.left!=null){
+    Node pre = current.left;
+    while(pre.right!=null&&pre.right!=cur){
+        pre=pre.right;
+    }
+}
+```
+```java
+//创建链接：第一次到达这个最右的结点，cur的左边其实还有结点
+if(pre.right==null){
+  pre.right = cur;
+  cur=cur.left;
+}
+```
+2. 找root.left的前趋：cur向左（相当于新的root（1）的状态），找到cur的最右，标识成pre.right = cur
+3. 当cur向左是null则找到中序遍历的第一个输出，cur向右
+```java
+if(cur.left==null){
+    sout(current.val);
+    current=current.right;}
+```
+4. 当cur的left==null并且右链接已经建立到上一层。cur移动到上一层，找到前趋pre就是右链接的cur.left。 把这个右链接(pre.right)删除，输出（中），然后继续向右（上）并删除这种从前趋right过来的线。
+```java
+//pre.right=cur
+else if(pre.right!=null){
+  pre.right = null;
+  sout(cur.val);
+  cur=cur.right;
+}
+```
+
+### Convert BST to Greater Tree
+[17ms 66% Reverse Morris In-order Traversal](https://leetcode.com/problems/convert-bst-to-greater-tree/solution/)
+{% fold %}
+```java
+ public TreeNode convertBST(TreeNode root) {
+     int sum = 0;
+     TreeNode cur = root;
+     while(cur!=null){
+         //最右 
+         if(cur.right==null){
+             sum+=cur.val;
+             cur.val=sum;
+             cur=cur.left;
+         }else{
+             //找前继，键link
+             TreeNode pre = cur.right;
+             //一直向左
+             while(pre.left!=null&&pre.left!=cur){
+                 pre=pre.left;
+             }
+            //找到了pre 联立链接
+             if(pre.left== null){
+                pre.left = cur;
+                cur=cur.right;
+             }
+             //右边没了，并且左连接向上
+             else{
+                 pre.left=null;
+                 sum+=cur.val;
+                 cur.val= sum;
+                 cur=cur.left;
+                 
+             }
+         }
+         
+     }
+        return root;
+    }
+```
+{% endfold %}
+正常做法递归中序 15ms 99%
+```java
+public TreeNode convertBST(TreeNode root) {
+if(root==null)return root;
+convertBST(root.right);
+sum+=root.val;
+root.val=sum;
+convertBST(root.left);
+return root;
+}
+```
+
+## 110 判断树平衡 在计算高度时同时判断平衡只需要O(n)
+```java
+private boolean balance =true;
+public boolean isbalance(TreeNode root){
+    height(root);
+    return balance;
+}
+private int height(TreeNode root){
+    if(root==null) return 0;
+    int left = height(root.left);
+    int right = height(root.right);
+    if(Math.abs(left-right)>1)balance = false;
+    return Math.max(left,right)+1;
+}
+```
+
+## 2-3树 
+10亿结点的2-3树高度在19-30之间。：math.log(1000000000,3)~math.log(1000000000,2)
+与BST不同，2-3树是由下往上构建，防止升序插入10个键高为9的情况
+2-3树的高度在$\lfloor log_3N \rfloor=\lfloor logN/log3 \rfloor$ 到$\lfloor lgN \rfloor$ 之间
+
+## 红黑树：将3-结点变成左二叉树，将2-3变成二叉树
+有二叉树高效查找和2-3树高效平衡插入
+红黑树高度不超过$\lfloor 2logN \rfloor$ 实际上查找长度约为$1.001logN-0.5$
+
+插入：总是用红链接将新结点和父节点链接（如果变成了右红链接需要旋转）
+
+## 581 需要排序的最小子串，整个串都被排序了 递增
+![lc581](/images/lc581.jpg)
+40大于35，只排序到右边遍历过来第一个`n<n-1`是不够的
+要找到[30~31]中的min和max
+```java
+public static int fid(int[]A){
+    //1,3,2,2,2
+    int n = A.length, beg = -1, end = -2, min = A[n-1], max = A[0];
+    for (int i=1;i<n;i++) {
+        max = Math.max(max, A[i]);//从前往后，找到最大值max=3
+        min = Math.min(min, A[n-1-i]);//从后往前找到最小值min=2
+        if (A[i] < max) end = i; //a=2<3 end = 2->3->4 直到找到a[i]>max
+        if (A[n-1-i] > min) beg = n-1-i;//begin =1 直到找到a[i]<min
+    }
+    return end - beg + 1;
+    }
+```
+
+## 136 Single Number
+异或 0^12=12,12^12=0
+[single number](https://leetcode.com/articles/single-number/)
+$$2(a+b+c)-(a+a+b+b+c)$$ `2*sum(set(list))-sum(list)`
+
+## 438 Anagrams in a String 滑动窗口
+[Sliding Window algorithm](https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)
+![anagram](/images/anagram.jpg)
+![anagram2](/images/anagram2.jpg)
+两个数组一样，则找到index，不一样，则窗口向前滑动一哥
+输出0，1，4
+s: "cbaebabacd" p: "abc" 顺序无关，连续出现在s中
+Output:
+[0, 6]
+> **Anagram** result of [rearranging the letter of a word to produce a new word using all the orginal letters exactly once]
+> 1) The first count array store frequencies of characters in pattern.
+2) The second count array stores frequencies of characters in current window of text.
+
+## 141链表环检测
+空间O(1) 快慢指针：快指针走2步，慢指针走一步，当快指针遇到慢指针
+最坏情况，快指针和慢指针相差环长q -1步
+{% fold cpp练习 %}
+```java
+class Solution{
+    public:
+    bool hasCycle(ListNode *head) {
+        auto slow = head;
+        auto fast = head;
+        while(fast){
+            if(!fast->next)return false;
+            fast = fast->next->next;
+            slow = slow->next;
+            if(fast == slow) return true;
+        }
+        return false;
+    }
+};```
+{% endfold %}
+
+### 142 环起始于哪个node
+![loops](/images/loops.jpg)
+1->2->3->4->5->6->7->3 meet:6
+a: 从head到环 
+b：快指针走了两次的环内距离(慢指针到环起点的距离)
+c: 慢指针没走完的环内距离
+已知快指针走的距离是slow的两倍
+慢=a+b  快=a+2b+c
+则a=c
+从len(head - 环起点) == 慢指针没走完的环距离
+head与慢指针能在环起点相遇。
+```java
+if(slow==fast){
+    while(head!=slow){
+        head=head.next;
+        slow=slow.next;
+    }
+    return slow;
+}
+```
+
+## 160 链表相交于哪一点
+A:          a1 → a2
+                   ↘
+                     c1 → c2 → c3
+                   ↗            
+B:     b1 → b2 → b3
+思路1：计算len(a),len(b)，a长则a一直跳到len(a)==len(b)再开始比较.val
+思路2：将a,b连成m+n长的链表遍历两遍
+      a1 → a2  c1 → c2 → c3 -null- b1 → b2 → b3  c1 → c2 → c3
+             // ↘
+             //   c1 → c2 → c3
+              // ↗            
+      b1 → b2 → b3  c1 → c2 → c3 -null- a1 → a2  c1 → c2 → c3
+{% fold %}
+```java
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+           if(headA==null||headB==null)return null;
+            ListNode a = headA;
+            ListNode b = headB;
+            while(a!=b){
+                if(a==null){a=headB;}else{a=a.next;}
+                if(b==null){b=headA;}else{b=b.next;} 
+            }
+            return a;
+    }
+}
+```
+{% endfold %}
+
+## 168
+1 -> A
+2 -> B
+3 -> C
+...
+26 -> Z
+27 -> AA
+28 -> AB 
+递归26进制
+```java
+ public String convertToTitle(int n) {
+    return n == 0 ? "" : convertToTitle(--n / 26) + (char)('A' + (n % 26));
+}
+```
+
+## 169 众数 Boyer-Moore Voting Algorithm 
+每次取两个不同的数删除，最后剩下的返回
+{% fold %}
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        if(nums==null)return -1;
+        int res=0;
+        int count=0;
+        for(int e : nums){
+            if(count==0){
+                res=e;
+            }
+                if(res!=e){
+                    count--;//删除这个数
+                }
+                else count++;
+        }
+        return res;
+    }
+}```
+{% endfold %}
+
+# 搜索算法的优化
+
+## 问题
+- 8数码（9宫格拼图) 移动序列，树搜索：每个移动状态为节点，边为状态转移。
+- 哈密顿环：从一个点出发经过所有的点1次回到原点。
+- 子集的合 S={} 求sum(S')=num ：树搜索，栈，深度优先
+> 搜索速度：广度优先 最优解 ；深度优先:存在问题，可行解。（得遍历完整个空间得到最优）
+
+> ？？？空间：深度栈：多项式； 广度优先队列：最坏指数
+
+## 1. 爬山：局部贪心，快速找到可行解，局部最优
+- 8数码:启发函数：当前状态和目标状态的距离：错位方块个数。
+	1. 深度优先
+![mounting](\images\mounting.jpg)
+	2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
+
+### Best-First搜索：全局最优贪心
+- 当前所有可扩展节点中启发函数最优点
+- 用堆
+
+### 分支界限：组合优化
+- 多阶段图搜索：最短路径
+	- 爬山与BF算法得到最优解都需要遍历整个空间
+	1. 用爬山生成界限(可行解or最优解的上限)
+![fenzhi](\images\fenzhi.jpg)
+
+# 字符串搜索
+
+## Rabin-Karp
+O(MN)
+
+## Review
+
+### 1. 枚举：
+1. 小于N的完美立方 $a^3=b^3+c^3+d^3$
+	> 按a的值从小到大输出a>b>c>d
+
+	+ a->[2,N];b->[2,a-1];c[c,a-1];d[c,a-1]
+
+2. 生理周期
+	> A周期23天，B周期28天，C周期31天
+	> 给定三个高峰p,e,i;求给定日子d后下一次三次高峰同一天还有多少天。 输出天数小于21252.
+	> 输入：0 0 0 0
+
+	+ k=[d+1,21252] ;(k-p)%23,(k-e)%28,(k-i)%31==0
+	```java
+			for(k=d+1;(k-p)%23;++k); //找到第一个高峰
+			for(;(k-e)%28;k+=23); //找双高峰
+			for(;(k-i)%33;k+=23*28); //找三高峰
+			//输出k-d
+	```
+3. 称硬币:已经分组称了3次12枚硬币，找出假币
+	> ABCD EFGH even
+	> ABI EFJK up
+	> ABIJ EFGH even
+	> 输出假的硬币
+	
+	+ 数据结构 `char Left[3][7]``char Right[3][7]` `char result[3][7]` 一共称3次，每边最多放6个硬币，result（天平右边的情况）
+	+ `isFake(char c,bool light )`假设函数：c是轻的
+	+ `for(char c= 'A' to 'L')`枚举假硬币
+	+ `for(3)`三次称重情况都匹配
+		+ 如果假设c是轻的，数组保存输入的left,right;如果c是种的，right保存到left 互换
+		+ `switch result[i][0]` 选择三种u,e,d的情况
+			+ 如果 第一次实验为up,右边高，则c应该出现在right,当`right.indexOf(c)==null`//没出现 return false
+			+ 如果even 判断出现在left||right
+			+ d 判断出现在left
+---
+4. 熄灯问题(deng.java)
+	> 按一个位置，改变上下左右自己5个灯的状态，边角自动变少3，4
+	> 给定每盏灯的初始状态，求按钮方案，使灯全熄灭
+	> 输入 01矩阵 输出 01矩阵
+	> 一个按钮按两次及以上是无意义的，按钮次序无关
+	> {0,1,1,0,1,0},
+    > {1,0,0,1,1,1},
+    > {0,0,1,0,0,1},
+    > {1,0,0,1,0,1},
+    > {0,1,1,1,0,0}
+	
+	+ 枚举所有可能的开关状态30个开关有$2^{30}$个状态（方案数）
+	+ 只需枚举第一行作为（局部） 后面几行都是确定的。第一行没灭的灯必须要第二行按灭，且其它灯不能按
+	+ 一行01可以采用位运算 一维char数组5位(5行) 用int [0,2^6-1]
+	+ 一个bit异或1 反转`1^1->0反转0^1->1反转；`
+	+ j位 置1 `|=(1<<j)`
+	+ j位 置0 `&=~(1<<j)`
+	+ 取第j 位的值 `>>j&1`
+	>  主循环：1.遍历第一行开关状态
+	>  2.每次换第一行重置原来灯状态lighting[]=输入
+	>  3.对每一行，每一个灯，按switch更新lighting
+	
+```java
+for (int j = 0;j<6;j++){
+  if(getBit(result,i,j)==1){
+if(j>0)FlipBit(lights,i,j-1);
+FlipBit(lights,i,j);
+if(j<5)FlipBit(lights,i,j+1);}}
+if(i<4){lights[i+1]^= switchs;}
+```
+	>  4.更新开关，下一行开关为上一行还亮着灯的位置回3
+	>  5.当lighting最后一行为0，结束
+
+
+### 递归
+1. 汉诺塔：将A上的n个移动到C用B中转可以分解为3个字问题(1,2)
+	1. A上n-1个移动到B，用C中转+移动一个盘子sout(A->c)
+	2. 再将B上n-1个移动到C，用A中转
+	3. 回到0 A上n-2个移动到C，用B中转
+2. n皇后 递归代替多重循环
+	
+#### 链表DELETE_IF
+```java
+
+```
+
+
+#### 创建链表    
+list->nodelist 会stackOverflow
+```java
+Node create(List<Integer> data){
+    Node first = new Node(data.get(0));
+    Node sub = create(data.subList(1,data.size()));
+    first.next=sub;
+    return first;
+}
+```
+---
+迭代：
+```java
+Node pre = null;
+Node head =null;
+for(1 to size){
+    Node node = new Node(i);
+    if(pre!=null){
+        pre.next =node;
+    }else{
+        head = node;
+    }
+    pre = node;
+}
+return head;
+```
+
+#### 反转链表
+```java
+Node reverse(Nodde head){
+    if(head==null)return null;
+    if(head.next == null)return head;
+    Node second = reverse(head.next);
+    second.next = head;
+    head.next = null;
+    return second;
+}
+```
+---
+迭代：
+中间状态null<-1<-2<3 |  4->5->null
+3是newhead 反转成功的链表 | 4curhead是还没反转的链表
+newhead=null开始，curhead从第一个node开始，两个同时向右每次移一格，直到curhead=null
+```java
+Node newhead = null;
+Node curhead = head;
+while(head!=null){
+    Node tmp = curhead.next;
+    curhead.next = newhead;
+    curhead=tmp;
+    newhead = curhead;
+}
+return newhead;
+```
+
+
+转成栈浪费空间并且代码复杂
+
+#### combinations 从list中选n个的组合
+递归框架：
+1选择第0号元素，递归去除第一个元素中选n-1个`com(data.subList(1,data.size()),n-1)`
+2不选，去除第一个元素后选n个元素
+
+递归基准：
+1.当data为空，并且选择0个则合理
+2.当n=0 选完了
+
+```java
+void com(List<Integer> selected,List<Integer> data,int n){
+    if(n==0)printList(selected);
+    if(data.isEmpty())return;
+    selected.add(data.get(0));
+    com(selected,data.subList(1,data.size()),n-1);
+    selected.remove(selected.size()-1,n);
+    com(selected,data.subList(1,data.size()),n);
+}
+```
+
+
+
+最长上升子序列
+无后效性：可写出递推式。之与子问题函数的状态函数值有关，与到达值的路径无关
+子问题：求以$a_k(k=1,2,3...N)$为终点的最长上升子序列长度
+max(n个子问题)
+- 如果ak比已得最长子序列的最后ai大，则长度+1
+`maxLen(k)=max(maxLen(i):i in range(1,k)且ai<ak且k!=1)+1`
+```python
+for i in range(1,n)
+	maxlen[i]=1
+for i in range(2,n)
+	##求以ai 为终点的最长
+	for j in range(0,i)# ai左边所有的数
+		if a[i]>a[j]: # ai为终点的更长
+		#？？ maxlen[i]也更新了，可能比manlen[j]+1大
+			maxlen[i]=max(maxlen[j]+1,maxlen[i])
+```
