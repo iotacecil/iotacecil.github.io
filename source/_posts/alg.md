@@ -3,6 +3,92 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
+
+### 笛卡尔树
+
+### RMQ
+
+### 654
+
+### 671 根的值<=子树的值的二叉树中的第二小元素
+```
+      2
+  2       5
+4   3(out)
+```
+1.dfs在set中加入所有节点，遍历set
+```java
+int min = root.val;
+int ans = Long.MAX_VALUE;
+for(int v:set){
+    if(min<v&&v<ans)ans = v;
+}
+return ans<Long.MAX_VALUE?(int) ans:-1;
+```
+2.在dfs的时候只有node.val == root.val的时候表示这个分支需要继续遍历
+```java
+min = root.val;
+int ans = Long.MAX_VALUE;
+private dfs(TreeNode rote){
+    if(root!=null){
+        if(min<root.val&&root.val<ans)
+            ans = root.val;
+    }else if(min == root.val){
+        dfs(root.left);
+        dfs(root.right);
+    }
+}
+```
+
+
+### 654 二叉树根是数组中最大元素，左子树是左边元素建子树，右子树是右边元素建子树
+stack：
+[3,2,1,6,0,5]
+1.栈底是数组最大值，即树根
+```
+3left->
+ right->2->1 stack:3,2,1
+将栈里比cur小的右链变成当前最大值的左链，pop所有比6小的元素
+6left->3
+        ->right->2->1 stack：6
+6left->3
+ right->0 stack:6,0
+5left->0,6right->5
+6->left->3
+         ->right->2->1
+ ->right->5
+          ->left->0
+```
+68%
+```java
+Deque<Integer> stack = new ArrayDeque<>();
+for(int i =0;i<nums.length;i++){
+    TreeNode cur = nums[i];
+    while(!stack.isEmpty()&&stack.peek().val<cur.val){
+        cur.left = stack.pop();
+    }
+    if(!stack.isEmpty())
+        stack.peek().right=cur;
+    stack.push(cur);
+    }
+return stack.isEmpty()?null:stack.removeLast();
+```
+递归95%
+```java
+build(nums,0,nums.length-1);
+private TreeNode build(int[] nums,int start,int end){
+    if(start>end)return null;
+    int max = start;
+    for(int i =start+1;i<=end;i++){
+        max = nums[]
+    }
+    TreeNode root = new TreeNode(nums[max]);
+    root.left = build(nums,start,max-1);
+    root.right = build(nums,max+1,end);
+    return root;
+}
+```
+
 ### 伪多项式时间
 一个整数是否是素数
 ```python
@@ -60,8 +146,8 @@ public boolean isInterleave(String s1, String s2, String s3) {
     return true;
 }
 ```
----
 
+---
 ### 62 从左上角走到右下角总共有多少种不同方式
 f[m][n] = f[m-1][n]+f[m][n-1]
 简化成一维dp
@@ -90,8 +176,8 @@ for(int i =0;i<Math.min(m-1,n-1);i++){
 }
 return (int)rst;
 ```
----
 
+---
 ### 63 有障碍物的左上到右下
 dp[i][j]定义为走到i,j的方法数，障碍物则为0
 ```java
@@ -100,14 +186,14 @@ if(obs[i][j]==1)continue;//dp[i][j]=0//res[j]=0;
 
 ### 64 从左上角走到右下角的最少sum
 grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
----
 
+---
 ### 32 括号字符串中合法的括号对
 方法1. stack:栈底放-1，当栈空&&读到是')'将')'的index当栈底。每次读到')'弹栈，并更新i-peek()，因为peek为没消掉的'('的前一个位置
 方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
   从右向左扫描，同理更新max，当左括号>右括号重置0.
----
 
+---
 ### ？96 不同的BST数量
 (为什么是乘)
 ```
@@ -241,18 +327,19 @@ for i<- 1 to N
     F[v]<- max(F[v],F[v-Ci]+Wi)
 ```
 - 两个状态转移方程
-$F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=kC_i<=v}$
+$F[i,v] = max {F[i-1,v-kC_i]+kW_i|0<=kC_i<=v} $
 $F[i,v] = max(F[i-1,v],F[i,v-C_i]+W_i)$
 
 ---
 #### 多重背包 第i种物品最多Mi件可用
-$F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}
+$F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 
 ### 本福特定律
 以1为首位的数组数显的概率为30%
 
 ### 正确二分查找的写法
 1.查找范围是 [0,len-1]
+[0]：l=0,r=1-1，while(l==r)的时候应该继续
 ```java
 int l = 0,r=n-1;
 while(l<=r){
@@ -271,6 +358,7 @@ while(l<=r){
 return -1;
 ```
 2.[0,len) 保持len取不到 
+[0]:l=0,r=1,l++,while(l==r)的时候应该结束
 好处：len就是长度[a,a+len)，[a,b)+[b,c)=[a,c),[a,a)是空的
 ```java
 int l = 0,r = n;
@@ -404,8 +492,8 @@ return cnt;
 ```
 {{1,3},{2,5},{4,7},{6,9}}输出2还是3？
 ```
----
 
+---
 ### 402 去掉数字串中k个数字留下最小的数字
 Input: num = "1432219", k = 3
 Output: "1219"
@@ -426,8 +514,8 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
     stack[top++]=num.charAt(i);
 }
 ```
----
 
+---
 ### 欧拉图：一笔画
 经过所有顶点、所有边的**闭路径**（边不重复，允许顶点重复）
 
@@ -449,8 +537,8 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 
 充分条件：
 满足： 是哈密顿图
----
 
+---
 ### 236 最低的二叉树公共祖先
 终止条件`root==null|root==q||root=p`
 1. 在左/右子树找p|q，两边都能找到一个值（因为值不重复） 则返回当前root
@@ -467,7 +555,7 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 ### 139 word break
 1.状态：boolean[n+1]长度为i的前缀能否由字典组成
 2.初始值：[0]=true 空字符串
-3.转移方程if(dp[i]==true&&dic.contains(sub(i,i+j)))dp[i+j]=true
+3.转移方程if(dp[i]==true&&dic.contains(sub(i,i+j))) dp[i+j]=true
 4.结果
 
 ```java
@@ -518,7 +606,7 @@ return lastp==0;
 
 定义dp[i][j]用前i种硬币达到amount[j]最少的硬币数量
 用1，2，5组成11的数量=只用1,2组成11的数量+1，2，5组成[11-5]
-1. ?dp[i][j]=min(dp[i][j],dp[i-1][j-k*coin[i]]+k)：[i-1]不用这枚硬币之前能够到加上k枚i硬币达到amount[J]。需要遍历n.复杂度n\*amount^2
+1. ?dp[i][j]=min(dp[i][j],dp[i-1][j-k\*coin[i]]+k)：[i-1]不用这枚硬币之前能够到加上k枚i硬币达到amount[J]。需要遍历n.复杂度n\*amount^2
 2.不需要遍历几枚硬币dp[i][j]=min(dp[i][j],dp[i][j-coin[i]]+1).复杂度n\*amount 降成了一维。dp[i]=dp[i-coin[i]]+1
 基础：dp[amount] 当amount=0时，dp=0;当coin有1时dp[i]=i
 
@@ -603,7 +691,7 @@ from1 to3 cost800 18:00 21:00
 
 ---
 ### 16支队伍两两获胜概率已知求冠军概率1/8->1/4->1/16
-A进入1/8只需要打败B，A进入1/4需要P(A进入1/8)*(P(C进入1/8)*P(A赢了C)+P(D进入1/8)*P(A赢了D))
+A进入1/8只需要打败B，A进入1/4需要P(A进入1/8)\*(P(C进入1/8)\*P(A赢了C)+P(D进入1/8)\*P(A赢了D))
 A进入1/2需要赢没比过的另外4个队
 A变成冠军需要赢没比过的另外8个队
 分组问题：如果1/4赛 1234 5678是一组4个是一组
@@ -753,6 +841,7 @@ int fib(int n){
     return memo[n];
 }
 ```
+
 ---
 ### 11 数组index当底边，值当杯子两侧，最大面积
 
@@ -848,7 +937,7 @@ public void decreaseCount(HashMap<String, Integer> curDict, String key) {
 }
 }
 ```
-{% endfold%}
+{% endfold %}
 
 ### ?3 连续最长不重复子序列
 两指针i从左向右遍历到最后
@@ -1050,6 +1139,7 @@ public static int highestOneBit(int i) {
 A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。
 1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)
 2.因为1,2...和2,1...是一样的，所以可以降为$2^n$
+状态压缩
 
 ### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
 {3，9，1，2}
@@ -1292,18 +1382,23 @@ if(slow==fast){
 ```
 
 ## 160 链表相交于哪一点
+```
 A:          a1 → a2
                    ↘
                      c1 → c2 → c3
                    ↗            
 B:     b1 → b2 → b3
+```
 思路1：计算len(a),len(b)，a长则a一直跳到len(a)==len(b)再开始比较.val
 思路2：将a,b连成m+n长的链表遍历两遍
-      a1 → a2  c1 → c2 → c3 -null- b1 → b2 → b3  c1 → c2 → c3
-             // ↘
-             //   c1 → c2 → c3
-              // ↗            
-      b1 → b2 → b3  c1 → c2 → c3 -null- a1 → a2  c1 → c2 → c3
+```
+  a1 → a2  c1 → c2 → c3 -null- b1 → b2 → b3  c1 → c2 → c3
+         // ↘
+         //   c1 → c2 → c3
+          // ↗            
+  b1 → b2 → b3  c1 → c2 → c3 -null- a1 → a2  c1 → c2 → c3
+```
+
 {% fold %}
 ```java
 public class Solution {

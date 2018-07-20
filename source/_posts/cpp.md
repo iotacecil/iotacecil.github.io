@@ -3,6 +3,9 @@ title: cpp
 date: 2018-04-23 08:59:30
 tags:
 ---
+### resigter 寄存器变量
+存放在寄存器中，调用时直接从寄存器中取出参加运算。
+
 ### STL
 ![STL](/images/STL.jpg)
 

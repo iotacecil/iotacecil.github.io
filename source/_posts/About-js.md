@@ -3,6 +3,9 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+## chrome 技巧
+截图：ctrl+shift+P Captrue full size screenshot
+
 ## Web Component 用法
 
 ## Webview loadUrl
