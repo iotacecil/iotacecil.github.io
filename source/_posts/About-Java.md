@@ -4,6 +4,8 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: java
 ---
+
+
 String+" "原来的string还是在的 要等垃圾回收
 ### 被动加载和主动加载
 final static List<Dish> menu = Arrays.asList{} 

@@ -110,11 +110,11 @@ function Compile(el,vm) {
 ```
 4. 订阅器：接受更新重新渲染
  1. 订阅器[fn1,fn2]方法集合
- ```js
+ ```javascript
  function Dep() {this.subs =[]}
  ```
  2. 订阅器添加方法、订阅器中方法全部执行(约定订阅"update方法")
-```js
+```javascript
 Dep.prototype.addSub= function (sub) {
   this.subs.push(sub)
 }
@@ -126,13 +126,13 @@ Dep.prototype.notify= function () {
 5. 订阅者（Dep数组中的方法类，被激活的方法类)
  1. 在观察者Observer中注册`let dep = new Dep()`
  2. 订阅事件在渲染Compile中
- ```js
+```javascript
  new Watcher(vm,RegExp.$1,function (newVal) {
           item.textContent = text.replace(reg,newVal)
         })
- ```
+```
  3. 定义watcher并添加到订阅中
- ```js
+```javascript
  function Watcher(vm,exp,fn) {
     this.fn = fn
     this.vm= vm
@@ -146,7 +146,7 @@ Dep.prototype.notify= function () {
     })
     Dep.target=null
 }
- ```
+```
  4. 调用get方法更新时添加`Dep.target&&dep.addSub(Dep.target)`
  5. 在set中执行订阅器中所有watcher的方法`dep.notify()`
  ```js

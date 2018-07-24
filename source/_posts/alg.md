@@ -8,7 +8,144 @@ tags: [alg]
 
 ### RMQ
 
-### 654
+### 279完美平方数？？？
+
+### 198
+
+### 174 骑士从左上到右下找公主，求初始血量
+dp[i][j]表示到i,j的最少血量，因为右下角一格也要减
+dp[n-1][m],dp[n][m-1]=1表示走完了右下角还剩下1点血
+dp[0~n-2][m]和dp[n][0~m-2]都是非法值，为了取min设置MAX_VALUE
+```java
+dp[i][j]=Math.max(1,Math.min(dp[i+1][j],dp[i][j+1])-dungeon[i][j]);
+```
+
+### lt 254 2个鸡蛋从n层楼中找到可以丢碎鸡蛋的楼层，最少几次
+1.只能从低往高试，碎了鸡蛋就-1
+2.第一次选择楼层n，再向上跳n-1层，再n-2层
+假如100层的楼，
+$n+(n-1)+(n-2)+...+1>=100$->$(n+1)n/2>=100$ ->n=14
+第一次从n层楼投没破，则需要再跳一段再投，cnt++，
+当在 n层破了，则需要搜索1~n-1层。
+为了平衡向上跳一大格和单步搜索，
+**minimize max regret**
+所以每次往上跳一大格应该缩短破了之后搜索的间隔，弥补一下cnt的计算。
+每次跳一大格，减少单步搜索的次数。
+
+第一次跳到14，如果没破，搜索1~13，在13层破，则最坏情况14步
+如果最坏情况跳了14步到达100层破了，跳了14步。
+
+假如10层：策略：
+$(1+n)\*n/2>=10$
+```python
+print(scipy.optimize.fsolve(lambda x: x**2 + 2*x - 20, 0))
+```
+输出3.58所以4,即4步就能把10层楼遍历掉 4->7->9->10
+
+```java
+if(n==1||n==2)return n;
+long ans = 0;
+//死循环之后外面不需要return语句了
+for(int i =1;;i++){
+    ans+=(long)n;
+    if(ans>=(long)n)
+        return i;
+}
+```
+
+### lt 584 m个蛋，n层楼最少次数
+
+
+
+
+### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
+226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
+1递归：8%
+```java
+Map<String,Integer> map = new HashMap<>();
+public int numDecodings(String s){
+    if(s.length()<1)return 1;
+    if(map.containsKey(s))return map.get(s);
+    if(s.charAt(0)=='0')return 0;
+    if(s.length()==1)return 1;
+    w = numDecodings(s.substring(1));
+    int pre2 = Integer.parseInt(s.substring(0,2));
+    if(pre2<=26){
+        w+=numDecodings(s.substring(2));
+    }
+    map.put(s,w);
+    return w;
+}
+```
+2递归改成index 63%
+```java
+public int numDecodings(String s){
+    return help(s,0,s.length()-1);
+    }
+private int help(String s,int l,int r){
+    if(l>s.length()-1)return 1;
+    if(s.charAt(0)=='0')return 0;
+    if(l>=r)return 1;
+    w = help(s,l+1,r);
+    int pre2 = (s.charAt(l)-'0')*10+s.charAt(l+1)-'0';
+    if(pre2<=26){
+        w+=help(s,l+2,r);
+    }
+    map2.put(l,w);
+    return w;
+}
+```
+3.dp[i]表示s[0..i]的解码方式？？？
+dp[0]=1
+226->s['2']->dp[1]=dp[0]=1
+   ->s['2']->s['22']->dp[2]=dp[1]+dp[0]=2
+   ->s['6']->s['26']->dp[3]=dp[2]+dp[1]=3
+
+102
+当s[i]合法,dp[i]=dp[i-1], dp[1]=dp[0]
+当s[i][i-1]合法dp[i]=dp[i-2] ,dp[2]=dp[0]
+当s[i-1]s[i]合法，dp[i]=dp[i-1]+dp[i-2]
+
+### 343 整数分割求乘积最大值
+```java
+int[] memo;
+public int IntegerBread(int n){
+    memo = new int[n+1];
+    return ib(n);
+}
+private int ib(int n){
+    if(memo[n]!=0)return memo[n];
+    if(n==1)return 1;
+    int res = -1;
+    for(int i=1;i<n;i++){
+        res = Math.max(res,Math.max(i*(n-i),i*ib(n-i)));
+        memo[n]=res;
+    }
+    return res;
+}
+```
+dp：
+```java
+dp[i] = Math.max(dp[i],Math.max(j*(i-j),j*dp[i-j]));
+```
+
+### 435 去掉最少区间使区间不重叠
+```java
+Arrays.sort(intervals,(a,b)->{a.end!=b.end?(a.end-b.end):(a.start-b.start)});
+```
+性能很慢44ms
+换 提升到2ms 打败了100%
+```java
+Arrays.sort(intervals,new Comparator<Inteval>(){
+    public int compare(Interval a,Interval b){
+        if(a.start==b.start)return a.end-b.end;
+        return a.start-b.start;
+    }
+})
+```
+
+算法：按start排序，如果重叠了，end更新成min(end1,end2)
+
 
 ### 671 根的值<=子树的值的二叉树中的第二小元素
 ```
@@ -227,6 +364,8 @@ return dp[n];
        / \
 [1~k-1]  [k+1,n] 与上一层的构建过程是一样的
 ```
+
+---
 
 ### 背包9讲:
 #### 01背包
@@ -1114,8 +1253,6 @@ while(i<j){
 rst[1]=j;
 ```
 
-### ？698 减枝？DP方法 
-
 ### 239
 Monotonic queue 前后可以修改o(1)，并且可以随机访问
 维护一个单调递减的序列，读一个窗口输出单调队列的first
@@ -1135,16 +1272,65 @@ public static int highestOneBit(int i) {
 }
 ```
 
-## 464 博弈
+---
+### 464 博弈
 A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。
 1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)
 2.因为1,2...和2,1...是一样的，所以可以降为$2^n$
 状态压缩
 
+1. 子状态，m个数state[m+1]表示visited
+2. 记忆化递归key是子状态，`Arrays.toString(state)`
+3. 遍历state中还是0的没选的数，
+    如果d-i选这个数赢了或者另一个人递归d-i的子问题不能赢，
+    更新map中这个state为true，可以先state[i]=0回溯return true到之前的选择(上一层递归)
+    ```java
+    if(d-i<0||!canwin(d-i,hmap)){
+        hmap.put(key,true);
+        state[i]=0;
+        return true;
+    }
+    ```
+    如果对方赢了，不选这个state[i]=0，继续尝试循环中其它state
+   如果所有的state都试过了也不行，说明当前子问题
+   `hamp.put(key,false)`,`return false`
+
+优化19ms：用二进制存一个int表示状态 用`byte[i<<M+1]`记忆化
+```java
+int byte[] m_;
+m = new byte[1<<M+1];
+```
+遍历M个数
+```java
+if(state&(1<<i)>0)continue;
+if(!canwin(d-i,state|(1<<i))){
+    m_[state]=1;
+    return true;
+}
+```
+出循环，表示这个状态不行
+```java
+m_[state]=-1;
+return false;
+```
+- 优化2：如果用byte[1<<M] 遍历0~M ,`canwin(d-i+1,state|(1<<i))`只需要15ms
+
+1左移i位`int mask=1<<i`表示选这个数的状态
+如果`(mask&visited)==0`表示没使用过这个数
+另一个玩家能不能赢的state：`mask|visited` 在visited（上一个状态）的基础将i位也置1
+
+---
+### ？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种
+
+
+
+### 698 将数组分成sum相等的k份
+
+
 ### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
 {3，9，1，2}
 1. 二维数组dp：`[i][j]`只用右上三角表示两个人都从list取1个数，2个数，3个数到list长能获得的最大差值
-1. 填对角线，如果两个人只身下一个数为3：{A取3，B取0}，剩下9：{A取9，B取0}...
+1. 填对角线，如果两个人只剩下一个数为3：{A取3，B取0}，剩下9：{A取9，B取0}...
 2. 如果剩下2个数，剩下{3,9}`[1][2]`：{A取9，B剩下{3}回到1的情况}...
 3. 如果剩下3个数，剩下{3,9,1}`[1][3]`:{A取3,B剩下{9,1}即表格`[2][3]`的情况}
 4. 剩下4个数，填`[1][4]`即为答案
@@ -1161,7 +1347,7 @@ int dif(int[] nums,int left,int right){
     return max(nums[left]-dif(nums,left+1,right),nums[right]-dif(nums,left,right+1));
 }
 ```
-用一个数组存储key是`left*len+right`
+用一维数组存储key是`left*len+right`
 {% fold %}
 ```java
 int[] m;
@@ -1182,7 +1368,7 @@ private int help(int[] nums,int l,int r){
 ```
 {% endfold %}
 
-### 292 
+### 292每个人可以拿1-3块石头，拿到最后一块的赢，所有4的倍数的情况先手不能赢 
 
 
 

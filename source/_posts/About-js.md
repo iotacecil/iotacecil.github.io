@@ -3,6 +3,38 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### nodejs 单线程
+IO密集：静态资源（文件），网络，数据库
+Event loop主进程是单线程，I/O等操作系统多线程调用。
+nojs有cluster模块可以在每个核启一个进程不会浪费cpu
+
+### 移动端自适应
+1.css像素即逻辑像素。
+一般屏幕【设备像素比】1：1，一个逻辑像素对应一格设备物理像素
+Retina屏幕，1：2，一个逻辑像素需要4个物理像素表示
+2.viewport分三类
+layout viewport 整个网页
+visual viewport 在手机上拖动显示的网页的一部分
+ideal viewport 手机的宽和高
+`content="width=device-width"`让layout==手机的ideal 手机自动铺满
+3.rem：em是相对于父级元素计算大小，rem相对于root element
+
+用viewport和设备像素比可以调整基准像素
+
+### spa的好处
+不用每次请求消耗dns tcp等接口相应时间。单页面只有接口耗费的时间。
+Prerender可以优化SEO
+
+#### 实现
+1.History api
+  pushState
+  onpopstate
+2.Hash
+  hashchange
+  location.hash
+
+
+gulp不用io流式处理 比grunt晚出现
 ## chrome 技巧
 截图：ctrl+shift+P Captrue full size screenshot
 
@@ -58,7 +90,7 @@ server{
   server_name test.com;
   http2_push_preload on;
 }
-````
+```
 nodejs
 ```javascript
 if(request.url === '/'){
