@@ -14,6 +14,8 @@ tags: [alg]
 
 ### 207 先修课程有环则返回false
 
+### kolakoski序列找规律
+![kolakoski](/images/kolakoski.jpg)
 
 ### !!!114原地将二叉树变成链表
 1.入栈迭代40%
