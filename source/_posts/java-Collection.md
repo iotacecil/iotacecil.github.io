@@ -246,6 +246,13 @@ map.merge(1,"222",(oldv,newv)->oldv+newv);
 ### TreeMap
 
 ### HashMap 数组+链表+（链表长度达到8，会转化成红黑树）
+> Ideally, under random hashCodes, the frequency of nodes in bins follows a **Poisson distribution**with a parameter of about 0.5 on average for the default resizingthreshold of 0.75,
+> 负载因子0.75的清空下，bin满足泊松分布(exp(-0.5) * pow(0.5, k) /factorial(k)). 
+> 落在0的桶的概率有0.6
+
+
+> 用树存储冲突hash when bins contain enough nodes to warrant use`TREEIFY_THRESHOLD = 8;`
+
 1. 计算hash值 【扰动函数】
 ```java
 static final int hash(Object key) {
@@ -253,22 +260,35 @@ static final int hash(Object key) {
     return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
 }
 ```
-    65536(2^16)>>>16 ==1
-    1. ***table uses power-of-two masking***
-        + 为了用`&2^n-1`取模 2^n的table长不是素数很容易冲突
-    2. ***spreads the impact of higher bits downward**
-        + int类型自带hashCode范围-2147483648到2147483648
-        + `i = (n - 1) & hash` 插入位置 n-1=15是1111低位掩码高位归零
-        + int长32`>>>16`是int的高16位，低16与高16位`^`,混合hash的高位低位
-        {% note %}
-        `key1=0ABC0000 & (16-1) = 0`（8个16进制数，共32位）
-        `key2=0DEF0000 & (16-1) = 0`
-        hashcode的1位全集中在前16位。key相差很大的pair，却存放在了同一个链表
-        把hashcode的“1位”变得“松散”，比如，经过hash函数处理后，0ABC0000变为A02188B，0DEF0000变为D2AFC70
-        {% endnote %}
+实验：
+```java
+int a = (65535<<2)+1;
+//262141 111111111111111101
+System.out.println(a+" "+Integer.toBinaryString(a));
+//32是表长
+int hash=a^(a>>>16);
+//输出：11 反转最后两位 
+//扰动(如果>65536，右移16位) 
+//低16与高16位`^`,混合hash的高位低位
+System.out.println(Integer.toBinaryString(a>>>16));
+int index = (32-1)&hash;
+/*
+111111111111111110
+11111//只取了低位
+-------------
+11110->30
+*/
+System.out.println(Integer.toBinaryString(hash));
+System.out.println(Integer.toBinaryString(31));
+System.out.println("-------------");
+System.out.println(Integer.toBinaryString(index));
+//262142 30
+System.out.println(hash+" "+index);
+```
 2. `put(K key, V value) {return putVal(hash(key), key`
 3. `putVal`
 ```java
+ n = (tab = resize()).length;
  if ((p = tab[i = (n - 1) & hash]) == null)//n=length=16
             tab[i] = newNode(hash, key, value, null);
 ```
@@ -278,6 +298,20 @@ static final int hash(Object key) {
     treeifyBin(tab, hash);//变成红黑树
 ```
 `TreeNode<K,V> extends LinkedHashMap.Entry<K,V>`
+65536(2^16)>>>16 ==1
+1. ***table uses power-of-two masking***
+- 为了用`&2^n-1`取模 2^n的table长不是素数很容易冲突
+2. ***spreads the impact of higher bits downward**
+* int类型自带hashCode范围-2147483648到2147483648
+* `i = (n - 1) & hash` 插入位置 n-1=15是1111低位掩码高位归零
+* int长32`>>>16`是int的高16位，低16与高16位`^`,混合hash的高位低位
+{% note %}
+`key1=0ABC0000 & (16-1) = 0`（8个16进制数，共32位）
+`key2=0DEF0000 & (16-1) = 0`
+hashcode的1位全集中在前16位。key相差很大的pair，却存放在了同一个链表
+把hashcode的“1位”变得“松散”，比如，经过hash函数处理后，0ABC0000变为A02188B，0DEF0000变为D2AFC70
+{% endnote %}
+
 
 ### Hashtable 数组加链表没用二叉树
 数据结构一样的名字不同：

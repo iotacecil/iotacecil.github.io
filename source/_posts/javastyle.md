@@ -5,6 +5,7 @@ tags: [java]
 category: java
 ---
 ### String
+String+" "原来的string还是在的 要等垃圾回收
 必用方法：
 1.`char[] toCharArray()`
 ```java

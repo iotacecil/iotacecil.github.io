@@ -4,6 +4,16 @@ date: 2018-07-05 13:20:56
 tags:
 ---
 ### redis 高速缓存集群
+解除docker集群 `docker swarm leave -f`
+查看docker内的网络`docker network ls`
+
+拉镜像
+`docker pull yyyyttttwwww/redis`
+创建容器
+`docker run -it -d --name r1 -p5000:6379 --net=net2 --ip 172.19.0.2 redis bash`
+进入容器
+`docker exec -it r1 bash`
+修改redis配置文件`/usr/redis/redis.conf`
 
 
 

@@ -6,7 +6,7 @@ category: java
 ---
 
 
-String+" "原来的string还是在的 要等垃圾回收
+
 ### 被动加载和主动加载
 final static List<Dish> menu = Arrays.asList{} 
 import static A.menu;
@@ -255,7 +255,6 @@ Color.yellow.getColor();
 也可以单独定义方法
 
 ### 添加抽象方法，每个对象要都实现
-
 
 `.getBytes('iso8859-1')`以iso编码读
 `new String(,"gb2312")`
@@ -581,8 +580,6 @@ try(DirectoryStream<Path> entries = files.newDirectoryStream(dir)){
 #### Map的方法
 put putAll
 
-String像数组一样取值 .charAt(i)
-- 
 ```java 
 @Native public static final int   MAX_VALUE = 0x7fffffff;
 ```
@@ -604,6 +601,7 @@ String像数组一样取值 .charAt(i)
             } 	
      //直到下一个匹配的继续for中内容
 ```
+
 ```java
 /*
 @param source:左值（被查找）
