@@ -8,14 +8,99 @@ tags: [alg]
 
 ### RMQ
 
+### 46 permutations
+O(2^n)复杂度 3ms
+```java
+if(tmp.size()==nums.length){         
+    rst.add(new ArrayList<Integer>(tmp));
+    return;
+}
+```
+一定要复制一份tmp，不然tmp是对象最后tmp会被remove为空
+```java
+for(int i =0;i<nums.length;i++){
+    if(tmp.contains(nums[i]))continue;
+    tmp.add(nums[i]);
+    help(rst,nums,tmp);
+    tmp.remove(tmp.size()-1);
+}
+```
+O(n!)复杂度
+
 ### 279完美平方数？？？
 
 ### 198
 
-### 207 先修课程有环则返回false
+### 164 桶排序找区间最大值
+
+### 494 在数字中间放正负号使之==target
+递归的2种写法另一种void用全局变量累加
+？？为什么递归中不能写`dfs(idx++)`
+O(2^n)
+```java
+private int dfs(int[] nums,int S,int idx){
+    if(idx == nums.length){
+        if(S==0)return 1;
+        else return 0;
+    }
+    int cnt =dfs(nums, S+nums[pos], pos+1)+dfs(nums, S-nums[pos], pos+1);
+    return cnt;
+}
+```
+53% 
+优化记忆化：用当前的idx和当前的S当key 注意如果用`String key=idx+""+S`有一个case会报错，应该是数字大的时候混淆了。
+sum不会超过1000所以`Integer key = idx*10000+S`就可以通过。
+
+dp??：
+所有可能的target最大值是全部正号sum(a),或者全部负号）dp[2\*sum(a)+1]
+题目sum最大2k，则dp[4001]
+
+
+
+
+
+
+### ?207 先修课程有环则返回false
+56% 有可以优化到100%4ms的方法
+1.邻接表存储课程依赖图L
+```java
+List[] graph_;
+public boolean canFinish(int numCourses, int[][] prerequisites) 
+    graph_ = new ArrayList[numCourses];
+    for(int i =0;i<numCourses;i++)
+    {graph_[i] = new ArrayList<Integer>();}
+    for(int[] back:prerequisites){
+        int pre = back[0];
+        int lesson = back[1];
+        graph_[lesson].add(pre);
+    }
+```
+2.定义状态`int[] visit = new int[numCourses];`
+3.dfs每个顶点
+```java
+for(int i =0;i<numCourses;i++){
+    if(hasCircle(i,visit))return false;
+}
+return true;
+```
+4.dfs 
+```java
+boolean hasCircle(int idx,int[] visited){
+    if(visited[idx]==1)return true;
+    if(visited[idx]==2)return false;
+    List<Integer> neib = graph_[idx];
+    for(int i:neib){
+        if(hasCircle(i,visited))return true;
+    }
+    visited[idx]=2;
+    return false;
+}
+```
 
 ### kolakoski序列找规律
 ![kolakoski](/images/kolakoski.jpg)
+
+#### lc481 返回kolakoski前N中有几个1
 
 ### !!!114原地将二叉树变成链表
 1.入栈迭代40%
