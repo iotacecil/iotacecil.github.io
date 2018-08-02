@@ -60,8 +60,29 @@ reverse(rev_post(root));
 ### 753 输出能包含所有密码可能性的最短串
 > Input: n = 2, k = 2
 > Output: "00110" 包含了00,01,10,11
-[官方解](https://leetcode.com/problems/cracking-the-safe/solution/)
 
+[官方解](https://leetcode.com/problems/cracking-the-safe/solution/)
+[de Bruijn Card Trick](https://www.youtube.com/watch?v=EWG6e-yBL94)
+1. 方法1
+![hamilton](/images/lc753.jpg)
+每个点1次
+写出n个数的组合(11,12,22,21) 并找出哈密尔顿路径
+2. 方法2 
+![euler](/images/lc7532.jpg)
+每条边1次
+写出(n-1)个数的组合(1,2) 的完全图，找出欧拉环路(circuit)。de Bruijn 序列的数量为欧拉环的数量。
+用k个数字，长度有n的组合有$k^n$种，但是因为可以首尾相连，总共de Bruijn的数量是
+$\frac{k! k^{n-1}}{k^n}$
+3. 方法3 用不重复的最小字典序Lyndon Word
+例子：
+1.列出所有长度为4的组合1111,1112...以及能被4整除的长度(1,2)的组合1,2,11,22.
+2.所有按字典序排序
+3.去除所有旋转之后相同的组合，只保留字典序最小的：01和10只保留01
+> n = 6, k = 2
+> 0 000001 000011 000101 000111 001 001011 001101 001111 01 010111 011 011111 1
+4. 连起来就是最小的de Bruijin sequence
+
+#### Inverse Burrows-Wheeler Transform (IBWT) 生成 Lyndon words.  
 
 ### 332 欧拉路径 每条边一次
 (这道题不用判断)
