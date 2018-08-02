@@ -199,8 +199,13 @@ empls.add(new Employee(...)); //可以在管理员列里添加普通成员
         return result;
     }
     ```
-4. 泛型类数组`Entry<String,Integer>[]`是合法的，但是初始化要@SuppressWarnings("unchecked")
+4. 泛型数组`Entry<String,Integer>[]`是合法的，但是初始化要@SuppressWarnings("unchecked")
 正确方法：`ArrayList<Entry<String,Integer>>`
+
+```java
+//可以
+List<Integer>[] gen = (List<Integer>[]) new ArrayList[10];
+```
 
 ## 异常
 ![throwable](/images/throwable.jpg)

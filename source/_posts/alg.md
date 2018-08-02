@@ -8,6 +8,107 @@ tags: [alg]
 
 ### RMQ
 
+
+### 106 中序+后序建树
+
+### 145 后序遍历二叉树 
+1. 函数式编程 不用help函数（可变数组），复制数组
+{% fold %}
+```java
+public List<Integer> post(TreeNode root){
+    List<Integer> list = new ArrayList<>();
+    if(root==null)return list;
+    List<Integer> left = post(root.left);
+    List<Integer> right = post(root.right);
+    list.addAll(left);
+    list.addAll(right);
+    list.add(root.val);
+    return list;
+}
+```
+{% endfold %}
+原理：
+```python
+rev_post(root):
+    # 全部反过来刚好是后序遍历
+    print(root->val);
+    rev_post(root->right)
+    rev_post(root->left)
+reverse(rev_post(root));
+```
+
+方法1：
+```java
+ public List<Integer> postorderTraversal(TreeNode root) {
+        LinkedList<Integer> list = new LinkedList<>();
+         if(root==null)return list;
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        stack.push(root);
+        while(!stack.isEmpty()){
+            root = stack.pop();
+            list.addFirst(root.val);
+            if(root.left!=null)stack.push(root.left);
+            //下一次poll出的是右子树
+            if(root.right!=null)stack.push(root.right);
+        }
+        // 如果使用ArrayList 1%
+        //Collections.reverse(list);
+        return list;
+    }
+```
+
+### 753 输出能包含所有密码可能性的最短串
+> Input: n = 2, k = 2
+> Output: "00110" 包含了00,01,10,11
+[官方解](https://leetcode.com/problems/cracking-the-safe/solution/)
+
+
+### 332 欧拉路径 每条边一次
+(这道题不用判断)
+只有1个点入度比出度少1（起点）&& 只有一个点入度比出度多1（终点）其余点入度==出度
+
+#### Hierholzer：O(e)
+删除边`e(u,v)`，并`dfs(v)`，不断寻找封闭回路，
+
+> 从v点出发一定会回到v。因为入度出度相等。虽然可能不包含所有点和边。
+> 总是可以回到以前的点，从另一条路走，把其它所有的边全部遍历掉。
+
+**不是拓扑排序，拓扑排序每个点仅1次**
+![Hierholzer](/images/Hierholzer1.jpg)
+path里加入{0},{2}头插法{2,0}//保证远的在后面
+dfs回到1，继续找封闭回路
+![Hierholzer](/images/Hierholzer2.jpg)
+
+> Input: tickets = [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+> Output: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+
+1. 用hashmap记录每个点的出度的点，建图
+2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
+```java
+public List<String> findItinerary(String[][] tickets){
+    Map<String,PriorityQueue<String>> graph = new HashMap<>();
+    List<String> rst = new ArrayList<>();
+    for(String[] edge:tickets){
+        graph.putIfAbsent(edge[0],new PriorityQueue<>());
+        graph.putIfAbsent(edge[1],new PriorityQueue<>());
+        map.get(edge[0]).add(edge(1));
+    }
+    dfs("JFK",rst,graph);
+    return rst;
+}
+private void dfs(String s,List<String> rst,Map<String,PriorityQueue<String>>graph){
+    PriorityQueue<String> edge = graph.get(s);
+    if(edge!=null&&!edge.isEmpty()){
+        dfs(edge.poll(),rst,graph);
+    }
+    rst.addFirst(s);
+}
+```
+后序遍历stack：
+```java
+
+```
+
 ### 46 permutations
 O(2^n)复杂度 3ms
 ```java

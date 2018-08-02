@@ -19,7 +19,8 @@ tags:
 
 #### 树存储结构
 1.`rank[n],data[n],parent[n]`,空间O(n)
- 时间：1.访问父节点`parent()` O(1) 
+ 时间：
+    1. 访问父节点`parent()` O(1) 
     2. `root()`一直沿着`parent[]`到-1 O(n),可以将根放在`rank[0]`变成O(1)
     3. 但是找长子O(n)遍历`rank[i]`的parent 兄弟节点也是O(n)
 2. 将`parent[]`变成指针`child[n]`，指向子节点，子节点的查找效率是度数，但是查找parent变成O(n)
@@ -28,7 +29,7 @@ tags:
 
 #### 二叉树
 1. 每一层$2^k$个节点
-2. 树的节点数 $h<n<2^{h+1}$
+2. 树的节点数 $h< n<2^{h+1}$
 3. 为简化算法思考，为叶子节点加上2个子节点(null)，将每个节点补齐度为2
 ```
 BinNode:
@@ -37,6 +38,7 @@ lchild parent rchild
 height npl(左氏堆) color
 size
 ```
+
 1. 插入左/右孩子
 ```cpp
 //data和父节点
@@ -79,15 +81,15 @@ int BinTree<T> ::updateHeight(BinNodePosi(T) x){
     return x->height = 1+max(stature(x->lChild),stature(x->rChild));
 }
 ```
-更新了x节点的高度，x的父节点们的高度也高更新O(n=depth(x))
-```cpp
-template<typename T>
-void BinTree<T>:: updateHeightAbove(BinNodePosi(T) x){
-    while(x){
-        updateHeight(x);x= x->parent;
+    更新了x节点的高度，x的父节点们的高度也高更新O(n=depth(x))
+    ```cpp
+    template<typename T>
+    void BinTree<T>:: updateHeightAbove(BinNodePosi(T) x){
+        while(x){
+            updateHeight(x);x= x->parent;
+        }
     }
-}
-```
+    ```
 5. 节点插入
 ```cpp
 template <typename T> BinNodePosi(T)

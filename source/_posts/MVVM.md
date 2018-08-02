@@ -166,7 +166,7 @@ Dep.prototype.notify= function () {
   new Watcher(vm,RegExp.$1,function (newVal) {
           item.textContent = text.replace(reg,newVal)
         })
- ```
+```
 
 ====效果：
 1.myvue.b放入队列
