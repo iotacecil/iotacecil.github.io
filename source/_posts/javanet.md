@@ -3,6 +3,300 @@ title: javanet
 date: 2018-03-11 23:05:52
 tags: [javaNet,java]
 ---
+### 1.前后台json格式
+```java
+class Result<T> {
+    private int code;
+    private String msg;
+    private T data;
+}
+```
+为实现controller中的返回：
+```java
+@RequestMapping("/hello")
+    @ResponseBody
+    public Result<String> hello() {
+        return Result.success("hello");
+       // return new Result(0, "success", "hello");
+    }
+```
+给Result添加静态方法和对应的构造函数
+```java
+public static <T> Result<T> success(T data){
+    return new Result<T> (data)
+}
+private Result(T data){
+    this.code = 200;
+    this.message = "success";
+    this.data = data;
+}
+```
+封装错误信息类，用于生成各种各样的错误信息（枚举类？）
+```java
+return Result.error(CodeMsg.SERVER_ERROR);
+```
+
+### 2.配置文件配置项
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#common-application-properties
+aplication.properties
+```proerties
+spring.thymeleaf.cache=false
+spring.thymeleaf.content-type=text/html
+spring.thymeleaf.enabled=true
+spring.thymeleaf.encoding=UTF-8
+spring.thymeleaf.mode=HTML5
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+```
+controller返回页面
+```java
+@RequestMapping("/hel")
+public String  thymeleaf(Model model) {
+    //写入model的属性可以在页面中取到
+    model.addAttribute("name", "名字");
+    //找的是prefix+hello+sufix ->/templates/hello.html
+    return "hello";
+}
+```
+hello.html
+```html
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="'hello:'+${name}" ></p>
+</body>
+</html>
+```
+
+### 3. Mybatis
+
+```
+mybatis.type-aliases-package=package.model
+#下划线转驼峰
+mybatis.configuration.map-underscore-to-camel-case=true
+mybatis.configuration.default-fetch-size=100
+mybatis.configuration.default-statement-timeout=3000
+mybatis.mapperLocations = classpath:package/dao/*.xml
+```
+数据源druid
+```xml
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.0.5</version>
+</dependency>
+```
+```
+spring.datasource.url=jdbc:mysql://:3306/datasets?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+spring.datasource.filters=stat
+spring.datasource.maxActive=2
+spring.datasource.initialSize=1
+spring.datasource.maxWait=60000
+spring.datasource.minIdle=1
+spring.datasource.timeBetweenEvictionRunsMillis=60000
+spring.datasource.minEvictableIdleTimeMillis=300000
+spring.datasource.validationQuery=select 'x'
+spring.datasource.testWhileIdle=true
+spring.datasource.testOnBorrow=false
+spring.datasource.testOnReturn=false
+spring.datasource.poolPreparedStatements=true
+spring.datasource.maxOpenPreparedStatements=20
+```
+新建数据库并添加user表
+新建domain对象
+```java
+public class User {
+    private int id;
+    private String name;
+}
+```
+新建dao层interface UserDao
+```java
+@Mapper
+public interface UserDao { 
+    @Select("select * from user where id = #{id}")
+    public User getById(@Param("id")int id  );
+}
+```
+写service
+```java
+@Service
+public class UserService {  
+@Autowired
+UserDao userDao;
+
+public User getById(int id) {
+     return userDao.getById(id);
+}
+```
+添加到controller
+```java
+@Autowired
+UserService userService;
+@RequestMapping("/db/get")
+@ResponseBody
+public Result<User> dbGet() {
+    User user = userService.getById(1);
+    return Result.success(user);
+}
+```
+测试事务：数据库中已经有id=1的数据，连插入id=2，id=1的数据，如果能回滚就行
+dao:
+```java
+@Insert("insert into user(id, name)values(#{id}, #{name})")
+public int insert(User user);
+```
+service:
+```java
+//注解注释掉 报错但插入了id=2
+@Transactional
+public boolean tx() {
+    User u1= new User();
+    u1.setId(2);
+    u1.setName("2222");
+    userDao.insert(u1);
+    
+    User u2= new User();
+    u2.setId(1);
+    u2.setName("11111");
+    userDao.insert(u2);
+    return true;
+}
+```
+controller:
+```java
+@RequestMapping("/db/tx")
+@ResponseBody
+public Result<Boolean> dbTx() {
+    userService.tx();
+    return Result.success(true);
+}
+```
+结果：
+Duplicate entry '1' for key 'PRIMARY'
+MySQLIntegrityConstraintViolationException:
+
+### 4.搭建redis服务器
+
+```shell
+cd /usr/local
+tar -zvxf 
+yum -y install gcc gcc-c++ libstdc++-devel
+make MALLOC=libc
+yum install tcl
+make test
+vi tests/integration/replication-2.tcl 1000->10000
+make install
+redis-server
+vi redis.conf
+    bind 127.0.0.1->0.0.0.0所有ip都能访问
+    :/dae
+    daemonize yes 允许后台执行
+redis-server ./redis.conf
+#Redis version=4.0.2, bits=64, commit=00000000, modified=0, pid=10217, just started
+ps -ef |grep redis
+#root     10218     1  0 10:42 ?        00:00:00 redis-server 0.0.0.0:6379
+redis-cli
+#给redis加密码
+vi redis.conf
+    :/requirepass
+     # requirepass foobared -> requirepass 123456
+#重启
+redis-cli
+    shutdown save
+    exit
+ps -ef | grep redis
+redis-server ./redis.conf
+redis-cli
+    auth 123456
+# 变成系统服务
+cd utils
+./install_server.sh
+# 配置文件位置
+    /usr/local/redis-4.0.2/redis.conf
+# log位置
+    /usr/local/redis-4.0.2/redis.log
+# data位置
+    /usr/local/redis-4.0.2/data
+# 可执行文件路径
+chkconfig --list |grep redis
+# redis_6379        0:关 1:关 2:开 3:开 4:开 5:开 6:关
+systemctl status redis_6379
+systemctl stop redis_6379
+systemctl start redis_6379
+ps -ef |grep redis
+# 改服务名
+vi /etc/init.d/redis_6379
+```
+
+### 5.集成Redis
+```xml
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.38</version>
+</dependency>
+```
+配置：
+```
+redis.host=192.168.3.109
+redis.port=6379
+redis.timeout=3
+redis.password=123456
+redis.poolMaxTotal=10
+redis.poolMaxIdle=10
+```
+新建redis包
+配置类
+```java
+@Component
+//配置里的前缀
+@ConfigurationProperties(prefix="redis")
+public class RedisConfig {
+    private String host;
+    private int port;
+    private int timeout;//秒
+    private String password;
+    private int poolMaxTotal;
+    private int poolMaxIdle;
+    private int poolMaxWait;//秒
+}
+```
+通过service提供Redis的get/set
+```java
+@Service
+public class RedisService{
+    public<T> T get(String key,Class<T> clazz){
+        JedisPoll jp = null;
+        Jedis jedis = jp.getResource();
+
+    }
+    @Bean
+    public Jedis
+}
+
+```
+
+
+---
+
 spring中自建exception类要继承RuntimeException
 只有RuntimeException才会事务回滚，继承Exception不会。
 

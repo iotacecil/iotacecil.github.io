@@ -3,6 +3,16 @@ title: mlpractice
 date: 2018-03-09 23:45:20
 tags: [alg]
 ---
+### UTC 时间戳转localtime
+```python
+# 1346844688 -> 2012-09-05 11:31:28
+Tor_user["UTCtime"] = pd.to_datetime(Tor_user['dateTaken'],unit='s')
+# 2012-09-05 11:31:28  -> 2012-09-05 07:31:28-04:00
+Tor_user["Localtime"]=Tor_user.UTCtime.dt.tz_localize('UTC').dt.tz_convert('America/Toronto')
+# 2012-09-05 07:31:28-04:00  -> 2012-09-05 07:31:28
+Tor_user["Localtime"]=Tor_user["Localtime"].apply(lambda x:x.strftime("%Y-%m-%d %H:%M:%S"))
+```
+
 ### 标签传播LP算法（基于图）
 1.半监督学习的假设：
  1）Smoothness平滑假设：相似的数据具有相同的label。

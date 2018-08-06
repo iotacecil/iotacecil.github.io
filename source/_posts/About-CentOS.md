@@ -3,6 +3,12 @@ title: About CentOS
 date: 2018-03-08 13:49:14
 tags: [CentOS]
 ---
+
+
+`ip -br addr` ip太多VB显示不下
+
+---
+
 1. perf 监视java程序上下文切换情况 windows perfmon性能监视器
 2. JDK自带的jvisualvm、jstack
 

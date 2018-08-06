@@ -3,6 +3,30 @@ title: dockermysql
 date: 2018-07-05 13:20:56
 tags:
 ---
+### CentOS7 安装mysql
+1.下载mysql源
+```shell
+yum install wget
+wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+rpm -ivh mysql-community-release-el7-5.noarch.rpm
+cd /etc/yum.repos.d/
+ll
+yum install mysql-server
+mysql -u root
+chown -R root:root /var/lib/mysql
+service mysqld restart
+mysql -u root
+```
+改密码
+```sql
+use mysql;
+# 一定要引号
+update user set password=password("root") where user="root";
+exit;
+```
+用windows连接虚拟机mysql配置
+
+
 ### redis 高速缓存集群
 解除docker集群 `docker swarm leave -f`
 查看docker内的网络`docker network ls`

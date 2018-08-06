@@ -3,6 +3,9 @@ title: problems
 date: 2018-03-09 08:39:10
 tags: [leetcode]
 ---
+
+不要把xshell的ctrl-c变成复制，不然没办法结束程序
+
 tampermonkey一直在向//cr-input.mxpnl.net发请求 
 
 ---
