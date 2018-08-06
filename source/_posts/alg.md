@@ -808,9 +808,168 @@ int rangeSum(int i,int j){
 
 方法3：归并排序
 
+#### 小和问题(右边有多少个数比它大)
+```
+1 3  4 2 5
+   /   \
+1 3 4  2 5
+  /\   
+13  4     
+```
+归并1,3得小和->+1
+归并13，4 得小和->+1,+3 并且merge好了[1,3,4]
+归并2,5 得小和->+2
+归并134,25 :
+1比右边多少个数小：2的位置是mid+1，所以通过index可以得到 小和1x2个
+p1指向3，p2指2，无小和
+p1=3 p2=5 小和3x1个
+p1=4 p2=5 小和4x1
+
+例子2
+1 3 4 5 6 7
+1比多少个数小：
+13)->1
+13)4)->1
+13)4)567)->1*3
+
+如果[p1...][p2...]
+如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+比归并排序就多这一句
+```java
+res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+```
+{% fold %}
+```java
+//数组每个数左边比当前小的数累加起来叫这个 组数的小和。
+//[1,3,4,2,5]->1 +1+3 +1 +1+3+4+2
+    public int xiaohe(int[] arr){
+        if(arr==null||arr.length<2)return 0;
+        return mergesort(arr,0,arr.length-1);
+
+    }
+    private int mergesort(int[] arr,int l,int r){
+        if(l==r)return 0;
+        int mid = l+((r-l)>>2);
+        return mergesort(arr,l,mid)+mergesort(arr,mid+1,r)+merge(arr,l,mid,r);
+    }
+//    如果[p1...][p2...]
+//    如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+    private static int merge(int[] arr,int l,int mid,int r){
+        int[] help = new int[r-l+1];
+        int i = 0;
+        int p1 = l;
+        int p2 = mid+1;
+        int res = 0;
+        while (p1<=mid&&p2<=r){
+            System.out.println(res);
+            res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+            help[i++] = arr[p1]<arr[p2]?arr[p1++]:arr[p2++];
+            System.out.println(Arrays.toString(help));
+
+        }
+        while (p1<=mid){
+            help[i++] = arr[p1++];
+        }
+        while (p2<=r){
+            help[i++] = arr[p2++];
+        }
+        for (int j = 0; j <help.length ; j++) {
+            arr[l+j] = help[j];
+        }
+        System.out.println(Arrays.toString(help));
+        return res;
+    }
+```
+{% endfold %}
+
+### !!!169 众数 Boyer-Moore Voting Algorithm 
+1.hashmap,直到有计数>n/2 break->return 11%
+2.随机数44% 因为一半以上都是这个数，可能只要循环两边就找到了
+```java
+public int majorityElement(int[] nums){
+    Random random = new Random(System.currentTimeMillis());
+    while(true){
+        int idx = random.nextInt(nums.length);
+        int choose = nums[idx];
+        int cnt = 0;
+        for(int num:nums){
+            if(num==cur&&++cnt>nums.length/2)return num;
+        }
+    }
+}
+```
+3.39% 计算用每个数字的每一位投票，1的个数>n/2则为1 
+```java
+public int majorityElement(int[] nums){
+    int n = nums.length;
+    int rst =0;
+    int mask =0;
+    for(int i=0;i<32;i++){
+        mask = 1<<i;
+        int cnt =0;
+        for(int num:nums){
+            if((num&mask)!=0)cnt++;
+        }
+        if(cnt>n/2)rst|=mask;
+    }
+    return rst;
+}
+```
+#### 4.moore voting 在线算法92%
+```java
+public int majorityElement(int[] nums){
+    //假设就是第一个数
+    int maj = nums[0];
+    int cnt=0;
+    for(int num:nums){
+        //第一个数就cnt=1
+        if(num==maj)cnt++;
+        else if(--cnt==0){
+            //等于0 从头开始做
+            cnt=1;
+            maj = num;
+        }
+    }
+    return maj;
+}
+```
+**优化100%**
+每次取两个不同的数删除，最后剩下的返回
+{% fold %}
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        if(nums==null)return -1;
+        int res=0;
+        int count=0;
+        for(int e : nums){
+            if(count==0){
+                res=e;
+            }
+                if(res!=e){
+                    count--;//删除这个数
+                }
+                else count++;
+        }
+        return res;
+    }
+}
+```
+{% endfold %}
+
+5.排序取中间的数
+6.C++专有 部分排序
+```cpp
+int majorityElement(vector<int> & nums){
+    nth_element(nums.begin(),nums.begin()+nums.size()/2,nums.end());
+    return nums[nums.size()/2];
+}
+```
+7.分治???
+
 ---
 ### 80 数组每个元素只保留<=2次
-cnt表示插入位置，i用于遍历
+cnt表示插入位置，i用于遍历 
 ```java
 int cnt=2;
 for(int i =2;i<nums.length;i++){
@@ -1795,7 +1954,7 @@ public class Solution {
 ```
 {% endfold %}
 
-## 168
+### 168
 1 -> A
 2 -> B
 3 -> C
@@ -1809,29 +1968,6 @@ public class Solution {
     return n == 0 ? "" : convertToTitle(--n / 26) + (char)('A' + (n % 26));
 }
 ```
-
-## 169 众数 Boyer-Moore Voting Algorithm 
-每次取两个不同的数删除，最后剩下的返回
-{% fold %}
-```java
-class Solution {
-    public int majorityElement(int[] nums) {
-        if(nums==null)return -1;
-        int res=0;
-        int count=0;
-        for(int e : nums){
-            if(count==0){
-                res=e;
-            }
-                if(res!=e){
-                    count--;//删除这个数
-                }
-                else count++;
-        }
-        return res;
-    }
-}```
-{% endfold %}
 
 # 搜索算法的优化
 

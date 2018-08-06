@@ -14,11 +14,11 @@ class Result<T> {
 为实现controller中的返回：
 ```java
 @RequestMapping("/hello")
-    @ResponseBody
-    public Result<String> hello() {
-        return Result.success("hello");
-       // return new Result(0, "success", "hello");
-    }
+@ResponseBody
+public Result<String> hello() {
+    return Result.success("hello");
+   // return new Result(0, "success", "hello");
+}
 ```
 给Result添加静态方法和对应的构造函数
 ```java
@@ -239,6 +239,10 @@ systemctl start redis_6379
 ps -ef |grep redis
 # 改服务名
 vi /etc/init.d/redis_6379
+# ！打开防火墙
+firewall-cmd --zone=public --add-port=6379/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --list-ports
 ```
 
 ### 5.集成Redis
@@ -279,21 +283,507 @@ public class RedisConfig {
     private int poolMaxWait;//秒
 }
 ```
+#### Service
 通过service提供Redis的get/set
 ```java
 @Service
 public class RedisService{
+    @Autowired
+    JedisPool jedisPool;
     public<T> T get(String key,Class<T> clazz){
-        JedisPoll jp = null;
-        Jedis jedis = jp.getResource();
-
+        Jedis jedis = jedisPool.getResource();
     }
+    @Autowired
+    RedisConfig redisConfig;
     @Bean
-    public Jedis
+    public JedisPool JedisFactory(){
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxIdle(redisConfig.getPoolMaxIdle());
+        poolConfig.setMaxTotal(redisConfig.getPoolMaxTotal());
+        poolConfig.setMaxWaitMillis(redisConfig.getPoolMaxWait() * 1000);
+        //redis默认16个库，从0库开始
+        JedisPool jp = new JedisPool(poolConfig, redisConfig.getHost(), redisConfig.getPort(),redisConfig.getTimeout()*1000, redisConfig.getPassword(), 0);
+        return jp;
+    }
 }
-
 ```
 
+查看源码找JedisPool中的timeout是什么单位
+```java
+JedisPool jp = new JedisPool(poolConfig, redisConfig.getHost(), redisConfig.getPort(),redisConfig.getTimeout()*1000, redisConfig.getPassword(), 0);
+//JedisPool.java
+public JedisPool(final GenericObjectPoolConfig poolConfig, final String host, int port,int timeout, final String password, final int database) {
+    this(poolConfig, host, port, timeout, password, database, null);
+}
+//this
+public JedisPool(final GenericObjectPoolConfig poolConfig, final String host, int port,final int connectionTimeout, final int soTimeout, final String password, final int database,
+  final String clientName, final boolean ssl, final SSLSocketFactory sslSocketFactory,
+  final SSLParameters sslParameters, final HostnameVerifier hostnameVerifier) {
+super(poolConfig, new JedisFactory(host, port, connectionTimeout, soTimeout, password,
+    database, clientName, ssl, sslSocketFactory, sslParameters, hostnameVerifier));
+}
+```
+JedisFactory
+```java
+public JedisFactory(final String host, final int port, final int connectionTimeout,
+  final int soTimeout, final String password, final int database, final String clientName,
+  final boolean ssl, final SSLSocketFactory sslSocketFactory, final SSLParameters sslParameters,
+  final HostnameVerifier hostnameVerifier) {
+this.hostAndPort.set(new HostAndPort(host, port));
+//找用到connect time的地方
+this.connectionTimeout = connectionTimeout;
+this.soTimeout = soTimeout;
+this.password = password;
+this.database = database;
+this.clientName = clientName;
+this.ssl = ssl;
+this.sslSocketFactory = sslSocketFactory;
+this.sslParameters = sslParameters;
+this.hostnameVerifier = hostnameVerifier;
+}
+//connectionTimeout用的地方PooledObject类
+final Jedis jedis = new Jedis(hostAndPort.getHost(), hostAndPort.getPort(), connectionTimeout,
+        soTimeout, ssl, sslSocketFactory, sslParameters, hostnameVerifier);
+//Jedis.java
+public Jedis(final String host, final int port, final int connectionTimeout, final int soTimeout,
+  final boolean ssl, final SSLSocketFactory sslSocketFactory, final SSLParameters sslParameters,
+  final HostnameVerifier hostnameVerifier) {
+super(host, port, connectionTimeout, soTimeout, ssl, sslSocketFactory, sslParameters,
+    hostnameVerifier);
+}
+//super BinaryJedis.java
+public BinaryJedis(final String host, final int port, final int connectionTimeout,
+  final int soTimeout, final boolean ssl, final SSLSocketFactory sslSocketFactory,
+  final SSLParameters sslParameters, final HostnameVerifier hostnameVerifier) {
+client = new Client(host, port, ssl, sslSocketFactory, sslParameters, hostnameVerifier);
+//timeout的地方是Client
+client.setConnectionTimeout(connectionTimeout);
+client.setSoTimeout(soTimeout);
+}
+//Connection.java
+socket.connect(new InetSocketAddress(host, port), connectionTimeout);
+socket.setSoTimeout(soTimeout);
+//Socket.java
+//!!!毫秒
+@param timeout the specified timeout, in milliseconds.
+public synchronized void setSoTimeout(int timeout) throws SocketException {
+    if (isClosed())
+        throw new SocketException("Socket is closed");
+    if (timeout < 0)
+      throw new IllegalArgumentException("timeout can't be negative");
+
+    getImpl().setOption(SocketOptions.SO_TIMEOUT, new Integer(timeout));
+}
+```
+所以回到最开始`redis.timeout=3`是秒
+```java
+JedisPool jp = new JedisPool(poolConfig, redisConfig.getHost(), redisConfig.getPort(),redisConfig.getTimeout()*1000, redisConfig.getPassword(), 0);
+```
+//Client.java 
+{% fold %}
+```java
+//Client.java
+public Client(final String host, final int port, final boolean ssl,
+  final SSLSocketFactory sslSocketFactory, final SSLParameters sslParameters,
+  final HostnameVerifier hostnameVerifier) {
+super(host, port, ssl, sslSocketFactory, sslParameters, hostnameVerifier);
+}
+//super->BinaryClient.java
+public BinaryClient(final String host, final int port, final boolean ssl,
+  final SSLSocketFactory sslSocketFactory, final SSLParameters sslParameters,
+  final HostnameVerifier hostnameVerifier) {
+super(host, port, ssl, sslSocketFactory, sslParameters, hostnameVerifier);
+}
+//super->Connection.java
+public Connection(final String host, final int port, final boolean ssl,
+  SSLSocketFactory sslSocketFactory, SSLParameters sslParameters,
+  HostnameVerifier hostnameVerifier) {
+this.host = host;
+this.port = port;
+this.ssl = ssl;
+this.sslSocketFactory = sslSocketFactory;
+this.sslParameters = sslParameters;
+this.hostnameVerifier = hostnameVerifier;
+}
+```
+{% endfold %}
+
+修改上面Service 加上释放连接池的代码
+查看Jedis的close方法源码
+```java
+public void close() {
+if (dataSource != null) {
+  if (client.isBroken()) {
+    //不关掉 返回到连接池
+    this.dataSource.returnBrokenResource(this);
+  } else {
+    this.dataSource.returnResource(this);
+  }
+} else {
+  client.close();
+}
+}
+```
+##### set方法BeanToStrnig
+用fastjson将bean对象变成string
+```java
+public <T> boolean set(String key,T value){
+    Jedis jedis = null;
+    try{
+        jedis = jedisPool.getResource();
+        String str = beanToString(value);
+        if(str == null||str.length()<=0)return false;
+        jedis.set(key,str);
+        return true;
+        }finally{
+            returnToPool(jedis);
+        }
+}
+//任意类型转化成字符串
+import com.alibaba.fastjson.JSON;
+private <T> String beanToString(T value){
+    //2. 添加空判断
+    if(value == null)return null;
+    //3. 如果是数字，字符串，Long
+    Class<?> clazz = value.getClass();
+    if(clazz == int.class || clazz == Integer.class) {
+         return ""+value;
+    }else if(clazz == String.class) {
+         return (String)value;
+    }else if(clazz == long.class || clazz == Long.class) {
+        return ""+value;
+    }else {
+        return JSON.toJSONString(value);
+    }
+}
+```
+
+#### get方法 StringToBean
+```java
+@Service
+public class RedisService{
+    @Autowired
+    JedisPool jedisPool;
+    @SuppressWarnings("unchecked")//屏蔽警告
+    private <T> T stringToBean(String str,Class<T> clazz){
+        //1. 参数校验
+        if(str == null || str.length() <= 0 || clazz == null) {
+             return null;
+        }
+        //2 如果是int，string，Long
+        if(clazz == int.class || clazz == Integer.class) {
+             return (T)Integer.valueOf(str);
+        }else if(clazz == String.class) {
+             return (T)str;
+        }else if(clazz == long.class || clazz == Long.class) {
+            return  (T)Long.valueOf(str);
+        }else {
+            //fastJson 其他List类型要再写
+            return JSON.toJavaObject(JSON.parseObject(str), clazz);
+        }
+
+    }
+    public<T> T get(String key,Class<T> clazz){
+        Jedis jedis = null;
+        try{
+        jdeis = jedisPool.getResource();
+        //2.get的逻辑：get是String类型，需要的是T类型
+        String value =  jedis.get(key);
+        T t = stringToBean(value,clazz);
+        return t;
+        //1. 添加关闭代码
+        }finally{
+            returnToPool(jedis);
+        }
+    }
+    private void returnToPool(Jedis jedis){
+        if(jedis != null) {
+             jedis.close();
+         }
+    }
+    @Autowired
+    RedisConfig redisConfig;
+    @Bean
+    public JedisPool JedisFactory(){
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxIdle(redisConfig.getPoolMaxIdle());
+        poolConfig.setMaxTotal(redisConfig.getPoolMaxTotal());
+        poolConfig.setMaxWaitMillis(redisConfig.getPoolMaxWait() * 1000);
+        //redis默认16个库，从0库开始
+        JedisPool jp = new JedisPool(poolConfig, redisConfig.getHost(), redisConfig.getPort(),redisConfig.getTimeout()*1000, redisConfig.getPassword(), 0);
+        return jp;
+    }
+}
+```
+#### controller get测试:
+127.0.0.1:6379> auth 123456
+OK
+127.0.0.1:6379> set key1 1
+OK
+```java
+@Autowired
+RedisService redisService;
+@RequestMapping("/redis/get")
+@ResponseBody
+public Result<String> redisGet() {
+
+    String  name  = redisService.get("key1", String.class);
+    return Result.success(name);
+}
+```
+报错：
+> [redis.clients.jedis.JedisPool]: Circular reference involving containing bean 'redisService' - consider declaring the factory method as static for independence from its containing instance. Factory method 'JedisFactory' threw exception; nested exception is java.lang.NullPointerException
+
+因为Service里注入了pool
+```java
+@Autowired
+JedisPool jedisPool;
+```
+但是 JedisPool是实例方法 创建这个Bean需要RedisSevice
+```java
+@Bean
+public JedisPool JedisFactory()
+```
+
+所以独立出`JedisPool`
+```java
+@Service
+public class RedisPoolFactory {
+    @Autowired
+    RedisConfig redisConfig;
+    @Bean
+    public JedisPool JedisFactory(){
+    JedisPoolConfig poolConfig = new JedisPoolConfig();
+    poolConfig.setMaxIdle(redisConfig.getPoolMaxIdle());
+    poolConfig.setMaxTotal(redisConfig.getPoolMaxTotal());
+    poolConfig.setMaxWaitMillis(redisConfig.getPoolMaxWait() * 1000);
+    //redis默认16个库，从0库开始
+    JedisPool jp = new JedisPool(poolConfig, redisConfig.getHost(), redisConfig.getPort(),redisConfig.getTimeout()*1000, redisConfig.getPassword(), 0);
+    return jp;
+}
+```
+#### controller set测试:
+```java
+@RequestMapping("/redis/set")
+@ResponseBody
+public Result<Boolean> redisSet() {
+    User user  = new User();
+    user.setId(1);
+    user.setName("1111");
+    redisService.set("key3",user);//UserKey:id1
+    return Result.success(true);
+}
+```
+127.0.0.1:6379> get key3
+"{\"id\":1,\"name\":\"1111\"}"
+
+#### 模板模式：封装缓存key，加上前缀
+优化：将key加上Prefix，按业务模块区分缓存的key
+接口：
+```java
+public interface Prefix(){
+    //有效期
+    public int expireSeconds();
+    //前缀
+    public String getPrefix(); 
+}
+```
+实现的抽象类 防止被创建
+```java
+public abstract class BasePrefix implements Prefix{
+    private int expireSeconds;
+    private String prefix;
+    //0表示永不过期
+    public BasePrefix(String prefix) {//0代表永不过期
+        this(0, prefix);
+    }
+    
+    public int expireSeconds(){
+        return expireSeconds;
+    }
+    //用类名当前缀
+    public String getPrefix(){
+        String className = getClass().getSimpleName();
+        return className+":"+perfix;
+    }
+}
+```
+
+实现类：用户key
+```java
+public class UserKey extends BasePrefix{
+    //私有 防实例化
+    private UserKey(String prefix){super(prefix);}
+    public static UserKey getById = new UserKey("id");
+    public static UserKey getByName = new UserKey("name");
+}
+```
+实现类：订单key
+```java
+public class OrderKey extends BasePrefix
+```
+controller使用:classname+prefix+key
+```java
+ @RequestMapping("/redis/get")
+    @ResponseBody
+    public Result<User> redisGet() {
+        User  user  = redisService.get(UserKey.getById, "1", User.class);
+        return Result.success(user);
+    }
+    
+    @RequestMapping("/redis/set")
+    @ResponseBody
+    public Result<Boolean> redisSet() {
+        User user  = new User();
+        user.setId(1);
+        user.setName("1111");
+        //UserKey:id1
+        redisService.set(UserKey.getById,"1",user);
+        return Result.success(true);
+    }
+```
+修改Service中的get和set
+
+```java
+public<T> T get(Prefix prefix,String key,Class<T> clazz){
+    Jedis jedis = null;
+    try{
+        jedis = jedisPool.getResource();
+    
+        String prefixKey = prefix.getPrefix()+key;
+        String value =  jedis.get(prefixKey);
+        T t = stringToBean(value,clazz);
+        return t;
+    }finally{
+        returnToPool(jedis);
+    }
+}
+```
+添加失效时间
+127.0.0.1:6379> expire key1 3
+(integer) 1
+```java
+public <T> boolean set(KeyPrefix prefix,String key,T value){
+    Jedis jedis = null;
+    try{
+        jedis = jedisPool.getResource();
+        String str = beanToString(value);
+        if(str == null||str.length()<=0)return false;
+        String prefixKey = prefix.getPrefix()+key;
+        int expire = prefix.expireSeconds();
+        //永不过期
+        if(expire<=0){
+            jedis.set(prefixKey,str);
+
+        }else{
+            jedis.setex(prefixKey,expire,str);
+        }
+        return true;
+    }finally{
+        returnToPool(jedis);
+    }
+}
+```
+setex:
+等于set+expire命令
+```java
+public String setex(final String key, final int seconds, final String value) {
+    checkIsInMultiOrPipeline();
+    client.setex(key, seconds, value);
+    return client.getStatusCodeReply();
+  }
+```
+
+#### 添加其他API:
+127.0.0.1:6379> exists key1
+(integer) 1
+```java
+public <T> boolean exists(KeyPrefix prefix, String key) {
+ Jedis jedis = null;
+ try {
+     jedis =  jedisPool.getResource();
+     String prefixKey = prefix.getPrefix()+key;
+    return  jedis.exists(prefixKey);
+ }finally {
+      returnToPool(jedis);
+ }
+```
+127.0.0.1:6379> incr key1
+(integer) 2
+127.0.0.1:6379> incr key1
+(integer) 3
+127.0.0.1:6379> set key222 fdafda
+OK
+127.0.0.1:6379> incr key222
+(error) ERR value is not an integer or out of range
+
+incr
+```java
+public <T> Long incr(KeyPrefix prefix, String key) {
+     Jedis jedis = null;
+     try {
+         jedis =  jedisPool.getResource();
+        //生成真正的key
+         String realKey  = prefix.getPrefix() + key;
+        return  jedis.incr(realKey);
+     }finally {
+          returnToPool(jedis);
+     }
+}
+```
+127.0.0.1:6379> incr key1
+(integer) 5
+127.0.0.1:6379> decr key1
+(integer) 4
+
+decr
+```java
+public <T> Long decr(KeyPrefix prefix, String key) {
+     Jedis jedis = null;
+     try {
+         jedis =  jedisPool.getResource();
+        //生成真正的key
+         String realKey  = prefix.getPrefix() + key;
+        return  jedis.decr(realKey);
+     }finally {
+          returnToPool(jedis);
+     }
+}
+```
+
+### 6.实现登陆
+数据库设计
+```sql
+create table `miaosha_user`(
+  `id` bigint(20) not null comment '用户ID，手机号',
+  `nickname` varchar(256) not null,
+  `password` varchar(32) default null comment 'MD5(md5+salt)+salt',
+  `salt` varchar(10) default null,
+  `head` varchar(128) default null comment '头像',
+  `register_date` datetime default null comment '注册时间',
+  `last_login_date` datetime default null comment '上次登录时间',
+  `login_cnt` int(11) default '0' comment '登陆次数',
+  primary key (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+密码用户传给数据库先MDB(明文+salt)
+服务端存再一次md5(明文+随机salt)
+```xml
+<dependency>
+    <groupId>commons-codec</groupId>
+    <artifactId>commons-codec</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.6</version>
+</dependency>
+```
+新建util包MD5加密
+```java
+
+```
 
 ---
 

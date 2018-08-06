@@ -19,7 +19,7 @@ tags:
 >jinfo -flags 1972
 ```
 {% fold %}
-```shell
+```sh
 Attaching to process ID 1972, please wait...
 Debugger attached successfully.
 Server compiler detected.
@@ -66,21 +66,21 @@ java代码是解释执行的，JIT编译信息 即时编译 java代码转化成�
 `-Xcomp` 第一次就编译成本地代码
 `-Xmixed` 混合模式JVM自己决定是否本地代码
 mixed mode:
-```shell
+```sh
 java -version
 java version "1.8.0_144"
 Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
 Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)
 ```
 解释模式：
-```shell
+```sh
 java -Xint -version
 java version "1.8.0_144"
 Java(TM) SE Runtime Environment (build 1.8.0_144-b01)
 Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, interpreted mode)
 ```
 编译模式：
-```shell
+```sh
 java -Xcomp -version
 java version "1.8.0_144"
 Java(TM) SE Runtime Environment (build 1.8.0_144-b01)

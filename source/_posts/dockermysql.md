@@ -5,13 +5,14 @@ tags:
 ---
 ### CentOS7 安装mysql
 1.下载mysql源
-```shell
+```sh
 yum install wget
 wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
 rpm -ivh mysql-community-release-el7-5.noarch.rpm
 cd /etc/yum.repos.d/
 ll
 yum install mysql-server
+systemctl enable mysqld
 mysql -u root
 chown -R root:root /var/lib/mysql
 service mysqld restart
@@ -25,6 +26,34 @@ update user set password=password("root") where user="root";
 exit;
 ```
 用windows连接虚拟机mysql配置
+```sh
+bind-address =
+service mysql restart
+# ！打开防火墙
+firewall-cmd --zone=public --add-port=3306/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --list-ports
+
+ps aux|grep mysql
+netstat -plntu
+# tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      15323/mysqld 
+```
+给外部ip权限
+```sh
+vi /etc/my.cnf
+# 强行加上
+[mysqld]
+bind-address = 0.0.0.0
+```
+给任何ip过来的root用户 密码（identified）为root的，可以访问所有表
+```sql
+grant all privileges on *.* to "root"@"%" identified by "root" with grant option;
+flush privileges;
+```
+
+可以连接并创建表了，注意字符集
+将centos上的数据库转移到win：
+front中-其他-转移
 
 
 ### redis 高速缓存集群
