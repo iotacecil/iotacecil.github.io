@@ -4,7 +4,25 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: java
 ---
-
+### forEach： ConcurrentModificationException
+报错代码：
+```java
+for(List<Integer> list :subsets) {
+    List<Integer> before = new ArrayList<>(list);
+    before.add(i);
+    //subsets的大小在不断增加！终止不了
+    subsets.add(before);
+}
+```
+at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:901)
+```java
+final void checkForComodification() {
+    if (modCount != expectedModCount)
+        throw new ConcurrentModificationException();
+}
+```
+> Iterator 是工作在一个独立的线程中，并且拥有一个 mutex 锁。 Iterator 被创建之后会建立一个指向原来对象的单链索引表，当原来的对象数量发生变化时，这个索引表的内容不会同步改变，所以当索引指针往后移动的时候就找不到要迭代的对象，所以按照 fail-fast 原则 Iterator 会马上抛出 java.util.ConcurrentModificationException 异常。
+所以 Iterator 在工作的时候是不允许被迭代的对象被改变的。
 
 
 ### 被动加载和主动加载

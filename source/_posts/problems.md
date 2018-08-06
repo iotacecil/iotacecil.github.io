@@ -3,6 +3,12 @@ title: problems
 date: 2018-03-09 08:39:10
 tags: [leetcode]
 ---
+---
+
+IBM的文档总是跳转登录页面，左上角禁用js。
+
+---
+
 tampermonkey一直在向//cr-input.mxpnl.net发请求 
 
 ---

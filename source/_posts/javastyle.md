@@ -4,6 +4,40 @@ date: 2018-03-07 14:18:24
 tags: [java]
 category: java
 ---
+### Collections.sort->list::sort->Arrays.sort->TimSort.sort
+`{1, 2, 3, 4, 5, 9,   7, 8, 10, 6}` 输出 6
+`{9,8,7,6,5,4,  10}`输出6 并且`reverse(0,6)`->`[4, 5, 7, 6, 8, 9, 10]`
+{% fold %}
+```java 
+private static <T> int countRunAndMakeAscending(T[] a, int lo, int hi,
+                                                    Comparator<? super T> c) {
+    assert lo < hi;
+    int runHi = lo + 1;
+    if (runHi == hi)
+        return 1;
+    // Find end of run, and reverse range if descending
+    if (c.compare(a[runHi++], a[lo]) < 0) { // Descending
+        while (runHi < hi && c.compare(a[runHi], a[runHi - 1]) < 0)
+            runHi++;
+        reverseRange(a, lo, runHi);
+    } else {                              // Ascending
+        while (runHi < hi && c.compare(a[runHi], a[runHi - 1]) >= 0)
+            runHi++;
+    }
+    return runHi - lo;
+}
+private  void reverseRange(Object[] a, int lo, int hi) {
+    hi--;
+    while (lo < hi) {
+        System.out.println(Arrays.toString(a));
+        Object t = a[lo];
+        a[lo++] = a[hi];
+        a[hi--] = t;
+    }
+}
+```
+{% endfold %}
+
 ### String
 String+" "原来的string还是在的 要等垃圾回收
 必用方法：
