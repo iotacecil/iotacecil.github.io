@@ -3,6 +3,73 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### requirejs异步加载文件
+加载机制：使用`head.appendChild()`将每个依赖变成`<script>`标签
+helper不是xhr是以js形式加载的`Content-Type:application/javascript;charset=UTF-8`
+所以模块加载可以跨域，可以从cdn
+```html
+<script data-main = "/js/app" src = "/js/require.js"></script>
+```
+app.js
+```javascript
+//不用data-main直接配置base-Url
+//在html里两个script标签，先require.js再app.js
+requirejs.config({
+  baseUrl:'/js'
+});
+require(['helper'],function(helper){
+  var str = helper.trim(' amd ')
+  console.log(str)
+});
+```
+helper.js
+```javascript
+//模块名，依赖的模块，加载的依赖中的对象（jquery）
+define("helper",['jquery'],fucntion($){
+  return {
+    trim: function(str){
+      return $.trim(str)
+    }
+  }
+});
+```
+
+#### 获取用户信息
+1.定义简单对象user.js
+```javascript
+define({
+  username:'username',
+  name:'zhou',
+  email:'abc@abc.com',
+  gender:'男'
+  })
+```
+2.app.js
+```javascript
+require(['jquery','../js/api'],function($,api){
+  $("#user").click(function(){
+    //.then异步处理
+    api.getUser().then(function(user){
+      console.log(user);
+    })
+  })
+});
+```
+3.api.js
+```javascript
+define(['jquery'],function($){
+//异步处理
+  var def = $.Deferred();
+  require(['../js/user'],function(user){
+    def.resolve(user);
+  });
+  return def;
+});
+```
+
+#### 不支持AMD(require,define)的库：Mondernizr，bootstrap
+
+
 ### nodejs 单线程
 IO密集：静态资源（文件），网络，数据库
 Event loop主进程是单线程，I/O等操作系统多线程调用。

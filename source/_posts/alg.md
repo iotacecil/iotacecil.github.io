@@ -182,7 +182,7 @@ dp??：
 
 
 
-### ?207 先修课程有环则返回false
+### ?207 先修课程有环则返回false 拓扑排序
 56% 有可以优化到100%4ms的方法
 1.邻接表存储课程依赖图L
 ```java
@@ -205,7 +205,7 @@ for(int i =0;i<numCourses;i++){
 }
 return true;
 ```
-4.dfs 
+4.dfs 检查有没有环
 ```java
 boolean hasCircle(int idx,int[] visited){
     if(visited[idx]==1)return true;

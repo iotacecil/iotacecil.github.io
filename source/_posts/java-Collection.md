@@ -4,6 +4,7 @@ date: 2018-04-28 18:55:55
 tags:
 ---
 # 集合框架
+![java_collections](/images/java_collections.jpg)
 ![collection](/images/collection.jpg)
 ![collection2](/images/collection2.jpg)
 1. 三大接口：`Iterator`,`Collection`,`Map`

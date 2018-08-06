@@ -6,6 +6,8 @@ tags: [leetcode]
 
 不要把xshell的ctrl-c变成复制，不然没办法结束程序
 
+IBM的文档总是跳转登录页面，左上角禁用js。
+
 tampermonkey一直在向//cr-input.mxpnl.net发请求 
 
 ---
