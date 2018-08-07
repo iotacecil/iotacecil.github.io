@@ -8,6 +8,8 @@ tags: [alg]
 
 ### RMQ
 
+### MST：
+将图的点分成2个集合，用边连接两个集合中的点，最小的边集是MST
 
 ### 106 中序+后序建树
 
@@ -877,7 +879,7 @@ $F[i,v] = max(F[i-1,v],F[i,v-C_i]+W_i)$
 $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 
 ### 本福特定律
-以1为首位的数组数显的概率为30%
+以1为首位的数字的概率为30%
 
 ### 正确二分查找的写法
 1.查找范围是 [0,len-1]
@@ -917,6 +919,21 @@ while(l<r){
 }
 //如果l==r [1,1)表示空的
 return -1;
+```
+
+### 34 二分查找数字的first+last idx？？？？？？
+> Input: nums = [5,7,7,8,8,10], target = 8
+> Output: [3,4]
+
+二分查找获取最左/右边相等的
+```java
+//获取最右
+while(i<j){
+ int mid = (i+j)/2+1;
+ if(nums[mid]>target)j = mid-1;
+ //找到了继续向右找
+ else i =mid;}
+rst[1]=j;
 ```
 
 ---
@@ -1237,6 +1254,22 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 
 
 ### DLS可以达到BFS一样空间的DFS
+
+### word search
+
+#### Boggle
+![boggle.jpg](/images/boggle.jpg)
+> ```
+> board =
+> [
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+> Given word = "ABCCED", return true.
+> Given word = "SEE", return true.
+> Given word = "ABCB", return false.
+> ```
 
 ---
 ### 139 word break
@@ -1776,21 +1809,6 @@ for(int i =1;i<nums.length;i++){
 ### 551 出现两个以上A或者3个以上L为false
 ```java
 return s.indexOf("A")==s.lastIndexOf("A") && s.indexOf("LLL") == -1; 
-```
-
-### 34 二分查找数字的first+last idx
-> Input: nums = [5,7,7,8,8,10], target = 8
-> Output: [3,4]
-
-二分查找获取最左/右边相等的
-```java
-//获取最右
-while(i<j){
- int mid = (i+j)/2+1;
- if(nums[mid]>target)j = mid-1;
- //找到了继续向右找
- else i =mid;}
-rst[1]=j;
 ```
 
 ### 239
