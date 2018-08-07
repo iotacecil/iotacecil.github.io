@@ -3,6 +3,8 @@ title: JVM
 date: 2018-04-23 21:21:18
 tags:
 ---
+![suanfaGC](/images/suanfaGC.jpg)
+
 ### jstat 查看类加载/GC/JIT编译信息
 [jstat官网](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html)
 

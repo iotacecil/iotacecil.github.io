@@ -155,6 +155,28 @@ O(n!)复杂度
 
 ### 164 桶排序找区间最大值
 
+### 二分图 让每条边的两个顶点属于不同的集合
+
+#### 785
+```
+输入[0]={1,3}0的邻点是1,3
+[[1,3], [0,2], [1,3], [0,2]]
+The graph looks like this:
+0----1
+|    |
+|    |
+3----2
+```
+![bipartite.jpg](/images/bipartite.jpg)
+max match：没有两点共享1点，最多的边数
+![matching](/images/matching.jpg)
+maximal:再加一条边就有两条边有共同顶点了
+maximum：有两种matching的画法，3条边的为max
+
+1. 室友分配问题不是二分图，因为有3人团，是最大团问题
+2. 出租车和乘客匹配问题 问题是求最小边和
+3. 分配老师给班级是二分图max match问题
+
 ### 494 在数字中间放正负号使之==target
 递归的2种写法另一种void用全局变量累加
 ？？为什么递归中不能写`dfs(idx++)`
@@ -178,11 +200,160 @@ dp??：
 题目sum最大2k，则dp[4001]
 
 
+![graphmostuse](/images/graphmostuse.jpg)
+
+### 图的遍历顺序
+![graphtra](/images/graphtra.jpg)
+{% fold %}
+```java
+public class DepthFirstOrder {
+    private boolean[] marked;
+    private List<Integer> pre;
+    private List<Integer> post;
+    private Deque<Integer> reversePost;
+
+    public DepthFirstOrder(int n,int[][] edges){
+        List<Integer>[] graph = new ArrayList[n];
+        for (int i = 0; i <n ; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for(int[] edge:edges){
+            graph[edge[0]].add(edge[1]);
+        }
+        marked = new boolean[n];
+        pre = new ArrayList<>();
+        post = new ArrayList<>();
+        reversePost = new ArrayDeque<>();
+
+        for (int i = 0; i <n ; i++) {
+            if(!marked[i])dfs(graph,i);
+        }
+    }
+    private void dfs( List<Integer>[] graph ,int v){
+        pre.add(v);
+        marked[v] = true;
+        for(int w :graph[v]){
+            if(!marked[w])
+                dfs(graph,w);
+        }
+        post.add(v);
+        reversePost.push(v);
+    }
+/*
+[0, 1, 5, 4, 6, 9, 10, 11, 12, 2, 3, 7, 8]
+[1, 4, 5, 10, 12, 11, 9, 6, 0, 3, 2, 7, 8]
+[8, 7, 2, 3, 0, 6, 9, 11, 12, 10, 5, 4, 1]
+*/
+    public static void main(String[] args) {
+        DepthFirstOrder sl = new DepthFirstOrder(13,new int[][]{{0,1},{0,5},{0,6},{2,0},{2,3},{3,5},{5,4},{6,4},{6,9},{7,6},{8,7},{9,10},{9,11},{9,12},{11,12}});
+        System.out.println(sl.pre);
+        System.out.println(sl.post);
+        System.out.println(sl.reversePost);
+    }
+```
+{% endfold %}
 
 
+### 调度问题：给定一组任务，安排执行时间->拓扑排序
+**DAG的拓扑排序是dfs逆后排序**
+将一张图拉成边全部向下的图
+![tuopu](/images/tuopu.jpg)
+
+#### 拓扑排序：有向环
+> {0, 3}, {1, 3}, {3, 2}, {2, 1} 0-> 3->2->1->3
+![graphcy](/images/graphcy.jpg)
+
+{% fold %}
+```java
+//算法4 p386
+private boolean[] marked;
+private int[] edgeTo;
+private Deque<Integer> cycle;//环
+private boolean[] onStack;
+public Deque cycle(int numCourses, int[][] prerequisites) {
+    onStack = new boolean[numCourses];
+    edgeTo = new int[numCourses];
+    marked =new boolean[numCourses];
+    List<Integer>[] graph=new ArrayList[numCourses];
+    for (int i = 0; i <numCourses ; i++) {
+        graph[i] = new ArrayList<>();
+    }
+    for (int[] edge :prerequisites) {
+        graph[edge[0]].add(edge[1]);
+    }
+    System.out.println(Arrays.toString(graph));
+    for (int i = 0; i < numCourses; i++) {
+        if(!marked[i])dfs(graph,i);
+    }
+    return cycle;
+}
+private void dfs(List<Integer>[] graph,int v){
+    onStack[v] =true;
+    marked[v] =true;
+   if(graph[v].size()<1)return;
+    for(int w:graph[v]){
+        if(cycle!=null) return;
+        else if(!marked[w]){
+            edgeTo[w] = v;
+            dfs(graph,w);
+        }
+        else if(onStack[w]){
+            cycle = new ArrayDeque<>();
+            for (int x = v; x !=w ; x=edgeTo[x]) {
+                cycle.push(x);
+            }
+            cycle.push(w);
+            cycle.push(v);
+        }
+        
+    }
+    onStack[v] =false;
+}
+```
+{% endfold %}
 
 
-### ?207 先修课程有环则返回false 拓扑排序
+#### ?207 先修课程有环则返回false 拓扑排序
+??和并查集的区别（？
+按算法4上88.45%
+```java
+private boolean[] marked;
+private boolean cycle = true;
+private boolean[] onStack;
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    onStack = new boolean[numCourses];
+    marked =new boolean[numCourses];
+    List<Integer>[] graph=new ArrayList[numCourses];
+    for (int i = 0; i <numCourses ; i++) {
+            graph[i] = new ArrayList<>();
+    }
+    //{2,0},{1,0},{3,1},{3,2},{1,3}}->[[], [0, 3], [0], [1, 2]]
+    for (int[] edge :prerequisites) {
+        graph[edge[0]].add(edge[1]);
+    }
+    for (int i = 0; i < numCourses; i++) {
+            if(!marked[i])dfs(graph,i);
+    }
+    return cycle;
+}
+private void dfs(List<Integer>[] graph,int v){
+    if(graph[v].size()<1)return;
+    //dfs是从起点到v的有向路径，onstack保存了递归中经历的点
+    onStack[v] = true;
+    marked[v] = true;
+    for(int w :graph[v]){
+        if(!marked[w])
+        dfs(graph,w);
+        else if(onStack[w]){
+            cycle = false;
+            return;
+        }
+    }
+    //这个点出发没有环
+    onStack[v] = false;
+}
+```
+
 56% 有可以优化到100%4ms的方法
 1.邻接表存储课程依赖图L
 ```java
@@ -218,6 +389,12 @@ boolean hasCircle(int idx,int[] visited){
     return false;
 }
 ```
+
+#### 210 输出修课顺序
+> Input: 4, [[1,0],[2,0],[3,1],[3,2]]
+  Output: [0,1,2,3] or [0,2,1,3]
+
+用onStack和post 11%
 
 ### kolakoski序列找规律
 ![kolakoski](/images/kolakoski.jpg)
@@ -992,8 +1169,16 @@ $=>x=12$
  
 树的前/中/后序遍历本质都是DFS
 
+### 连通分量
+![connect.jpg](/images/connect.jpg)
 无向图的连通分量可以用并查集（集合）来做
 并查集：[12,3,4,5]->[6,2,3,4,5]位置存放的是根节点
+有向图的连通分量Kosaraju 算法4p380
+![kosaraju.jpg](/images/kosaraju.jpg)
+1.将图的边反向,dfs得到逆后序
+2.按逆后序列dfs原图 cnt++
+![kosaraju2.jpg](/images/kosaraju2.jpg)
+
 
 ### 452 重叠线段
 ```java
@@ -1593,7 +1778,10 @@ for(int i =1;i<nums.length;i++){
 return s.indexOf("A")==s.lastIndexOf("A") && s.indexOf("LLL") == -1; 
 ```
 
-### 34
+### 34 二分查找数字的first+last idx
+> Input: nums = [5,7,7,8,8,10], target = 8
+> Output: [3,4]
+
 二分查找获取最左/右边相等的
 ```java
 //获取最右
@@ -1724,8 +1912,8 @@ private int help(int[] nums,int l,int r){
 
 
 
-##  lc538 O(1)空间 线索二叉树 Morris Inorder(中序) Tree Traversal
-### Morris Inorder(中序) Tree Traversal
+###  lc538 O(1)空间 线索二叉树 Morris Inorder(中序) Tree Traversal
+#### Morris Inorder(中序) Tree Traversal
 **先把每个中缀的前缀（左子树最右）指向中缀，遍历完后把这些链接都删除还原为 null**
 1. 找root的前趋：root 的中序前趋是左子树(第一个左结点)cur的最右标记为pre， pre.right = root
 ```java
@@ -1814,7 +2002,7 @@ return root;
 }
 ```
 
-## 110 判断树平衡 在计算高度时同时判断平衡只需要O(n)
+### 110 判断树平衡 在计算高度时同时判断平衡只需要O(n)
 ```java
 private boolean balance =true;
 public boolean isbalance(TreeNode root){
@@ -1830,18 +2018,18 @@ private int height(TreeNode root){
 }
 ```
 
-## 2-3树 
+### 2-3树 
 10亿结点的2-3树高度在19-30之间。：math.log(1000000000,3)~math.log(1000000000,2)
 与BST不同，2-3树是由下往上构建，防止升序插入10个键高为9的情况
 2-3树的高度在$\lfloor log_3N \rfloor=\lfloor logN/log3 \rfloor$ 到$\lfloor lgN \rfloor$ 之间
 
-## 红黑树：将3-结点变成左二叉树，将2-3变成二叉树
+### 红黑树：将3-结点变成左二叉树，将2-3变成二叉树
 有二叉树高效查找和2-3树高效平衡插入
 红黑树高度不超过$\lfloor 2logN \rfloor$ 实际上查找长度约为$1.001logN-0.5$
 
 插入：总是用红链接将新结点和父节点链接（如果变成了右红链接需要旋转）
 
-## 581 需要排序的最小子串，整个串都被排序了 递增
+### 581 需要排序的最小子串，整个串都被排序了 递增
 ![lc581](/images/lc581.jpg)
 40大于35，只排序到右边遍历过来第一个`n<n-1`是不够的
 要找到[30~31]中的min和max
@@ -1859,12 +2047,12 @@ public static int fid(int[]A){
     }
 ```
 
-## 136 Single Number
+### 136 Single Number
 异或 0^12=12,12^12=0
 [single number](https://leetcode.com/articles/single-number/)
 $$2(a+b+c)-(a+a+b+b+c)$$ `2*sum(set(list))-sum(list)`
 
-## 438 Anagrams in a String 滑动窗口
+### 438 Anagrams in a String 滑动窗口
 [Sliding Window algorithm](https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)
 ![anagram](/images/anagram.jpg)
 ![anagram2](/images/anagram2.jpg)
@@ -1877,7 +2065,7 @@ Output:
 > 1) The first count array store frequencies of characters in pattern.
 2) The second count array stores frequencies of characters in current window of text.
 
-## 141链表环检测
+### 141链表环检测
 空间O(1) 快慢指针：快指针走2步，慢指针走一步，当快指针遇到慢指针
 最坏情况，快指针和慢指针相差环长q -1步
 {% fold cpp练习 %}
@@ -1895,7 +2083,8 @@ class Solution{
         }
         return false;
     }
-};```
+};
+```
 {% endfold %}
 
 ### 142 环起始于哪个node
