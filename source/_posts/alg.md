@@ -8,13 +8,32 @@ tags: [alg]
 
 ### RMQ
 
-### MST：
-将图的点分成2个集合，用边连接两个集合中的点，最小的边集是MST
+### MST和聚类：
+连通图
+将图的点分成2个集合，边两端连的是不同集合，最小的边集是MST
+![mst](/images/mst.jpg)
+假设分为6和其它点2个集合，在6-2 3-6 6-0 6-4四条连接两个集合的边中取最小边，标记成黑色。
+再随机分两个集合，不要让黑色边跨集合
+
+#### kruskal
+kruskal遍历所有边(优先队列)，判断边的两点是否在一个集合里(find)，如果在则说明这条边加上会有环，如果不在，则union(v,w)并且将这条边加入mst。直到找到n-1条边。
+复杂度$ElogE$ 空间E
+- 因为不仅维护优先队列还要union-find所以效率一般比prim慢
+
+#### prim
+prim复杂度$ElogV$ 空间V
+prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和distTo[]
+![prim.jpg](/images/prim.jpg)
+每个没在MST中的顶点只保留(更新)离mst中点最短的边。
+
+### 聚类：single link
+![singlelink.jpg](/images/singlelink.jpg)
+![singleclu.jpg](/images/singleclu.jpg)
 
 ### 106 中序+后序建树
 
 ### 145 后序遍历二叉树 
-1. 函数式编程 不用help函数（可变数组），复制数组
+1.函数式编程 不用help函数（可变数组），复制数组
 {% fold %}
 ```java
 public List<Integer> post(TreeNode root){
@@ -29,6 +48,7 @@ public List<Integer> post(TreeNode root){
 }
 ```
 {% endfold %}
+
 原理：
 ```python
 rev_post(root):
@@ -41,22 +61,22 @@ reverse(rev_post(root));
 
 方法1：
 ```java
- public List<Integer> postorderTraversal(TreeNode root) {
-        LinkedList<Integer> list = new LinkedList<>();
-         if(root==null)return list;
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        stack.push(root);
-        while(!stack.isEmpty()){
-            root = stack.pop();
-            list.addFirst(root.val);
-            if(root.left!=null)stack.push(root.left);
-            //下一次poll出的是右子树
-            if(root.right!=null)stack.push(root.right);
-        }
-        // 如果使用ArrayList 1%
-        //Collections.reverse(list);
-        return list;
+public List<Integer> postorderTraversal(TreeNode root) {
+    LinkedList<Integer> list = new LinkedList<>();
+     if(root==null)return list;
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    stack.push(root);
+    while(!stack.isEmpty()){
+        root = stack.pop();
+        list.addFirst(root.val);
+        if(root.left!=null)stack.push(root.left);
+        //下一次poll出的是右子树
+        if(root.right!=null)stack.push(root.right);
     }
+    // 如果使用ArrayList 1%
+    //Collections.reverse(list);
+    return list;
+}
 ```
 
 ### 753 输出能包含所有密码可能性的最短串
@@ -107,6 +127,7 @@ dfs回到1，继续找封闭回路
 
 1. 用hashmap记录每个点的出度的点，建图
 2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
+
 ```java
 public List<String> findItinerary(String[][] tickets){
     Map<String,PriorityQueue<String>> graph = new HashMap<>();
@@ -1256,6 +1277,42 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 ### DLS可以达到BFS一样空间的DFS
 
 ### word search
+用全局mark数组58%，改用char修改board98%
+{% fold %}
+```java
+//    boolean[][] marked;
+public boolean exist(char[][] board, String word) {
+    int n  = board.length;
+    int m = board[0].length;
+//        marked = new boolean[n][m];
+    for (int i = 0; i <n ; i++) {
+        for (int j = 0; j <m ; j++) {
+            if(word.charAt(0)!=board[i][j])continue;
+            if(dfs(board,0,i,j,word))return true;
+
+        }
+
+    }
+    return false;
+}
+
+private boolean dfs(char[][] board,int idx,int i,int j,String word){
+    if(i>board.length-1||i<0||j>board[0].length-1||j<0||word.charAt(idx)!=board[i][j])return false;
+
+    if(idx==word.length()-1)return true;
+    char tmp = board[i][j];
+//        marked[i][j] = true;
+board[i][j]='0';
+
+    boolean ans = dfs(board,idx+1,i+1,j,word)||
+            dfs(board,idx+1,i,j+1,word)||dfs(board,idx+1,i-1,j,word)
+            ||dfs(board,idx+1,i,j-1,word);
+//        marked[i][j]=false;
+    board[i][j]=tmp;
+    return ans;
+}
+```
+{% endfold %}
 
 #### Boggle
 ![boggle.jpg](/images/boggle.jpg)
