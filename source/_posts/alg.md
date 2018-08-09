@@ -1217,6 +1217,11 @@ $=>x=12$
 2.按逆后序列dfs原图 cnt++
 ![kosaraju2.jpg](/images/kosaraju2.jpg)
 
+[tarjan](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
+
+https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html
+和拓扑排序一样Tarjan算法的运行效率也比Kosaraju算法高30%左右
+每个顶点都被访问了一次，且只进出了一次堆栈，每条边也只被访问了一次，所以该算法的时间复杂度为O(N+M)。
 
 ### 452 重叠线段
 ```java

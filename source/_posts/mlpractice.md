@@ -272,6 +272,7 @@ matrix([[2, 0, 1]])
 3. 曼哈顿距离 `sum(abs(v1-v2))`
 4. 切比雪夫距离：国际象棋国王的步数
 `abs(v1-v2).max()`
+
 ##### 夹角cosθ
 `cos = dot(v1,v2)/(linalg.norm(v1)*linalg.norm(v2))`
 
