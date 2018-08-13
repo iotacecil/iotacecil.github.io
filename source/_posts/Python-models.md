@@ -3,6 +3,8 @@ title: Python modules
 date: 2018-03-08 10:50:38
 tags:
 ---
+### 协程和异步io
+
 ### deque GIL线程安全的 list不安全
 copy：shallow copy 浅拷贝 id不一样。
 看起来隔离了，但是如果deque里[2]是一个可变对象list，拷贝的是索引
@@ -22,7 +24,23 @@ python线程对应c中的线程
 
 2. 同时修改global变量的两个线程会不安全
     py2和3不同。
-    按字节码行数/时间片，会释放全局解释器锁。io操作也会释放
+    按字节码行数/时间片，!!!!会释放全局解释器锁。io操作也会释放
+```python
+def add(a):
+    a=a+1
+    return a
+```
+
+```
+>>>dis.dis(add)
+2         0 LOAD_FAST   加载a        0 (a)
+          2 LOAD_CONST  加载1        1 (1)
+          4 BINARY_ADD
+          6 STORE_FAST               0 (a)
+
+3           8 LOAD_FAST              0 (a)
+         10 RETURN_VALUE
+```
 
 #### Condition 条件变量
 两层锁：底层调用wait释放就能acquire。wait分配放入等待队列的锁，等notify。

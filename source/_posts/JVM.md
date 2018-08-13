@@ -93,19 +93,36 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, compiled mode)
 
 ### 64位的JVM 寻址空间
 
-## 类装载器
-1. 装载：
-1.取得类的二进制流：
+### 类装载器
+```java
+/* 只有jvm能创建
+ * Private constructor. Only the Java Virtual Machine creates Class objects.
+ * This constructor is not used and prevents the default constructor being
+ * generated.
+ */
+private Class(ClassLoader loader) {
+    // Initialize final field for classLoader.  The initialization value of non-null
+    // prevents future JIT optimizations from assuming this final field is null.
+    classLoader = loader;
+    }
+```
+1. 装载：（磁盘->内存）
+1）取得类的二进制流：
 装载器`ClassLoader` 读入java字节码装在到JVM
-2.转为方法区的数据结构
-3.在堆中生成对象
+2）放到方法区
+3）在堆中生成java.lang.Class对象 封装方法区的数据结构
 2. 链接：
-1.验证
-2.准备 `static final` 在准备阶段赋值，static被赋值0
+1.验证 符合jvm对字节码的要求
+2.准备 为`static final`静态变量 分配内存，并初始化默认值。(还没生成对象)
 3.解析 符号引用转换成指针or地址偏移量（直接引用）（内存中的位置）
-3. 初始化`<clint>`
+3. 初始化：静态变量赋值（用户赋值）`<clint>`
     `lang.NoSuchFiledError`
 
+最终结果是堆区的class对象，提供了访问方法区的接口（反射接口）
+
+主动使用6种
+1.创建类实例2.读写静态变量3.调用静态方法4.反射Class.forName 5.初始化类的子类 6.启动类
+其它都是被动使用，都不会类初始化
 
 jvm用软件模拟java字节码的指令集
 jvm规范定义了：`returnAddress`数据类型 指向操作码的指针;

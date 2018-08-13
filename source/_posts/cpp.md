@@ -258,37 +258,6 @@ void BinNode<T>::travLevel(VST & visit){
 ### resigter 寄存器变量
 存放在寄存器中，调用时直接从寄存器中取出参加运算。
 
-### STL
-![STL](/images/STL.jpg)
-
-分配器Allocator支持容器，处理容器的内存。
-容器Containers数据和算法Algorithms操作分开。不是OO设计，是模板编程。
-迭代器是泛化指针 是容器和算法的桥梁。
-仿函数Functors
-
-### 容器
-1 Sequence Containers:
-    Array\vector\deque\list循环双端链表\forwardlist单向链表
-2 Associative Container:Set\Multiset,Map\Multimap
-3 unordered Containers:
-    HashTable:Separate Chaning。
-
-### array
-```cpp
-array<long,50000> c;
-////0x47a20数组在内存中起始的地址
-c.data();
-int compareLongs(const void*a,const void*b){
-    return(*(long*)a-*(long*)b);
-}
-//排序
-qsort(c.data,50000,sizeof(long),compareLongs);
-//二分查找
-long* pItem = (long*)bsearch(&target,c.data(),50000,sizeof(long),compareLongs);
-```
-
-### vecotr
-
 ### 对象像指针`*`,`->`
 #### 智能指针 包装类修改指针的行为 像一个指针
 ->会对作用到的结果一直作用下去

@@ -4,6 +4,25 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: java
 ---
+### 打印整数的二进制表示
+0x8000000 表示100000...0
+```java
+int a = -6;
+for(int i =0;i<32;i++){
+    //取第一位，右移
+    int t = (a&0x8000000>>>i)>>>(31-i);
+    out(t);
+}
+```
+
+### System.exit
+结束一个jvm。 状态0是正常退出
+```java
+//非零是异常
+by convention, a nonzero status code indicates abnormal termination.
+public static void exit(int status)
+```
+
 ### forEach： ConcurrentModificationException
 报错代码：
 ```java
