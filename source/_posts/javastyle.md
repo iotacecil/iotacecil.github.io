@@ -4,6 +4,16 @@ date: 2018-03-07 14:18:24
 tags: [java]
 category: java
 ---
+### LinkedHashMap:LRU的写法
+```java
+@param  accessOrder the ordering mode 
+true for  access-order访问顺序, 
+false for insertion-order插入顺序
+public LinkedHashMap(int initialCapacity,
+                         float loadFactor,
+                         boolean accessOrder)
+```
+
 ### Collections.sort->list::sort->Arrays.sort->TimSort.sort
 `{1, 2, 3, 4, 5, 9,   7, 8, 10, 6}` 输出 6
 `{9,8,7,6,5,4,  10}`输出6 并且`reverse(0,6)`->`[4, 5, 7, 6, 8, 9, 10]`

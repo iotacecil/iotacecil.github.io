@@ -8,16 +8,46 @@ tags: [alg]
 
 ### RMQ
 
+
 ### 链式前向星
 
 
 ### MST：
 将图的点分成2个集合，用边连接两个集合中的点，最小的边集是MST
 
+
+### 数组组成三角形的最大周长
+贪心，排序，如果$a[i]<a[i-1]+a[i-2]$则没有其他两条边可以两边之和>第三边了，换下一条当最长边。
+
+
+### MST和聚类：
+连通图
+将图的点分成2个集合，边两端连的是不同集合，最小的边集是MST
+![mst](/images/mst.jpg)
+假设分为6和其它点2个集合，在6-2 3-6 6-0 6-4四条连接两个集合的边中取最小边，标记成黑色。
+再随机分两个集合，不要让黑色边跨集合
+
+#### kruskal
+kruskal遍历所有边(优先队列)，判断边的两点是否在一个集合里(find)，如果在则说明这条边加上会有环，如果不在，则union(v,w)并且将这条边加入mst。直到找到n-1条边。
+复杂度$ElogE$ 空间E
+- 因为不仅维护优先队列还要union-find所以效率一般比prim慢
+
+#### prim
+prim复杂度$ElogV$ 空间V
+prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和distTo[]
+![prim.jpg](/images/prim.jpg)
+每个没在MST中的顶点只保留(更新)离mst中点最短的边。
+
+### 聚类：single link
+![singlelink.jpg](/images/singlelink.jpg)
+![singleclu.jpg](/images/singleclu.jpg)
+
 ### 106 中序+后序建树
 
+#### 前序ABCDEFGH->中序不可能是
+
 ### 145 后序遍历二叉树 
-1. 函数式编程 不用help函数（可变数组），复制数组
+1.函数式编程 不用help函数（可变数组），复制数组
 {% fold %}
 ```java
 public List<Integer> post(TreeNode root){
@@ -32,6 +62,7 @@ public List<Integer> post(TreeNode root){
 }
 ```
 {% endfold %}
+
 原理：
 ```python
 rev_post(root):
@@ -44,22 +75,22 @@ reverse(rev_post(root));
 
 方法1：
 ```java
- public List<Integer> postorderTraversal(TreeNode root) {
-        LinkedList<Integer> list = new LinkedList<>();
-         if(root==null)return list;
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        stack.push(root);
-        while(!stack.isEmpty()){
-            root = stack.pop();
-            list.addFirst(root.val);
-            if(root.left!=null)stack.push(root.left);
-            //下一次poll出的是右子树
-            if(root.right!=null)stack.push(root.right);
-        }
-        // 如果使用ArrayList 1%
-        //Collections.reverse(list);
-        return list;
+public List<Integer> postorderTraversal(TreeNode root) {
+    LinkedList<Integer> list = new LinkedList<>();
+     if(root==null)return list;
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    stack.push(root);
+    while(!stack.isEmpty()){
+        root = stack.pop();
+        list.addFirst(root.val);
+        if(root.left!=null)stack.push(root.left);
+        //下一次poll出的是右子树
+        if(root.right!=null)stack.push(root.right);
     }
+    // 如果使用ArrayList 1%
+    //Collections.reverse(list);
+    return list;
+}
 ```
 
 ### 753 输出能包含所有密码可能性的最短串
@@ -110,6 +141,7 @@ dfs回到1，继续找封闭回路
 
 1. 用hashmap记录每个点的出度的点，建图
 2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
+
 ```java
 public List<String> findItinerary(String[][] tickets){
     Map<String,PriorityQueue<String>> graph = new HashMap<>();
@@ -135,7 +167,25 @@ private void dfs(String s,List<String> rst,Map<String,PriorityQueue<String>>grap
 
 ```
 
+### 784 大小写字母的permutation
+`'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快
+小写和数字都加上这一位继续dfs，大写要
+```java
+if(idxchar-'A'>=0&&idxchar-'A'<26||idxchar-'a'>=0&&idxchar-'a'<26){
+    idxchar = (char)(idxchar^(1<<5));
+    dfs(s,idx+1,cur+idxchar);
+    idxchar = (char)(idxchar^(1<<5));
+}
+    dfs(s,idx+1,cur+idxchar);
+```
+
+$C(n,r) = P(n,r)/r!$
+
 ### 46 permutations
+给定{1..n-1}的排列，存在n种方法将n插入得到{1..n}的排列
+n个球放入r个盒子里
+分步递推：$P(n,r)=nP(n-1,r-1)$
+分类递推：不选第一个球，方案数$P(n-1,r)$,选第一个球方案数$rP(n-1,r-1)$->$P(n,r)=P(n-1,r)+rP(n-1,r-1)$
 O(2^n)复杂度 3ms
 ```java
 if(tmp.size()==nums.length){         
@@ -255,6 +305,7 @@ public class DepthFirstOrder {
         System.out.println(sl.post);
         System.out.println(sl.reversePost);
     }
+}
 ```
 {% endfold %}
 
@@ -884,6 +935,34 @@ $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 ### 本福特定律
 以1为首位的数字的概率为30%
 
+### 786 数组中可能组成的分数排序后第k大的是哪个组合
+数组长度2000 n^2的算法是超时
+> A = [1, 2, 3, 5], K = 3
+> Output: [2, 5]
+Explanation:
+The fractions to be considered in sorted order are:
+1/5, 1/3, 2/5, 1/2, 3/5, 2/3.
+The third fraction is 2/5.
+
+`M[i][j]=A[i]/A[j]`肯定在右上角最小
+```
+1/2 1/3 1/5 
+-   2/3 2/5
+-   -   3/5
+```
+1 查比0.5小有1/2,1/3,2/5 大于3个 r =0.5
+2 查比0.25小的有1/5 l=0.25
+3 查比0.375小的有1/3,1/5 l=0.375
+4 查比0.475小的正好3个
+
+
+
+### 378 矩阵从左到右从上到下有序，找第k大个元素
+1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
+2.
+
+### 719
+
 ### 正确二分查找的写法
 1.查找范围是 [0,len-1]
 [0]：l=0,r=1-1，while(l==r)的时候应该继续
@@ -1112,6 +1191,7 @@ public int majorityElement(int[] nums){
     return rst;
 }
 ```
+
 #### 4.moore voting 在线算法92%
 ```java
 public int majorityElement(int[] nums){
@@ -1199,6 +1279,11 @@ $=>x=12$
 2.按逆后序列dfs原图 cnt++
 ![kosaraju2.jpg](/images/kosaraju2.jpg)
 
+[tarjan](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
+
+https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html
+和拓扑排序一样Tarjan算法的运行效率也比Kosaraju算法高30%左右
+每个顶点都被访问了一次，且只进出了一次堆栈，每条边也只被访问了一次，所以该算法的时间复杂度为O(N+M)。
 
 ### 452 重叠线段
 ```java
@@ -1259,6 +1344,42 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 ### DLS可以达到BFS一样空间的DFS
 
 ### word search
+用全局mark数组58%，改用char修改board98%
+{% fold %}
+```java
+//    boolean[][] marked;
+public boolean exist(char[][] board, String word) {
+    int n  = board.length;
+    int m = board[0].length;
+//        marked = new boolean[n][m];
+    for (int i = 0; i <n ; i++) {
+        for (int j = 0; j <m ; j++) {
+            if(word.charAt(0)!=board[i][j])continue;
+            if(dfs(board,0,i,j,word))return true;
+
+        }
+
+    }
+    return false;
+}
+
+private boolean dfs(char[][] board,int idx,int i,int j,String word){
+    if(i>board.length-1||i<0||j>board[0].length-1||j<0||word.charAt(idx)!=board[i][j])return false;
+
+    if(idx==word.length()-1)return true;
+    char tmp = board[i][j];
+//        marked[i][j] = true;
+board[i][j]='0';
+
+    boolean ans = dfs(board,idx+1,i+1,j,word)||
+            dfs(board,idx+1,i,j+1,word)||dfs(board,idx+1,i-1,j,word)
+            ||dfs(board,idx+1,i,j-1,word);
+//        marked[i][j]=false;
+    board[i][j]=tmp;
+    return ans;
+}
+```
+{% endfold %}
 
 #### Boggle
 ![boggle.jpg](/images/boggle.jpg)
@@ -1369,6 +1490,23 @@ struct TrieNode{
 }
 ```
 可以把terminal变成int用`map<String,int>`表示字典树
+
+#### 677计算单词前缀的累积和
+```cpp
+struct Trie{
+    Trie():children(128,nullptr),sum(0){}
+    ~Trie(){
+        //动态分配内存 内存泄漏 写析构会递归删除 
+        for(auto child:children){
+            if(child)delete child;
+        }
+        children.clear();
+    }
+    vector<Trie*> children;
+    int sum;
+    }
+};
+```
 
 ### 后缀树字典树 每层多一个字符的字典树
 ### 后缀树 对字典树路径压缩，一层多个字符 生成需要O(N^2)

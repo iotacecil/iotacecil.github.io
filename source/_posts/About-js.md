@@ -3,6 +3,8 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### 写一个base62.js
+
 ### requirejs异步加载文件
 加载机制：使用`head.appendChild()`将每个依赖变成`<script>`标签
 helper不是xhr是以js形式加载的`Content-Type:application/javascript;charset=UTF-8`
@@ -745,6 +747,7 @@ https://chromium.googlesource.com/chromium/src/+/master/docs/es6_chromium.md
 defer 与相比普通 script，有两点区别：载入 JavaScript 文件时不阻塞 HTML 的解析，执行阶段被放到 HTML 标签解析完成之后
 
 ### 虚拟DOM 
+https://segmentfault.com/a/1190000015821780
 1. Virtual Node
 - 用json构建，type\props\children
 {type:"div",props:{"style:"},children:[]}

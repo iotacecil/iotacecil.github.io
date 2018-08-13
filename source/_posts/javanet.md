@@ -33,6 +33,25 @@ private Result(T data){
 ```
 封装错误信息类，用于生成各种各样的错误信息（枚举类？）
 ```java
+public enum  CodeMsg {
+    SUCCESS(0,"success"),
+    SERVER_ERROR(500100,"服务端异常");
+    private final int code;
+    private final String msg;
+    private CodeMsg( int code,String msg ) {
+        this.code = code;
+        this.msg = msg;
+    }
+    public int getCode() {
+        return code;
+    }
+    public String getMsg() {
+        return msg;
+    }
+}
+```
+
+```java
 return Result.error(CodeMsg.SERVER_ERROR);
 ```
 
@@ -782,8 +801,314 @@ create table `miaosha_user`(
 ```
 新建util包MD5加密
 ```java
-
+import org.apache.commons.codec.digest.DigestUtils;
+public static String md5(String src){
+    return DigestUtils.md5Hex(src);
+}
+//添加一个salt
+//前端form表单提交上来的密码
+//一次加密"123456"-> 26718c17fe0b7862a27dd7dc1b532f29
+public static String inputPassFormPass(String inputPass){
+    String passsalt = salt.charAt(0)+salt.charAt(2)+inputPass+salt.charAt(5);
+    return md5(passsalt);
+}
+//第二次加密，放入数据库
+public static String formPassToDBPass(String formPass, String salt) {
+    String toDB = ""+salt.charAt(0)+salt.charAt(2) + formPass +salt.charAt(5) + salt.charAt(4);
+    return md5(toDB);
+}
+//两次合并成1次
+public static String inputPassToDbPass(String inputPass, String saltDB) {
+    String formPass = inputPassToFormPass(inputPass);
+    String dbPass = formPassToDBPass(formPass, saltDB);
+    return dbPass;
+}
+public static void main(String[] args) {
+    //c996054adec06904c675b89aa68de2ec
+    System.out.println(inputPassToFormPass("123456"));
+    //bef054e9b1abb70963943f32b41a3f6d
+    System.out.println(formPassToDBPass(inputPassToFormPass("123456"), "secondsalt"));
 ```
+
+在controller添加path
+```java
+@RequestMapping("/login")
+    public String toLogin() {
+        return "login";
+    }
+```
+
+登陆页面
+
+登陆html页面：
+```html
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- jquery -->
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <!-- jquery-validator -->
+    <script type="text/javascript" th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
+    <!-- layer -->
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <!-- md5.js -->
+    <script type="text/javascript" th:src="@{/js/md5.min.js}"></script>
+    <!-- common.js -->
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+</head>
+```
+bootstrap+jquery验证:
+{% fold %}
+```html
+<!-- 50%宽度 居中 margin: 0 auto -->
+<form name="loginForm" id="loginForm" method="post"  style="width:50%; margin:0 auto">
+    <h2 style="text-align:center; margin-bottom: 20px">用户登录</h2> 
+    <div class="form-group">
+        <div class="row">
+            <label class="form-label col-md-4">请输入手机号码</label>
+            <div class="col-md-5">
+                <input id="mobile" name = "mobile" class="form-control" type="text" placeholder="手机号码" required="true"  minlength="11" maxlength="11" />
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+            <div class="row">
+                <label class="form-label col-md-4">请输入密码</label>
+                <div class="col-md-5">
+                    <input id="password" name="password" class="form-control" type="password"  placeholder="密码" required="true" minlength="6" maxlength="16" />
+                </div>
+            </div>
+    </div>
+    
+    <div class="row">
+                <div class="col-md-5">
+                    <button class="btn btn-primary btn-block" type="reset" onclick="reset()">重置</button>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary btn-block" type="submit" onclick="login()">登录</button>
+                </div>
+     </div>
+</form>
+```
+{% endfold %}
+jquery validate:
+http://www.runoob.com/jquery/jquery-plugin-validate.html
+```js
+function login(){
+    $("#loginForm").validate({
+        submitHandler:function(form){doLogin()}
+    })
+```
+layer.js弹窗
+http://layer.layui.com/
+common.js
+```js
+function g_showLoading(){
+    var idx = layer.msg('处理中...', {icon: 16,shade: [0.5, '#f5f5f5'],scrollbar: false,offset: '0px', time:100000}) ;  
+    return idx;
+}
+```
+在js中设置salt
+```js
+var g_passsword_salt="abcd1234"
+```
+
+使用ajax异步提交
+```java
+function doLogin(){
+    //每次提交loading框
+    g_showLoading()
+    //md5加密密码 与后台规则一样
+    var inputpwd = $("#password").val()
+    var str = salt.charAt(0)+salt.charAt(2)+inputpwd+salt.charAt(5)
+    //123456->c996054adec06904c675b89aa68de2ec
+    var password = md5(str)
+
+    $.ajax({
+        url:"/login/do_login",
+        type:"POST",
+        data:{
+            mobile:$("#mobile").val(),
+            password:password
+        },
+        success:function(data){
+            //无论成功失败都关闭框
+            layer.closeAll();
+            console.log("login")
+            console.log(password)
+ /* {code: 0, msg: null, data: "登录成功"} */
+            if(data.code==0){
+                layer.msg("成功")
+                console.log(data)
+            }
+        },
+        error:function(){
+            layer.closeAll()
+        }
+    })
+}
+```
+
+后台添加vo接收前端数据的类：
+```java
+public class LoginVo {
+    private String mobile;
+    private String password;
+}
+```
+添加controller：
+添加errormessage
+CodeMsg.java
+```java
+PASSWORD_EMPTY(500211, "登录密码不能为空"),
+MOBILE_EMPTY(500212, "手机号不能为空"),
+MOBILE_ERROR(500213, "手机号格式错误"),
+MOBILE_NOT_EXIST(500214, "手机号不存在"),
+PASSWORD_ERROR(500215, "密码错误");
+```
+
+```java
+//添加log 可以查看前端传过来的form数据是什么
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+private static Logger log = LoggerFactory.getLogger(LoginController.class);
+@RequestMapping("/do_login")
+@ResponseBody
+public Result<Boolean> doLogin(LoginVo loginVo) {
+    log.info(loginVo.toString());
+        //参数校验
+    String password = loginVo.getPassword();
+    String mobile = loginVo.getMobile();
+    if(StringUtils.isEmpty(mobile)){
+        return Result.error(CodeMsg.MOBILE_EMPTY);
+    }
+    if(StringUtils.isEmpty(password)){
+        return Result.error(CodeMsg.PASSWORD_EMPTY);
+    }
+    if(!ValidatorUtil.isMobile(mobile))
+        return Result.error(CodeMsg.MOBILE_ERROR);
+    }
+```
+手机号验证类ValidatorUtil.java
+```java
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
+public class ValidatorUtil {
+    private static final Pattern mobile_pattern = Pattern.compile("^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$");
+    public static boolean isMobile(String str){
+        if(StringUtils.isEmpty(str)){
+            return false;
+        }
+        Matcher m = mobile_pattern.matcher(str);
+        return m.matches();
+    }
+    public static void main(String[] args) {
+        //true
+            System.out.println(isMobile("18912341234"));
+        //false
+            System.out.println(isMobile("12345678900"));
+    }
+}
+```
+新建与数据库关联的domain对象
+```java
+public class MiaoshaUser {
+    //bigint
+    private Long id;
+    private String nickname;
+    private String password;
+    private String salt;
+    private String head;
+    private Date registerDate;
+    private Date lastLoginDate;
+    private Integer loginCount;
+}
+```
+新建dao,通过id找用户
+```java
+@Mapper
+public interface MiaoshaUserDao{
+    @Select（"select * from miaosha user where id = #{id}")
+    public MiaoshaUser getById(@Param("id") long id);
+}
+```
+
+service获取用户及登陆:
+```java
+@Service
+public class MiaoshaUserService{
+    @Autowired
+    MiaoshaUserDao miaoshaUserDao;
+    public MiaoshaUser getById(long id) {
+        return miaoshaUserDao.getById(id);
+    }
+    public CodeMsg login(LoginVo loginVo){
+        if(loginVo == null) {
+            throw new GlobalException(CodeMsg.SERVER_ERROR);
+        }
+        String mobile = loginVo.getMobile();
+        String formPass = loginVo.getPassword();
+        //数据库查询手机号
+        MiaoshaUser user = getById(Long.parseLong(mobile));
+        if(user == null) {
+            //用户/手机号不存在
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+        //数据库中的密码,salt
+        String dbPass = user.getPassword();
+        String saltDB = user.getSalt();
+        //用前端密码+数据库salt是否等于数据库密码
+        String gassDBpass = MD5Util.formPassToDBPass(formPass, saltDB);
+        if(!calcPass.equals(dbPass)) {
+            throw new GlobalException(CodeMsg.PASSWORD_ERROR);
+        }
+        return CodeMsg.SUCCESS;
+    }
+}
+```
+在controller中注入
+```java
+@Autowired
+    MiaoshaUserService userService;
+    @RequestMapping("/do_login")
+    @ResponseBody
+    public Result<String> doLogin(LoginVo loginVo) {
+        //..参数校验
+        //登录
+        CodeMsg code = userService.login(loginVo);
+        if(code.getCode()==0)return Result.success("登录成功");
+        else return Result.error(code);
+```
+
+### 7.JSR303参数校验+全局异常
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+在controller要校验的实体前打`@Valid`
+```java
+public Result<String> doLogin(@Valid  LoginVo loginVo)
+```
+在实体类加注解
+```java
+public class LoginVo {
+@NotNull
+@Length(min=32)
+private String password;
+```
+
 
 ---
 

@@ -3,6 +3,9 @@ title: cpp
 date: 2018-04-23 08:59:30
 tags:
 ---
+### static_cast
+强制类型转换
+
 ### 拓扑排序
 ![topu](/images/topu.jpg)
 
@@ -307,7 +310,7 @@ conplex.h
 ```cpp
 #ifndef __COMPLEX__
 #define __COMPLEX__
-....
+...
 #endif
 ```
 
