@@ -3,6 +3,14 @@ title: mlpractice
 date: 2018-03-09 23:45:20
 tags: [alg]
 ---
+### pandas操作：
+1.
+
+### pip镜像
+```sh
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyclustering
+```
+
 ### UTC 时间戳转localtime
 ```python
 # 1346844688 -> 2012-09-05 11:31:28

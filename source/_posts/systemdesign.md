@@ -7,6 +7,21 @@ https://www.educative.io/collection/page/5668639101419520/5649050225344512/56686
 ### gohash
 [poi-gohash](http://www.learn4master.com/interview-questions/system-design/poi-geohash)
 
+### 弹幕系统
+一个直播间：
+在线人数100万
+1000条弹幕/秒
+推送频率：100万\*1000条/秒 = 10亿/秒
+
+拉模式：客户端轮询服务端
+推模式：长连接 立即推送（时效性）
+![websocket.jpg](/images/websocket.jpg)
+websocket 将message->frame
+
+go语言携程模型 自带websocket库
+
+
+
 ### 146 LRU cache HashMap<Integer,DoubleLinkedList>
 [Cache replacement policies](https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU)
 least recently used cache最近最少使用缓存

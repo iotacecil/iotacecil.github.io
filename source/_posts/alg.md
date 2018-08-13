@@ -8,6 +8,10 @@ tags: [alg]
 
 ### RMQ
 
+### 数组组成三角形的最大周长
+贪心，排序，如果$a[i]<a[i-1]+a[i-2]$则没有其他两条边可以两边之和>第三边了，换下一条当最长边。
+
+
 ### MST和聚类：
 连通图
 将图的点分成2个集合，边两端连的是不同集合，最小的边集是MST
@@ -31,6 +35,8 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 ![singleclu.jpg](/images/singleclu.jpg)
 
 ### 106 中序+后序建树
+
+#### 前序ABCDEFGH->中序不可能是
 
 ### 145 后序遍历二叉树 
 1.函数式编程 不用help函数（可变数组），复制数组
@@ -153,7 +159,25 @@ private void dfs(String s,List<String> rst,Map<String,PriorityQueue<String>>grap
 
 ```
 
+### 784 大小写字母的permutation
+`'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快
+小写和数字都加上这一位继续dfs，大写要
+```java
+if(idxchar-'A'>=0&&idxchar-'A'<26||idxchar-'a'>=0&&idxchar-'a'<26){
+    idxchar = (char)(idxchar^(1<<5));
+    dfs(s,idx+1,cur+idxchar);
+    idxchar = (char)(idxchar^(1<<5));
+}
+    dfs(s,idx+1,cur+idxchar);
+```
+
+$C(n,r) = P(n,r)/r!$
+
 ### 46 permutations
+给定{1..n-1}的排列，存在n种方法将n插入得到{1..n}的排列
+n个球放入r个盒子里
+分步递推：$P(n,r)=nP(n-1,r-1)$
+分类递推：不选第一个球，方案数$P(n-1,r)$,选第一个球方案数$rP(n-1,r-1)$->$P(n,r)=P(n-1,r)+rP(n-1,r-1)$
 O(2^n)复杂度 3ms
 ```java
 if(tmp.size()==nums.length){         
@@ -902,6 +926,34 @@ $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 ### 本福特定律
 以1为首位的数字的概率为30%
 
+### 786 数组中可能组成的分数排序后第k大的是哪个组合
+数组长度2000 n^2的算法是超时
+> A = [1, 2, 3, 5], K = 3
+> Output: [2, 5]
+Explanation:
+The fractions to be considered in sorted order are:
+1/5, 1/3, 2/5, 1/2, 3/5, 2/3.
+The third fraction is 2/5.
+
+`M[i][j]=A[i]/A[j]`肯定在右上角最小
+```
+1/2 1/3 1/5 
+-   2/3 2/5
+-   -   3/5
+```
+1 查比0.5小有1/2,1/3,2/5 大于3个 r =0.5
+2 查比0.25小的有1/5 l=0.25
+3 查比0.375小的有1/3,1/5 l=0.375
+4 查比0.475小的正好3个
+
+
+
+### 378 矩阵从左到右从上到下有序，找第k大个元素
+1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
+2.
+
+### 719
+
 ### 正确二分查找的写法
 1.查找范围是 [0,len-1]
 [0]：l=0,r=1-1，while(l==r)的时候应该继续
@@ -1428,6 +1480,23 @@ struct TrieNode{
 }
 ```
 可以把terminal变成int用`map<String,int>`表示字典树
+
+#### 677计算单词前缀的累积和
+```cpp
+struct Trie{
+    Trie():children(128,nullptr),sum(0){}
+    ~Trie(){
+        //动态分配内存 内存泄漏 写析构会递归删除 
+        for(auto child:children){
+            if(child)delete child;
+        }
+        children.clear();
+    }
+    vector<Trie*> children;
+    int sum;
+    }
+};
+```
 
 ### 后缀树字典树 每层多一个字符的字典树
 ### 后缀树 对字典树路径压缩，一层多个字符 生成需要O(N^2)
