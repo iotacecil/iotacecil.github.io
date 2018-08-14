@@ -3,6 +3,114 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### fisher-yates 洗牌
+>shuffle the deck first to randomize the order and insure a fair game
+O(n)
+
+```js
+function shuffle(array){
+  var m = array.length,t,i;
+  while(m){
+    //99...0
+    i = Math.floor(Math.random()*m--);
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+  return array;
+}
+```
+测试shuff如果5x2一共10个格，雷5个，则出现的概率应该都是0.5
+```js
+function testshuff (N,n,m,num){
+  var freq = Array();
+  for(var i=0;i<m*n;i++)
+  freq[i]=0;
+  var arr = Array() 
+for(var test=0;test<N;test++){
+  for(var i = 0;i<num;i++){
+    arr[i]=1;
+    }
+  for(var i = num;i<m*n;i++)
+    {
+    arr[i]=0;
+    }
+shuffle(arr)
+//console.log(arr)
+  for(var j=0;j<n*m;j++){
+  freq[j]+=arr[j];
+    }
+}
+for(var i =0;i<n*m;i++){
+console.log(i+" "+freq[i]/N);
+}
+}
+```
+
+假装做个扫雷 生成nxm大小的格子里面有num个雷,并且打乱它
+```js
+function generate(n,m,num){
+  var mines = new Array()
+  let x,y;
+  for(var i =0;i<n;i++){
+     mines[i]=new Array();
+      for(var j=0;j<m;j++){
+      mines[i][j]=0;
+      }
+  }
+  while(num){
+    x= Math.floor(Math.random()*n);
+    y= Math.floor(Math.random()*m);
+    //一定要加，不然雷数少于num
+    if(mines[x][y]===0){
+      mines[x][y]=1;
+      num--;
+    }
+  }
+  return mines;
+}
+function shuff2d(mines,n,m){
+  var t,ix,iy,ranx,rany;
+    for(var i = n*m-1;i>=0;i--){
+    ix = Math.floor(i/m);
+    iy = i%m;
+    var random = Math.floor(Math.random()*(i+1));
+    ranx = Math.floor(random/m);
+    rany = random%m;
+    t = mines[ix][iy];
+    mines[ix][iy]=mines[ranx][rany];
+    mines[ranx][rany]=t;
+    }
+}
+```
+
+其他要设置用户点击open[][],这个点周围有多少雷cnt[][]，用户插旗坐标flag[][]
+另外 点开不是数字的地方要扩展
+
+
+### window.getSelections()
+https://developer.mozilla.org/zh-CN/docs/Web/API/Window/getSelection
+### css 伪类选择器的not
+css权重计算？
+![cssnot](/images/cssnot.png)
+```html
+<head>
+ <style>
+        p:not(.classy) { color: red; }
+        body :not(p) { color: green; }
+    </style>
+</head>
+<body>
+<p>Some text.</p>
+<p class="classy">就这条不用这个样式</p>
+<p>Some text.</p>
+<p>Some text.</p>
+<p>Some text.</p>
+<p>Some text.</p>
+<span>body里面除了p都是绿的<span>
+<div>body里面除了p都是绿的</div>
+```
+
 ### 写一个base62.js
 
 ### requirejs异步加载文件

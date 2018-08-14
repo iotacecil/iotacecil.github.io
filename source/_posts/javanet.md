@@ -616,7 +616,6 @@ public abstract class BasePrefix implements Prefix{
     public BasePrefix(String prefix) {//0代表永不过期
         this(0, prefix);
     }
-    
     public int expireSeconds(){
         return expireSeconds;
     }
@@ -1053,7 +1052,7 @@ public class MiaoshaUserService{
     }
     public CodeMsg login(LoginVo loginVo){
         if(loginVo == null) {
-            throw new GlobalException(CodeMsg.SERVER_ERROR);
+            throw CodeMsg.SERVER_ERROR;
         }
         String mobile = loginVo.getMobile();
         String formPass = loginVo.getPassword();
@@ -1061,7 +1060,7 @@ public class MiaoshaUserService{
         MiaoshaUser user = getById(Long.parseLong(mobile));
         if(user == null) {
             //用户/手机号不存在
-            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+            throw new CodeMsg.MOBILE_NOT_EXIST;
         }
         //数据库中的密码,salt
         String dbPass = user.getPassword();
@@ -1069,7 +1068,7 @@ public class MiaoshaUserService{
         //用前端密码+数据库salt是否等于数据库密码
         String gassDBpass = MD5Util.formPassToDBPass(formPass, saltDB);
         if(!calcPass.equals(dbPass)) {
-            throw new GlobalException(CodeMsg.PASSWORD_ERROR);
+            throw CodeMsg.PASSWORD_ERROR;
         }
         return CodeMsg.SUCCESS;
     }
@@ -1108,7 +1107,302 @@ public class LoginVo {
 @Length(min=32)
 private String password;
 ```
+对手机号添加自定义验证注解
+新建validator包,新建IsMobile.java
+参考java.validation.constrains里的NotNull,将class改成class
+必须的，添加
+```java
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Retention(RUNTIME)
+@Documented
+@Constraint(validatedBy = { })
+public @interface IsMobile{
+    //不能为空
+    boolean required() default true;
+    //默认信息
+    String message() default "手机号码格式错误";
 
+    Class<?>[] groups() default { };
+
+    Class<? extends Payload>[] payload() default { };
+}
+```
+新建类`IsMobileValidator`并在`@interface`里添加`@Constraint(validatedBy = {IsMobileValidator.class})`
+创建类<注解,检测的类型>，用上之前创建的ValidatorUtil
+```java
+public class MobileValidator implements ConstraintValidator<Mobile,String> {
+    //成员变量，接收注解定义
+    private boolean required = false;
+    @Override
+    public void initialize(Mobile constraintAnnotation) {
+    required = constraintAnnotation.required();
+    }
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if(required){
+            //如果是必须的，判断是否合法
+            return ValidatorUtil.isMobile(value);
+        }else//如果不是必须的
+            if(StringUtils.isEmpty(value)){
+            return true;
+
+        }else{
+            return ValidatorUtil.isMobile(value);
+            }
+    }
+}
+```
+在LoginVo上加上
+```java
+@NotNull
+@Mobile(required = true,message = "手机号错")
+private String mobile;
+```
+返回controller的doLogin的参数校验
+```java
+@RequestMapping("/do_login")
+@ResponseBody
+public Result<String> doLogin(@Valid  LoginVo loginVo) {
+    log.info(loginVo.toString());
+    CodeMsg code = userService.login(loginVo);
+    if(code.getCode()==0)return Result.success("登录成功");
+    else return Result.error(code);
+}
+```
+可以得到完整错误信息
+![error](/images/errormsg.jpg)
+
+错误处理新建exception包
+添加`@ControllerAdvice` 和controller是一样的 
+```java
+@ControllerAdvice
+@ResponseBody
+public class BindExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public Result<String> bindexp(HttpServletRequest request,Exception e){
+        if(e instanceof BindException){
+            BindException ex = (BindException) e;
+            List<ObjectError> errors = ex.getAllErrors();
+            ObjectError objectError = errors.get(0);
+            String defaultMessage = objectError.getDefaultMessage();
+            return Result.error(CodeMsg.BIND_ERROR.fillArgs(defaultMessage));
+
+        }else{
+            //通用异常
+            return Result.error(CodeMsg.SERVER_ERROR);
+        }
+    }
+}
+```
+可传递参数的错误信息，原来定义的枚举类不能new
+`CodeMsg.BIND_ERROR.fillArgs(msg)`
+```java
+public class  CodeMsg {
+    private  int code;
+    private  String msg;
+    private CodeMsg( int code,String msg ) {
+        this.code = code;
+        this.msg = msg;
+    }
+    //通用的错误码
+    public static CodeMsg SUCCESS = new CodeMsg(0, "success");
+    public static CodeMsg SERVER_ERROR = new CodeMsg(500100, "服务端异常");
+    public static CodeMsg BIND_ERROR = new CodeMsg(500101, "参数校验异常：%s");
+    //登录模块 5002XX
+    public static CodeMsg SESSION_ERROR = new CodeMsg(500210, "Session不存在或者已经失效");
+    public static CodeMsg PASSWORD_EMPTY = new CodeMsg(500211, "登录密码不能为空");
+    public static CodeMsg MOBILE_EMPTY = new CodeMsg(500212, "手机号不能为空");
+    public static CodeMsg MOBILE_ERROR = new CodeMsg(500213, "手机号格式错误");
+    public static CodeMsg MOBILE_NOT_EXIST = new CodeMsg(500214, "手机号不存在");
+    public static CodeMsg PASSWORD_ERROR = new CodeMsg(500215, "密码错误");
+    //参数校验异常：%s
+    public CodeMsg fillArgs(Object... args) {
+        int code = this.code;
+        String message = String.format(this.msg,args);
+        return new CodeMsg(code,message);
+    }
+}
+```
+测试：200返回`{"code":500101,"msg":"参数校验异常：手机号错","data":null}`
+
+##### 定义全局异常
+```java
+public class GlobalException extends RuntimeException{
+
+    private static final long serialVersionUID = 1L;
+    
+    private CodeMsg cm;
+    
+    public GlobalException(CodeMsg cm) {
+        super(cm.toString());
+        this.cm = cm;
+    }//get
+}
+```
+UserService.java
+修改业务代码直接抛异常而不是返回CodeMsg
+```java
+public boolean login( LoginVo loginVo) {
+if(loginVo == null) {
+    throw new GlobalException(CodeMsg.SERVER_ERROR);
+}
+if(user == null) {
+    throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+}
+if(!calcPass.equals(dbPass)) {
+    throw new GlobalException(CodeMsg.PASSWORD_ERROR);
+}
+return true;
+}
+```
+添加全局异常处理类,注意合并成一个异常处理，不要覆盖
+```java
+ControllerAdvice
+@ResponseBody
+public class GlobalExceptionHandler {
+    //拦截任何的异常
+    @ExceptionHandler(value=Exception.class)
+    public Result<String> exceptionHandler(HttpServletRequest request, Exception e){
+        e.printStackTrace();
+        if(e instanceof BindException) {
+            BindException ex = (BindException)e;
+            List<ObjectError> errors = ex.getAllErrors();
+            ObjectError error = errors.get(0);
+            String msg = error.getDefaultMessage();
+            return Result.error(CodeMsg.BIND_ERROR.fillArgs(msg));
+        }else if(e instanceof GlobalException) {
+            GlobalException ex = (GlobalException)e;
+            return Result.error(ex.getCm());
+        }else {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+    }
+}
+```
+修改controllor中service的返回值，异常已经处理了，不用返回值
+```java
+userService.login(loginVo);
+return Result.success("登录成功");
+```
+
+### 8.分布式Session
+1.容器session同步 比较复杂
+2.登陆成功后生成sessionID写道cookie传递给客户端，客户端每次访问上传cookie
+用uuid，原生UUID带‘-’，去掉
+```java
+public class UUIDUtil {
+    public static String uuid() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+}
+```
+service中login比对密码正确后，生成token，并写到redis中
+新建redis前缀tokenKey
+```java
+public class tokenKey extends BasePrefix {
+    public tokenKey(String prefix) {
+        super(prefix);
+    }
+    public static tokenKey token = new tokenKey("tk");
+}
+```
+在service中引入，设置cookie中的token name
+```java
+public static final String COOKI_NAME_TOKEN = "token";
+@Autowired
+RedisService redisService;
+public boolean login( HttpServletResponse response,@Valid LoginVo loginVo) {
+    if(loginVo == null) {
+        System.out.println("loginvonull");
+        throw new GlobalException(CodeMsg.SERVER_ERROR);
+    }
+    String mobile = loginVo.getMobile();
+    String formPass = loginVo.getPassword();
+    //判断手机号是否存在
+
+    MiaoshaUser user = getById(Long.parseLong(mobile));
+    if(user == null) {
+        throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+    }
+    //验证密码
+    String dbPass = user.getPassword();
+    String saltDB = user.getSalt();
+    String calcPass = MD5Util.formPassToDBPass(formPass, saltDB);
+    if(!calcPass.equals(dbPass)) {
+        throw new GlobalException(CodeMsg.PASSWORD_ERROR);
+    }
+    //生成cookie
+    String token= UUIDUtil.uuid();
+    redisService.set(tokenKey.token, token, user);
+    Cookie cookie = new Cookie(COOKI_NAME_TOKEN,token);
+    cookie.setMaxAge(tokenKey.token.expireSeconds());
+    cookie.setPath("./");
+     //写到response要HttpResponse
+    response.addCookie(cookie);
+    return true;
+}
+```
+修改login controller
+```java
+@RequestMapping("/do_login")
+@ResponseBody
+public Result<String> doLogin(HttpServletResponse response,@Valid  LoginVo loginVo) {
+    log.info(loginVo.toString());
+     userService.login(response,loginVo);
+    return Result.success("登录成功");
+}
+```
+
+#### 登录成功跳转页
+```html
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>商品列表</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="'hello:'+${user.nickname}" ></p>
+</body>
+</html>
+```
+创建新的controller类
+```java
+@Controller
+@RequestMapping("/goods")
+public class GoodsController {
+    @RequestMapping("/to_list")
+    public String list(Model model,MiaoshaUser user) {
+        return "goods_list";
+    }
+}
+```
+login.html ajax成功后跳转
+```js
+$.ajax({
+    url: "/login/do_login",
+    type: "POST",
+    data:{
+        mobile:$("#mobile").val(),
+        password: password
+    },
+    success:function(data){
+        layer.closeAll();
+        if(data.code == 0){
+            layer.msg("成功");
+            window.location.href="/goods/to_list";
+        }else{
+            layer.msg(data.msg);
+        }
+    },
+    error:function(){
+        layer.closeAll();
+    }
+});
+```
+
+chrome-network-preserve log
+![cookieresponse.jpg](/images/cookieresponse.jpg)
 
 ---
 

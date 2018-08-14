@@ -5,6 +5,9 @@ tags: [cryption]
 ---
 # 安全
 
+## java MD
+MD家族长128，MD2,MD5 JDK有实现 MD4（电驴)Bouncy Castle
+
 # 报文摘要：固定长度的摘要 类似消息验证码MAC
 关键：找到两段内容不同而摘要相同的数据在计算上是不可能的
 

@@ -12,6 +12,153 @@ tags: [alg]
 ### 链式前向星
 
 
+### 堆排序不稳定
+
+### 三向快速排序
+![threepart.jpg](/images/threepart.jpg)
+取第一位，将所有字符串分成3份
+
+### MSD most-significant-digit-first 不用长度相同从左开始
+一般也是NW复杂度，对于N很大的情况可以达到$Nlog_RN$
+![MSD](/images/MSD.jpg)
+ASCII的R是256，需要count[258]
+Unicode需要65536，可能要几小时
+按第0位分组，对每组递归按第1位分组...n
+![MSD2](/images/MSD2.jpg)
+当前前d位都相同的组，组内字符串个数小于15，用插入排序
+{% fold %}
+```java
+import java.util.Arrays;
+
+public class MSD {
+private static String[] aux;
+private static int R = 256;
+private static final int M = 3;
+private static int charAt(String s,int d){
+    if(s.length()>d)return s.charAt(d);
+    else return -1;
+}
+public static void sort(String[] a){
+    aux = new String[a.length];
+    sort(a,0,a.length-1,0);
+}
+private static boolean less(String v,String w,int d){
+    for (int i = d; i <Math.min(v.length(),w.length()) ; i++) {
+        if(v.charAt(i)<w.charAt(i))return true;
+        if(v.charAt(i)>w.charAt(i))return false;
+    }
+    return  v.length()<w.length();
+//        return v.substring(d).compareTo(w.substring(d))<0;
+}
+private static void sort(String[] a,int lo,int hi,int d){
+    if(hi<=lo)return;
+    //添加一步阈值，如果a长度太小，直接用插入排序
+    if(hi<=lo+M){
+        for (int i = lo; i <=hi ; i++) {
+            for (int j = i; j >lo&&less(a[j],a[j-1],d);j--) {
+                String tmp = a[j];
+                a[j]=a[j-1];
+                a[j-1]=tmp;
+            }
+        }
+        return;
+    }
+    //0位留作字符串结尾？
+    int[] count = new int[R+2 ];
+    for (int i = lo; i <=hi ; i++) {
+        count[charAt(a[i],d)+2]++;
+    }
+    for (int i = 0; i <R+1 ; i++) {
+        count[i+1]+=count[i];
+    }
+    for (int i = lo; i <=hi ; i++) {
+        aux[count[charAt(a[i],d)+1]++] = a[i];
+    }
+    for (int i = lo; i <=hi ; i++) {
+        a[i] =aux[i-lo];
+    }
+    for (int i = 0; i <R ; i++) {
+        sort(a,lo+count[i],lo+count[i+1]-1,d+1);
+    }
+}
+
+public static void main(String[] args) {
+    String[] words = {"4PGC938","2iye230","2iye231","3cio720","fds","1","4PGC933","4PGC9382","4PGC9384","4PGC9385","4PGC9387","4PGC9388","4PGC9389"};
+    sort(words);
+    System.out.println(Arrays.toString(words));
+}
+}
+```
+{% endfold %}
+
+
+### LSD 基数排序radix sort 定长字符串 复杂度WN  低位优先
+![LSD](/images/LSD.jpg)
+长度相同的字符串，从最后一位开始排序
+（如何应用到变长字符串？）
+```java
+public static void sort(String[] a,int w){
+    int N = a.length;
+    int R = 256;
+    //只初始化一次
+    String[] aux = new String[N];
+    for (int d = w-1; d >=0 ; d--) {
+        int[] count = new int[R+1];
+
+        for (int i = 0; i <N ; i++) {
+            count[a[i].charAt(d)+1]++;
+        }
+        for (int i = 0; i <R ; i++) {
+            count[i+1]+=count[i];
+        }
+        for (int i = 0; i <N ; i++) {
+            aux[count[a[i].charAt(d)]++]=a[i];
+        }
+        for (int i = 0; i < N; i++) {
+            a[i]=aux[i];
+        }
+
+    }
+
+}
+```
+
+### key-index count sort键索引计数法 稳定的
+![indexsort](/images/indexsort.jpg)
+count:[0, 2, 3, 1, 2, 1, 3]
+累加cnt[0, 2, 5, 6, 8, 9, 12] 起始索引
+结果[a, a, b, b, b, c, d, d, e, f, f, f]
+```java
+static int[] count = new int[7];
+static private int[] countt(String s){
+    int N = s.length();
+    for (int i = 0; i <N ; i++) {
+        //关键 +1
+        count[s.charAt(i)-'a'+1]++;
+    }
+    return count;
+}
+static private int[] acu(){
+    for (int i = 0; i < count.length-1; i++) {
+        count[i+1]+=count[i];
+    }
+    return count;
+}
+static private char[] axuu(String s){
+  char[] axu = new  char[s.length()];
+
+    for (int i = 0; i < s.length(); i++) {
+        //关键 ++
+        axu[count[s.charAt(i)-'a']++] = s.charAt(i);
+    }
+    return axu;
+}
+System.out.println(Arrays.toString(countt("dacffbdbfbea")));
+System.out.println(Arrays.toString(acu()));
+String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
+```
+
+
 ### MST：
 将图的点分成2个集合，用边连接两个集合中的点，最小的边集是MST
 
@@ -457,6 +604,16 @@ boolean hasCircle(int idx,int[] visited){
 
 #### lc481 返回kolakoski前N中有几个1
 
+### 5只猴子分桃，每次拿走一个正好分成5堆，问桃子数
+
+### !543树中两点的最远路径，自己到自己0
+> [4,2,1,3]路径长度3
+
+![lc545](/images/lc545.jpg)
+将每个点试当成转折点,在更新左右最长高度的同时更新rst = Max(rst,l+r);
+
+### ！！687树中值相等的点的路径长
+
 ### !!!114原地将二叉树变成链表
 1.入栈迭代40%
     1. 先入栈右子树，再入栈左子树，更新右节点为栈顶。
@@ -699,7 +856,22 @@ def isPrime(n):
 421 ：‭‭000110100101‬
 
 ---
-### 97 s1和s2是否交错组成s3
+### 790 L型，XX型骨牌覆盖2xN的board
+> Input: 3
+Output: 5
+Explanation: 
+The five different ways are listed below, different letters indicates different tiles:
+XYZ XXZ XYY XXY XYY
+XYZ YYZ XZZ XYY XXY
+
+![lc790.jpg](/images/lc790.jpg)
+1.如果只XX骨牌
+dp[i] 表示N = i的时候有多少种解
+其实是费fib数列
+
+
+
+### !!97 s1和s2是否交错组成s3
 [Solution](https://leetcode.com/problems/interleaving-string/solution/)
 状态dp[len1][len2]表示s1长度len1，s2长度len2出现在s3[len1+len2]中
 任意位置s3[i]一定是由s1[m],s2[n]组成的

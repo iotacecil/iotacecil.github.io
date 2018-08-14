@@ -4,7 +4,7 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 ---
 ### pandas操作：
-1.
+1.`userpd.columns=userpd.columns.droplevel([0,1])`
 
 ### pip镜像
 ```sh
