@@ -3,6 +3,12 @@ title: About CentOS
 date: 2018-03-08 13:49:14
 tags: [CentOS]
 ---
+### shell wordcount:
+```shell
+cat wordcount.txt |sed 's/[,.:;/!?]/ /g'|awk '{for(i=1;i<=NF;i++)array[$i]++;}END{for(i in array) print i,array[i]}'
+
+```
+
 ### centos装python3
 ```sh
 yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make

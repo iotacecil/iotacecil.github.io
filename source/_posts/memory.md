@@ -3,6 +3,31 @@ title: 操作系统+内存知识
 date: 2018-03-05 20:43:15
 tags: [os,memory]
 ---
+### 银行家算法
+条件：
+1.固定进程数
+2.每个进程预先申请最大需要资源数量
+3.不能申请比系统可用资源总数还多的资源
+4.进程等待资源时间有限
+5.进程用完会还
+数据结构：
+n：进程数
+m：资源类数量
+`Avaliable[1..m]`
+`Max[1..n,1..m]`每个进程对某一资源最大需求量
+`Allocation[1..n,1..m]`当前进程分配到的 资源
+`Need[1..n,1..m]`当前进程还需要多少资源
+`Request[1..n,1..m]`本次申请多少资源
+
+系统状态：
+当前可用资源的数量`Work[1..m]=Available`
+`Finish[1..n]=False`
+//to-do
+遍历查找进程i：`Finish[i]==false&Need[i]<=Work`
+
+
+
+Linux IO模式及 select、poll、epoll详解
 https://segmentfault.com/a/1190000003063859
 ### 为什么要用反码
 0如果是正数000...0

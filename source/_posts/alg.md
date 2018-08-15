@@ -4,6 +4,85 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 ---
 
+### 亚线性算法o(n)小于输入规模
+亚线性时间：
+[scale-free network](https://zh.wikipedia.org/wiki/%E6%97%A0%E5%B0%BA%E5%BA%A6%E7%BD%91%E7%BB%9C)S：
+大部分节点只和很少节点连接，而有极少的节点与非常多的节点连接。
+网络中随机抽取一个节点，它的度是多少呢？这个概率分布就称为节点的度分布
+![scalenetwork.jpg](/images/scalenetwork.jpg)
+顶点的度满足幂律分布（也称为帕累托分布）,所以不能均匀采样计算每个人的平均度数。
+
+亚线性空间
+中位数问题，知道所有的输入，有O(n)的分治算法
+
+### 水库抽样Reservpor Sampling 亚线性空间
+> “给出一个数据流，这个数据流的长度很大或者未知。并且对该数据流中数据只能访问一次。请写出一个随机选择算法，使得数据流中所有数据被选中的概率相等。”
+
+当扫描到前n个数字时，保留数组中k个均匀的抽样
+1.k大小的数组
+2.填充k个元素
+3.收到第i个元素t。以k/i的概率替换A中的元素。这样保证收到第i个数字的时候，i在k中的概率是k/i。
+实现：生成`[1..k..i]`中随机数j，如果j<=k（k/i的概率),A[j]=t
+证明：第i个数接收时有k/i的概率在k数组中，当第i+1个数接收时,i+1有k/(i+1)概率在数组k中，并且刚好替换掉的是第i个数的概率是k中选i：1/k，所以第i+1个数来之后i还在k中的概率是（1-k/(i+1)\*1/k)=（1-1/(1+i)）
+![shuku.jpg](/images/shuku.jpg)
+```java
+private void select(int[] stream,int n,int k){
+    int[] reserve = new int[k];
+    int i;
+    for(i=0;i<k;i++){
+        reserve[i]=stream[i];
+    }
+    Random r = new Random();
+    for(;i<n;i++){
+        int j = r.nextInt(i+1);
+        if(j<k)reserve[j]=stream[i];
+    }//sout
+}
+```
+
+### 398 数组中重复元素随机返回index
+> int[] nums = new int[] {1,2,3,3,3};
+Solution solution = new Solution(nums);
+
+> // pick(3) should return either index 2, 3, or 4 randomly. Each index should have equal probability of returning.
+solution.pick(3);
+
+> // pick(1) should return 0. Since in the array only nums[0] is equal to 1.
+solution.pick(1);
+
+水库抽样：流式处理，空间复杂度O(1),pick O(N)
+如果用hashmap，初始化O(N)时间，O（N）空间，数组太大就不行。
+```java
+class Solution {
+    int[] nums;
+    Random r;
+    public Solution(int[] nums) {
+        this.nums=nums;
+        this.r = new Random();
+    }
+    
+    public int pick(int target) {
+        int cnt =0;
+        int rst =-1;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]!=target)continue;
+            //以1/++cnt的概率抽这个数
+            // int j = r.nextInt(++cnt);
+            // if(j==0)rst=i;
+            else{//不赋值变量从180ms->127ms
+            if(r.nextInt(++cnt)==0)rst=i;
+            }
+        }
+        return rst;
+    }
+}
+```
+
+### 382 随机链表 extremely large and its length is unknown
+长度不知，读到第三个node，让它的概率变成1/3，用1/3的概率替换掉之前选择的item
+> 由于计算机产生的随机数都是伪随机数，对于相同的随机数引擎会产生一个相同的随机数序列，因此，如果不使用静态变量（static），会出现每次调用包含随机数引擎的函数时，随机数会重新开始产生随机数，因此会产生相同的一串随机数。比如你第一次调用产生100个随机数，第二次调用仍然会产生这一百个随机数。如果将随机数引擎设置为静态变量，那么第一次调用会产生随机数序列中的前100个随机数，第二次调用则会产生第100到200的随机数。
+
+
 ### 笛卡尔树
 
 ### RMQ
@@ -1445,6 +1524,7 @@ $=>x=12$
 ![connect.jpg](/images/connect.jpg)
 无向图的连通分量可以用并查集（集合）来做
 并查集：[12,3,4,5]->[6,2,3,4,5]位置存放的是根节点
+![unionfind.jpg](/images/unionfind.jpg)
 有向图的连通分量Kosaraju 算法4p380
 ![kosaraju.jpg](/images/kosaraju.jpg)
 1.将图的边反向,dfs得到逆后序
@@ -2488,6 +2568,7 @@ public class Solution {
     return n == 0 ? "" : convertToTitle(--n / 26) + (char)('A' + (n % 26));
 }
 ```
+
 
 # 搜索算法的优化
 

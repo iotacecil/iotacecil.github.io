@@ -5,6 +5,13 @@ tags: [alg]
 ---
 ### pandas操作：
 1.`userpd.columns=userpd.columns.droplevel([0,1])`
+2.`df.set_index('date', inplace=True)`列 ->索引
+3.`df['index'] = df.index`,`df.reset_index(level=0, inplace=True)`
+![pandasttt.jpg](/images/pandasttt.jpg)
+4.`user_ca_ph.unstack(level=1)`
+5.去掉不用的复合索引
+`user_ca_ph_cnt.columns=user_ca_ph_cnt.columns.droplevel([0,1])`
+6.填空`user_ca_ph_cnt=user_ca_ph_cnt.fillna(0.)`
 
 ### pip镜像
 ```sh

@@ -10,6 +10,32 @@ tags:
 1. 三大接口：`Iterator`,`Collection`,`Map`
 2. 工具类：`Collections` `Arrays`
 
+## Arrays.asList
+String可以
+```java
+String[] ss = {"da","da"};
+List<String> strings = Arrays.asList(ss);
+```
+基本数据类型不行
+```java
+int[] ss = {1,2};
+List<int[]> ints1 = Arrays.asList(ss);
+```
+源码：基本数据类型
+```java
+public static <T> List<T> asList(T... a) {
+    return new ArrayList<>(a);
+}
+```
+
+## 泛型类型擦除
+```java
+List<String> l1 = new ArrayList<String>();
+List<Integer> l2 = new ArrayList<Integer>();
+//true
+System.out.println(l1.getClass() == l2.getClass());
+```
+
 ## guava组件
 1. `ImmutableList<String> ilist = ImmutableList.of("a","b");`不可变List
 2. 过滤器
