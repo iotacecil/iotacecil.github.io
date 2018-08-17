@@ -165,6 +165,9 @@ R树，多维B树，解决经纬度查询。Minimal Bounding Rectangle算法。�
 缓冲区溢出：用户名过长没有判断就放进内存，写入程序的内存部分
 TLS：Thread local strategy 线程的独立内存
 
+### 虚拟内存
+![virtualmemory.jpg](/images/virtualmemory.jpg)
+
 ### 缺页中断
 MMU访问虚拟内存时，这页虚拟内存还没有分配物理内存。向cpu发出缺页中断。cpu初始化物理页的内容分配，在进程页表添加映射。
 `int n = *p`当p所指向的地址在虚拟内存中，不是将p的值复制给内存，而是将p所在的虚拟内存的分页放入物理内存

@@ -3,6 +3,7 @@ title: problems
 date: 2018-03-09 08:39:10
 tags: [leetcode]
 ---
+虚拟机traceroute超时没回应
 
 不要把xshell的ctrl-c变成复制，不然没办法结束程序
 

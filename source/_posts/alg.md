@@ -3,6 +3,95 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
+### 56 合并区间 扫描线
+方法1：O(nLogn) 需要O(n)空间
+1.按起点排序，
+2.push第一个interval
+3.for全部interval：
+  a.不交叉，push
+  b.交叉,更新栈顶的end
+
+方法2：分解成start[],end[]
+starts:   1    2    8    15
+ends:     3    6    10    18
+push(1,6)
+当`start[i+1]<end[i]` `push(start[j],end[i])` 更新`j=i+1`
+
+方法3：原地算法
+1.按地点降序排序
+2. a如果不是第一个，并且和前一个可以合并，则合并
+   b push当前
+
+### 57 插入一个区间并合并
+1. 将区间插到newInterval.start>interval.start之前的位置
+
+### 435 去掉最少区间使区间不重叠
+```java
+Arrays.sort(intervals,(a,b)->{a.end!=b.end?(a.end-b.end):(a.start-b.start)});
+```
+性能很慢44ms
+换 提升到2ms 打败了100%
+```java
+Arrays.sort(intervals,new Comparator<Inteval>(){
+    public int compare(Interval a,Interval b){
+        if(a.start==b.start)return a.end-b.end;
+        return a.start-b.start;
+    }
+})
+```
+
+算法：按start排序，如果重叠了，end更新成min(end1,end2)
+
+
+
+### 697 保留数组中最高频出现数字频数的最短数组长度
+> Input: [1,2,2,3,1,4,2]
+> 最小连续子数组，使得子数组的度与原数组的度相同。返回子数组的长度
+> Output: 6 最高频是2->【2,2,3,1,4,2】
+用3个hashmap扫一遍记录每个数字出现的cnt,left,right
+最后cnt最大的right-left+1
+合并成一个hashmap<Integer,int[3]>
+
+
+### 819 找出句子中出现频率最高没被ban掉的词
+正则去掉所有标点
+> "Bob hit a ball, the hit BALL flew far after it was hit."
+
+pP 其中的小写 p 是 property 的意思，表示 Unicode 属性，用于 Unicode 正表达式的前缀。
+
+大写 P 表示 Unicode 字符集七个字符属性之一：标点字符。
+其他六个是
+L：字母；
+M：标记符号（一般不会单独出现）；
+Z：分隔符（比如空格、换行等）；
+S：符号（比如数学符号、货币符号等）；
+N：数字（比如阿拉伯数字、罗马数字等）；
+C：其他字符
+P：各种标点
+
+```java
+//busymannote
+// [Bob, hit, a, ball, the, hit, BALL, flew, far, after, it, was, hit]
+paragraph.split("\\PL+");
+// Bob hit a ball the hit BALL flew far after it was hit
+paragraph.replaceAll("\\pP","");
+paragraph.replaceAll("[^a-zA-Z ]", "")
+```
+
+```java
+public String mostCommonWord(String paragraph, String[] banned) {
+ Set<String> ban = new HashSet<>(Arrays.asList(banned));
+    Map<String,Integer> cnt = new HashMap<>();
+    String[] split = paragraph.toLowerCase().split("\\PL+");
+    for(String s:split)if(!ban.contains(s))cnt.put(s,cnt.getOrDefault(s,0 )+1);
+    return Collections.max(cnt.entrySet(),Map.Entry.comparingByValue()).getKey();
+}
+```
+
+
+### 743 从一个node广播，让所有节点收到最多要多久 单源最短路径
+dijkstra如果用heap可以从$N^2$->$NlogN+E$ O(N+E)
+Bellman-Ford O(NE)稠密图不好 空间O(N)
 
 ### 亚线性算法o(n)小于输入规模
 亚线性时间：
@@ -82,6 +171,10 @@ class Solution {
 长度不知，读到第三个node，让它的概率变成1/3，用1/3的概率替换掉之前选择的item
 > 由于计算机产生的随机数都是伪随机数，对于相同的随机数引擎会产生一个相同的随机数序列，因此，如果不使用静态变量（static），会出现每次调用包含随机数引擎的函数时，随机数会重新开始产生随机数，因此会产生相同的一串随机数。比如你第一次调用产生100个随机数，第二次调用仍然会产生这一百个随机数。如果将随机数引擎设置为静态变量，那么第一次调用会产生随机数序列中的前100个随机数，第二次调用则会产生第100到200的随机数。
 
+### 频繁元素计算 Misra Gries(MG)算法
+
+
+### 最小生成树
 
 ### 笛卡尔树
 
@@ -237,13 +330,11 @@ System.out.println(Arrays.toString(acu()));
 String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 ```
 
+### 数组组成三角形的最大周长
+贪心，排序，如果$a[i]<a[i-1]+a[i-2]$则没有其他两条边可以两边之和>第三边了，换下一条当最长边。
 
 ### MST：
 将图的点分成2个集合，用边连接两个集合中的点，最小的边集是MST
-
-
-### 数组组成三角形的最大周长
-贪心，排序，如果$a[i]<a[i-1]+a[i-2]$则没有其他两条边可以两边之和>第三边了，换下一条当最长边。
 
 
 ### MST和聚类：
@@ -437,17 +528,6 @@ O(n!)复杂度
 ### 164 桶排序找区间最大值
 
 ### 二分图 让每条边的两个顶点属于不同的集合
-
-#### 785
-```
-输入[0]={1,3}0的邻点是1,3
-[[1,3], [0,2], [1,3], [0,2]]
-The graph looks like this:
-0----1
-|    |
-|    |
-3----2
-```
 ![bipartite.jpg](/images/bipartite.jpg)
 max match：没有两点共享1点，最多的边数
 ![matching](/images/matching.jpg)
@@ -457,6 +537,67 @@ maximum：有两种matching的画法，3条边的为max
 1. 室友分配问题不是二分图，因为有3人团，是最大团问题
 2. 出租车和乘客匹配问题 问题是求最小边和
 3. 分配老师给班级是二分图max match问题
+
+#### 785 是否是二分图
+```
+输入[0]={1,3}0的邻点是1,3
+[[1,3], [0,2], [1,3], [0,2]]
+The graph looks like this:
+0----1
+|    |
+|    |
+3----2
+```
+不用建图，已经是邻接表了。
+按算法4上75%
+还可以优化mark和color为一个数组，用位运算变更状态，变成boolean的dfs
+```java
+boolean[] marked;
+boolean[] color;
+boolean isTwo = true;
+public boolean isBiartie(int[][] graph){
+    marked = new int[graph.length];
+    color = new int[graph.length];
+    for(int s =0;s<graph.length;s++){
+        if(!marked[s])dfs(graph,s);
+    }
+    return isTwo;
+}
+private void dfs(int[][] G,int v){
+    marked[v]=true;
+    for(int w :G[v]){
+        color[w]=!color[v];
+        dfs(G,w);
+    }else if(color[w]==color[v])isTwo=false;
+}
+```
+改成boolean的dfs->100%
+```java
+boolean[] marked;
+boolean[] color;
+boolean isTwo = true;
+public boolean isBipartite(int[][] graph) {
+    marked = new boolean[graph.length];
+    color = new boolean[graph.length];
+    for (int s = 0; s <graph.length ; s++) {
+        if(!marked[s]&&!dfs(graph,s))return false;
+    }
+    return true;
+}
+private boolean dfs(int[][] graph,int v){
+    marked(v)=true;
+    for(int w:graph[v]){
+        //*关键
+        if(!marked[w]){
+        color[w]=!color[v];
+        if(!dfs(graph,w))return false;
+        }
+        else if(color[w]==color[v])return false;
+    }
+    return true;
+}
+```
+
 
 ### 494 在数字中间放正负号使之==target
 递归的2种写法另一种void用全局变量累加
@@ -823,23 +964,6 @@ dp：
 ```java
 dp[i] = Math.max(dp[i],Math.max(j*(i-j),j*dp[i-j]));
 ```
-
-### 435 去掉最少区间使区间不重叠
-```java
-Arrays.sort(intervals,(a,b)->{a.end!=b.end?(a.end-b.end):(a.start-b.start)});
-```
-性能很慢44ms
-换 提升到2ms 打败了100%
-```java
-Arrays.sort(intervals,new Comparator<Inteval>(){
-    public int compare(Interval a,Interval b){
-        if(a.start==b.start)return a.end-b.end;
-        return a.start-b.start;
-    }
-})
-```
-
-算法：按start排序，如果重叠了，end更新成min(end1,end2)
 
 
 ### 671 根的值<=子树的值的二叉树中的第二小元素

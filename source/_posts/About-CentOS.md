@@ -3,6 +3,10 @@ title: About CentOS
 date: 2018-03-08 13:49:14
 tags: [CentOS]
 ---
+`netstat -tunpl`
+`ss -t` tcp连接
+
+
 ### shell wordcount:
 ```shell
 cat wordcount.txt |sed 's/[,.:;/!?]/ /g'|awk '{for(i=1;i<=NF;i++)array[$i]++;}END{for(i in array) print i,array[i]}'

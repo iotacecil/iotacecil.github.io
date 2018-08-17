@@ -3,6 +3,8 @@ title: cpp
 date: 2018-04-23 08:59:30
 tags:
 ---
+编译期常量constexpr
+
 ### static_cast
 强制类型转换
 

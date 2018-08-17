@@ -3,6 +3,61 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### Connection
+https://imququ.com/post/transfer-encoding-header-in-http.html
+HTTP/1.0 的持久连接机制是后来才引入的，通过 Connection: keep-alive 这个头部来实现，服务端和客户端都可以使用它告诉对方在发送完数据之后不需要断开 TCP 连接，以备后用。HTTP/1.1 则规定所有连接都必须是持久的，除非显式地在头部加上 Connection: close。所以实际上，HTTP/1.1 中 Connection 这个头部字段已经没有 keep-alive 这个取值了，但由于历史原因，很多 Web Server 和浏览器，还是保留着给 HTTP/1.1 长连接发送 Connection: keep-alive 的习惯。
+
+浏览器可以通过 Content-Length 的长度信息，判断出响应实体已结束。那如果 Content-Length 和实体实际长度不一致会怎样？有兴趣的同学可以自己试试，通常如果 Content-Length 比实际长度短，会造成内容被截断；如果比实体内容长，会造成 pending。
+
+TTFB（Time To First Byte），它代表的是从客户端发出请求到收到响应的第一个字节所花费的时间。
+
+在头部加入 Transfer-Encoding: chunked 之后，就代表这个报文采用了分块编码。这时，报文中的实体需要改为用一系列分块来传输。每个分块包含十六进制的长度值和数据，长度值独占一行，长度不包括它结尾的 CRLF（\r\n），也不包括分块数据结尾的 CRLF。最后一个分块长度值必须为 0，对应的分块数据没有内容，表示实体结束。
+```js
+require('net').createServer(function(sock) {
+    sock.on('data', function(data) {
+        sock.write('HTTP/1.1 200 OK\r\n');
+        sock.write('Transfer-Encoding: chunked\r\n');
+        sock.write('\r\n');
+
+        sock.write('b\r\n');
+        sock.write('01234567890\r\n');
+
+        sock.write('5\r\n');
+        sock.write('12345\r\n');
+
+        sock.write('0\r\n');
+        sock.write('\r\n');
+    });
+}).listen(9090, '127.0.0.1');
+```
+
+### webworkers
+《高性能网站建设进阶指南》
+https://www.html5rocks.com/en/tutorials/workers/basics/
+![webworkers.jpg](/images/webworkers.jpg)
+![XHR.jpg](/images/XHR.jpg)
+```js
+ var worker = new Worker("./worker.js")
+    console.log("主线程主线程主线程主线程1")//1
+    worker.addEventListener("message",function(e){
+        console.log("主线程主线程主线程主线程2")//8
+        console.log("worker said",e.data)//9
+        console.log("主线程主线程主线程主线程3")//10
+    },false)
+    console.log("主线程主线程主线程主线程4")//2
+    worker.postMessage("hello world");
+    console.log("主线程主线程主线程主线程5")//3
+//worker.js
+console.log("子线程0")//4
+self.addEventListener("message",function(e){
+    console.log("子线程1")//6
+    self.postMessage(e.data)
+    console.log("子线程2")//7
+},false)
+console.log("子线程3")//5
+```
+
+
 ### fisher-yates 洗牌
 >shuffle the deck first to randomize the order and insure a fair game
 O(n)
@@ -253,6 +308,33 @@ http/1.1 字符串传输
 持久链接：一个tcp链接里可以发送很多http请求。减少三次握手次数。
 pipeline:
 添加了host：
+
+《Web性能权威指南》
+![http2.jpg](/images/http2.jpg)
+>是通过支持请求与响应的多路复用来减少延迟，通过压缩 HTTP
+首部字段将协议开销降至最低，同时增加对请求优先级和服务器端推送的支持。
+
+> 它改变了客户端与服务器之间交换数据的方式。
+> 为实现宏伟的性能改进目标，HTTP  2.0 增加了新的二进制分帧数据层
+
+![http2connect.jpg](/images/http2connect.jpg)
+
+> HTTP  2.0 通信都在一个连接上完成，这个连接可以承载任意数量的双向数据流。
+> 每个数据流以消息的形式发送，而消息由一或多个帧组成，这些帧可以乱序发送，然后再根据每个帧首部的流标识符重新组装。
+
+![http22.jpg](/images/http22.jpg)
+
+![sendrecv.jpg](/images/sendrecv.jpg)
+> HTTP 消息分解为独立的帧，交错发送，然后在另一端重新组装是 HTTP  2.0 最
+重要的一项增强。
+
+![http2better.jpg](/images/http2better.jpg)
+
+> http2:：浏览器可以在发现资源时立即分派请求，指定每个流的优先级，让服务器决定最优的响应次序。这样请求就不必排队了，既节省了时间，也最大限度地利用了每个连接。 
+
+> 每个来源一个链接:，所有HTTP 2.0 连接都是持久化的，而且客户端与服务器之间也只需要一个连接即可。
+
+![http2tcp.jpg](/images/http2tcp.jpg)
 
 http2：分帧传输二进制传输（不用连续）
 信道复用 同一个链接多个请求

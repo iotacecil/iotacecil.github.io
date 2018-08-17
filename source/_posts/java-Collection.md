@@ -27,14 +27,75 @@ public static <T> List<T> asList(T... a) {
     return new ArrayList<>(a);
 }
 ```
+## 泛型
+### 泛型方法：
+> 类型参数放在修饰符public static后，返回类型之前
 
-## 泛型类型擦除
+1. 元素限定`<T extends AutoCloseable> void closeAll(ArrayList<T> elems)`确保Array的元素类型是AutoCloseable的子类；`extends`表示子类型、类型限定
+- 多个限定`T extends Runnable & AutoCloseable`,只能有一个限定类，放在第一个，其它都是接口
+2. Manager是Employee子类但`ArrayList<Manger>`不是`ArrayList<Employee>`子类
+因为
+```java
+ArrayList<Manger> bosses = new ArrayList<>();
+ArrayList<Employee> empls = bosses; //非法
+empls.add(new Employee(...)); //可以在管理员列里添加普通成员
+```
+如果使用数组Manger[]和Employee[] 转型是合法的，但赋值会爆`ArrayStoreException`
+> 如果不对ArrayList写操作，转换是安全的。可以用子类通配符
+
+1. `<? extends Employee> staff`可以传Arraylist<Manager>
+    1. staff.get(i)可以 可以将`<? extends Employee>`转成`Employee`
+    2. staff.add(i)不行 不能将任何对象转成`<? extends Employee>`
+2. 父类通配符`<? super Employee>`常用于函数式对象参数（用lambda调用）
+
+
+### 泛型类型擦除
 ```java
 List<String> l1 = new ArrayList<String>();
 List<Integer> l2 = new ArrayList<Integer>();
 //true
 System.out.println(l1.getClass() == l2.getClass());
 ```
+```java
+List<Integer> l2 = new ArrayList<Integer>();
+l2.add(1);
+Method madd = l2.getClass().getDeclaredMethod("add",Object.class);
+//[1, abc]
+madd.invoke(l2,"abc");
+```
+
+### 泛型约束
+3. 类型变量不能实例化 `T[] result = new T[n];`错误
+    1. 以【方法引用】方式提供数组的构造函数`Sting[]::new`
+    `IntFunction<T[]> constr` `T[] result = constr.apply(n)`
+    2. 反射
+    ```java
+    public static <T> T[] repeat(int n,T obj,Class<T> c1){
+    //编译器不知道类型，必须转换
+    @SuppressWarnings("unchecked") 
+    T[] result = (T[])java.lang.reflect.Array.newInstance(c1,n);
+    for(int i=0;i<n;i++)result[i]=obj;
+    return result;
+    }
+    ```
+    调用`String[] greetings = repeat(10,"Hi",String.class);`
+    3. 最简单的方法```java
+     public static <T> ArrayList<T> repeat(int n,T obj){
+        ArrayList<T> result = new ArrayList<>();
+        for(int i =0;i<n;i++) result.add(obj);
+        return result;
+    }
+    ```
+4. 泛型数组`Entry<String,Integer>[]`是合法的，但是初始化要@SuppressWarnings("unchecked")
+正确方法：`ArrayList<Entry<String,Integer>>`
+
+```java
+//可以
+List<Integer>[] gen = (List<Integer>[]) new ArrayList[10];
+```
+
+
+
 
 ## guava组件
 1. `ImmutableList<String> ilist = ImmutableList.of("a","b");`不可变List

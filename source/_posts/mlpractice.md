@@ -3,6 +3,8 @@ title: mlpractice
 date: 2018-03-09 23:45:20
 tags: [alg]
 ---
+
+[很详细的中文泰坦尼克号](https://blog.csdn.net/Koala_Tree/article/details/78725881)
 ### pandas操作：
 1.`userpd.columns=userpd.columns.droplevel([0,1])`
 2.`df.set_index('date', inplace=True)`列 ->索引
@@ -12,6 +14,30 @@ tags: [alg]
 5.去掉不用的复合索引
 `user_ca_ph_cnt.columns=user_ca_ph_cnt.columns.droplevel([0,1])`
 6.填空`user_ca_ph_cnt=user_ca_ph_cnt.fillna(0.)`
+7.` train_data[["Age_int", "Survived"]].groupby(['Age_int'],as_index=False).mean()`
+8.找null`age_df_isnull = age_df.loc[(train_data['Age'].isnull())]`
+9.用dict替换掉一列
+```python
+user_weight =[i/sum([30,53,334,16]) for i in [30,53,334,16]]
+dict(zip(["Amusement","Entertainment","Historical","Park"],user_weight))
+Osaka_cost["userweight"]=Osaka_cost["category"].map(usr_weight)
+```
+10.全部onehot`pd.get_dummies(df)`
+11.离散化，分桶,再向量化/onehot
+```python
+train_data['Fare_bin'] = pd.qcut(train_data['Fare'], 5)
+0      (-0.001, 7.854]
+1    (39.688, 512.329]
+2        (7.854, 10.5]
+3    (39.688, 512.329]
+4        (7.854, 10.5]
+    # factorize
+train_data['Fare_bin_id'] = pd.factorize(train_data['Fare_bin'])[0]
+
+# dummies
+fare_bin_dummies_df = pd.get_dummies(train_data['Fare_bin']).rename(columns=lambda x: 'Fare_' + str(x))
+train_data = pd.concat([train_data, fare_bin_dummies_df], axis=1)
+```
 
 ### pip镜像
 ```sh
