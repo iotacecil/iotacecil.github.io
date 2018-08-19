@@ -242,7 +242,7 @@ for(int i =0;i<n;i++){
         }
         return removed;
     }
- ```
+```
 
 
 ### 函数式接口

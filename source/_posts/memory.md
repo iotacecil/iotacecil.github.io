@@ -3,6 +3,224 @@ title: 操作系统+内存知识
 date: 2018-03-05 20:43:15
 tags: [os,memory]
 ---
+### 磁盘驱动
+
+1. 移动磁头到磁道
+2. 转动磁盘到扇区
+3. 磁生电和内存读，电生磁 内存写
+
+总线倒用技术DMA 扇区和内存
+
+![dictuse](/images/dictuse.jpg)
+
+算出柱面磁头扇区和读写的缓冲区直接out
+
+抽象1：通过盘块号 操作系统 计算出柱面磁头扇区CHS
+
+
+### 磁盘调度算法
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+const int maxn = 100;
+int n, now, s, sum, nnow, everage, p[maxn], b[maxn], sp[maxn], lenp[maxn];
+//显示结果
+void show()
+{
+    sum = 0;
+    cout <<"        被访问的下一磁道号     移动距离（磁道数）\n";
+    for(int i = 0;i < n; ++i)
+    {
+        printf("                 %3d                  %3d\n", sp[i], lenp[i]);
+        sum += lenp[i];
+    }
+    cout <<"        平均寻道长度： "<<(double)sum/n <<"\n";
+}
+//先来先服务
+void FCFS()
+{
+    for(int i = 0;i < n; ++i)
+    {
+        sp[i] = p[i];
+        if(i)   lenp[i] = abs(sp[i-1] - sp[i]);
+        else    lenp[i] = abs(now  - sp[i]);
+    }
+}
+//最短寻道优先
+void SSTF()
+{
+    nnow = now;
+    int fl[maxn] = {0};
+    for(int i = 0;i < n; ++i)
+    {
+        int minx = 999999, pp;
+        for(int j = 0;j < n; ++j)
+        {
+            if(!fl[j] && abs(nnow - p[j]) < minx)
+            {
+                minx = abs(nnow - p[j]);
+                pp = j;
+            }
+        }
+        sp[i] = p[pp];
+        lenp[i] = minx;
+        nnow = p[pp];
+        fl[pp] = 1;
+    }
+}
+//扫描算法
+bool cmp(int a, int b)
+{
+    return a > b;
+}
+void SCAN()
+{
+    nnow = now;
+    int aa[maxn], bb[maxn], ak = 0, bk = 0;
+    for(int i = 0;i < n; ++i)
+    {
+        if(p[i] < nnow) aa[ak++] = p[i];
+        else bb[bk++] = p[i];
+    }
+    sort(aa, aa+ak,cmp);
+    sort(bb, bb+bk);
+    int i = 0;
+    for(int j = 0;j < bk; ++j)
+    {
+        sp[i] = bb[j];
+        lenp[i++] =  bb[j] - nnow;
+        nnow = bb[j];
+    }
+    for(int j = 0;j < ak; ++j)
+    {
+        sp[i] = aa[j];
+        lenp[i++] = nnow - aa[j];
+        nnow = aa[j];
+    }
+}
+//循环扫描算法
+void CSCAN()
+{
+    nnow = now;
+    int aa[maxn], bb[maxn], ak = 0, bk = 0;
+    for(int i = 0;i < n; ++i)
+    {
+        if(p[i] < nnow) aa[ak++] = p[i];
+        else bb[bk++] = p[i];
+    }
+    sort(aa, aa+ak);
+    sort(bb, bb+bk);
+    int i = 0;
+    for(int j = 0;j < bk; ++j)
+    {
+        sp[i] = bb[j];
+        lenp[i++] =  bb[j] - nnow;
+        nnow = bb[j];
+    }
+    for(int j = 0;j < ak; ++j)
+    {
+        sp[i] = aa[j];
+        lenp[i++] = abs(aa[j] - nnow);
+        nnow = aa[j];
+    }
+}
+int main()
+{
+    xbegin:
+        cout<<"请输入被访问的总磁道数：  ";
+        cin >> n;
+        if(n <= 0 ||  n > 100)
+        {
+            cout <<"输入不合法，请重新输入！\n";
+            goto xbegin;
+        }
+    nowCD:
+        cout <<"请输入当前磁道： ";
+        cin >> now;
+        if(now < 0)
+        {
+            cout <<"磁道不存在，请重新输入！";
+            goto nowCD;
+        }
+    pCD:
+        cout <<"请按顺序输入所有需要访问的磁道：";
+        for(int i = 0;i < n; ++i) cin >> p[i];
+        for(int i = 0;i < n; ++i)
+        {
+            b[i] = p[i];
+            if(p[i] < 0)
+            {
+                cout <<"输入中有不存在的磁道，请重新输入！\n";
+                goto pCD;
+            }
+        }
+    serve:
+        cout <<"  1、先来先服务算法（FCFS）\n";
+        cout <<"  2、最短寻道优先算法（SSTF）\n";
+        cout <<"  3、扫描算法（SCAN）\n";
+        cout <<"  4、循环扫描算法（CSCAN）\n";
+        cout <<"请输入所用磁盘调度的算法： ";
+        cin >> s;
+        if(s < 1 || s > 4)
+        {
+            cout <<"输入有误，请重新输入！\n";
+            goto serve;
+        }
+    work:
+        for(int i = 0;i < n; ++i) p[i] = b[i];
+        if(s == 1) FCFS();
+        else if(s == 2) SSTF();
+        else if(s == 3) SCAN();
+        else CSCAN();
+        show();
+    xend:
+        char ch;
+        cout <<"重新选择算法或重新输入数据？（输入Y选择算法，输入y重新输入数据）: ";
+        cin >> ch;
+        if(ch == 'Y') goto serve;
+        else if(ch == 'y') goto xbegin;
+        else cout <<"程序结束，谢谢使用！\n";
+    return 0;
+}
+
+```
+
+https://www.shiyanlou.com/courses/115
+### 进程调度
+![diaodushiji.jpg](/images/diaodushiji.jpg)
+就绪队列改变->重新调度
+进程调度的时机4个：
+1.进程正常/错误终止
+2.创建新进程/等待进程->就绪
+3.进程从运行->阻塞（等待）
+4.进程从运行->就绪（时间片到）
+重新调度的时机：内核对 【中断/陷入（异常）/系统调用】等处理之后【返回用户态】需要重新调度。
+
+调度程序从就绪队列里选择进程可以是刚刚被暂停的，也可以是新的进程，新的就发生进程切换。
+![processchange.jpg](/images/processchange.jpg)
+新的进程上cpu要用自己的地址空间
+![contentstep.jpg](/images/contentstep.jpg)
+
+
+高速缓存：刚才执行进程的指令和数据
+TLB存放了进程的页表表项
+
+新的进程的指令、数据、表项也要放入高速缓存和TLB
+
+### 调度算法
+![diaodumetric.jpg](/images/diaodumetric.jpg)
+
+
+### FC: Fibre Channel
+集群的磁盘阵列通过驱动接口同步磁盘块
+
+1.获得linux文件的访问次数
+2.获得文件和磁盘块的映射
+
+
 ### 银行家算法
 条件：
 1.固定进程数
@@ -121,7 +339,7 @@ pthread线程库实现条件变量的signal 是mesa管程的语义
 2.通过读者写问题的方法解决互斥问题
 
 ### 管道通信PIPE
-![pipe.jpg](/images/pipe.jpg)
+![pipe.jpg](/images/PIPE.jpg)
 
 ### linux，windows常用通信机制
 ![osipc.jpg](/images/osipc.jpg)
@@ -361,9 +579,9 @@ inode：文件系统的数据结构，文件元信息
 
 #### 第7章 内存管理
 - 内存管理 ：
-	- 重定位进程->就绪进程池->处理器利用率
-	- **运行**时内存保护
-	- 进程共享内存
+    - 重定位进程->就绪进程池->处理器利用率
+    - **运行**时内存保护
+    - 进程共享内存
 - 内部碎片、外部碎片：数据<分区->浪费；？动态分区，分区外存储空间变多。
 - 页： 进程和磁盘划分块；帧：主存划分块；一页装入一帧。
 - 段： 长度可变

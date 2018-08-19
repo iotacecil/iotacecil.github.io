@@ -3,6 +3,43 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
+### 879
+
+### 576 无向图访问所有点的最短边数
+
+### 93 分解Ip地址
+dfs
+```java
+private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
+    if(cnt>4)return;
+    if(cnt==4&&idx==s.length()){
+        rst.add(cur);
+    }
+    for(int i =1;i<4;i++){
+        if(idx+i>s.length())break;
+        String tmp = s.substring(idx,idx+i);
+        if((tmp.startsWith("0")&&tmp.length()>1)||(i==3&&Integer.parseInt(tmp)>=256))continue;
+        dfs(rst,s,idx+i,cur+tmp+(cnt==3?"":"."),cnt+1);
+    }
+}
+```
+
+### 旋转矩阵
+![rotate2d.jpg](/images/rotate2d.jpg)
+top=0,bot=3,left=0,right = 3
+n是矩阵大小n>1的时候继续，每一圈，矩阵大小-=2
+将2赋值给8：
+[top+i][right]=[top][left+i]
+i=3:3赋值给12
+每个i要赋值4遍，上下左右
+外层完了之后子问题是top++,left++,right--,bot--,n-=2
+
+方法2：翻转？
+
+### 49 
+直接拿CharArray的sort重建String当key 49%
+
+
 ### 56 合并区间 扫描线
 方法1：O(nLogn) 需要O(n)空间
 1.按起点排序，
@@ -11,7 +48,7 @@ tags: [alg]
   a.不交叉，push
   b.交叉,更新栈顶的end
 
-方法2：分解成start[],end[]
+方法2：分解成`start[],end[]`
 starts:   1    2    8    15
 ends:     3    6    10    18
 push(1,6)
@@ -23,7 +60,29 @@ push(1,6)
    b push当前
 
 ### 57 插入一个区间并合并
-1. 将区间插到newInterval.start>interval.start之前的位置
+方法1： 将区间插到newInterval.start>interval.start之前的位置，用56的和last比较合并
+方法2： 分成left+new+right三部分并合并
+```java
+public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+     List<Interval> left = new ArrayList<>();
+     List<Interval> right = new ArrayList<>();
+     int start =newInterval.start;
+     int end =newInterval.end;
+     for(Interval interval:intervals){
+         if(interval.end<newInterval.start){
+             left.add(interval);
+         }else if(interval.start>newInterval.end){
+             right.add(interval);
+         }else {
+             start = Math.min(start,interval.start);
+             end = Math.max(end,interval.end);
+         }
+     }
+     left.add(new Interval(start,end));
+     left.addAll(right);
+    return left;
+}
+```
 
 ### 435 去掉最少区间使区间不重叠
 ```java
@@ -40,7 +99,7 @@ Arrays.sort(intervals,new Comparator<Inteval>(){
 })
 ```
 
-算法：按start排序，如果重叠了，end更新成min(end1,end2)
+`算法：按start排序，如果重叠了，end更新成min(end1,end2)`
 
 
 
@@ -521,11 +580,16 @@ for(int i =0;i<nums.length;i++){
 ```
 O(n!)复杂度
 
+### 39 等于target的每个数字无限次的combination
+关键：加上start，防止出现3,2,2的重复
+
 ### 279完美平方数？？？
 
 ### 198
 
 ### 164 桶排序找区间最大值
+
+### 求数组的最大gap
 
 ### 二分图 让每条边的两个顶点属于不同的集合
 ![bipartite.jpg](/images/bipartite.jpg)
@@ -621,8 +685,31 @@ dp??：
 所有可能的target最大值是全部正号sum(a),或者全部负号）dp[2\*sum(a)+1]
 题目sum最大2k，则dp[4001]
 
-
+### 图的度
 ![graphmostuse](/images/graphmostuse.jpg)
+1.顶点v的度
+```java
+public static int degree(Map<Integer,List<Integer>> graph,int v){
+    int degree = 0;
+    for(int w :graph.get(v)){
+        degree++;
+    }
+    return degree;
+}
+```
+2.所有顶点的最大度
+```java
+public static int maxDegree(Map<Integer,List<Integer>> graph){
+    int max = 0;
+    for(int v:graph.keySet()){
+        max = Math.max(degree(graph,v ),max);
+    }
+    return max;
+}
+```
+3.
+
+
 
 ### 图的遍历顺序
 ![graphtra](/images/graphtra.jpg)
@@ -728,7 +815,6 @@ private void dfs(List<Integer>[] graph,int v){
             cycle.push(w);
             cycle.push(v);
         }
-        
     }
     onStack[v] =false;
 }
@@ -1934,6 +2020,7 @@ A变成冠军需要赢没比过的另外8个队
 分组问题：如果1/4赛 1234 5678是一组4个是一组
 如果1/2赛  8个是一组
 ![shijiebei](/images/shijiebei.jpg)
+
 {% fold %}
 ```java
 for(int i =1;i<4;i++){
@@ -2055,10 +2142,43 @@ public List<List<Integer>> subsets(int[] nums) {
 ```
 
 ---
-### 815 换公交
-routes = [[1, 2, 7], [3, 6, 7]]
-把车routes[0]的路线当成一个连通分量，并分配一个颜色标记
-BFS相同连通分量标记的点跳过。
+### !815 换公交 BFS
+`routes = [[1, 2, 7], [3, 6, 7]]`
+表示环线`1->5->7->1->5->7->1->`
+求从S->T的最少公交车数量（不是少的站点）
+> Input: routes = [[1, 2, 7], [3, 6, 7]]
+> S = 1
+> T = 6
+> Output: 2乘坐 routes[0]到7，换routes[1]到6
+
+易错点1： bfs的size保留当前层的定点数
+易错点2： deque的add和poll
+
+{% fold %}
+{{0,1,6,16,22,23},
+ {14,15,24,32},
+ {4,10,12,20,24,28,33},
+ {1,10,11,19,27,33},
+ {11,23,25,28},
+ {15,20,21,23,29},
+ {29}};
+ S=4 T=21
+bfs，起点入队，遍历起点可以到达的所有公交(4可以达公交2)，遍历所有公交2上的可达stop{4,10,12,20,24,28,33},
+如果没到T，则4乘的公交换一辆，再遍历有4公交上的其他可达stop。
+**用size保留当前层的定点数** 4的bus全部遍历完后size==0。下一轮重新获取que.size()
+如果4的所有公交都不能达到T，则必须换乘cnt+1。当前起点变成stop{10}，遍历它的公交和stop，不行就{12}这些都是cnt+1可达的。直到stop{20}->bus{2,5}遍历公交5的stop找到T，bfs换乘1层找到的。
+
+注意deque的add是addLast，push是addFirst,poll是pollFirst，pop是poolFirst 队列应该是add+poll,
+bfs如果用栈，则会在这一层还没找完先找下一层cnt=1{4}->
+![bus1.jpg](/images/bus1.jpg)
+cnt=2{33:[2, 3]}->
+将{1,10,11,19,27,33}入队
+![bus2.jpg](/images/bus2.jpg)
+所以回到下一次size--的时候取到了下一层的点33,两个bus都标记过了
+然后就全乱了
+{27:[3]}->{19:[3]}->{11:[3,4]}->bus4的最后{28:[2,4]}->25:[4]->cnt=3{23:[0,4,5]}->bus5找到21
+本来应该bus[2]->20->bus[5]结果bus[2]->bus[4]->bus[5]
+{% endfold %}
 
 数据结构：
 1. {站点：list<经过的公交车id>}
@@ -2067,6 +2187,9 @@ BFS相同连通分量标记的点跳过。
     遍历一辆车的连通分量`while(que.size()>0)`
     遍历当前节点相邻的busid是否乘过`for(int car:list)，`
     并标记这个车的连通分量已乘过，遍历这个连通分量`for(int t:routes[car])`中有没有T，有则结束，没有则将整个连通分量入队。
+```java
+//todonexttime
+```
 
 ---
 ### fib
@@ -2525,6 +2648,7 @@ else if(pre.right!=null){
     }
 ```
 {% endfold %}
+
 正常做法递归中序 15ms 99%
 ```java
 public TreeNode convertBST(TreeNode root) {
@@ -2706,9 +2830,9 @@ public class Solution {
 
 ## 1. 爬山：局部贪心，快速找到可行解，局部最优
 - 8数码:启发函数：当前状态和目标状态的距离：错位方块个数。
-	1. 深度优先
+    1. 深度优先
 ![mounting](\images\mounting.jpg)
-	2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
+    2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
 
 ### Best-First搜索：全局最优贪心
 - 当前所有可扩展节点中启发函数最优点
@@ -2716,8 +2840,8 @@ public class Solution {
 
 ### 分支界限：组合优化
 - 多阶段图搜索：最短路径
-	- 爬山与BF算法得到最优解都需要遍历整个空间
-	1. 用爬山生成界限(可行解or最优解的上限)
+    - 爬山与BF算法得到最优解都需要遍历整个空间
+    1. 用爬山生成界限(可行解or最优解的上限)
 ![fenzhi](\images\fenzhi.jpg)
 
 # 字符串搜索
@@ -2729,60 +2853,60 @@ O(MN)
 
 ### 1. 枚举：
 1. 小于N的完美立方 $a^3=b^3+c^3+d^3$
-	> 按a的值从小到大输出a>b>c>d
+    > 按a的值从小到大输出a>b>c>d
 
-	+ a->[2,N];b->[2,a-1];c[c,a-1];d[c,a-1]
+    + a->[2,N];b->[2,a-1];c[c,a-1];d[c,a-1]
 
 2. 生理周期
-	> A周期23天，B周期28天，C周期31天
-	> 给定三个高峰p,e,i;求给定日子d后下一次三次高峰同一天还有多少天。 输出天数小于21252.
-	> 输入：0 0 0 0
+    > A周期23天，B周期28天，C周期31天
+    > 给定三个高峰p,e,i;求给定日子d后下一次三次高峰同一天还有多少天。 输出天数小于21252.
+    > 输入：0 0 0 0
 
-	+ k=[d+1,21252] ;(k-p)%23,(k-e)%28,(k-i)%31==0
-	```java
-			for(k=d+1;(k-p)%23;++k); //找到第一个高峰
-			for(;(k-e)%28;k+=23); //找双高峰
-			for(;(k-i)%33;k+=23*28); //找三高峰
-			//输出k-d
-	```
+    + k=[d+1,21252] ;(k-p)%23,(k-e)%28,(k-i)%31==0
+    ```java
+            for(k=d+1;(k-p)%23;++k); //找到第一个高峰
+            for(;(k-e)%28;k+=23); //找双高峰
+            for(;(k-i)%33;k+=23*28); //找三高峰
+            //输出k-d
+    ```
 3. 称硬币:已经分组称了3次12枚硬币，找出假币
-	> ABCD EFGH even
-	> ABI EFJK up
-	> ABIJ EFGH even
-	> 输出假的硬币
-	
-	+ 数据结构 `char Left[3][7]``char Right[3][7]` `char result[3][7]` 一共称3次，每边最多放6个硬币，result（天平右边的情况）
-	+ `isFake(char c,bool light )`假设函数：c是轻的
-	+ `for(char c= 'A' to 'L')`枚举假硬币
-	+ `for(3)`三次称重情况都匹配
-		+ 如果假设c是轻的，数组保存输入的left,right;如果c是种的，right保存到left 互换
-		+ `switch result[i][0]` 选择三种u,e,d的情况
-			+ 如果 第一次实验为up,右边高，则c应该出现在right,当`right.indexOf(c)==null`//没出现 return false
-			+ 如果even 判断出现在left||right
-			+ d 判断出现在left
+    > ABCD EFGH even
+    > ABI EFJK up
+    > ABIJ EFGH even
+    > 输出假的硬币
+    
+    + 数据结构 `char Left[3][7]``char Right[3][7]` `char result[3][7]` 一共称3次，每边最多放6个硬币，result（天平右边的情况）
+    + `isFake(char c,bool light )`假设函数：c是轻的
+    + `for(char c= 'A' to 'L')`枚举假硬币
+    + `for(3)`三次称重情况都匹配
+        + 如果假设c是轻的，数组保存输入的left,right;如果c是种的，right保存到left 互换
+        + `switch result[i][0]` 选择三种u,e,d的情况
+            + 如果 第一次实验为up,右边高，则c应该出现在right,当`right.indexOf(c)==null`//没出现 return false
+            + 如果even 判断出现在left||right
+            + d 判断出现在left
 ---
 4. 熄灯问题(deng.java)
-	> 按一个位置，改变上下左右自己5个灯的状态，边角自动变少3，4
-	> 给定每盏灯的初始状态，求按钮方案，使灯全熄灭
-	> 输入 01矩阵 输出 01矩阵
-	> 一个按钮按两次及以上是无意义的，按钮次序无关
-	> {0,1,1,0,1,0},
+    > 按一个位置，改变上下左右自己5个灯的状态，边角自动变少3，4
+    > 给定每盏灯的初始状态，求按钮方案，使灯全熄灭
+    > 输入 01矩阵 输出 01矩阵
+    > 一个按钮按两次及以上是无意义的，按钮次序无关
+    > {0,1,1,0,1,0},
     > {1,0,0,1,1,1},
     > {0,0,1,0,0,1},
     > {1,0,0,1,0,1},
     > {0,1,1,1,0,0}
-	
-	+ 枚举所有可能的开关状态30个开关有$2^{30}$个状态（方案数）
-	+ 只需枚举第一行作为（局部） 后面几行都是确定的。第一行没灭的灯必须要第二行按灭，且其它灯不能按
-	+ 一行01可以采用位运算 一维char数组5位(5行) 用int [0,2^6-1]
-	+ 一个bit异或1 反转`1^1->0反转0^1->1反转；`
-	+ j位 置1 `|=(1<<j)`
-	+ j位 置0 `&=~(1<<j)`
-	+ 取第j 位的值 `>>j&1`
-	>  主循环：1.遍历第一行开关状态
-	>  2.每次换第一行重置原来灯状态lighting[]=输入
-	>  3.对每一行，每一个灯，按switch更新lighting
-	
+    
+    + 枚举所有可能的开关状态30个开关有$2^{30}$个状态（方案数）
+    + 只需枚举第一行作为（局部） 后面几行都是确定的。第一行没灭的灯必须要第二行按灭，且其它灯不能按
+    + 一行01可以采用位运算 一维char数组5位(5行) 用int [0,2^6-1]
+    + 一个bit异或1 反转`1^1->0反转0^1->1反转；`
+    + j位 置1 `|=(1<<j)`
+    + j位 置0 `&=~(1<<j)`
+    + 取第j 位的值 `>>j&1`
+    >  主循环：1.遍历第一行开关状态
+    >  2.每次换第一行重置原来灯状态lighting[]=输入
+    >  3.对每一行，每一个灯，按switch更新lighting
+    
 ```java
 for (int j = 0;j<6;j++){
   if(getBit(result,i,j)==1){
@@ -2791,17 +2915,17 @@ FlipBit(lights,i,j);
 if(j<5)FlipBit(lights,i,j+1);}}
 if(i<4){lights[i+1]^= switchs;}
 ```
-	>  4.更新开关，下一行开关为上一行还亮着灯的位置回3
-	>  5.当lighting最后一行为0，结束
+    >  4.更新开关，下一行开关为上一行还亮着灯的位置回3
+    >  5.当lighting最后一行为0，结束
 
 
 ### 递归
 1. 汉诺塔：将A上的n个移动到C用B中转可以分解为3个字问题(1,2)
-	1. A上n-1个移动到B，用C中转+移动一个盘子sout(A->c)
-	2. 再将B上n-1个移动到C，用A中转
-	3. 回到0 A上n-2个移动到C，用B中转
+    1. A上n-1个移动到B，用C中转+移动一个盘子sout(A->c)
+    2. 再将B上n-1个移动到C，用A中转
+    3. 回到0 A上n-2个移动到C，用B中转
 2. n皇后 递归代替多重循环
-	
+    
 #### 链表DELETE_IF
 ```java
 
@@ -2866,26 +2990,6 @@ return newhead;
 
 转成栈浪费空间并且代码复杂
 
-#### combinations 从list中选n个的组合
-递归框架：
-1选择第0号元素，递归去除第一个元素中选n-1个`com(data.subList(1,data.size()),n-1)`
-2不选，去除第一个元素后选n个元素
-
-递归基准：
-1.当data为空，并且选择0个则合理
-2.当n=0 选完了
-
-```java
-void com(List<Integer> selected,List<Integer> data,int n){
-    if(n==0)printList(selected);
-    if(data.isEmpty())return;
-    selected.add(data.get(0));
-    com(selected,data.subList(1,data.size()),n-1);
-    selected.remove(selected.size()-1,n);
-    com(selected,data.subList(1,data.size()),n);
-}
-```
-
 
 
 最长上升子序列
@@ -2896,11 +3000,11 @@ max(n个子问题)
 `maxLen(k)=max(maxLen(i):i in range(1,k)且ai<ak且k!=1)+1`
 ```python
 for i in range(1,n)
-	maxlen[i]=1
+    maxlen[i]=1
 for i in range(2,n)
-	##求以ai 为终点的最长
-	for j in range(0,i)# ai左边所有的数
-		if a[i]>a[j]: # ai为终点的更长
-		#？？ maxlen[i]也更新了，可能比manlen[j]+1大
-			maxlen[i]=max(maxlen[j]+1,maxlen[i])
+    ##求以ai 为终点的最长
+    for j in range(0,i)# ai左边所有的数
+        if a[i]>a[j]: # ai为终点的更长
+        #？？ maxlen[i]也更新了，可能比manlen[j]+1大
+            maxlen[i]=max(maxlen[j]+1,maxlen[i])
 ```

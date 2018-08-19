@@ -4,8 +4,6 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: java
 ---
-### 打印二维数组应不应该用泛型？不能传递泛型数组
-
 ### 打印整数的二进制表示
 0x8000000 表示100000...0
 
@@ -127,6 +125,7 @@ public class callbackk {
     }
 ```
 {% endfold %}
+
 线程Thread是回调者，Runnable回调接口
 ```java
 new Thread(new Runnable(){

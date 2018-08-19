@@ -3,7 +3,8 @@ title: nodejs
 date: 2018-07-22 12:58:32
 tags:
 ---
-### CommonJS
+### CommonJS nodejs的模块规范
+global对象和process对象
 一个文件是一个模块
 使用requirejs需要自己写包裹函数，nodejs省了这一步
 

@@ -188,7 +188,7 @@ require(['helper'],function(helper){
 });
 ```
 helper.js
-```javascript
+```js
 //模块名，依赖的模块，加载的依赖中的对象（jquery）
 define("helper",['jquery'],fucntion($){
   return {

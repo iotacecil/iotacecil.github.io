@@ -79,7 +79,8 @@ madd.invoke(l2,"abc");
     }
     ```
     调用`String[] greetings = repeat(10,"Hi",String.class);`
-    3. 最简单的方法```java
+    3. 最简单的方法
+    ```java
      public static <T> ArrayList<T> repeat(int n,T obj){
         ArrayList<T> result = new ArrayList<>();
         for(int i =0;i<n;i++) result.add(obj);
@@ -92,6 +93,8 @@ madd.invoke(l2,"abc");
 ```java
 //可以
 List<Integer>[] gen = (List<Integer>[]) new ArrayList[10];
+//可以
+ List<Integer>[] graph=new ArrayList[numCourses];
 ```
 
 
