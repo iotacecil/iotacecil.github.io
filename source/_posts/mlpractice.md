@@ -24,7 +24,7 @@ Osaka_cost["userweight"]=Osaka_cost["category"].map(usr_weight)
 ```
 10.全部onehot`pd.get_dummies(df)`
 11.离散化，分桶,再向量化/onehot
-```python
+```py
 train_data['Fare_bin'] = pd.qcut(train_data['Fare'], 5)
 0      (-0.001, 7.854]
 1    (39.688, 512.329]
