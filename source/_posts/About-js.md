@@ -3,6 +3,9 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### 浏览器缓存
+https://segmentfault.com/a/1190000009638800
+
 ### Connection
 https://imququ.com/post/transfer-encoding-header-in-http.html
 HTTP/1.0 的持久连接机制是后来才引入的，通过 Connection: keep-alive 这个头部来实现，服务端和客户端都可以使用它告诉对方在发送完数据之后不需要断开 TCP 连接，以备后用。HTTP/1.1 则规定所有连接都必须是持久的，除非显式地在头部加上 Connection: close。所以实际上，HTTP/1.1 中 Connection 这个头部字段已经没有 keep-alive 这个取值了，但由于历史原因，很多 Web Server 和浏览器，还是保留着给 HTTP/1.1 长连接发送 Connection: keep-alive 的习惯。

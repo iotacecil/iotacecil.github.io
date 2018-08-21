@@ -3,6 +3,9 @@ title: cpp
 date: 2018-04-23 08:59:30
 tags:
 ---
+### MS-MPI
+https://blog.csdn.net/u011514451/article/details/50675222
+
 编译期常量constexpr
 
 ### static_cast

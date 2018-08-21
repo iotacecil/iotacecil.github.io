@@ -7,6 +7,14 @@ tags: [alg]
 
 ### 576 无向图访问所有点的最短边数
 
+### fraction 背包问题
+Items can be broen down 贪心按value/weight排序
+![knapsack.jpg](/images/knapsack.jpg)
+
+### tsp
+0~3的tspdp解法
+![tspdp.jpg](/images/tspdp.jpg)
+
 ### 93 分解Ip地址
 dfs
 ```java
@@ -245,9 +253,83 @@ class Solution {
 
 ### 堆排序不稳定
 
-### 三向快速排序
+![stringsort.jpg](/images/stringsort.jpg)
+测试：6 5 12 至少都比内置的快
+{% fold %}
+```java
+ public static void main(String[] args) {
+        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        String[] words2 = new String[10000];
+        Random random=new Random();
+        for (int  j= 0; j <words2.length ; j++) {
+            StringBuffer sb=new StringBuffer();
+            int length = random.nextInt(30);
+            for(int i=0;i<length;i++){
+                int number=random.nextInt(62);
+                sb.append(str.charAt(number));
+            }
+            words2[j] = sb.toString();
+        }
+        String[] word3 = words2.clone();
+        String[] word4 = words2.clone();
+        long start = System.currentTimeMillis();
+        sort(words2, 0,words2.length-1 ,0 );
+        long end = System.currentTimeMillis();
+        System.out.println(end-start);
+        long start2 = System.currentTimeMillis();
+        MSD.sort(word3);
+        long end2 = System.currentTimeMillis();
+        System.out.println(end2-start2);
+
+        long start3 = System.currentTimeMillis();
+        Arrays.sort(word4);
+        long end3 = System.currentTimeMillis();
+        System.out.println(end3-start3);
+
+    }
+```
+{% endfold %}
+
+### 三向快速排序 不稳定
 ![threepart.jpg](/images/threepart.jpg)
 取第一位，将所有字符串分成3份
+{% fold %}
+```java
+public class threewaypart {
+    private static int charAt(String s,int d){
+        if(s.length()>d)return s.charAt(d);
+        else return -1;
+    }
+    private static void swap(String[] a ,int i,int j){
+        String tmp = a[i];
+        a[i]=a[j];
+        a[j]=tmp;
+    }
+    private static void sort(String[] a,int lo,int hi,int d){
+        if(hi<=lo)return;
+        int lt = lo,gt = hi;
+        int v = charAt(a[lo],d);
+        int i = lo+1;
+        while (i<=gt){
+            int t = charAt(a[i],d);
+            if(t<v)swap(a,lt++,i++);
+            else if(t>v)swap(a,i,gt--);
+            else i++;
+        }
+        sort(a,lo,lt-1,d);
+        if(v>=0)sort(a, lt, gt, d+1);
+        sort(a,gt+1,hi , d );
+    }
+
+    public static void main(String[] args) {
+        String[] words = {"4PGC938","2iye230","2iye231","3cio720","fds","1","4PGC933","4PGC9382","4PGC9384","4PGC9385","4PGC9387","4PGC9388","4PGC9389"};
+       sort(words,0 , words.length-1,0 );
+        System.out.println(Arrays.toString(words));
+    }
+}
+
+```
+{% endfold %}
 
 ### MSD most-significant-digit-first 不用长度相同从左开始
 一般也是NW复杂度，对于N很大的情况可以达到$Nlog_RN$
@@ -639,7 +721,6 @@ private void dfs(int[][] G,int v){
 ```java
 boolean[] marked;
 boolean[] color;
-boolean isTwo = true;
 public boolean isBipartite(int[][] graph) {
     marked = new boolean[graph.length];
     color = new boolean[graph.length];
@@ -649,7 +730,7 @@ public boolean isBipartite(int[][] graph) {
     return true;
 }
 private boolean dfs(int[][] graph,int v){
-    marked(v)=true;
+    marked[v]=true;
     for(int w:graph[v]){
         //*关键
         if(!marked[w]){
@@ -661,6 +742,9 @@ private boolean dfs(int[][] graph,int v){
     return true;
 }
 ```
+
+#### 886 给出dislike边集，能不能分成2组，组里没有互相讨厌的人
+边集->邻接表->二分图
 
 
 ### 494 在数字中间放正负号使之==target
@@ -1941,6 +2025,11 @@ max flw == min cut
 如果容量都是integer
 number of augemntation <= maxflow value 每次增加至少1
 
+查找
+![trie.jpg](/images/trie.jpg)
+插入
+![tirinsert.jpg](/images/tirinsert.jpg)
+
 ---
 ### TrieNode字典树 find/insert复杂度为字符串长度
 结点保存子节点（指针）的目录[26]下一个字符
@@ -2041,7 +2130,8 @@ for(int i =1;i<4;i++){
 1在第2轮的获胜概率是0加上1在上一轮胜利的概率0.133 ×3在上一轮获胜的概率0.335×1赢3的概率0.21
 1 2 0.00935655
 1在第2轮的获胜概率是0.00935655加上1在上一轮胜利的概率0.133 ×4在上一轮获胜的概率0.665×1赢4的概率0.292
-1 2 0.0351825```
+1 2 0.0351825
+```
 第三轮：1赢了1/4在1/2半决赛赢的概率是
 ```
 1在第3轮的获胜概率是0加上1在上一轮胜利的概率0.0351825 ×5在上一轮获胜的概率0.336947×1赢5的概率0.67

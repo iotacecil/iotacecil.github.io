@@ -3,7 +3,12 @@ title: 操作系统+内存知识
 date: 2018-03-05 20:43:15
 tags: [os,memory]
 ---
+https://hit-alibaba.github.io/interview/basic/arch/Concurrency.html
+### IO多路复用
+http://www.cnblogs.com/Anker/archive/2013/08/14/3258674.html
+
 ### 磁盘驱动
+https://my.oschina.net/manmao/blog/746492
 
 1. 移动磁头到磁道
 2. 转动磁盘到扇区
@@ -222,6 +227,7 @@ TLB存放了进程的页表表项
 
 
 ### 银行家算法
+https://blog.csdn.net/yaopeng_2005/article/details/6935235
 条件：
 1.固定进程数
 2.每个进程预先申请最大需要资源数量
