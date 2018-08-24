@@ -3,6 +3,8 @@ title: problems
 date: 2018-03-09 08:39:10
 tags: [leetcode]
 ---
+GC overhead limit exceeded
+
 0x7fffffff指的不是单个数组的字间，而是整个用户态程序的寻址空间
 
 32位的处理器的地址长度是32位,所以他能表示大最大地址是 2^32， 指针表示的是地址，所以指针也是32位的， 但是 windows 对内存做了分区, 进程可用的内存地址范围是 0x00010000 ~ 0x7FFFFFFF，

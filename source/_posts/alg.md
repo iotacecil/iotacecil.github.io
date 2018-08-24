@@ -1377,6 +1377,44 @@ N个物品，背包容量V
 F[i,v]前i件物品放入容量v的背包可获得的最大价值。
 如果放第i件，转化为前i-i件放入容量为v-Ci的背包中，最大价值是F[i-1,v-Ci]+Wi
 $F[i,v]=max{F[i-1,v],F[i-1,v-C_i]+W_i}$
+```java
+private int zoknap(int W,int[] val,int[] wt,int n){
+    if(n == 0||W == 0){
+        return 0;
+    }
+    //这个物品超重了 跳过
+    if(wt[n-1]>W)return zoknap(W, val, wt,n-1 );
+    else return Math.max(val[n-1]+zoknap(W-wt[n-1],val ,wt ,n-1 ),zoknap(W,val ,wt ,n-1) );
+}
+ private int zoknapdp(int W,int[] wt,int[] val,int n){
+    int[][] dp = new int[n+1][W+1];
+    for (int i = 0; i <=n ; i++) {
+        for (int w = 0; w <=W ; w++) {
+            if(i ==0||w==0)dp[i][w] = 0;
+            else if(wt[i-1]<=w)
+                dp[i][w]=Math.max(val[i-1]+dp[i-1][w-wt[i-1]],dp[i-1][w]);
+            else
+                dp[i][w] = dp[i-1][w];
+        }
+
+    }
+    return dp[n][W];
+}
+```
+
+#### 输出路径
+```java
+w = W;
+for (i = n;  i>0&&res>0 ; i--) {
+    if(res ==dp[i-1][w])continue;
+    else{
+        System.out.println(wt[i-1]+" ");
+        res-= val[i-1];
+        w-= wt[i-1];
+    }
+}
+```
+
 ```c
 for i<- 1 to N
   for v<- Ci to V
@@ -1391,8 +1429,31 @@ for i<- 1 to N
 ```
 第二个for可以优化
 for v<- V to max(V-$\sum_{i}^{N}W_i$,Ci)
+```java
+private int zoknapdp1d(int W,int[] wt,int[] val,int n){
+    int[] dp = new int [W+1];
+    for (int i = 0; i <n ; i++) {
+        for (int j = W; j >=wt[i] ; j--) {
+            dp[j] = Math.max(dp[j],dp[j-wt[i]]+val[i]);
+        }
+    }
+    return dp[W];
+}
+```
 
-#### taotao要吃鸡
+#### ?taotao要吃鸡
+> h为0代表没有装备背包
+> n个物品，容量=m+h
+> 接下来n行，第i个物品的物品的重量Wi和威力值Vi。0<=Wi,Vi<=100. 
+> 当装备背包之后，如果可携带重量没有满，就可以拿一个任意重的东西。
+> 3 3 3 
+> 2 3 
+> 3 2 
+> 2 3 
+> 0 
+> 输出 
+> 8 拿了1，2物品val=5,weight=5<6，可以拿3
+
 1.方法1
 m+h容量背包，在m+h没装满时可以任意取一个超过重量的
 最外层遍历：最后一个超额的物品i.
@@ -1472,6 +1533,27 @@ for i<- 1 to N
 - 两个状态转移方程
 $F[i,v] = max {F[i-1,v-kC_i]+kW_i|0<=kC_i<=v} $
 $F[i,v] = max(F[i-1,v],F[i,v-C_i]+W_i)$
+
+#### exactly装满背包需要的最少/最大物品数量
+> Input : W = 100
+       val[]  = {1, 30}
+       wt[] = {1, 50}
+Output : 100 放100个{1，1}是物品数最多的方案
+
+```java
+private int multicnt(int W,int n,int[] val,int[] wt){
+    int dp[] = new int[W+1];
+    for (int i = 0; i <=W ; i++) {
+        for (int j = 0; j < n ; j++) {
+            if(wt[j]<=i){
+                dp[i] = Math.max(dp[i],dp[i-wt[j]]+val[j] );
+            }
+        }
+    }
+    return dp[W];
+}
+```
+
 
 ---
 #### 多重背包 第i种物品最多Mi件可用
