@@ -3,6 +3,358 @@ title: netty
 date: 2018-06-04 09:32:40
 tags:
 ---
+### 实现一个简单的协议
+![protocolUtil.jpg](/images/protocolUtil.jpg)
+1.客户端request请求协议
+```java
+public class Request {
+    //编码
+    private byte encode;
+    //指令
+    private String command;
+    //命令长度
+    private int commandLength;
+}
+```
+2.服务器response响应
+```java
+public class Response {
+    private byte encode;
+    private int responseLength;
+    //响应内容
+    private String response;
+}
+```
+3.Server:
+```java
+ServerSocket server = new ServerSocket(4567);
+while(true){
+    Socket client = server.accept();
+
+    //客户端数据通过协议解码Request
+    InputStream input = client.getInputStream();
+    Request request = ProtocolUtil.readRequest(input);
+    OutputStream output = client.getOutputStream();
+
+    //封装response,根据客户端请求回应hello或者再见
+    Response response = new Response();
+    response.setEncode(Encode.UTF8.getValue());
+    if(request.getCommand().equals("HELLO")){
+        response.setResponse("hello!");
+    }else{
+        response.setResponse("bye bye!");
+    }
+    response.setResponseLength(response.getResponse().length());
+
+    //通过协议发送
+    ProtocolUtil.writeResponse(output, response);
+    client.shutdownOutput();
+}
+```
+4.编码类1字节长度：
+```java
+public enum Encode {
+
+    GBK((byte)0), UTF8((byte)1);
+    
+    private byte value = 1;
+    
+    private Encode(byte value){
+        this.value = value;
+    }
+    
+    public byte getValue(){
+        return value;
+    }}
+```
+
+5.Client端：
+```java
+Request request = new Request(Encode.UTF8.getValue(),"HELLO","HELLO".length());
+Socket client = new Socket("127.0.0.1",4567);
+OutputStream output = client.getOutputStream();
+
+//通过协议发送
+ProtocolUtil.writeRequest(output, request);
+
+//读取服务响应
+InputStream input = client.getInputStream();
+Response response = ProtocolUtil.readResponse(input);
+client.shutdownOutput();
+```
+6.协议实现对socket流的编码解码：
+`InputStream->Request->OutputStream`
+
+`InputStream->Response->OutputStream`
+
+```java
+public class ProtocolUtil {
+    //1.read解码request
+    public static Request readRequest(InputStream input) throws IOException{
+       //1字节编码
+        byte[] encodeByte = new byte[1];
+        input.read(encodeByte);
+        byte encode = encodeByte[0];
+        
+        //4个字节是命令的长度
+        byte[] commandLengthBytes = new byte[4];
+        input.read(commandLengthBytes);
+        int commandLength = ByteUtil.bytes2Int(commandLengthBytes);
+        
+        //读命令
+        byte[] commandBytes = new byte[commandLength];
+        input.read(commandBytes);
+        String command = "";
+        command = new String(commandBytes,Encode.GBK.getValue() == encode?"GBK":"UTF8");
+        
+        //封装返回
+        return new Request(encode,commandLength,command);
+    }
+
+    //3.发送请求给服务端
+    public static void writeRequest(OutputStream output,Request request) throws IOException{
+        //注意read和write的字节顺序要相同
+        output.write(request.getEncode());
+        output.write(ByteUtil.int2ByteArray(request.getCommandLength()));
+        output.write(request.getCommand().getBytes(Encode.GBK.getValue() == request.getEncode()?"GBK":"UTF8"));
+        output.flush();
+    }
+    public static Response readResponse(InputStream input) throws IOException{
+        //...
+    }
+    public static void writeResponse(OutputStream output,Response response) throws IOException{//...
+    }
+}
+```
+读取写入响应长度的byte<->int
+java是大端字节序
+> TCP/IP协议规定了在网络上必须采用网络字节顺序，也就是大端模式。对于char型数据只占一个字节，无所谓大端和小端。而对于非char类型数据，必须在数据发送到网络上之前将其转换成大端模式。
+
+`ByteOrder.nativeOrder()`LITTLE_ENDIAN小端
+Big-endian：将高序字节存储在起始地址（高位编址）
+```
+低地址                                            高地址
+---------------------------------------------------->
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| byte[0]=12 |      34    |     56      |     78    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+Little-endian：将低序字节存储在起始地址（低位编址）
+```
+低地址                                            高地址
+---------------------------------------------------->
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| byte[0]=78 |      56    |     34      |     12    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+4位大端数据转换{0,0,0,1}<->1
+```java
+public static int bytes2Int(byte[] bytes) {
+    System.out.println(Arrays.toString(bytes));
+    int num = bytes[3] & 0xFF;  
+    num |= ((bytes[2] << 8) & 0xFF00);  
+    num |= ((bytes[1] << 16) & 0xFF0000);  
+    num |= ((bytes[0] << 24) & 0xFF000000);
+    return num;
+    } 
+
+public static byte[] int2ByteArray(int i) {   
+    byte[] result = new byte[4];   
+    result[0] = (byte)((i >> 24) & 0xFF);
+    result[1] = (byte)((i >> 16) & 0xFF);
+    result[2] = (byte)((i >> 8) & 0xFF); 
+    result[3] = (byte)(i & 0xFF);
+    return result;
+    }
+```
+利用http协议实现rpc
+
+### 序列化比较 
+用字节数组流
+
+#### Hessian
+hessian-4.0.7.jar
+`Object`->`HessianOutput(ByteArrayOutputStream)`->`.write(Objcet)`->`.toByteArray()`
+`HessianInput(ByteArrayInputStream())`->`.readObject()`
+```java
+Person zhangsan = new Person("zhangsan");
+//序列化 object->outputStream
+ByteArrayOutputStream bos = new ByteArrayOutputStream();
+HessianOutput hot = new HessianOutput(bos);
+hot.writeObject(zhangsan);
+byte[] zhangsanByte = bos.toByteArray();
+
+//反序列化
+ByteArrayInputStream ips = new ByteArrayInputStream(zhansanByte);
+HessianInput hin = new HessianInput(ips);
+Person person = (Person)hi.readObject();
+```
+
+#### Java自带的序列化
+`ObjectOutputStream(ByteArrayOutputStream)`->`writeObject`0>`.toByteArray()`
+```java
+Person zhangsan = new Person("zhangsan");
+//序列化 写到字节数组流->写到对象流
+ByteArrayOutputStream os = new ByteArrayOutputStream();
+ObjectOutputStream out = new ObjectOutputStream(os);
+out.writeObject(zhangsan);
+byte[] zhangsanByte = os.toByteArray();
+//反序列化
+ByteArrayInputStream is = new ByteArrayInputStream(zhansanByte);
+ObjectInputStream in = new ObjectInputStream(is);
+Person person = (Person)in.readObject();
+```
+
+#### jackson序列化 字符串流
+jackson-all-1.7.6.jar
+```java
+//序列化
+String personJson = null;
+ObjectMapper mapper = new ObjectMapper();
+StringWriter sw = new StringWriter();
+JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
+mapper.writeValue(gen, person);
+gen.close();
+personJson = sw.toString();
+//反序列化
+Person zhangsan = (Person)mapper.readValue(personJson, Person.class);
+```
+
+#### xml xstream-1.4.4.jar
+```xml
+<pppp>
+  <name>zhangsan</name>
+  <age>18</age>
+  <address>hangzhou,china</address>
+  <birth>2018-08-25 11:17:03.450 UTC</birth>
+</pppp>
+```
+
+```java
+//将person对象序列化为XML
+XStream xStream = new XStream(new DomDriver());
+//设置Person类的别名
+xStream.alias("pppp", Person.class);
+String personXML = xStream.toXML(person);
+
+//将XML反序列化还原为person对象
+Person zhangsan = (Person)xStream.fromXML(personXML);
+```
+
+### 基于tcp的服务调用
+![tcprpc.jpg](/images/tcprpc.jpg)
+
+服务接口
+```java
+public interface SayHelloService{
+    public String sayHello(String str);
+}
+```
+
+Consumer
+```java
+//调用的接口名称
+String interfaceName = SayHelloService.class.getName();
+//调用的方法
+Method method = SayHelloService.class.getMethod("sayHello", java.lang.String.class);
+//传给服务端方法的参数
+Object[] arguments = {"hello"};
+Socket socket = new Socket("127.0.0.1", 1234);
+//接口名，方法名，参数类型，参数 传到服务器
+ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+output.writeUTF(interfaceName); 
+output.writeUTF(method.getName()); 
+output.writeObject(method.getParameterTypes());  
+output.writeObject(arguments);  
+
+//接收远程方法的结果
+ObjectInputStream input = new ObjectInputStream(socket.getInputStream()); 
+Object result = input.readObject();
+```
+
+Provider
+```java
+//所有对外提供的服务注册到map里
+private static Map<String,Object> services = new HashMap<String,Object>();
+static{
+    services.put(SayHelloService.class.getName(), new SayHelloServiceImpl());
+}
+//main
+ServerSocket server = new ServerSocket(1234);
+while(true) {  
+    Socket socket = server.accept();
+    ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+    //接口名称
+    String interfaceName = input.readUTF(); 
+    //方法名称
+    String methodName = input.readUTF();  
+     //参数类型
+    Class<?>[] parameterTypes = (Class<?>[])input.readObject(); 
+    //参数对象
+    Object[] arguments = (Object[])input.readObject();  
+
+    //执行方法
+    Class interfaceClass = Class.forName(interfaceName);
+    //实现的具体类
+    Object service = service.get(interfaceName);
+    Method method = interfaceClass.getMethod(methodName,parameterTypes);
+    Objcet result = method.invoke(service,arguments);
+    ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+    output.writeObject(result);
+}
+```
+具体实现类
+```java
+public class SayHelloServiceImpl implements SayHelloService {
+    @Override
+    public String sayHello(String str) {
+        if(helloArg.equals("hello")){
+            return "hello";
+        }else{
+            return "bye bye";
+        }}}
+```
+报错初始化堆空间不够`-Xmx3550m`
+
+### 基于HTTP的RPC
+![httprpc.jpg](/images/httprpc.jpg)
+servlet-api.jar
+jackson-all-1.7.6.jar
+httpcore4.2.4.jar
+httpclient-4.2.5.jar
+commons-logging-1.1.1.jar
+
+接口
+```java
+public interface BaseService {
+    public Object execute(Map<String,Object> args);
+}
+```
+
+实现：
+```java
+public class SayHelloService implements BaseService{
+
+    public Object execute(Map<String, Object> args) {
+        //request.getParameterMap() 取出来为array,此处需要注意
+        String[] helloArg = (String[]) args.get("arg1");
+        
+        if("hello".equals(helloArg[0])){
+            return "hello";
+        }else{
+            return "bye bye";
+        }}}
+```
+
+消费者：
+```java
+public class ServiceConsumer extends HttpServlet{
+   
+}
+```
+
+
 ### 排队延迟
 > 路由器必须检测分组的首部，以确定出站路由，并且还可
 能对数据进行检查，这些都要花时间。由于这些检查通常由硬件完成，因此相应的

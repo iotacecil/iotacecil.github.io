@@ -15,6 +15,23 @@ Items can be broen down 贪心按value/weight排序
 0~3的tspdp解法
 ![tspdp.jpg](/images/tspdp.jpg)
 
+### 17 九宫格输入法数字对应的字符串
+```java
+private String[] letters = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+private void help(List<String> rst,int idx,String digits,String cur){
+    if(cur.length()==digits.length()){
+        rst.add(cur);
+        return;
+    }
+    if(digits.charAt(idx)>='2'&&digits.charAt(idx)<='9'){
+        String num2letter = letters[digits.charAt(idx)-'0'];
+        for(int i =0;i<num2letter.length();i++){
+            help(rst,idx+1,digits,cur+num2letter.charAt(i));
+        }   
+    }
+}
+```
+
 ### 93 分解Ip地址
 dfs
 ```java
@@ -31,6 +48,9 @@ private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
     }
 }
 ```
+
+
+### 131 
 
 ### 旋转矩阵
 ![rotate2d.jpg](/images/rotate2d.jpg)
@@ -601,23 +621,23 @@ dfs回到1，继续找封闭回路
 2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
 
 ```java
-public List<String> findItinerary(String[][] tickets){
-    Map<String,PriorityQueue<String>> graph = new HashMap<>();
-    List<String> rst = new ArrayList<>();
+public List<String> findItinerary(String[][] tickets) {
+    LinkedList<String> rst = new LinkedList<>();
+    
+    Map<String,PriorityQueue<String> > map = new HashMap<>();
     for(String[] edge:tickets){
-        graph.putIfAbsent(edge[0],new PriorityQueue<>());
-        graph.putIfAbsent(edge[1],new PriorityQueue<>());
-        map.get(edge[0]).add(edge(1));
+        PriorityQueue<String> nei = map.getOrDefault(edge[0],new PriorityQueue<String>());
+        nei.add(edge[1]);
+        map.put(edge[0],nei);
     }
-    dfs("JFK",rst,graph);
+    dfs(rst,map,"JFK");
     return rst;
 }
-private void dfs(String s,List<String> rst,Map<String,PriorityQueue<String>>graph){
-    PriorityQueue<String> edge = graph.get(s);
-    if(edge!=null&&!edge.isEmpty()){
-        dfs(edge.poll(),rst,graph);
-    }
-    rst.addFirst(s);
+private void dfs(LinkedList<String> rst,Map<String,PriorityQueue<String> > map,String start){
+  PriorityQueue<String> pri = map.get(start);
+    while(pri!=null&&!pri.isEmpty())
+        dfs(rst,map,pri.poll());
+    rst.addFirst(start);  
 }
 ```
 后序遍历stack：
@@ -661,6 +681,28 @@ for(int i =0;i<nums.length;i++){
 }
 ```
 O(n!)复杂度
+
+方法2 swap java不能int[]->List<Integer>
+[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,2,1],[3,1,2]]
+```cpp
+vector<vector<int>> permute(vector<int>& nums) {
+    vector<vector<int> > ans;
+    help(nums,0,ans);
+    return ans;
+}
+void help(vector<int> &num,int begin,vector<vector<int> > &ans){
+    if(begin>=num.size()){
+        ans.push_back(num);
+        return;
+    }
+    for(int i =begin;i<num.size();i++){
+        swap(num[begin],num[i]);
+        help(num,begin+1,ans);
+        swap(num[begin],num[i]);
+    }
+}
+```
+
 
 ### 39 等于target的每个数字无限次的combination
 关键：加上start，防止出现3,2,2的重复
@@ -2066,23 +2108,90 @@ return lastp==0;
 不能用贪心的原因：如果coin={1,2,5,7,10}则使用2个7组成14是最少的，贪心不成立。
 满足贪心则需要coin满足倍数关系{1,5,10,20,100,200}
 
-输入：coins = [1, 2, 5], amount = 11
-输出：3 (11 = 5 + 5 + 1)
+
+> 输入：coins = [1, 2, 5], amount = 11
+> 输出：3 (11 = 5 + 5 + 1)
+
 1. 递归mincoins(coins,11)=mincoins(coins,11-1)+1=(mincoins,10-1)+1+1..=(mincoins,0)+n
+
+![coinchange.jpg](/images/coinchange.jpg)
+递归 记忆子问题 剩下3，用2的硬币变成剩下1的子问题和 剩下2，用1的硬币 剩下1的子问题是相同的。递归给count赋值是从下往上的。
+```java
+public int coinChange3(int[] coins, int amount) {
+    if(amount<1)return 0;
+    return coinChange2(coins,amount,new int[amount]);
+}
+private int coinC(int[] coins,int left,int[] count){
+    if(left<0)return -1;
+    if(left==0)return 0;
+    //关键，不然超时
+    if(count[left]!=0)return count[left];
+    int min = Integer.MAX_VALUE;
+    for(int coin:coins){
+        int useCoin = coinC(coins,left-coin,count);
+        if(useCoin >=0&&useCoin<min){
+            min = 1+useCoin;
+        }
+    }
+    return count[left] = (min==Integer.MAX_VALUE)?-1:min;  
+}
+```
+
 ![coin](/images/coin.jpg)
 
 2. dp:
-    1. 初始化table[amount+1]={0,max,max...}
-    2. table[5]=table[0]对每个coin重填整行表格
-    3. if(amount>=coin)dp[amoun]+=dp[amount-coin]
-3. dfs分支限界
-    1.逆序coins数组 贪心从大硬币开始试
+    注意点：初值如果设为Int的max，两个都是max的话+1变成负数，所以设amount+1
+    j 从coin开始
+81%~94% 不稳定
+```java
+int[] dp = new int[amount+1];
+Arrays.fill(dp,amount+1);
+dp[0] =0;
+for(int coin:coins){
+    for(int j = coin;j<=amount;j++){
+        dp[j]=Math.min(dp[j],dp[j-coin]+1);
+    }
+}
+return dp[amount]>amount?-1:dp[amount];    
+```
 
-定义dp[i][j]用前i种硬币达到amount[j]最少的硬币数量
-用1，2，5组成11的数量=只用1,2组成11的数量+1，2，5组成[11-5]
-1. ?dp[i][j]=min(dp[i][j],dp[i-1][j-k\*coin[i]]+k)：[i-1]不用这枚硬币之前能够到加上k枚i硬币达到amount[J]。需要遍历n.复杂度n\*amount^2
-2.不需要遍历几枚硬币dp[i][j]=min(dp[i][j],dp[i][j-coin[i]]+1).复杂度n\*amount 降成了一维。dp[i]=dp[i-coin[i]]+1
-基础：dp[amount] 当amount=0时，dp=0;当coin有1时dp[i]=i
+3. 最正确的方法：dfs分支限界
+    1.逆序coins数组 贪心从大硬币开始试
+    2.dfs终止条件是 找到硬币整除了，或者idx==0但是不能整除
+    3.剪枝条件是 考虑用当前`coins[idx]`i个之后，用下一个硬币至少1个，如果超了break
+99%
+```java
+int minCnt = Integer.MAX_VALUE;
+public int coinChangedfs(int[] coins,int amount){
+    Arrays.sort(coins);
+    dfs(amount,coins.length-1,)
+    return minCount == Integer.MAX_VALUE?-1:minCount;
+}
+private void dfs(int amount,int idx,int[] coins,int count){
+    if(amount%coins[idx]==0){
+        int bestCnt = count+amount/coins[idx];
+        //当[1,2,5] 11, 用掉两个5，count=2 idx=0,cnt+1=3 return
+        if(bestCnt<minCnt){
+            minCnt = bestCnt;
+            //这个return放在里面97%
+            return;
+        }
+        //本来应该放在这里 94%
+    }
+    if(idx==0)return;
+    for(int i = amount/coins[idx];i>=0;i--){
+        int leftA = amount - i*coins[idx];
+        int useCnt = count+i;
+        int nextCoin = coins[idx-1];
+        //保证只要left>0都还需要至少1枚硬币
+        //或者简单一点if(useCnt+1>minCount)break; 98%
+        if(useCnt+(leftA+nextCoin-1)/nextCoin>=minCount)break;
+        dfs(leftA,idx-1,coins,useCnt);
+    }
+}
+```
+
+ 
 
 ---
 ### 网络流

@@ -3,7 +3,17 @@ title: concurrent并发多线程
 date: 2018-04-13 08:46:51
 tags: [java]
 ---
-dxdiag
+### PV和QPS估计
+每天300w PV 80%会在24小时的20%的时间里
+$3000 000\*0.8)/(86400\*0.2*)=139(QPS)$
+如果一台机器QPS是58，则需要139/58=3台机器
+
+### 并发模型
+1.进程&线程Apache C10K问题
+2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高
+3.协程Golang Erlang Lua
+
+
 
 TreeMap是非线程安全的。
 跳表：

@@ -3,6 +3,147 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### h5视频控制
+到指定位置并播放
+```js
+var v = document.getElementsByTagName("video")[0];
+v.currentTime = 10.0;
+v.play()
+//暂停
+v.pause()
+```
+
+### html5存储
+Content-Length 单位是字节
+DnionOS nginx？
+
+#### cookie 4k
+`document.cookie`
+cookies会有主域名污染 
+在.baidu.com放了cookie之后music子域名访问都带主域名的cookies，请求头会臃肿
+http-only cookie只能被服务器端读写，客户端无权限。
+Secure 请求只能是https 
+
+单个域名持支的cookie个数。chrome50个，长度4k 
+与localStorage类似 不同域名独立。
+可以设置cookie的path和domain相同父域共享
+
+#### H5之前userData 只有IE，存放成XML
+
+#### indexedDB 按域名分配独立空间，一个域名多个数据库
+
+#### H5离线缓存 manifest
+![appcache.jpg](/images/appcache.jpg)
+`navigator.onLine`检测是否在线
+```html
+<html lang = "en" manifest = 'manifestFile'>
+```
+manifestFile文件
+```
+CACHE MANIFEST
+#version 1.1
+CACHE:
+  img/1.jpg
+NETWORK
+```
+```js
+window.addEventListener('load',function(e){
+  window.applicationCache.addEventListener('updateready',function(e){
+    if(window.applicationCache.status == window.applicationCache.UPDATEREADY){
+      window.applicationCache.swapCache()
+      if(confirm("是否更新页面"))
+        window.location.reload()
+    }
+  },fasle)
+},false)
+```
+改manifest版本号会更新
+
+#### 本地存储 子域名不能共享
+> h5 postMessage 共享数据
+
+只有5个api：setItem/getItem/removeItem/clear/key
+ios的隐身模式没有，需要检测浏览器支持，最好的方法是先set一次
+```js
+localStorage.setItem('testkey','testvalue')
+localStorage.getItem('testkey')
+localStorage.key(9)
+localStorage.clear()
+```
+localstorage 永不过期
+sessionstorage 重新打开页面/关闭浏览器 消失
+
+每个 域名5M
+localStroage在chrome限制为2.6M 同域名一般共享
+
+所有可以序列化的都能存到localStorage
+
+存图片
+![localstorage.jpg](/images/localstorage.jpg)
+`set('key')`+`get('key')`
+{% fold %}
+```js
+var src = "./bd_logo1.png"
+function set(key){
+    var img = document.createElement('img')
+    img.addEventListener('load',function () {
+        var imgCanvas = document.createElement("canvas"),
+            imgContext = imgCanvas.getContext("2d");
+        imgCanvas.width = this.width;
+        imgCanvas.height = this.height;
+        imgContext.drawImage(this,0,0,this.width,this.width);
+        //base64 url图片
+        var imgAsDataUrl = imgCanvas.toDataURL("image/png")
+        try{
+            localStorage.setItem(key,imgAsDataUrl)
+        }
+        catch(e){
+            console.log("storage failed"+e)
+        }},false);
+    img.src = src;
+}
+function  get(key) {
+    var srcStr =localStorage.getItem(key)
+    var imgObj = document.createElement('img')
+    imgObj.src = srcStr
+    document.body.appendChild(imgObj)
+
+}
+```
+{% endfold %}
+业务代码添加过期控制`set('wait4expire','expire')`,`get('wait4expire',60*5*1000)`
+```js
+function set(key,v){
+    var curTime = new Date().getTime()
+    localStorage.setItem(key,JSON.stringify({data:v,time:curTime}))
+}
+function get(key,exp) {
+    var data = localStorage.getItem(key)
+    var dataObj = JSON.parse(data)
+    if(new Date().getTime() - dataObj.time > exp){
+        console.log("expires")
+    }else{
+        console.log("data = "+dataObj.data)
+    }
+}
+```
+
+
+1. HTTP文件缓存
+Application-Frames
+Etag响应/if-Node-Match请求
+同时设置Expire和Cache-Control只有Cache-Control生效
+
+
+
+
+
+
+
+
+
+
+
 ### 浏览器缓存
 https://segmentfault.com/a/1190000009638800
 
@@ -290,21 +431,6 @@ js解释器
 `document.defaultView.getComputedStype(document.getElementById("id",null))`
 css计算权重：!important>内联样式>id选择器>类选择器>元素选择器
 
-## 浏览器持久化
-1. HTTP文件缓存
-Application-Frames
-Etag响应/if-Node-Match请求
-同时设置Expire和Cache-Control只有Cache-Control生效
-
-2. localStroage在chrome限制为2.6M 同域名一般共享
-只有4个api：set/get/removeItem/clear
-
-3. sessionStorage 浏览器关闭时会自动清空
-
-4. cookie
-单个域名持支的cookie个数。chrome50个，长度4k 
-与localStorage类似 不同域名独立。
-可以设置cookie的path和domain相同父域共享
 
 ## HTTP
 http/1.1 字符串传输
