@@ -3,6 +3,9 @@ title: problems
 date: 2018-03-09 08:39:10
 tags: [leetcode]
 ---
+
+git config --global gui.encoding utf-8 
+
 GC overhead limit exceeded
 
 0x7fffffff指的不是单个数组的字间，而是整个用户态程序的寻址空间
