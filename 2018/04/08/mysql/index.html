@@ -80,25 +80,25 @@
 
 
 
-<meta name="description" content="timestamp有时区datetime表示的时间范围更广，一般应用不会跨时区。 压力测试1mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-a">
+<meta name="description" content="mybatis逆向工程generatorConfig.xmlexplain执行计划 ：select,update,insert,replace,delete 分区show plugins;可以看到partition 则可以分区。逻辑上一个表，物理上多个文件中。在create table的最后加上partition by hash(id) partitions 4.frm存储表数据.ibdinndb">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mySQL">
-<meta property="og:url" content="https://iotaa.xyz/2018/04/08/mysql/index.html">
+<meta property="og:url" content="http://iotaa.xyz/2018/04/08/mysql/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="timestamp有时区datetime表示的时间范围更广，一般应用不会跨时区。 压力测试1mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-a">
+<meta property="og:description" content="mybatis逆向工程generatorConfig.xmlexplain执行计划 ：select,update,insert,replace,delete 分区show plugins;可以看到partition 则可以分区。逻辑上一个表，物理上多个文件中。在create table的最后加上partition by hash(id) partitions 4.frm存储表数据.ibdinndb">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://iotaa.xyz/images/weeken.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/left_join.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/left_only_join.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/full_join.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/JDBC_conn.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/zangdu.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/geli.jpg">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.358Z">
+<meta property="og:image" content="http://iotaa.xyz/images/weeken.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/left_join.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/left_only_join.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/full_join.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/JDBC_conn.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/zangdu.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/geli.jpg">
+<meta property="og:updated_time" content="2018-07-20T06:16:59.734Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mySQL">
-<meta name="twitter:description" content="timestamp有时区datetime表示的时间范围更广，一般应用不会跨时区。 压力测试1mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-a">
-<meta name="twitter:image" content="https://iotaa.xyz/images/weeken.jpg">
+<meta name="twitter:description" content="mybatis逆向工程generatorConfig.xmlexplain执行计划 ：select,update,insert,replace,delete 分区show plugins;可以看到partition 则可以分区。逻辑上一个表，物理上多个文件中。在create table的最后加上partition by hash(id) partitions 4.frm存储表数据.ibdinndb">
+<meta name="twitter:image" content="http://iotaa.xyz/images/weeken.jpg">
 
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <link rel="canonical" href="https://iotaa.xyz/2018/04/08/mysql/"/>
+  <link rel="canonical" href="http://iotaa.xyz/2018/04/08/mysql/"/>
 
 
 
@@ -298,7 +298,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/04/08/mysql/">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/04/08/mysql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-20T14:16:59+08:00">
+                2018-07-20
               </time>
             
           </span>
@@ -378,10 +378,7 @@
       
 
       
-        <h2 id="timestamp有时区"><a href="#timestamp有时区" class="headerlink" title="timestamp有时区"></a>timestamp有时区</h2><p>datetime表示的时间范围更广，一般应用不会跨时区。</p>
-<h2 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqlslap -hlocalhost -uroot -proot -P3306 --concurrency=5000 --iterations=1 --auto-generate-sql --auto-generate-sql-load-type=mixed --auto-generate-sql-add-autoincrement --engine=innodb --number-of-queries=5000 --debug-info</span><br></pre></td></tr></table></figure>
-<p>5000并发，6秒<br>10000并发每次10000查询 会提示 1w并发单集群的mysql不行，需要集群<br>2003 Can’t connect<br>1040Too many connections<br>mysql单表数据量小于2千万 mycat可以集群分片</p>
-<h2 id="mybatis逆向工程generatorConfig-xml"><a href="#mybatis逆向工程generatorConfig-xml" class="headerlink" title="mybatis逆向工程generatorConfig.xml"></a>mybatis逆向工程<code>generatorConfig.xml</code></h2><p><code>explain</code>执行计划 ：select,update,insert,replace,delete</p>
+        <h2 id="mybatis逆向工程generatorConfig-xml"><a href="#mybatis逆向工程generatorConfig-xml" class="headerlink" title="mybatis逆向工程generatorConfig.xml"></a>mybatis逆向工程<code>generatorConfig.xml</code></h2><p><code>explain</code>执行计划 ：select,update,insert,replace,delete</p>
 <h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2><p><code>show plugins;</code><br>可以看到partition 则可以分区。逻辑上一个表，物理上多个文件中。<br>在create table的最后加上<code>partition by hash(id) partitions 4</code><br><code>.frm</code>存储表数据<br><code>.ibd</code>inndb数据文件<br>分区之后<code>.ibd</code>会有好几个</p>
 <p>hash分区 利用表中的int列或者<code>by hash(UNIX_TIMESTAMP(login_time))</code>将timestamp转成int<br>range分区 log推荐使用 日期/时间 查询的时候包含分区键 适合定期清理历史数据<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">partition by range(id)(</span><br><span class="line">    partition p0 values less than(10000),</span><br><span class="line">    partition p1 values less than(20000),</span><br><span class="line">    partition p3 values less than maxvalue);</span><br></pre></td></tr></table></figure></p>
 <p>list分区 按枚举<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">partition by list(type)(</span><br><span class="line">    partition p0 values in (1,3,5,7,9),</span><br><span class="line">    partition p1 values in (2,4,6,8));</span><br></pre></td></tr></table></figure></p>
@@ -526,44 +523,8 @@
 <h4 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h4><ul>
 <li><strong>脏读</strong>：一个事务读取了一个事务未提交的更新<br><img src="/images/zangdu.jpg" alt="zangdu"></li>
 <li>不可重复读：同一个事务，两次读取值不一样。</li>
-<li>幻读：同一个事务，两次读取行记录数目不一样。插入了新记录<br><img src="/images/geli.jpg" alt="geli"></li>
+<li>幻读：同一个事务，两次读取行记录数目不一样。插入了新记录<br><img src="/images/geli.jpg" alt="geli"><br>| 隔离级别 | 脏读 | 可重复读 | 幻读 |<br>| ——| —— | —— | —— |<br>| 读未提交 | √ |  X | √ |<br>| 读提交 | X | X | √ |<br>| 可重复读 | X  | √ | √ |<br>| 串行化 | X | √ | X |</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>隔离级别</th>
-<th>脏读</th>
-<th>可重复读</th>
-<th>幻读</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>读未提交</td>
-<td>√</td>
-<td>X</td>
-<td>√</td>
-</tr>
-<tr>
-<td>读提交</td>
-<td>X</td>
-<td>X</td>
-<td>√</td>
-</tr>
-<tr>
-<td>可重复读</td>
-<td>X</td>
-<td>√</td>
-<td>√</td>
-</tr>
-<tr>
-<td>串行化</td>
-<td>X</td>
-<td>√</td>
-<td>X</td>
-</tr>
-</tbody>
-</table>
 <ol>
 <li>读未提交：允许脏读</li>
 <li>读提交：不允许脏读，可以不可重复读</li>
@@ -726,7 +687,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -781,7 +742,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#timestamp有时区"><span class="nav-number">1.</span> <span class="nav-text">timestamp有时区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压力测试"><span class="nav-number">2.</span> <span class="nav-text">压力测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis逆向工程generatorConfig-xml"><span class="nav-number">3.</span> <span class="nav-text">mybatis逆向工程generatorConfig.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分区"><span class="nav-number">4.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis"><span class="nav-number">5.</span> <span class="nav-text">Mybatis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-like通配符"><span class="nav-number">5.1.</span> <span class="nav-text">mysql like通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ER图"><span class="nav-number">5.2.</span> <span class="nav-text">ER图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#慢查询"><span class="nav-number">6.</span> <span class="nav-text">慢查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#慢查询分析工具mysqldumpslow"><span class="nav-number">6.1.</span> <span class="nav-text">慢查询分析工具mysqldumpslow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-1-和count-和count"><span class="nav-number">6.2.</span> <span class="nav-text">count(1)和count(*)和count(*)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内置类型"><span class="nav-number">6.2.1.</span> <span class="nav-text">内置类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据类型"><span class="nav-number">6.2.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-join"><span class="nav-number">6.2.3.</span> <span class="nav-text">mysql join</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-min-p-39-price-39-group-by-p-quot-id-quot-quot-name-quot"><span class="nav-number">6.3.</span> <span class="nav-text">count(*),min(p.&#39;price&#39;) group by p.&quot;id&quot;,&quot;name&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库"><span class="nav-number">6.4.</span> <span class="nav-text">数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池"><span class="nav-number">6.4.1.</span> <span class="nav-text">连接池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBCP"><span class="nav-number">6.4.2.</span> <span class="nav-text">DBCP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防范SQL注入-39"><span class="nav-number">6.5.</span> <span class="nav-text">防范SQL注入&#39;--</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID-原子、一致、隔离、持久-，并发控制的基本单位。"><span class="nav-number">6.6.</span> <span class="nav-text">事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID(原子、一致、隔离、持久) ，并发控制的基本单位。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#检查点"><span class="nav-number">6.6.1.</span> <span class="nav-text">检查点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务的隔离级别"><span class="nav-number">6.6.2.</span> <span class="nav-text">事务的隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL的锁"><span class="nav-number">6.6.3.</span> <span class="nav-text">MySQL的锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis-底层基于JDBC"><span class="nav-number">6.7.</span> <span class="nav-text">Mybatis 底层基于JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ResultMap"><span class="nav-number">6.7.1.</span> <span class="nav-text">ResultMap</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mybatis逆向工程generatorConfig-xml"><span class="nav-number">1.</span> <span class="nav-text">mybatis逆向工程generatorConfig.xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分区"><span class="nav-number">2.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis"><span class="nav-number">3.</span> <span class="nav-text">Mybatis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-like通配符"><span class="nav-number">3.1.</span> <span class="nav-text">mysql like通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ER图"><span class="nav-number">3.2.</span> <span class="nav-text">ER图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#慢查询"><span class="nav-number">4.</span> <span class="nav-text">慢查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#慢查询分析工具mysqldumpslow"><span class="nav-number">4.1.</span> <span class="nav-text">慢查询分析工具mysqldumpslow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-1-和count-和count"><span class="nav-number">4.2.</span> <span class="nav-text">count(1)和count(*)和count(*)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内置类型"><span class="nav-number">4.2.1.</span> <span class="nav-text">内置类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据类型"><span class="nav-number">4.2.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-join"><span class="nav-number">4.2.3.</span> <span class="nav-text">mysql join</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-min-p-39-price-39-group-by-p-quot-id-quot-quot-name-quot"><span class="nav-number">4.3.</span> <span class="nav-text">count(*),min(p.&#39;price&#39;) group by p.&quot;id&quot;,&quot;name&quot;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库"><span class="nav-number">4.4.</span> <span class="nav-text">数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#连接池"><span class="nav-number">4.4.1.</span> <span class="nav-text">连接池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBCP"><span class="nav-number">4.4.2.</span> <span class="nav-text">DBCP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防范SQL注入-39"><span class="nav-number">4.5.</span> <span class="nav-text">防范SQL注入&#39;--</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID-原子、一致、隔离、持久-，并发控制的基本单位。"><span class="nav-number">4.6.</span> <span class="nav-text">事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID(原子、一致、隔离、持久) ，并发控制的基本单位。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#检查点"><span class="nav-number">4.6.1.</span> <span class="nav-text">检查点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务的隔离级别"><span class="nav-number">4.6.2.</span> <span class="nav-text">事务的隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MySQL的锁"><span class="nav-number">4.6.3.</span> <span class="nav-text">MySQL的锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis-底层基于JDBC"><span class="nav-number">4.7.</span> <span class="nav-text">Mybatis 底层基于JDBC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ResultMap"><span class="nav-number">4.7.1.</span> <span class="nav-text">ResultMap</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

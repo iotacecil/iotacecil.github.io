@@ -80,17 +80,19 @@
 
 
 
-<meta name="description" content="堆外内存64位的JVM 寻址空间类装载器 装载：1.取得类的二进制流：装载器ClassLoader 读入java字节码装在到JVM2.转为方法区的数据结构3.在堆中生成对象 链接：1.验证2.准备 static final 在准备阶段赋值，static被赋值03.解析 符号引用转换成指针or地址偏移量（直接引用）（内存中的位置） 初始化&amp;lt;clint&amp;gt; lang.NoSuchFiledE">
+<meta name="description" content="jstat 查看类加载/GC/JIT编译信息jstat官网 jinfo 查看运行中的jvm参数123&amp;gt;jinfo -flag MaxHeapSize 1972-XX:MaxHeapSize=734003200&amp;gt;jinfo -flag ThreadStackSize &amp;lt;进程号&amp;gt; 打印进程Non-default参数（被赋值过的）1&amp;gt;jinfo -flags 1972 展">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM">
-<meta property="og:url" content="https://iotaa.xyz/2018/04/23/JVM/index.html">
+<meta property="og:url" content="http://iotaa.xyz/2018/04/23/JVM/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="堆外内存64位的JVM 寻址空间类装载器 装载：1.取得类的二进制流：装载器ClassLoader 读入java字节码装在到JVM2.转为方法区的数据结构3.在堆中生成对象 链接：1.验证2.准备 static final 在准备阶段赋值，static被赋值03.解析 符号引用转换成指针or地址偏移量（直接引用）（内存中的位置） 初始化&amp;lt;clint&amp;gt; lang.NoSuchFiledE">
+<meta property="og:description" content="jstat 查看类加载/GC/JIT编译信息jstat官网 jinfo 查看运行中的jvm参数123&amp;gt;jinfo -flag MaxHeapSize 1972-XX:MaxHeapSize=734003200&amp;gt;jinfo -flag ThreadStackSize &amp;lt;进程号&amp;gt; 打印进程Non-default参数（被赋值过的）1&amp;gt;jinfo -flags 1972 展">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.305Z">
+<meta property="og:image" content="http://iotaa.xyz/images/suanfaGC.jpg">
+<meta property="og:updated_time" content="2018-08-13T04:47:13.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
-<meta name="twitter:description" content="堆外内存64位的JVM 寻址空间类装载器 装载：1.取得类的二进制流：装载器ClassLoader 读入java字节码装在到JVM2.转为方法区的数据结构3.在堆中生成对象 链接：1.验证2.准备 static final 在准备阶段赋值，static被赋值03.解析 符号引用转换成指针or地址偏移量（直接引用）（内存中的位置） 初始化&amp;lt;clint&amp;gt; lang.NoSuchFiledE">
+<meta name="twitter:description" content="jstat 查看类加载/GC/JIT编译信息jstat官网 jinfo 查看运行中的jvm参数123&amp;gt;jinfo -flag MaxHeapSize 1972-XX:MaxHeapSize=734003200&amp;gt;jinfo -flag ThreadStackSize &amp;lt;进程号&amp;gt; 打印进程Non-default参数（被赋值过的）1&amp;gt;jinfo -flags 1972 展">
+<meta name="twitter:image" content="http://iotaa.xyz/images/suanfaGC.jpg">
 
 
 
@@ -120,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://iotaa.xyz/2018/04/23/JVM/"/>
+  <link rel="canonical" href="http://iotaa.xyz/2018/04/23/JVM/"/>
 
 
 
@@ -290,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/04/23/JVM/">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/04/23/JVM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -336,8 +338,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-13T12:47:13+08:00">
+                2018-08-13
               </time>
             
           </span>
@@ -370,11 +372,34 @@
       
 
       
-        <h3 id="堆外内存"><a href="#堆外内存" class="headerlink" title="堆外内存"></a>堆外内存</h3><h3 id="64位的JVM-寻址空间"><a href="#64位的JVM-寻址空间" class="headerlink" title="64位的JVM 寻址空间"></a>64位的JVM 寻址空间</h3><h2 id="类装载器"><a href="#类装载器" class="headerlink" title="类装载器"></a>类装载器</h2><ol>
-<li>装载：<br>1.取得类的二进制流：<br>装载器<code>ClassLoader</code> 读入java字节码装在到JVM<br>2.转为方法区的数据结构<br>3.在堆中生成对象</li>
-<li>链接：<br>1.验证<br>2.准备 <code>static final</code> 在准备阶段赋值，static被赋值0<br>3.解析 符号引用转换成指针or地址偏移量（直接引用）（内存中的位置）</li>
-<li>初始化<code>&lt;clint&gt;</code><br> <code>lang.NoSuchFiledError</code></li>
+        <p><img src="/images/suanfaGC.jpg" alt="suanfaGC"></p>
+<h3 id="jstat-查看类加载-GC-JIT编译信息"><a href="#jstat-查看类加载-GC-JIT编译信息" class="headerlink" title="jstat 查看类加载/GC/JIT编译信息"></a>jstat 查看类加载/GC/JIT编译信息</h3><p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html" target="_blank" rel="noopener">jstat官网</a></p>
+<h3 id="jinfo-查看运行中的jvm参数"><a href="#jinfo-查看运行中的jvm参数" class="headerlink" title="jinfo 查看运行中的jvm参数"></a>jinfo 查看运行中的jvm参数</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">jinfo -flag MaxHeapSize 1972</span></span><br><span class="line">-XX:MaxHeapSize=734003200</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">jinfo -flag ThreadStackSize &lt;进程号&gt;</span></span><br></pre></td></tr></table></figure>
+<p>打印进程Non-default参数（被赋值过的）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">jinfo -flags 1972</span></span><br></pre></td></tr></table></figure></p>
+<div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Attaching to process ID 1972, please <span class="built_in">wait</span>...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.144-b01</span><br><span class="line">Non-default VM flags: -XX:CICompilerCount=3 -XX:InitialHeapSize=132120576 -XX:MaxHeapSize=734003200 -XX:MaxNewSize=244318208 -XX:MinHeapDeltaBytes=524288 -XX:NewSize=44040192 -XX:OldSize=88080384 -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelGC</span><br><span class="line">Command line:  -Xmx700m -Djava.awt.headless=<span class="literal">true</span> -Djava.endorsed.dirs=<span class="string">""</span> -Djdt.compiler.useSingleThread=<span class="literal">true</span> -Dpreload.project.path=D:/demo/algLearn -Dpreload.config.path=C:/Users/cecil/.IntelliJIdea2017.2/config/options -Dcompile.parallel=<span class="literal">false</span> -Drebuild.on.dependency.change=<span class="literal">true</span> -Djava.net.preferIPv4Stack=<span class="literal">true</span> -Dio.netty.initialSeedUniquifier=1077334432047011613 -Dfile.encoding=GBK -Djps.file.types.component.name=FileTypeManager -Duser.language=zh -Duser.country=CN -Didea.paths.selector=IntelliJIdea2017.2 -Didea.home.path=C:\Program Files\JetBrains\IntelliJ IDEA 2017.2.5 -Didea.config.path=C:\Users\cecil\.IntelliJIdea2017.2\config -Didea.plugins.path=C:\Users\cecil\.IntelliJIdea2017.2\config\plugins -Djps.log.dir=C:/Users/cecil/.IntelliJIdea2017.2/system/<span class="built_in">log</span>/build-log -Djps.fallback.jdk.home=C:/Program Files/JetBrains/IntelliJ IDEA 2017.2.5/jre64 -Djps.fallback.jdk.version=1.8.0_152-release -Dio.netty.noUnsafe=<span class="literal">true</span> -Djava.io.tmpdir=C:/Users/cecil/.IntelliJIdea2017.2/system/compile-server/alglearn_d660bc04/_temp_ -Djps.backward.ref.index.builder=<span class="literal">true</span> -Dkotlin.incremental.compilation.experimental=<span class="literal">true</span> -Dkotlin.daemon.enabled -Dkotlin.daemon.client.alive.path=<span class="string">"C:\Users\cecil\AppData\Local\Temp\kotlin-idea-4845382868272217760-is-running"</span></span><br></pre></td></tr></table></figure>
+
+</div></div>
+<h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p><a href="https://docs.oracle.com/javase/7/docs/technotes/tools/share/jps.html" target="_blank" rel="noopener">jps官网</a><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jps -l</span><br><span class="line">5392 sun.tools.jps.Jps</span><br><span class="line">1972 org.jetbrains.jps.cmdline.Launcher</span><br><span class="line">6500</span><br></pre></td></tr></table></figure></p>
+<h3 id="JVM参数"><a href="#JVM参数" class="headerlink" title="JVM参数"></a>JVM参数</h3><p>1.<code>java -help</code></p>
+<h4 id="XX参数-JVM调优和Debug"><a href="#XX参数-JVM调优和Debug" class="headerlink" title="XX参数(JVM调优和Debug)"></a>XX参数(JVM调优和Debug)</h4><ol>
+<li><p>Boolean类型<br>格式：<code>-XX:[+-]&lt;name&gt;</code> 启用或禁用name属性<br>启用CMS垃圾回收器<br><code>-XX:+UseConcMarkSweepGC</code><br>启用G1垃圾回收器<br><code>-XX:+UseG1GC</code></p>
+</li>
+<li><p>非boolean kv类型<br>格式：<code>-XX:&lt;name&gt;=&lt;value&gt;</code><br>GC最大停顿时间<br><code>-XX:MaxGCPauseMillis=500</code></p>
+</li>
 </ol>
+<h5 id="Xmx-Xms"><a href="#Xmx-Xms" class="headerlink" title="-Xmx -Xms"></a><code>-Xmx</code> <code>-Xms</code></h5><p><code>-Xms</code>等价于<code>-XX:InitialHeapSize</code><br><code>-Xmx</code>等价于<code>-XX:MaxHeapSize</code><br><code>-Xss</code>线程堆栈大小</p>
+<h4 id="X参数（非标准化参数）各个版本可能会变-不常用"><a href="#X参数（非标准化参数）各个版本可能会变-不常用" class="headerlink" title="X参数（非标准化参数）各个版本可能会变 不常用"></a>X参数（非标准化参数）各个版本可能会变 不常用</h4><p>java代码是解释执行的，JIT编译信息 即时编译 java代码转化成本地代码<br><code>-Xint</code> 完全解释执行（不转换成本地代码<br><code>-Xcomp</code> 第一次就编译成本地代码<br><code>-Xmixed</code> 混合模式JVM自己决定是否本地代码<br>mixed mode:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br><span class="line">java version <span class="string">"1.8.0_144"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_144-b01)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, mixed mode)</span><br></pre></td></tr></table></figure></p>
+<p>解释模式：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -Xint -version</span><br><span class="line">java version <span class="string">"1.8.0_144"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_144-b01)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, interpreted mode)</span><br></pre></td></tr></table></figure></p>
+<p>编译模式：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -Xcomp -version</span><br><span class="line">java version <span class="string">"1.8.0_144"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_144-b01)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.144-b01, compiled mode)</span><br></pre></td></tr></table></figure></p>
+<h3 id="堆外内存"><a href="#堆外内存" class="headerlink" title="堆外内存"></a>堆外内存</h3><h3 id="64位的JVM-寻址空间"><a href="#64位的JVM-寻址空间" class="headerlink" title="64位的JVM 寻址空间"></a>64位的JVM 寻址空间</h3><h3 id="类装载器"><a href="#类装载器" class="headerlink" title="类装载器"></a>类装载器</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 只有jvm能创建</span></span><br><span class="line"><span class="comment"> * Private constructor. Only the Java Virtual Machine creates Class objects.</span></span><br><span class="line"><span class="comment"> * This constructor is not used and prevents the default constructor being</span></span><br><span class="line"><span class="comment"> * generated.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Class</span><span class="params">(ClassLoader loader)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Initialize final field for classLoader.  The initialization value of non-null</span></span><br><span class="line">    <span class="comment">// prevents future JIT optimizations from assuming this final field is null.</span></span><br><span class="line">    classLoader = loader;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>装载：（磁盘-&gt;内存）<br>1）取得类的二进制流：<br>装载器<code>ClassLoader</code> 读入java字节码装在到JVM<br>2）放到方法区<br>3）在堆中生成java.lang.Class对象 封装方法区的数据结构</li>
+<li>链接：<br>1.验证 符合jvm对字节码的要求<br>2.准备 为<code>static final</code>静态变量 分配内存，并初始化默认值。(还没生成对象)<br>3.解析 符号引用转换成指针or地址偏移量（直接引用）（内存中的位置）</li>
+<li>初始化：静态变量赋值（用户赋值）<code>&lt;clint&gt;</code><br> <code>lang.NoSuchFiledError</code></li>
+</ol>
+<p>最终结果是堆区的class对象，提供了访问方法区的接口（反射接口）</p>
+<p>主动使用6种<br>1.创建类实例2.读写静态变量3.调用静态方法4.反射Class.forName 5.初始化类的子类 6.启动类<br>其它都是被动使用，都不会类初始化</p>
 <p>jvm用软件模拟java字节码的指令集<br>jvm规范定义了：<code>returnAddress</code>数据类型 指向操作码的指针;<br>输出整数的二进制<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> a = <span class="number">6</span>;</span><br><span class="line">       <span class="comment">//0x80000000表示最高位为1的数字</span></span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;<span class="number">32</span>;i++)&#123;</span><br><span class="line">           <span class="comment">//取出a的第一位 //无符号右移( &gt;&gt;&gt; )</span></span><br><span class="line">           <span class="keyword">int</span> t = (a&amp;<span class="number">0x80000000</span>&gt;&gt;&gt;i)&gt;&gt;&gt;(<span class="number">31</span>-i);</span><br><span class="line">           System.out.print(t);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
 <p><code>public native String intern();</code>运行期间放入常量池</p>
 
@@ -490,7 +515,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -545,7 +570,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#堆外内存"><span class="nav-number">1.</span> <span class="nav-text">堆外内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#64位的JVM-寻址空间"><span class="nav-number">2.</span> <span class="nav-text">64位的JVM 寻址空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类装载器"><span class="nav-number"></span> <span class="nav-text">类装载器</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat-查看类加载-GC-JIT编译信息"><span class="nav-number">1.</span> <span class="nav-text">jstat 查看类加载/GC/JIT编译信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinfo-查看运行中的jvm参数"><span class="nav-number">2.</span> <span class="nav-text">jinfo 查看运行中的jvm参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jps"><span class="nav-number">3.</span> <span class="nav-text">jps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM参数"><span class="nav-number">4.</span> <span class="nav-text">JVM参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XX参数-JVM调优和Debug"><span class="nav-number">4.1.</span> <span class="nav-text">XX参数(JVM调优和Debug)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Xmx-Xms"><span class="nav-number">4.1.1.</span> <span class="nav-text">-Xmx -Xms</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#X参数（非标准化参数）各个版本可能会变-不常用"><span class="nav-number">4.2.</span> <span class="nav-text">X参数（非标准化参数）各个版本可能会变 不常用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆外内存"><span class="nav-number">5.</span> <span class="nav-text">堆外内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#64位的JVM-寻址空间"><span class="nav-number">6.</span> <span class="nav-text">64位的JVM 寻址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类装载器"><span class="nav-number">7.</span> <span class="nav-text">类装载器</span></a></li></ol></div>
             
 
           </div>

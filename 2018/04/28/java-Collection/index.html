@@ -80,21 +80,22 @@
 
 
 
-<meta name="description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  guava组件 ImmutableList&amp;lt;String&amp;gt; ilist = ImmutableList.of(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;);不可变List 过滤器   工具类Lists  1List&amp;lt;String&amp;gt; lit = L">
+<meta name="description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  Arrays.asListString可以12String[] ss = &amp;#123;&quot;da&quot;,&quot;da&quot;&amp;#125;;List&amp;lt;String&amp;gt; strings = Arrays.asList(ss); 基本数据类型不行12int[] ss = &amp;#123;1,2&amp;#12">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java-Collection">
-<meta property="og:url" content="https://iotaa.xyz/2018/04/28/java-Collection/index.html">
+<meta property="og:url" content="http://iotaa.xyz/2018/04/28/java-Collection/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  guava组件 ImmutableList&amp;lt;String&amp;gt; ilist = ImmutableList.of(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;);不可变List 过滤器   工具类Lists  1List&amp;lt;String&amp;gt; lit = L">
+<meta property="og:description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  Arrays.asListString可以12String[] ss = &amp;#123;&quot;da&quot;,&quot;da&quot;&amp;#125;;List&amp;lt;String&amp;gt; strings = Arrays.asList(ss); 基本数据类型不行12int[] ss = &amp;#123;1,2&amp;#12">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://iotaa.xyz/images/collection.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/collection2.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/rotate.jpg">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.341Z">
+<meta property="og:image" content="http://iotaa.xyz/images/java_collections.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/collection.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/collection2.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/rotate.jpg">
+<meta property="og:updated_time" content="2018-08-19T01:45:43.412Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java-Collection">
-<meta name="twitter:description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  guava组件 ImmutableList&amp;lt;String&amp;gt; ilist = ImmutableList.of(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;);不可变List 过滤器   工具类Lists  1List&amp;lt;String&amp;gt; lit = L">
-<meta name="twitter:image" content="https://iotaa.xyz/images/collection.jpg">
+<meta name="twitter:description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  Arrays.asListString可以12String[] ss = &amp;#123;&quot;da&quot;,&quot;da&quot;&amp;#125;;List&amp;lt;String&amp;gt; strings = Arrays.asList(ss); 基本数据类型不行12int[] ss = &amp;#123;1,2&amp;#12">
+<meta name="twitter:image" content="http://iotaa.xyz/images/java_collections.jpg">
 
 
 
@@ -124,7 +125,7 @@
 
 
 
-  <link rel="canonical" href="https://iotaa.xyz/2018/04/28/java-Collection/"/>
+  <link rel="canonical" href="http://iotaa.xyz/2018/04/28/java-Collection/"/>
 
 
 
@@ -294,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/04/28/java-Collection/">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/04/28/java-Collection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -340,8 +341,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-19T09:45:43+08:00">
+                2018-08-19
               </time>
             
           </span>
@@ -374,11 +375,57 @@
       
 
       
-        <h1 id="集合框架"><a href="#集合框架" class="headerlink" title="集合框架"></a>集合框架</h1><p><img src="/images/collection.jpg" alt="collection"><br><img src="/images/collection2.jpg" alt="collection2"></p>
+        <h1 id="集合框架"><a href="#集合框架" class="headerlink" title="集合框架"></a>集合框架</h1><p><img src="/images/java_collections.jpg" alt="java_collections"><br><img src="/images/collection.jpg" alt="collection"><br><img src="/images/collection2.jpg" alt="collection2"></p>
 <ol>
 <li>三大接口：<code>Iterator</code>,<code>Collection</code>,<code>Map</code></li>
 <li>工具类：<code>Collections</code> <code>Arrays</code></li>
 </ol>
+<h2 id="Arrays-asList"><a href="#Arrays-asList" class="headerlink" title="Arrays.asList"></a>Arrays.asList</h2><p>String可以<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String[] ss = &#123;<span class="string">"da"</span>,<span class="string">"da"</span>&#125;;</span><br><span class="line">List&lt;String&gt; strings = Arrays.asList(ss);</span><br></pre></td></tr></table></figure></p>
+<p>基本数据类型不行<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] ss = &#123;<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">List&lt;<span class="keyword">int</span>[]&gt; ints1 = Arrays.asList(ss);</span><br></pre></td></tr></table></figure></p>
+<p>源码：基本数据类型<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">List&lt;T&gt; <span class="title">asList</span><span class="params">(T... a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><h3 id="泛型方法："><a href="#泛型方法：" class="headerlink" title="泛型方法："></a>泛型方法：</h3><blockquote>
+<p>类型参数放在修饰符public static后，返回类型之前</p>
+</blockquote>
+<ol>
+<li>元素限定<code>&lt;T extends AutoCloseable&gt; void closeAll(ArrayList&lt;T&gt; elems)</code>确保Array的元素类型是AutoCloseable的子类；<code>extends</code>表示子类型、类型限定</li>
+</ol>
+<ul>
+<li>多个限定<code>T extends Runnable &amp; AutoCloseable</code>,只能有一个限定类，放在第一个，其它都是接口</li>
+</ul>
+<ol>
+<li>Manager是Employee子类但<code>ArrayList&lt;Manger&gt;</code>不是<code>ArrayList&lt;Employee&gt;</code>子类<br>因为<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Manger&gt; bosses = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">ArrayList&lt;Employee&gt; empls = bosses; <span class="comment">//非法</span></span><br><span class="line">empls.add(<span class="keyword">new</span> Employee(...)); <span class="comment">//可以在管理员列里添加普通成员</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果使用数组Manger[]和Employee[] 转型是合法的，但赋值会爆<code>ArrayStoreException</code></p>
+<blockquote>
+<p>如果不对ArrayList写操作，转换是安全的。可以用子类通配符</p>
+</blockquote>
+<ol>
+<li><code>&lt;? extends Employee&gt; staff</code>可以传Arraylist<manager><ol>
+<li>staff.get(i)可以 可以将<code>&lt;? extends Employee&gt;</code>转成<code>Employee</code></li>
+<li>staff.add(i)不行 不能将任何对象转成<code>&lt;? extends Employee&gt;</code></li>
+</ol>
+</manager></li>
+<li>父类通配符<code>&lt;? super Employee&gt;</code>常用于函数式对象参数（用lambda调用）</li>
+</ol>
+<h3 id="泛型类型擦除"><a href="#泛型类型擦除" class="headerlink" title="泛型类型擦除"></a>泛型类型擦除</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; l1 = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">List&lt;Integer&gt; l2 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line"><span class="comment">//true</span></span><br><span class="line">System.out.println(l1.getClass() == l2.getClass());</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; l2 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">l2.add(<span class="number">1</span>);</span><br><span class="line">Method madd = l2.getClass().getDeclaredMethod(<span class="string">"add"</span>,Object.class);</span><br><span class="line"><span class="comment">//[1, abc]</span></span><br><span class="line">madd.invoke(l2,<span class="string">"abc"</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="泛型约束"><a href="#泛型约束" class="headerlink" title="泛型约束"></a>泛型约束</h3><ol>
+<li><p>类型变量不能实例化 <code>T[] result = new T[n];</code>错误</p>
+<ol>
+<li>以【方法引用】方式提供数组的构造函数<code>Sting[]::new</code><br><code>IntFunction&lt;T[]&gt; constr</code> <code>T[] result = constr.apply(n)</code></li>
+<li><p>反射</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T[] repeat(<span class="keyword">int</span> n,T obj,Class&lt;T&gt; c1)&#123;</span><br><span class="line"><span class="comment">//编译器不知道类型，必须转换</span></span><br><span class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>) </span><br><span class="line">T[] result = (T[])java.lang.reflect.Array.newInstance(c1,n);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)result[i]=obj;</span><br><span class="line"><span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用<code>String[] greetings = repeat(10,&quot;Hi&quot;,String.class);</code></p>
+</li>
+<li>最简单的方法<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">ArrayList&lt;T&gt; <span class="title">repeat</span><span class="params">(<span class="keyword">int</span> n,T obj)</span></span>&#123;</span><br><span class="line">    ArrayList&lt;T&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;n;i++) result.add(obj);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>泛型数组<code>Entry&lt;String,Integer&gt;[]</code>是合法的，但是初始化要@SuppressWarnings(“unchecked”)<br>正确方法：<code>ArrayList&lt;Entry&lt;String,Integer&gt;&gt;</code></p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可以</span></span><br><span class="line">List&lt;Integer&gt;[] gen = (List&lt;Integer&gt;[]) <span class="keyword">new</span> ArrayList[<span class="number">10</span>];</span><br><span class="line"><span class="comment">//可以</span></span><br><span class="line"> List&lt;Integer&gt;[] graph=<span class="keyword">new</span> ArrayList[numCourses];</span><br></pre></td></tr></table></figure>
 <h2 id="guava组件"><a href="#guava组件" class="headerlink" title="guava组件"></a>guava组件</h2><ol>
 <li><code>ImmutableList&lt;String&gt; ilist = ImmutableList.of(&quot;a&quot;,&quot;b&quot;);</code>不可变List</li>
 <li>过滤器</li>
@@ -492,32 +539,42 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map.merge(<span class="number">1</span>,<span class="string">"222"</span>,(oldv,newv)-&gt;oldv+newv);</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h3 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h3><h3 id="HashMap-数组-链表-（链表长度达到8，会转化成红黑树）"><a href="#HashMap-数组-链表-（链表长度达到8，会转化成红黑树）" class="headerlink" title="HashMap 数组+链表+（链表长度达到8，会转化成红黑树）"></a>HashMap 数组+链表+（链表长度达到8，会转化成红黑树）</h3><ol>
-<li><p>计算hash值 【扰动函数】</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> 65536(2^16)&gt;&gt;&gt;16 ==1</p>
+<h3 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h3><h3 id="HashMap-数组-链表-（链表长度达到8，会转化成红黑树）"><a href="#HashMap-数组-链表-（链表长度达到8，会转化成红黑树）" class="headerlink" title="HashMap 数组+链表+（链表长度达到8，会转化成红黑树）"></a>HashMap 数组+链表+（链表长度达到8，会转化成红黑树）</h3><blockquote>
+<p>Ideally, under random hashCodes, the frequency of nodes in bins follows a <strong>Poisson distribution</strong>with a parameter of about 0.5 on average for the default resizingthreshold of 0.75,<br>负载因子0.75的清空下，bin满足泊松分布(exp(-0.5) * pow(0.5, k) /factorial(k)).<br>落在0的桶的概率有0.6</p>
+</blockquote>
+<blockquote>
+<p>用树存储冲突hash when bins contain enough nodes to warrant use<code>TREEIFY_THRESHOLD = 8;</code></p>
+</blockquote>
 <ol>
-<li><strong><em>table uses power-of-two masking</em></strong><ul>
-<li>为了用<code>&amp;2^n-1</code>取模 2^n的table长不是素数很容易冲突</li>
-</ul>
-</li>
-<li><strong>*spreads the impact of higher bits downward</strong><ul>
-<li>int类型自带hashCode范围-2147483648到2147483648</li>
-<li><code>i = (n - 1) &amp; hash</code> 插入位置 n-1=15是1111低位掩码高位归零</li>
-<li>int长32<code>&gt;&gt;&gt;16</code>是int的高16位，低16与高16位<code>^</code>,混合hash的高位低位<div class="note "><p><code>key1=0ABC0000 &amp; (16-1) = 0</code>（8个16进制数，共32位）<br><code>key2=0DEF0000 &amp; (16-1) = 0</code><br>hashcode的1位全集中在前16位。key相差很大的pair，却存放在了同一个链表<br>把hashcode的“1位”变得“松散”，比如，经过hash函数处理后，0ABC0000变为A02188B，0DEF0000变为D2AFC70</p></div></li>
-</ul>
+<li>计算hash值 【扰动函数】<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-</li>
+<p>实验：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = (<span class="number">65535</span>&lt;&lt;<span class="number">2</span>)+<span class="number">1</span>;</span><br><span class="line"><span class="comment">//262141 111111111111111101</span></span><br><span class="line">System.out.println(a+<span class="string">" "</span>+Integer.toBinaryString(a));</span><br><span class="line"><span class="comment">//32是表长</span></span><br><span class="line"><span class="keyword">int</span> hash=a^(a&gt;&gt;&gt;<span class="number">16</span>);</span><br><span class="line"><span class="comment">//输出：11 反转最后两位 </span></span><br><span class="line"><span class="comment">//扰动(如果&gt;65536，右移16位) </span></span><br><span class="line"><span class="comment">//低16与高16位`^`,混合hash的高位低位</span></span><br><span class="line">System.out.println(Integer.toBinaryString(a&gt;&gt;&gt;<span class="number">16</span>));</span><br><span class="line"><span class="keyword">int</span> index = (<span class="number">32</span>-<span class="number">1</span>)&amp;hash;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">111111111111111110</span></span><br><span class="line"><span class="comment">11111//只取了低位</span></span><br><span class="line"><span class="comment">-------------</span></span><br><span class="line"><span class="comment">11110-&gt;30</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">System.out.println(Integer.toBinaryString(hash));</span><br><span class="line">System.out.println(Integer.toBinaryString(<span class="number">31</span>));</span><br><span class="line">System.out.println(<span class="string">"-------------"</span>);</span><br><span class="line">System.out.println(Integer.toBinaryString(index));</span><br><span class="line"><span class="comment">//262142 30</span></span><br><span class="line">System.out.println(hash+<span class="string">" "</span>+index);</span><br></pre></td></tr></table></figure></p>
+<ol>
 <li><code>put(K key, V value) {return putVal(hash(key), key</code></li>
 <li><p><code>putVal</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)<span class="comment">//n=length=16</span></span><br><span class="line">           tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">n = (tab = resize()).length;</span><br><span class="line"><span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)<span class="comment">//n=length=16</span></span><br><span class="line">           tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>putVal如果Node链表太长</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">//TREEIFY_THRESHOLD==8</span></span><br><span class="line">   treeifyBin(tab, hash);<span class="comment">//变成红黑树</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><code>TreeNode&lt;K,V&gt; extends LinkedHashMap.Entry&lt;K,V&gt;</code></p>
+<p><code>TreeNode&lt;K,V&gt; extends LinkedHashMap.Entry&lt;K,V&gt;</code><br>65536(2^16)&gt;&gt;&gt;16 ==1</p>
+<ol>
+<li><strong><em>table uses power-of-two masking</em></strong></li>
+</ol>
+<ul>
+<li>为了用<code>&amp;2^n-1</code>取模 2^n的table长不是素数很容易冲突</li>
+</ul>
+<ol>
+<li><strong>*spreads the impact of higher bits downward</strong></li>
+</ol>
+<ul>
+<li>int类型自带hashCode范围-2147483648到2147483648</li>
+<li><code>i = (n - 1) &amp; hash</code> 插入位置 n-1=15是1111低位掩码高位归零</li>
+<li>int长32<code>&gt;&gt;&gt;16</code>是int的高16位，低16与高16位<code>^</code>,混合hash的高位低位<div class="note "><p><code>key1=0ABC0000 &amp; (16-1) = 0</code>（8个16进制数，共32位）<br><code>key2=0DEF0000 &amp; (16-1) = 0</code><br>hashcode的1位全集中在前16位。key相差很大的pair，却存放在了同一个链表<br>把hashcode的“1位”变得“松散”，比如，经过hash函数处理后，0ABC0000变为A02188B，0DEF0000变为D2AFC70</p></div>
+</li>
+</ul>
 <h3 id="Hashtable-数组加链表没用二叉树"><a href="#Hashtable-数组加链表没用二叉树" class="headerlink" title="Hashtable 数组加链表没用二叉树"></a>Hashtable 数组加链表没用二叉树</h3><p>数据结构一样的名字不同：<br>hashtable:<code>private transient Entry&lt;?,?&gt;[] table;</code> 默认大小11<br>hashmap: <code>transient Node&lt;K,V&gt;[] table;</code></p>
 <h3 id="LinkedHashMap-双重链表"><a href="#LinkedHashMap-双重链表" class="headerlink" title="LinkedHashMap 双重链表"></a>LinkedHashMap 双重链表</h3><h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><ol>
 <li>String、Path都有很好的hash函数</li>
@@ -655,7 +712,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -710,7 +767,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集合框架"><span class="nav-number">1.</span> <span class="nav-text">集合框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#guava组件"><span class="nav-number">1.1.</span> <span class="nav-text">guava组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集合操作"><span class="nav-number">1.1.1.</span> <span class="nav-text">集合操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mutiset无序可重复"><span class="nav-number">1.1.2.</span> <span class="nav-text">Mutiset无序可重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multimap-Key-可以重复，一个键对应一个Collection"><span class="nav-number">1.1.3.</span> <span class="nav-text">Multimap Key 可以重复，一个键对应一个Collection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BiMap-双向map-键值都不能重复"><span class="nav-number">1.1.4.</span> <span class="nav-text">BiMap 双向map 键值都不能重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双键Map-行，列，值"><span class="nav-number">1.1.5.</span> <span class="nav-text">双键Map 行，列，值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多对多"><span class="nav-number">1.2.</span> <span class="nav-text">多对多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collections工具类"><span class="nav-number">1.3.</span> <span class="nav-text">Collections工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#排序类：针对List（set不用排序）"><span class="nav-number">1.3.1.</span> <span class="nav-text">排序类：针对List（set不用排序）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">1.3.2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步重建，加上代码块的锁"><span class="nav-number">1.3.3.</span> <span class="nav-text">同步重建，加上代码块的锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置不可变的集合emptyXXX-singletonXXX-unmodifiableXXX"><span class="nav-number">1.3.4.</span> <span class="nav-text">设置不可变的集合emptyXXX,singletonXXX,unmodifiableXXX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">1.3.5.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optional"><span class="nav-number">1.4.</span> <span class="nav-text">Optional</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Iterator"><span class="nav-number">1.5.</span> <span class="nav-text">Iterator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器设计模式"><span class="nav-number">1.5.1.</span> <span class="nav-text">迭代器设计模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forEach-jdk1-8"><span class="nav-number">1.6.</span> <span class="nav-text">forEach jdk1.8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">1.7.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Map接口中的新方法"><span class="nav-number">1.7.1.</span> <span class="nav-text">Map接口中的新方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TreeMap"><span class="nav-number">1.7.2.</span> <span class="nav-text">TreeMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap-数组-链表-（链表长度达到8，会转化成红黑树）"><span class="nav-number">1.7.3.</span> <span class="nav-text">HashMap 数组+链表+（链表长度达到8，会转化成红黑树）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hashtable-数组加链表没用二叉树"><span class="nav-number">1.7.4.</span> <span class="nav-text">Hashtable 数组加链表没用二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashMap-双重链表"><span class="nav-number">1.7.5.</span> <span class="nav-text">LinkedHashMap 双重链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set"><span class="nav-number">1.8.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashSet"><span class="nav-number">1.8.1.</span> <span class="nav-text">HashSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashSet-用链表记录插入的位置"><span class="nav-number">1.8.2.</span> <span class="nav-text">LinkedHashSet 用链表记录插入的位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TreeSet-排序"><span class="nav-number">1.8.3.</span> <span class="nav-text">TreeSet 排序</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集合框架"><span class="nav-number">1.</span> <span class="nav-text">集合框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Arrays-asList"><span class="nav-number">1.1.</span> <span class="nav-text">Arrays.asList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型"><span class="nav-number">1.2.</span> <span class="nav-text">泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型方法："><span class="nav-number">1.2.1.</span> <span class="nav-text">泛型方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型类型擦除"><span class="nav-number">1.2.2.</span> <span class="nav-text">泛型类型擦除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型约束"><span class="nav-number">1.2.3.</span> <span class="nav-text">泛型约束</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#guava组件"><span class="nav-number">1.3.</span> <span class="nav-text">guava组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集合操作"><span class="nav-number">1.3.1.</span> <span class="nav-text">集合操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mutiset无序可重复"><span class="nav-number">1.3.2.</span> <span class="nav-text">Mutiset无序可重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multimap-Key-可以重复，一个键对应一个Collection"><span class="nav-number">1.3.3.</span> <span class="nav-text">Multimap Key 可以重复，一个键对应一个Collection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BiMap-双向map-键值都不能重复"><span class="nav-number">1.3.4.</span> <span class="nav-text">BiMap 双向map 键值都不能重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双键Map-行，列，值"><span class="nav-number">1.3.5.</span> <span class="nav-text">双键Map 行，列，值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多对多"><span class="nav-number">1.4.</span> <span class="nav-text">多对多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collections工具类"><span class="nav-number">1.5.</span> <span class="nav-text">Collections工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#排序类：针对List（set不用排序）"><span class="nav-number">1.5.1.</span> <span class="nav-text">排序类：针对List（set不用排序）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">1.5.2.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步重建，加上代码块的锁"><span class="nav-number">1.5.3.</span> <span class="nav-text">同步重建，加上代码块的锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置不可变的集合emptyXXX-singletonXXX-unmodifiableXXX"><span class="nav-number">1.5.4.</span> <span class="nav-text">设置不可变的集合emptyXXX,singletonXXX,unmodifiableXXX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其它"><span class="nav-number">1.5.5.</span> <span class="nav-text">其它</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optional"><span class="nav-number">1.6.</span> <span class="nav-text">Optional</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Iterator"><span class="nav-number">1.7.</span> <span class="nav-text">Iterator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代器设计模式"><span class="nav-number">1.7.1.</span> <span class="nav-text">迭代器设计模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forEach-jdk1-8"><span class="nav-number">1.8.</span> <span class="nav-text">forEach jdk1.8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">1.9.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Map接口中的新方法"><span class="nav-number">1.9.1.</span> <span class="nav-text">Map接口中的新方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TreeMap"><span class="nav-number">1.9.2.</span> <span class="nav-text">TreeMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap-数组-链表-（链表长度达到8，会转化成红黑树）"><span class="nav-number">1.9.3.</span> <span class="nav-text">HashMap 数组+链表+（链表长度达到8，会转化成红黑树）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hashtable-数组加链表没用二叉树"><span class="nav-number">1.9.4.</span> <span class="nav-text">Hashtable 数组加链表没用二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashMap-双重链表"><span class="nav-number">1.9.5.</span> <span class="nav-text">LinkedHashMap 双重链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set"><span class="nav-number">1.10.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashSet"><span class="nav-number">1.10.1.</span> <span class="nav-text">HashSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedHashSet-用链表记录插入的位置"><span class="nav-number">1.10.2.</span> <span class="nav-text">LinkedHashSet 用链表记录插入的位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TreeSet-排序"><span class="nav-number">1.10.3.</span> <span class="nav-text">TreeSet 排序</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

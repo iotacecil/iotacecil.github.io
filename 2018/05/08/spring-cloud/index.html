@@ -80,20 +80,19 @@
 
 
 
-<meta name="description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerservice docker startrun:-it 开启交互界面--name 容器的名字 端口映射-p 9000:8080将docker容器8080端口映射到宿主机端口9000文件目录映射-v /home/p">
+<meta name="description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime 时间单元 session超时等initLimit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spring-cloud">
-<meta property="og:url" content="https://iotaa.xyz/2018/05/08/spring-cloud/index.html">
+<meta property="og:url" content="http://iotaa.xyz/2018/05/08/spring-cloud/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerservice docker startrun:-it 开启交互界面--name 容器的名字 端口映射-p 9000:8080将docker容器8080端口映射到宿主机端口9000文件目录映射-v /home/p">
+<meta property="og:description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime 时间单元 session超时等initLimit">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://iotaa.xyz/images/dockerfile.jpg">
-<meta property="og:image" content="https://iotaa.xyz/images/zid.png">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.367Z">
+<meta property="og:image" content="http://iotaa.xyz/images/zid.png">
+<meta property="og:updated_time" content="2018-07-20T06:16:59.746Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring-cloud">
-<meta name="twitter:description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerservice docker startrun:-it 开启交互界面--name 容器的名字 端口映射-p 9000:8080将docker容器8080端口映射到宿主机端口9000文件目录映射-v /home/p">
-<meta name="twitter:image" content="https://iotaa.xyz/images/dockerfile.jpg">
+<meta name="twitter:description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime 时间单元 session超时等initLimit">
+<meta name="twitter:image" content="http://iotaa.xyz/images/zid.png">
 
 
 
@@ -123,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://iotaa.xyz/2018/05/08/spring-cloud/"/>
+  <link rel="canonical" href="http://iotaa.xyz/2018/05/08/spring-cloud/"/>
 
 
 
@@ -293,7 +292,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/05/08/spring-cloud/">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/05/08/spring-cloud/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -339,8 +338,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-20T14:16:59+08:00">
+                2018-07-20
               </time>
             
           </span>
@@ -375,10 +374,7 @@
       
         <p><code>@EnableEurekaServer</code></p>
 <h2 id="静态文件用Nginx-Lua实现高性能网关"><a href="#静态文件用Nginx-Lua实现高性能网关" class="headerlink" title="静态文件用Nginx+Lua实现高性能网关"></a>静态文件用Nginx+Lua实现高性能网关</h2><h2 id="文件服务器-FastDFS"><a href="#文件服务器-FastDFS" class="headerlink" title="文件服务器 FastDFS"></a>文件服务器 FastDFS</h2><h2 id="zk客户端-curator"><a href="#zk客户端-curator" class="headerlink" title="zk客户端 curator"></a>zk客户端 curator</h2><p>解决watcher注册一次就失效<br>分布式锁</p>
-<h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><p><img src="/images/dockerfile.jpg" alt="dockerfile"><br><code>service docker start</code><br>run:<br><code>-it</code> 开启交互界面<br><code>--name</code> 容器的名字</p>
-<p>端口映射<code>-p 9000:8080</code>将docker容器8080端口映射到宿主机端口9000<br>文件目录映射<code>-v /home/project:/soft</code> 映射到容器的soft目录 <code>--privileged</code>可以读写执行宿主机文件</p>
-<p>停止容器：<code>docker stop name</code><br>删除容器：<code>docker rm name</code></p>
-<h2 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h2><p>1.安装jdk到/usr/ 安装zookeeper到/usr/local/<br>2.<code>cp zoo_sample.cfg zoo.cfg</code><br>tickTime 时间单元 session超时等<br>initLimit=N 集群 初始化链接时间 表示是tickTime的N倍<br>syncLimit=N 主发送给从 的请求应答时间长度（心跳）表示是tickTime的N倍</p>
+<h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><h2 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h2><p>1.安装jdk到/usr/ 安装zookeeper到/usr/local/<br>2.<code>cp zoo_sample.cfg zoo.cfg</code><br>tickTime 时间单元 session超时等<br>initLimit=N 集群 初始化链接时间 表示是tickTime的N倍<br>syncLimit=N 主发送给从 的请求应答时间长度（心跳）表示是tickTime的N倍</p>
 <p>dataDir=/usr/zookeeper/dataDir<br>dataLogDir=/usr/zooKeeper/dataLogDir<br>并创建dataDir和dataLogDir</p>
 <p>回到/bin 启动服务器<br><code>./zkServer.sh start</code></p>
 <p>启动客户端<code>./zkCli.sh</code> 链接成功后 </p>
@@ -502,7 +498,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

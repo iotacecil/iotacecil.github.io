@@ -84,11 +84,11 @@
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java-io-file">
-<meta property="og:url" content="https://iotaa.xyz/2018/05/04/java-io-file/index.html">
+<meta property="og:url" content="http://iotaa.xyz/2018/05/04/java-io-file/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
 <meta property="og:description" content="JNI java native interface 本地接口堆外内存：ByteBuffer1.wrap可以包装一个数组，保证不被直接修改2.ByteBuffer.allocateDirect() 堆外内存。123public static ByteBuffer allocateDirect(int capacity) &amp;#123;    return new DirectByteBuffer(ca">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.343Z">
+<meta property="og:updated_time" content="2018-08-30T02:12:11.525Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java-io-file">
 <meta name="twitter:description" content="JNI java native interface 本地接口堆外内存：ByteBuffer1.wrap可以包装一个数组，保证不被直接修改2.ByteBuffer.allocateDirect() 堆外内存。123public static ByteBuffer allocateDirect(int capacity) &amp;#123;    return new DirectByteBuffer(ca">
@@ -121,7 +121,7 @@
 
 
 
-  <link rel="canonical" href="https://iotaa.xyz/2018/05/04/java-io-file/"/>
+  <link rel="canonical" href="http://iotaa.xyz/2018/05/04/java-io-file/"/>
 
 
 
@@ -291,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://iotaa.xyz/2018/05/04/java-io-file/">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/05/04/java-io-file/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-30T10:12:11+08:00">
+                2018-08-30
               </time>
             
           </span>
@@ -480,7 +480,7 @@
 <h3 id="管道流-PipedInputStream-线程之间的数据通信"><a href="#管道流-PipedInputStream-线程之间的数据通信" class="headerlink" title="管道流 PipedInputStream.. 线程之间的数据通信"></a>管道流 <code>PipedInputStream</code>.. 线程之间的数据通信</h3><p><code>pin.connect(pout);</code></p>
 <h3 id="RandomAccessFile在jdk1-4中nio-被内存映射文件-替代"><a href="#RandomAccessFile在jdk1-4中nio-被内存映射文件-替代" class="headerlink" title="RandomAccessFile在jdk1.4中nio 被内存映射文件 替代"></a><code>RandomAccessFile</code>在jdk1.4中nio 被内存映射文件 替代</h3><p>复制文件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RandomAccessFile r = <span class="keyword">new</span> RandomAccessFile(<span class="string">"a.txt"</span>,<span class="string">"r"</span>);</span><br><span class="line">RandomAccessFile w = <span class="keyword">new</span> RandomAccessFile(<span class="string">"c.txt"</span>,<span class="string">"rw"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>seek 实现文件续传</p>
-<h3 id="Properties-工具类-extends-Hashtable"><a href="#Properties-工具类-extends-Hashtable" class="headerlink" title="Properties 工具类 extends Hashtable"></a>Properties 工具类 <code>extends Hashtable</code></h3><p>ResourceBundle只能读取<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">InputStream cfg = <span class="keyword">new</span> FileInputStream...</span><br><span class="line">p.load(cfg);</span><br><span class="line">String name = p.getProperty(<span class="string">"username"</span>);</span><br><span class="line">p.put(<span class="string">"passwd"</span>,<span class="string">"dafdafa"</span>);</span><br><span class="line">String pw = p.getProperty(<span class="string">"passwd"</span>);</span><br><span class="line"><span class="comment">//写</span></span><br><span class="line">OutputStream out = <span class="keyword">new</span> FileOutputStream...</span><br><span class="line">p.store(out,<span class="string">"updatatatata"</span>);</span><br></pre></td></tr></table></figure></p>
+<h3 id="Properties-工具类-extends-Hashtable"><a href="#Properties-工具类-extends-Hashtable" class="headerlink" title="Properties 工具类 extends Hashtable"></a>Properties 工具类 <code>extends Hashtable</code></h3><p>ResourceBundle只能读取<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Properties p = <span class="keyword">new</span> Properties();</span><br><span class="line">InputStream cfg = <span class="keyword">new</span> FileInputStream...</span><br><span class="line">p.load(cfg);</span><br><span class="line">String name = p.getProperty(<span class="string">"username"</span>);</span><br><span class="line"><span class="comment">//放到内存中 setProperty调用的也是put</span></span><br><span class="line">p.put(<span class="string">"passwd"</span>,<span class="string">"dafdafa"</span>);</span><br><span class="line">String pw = p.getProperty(<span class="string">"passwd"</span>);</span><br><span class="line"><span class="comment">//写</span></span><br><span class="line">OutputStream out = <span class="keyword">new</span> FileOutputStream...</span><br><span class="line">p.store(out,<span class="string">"updatatatata"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>可以通过类加载器加载<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(<span class="string">"src/a.p"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>清除所有的键值对<code>p.clear();</code></p>
 <h3 id="压缩ZipOutputStream"><a href="#压缩ZipOutputStream" class="headerlink" title="压缩ZipOutputStream"></a>压缩<code>ZipOutputStream</code></h3><p>压缩 <code>z.putNextEntry(new ZipEntry(name));</code><br><code>ZipEntry(String name)</code> 创建条目<br>解压 <code>zIn.getNextEntry()</code></p>
@@ -631,7 +631,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
