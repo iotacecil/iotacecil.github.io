@@ -3,6 +3,27 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
+
+### 3 最长不重复字串
+18%
+```java
+public int LS(String s){
+    int max = 0;
+    int start = 0;
+    Map<Character,Integer> map = new HashMap<>();
+    for(int i =0;i<s.length();i++){
+        char c = s.charAt(i);
+        if(map.containsKey(c)){
+            start = Math.max(start,map.get(c)+1);
+        }
+        max = Math.max(max,i-start+1);
+        map.put(c,i);
+    }
+    return max;
+}
+```
+
+
 ### 879
 
 ### 576 无向图访问所有点的最短边数
@@ -703,6 +724,26 @@ void help(vector<int> &num,int begin,vector<vector<int> > &ans){
 }
 ```
 
+### 两个帅不能处在同一条直线上的所有可行位置
+```
+1 2 3
+4 5 6
+7 8 9
+```
+```cpp
+#include<iostream>
+using namespace std;
+int main(){
+    int i = 81;
+    while(i--){
+        if(i/9%3==i%9%3)continue;
+        cout<<i/9+1<<" "<<i%9+1<<endl;
+    }
+} 
+```
+
+
+### 翻煎饼排序的最少次数
 
 ### 39 等于target的每个数字无限次的combination
 关键：加上start，防止出现3,2,2的重复
@@ -1377,7 +1418,8 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
   从右向左扫描，同理更新max，当左括号>右括号重置0.
 
 ---
-### ？96 不同的BST数量
+### ？96 不同的BST数量 catalan数
+![numbst.jpg](/images/numbst.jpg)
 (为什么是乘)
 ```
 1个节点只有1种，2个节点1    2 一共两种
@@ -1388,6 +1430,10 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
    （0）(2) (1)(1) (2)(0)
       1x2  + 1x1  + 2x1
 ```
+![numbst2.jpg](numbst2.jpg)
+![numbst3.jpg](numbst3.jpg)
+当n=5 $T[4]+T[1][3]+T[2][2]+T[3][1]+T[4]$
+
 左子树有j个节点，右子树有n-j-1个节点
 ```java
 int[] dp = new int[n+1];
@@ -1397,13 +1443,63 @@ dp[1] = 1;
 for(int i =2;i<=n;i++){
     //左边j个
     for(int j =0;j<i;j++){
+        //注意是累加
         dp[i]+=dp[j]*dp[i-j-1];
     }
 }
 return dp[n];
 ```
+dfs:
+```java
+public int numTreesDfs(int n) {
+    int[] memory = new int[n+1];
+    return dfs(n,memory);
+}
+public int dfs(int n,int[] memroy){
+    if(n==0||n==1)return 1;
+    if(memroy[n-1]!=0)return memroy[n-1];
+    int sum = 0;
+    for (int i = 1; i <=n ; i++) {
+        sum+=dfs(i-1,memroy)*dfs(n-i,memroy);
+    }
+    memroy[n-1] = sum;
+    return sum;
+}
+```
 
-### ！95 输出全部不同的BST
+![catalannum.jpg](/images/catalannum.jpg)
+```java
+int ans[] = {1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190};
+return ans[n];
+```
+
+```java
+int res = 0;
+if(n<=1)return 1;
+for (int i = 0; i < n; i++) {
+    res += catalan(i) * catalan(n - i - 1);
+}
+```
+
+二项式系数
+![catalanformu.jpg](/images/catalanformu.jpg)
+```java
+private int C(int a,int b){
+    long res = 1;
+    for(int i =0;i<Math.min(b,a-b);i++){
+        res=res*(a-i)/(i+1);
+    }
+    return (int)res;
+}
+//C(2n,n)/(n+1)
+public int catalen2(int n){
+    int c =C(2*n,n);
+    return c/(n+1);
+}
+```
+
+
+### ！？？？95 输出全部不同的BST
 [1~n]组成的BST
 ```
 1.......k...n
@@ -1739,6 +1835,7 @@ int rangeSum(int i,int j){
 | 8 -> 1000 | e[8] = e[4]+e[6]+e[7]+a[8] |
 
 #### ？？？315 输出数组每个位置后有多少个数字比它小
+
 暴力n^2复杂度一般只能到1k数量级
 
 方法一：
@@ -1752,6 +1849,7 @@ int rangeSum(int i,int j){
 1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
 
 方法3：归并排序
+![nixu315.jpg](/images/nixu315.jpg)
 
 #### 小和问题(右边有多少个数比它大)
 ```
@@ -2386,12 +2484,7 @@ private void back(List<List<Integer>> rst,List<Integer> item,int[] nums,int inde
     rst.add(new ArrayList<>(item));
     for(int i =index;i<nums.length;i++){
         item.add(nums[i]);
-        //1.当i=2+1==nums.length 则回到上一层i=2,remove
         back(rst,item,nums,i+1);
-        //2.结束了back(,,2)并去掉了{3} 
-        //3回到back(,,index=1)并去掉了[2] item里只有1，
-        //  i++ 添加[3]->rst.add({1,3})
-        //4.结束back(,,index=1)回到index=0 remove 0 index=1 add{2} back
         item.remove(item.size()-1);
     }
 }
@@ -2408,17 +2501,15 @@ C用001表示
 如果i=011=3,添加j=0,001,j=1,010到item；i=100=4,添加j==2,1<<2=4
 ```java
 public List<List<Integer>> subsets(int[] nums) {
-  int setnum = 1<<nums.length;
     List<List<Integer>> rst = new ArrayList<>();
-    for(int i =0;i<setnum;i++){
-        List<Integer> item = new ArrayList<>();
-        for(int j=0;j<nums.length;j++){
-            if((i&(1<<j))!=0)
-            {
-                item.add(nums[j]);
+    for(int i=0;i<(1<<nums.length);i++){
+        List<Integer> tmp = new ArrayList<>();
+        for(int j =0;j<nums.length;j++){
+            if((i&(1<<j))!=0){
+                tmp.add(nums[j]);
             }
         }
-        rst.add(item);
+        rst.add(new ArrayList<>(tmp));
     }
     return rst;
 }

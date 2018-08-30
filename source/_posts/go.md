@@ -3,6 +3,140 @@ title: go
 date: 2018-08-27 14:02:17
 tags:
 ---
+### 对象 没有继承和多态 只有封装 只有struct
+构造
+```go
+type treeNode struct{
+    value int
+    left,right *treeNode
+}
+func main() {
+    var root treeNode
+    root = treeNode{value:3}
+    root.left = &treeNode{}
+    root.right = &treeNode{}
+    root2 :=treeNode{3,nil,nil}
+    root.right.left = new(treeNode)
+
+    nodes:= []treeNode{
+        {value:3},
+        {},
+        {6,nil,&root},
+    }
+    //{3 0xc04205c400 0xc04205c420}
+    fmt.Println(root)
+    //{3 <nil> <nil>}
+    fmt.Println(root2)
+    // [{3 <nil> <nil>} {0 <nil> <nil>} {6 <nil> 0xc04205c3e0}]
+    fmt.Println(nodes)
+}
+```
+没有构造函数可以写工厂函数
+局部变量的地址也能返回给外面用
+```go
+func factory(value int)*treeNode{
+    return &treeNode{value:value}
+}
+```
+
+
+
+### 容器
+支持中文的go
+```go
+package main
+
+import (
+    "fmt"
+    "unicode/utf8"
+)
+func lengthOfLongestSubstringrune(s string) int {
+    lastcur := make(map[rune]int)
+    start :=0
+    maxLength :=0
+
+    for i,ch:=range []rune(s){
+        if lastI,ok:=lastcur[ch];ok&&lastI>=start{
+            start = lastcur[ch]+1
+        }
+        if(i-start+1>maxLength) {
+            maxLength = i - start + 1
+        }
+        lastcur[ch] = i;
+    }
+    return maxLength;
+}
+func main() {
+    s:="中文中文中文字符串我"
+    fmt.Println(len(s))
+    for _,b := range []byte(s){
+        //utf-8的编码
+        fmt.Printf(" %X ",b)
+    }
+    fmt.Println(s)
+
+    for i,ch := range s{
+        //unicode
+        fmt.Printf("(%d, %X) ",i,ch)
+    }
+    fmt.Println(utf8.RuneCountInString(s))
+
+    bytes := []byte(s)
+    for len(bytes)>0{
+        ch,size :=utf8.DecodeRune(bytes)
+        bytes = bytes[size:]
+        fmt.Printf("%c ",ch)
+    }
+    fmt.Println()
+//每个rune占了4个字节 另外开了一个rune数组
+    for i,ch := range []rune(s){
+        fmt.Printf("(%d %c)",i,ch)
+    }
+    fmt.Println(lengthOfLongestSubstringrune("中文字符串中文中文"))
+}
+```
+
+
+Map
+除了slice map function其他内建类型都可以当key
+struct不包含上面三个也可以当key
+```go
+func main() {
+    m := map[string]string{
+        "A":    "a",
+        "B":  "b",
+        "C":    "c",
+        "D": "d",
+    }
+
+    m2 := make(map[string]int) // m2 == empty map
+
+    var m3 map[string]int // m3 == nil
+// map[A:a B:b C:c D:d] map[] map[]
+    fmt.Println(m, m2, m3)
+// B b
+// C c
+// D d
+// A a
+    for k,v:=range m{
+        fmt.Println(k,v)
+    }
+    //a
+    courseName := m["A"]
+    fmt.Println(courseName)
+    //  false 不存在也会输出空串
+    courseName ,ok:= m["dd"]
+    fmt.Println(courseName,ok)
+
+    if courseName ,ok:= m["dd"];ok{
+        fmt.Println(courseName)
+    }else{
+        fmt.Println("not Exist")
+    }
+    //删除
+    delete(m,"D")
+}
+```
 
 数组初始化
 ```go
@@ -70,6 +204,66 @@ s[1] =100
 //[1 2 3 100 5 6 7 8]
 fmt.Println(arr)
 ```
+
+切片可以扩展
+```go
+arr:=[...]int {1,2,3,4,5,6,7,8}
+s:=arr[2:4]
+//6
+fmt.Println(cap(s))
+//[6 7 8]
+fmt.Println(s[3:6])
+//[3 4 999] 必须接受append的返回值
+s2:=append(s, 999)
+fmt.Println(s2)
+//[1 2 3 100 999 6 7 8]
+//如果append超过了cap 会创建新的数组
+fmt.Println(arr)
+```
+
+创建切片
+```go
+var s3[] int;
+    for i:=0;i<100;i++{
+// len:  0  cap:  0
+// len:  1  cap:  1
+// len:  2  cap:  2
+// len:  3  cap:  4
+// len:  4  cap:  4
+// len:  5  cap:  8
+        fmt.Println("len: ",len(s3)," cap: ",cap(s3))
+        s3 = append(s3,2*i+1)
+    }
+    fmt.Println(s3)
+s4 := [] int{1,2,3,4,5}
+fmt.Println(s4)
+s5 := make([]int,16)
+fmt.Println(s5)
+s6 := make([]int,16,32)
+fmt.Println(s6)
+```
+拷贝
+```go
+//s5:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+//s4:[1 2 3 4 5]
+copy(s5,s4)
+//s5:[1 2 3 4 5 0 0 0 0 0 0 0 0 0 0 0]
+fmt.Println(s5)
+```
+
+删除
+```go
+//删掉3
+s=append(s[:3],s[4:]...)
+//pop
+front := s[0]
+s = s[1:]
+
+//pop
+tail = s[len(s)-1]
+s = s[:len(s)-1] 
+```
+
 
 ### 基础语法
 变量

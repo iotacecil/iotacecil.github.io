@@ -103,7 +103,7 @@ ExecutorService executor = Executors.newCachedThreadPool();
 ### AQS 两个node的队列
 
 ### 多个CPU缓存一致性 MESI缓存一致性！！！
-![mesi](/images/singleclu.jpg)
+![mesi](/images/mesi.jpg.jpg)
 4种数据状态，4种状态转换的cpu操作。
 M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存
 Exlusive独享：缓存行只在该CPU的缓存中，未被修改，与主存一致。其它CPU读取内存时变成S状态。被修改则变成M。
