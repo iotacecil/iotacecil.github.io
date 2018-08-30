@@ -49,7 +49,9 @@ dfsarr2(rst5,new int[]{0},0);
     }
 ```
 
-### 不可变对象：Integer 注意-127~128有cache 同理String，value
+### 不可变对象：Integer 注意-127~128有cache 同理String，Double
+> 的基本数据类型的包装类（如Integer 、 Long 和 Float ）都是不可变的，其它数字类型（如 BigInteger 和 BigDecimal ）也是不可变的。
+
 输出：每次地址不一样
 1002地址1450495309 1002地址1670782018 1002地址1706377736 1002地址468121027 
 ```java

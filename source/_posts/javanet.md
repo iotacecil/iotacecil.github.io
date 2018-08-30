@@ -32,7 +32,7 @@ ext {
                     "mysql:mysql-connector-java:5.1.29"
             ],
             jsonrpc:[
-                    "com.imooc.jsonrpc4j:jsonrpc4j:1.5.1"
+                    "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.5.1"
             ],
             swagger: [
                     "io.springfox:springfox-swagger2:2.7.0",
@@ -784,6 +784,490 @@ public class ProductControllerTest {
 #### 销售端
 产品查询 申购赎回 对账
 jsonrpc
+添加全局依赖
+```json
+ext {
+libs = [
+jsonrpc:[
+        "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.5.1"
+],]
+}
+```
+添加到api模块
+```json
+dependencies{
+    compile libs.jsonrpc
+}
+```
+添加entity依赖
+新建接口api-ProductRpc
+```java
+@JsonRpcService("rpc/products")
+public interface ProductRpc {
+    /**
+     * 查询多个产品
+     * @param req
+     * @return
+     */
+    List<Product> query(ProductRpcReq req);
+
+    /**
+     * 查单个产品
+     * @param id
+     * @return
+     */
+    Product findOne(String id);
+
+```
+将参数复杂的接口的参数封装到请求对象 
+api-domain
+```java
+public class ProductRpcReq {
+    private List<String> idList;
+    private BigDecimal minRewardRate;
+    private BigDecimal maxRewardRate;
+    private List<String> statusList;
+    }
+```
+
+修改manger添加api依赖
+```java
+compile project(":api")
+```
+
+在管理端新建包rpc
+rpc实现类
+```java
+@AutoJsonRpcServiceImpl
+@Service
+public class ProductRpcImpl implements ProductRpc {
+    private static Logger LOG = LoggerFactory.getLogger(ProductRpcImpl.class);
+    @Autowired
+    private ProductService productService;
+    
+    @Override
+    public List<Product> query(ProductRpcReq req) {
+        LOG.info("查询多个产品：{}",req );
+        Pageable pageable = new PageRequest(0,1000, Sort.Direction.DESC,"rewardRate");
+        Page<Product> page = productService.query(req.getIdList(), req.getMinRewardRate(),
+                req.getMaxRewardRate(), req.getStatusList(), pageable);
+        LOG.info("查询多个结果：{}",page );
+        return page.getContent();
+    }
+
+    @Override
+    public Product findOne(String id) {
+        LOG.info("请求id:{}",id);
+        Product rst = productService.findOne(id);
+        LOG.info("结果id:{}",rst);
+        return rst;
+    }
+}
+```
+将rpc地址交给spring管理的配置类
+在manager新建包configuration rpc服务端
+```java
+@Configuration
+public class RpcConfiguration {
+    @Bean
+    public AutoJsonRpcServiceImplExporter rpcServiceImplExporter(){
+        return new AutoJsonRpcServiceImplExporter();
+    }
+}
+```
+可以看到日志信息 说明在manager的rpc实现导出到api中的地址成功
+```log
+2018-08-30 13:17:37.832  WARN 21224 --- [           main] o.s.c.a.ConfigurationClassEnhancer       : @Bean method RpcConfiguration.rpcServiceImplExporter is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2018-08-30 13:17:37.846  INFO 21224 --- [           main] c.g.j.s.AutoJsonRpcServiceImplExporter   : exporting bean [productRpcImpl] ---> [/products]
+```
+
+saller模块：
+添加api依赖，新建saller包并添加启动类
+```java
+dependencies{
+    compile project(":api")
+}
+```
+```java
+@SpringBootApplication
+public class SellerApp {
+    public static void main(String[] args) {
+        SpringApplication.run(SellerApp.class);
+    }
+}
+```
+新建service包
+```java
+@Service
+public class ProductRpcService {
+    private static Logger LOG = LoggerFactory.getLogger(ProductRpcService.class);
+
+    @Autowired
+    private ProductRpc productRpc;
+
+    /**
+     * 查询全部产品 暂时不分页返回
+     * @return List
+     */
+    public List<Product> findAll(){
+        ProductRpcReq req = new ProductRpcReq();
+        List<String> status = new ArrayList<>();
+        //只能查询销售中的
+        status.add(ProductStatus.IN_SELL.name());
+        req.setStatusList(status);
+        LOG.info("rpc查询全部产品 请求:{}",req);
+        List<Product> result = productRpc.query(req);
+        LOG.info("rpc查询全部产品 结果:{}",result);
+        return result;
+    }
+    //测试类
+    @PostConstruct
+    public void testFindAll(){
+        findAll();
+    }
+    public Product findOne(String id){
+        LOG.info("单个产品请求:{}", id);
+        Product rst = productRpc.findOne(id);
+        LOG.info("单个产品 结果:{}", rst);
+        return rst;
+
+    }
+    @PostConstruct
+    public void testfindone(){
+        findOne("001");
+    }
+
+```
+添加配置文件映射rpc路径
+`application.yml`
+```yml
+server:
+  servlet:
+    context-path: /seller
+  port: 8082
+
+rpc.manager.url: http://localhost:8081/manager/
+```
+新建configuration包 导出bean创建rpc客户端
+```java
+@Configuration
+@ComponentScan(basePackageClasses = {ProductRpc.class})
+public class RpcConfiguration {
+    private static Logger LOG = LoggerFactory.getLogger(RpcConfiguration.class);
+    @Bean
+    public AutoJsonRpcClientProxyCreator rpcClientProxyCreator(@Value("${rpc.manager.url}") String url){
+        AutoJsonRpcClientProxyCreator creator = new AutoJsonRpcClientProxyCreator();
+        //设置地址
+        try{
+            creator.setBaseUrl(new URL(url));
+        }catch (MalformedURLException e){
+            LOG.error("创建rpc服务地址错误",e);
+        }
+        //扫描接口
+        creator.setScanPackage(ProductRpc.class.getPackage().getName());
+        return creator;
+    }
+}
+```
+
+修改路径
+```java
+bean [productRpcImpl] ---> [rpc/products]
+```
+jsonRPC
+注意点：
+1.不能传递复杂参数不要传递分页对象
+2.路径rpc路径前不能有`/`
+3.RPC配置类的扫描路径
+
+JSONRPC 
+
+#### 客户端原理
+```java
+logging:
+  level:
+    com.googlecode.jsonrpc4j: debug
+```
+开启客户端debug log
+```java
+2018-08-30 15:28:40.612 DEBUG 31512 --- [           main] c.g.j.s.AutoJsonRpcClientProxyCreator    : Scanning 'classpath:api/**/*.class' for JSON-RPC service interfaces.
+2018-08-30 15:28:40.613 DEBUG 31512 --- [           main] c.g.j.s.AutoJsonRpcClientProxyCreator    : Found JSON-RPC service to proxy [api.ProductRpc] on path 'rpc/products'.
+```
+
+```java
+2018-08-30 15:28:42.819  INFO 31512 --- [           main] saller.service.ProductRpcService         : 单个产品请求:001
+2018-08-30 15:28:42.836 DEBUG 31512 --- [           main] c.g.jsonrpc4j.JsonRpcHttpClient          : Request {"id":"1269662779","jsonrpc":"2.0","method":"findOne","params":["001"]}
+2018-08-30 15:28:42.872 DEBUG 31512 --- [           main] c.g.jsonrpc4j.JsonRpcHttpClient          : JSON-PRC Response: {"jsonrpc":"2.0","id":"1269662779","result":{"id":"001","name":"金融1号","status":"AUDITING","thresholdAmount":10.0,"stepAmount":1,"lockTerm":0,"rewardRate":3.86,"memo":null,"createAt":"2018-08-29T11:38:02.000+0000","updateAt":"2018-08-29T11:38:02.000+0000","createUser":null,"updateUser":null}}
+2018-08-30 15:28:42.905  INFO 31512 --- [           main] saller.service.ProductRpcService         : 单个产品 结果:entity.Product@12fcc71f[id=001,name=金融1号,status=AUDITING,thresholdAmount=10.0,stepAmount=1,lockTerm=0,rewardRate=3.86,memo=<null>,createAt=Wed Aug 29 19:38:02 CST 2018,updateAt=Wed Aug 29 19:38:02 CST 2018,createUser=<null>,updateUser=<null>]
+```
+`AutoJsonRpcClientProxyCreator`源码
+{% fold %}
+自动注入`Application`
+从容器中获取bean之后会调用方法`postProcessBeanFactory`
+```java
+implements BeanFactoryPostProcessor, ApplicationContextAware
+```
+```java
+private String resolvePackageToScan() {
+    return CLASSPATH_URL_PREFIX + convertClassNameToResourcePath(scanPackage) + "/**/*.class";
+}
+@Override
+public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(applicationContext);
+    DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
+    //配置的包路径
+    String resolvedPath = resolvePackageToScan();
+    logger.debug("Scanning '{}' for JSON-RPC service interfaces.", resolvedPath);
+    try {
+        for (Resource resource : applicationContext.getResources(resolvedPath)) {
+            if (resource.isReadable()) {
+                MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                ClassMetadata classMetadata = metadataReader.getClassMetadata();
+                //扫描注解
+                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+                String jsonRpcPathAnnotation = JsonRpcService.class.getName();
+                //如果是jsonRpc服务
+                if (annotationMetadata.isAnnotated(jsonRpcPathAnnotation)) {
+                    String className = classMetadata.getClassName();
+                    String path = (String) annotationMetadata.getAnnotationAttributes(jsonRpcPathAnnotation).get("value");
+                    logger.debug("Found JSON-RPC service to proxy [{}] on path '{}'.", className, path);
+                    //注册到容器
+                    registerJsonProxyBean(defaultListableBeanFactory, className, path);
+                }
+            }
+        }
+    } catch (IOException e) {
+        throw new RuntimeException(format("Cannot scan package '%s' for classes.", resolvedPath), e);
+    }
+}
+```
+注册到容器
+```java
+/**
+ * Registers a new proxy bean with the bean factory.
+ */
+private void registerJsonProxyBean(DefaultListableBeanFactory defaultListableBeanFactory, String className, String path) {
+    BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
+        //代理类
+            .rootBeanDefinition(JsonProxyFactoryBean.class)
+            .addPropertyValue("serviceUrl", appendBasePath(path))
+            .addPropertyValue("serviceInterface", className);
+    
+    if (objectMapper != null) {
+        beanDefinitionBuilder.addPropertyValue("objectMapper", objectMapper);
+    }
+    
+    if (contentType != null) {
+        beanDefinitionBuilder.addPropertyValue("contentType", contentType);
+    }
+    
+    defaultListableBeanFactory.registerBeanDefinition(className + "-clientProxy", beanDefinitionBuilder.getBeanDefinition());
+}
+```
+
+`JsonProxyFactoryBean`
+
+```java
+public class JsonProxyFactoryBean extends UrlBasedRemoteAccessor implements MethodInterceptor, InitializingBean, FactoryBean<Object>, ApplicationContextAware {
+@Override
+    @SuppressWarnings("unchecked")
+    public void afterPropertiesSet() {
+        super.afterPropertiesSet();
+        //根据接口创建代理对象
+        proxyObject = ProxyFactory.getProxy(getServiceInterface(), this);
+
+        if (jsonRpcHttpClient==null) {
+            //与spring容器共用一个objectMapper
+            if (objectMapper == null && applicationContext != null && applicationContext.containsBean("objectMapper")) {
+                objectMapper = (ObjectMapper) applicationContext.getBean("objectMapper");
+            }
+            if (objectMapper == null && applicationContext != null) {
+                try {
+                    objectMapper = BeanFactoryUtils.beanOfTypeIncludingAncestors(applicationContext, ObjectMapper.class);
+                } catch (Exception e) {
+                    logger.debug(e);
+                }
+            }
+            if (objectMapper == null) {
+                objectMapper = new ObjectMapper();
+            }
+    
+            try {
+                //通过HTTP的方式发送数据的
+                jsonRpcHttpClient = new JsonRpcHttpClient(objectMapper, new URL(getServiceUrl()), extraHttpHeaders);
+                jsonRpcHttpClient.setRequestListener(requestListener);
+                jsonRpcHttpClient.setSslContext(sslContext);
+                jsonRpcHttpClient.setHostNameVerifier(hostNameVerifier);
+    
+                if (contentType != null) {
+                    jsonRpcHttpClient.setContentType(contentType);
+                }
+                
+                if (exceptionResolver!=null) {
+                    jsonRpcHttpClient.setExceptionResolver(exceptionResolver);
+                }
+            } catch (MalformedURLException mue) {
+                throw new RuntimeException(mue);
+            }
+        }
+    }
+}
+```
+实际与服务端交互的http方法
+```java
+@Override
+public Object invoke(MethodInvocation invocation)
+        throws Throwable {
+    Method method = invocation.getMethod();
+    if (method.getDeclaringClass() == Object.class && method.getName().equals("toString")) {
+        return proxyObject.getClass().getName() + "@" + System.identityHashCode(proxyObject);
+    }
+
+    Type retType = (invocation.getMethod().getGenericReturnType() != null) ? invocation.getMethod().getGenericReturnType() : invocation.getMethod().getReturnType();
+    Object arguments = ReflectionUtil.parseArguments(invocation.getMethod(), invocation.getArguments());
+
+    return jsonRpcHttpClient.invoke(invocation.getMethod().getName(), arguments, retType, extraHttpHeaders);
+}
+```
+`jsonRpcHttpClient.java`
+```java
+private HttpURLConnection prepareConnection(Map<String, String> extraHeaders) throws IOException {
+        
+    // create URLConnection
+    HttpURLConnection connection = (HttpURLConnection) serviceUrl.openConnection(connectionProxy);
+    connection.setConnectTimeout(connectionTimeoutMillis);
+    connection.setReadTimeout(readTimeoutMillis);
+    connection.setAllowUserInteraction(false);
+    connection.setDefaultUseCaches(false);
+    connection.setDoInput(true);
+    connection.setDoOutput(true);
+    connection.setUseCaches(false);
+    connection.setInstanceFollowRedirects(true);
+    connection.setRequestMethod("POST");
+    
+    setupSsl(connection);
+    addHeaders(extraHeaders, connection);
+    
+    return connection;
+}
+```
+
+{% endfold %}
+
+测试调用rpc路径bug
+```java
+/**
+ * Appends the base path to the path found in the interface.
+ */
+private String appendBasePath(String path) {
+    try {
+        return new URL(baseUrl, path).toString();
+    } catch (MalformedURLException e) {
+        throw new RuntimeException(format("Cannot combine URLs '%s' and '%s' to valid URL.", baseUrl, path), e);
+    }
+}
+
+ public static void main(String[] args) throws MalformedURLException {
+    URL baseUrl = new URL("http://localhost:8081/manager/");
+    String path = "rpc/products";
+    //只有这种是对的
+    //http://localhost:8081/manager/rpc/products
+    System.out.println(new URL(baseUrl, path).toString());
+
+    URL baseUrl = new URL("http://localhost:8081/manager");
+    String path = "/rpc/products";
+    //少了manager
+    //http://localhost:8081/rpc/products
+    System.out.println(new URL(baseUrl, path).toString());
+
+    URL baseUrl = new URL("http://localhost:8081/manager/");
+    String path = "/rpc/products";
+    //http://localhost:8081/rpc/products
+    System.out.println(new URL(baseUrl, path).toString());
+}
+```
+
+#### 服务端的运行原理
+```java
+logging:
+  level:
+    com.googlecode.jsonrpc4j: debug
+```
+导出bean 注册接口 创建服务 映射到handler
+```java
+2018-08-30 21:48:37.315  INFO 20852 --- [           main] c.g.j.s.AutoJsonRpcServiceImplExporter   : exporting bean [productRpcImpl] ---> [rpc/products]
+2018-08-30 21:48:37.328 DEBUG 20852 --- [           main] c.g.j.s.AutoJsonRpcServiceImplExporter   : Registering interface 'api.ProductRpc' for JSON-RPC bean [productRpcImpl].
+2018-08-30 21:48:40.683 DEBUG 20852 --- [           main] c.g.jsonrpc4j.JsonRpcBasicServer         : created server for interface interface api.ProductRpc with handler class com.sun.proxy.$Proxy89
+2018-08-30 21:48:40.685  INFO 20852 --- [           main] o.s.w.s.h.BeanNameUrlHandlerMapping      : Mapped URL path [/rpc/products] onto handler '/rpc/products'
+```
+启动客户端
+收到http请求 参数是 调用方法findOne
+
+```java
+2018-08-30 21:53:22.947 DEBUG 20852 --- [nio-8081-exec-2] com.googlecode.jsonrpc4j.JsonRpcServer   : Handling HttpServletRequest org.apache.catalina.connector.RequestFacade@5681e873
+2018-08-30 21:53:22.962 DEBUG 20852 --- [nio-8081-exec-2] c.g.jsonrpc4j.JsonRpcBasicServer         : Request: {"id":"425662322","jsonrpc":"2.0","method":"findOne","params":["001"]}
+2018-08-30 21:53:22.964 DEBUG 20852 --- [nio-8081-exec-2] c.g.jsonrpc4j.JsonRpcBasicServer         : Invoking method: findOne with args ["001"]
+```
+结果 响应信息
+```java
+2018-08-30 21:53:23.025 DEBUG 20852 --- [nio-8081-exec-2] c.g.jsonrpc4j.JsonRpcBasicServer         : Invoked method: findOne, result entity.Product@1f724803[id=001,name=金融1号,status=AUDITING,thresholdAmount=10.000,stepAmount=1.000,lockTerm=0,rewardRate=3.860,memo=<null>,createAt=2018-08-29 19:38:02.0,updateAt=2018-08-29 19:38:02.0,createUser=<null>,updateUser=<null>]
+2018-08-30 21:53:23.064 DEBUG 20852 --- [nio-8081-exec-2] c.g.jsonrpc4j.JsonRpcBasicServer         : Response: {"jsonrpc":"2.0","id":"425662322","result":{"id":"001","name":"金融1号","status":"AUDITING","thresholdAmount":1E+1,"stepAmount":1,"lockTerm":0,"rewardRate":3.86,"memo":null,"createAt":"2018-08-29T11:38:02.000+0000","updateAt":"2018-08-29T11:38:02.000+0000","createUser":null,"updateUser":null}}
+```
+服务端配置类`AutoJsonRpcServiceImplExporter`
+实现`BeanFactoryPostProcessor`的方法
+```java
+public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
+    //<path,bean名称>
+    Map<String, String> servicePathToBeanName = findServiceBeanDefinitions(defaultListableBeanFactory);
+    for (Entry<String, String> entry : servicePathToBeanName.entrySet()) {
+        registerServiceProxy(defaultListableBeanFactory, makeUrlPath(entry.getKey()), entry.getValue());
+    }
+}
+```
+```java
+private static Map<String, String> findServiceBeanDefinitions(ConfigurableListableBeanFactory beanFactory) {
+        final Map<String, String> serviceBeanNames = new HashMap<>();
+        //遍历所有bean
+        for (String beanName : beanFactory.getBeanDefinitionNames()) {
+            //是否添加了auto rpc的注解
+            AutoJsonRpcServiceImpl autoJsonRpcServiceImplAnnotation = beanFactory.findAnnotationOnBean(beanName, AutoJsonRpcServiceImpl.class);
+            //判断jsonrpcservice的注解
+            JsonRpcService jsonRpcServiceAnnotation = beanFactory.findAnnotationOnBean(beanName, JsonRpcService.class);
+            //如果有Impl没有jsonrpcservice的注解 就报错
+            if (null != autoJsonRpcServiceImplAnnotation) {
+                
+                if (null == jsonRpcServiceAnnotation) {
+                    throw new IllegalStateException("on the bean [" + beanName + "], @" +
+                            AutoJsonRpcServiceImpl.class.getSimpleName() + " was found, but not @" +
+                            JsonRpcService.class.getSimpleName() + " -- both are required");
+                }
+                
+                List<String> paths = new ArrayList<>();
+                //auto上的注解会作为path，实现类上可以有额外的additionPath
+                //一个rpc服务可以映射到多个服务
+                Collections.addAll(paths, autoJsonRpcServiceImplAnnotation.additionalPaths());
+                paths.add(jsonRpcServiceAnnotation.value());
+                
+                for (String path : paths) {
+                    //判断格式是否合法
+                    if (!PATTERN_JSONRPC_PATH.matcher(path).matches()) {
+                        throw new RuntimeException("the path [" + path + "] for the bean [" + beanName + "] is not valid");
+                    }
+                    
+                    logger.info(String.format("exporting bean [%s] ---> [%s]", beanName, path));
+                    //判断是否是重复的服务，放到<路径，名称>的bean目录里
+                    if (isNotDuplicateService(serviceBeanNames, beanName, path))
+                        serviceBeanNames.put(path, beanName);
+                }
+                
+            }
+        }
+        
+        collectFromParentBeans(beanFactory, serviceBeanNames);
+        return serviceBeanNames;
+    }
+```
 
 
 ### 1.前后台json格式
