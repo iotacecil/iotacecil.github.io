@@ -3,6 +3,238 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
+### 14 最长公共前缀
+```java
+public String longestCommonPrefix(String[] strs) {
+   if(strs==null||strs.length<1)return "";
+   String rst = strs[0];
+   for(int i =1;i<strs.length;i++){
+    //削减rst以匹配每个后面的单词
+       while(strs[i].indexOf(rst)!=0){
+           rst =rst.substring(0,Math.min(rst.length()-1,strs[i].length()));
+       }
+   }
+   return rst;
+}
+```
+
+### 208 前缀树
+实现String`insert` `search` `startsWith`
+![trieTree.jpg](/images/trieTree.jpg)
+插入和查找的time都是O(len(s))
+
+
+### 211 单词查询正则匹配数据结构
+
+### lc205区间最小数LogN 查询时间
+```java
+class segMinNode{
+    public int start,end,min;
+    public segMinNode left,right;
+    public segMinNode(int start,int end,int min){
+        this.start = start;
+        this.end = end;
+        this.min = min;
+        this.left = null;
+        this.right = null;
+    }
+}
+private segMinNode build(int[] A,int start,int end){
+    if(start>end)return null;
+    if(start == end)return new segMinNode(start,end,A[start]);
+    segMinNode root = new segMinNode(start,end,A[0]);
+    int mid = (start+end)/2;
+    root.left = build(A,start,left);
+    root.right = build(A,left+1,end);
+    root.min = Math.min(root.left.min,root.right.min);
+    return root;
+}
+public int query(segMinNode root,int start,int end){
+    if(start == root.start&&root.end ==end)return root.min;
+    int mid = (root.start+root.end)/2;
+    int left = Integer.MAX_VALUE,right = Integer.MAX_VALUE;
+    //查询区间<=mid，肯定全在左边
+    if(end<=mid){
+        left = query(root.left,start,end);
+    }
+    if(mid<end){
+        //查询区间开始在mid或者mid左边，必须查左子树
+        if(start<=mid){
+            left = query(root.left,start,mid);
+            right = query(root.right,mid+1,end);
+        }else{
+            right = query(root.right,start,end);
+        }
+    }
+    return Math.min(left,right);
+}
+public List<Integer> intervalMinNumber(int[] A, List<Interval> queries) {
+    segMinNode root = build(A,0,A.length-1);
+    List<Integer> rst = new ArrayList<>(queries.size());
+    for(Interval in:queries){
+        rst.add(query(root, in.start,in.end ));
+    }
+    return rst;
+}
+```
+
+### lt206区间求和
+
+### 括号串达到匹配需要最小的逆转次数
+> Input:  exp = "}}}{"
+> Output: 2 
+
+将匹配的括号都去掉，`{`的个数是m=3，`}`的个数是n=3
+m/3+n/2 = 2+1=3
+![minbracket.jpg](/images/minbracket.jpg)
+```java
+private int minReversal(String s){
+    int len = s.length();
+    if((len&1)!=0)return -1;
+    Deque<Character> que = new ArrayDeque<>();
+    int n=0;
+    for(int i=0;i<s.length();i++){
+        char c = s.charAt(i);
+        if(c=='}'&&!s.isEmpty()){
+            if(que.peek()=='{')que.pop();
+            else {
+                que.push(c);
+            }
+        }
+    }
+    int mn = que.size();
+    while (!que.isEmpty()&&que.peek()=='{'){
+        que.pop();
+        n++;
+    }
+    //当m+n是偶数的时候ceil(n/2)+ceil(m/2)=
+    return (mn/2+n%2);
+}
+```
+
+
+### 字符串匹配暴力
+![backup](/images/backup.jpg)
+方法1是维持一个pattern长度的buffer
+![substring.jpg](/images/substring.jpg)
+流的情况下 没有backup
+```
+ADA B RAC
+ADA[C]R i-=j
+ ADACR
+```
+双指针
+i的位置是txt已匹配过的最后位置
+```java
+public static int search(String pat,String txt){
+    int j,M = pat.length();
+    int i,N = txt.length();
+    for(int i =0,j=0;i<N&&j<M;j++){
+        if(txt.charAt(i) == pat.charAt(j))j++;
+        else{i-=j;j=0;}
+    }
+    if(j==M)return i-M;
+    else return -1;
+}
+```
+ 
+
+### 127 bfs最短单词转换路径
+//todo双向bfs
+
+注意marked和dfs的不同，
+单纯bfs访问wordlist里每个单词1.79% 1097ms
+//list.size()*cur.length()
+{% fold %}
+```java
+private boolean dif(String difword,String cur){
+    int cnt=0;
+    for(int i =0;i<difword.length();i++){
+        if(difword.charAt(i)!=cur.charAt(i)){
+            cnt++;
+            if(cnt>1)return false;
+        }
+    }
+    return true;
+}
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+    int cnt = 0;
+    HashSet<String> words = new HashSet<>();
+    for(String word:wordList){
+        words.add(word);
+    }
+    Set<String> marked = new HashSet<>();
+    Deque<String> que = new ArrayDeque<>();
+    que.add(beginWord);
+    marked.add(beginWord);
+    while(!que.isEmpty()){
+    cnt++;
+    int size = que.size();
+    while(size>0){
+        size--;
+        String cur = que.poll();
+        for(String difword:words){
+            if(dif(difword,cur)){
+                if(difword.equals(endWord))return cnt+1;
+                if(!marked.contains(difword)){
+                que.add(difword);
+                marked.add(difword);}}}}}
+    return 0;
+}
+```
+{% endfold %}
+先改变单词cur.length()*25再查表
+47% 97ms
+{% fold %}
+```java
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        int cnt = 0;
+        HashSet<String> words = new HashSet<>();
+        for(String word:wordList){
+            words.add(word);
+        }
+        Set<String> marked = new HashSet<>();
+        Deque<String> que = new ArrayDeque<>();
+        que.add(beginWord);
+        marked.add(beginWord);
+        while(!que.isEmpty()){
+            cnt++;
+            int size = que.size();
+            while(size>0){
+                size--;
+                String cur = que.poll();
+                //System.out.println(cur);
+             
+                char[] curr = cur.toCharArray();
+                for(int i =0;i<curr.length;i++){
+                    char ori = curr[i];
+                    for(char c='a';c<='z';c++){
+                        if(curr[i]!=c){
+                            curr[i]=c;
+                            String next = new String(curr);
+                          
+
+                            if(words.contains(next)){
+                               
+                                if(next.equals(endWord))return cnt+1;
+                                if(!marked.contains(next)){
+                                     
+                                    que.add(next);
+                                    marked.add(next);
+                                }
+                            }
+                        }
+                    }
+                    curr[i] = ori;
+                }
+              
+            }
+        }
+        return 0;
+    }
+```
+{% endfold %}
+
 
 ### 3 最长不重复字串
 18%
@@ -285,9 +517,6 @@ class Solution {
 ### 最小生成树
 
 ### 笛卡尔树
-
-### RMQ
-
 
 ### 链式前向星
 
@@ -2101,11 +2330,79 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 
 
 ---
-### 236 最低的二叉树公共祖先
+### 236 最低的二叉树公共祖先LCA
+方法1：找出两条从root开始的路径，返回路径不开始不相同的前一个点
+27%空间两个array
+{% fold %}
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    List<TreeNode> pathp = new ArrayList<>();
+    List<TreeNode> pathq = new ArrayList<>();
+   // if(!findPath(root,p,pathp)||!findPath(root,p,pathp))return 
+    findPath(root,p,pathp);
+    findPath(root,q,pathq);
+    int i;
+    for(i = 0;i<Math.min(pathp.size(),pathq.size());i++){
+        if(pathp.get(i).val!=pathq.get(i).val)
+            break;
+    }
+    return pathp.get(i-1);
+}
+private boolean findPath(TreeNode root,TreeNode node,List<TreeNode> path){
+    if(root == null)return false;
+    path.add(root);
+    if(root.val == node.val)return true;
+    if(root.left!=null&&findPath(root.left,node,path))return true;
+    if(root.right!=null&&findPath(root.right,node,path))return true;
+    path.remove(path.size()-1);
+    return false;
+}
+```
+{% endfold %}
+方法二：只遍历一次树，这种方法如果其中一个q不在树中，会返会p,应该返回null
+13%
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if(root==null)return null;
+    if(root.val==p.val||root.val==q.val)return root;
+    TreeNode left = lowestCommonAncestor(root.left,p,q);
+    TreeNode right = lowestCommonAncestor(root.right,p,q);
+    if(left!=null&&right!=null)return root;
+    return left!=null?left:right;
+}
+```
+这道题两个点都保证存在，可以absent的
+
 终止条件`root==null|root==q||root=p`
 1. 在左/右子树找p|q，两边都能找到一个值（因为值不重复） 则返回当前root
 2. 如果左边没找到p|q，右边找到了p|q，最低的祖先就是找到的p|q，(因为保证p|q一定在树中)
 
+
+### 235 BST的LCA
+8.9%
+```java
+TreeNode lcaBST(TreeNode root,TreeNode p,TreeNode q){
+    if(root== null)return null;
+    if(root.val>p.val&&root.val>q.val)return lcaBST(root.left,p ,q );
+    if(root.val<p.val&&root.val<q.val)return lcaBST(root.right,p ,q );
+    return root;
+}
+```
+优化1： 13% 9ms
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if(root.val > p.val && root.val > q.val){
+        return lowestCommonAncestor(root.left, p, q);
+    }else if(root.val < p.val && root.val < q.val){
+        return lowestCommonAncestor(root.right, p, q);
+    }else{
+        return root;
+    }
+}
+```
+
+
+### RMQ
 
 ### 222 完全二叉树的节点数
 [83%](https://blog.csdn.net/jmspan/article/details/51056085)
@@ -2538,7 +2835,7 @@ public List<List<Integer>> subsets(int[] nums) {
  {11,23,25,28},
  {15,20,21,23,29},
  {29}};
- ```
+```
  S=4 T=21
 bfs，起点入队，遍历起点可以到达的所有公交(4可以达公交2)，遍历所有公交2上的可达`stop{4,10,12,20,24,28,33},`
 如果没到T，则4乘的公交换一辆，再遍历有4公交上的其他可达stop。
