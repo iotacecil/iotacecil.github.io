@@ -103,11 +103,9 @@ ExecutorService executor = Executors.newCachedThreadPool();
 ### AQS 两个node的队列
 
 ### 多个CPU缓存一致性 MESI缓存一致性！！！
-<<<<<<< HEAD
+
 ![mesi](/images/mesi.jpg)
-=======
-![mesi](/images/mesi.jpg.jpg)
->>>>>>> refs/remotes/origin/hexo-edit
+
 4种数据状态，4种状态转换的cpu操作。
 M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存
 Exlusive独享：缓存行只在该CPU的缓存中，未被修改，与主存一致。其它CPU读取内存时变成S状态。被修改则变成M。
@@ -159,7 +157,7 @@ Time per request:       33.366 [ms] (mean)
 Time per request:       0.667 [ms] (mean, across all concurrent requests) 
 单位时间从服务器获取的数据长度=Total transferred/Time taken for tests
 Transfer rate:          199.02 [Kbytes/sec] received 
- ```
+```
 3. JMeter 
     1. 添加线程组File-Test Plan-Add-Threads- Thread Group
     用户数：50
