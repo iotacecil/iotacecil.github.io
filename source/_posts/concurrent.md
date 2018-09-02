@@ -157,7 +157,7 @@ Time per request:       33.366 [ms] (mean)
 Time per request:       0.667 [ms] (mean, across all concurrent requests) 
 单位时间从服务器获取的数据长度=Total transferred/Time taken for tests
 Transfer rate:          199.02 [Kbytes/sec] received 
- ```
+```
 3. JMeter 
     1. 添加线程组File-Test Plan-Add-Threads- Thread Group
     用户数：50
