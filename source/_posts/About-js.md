@@ -3,6 +3,11 @@ title: About-js
 date: 2018-04-17 17:06:31
 tags:
 ---
+### js unicode->中文
+```js
+unescape('');
+```
+
 ### h5视频控制
 到指定位置并播放
 ```js
