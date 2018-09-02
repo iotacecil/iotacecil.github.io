@@ -3,8 +3,12 @@ title: problems
 date: 2018-03-09 08:39:10
 tags: [leetcode]
 ---
+javac -encoding UTF-8 xxx.java
+idea ctrl+Q document
+
 
 git config --global gui.encoding utf-8 
+
 
 GC overhead limit exceeded
 

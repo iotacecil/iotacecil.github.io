@@ -302,66 +302,7 @@ Color.yellow.getColor();
 
 `printf("%n")`总是输出正确的平台特定行分隔符，所以它是跨平台的
 
-### 四大核心函数式接口
-1. `Consumer` 消费者 接收一个值消费掉`list.forEach` 接收T返回void
-2. `Function<T,R>` 接收一个参数返回一个结果
-```java
-public static String str(String str,Function<String,String> f){
-    return f.apply(str);
-}
-String s = str("functionnnntest",(str)-> str.toUpperCase());
-```
-    `BiFunction<T, U, R>` `R apply(T t, U u);`
-3. `Supplier`::`T get();`不传参数返回结果
-```java
-public static List<Integer> getNumber(int num,Supplier<Integer> sup){
-    List<Integer> list = new ArrayList<>();
-    for(int i =0;i<num;i++){
-        list.add(sup.get());}
-    return list;}
-List<Integer> list = getNumber(10,()->(int)(Math.random()*100));
-```
-4. `Predicate`::`boolean test(T t);`断言
-```java
-private static void predicate(){}
-private static List<String> filter(List<String>list,Predicate<String> prd){
-    List<String> res=new ArrayList<>();
-    for(String s:list){
-        if(prd.test(s))res.add(s);
-    }
-    return res;
-}
-List<String> sig = filter(words,(d)->d.contains("L"));
-```
 
-### Lambda：函数作为方法的参数
-当接口只有一个抽象方法，函数式接口，不会生成class
-1. 内部类写法
-```java
-interface Ido{ public void doo(String thing);}
-class IdoImp implements Ido{
-    public void doo(String thing){
-        System.out.println(thing+"adfadfa");}}
-//main
-IdoImp idoimp = new IdoImp();
-idoimp.doo("thing");
-```
-2. Lambda写法
-```java
-interface Ido{ public void doo(String thing);}
-Ido ido = (thing)-> System.out.println(thing+"doooooo");
-```
-3. 比较对象
-`Comparator<Integer> c = (x,y)->Integer.compare(x,y);`
-4. 方法引用
-```java
-Arrays.sort(strings,String::compareToIgnoreCase);
-Arrays.sort(strings,(x,y)->x.compareToIgnoreCase(y));
-System.out.println(Arrays.toString(strings));
-```
-- ArrayList 打印全部元素
-`list.forEach(x->sout(x))`
-`list.forEach(System.out::println)`
 
 ### 内部类
 1. 方法内部类只能在方法内实例化，并且不能使用方法内的非final变量
@@ -371,6 +312,13 @@ jdk1.8开始不需要final 编译器自动final，所以不能改变
 2. 静态内部类 能使用外部类的静态成员和方法 不用new外部类也能访问
 3. 使用内部类可以使用多继承
 4. 优先选择静态内部类(防止内存泄漏)
+
+原因：因为java里传参是传值
+![finalnoname.jpg](/images/finalnoname.jpg)
+在里面引用外面的参数，外面的参数不应该被修改。不然里面变量和外面变量就会有二义性。
+如果是传引用
+![refnoname.jpg](/images/refnoname.jpg)
+两个会同时修改不会有二义性
 
 ### 适配器
 安卓开发中常用，用A接口的子类转换B接口的子类

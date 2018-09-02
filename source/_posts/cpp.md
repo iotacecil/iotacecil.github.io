@@ -3,6 +3,41 @@ title: cpp
 date: 2018-04-23 08:59:30
 tags:
 ---
+
+### `#include<pthread.h>`
+https://sourceware.org/pthreads-win32/ 
+pthreads-w32-2-9-1-release.zip
+include:
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.14.26428\include
+lib:C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.14.26428\lib
+dll:x86
+C:\Windows\SysWOW64
+dll:x64
+C:\Windows\System32
+```cpp
+#include <pthread.h>
+#pragma comment(lib,"pthreadVC2.lib")
+```
+编译错误C2011 “timespec”:“struct”类型重定义
+可修改pthread.h文件，在
+```cpp
+#if !defined( PTHREAD_H )
+#define PTHREAD_H
+下面加上一行宏定义
+#define HAVE_STRUCT_TIMESPEC
+```
+可以解决“timespec”:“struct”类型重定义错误
+
+1 4 0
+0 10 15 20
+10 0 35 25
+15 35 0 30
+20 25 30 0
+并行tsp
+```cpp
+```
+
+
 ### MS-MPI
 https://blog.csdn.net/u011514451/article/details/50675222
 

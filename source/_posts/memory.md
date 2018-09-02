@@ -3,6 +3,16 @@ title: 操作系统+内存知识
 date: 2018-03-05 20:43:15
 tags: [os,memory]
 ---
+### Windows API让cpu使用率划出一条直线
+一个时钟周期可以执行多少条指令？ CPU流水线？
+CPU每个时钟周期可以执行两条以上代码
+2.4Ghz主频则1秒可以执行2.4G\*2行汇编指令
+10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起
+资源管理器大约是1秒更新一次
+4核cpu一个线程死循环占用大概是25%
+`SetThreadAffinityMask()`
+
+
 https://hit-alibaba.github.io/interview/basic/arch/Concurrency.html
 ### IO多路复用
 http://www.cnblogs.com/Anker/archive/2013/08/14/3258674.html
@@ -24,6 +34,7 @@ https://my.oschina.net/manmao/blog/746492
 
 
 ### 磁盘调度算法
+电梯调度算法？
 ```cpp
 #include<iostream>
 #include<cstdio>

@@ -241,14 +241,9 @@ Fucntion<String,String> pipeline = addHeader.
 lambda作闭包不能修改局部变量内容，lambda在新线程运行。会造成线程不安全。栈在线程之间不共享，堆在线程间共享。
 
 ---
-### ::方法引用
-1. 用::将方法名称与类/对象分隔开
-    1. 类::实例方法 
-    2. 类::静态方法 `Integer::valueOf`
-    3. 对象::实例方法 `list::add`
-    4. 类::构造方法 `ArrayList::new`
 
-### Stream
+
+### Stream 高级迭代器
 pipelining 流水线式操作，方法返回一个流，可以链式操作
 Collection.java
 根据核数划分
