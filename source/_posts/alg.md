@@ -3,6 +3,26 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
+### 896有正负的数列判断单调
+```java
+ public boolean isMonotonic(int[] A) {
+        if(A==null||A.length<1)return false;
+        int n = A.length;
+        if(n==1)return true;
+        int flag = 1;
+       for(int i=1;i<n-1;i++){
+           if(A[i]==A[i-1])continue;
+           flag = A[i]-A[i-1];
+          while(i<n-1){
+              while(i<n-1&&A[i+1]-A[i]==0)i++;
+              if(i<n-1&&(A[i+1]-A[i])*flag<0)return false;
+              i++;
+          }   
+       }
+        return true;
+    }
+```
+
 ### 14 最长公共前缀
 ```java
 public String longestCommonPrefix(String[] strs) {

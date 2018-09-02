@@ -3,6 +3,69 @@ title: advanceDS
 date: 2018-09-01 15:29:18
 tags:
 ---
+### 208 Trie树 前缀树
+实现String`insert` `search` `startsWith`
+![trieTree.jpg](/images/trieTree.jpg)
+插入和查找的time都是O(len(s))
+```java
+class TrieNode{
+    public char val;
+    public boolean end;
+    public TrieNode[] children = new TrieNode[26];
+    TrieNode(char c){
+        TrieNode node = new TrieNode();
+        node.val = c;
+    }
+}
+class Trie {
+
+    private TrieNode root;
+
+    public Trie() {
+       root = new TrieNode(' ');
+    }
+
+    public void insert(String word) {
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            char c= word.charAt(i);
+            if(cur.children[c-'a']==null){
+                cur.children[c-'a'] = new TrieNode(c);
+            }
+            cur = cur.children[c-'a'];
+        }
+        cur.end = true;
+    }
+
+    public boolean search(String word) {
+        TrieNode cur = root;
+        for (int i = 0; i < word.length() ; i++) {
+            char c = word.charAt(i);
+            if(cur.children[c-'a']==null)return false;
+            cur = cur.children[c-'a'];
+        }
+        return cur.end;
+    }
+
+//trie.startsWith("app"); // returns true
+    public boolean startsWith(String prefix) {
+        TrieNode cur = root;
+        for (int i = 0; i < prefix.length() ; i++) {
+            char c = prefix.charAt(i);
+            if(cur.children[c-'a']== null)return false;
+            cur = cur.children[c-'a'];
+        }
+        return true;
+    }
+}
+```
+
+Trie应用：
+https://leetcode.com/problems/implement-trie-prefix-tree/solution/
+应用场景：
+1.查找公共前缀的key
+2.以字典序遍历数据
+相比hashtable节省空间
 
 ### 线段树Segment Tree
 定义：

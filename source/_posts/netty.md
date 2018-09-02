@@ -3,6 +3,11 @@ title: netty
 date: 2018-06-04 09:32:40
 tags:
 ---
+### 零拷贝
+java读文件:
+io流->缓冲区->java堆
+netty NIO直接开辟新的堆内存 从io流直接到堆
+
 ### 实现一个简单的协议
 ![protocolUtil.jpg](/images/protocolUtil.jpg)
 1.客户端request请求协议
@@ -350,7 +355,7 @@ public class SayHelloService implements BaseService{
 消费者：
 ```java
 public class ServiceConsumer extends HttpServlet{
-   
+
 }
 ```
 
