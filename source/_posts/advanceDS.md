@@ -1,8 +1,175 @@
 ---
-title: advanceDS
+title: 数据结构模板&模板题
 date: 2018-09-01 15:29:18
 tags:
 ---
+### 连通分量
+![connect.jpg](/images/connect.jpg)
+无向图的连通分量可以用并查集（集合）来做
+并查集：[12,3,4,5]->[6,2,3,4,5]位置存放的是根节点
+![unionfind.jpg](/images/unionfind.jpg)
+有向图的连通分量Kosaraju 算法4p380
+![kosaraju.jpg](/images/kosaraju.jpg)
+1.将图的边反向,dfs得到逆后序
+2.按逆后序列dfs原图 cnt++
+![kosaraju2.jpg](/images/kosaraju2.jpg)
+
+[tarjan](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
+
+https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html
+和拓扑排序一样Tarjan算法的运行效率也比Kosaraju算法高30%左右
+每个顶点都被访问了一次，且只进出了一次堆栈，每条边也只被访问了一次，所以该算法的时间复杂度为O(N+M)。
+
+### !200 number of islands
+dfs 52% 5ms
+{% fold %}
+```java
+public int numIslands(char[][] grid) {
+    int cnt =0;
+    for(int i = 0;i<grid.length;i++){
+        for(int j =0;j<grid[0].length;j++){
+            if(grid[i][j]=='1'){
+                dfs(grid,i,j);
+                ++cnt;
+            }
+        }
+    }
+    return cnt;
+}
+private void dfs(char[][] grid,int x,int y){
+    if(x<0||x>grid.length-1||y<0||y>grid[0].length-1||grid[x][y]=='0')
+        return;
+    grid[x][y] = '0';
+    dfs(grid,x+1,y);
+    dfs(grid,x-1,y);
+    dfs(grid,x,y+1);
+    dfs(grid,x,y-1);
+}
+```
+{% endfold %}
+并查集模板
+find O(1)判断是否在同一个集合中（同一个parent)
+![unionfind2.jpg](/images/unionfind2.jpg)
+1.找到一个‘1’
+2.用并查集把相邻的‘1’都union起来，本来8个‘1’，每次合并两个不同分量的就cnt--
+22% 8ms
+```java
+//union find模板
+class UnionFind{
+    int [] parent;
+    int m,n;
+    int count = 0;
+    UnionFind(char[][] grid){
+        m = grid.length;
+        n = grid[0].length;
+        parent = new int[m*n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if(grid[i][j] == '1'){
+                    int id = i*n+j;
+                    parent[id] = id;
+                    count++;
+                }
+
+            }
+        }
+//            System.out.println(Arrays.toString(parent));
+//            System.out.println("初始化完成");
+    }
+    public void union(int node1,int node2){
+        int find1 = find(node1);
+        int find2 = find(node2);
+        System.out.println("int union:"+node1+" "+node2);
+        System.out.println("find1,find2:"+find1+" "+find2);
+        if(find1 != find2){
+            parent[find1] = find2;
+            count--;
+        }
+    }
+    public int find (int node){
+        if(parent[node] == node)return node;
+        parent[node] = find(parent[node]);
+        return parent[node];
+    }
+}
+int[][] distance = {{1,0},{-1,0},{0,1},{0,-1}};
+public int numIslands(char[][] grid){
+    //
+    if(grid==null||grid.length<1||grid[0].length<1)
+        return 0;
+    UnionFind uf = new UnionFind(grid);
+    int rows = grid.length;
+    int cols = grid[0].length;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j <cols ; j++) {
+            
+            if(grid[i][j] == '1'){
+                for(int[] d :distance){
+                    int x = i+d[0];
+                    int y = j+d[1];
+                
+                    if(x>=0&&x<rows&&y>=0&&y<cols&&grid[x][y] == '1'){
+                        int id1 = i*cols+j;
+                        int id2 = x*cols+y;
+                        uf.union(id1,id2);
+                        System.out.println(Arrays.toString(uf.parent));
+                    }
+                }
+            }
+
+        }
+
+    }
+    return uf.count;
+    }
+```
+
+### ！684 多余的连接（构成环）
+用UF模板 uf可以改到97%
+```java
+//Unifind模板
+class UnionFind{
+    int [] parent;
+    UnionFind(int size){
+        parent = new int[size+1];
+        for (int i = 0; i < size+1; i++) {
+            parent[i] = i;
+        }
+    }
+    public boolean union(int node1,int node2){
+        int find1 = find(node1);
+        int find2 = find(node2);
+        //已经在一个集合里了
+        if(find1==find2)return false;
+        if(find1 != find2){
+            parent[find1] = find2;
+        }
+        return true;
+    }
+    public int find (int node){
+        if(parent[node] == node)return node;
+        parent[node] = find(parent[node]);
+        return parent[node];
+    }
+}
+public int[] findRedundantConnectionUF(int[][] edges) {
+    UnionFind uf = new UnionFind(edges.length);
+    for(int[]edge:edges){
+        if(!uf.union(edge[0],edge[1] ))
+            return edge;
+    }
+    return new int[]{};
+}
+```
+其他方法//todo
+
+
+### 547 互相是朋友的圈子有几个
+```java
+
+```
+
+
 ### 208 Trie树 前缀树
 实现String`insert` `search` `startsWith`
 ![trieTree.jpg](/images/trieTree.jpg)
@@ -67,12 +234,18 @@ https://leetcode.com/problems/implement-trie-prefix-tree/solution/
 2.以字典序遍历数据
 相比hashtable节省空间
 
+### 211 单词查询`.`匹配Trie
+
+#### 677计算单词前缀的累积和
+
 ### 线段树Segment Tree
 定义：
 1.叶节点是输入
 2。每个内部节点是为不同问题设计的，叶节点的组合（和/最大值/最小值）
 ![segmentTree.jpg](/images/segmentTree.jpg)
 查找范围内的最小值/和 只需要Log(n)
+
+### lt206区间求和
 
 #### lt201按区间构造线段树
 {% fold %}

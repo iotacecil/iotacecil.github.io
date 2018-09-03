@@ -3,156 +3,6 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
-### !200 number of islands
-dfs 52% 5ms
-{% fold %}
-```java
-public int numIslands(char[][] grid) {
-    int cnt =0;
-    for(int i = 0;i<grid.length;i++){
-        for(int j =0;j<grid[0].length;j++){
-            if(grid[i][j]=='1'){
-                dfs(grid,i,j);
-                ++cnt;
-            }
-        }
-    }
-    return cnt;
-}
-private void dfs(char[][] grid,int x,int y){
-    if(x<0||x>grid.length-1||y<0||y>grid[0].length-1||grid[x][y]=='0')
-        return;
-    grid[x][y] = '0';
-    dfs(grid,x+1,y);
-    dfs(grid,x-1,y);
-    dfs(grid,x,y+1);
-    dfs(grid,x,y-1);
-}
-```
-{% endfold %}
-并查集模板
-find O(1)判断是否在同一个集合中（同一个parent)
-![unionfind2.jpg](/images/unionfind.jpg)
-1.找到一个‘1’
-2.用并查集把相邻的‘1’都union起来，本来8个‘1’，每次合并两个不同分量的就cnt--
-22% 8ms
-```java
-//union find模板
-class UnionFind{
-    int [] parent;
-    int m,n;
-    int count = 0;
-    UnionFind(char[][] grid){
-        m = grid.length;
-        n = grid[0].length;
-        parent = new int[m*n];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if(grid[i][j] == '1'){
-                    int id = i*n+j;
-                    parent[id] = id;
-                    count++;
-                }
-
-            }
-        }
-//            System.out.println(Arrays.toString(parent));
-//            System.out.println("初始化完成");
-    }
-    public void union(int node1,int node2){
-        int find1 = find(node1);
-        int find2 = find(node2);
-        System.out.println("int union:"+node1+" "+node2);
-        System.out.println("find1,find2:"+find1+" "+find2);
-        if(find1 != find2){
-            parent[find1] = find2;
-            count--;
-        }
-    }
-    public int find (int node){
-        if(parent[node] == node)return node;
-        parent[node] = find(parent[node]);
-        return parent[node];
-    }
-}
-int[][] distance = {{1,0},{-1,0},{0,1},{0,-1}};
-public int numIslands(char[][] grid){
-    //
-    if(grid==null||grid.length<1||grid[0].length<1)
-        return 0;
-    UnionFind uf = new UnionFind(grid);
-    int rows = grid.length;
-    int cols = grid[0].length;
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j <cols ; j++) {
-            
-            if(grid[i][j] == '1'){
-                for(int[] d :distance){
-                    int x = i+d[0];
-                    int y = j+d[1];
-                
-                    if(x>=0&&x<rows&&y>=0&&y<cols&&grid[x][y] == '1'){
-                        int id1 = i*cols+j;
-                        int id2 = x*cols+y;
-                        uf.union(id1,id2);
-                        System.out.println(Arrays.toString(uf.parent));
-                    }
-                }
-            }
-
-        }
-
-    }
-    return uf.count;
-    }
-```
-
-### ！684 多余的连接（构成环）
-用UF模板 uf可以改到97%
-```java
-//Unifind模板
-class UnionFind{
-    int [] parent;
-    UnionFind(int size){
-        parent = new int[size+1];
-        for (int i = 0; i < size+1; i++) {
-            parent[i] = i;
-        }
-    }
-    public boolean union(int node1,int node2){
-        int find1 = find(node1);
-        int find2 = find(node2);
-        //已经在一个集合里了
-        if(find1==find2)return false;
-        if(find1 != find2){
-            parent[find1] = find2;
-        }
-        return true;
-    }
-    public int find (int node){
-        if(parent[node] == node)return node;
-        parent[node] = find(parent[node]);
-        return parent[node];
-    }
-}
-public int[] findRedundantConnectionUF(int[][] edges) {
-    UnionFind uf = new UnionFind(edges.length);
-    for(int[]edge:edges){
-        if(!uf.union(edge[0],edge[1] ))
-            return edge;
-    }
-    return new int[]{};
-}
-```
-其他方法//todo
-
-
-### 547 互相是朋友的圈子有几个
-```java
-
-```
-
-
 ### Celebrity Problem 所有人都认识他但是他不认识所有人
 方法1：找全是0的行，O(n^2)
 方法2： 如果A认识B，则A肯定不是名人 O(N)；A不认识B，则A可能是名人，B肯定不是名人
@@ -200,10 +50,11 @@ int findCele(int[][]Matrix){
 方法1：按递减排序，减半，再排序，一共排序t次
 方法2：维持最大堆，每次取root减半再插入
 
-### 445 链表数字相加
+### ？445 链表数字相加
 > Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
 > Output: 7 -> 8 -> 0 -> 7
 
+？递归写法
 
 ### 896有正负的数列判断单调
 ```java
@@ -241,7 +92,7 @@ public String longestCommonPrefix(String[] strs) {
 ```
 
 
-### 211 单词查询`.`匹配Trie
+
 
 
 ### lc205区间最小数LogN 查询时间
@@ -296,7 +147,7 @@ public List<Integer> intervalMinNumber(int[] A, List<Interval> queries) {
 }
 ```
 
-### lt206区间求和
+
 
 ### 括号串达到匹配需要最小的逆转次数
 > Input:  exp = "}}}{"
@@ -725,7 +576,7 @@ class Solution {
 }
 ```
 
-### 382 随机链表 extremely large and its length is unknown
+### ？？382 随机链表 extremely large and its length is unknown
 长度不知，读到第三个node，让它的概率变成1/3，用1/3的概率替换掉之前选择的item
 > 由于计算机产生的随机数都是伪随机数，对于相同的随机数引擎会产生一个相同的随机数序列，因此，如果不使用静态变量（static），会出现每次调用包含随机数引擎的函数时，随机数会重新开始产生随机数，因此会产生相同的一串随机数。比如你第一次调用产生100个随机数，第二次调用仍然会产生这一百个随机数。如果将随机数引擎设置为静态变量，那么第一次调用会产生随机数序列中的前100个随机数，第二次调用则会产生第100到200的随机数。
 
@@ -988,7 +839,7 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 ![singlelink.jpg](/images/singlelink.jpg)
 ![singleclu.jpg](/images/singleclu.jpg)
 
-### 106 中序+后序建树
+
 
 #### 前序ABCDEFGH->中序不可能是
 
@@ -2534,22 +2385,7 @@ $=>x=12$
  
 树的前/中/后序遍历本质都是DFS
 
-### 连通分量
-![connect.jpg](/images/connect.jpg)
-无向图的连通分量可以用并查集（集合）来做
-并查集：[12,3,4,5]->[6,2,3,4,5]位置存放的是根节点
-![unionfind.jpg](/images/unionfind.jpg)
-有向图的连通分量Kosaraju 算法4p380
-![kosaraju.jpg](/images/kosaraju.jpg)
-1.将图的边反向,dfs得到逆后序
-2.按逆后序列dfs原图 cnt++
-![kosaraju2.jpg](/images/kosaraju2.jpg)
 
-[tarjan](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
-
-https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html
-和拓扑排序一样Tarjan算法的运行效率也比Kosaraju算法高30%左右
-每个顶点都被访问了一次，且只进出了一次堆栈，每条边也只被访问了一次，所以该算法的时间复杂度为O(N+M)。
 
 ### 452 重叠线段
 ```java
@@ -2669,8 +2505,6 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 ```
 
 
-### RMQ
-
 ### 222 完全二叉树的节点数
 [83%](https://blog.csdn.net/jmspan/article/details/51056085)
 
@@ -2729,41 +2563,6 @@ board[i][j]='0';
 > Given word = "ABCB", return false.
 > ```
 
----
-### 139 word break
-1.状态：boolean[n+1]长度为i的前缀能否由字典组成
-2.初始值：[0]=true 空字符串
-3.转移方程if(dp[i]==true&&dic.contains(sub(i,i+j))) dp[i+j]=true
-4.结果
-
-```java
-f[0]=true;
-for(int i =1;i<s.length();i++){
-    for(int j=0;j<i;j++){
-        if(f[j]&&dic.contains(s.substring(j,i))){
-            f[i]=true;
-            break;
-        }
-    }
-}
-return f[s.length()];
-```
-
----
-### 55 ?jump game
-[jump game](https://leetcode.com/problems/jump-game/solution/)
-i+nums[i]大于lastp表示i位置可以跳到lastp位置。
-将lastp更新成现在的i。再向前直到lastp变成0，表示0位置可以到下一个lastp一直到len-1。
-```java
-lastp = len-1;
-for(int i =len-1;i>=0;i--)
-    if(i+nums[i]>=lastp)lastp==i;
-return lastp==0;
-```
-
-### 45 ?jump game最少跳跃次数
-1.在本次可跳跃的长度范围内如果不能达到len-1则表示一定要跳跃
-2.BFS
 
 ### 322找钱最少硬币数
 贪心算法一般考举反例。
@@ -2886,33 +2685,10 @@ number of augemntation <= maxflow value 每次增加至少1
 ![tirinsert.jpg](/images/tirinsert.jpg)
 
 ---
-### TrieNode字典树 find/insert复杂度为字符串长度
-结点保存子节点（指针）的目录[26]下一个字符
-和结点是否终止boolean
-```java
-struct TrieNode{
-    TrieNode* children[26];
-    boolean terminal;
-}
-```
-可以把terminal变成int用`map<String,int>`表示字典树
 
-#### 677计算单词前缀的累积和
-```cpp
-struct Trie{
-    Trie():children(128,nullptr),sum(0){}
-    ~Trie(){
-        //动态分配内存 内存泄漏 写析构会递归删除 
-        for(auto child:children){
-            if(child)delete child;
-        }
-        children.clear();
-    }
-    vector<Trie*> children;
-    int sum;
-    }
-};
-```
+
+
+
 
 ### 后缀树字典树 每层多一个字符的字典树
 ### 后缀树 对字典树路径压缩，一层多个字符 生成需要O(N^2)
@@ -3147,108 +2923,7 @@ int fib(int n){
 ### 11 数组index当底边，值当杯子两侧，最大面积
 
 ---
-### ！30 字典中单词连续出现在字符串中的位置 AC自动机（？
-加入字典的常用写法`dict.put(word,dict.getOrDefault(word,0)+1)`
-{% fold %}
-```java
-class Solution {
-public List<Integer> findSubstring(String s, String[] words) {
-    List<Integer> res = new ArrayList<Integer>();
-    int n = s.length(), m = words.length, k;
-    if (n == 0 || m == 0 || (k = words[0].length()) == 0)
-        return res;
 
-    HashMap<String, Integer> wDict = new HashMap<String, Integer>();
-
-    for (String word : words) {
-        if (wDict.containsKey(word))
-            wDict.put(word, wDict.get(word) + 1);
-        else
-            wDict.put(word, 1);
-    }
-
-    int i, j, start, x, wordsLen = m * k;
-    HashMap<String, Integer> curDict = new HashMap<String, Integer>();
-    String test, temp;
-    for (i = 0; i < k; i++) {
-        curDict.clear();
-        start = i;
-        if (start + wordsLen > n)
-            return res;
-        for (j = i; j + k <= n; j += k) {
-            test = s.substring(j, j + k);
-
-            if (wDict.containsKey(test)) {
-                if (!curDict.containsKey(test)) {
-                    curDict.put(test, 1);
-
-                    start = checkFound(res, start, wordsLen, j, k, curDict, s);
-                    continue;
-                }
-
-                // curDict.containsKey(test)
-                x = curDict.get(test);
-                if (x < wDict.get(test)) {
-                    curDict.put(test, x + 1);
-
-                    start = checkFound(res, start, wordsLen, j, k, curDict, s);
-                    continue;
-                }
-
-                // curDict.get(test)==wDict.get(test), slide start to
-                // the next word of the first same word as test
-                while (!(temp = s.substring(start, start + k)).equals(test)) {
-                    decreaseCount(curDict, temp);
-                    start += k;
-                }
-                start += k;
-                if (start + wordsLen > n)
-                    break;
-                continue;
-            }
-
-            // totally failed up to index j+k, slide start and reset all
-            start = j + k;
-            if (start + wordsLen > n)
-                break;
-            curDict.clear();
-        }
-    }
-    return res;
-}
-
-public int checkFound(List<Integer> res, int start, int wordsLen, int j, int k,
-        HashMap<String, Integer> curDict, String s) {
-    if (start + wordsLen == j + k) {
-        res.add(start);
-        // slide start to the next word
-        decreaseCount(curDict, s.substring(start, start + k));
-        return start + k;
-    }
-    return start;
-}
-
-public void decreaseCount(HashMap<String, Integer> curDict, String key) {
-    // remove key if curDict.get(key)==1, otherwise decrease it by 1
-    int x = curDict.get(key);
-    if (x == 1)
-        curDict.remove(key);
-    else
-        curDict.put(key, x - 1);
-}
-}
-```
-{% endfold %}
-
-### ?3 连续最长不重复子序列
-两指针i从左向右遍历到最后
-j指示i之前不重复的最高位置。
-i-j+1为当前最长结果
-
-### ?409 string中字符组成回文串的最大长度
-1.开int[128]，直接用int[char]++计数
-2.奇数-1变偶数&(~1)
-3.判断奇数(&1)>0
 
 ---
 ### ！5 最长回文串
@@ -3367,12 +3042,6 @@ public int getSum(int a, int b) {
 ```
 
 
-### 15 3sum=0 荷兰国旗写法3指针
-1p：从0~len-2，3个数的和 右边至少留两个数 sum=0-nums[i]转化成2sum问题
-去重：当num[i]=num[i-1]:continue
-另外两个指针从1p往后从len-1往前。
-去重：预判：nums[low]=nums[low+1]:low++;nums[high]=nums[high-1]:high--;
-
 ### 152 最大子列乘积 保留当前值之前的最大积和最小积
 负数的最小积有潜力变成最大积
 ```java
@@ -3385,16 +3054,14 @@ for(int i =1;i<nums.length;i++){
 }
 ```
 
-### 818 A加速，R掉头并减速，到指定位置最少需要多少条指令
+
 
 ### 551 出现两个以上A或者3个以上L为false
 ```java
 return s.indexOf("A")==s.lastIndexOf("A") && s.indexOf("LLL") == -1; 
 ```
 
-### 239
-Monotonic queue 前后可以修改o(1)，并且可以随机访问
-维护一个单调递减的序列，读一个窗口输出单调队列的first
+
 
 ### 476 
 前导0
@@ -3459,12 +3126,6 @@ return false;
 另一个玩家能不能赢的state：`mask|visited` 在visited（上一个状态）的基础将i位也置1
 
 ---
-### ？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种
-
-
-
-### 698 将数组分成sum相等的k份
-
 
 ### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
 {3，9，1，2}
@@ -3549,7 +3210,7 @@ else if(pre.right!=null){
 }
 ```
 
-### Convert BST to Greater Tree
+### ??Convert BST to Greater Tree
 [17ms 66% Reverse Morris In-order Traversal](https://leetcode.com/problems/convert-bst-to-greater-tree/solution/)
 {% fold %}
 ```java
@@ -3759,17 +3420,8 @@ public class Solution {
 ```
 
 
-# 搜索算法的优化
 
-## 问题
-- 8数码（9宫格拼图) 移动序列，树搜索：每个移动状态为节点，边为状态转移。
-- 哈密顿环：从一个点出发经过所有的点1次回到原点。
-- 子集的合 S={} 求sum(S')=num ：树搜索，栈，深度优先
-> 搜索速度：广度优先 最优解 ；深度优先:存在问题，可行解。（得遍历完整个空间得到最优）
-
-> ？？？空间：深度栈：多项式； 广度优先队列：最坏指数
-
-## 1. 爬山：局部贪心，快速找到可行解，局部最优
+### 1. 爬山：局部贪心，快速找到可行解，局部最优
 - 8数码:启发函数：当前状态和目标状态的距离：错位方块个数。
     1. 深度优先
 ![mounting](\images\mounting.jpg)
@@ -3785,12 +3437,11 @@ public class Solution {
     1. 用爬山生成界限(可行解or最优解的上限)
 ![fenzhi](\images\fenzhi.jpg)
 
-# 字符串搜索
 
-## Rabin-Karp
+
+### Rabin-Karp
 O(MN)
 
-## Review
 
 ### 1. 枚举：
 1. 小于N的完美立方 $a^3=b^3+c^3+d^3$
@@ -3798,18 +3449,6 @@ O(MN)
 
     + a->[2,N];b->[2,a-1];c[c,a-1];d[c,a-1]
 
-2. 生理周期
-    > A周期23天，B周期28天，C周期31天
-    > 给定三个高峰p,e,i;求给定日子d后下一次三次高峰同一天还有多少天。 输出天数小于21252.
-    > 输入：0 0 0 0
-
-    + k=[d+1,21252] ;(k-p)%23,(k-e)%28,(k-i)%31==0
-    ```java
-            for(k=d+1;(k-p)%23;++k); //找到第一个高峰
-            for(;(k-e)%28;k+=23); //找双高峰
-            for(;(k-i)%33;k+=23*28); //找三高峰
-            //输出k-d
-    ```
 3. 称硬币:已经分组称了3次12枚硬币，找出假币
     > ABCD EFGH even
     > ABI EFJK up
