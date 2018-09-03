@@ -3,6 +3,208 @@ title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
 ---
+### !200 number of islands
+dfs 52% 5ms
+{% fold %}
+```java
+public int numIslands(char[][] grid) {
+    int cnt =0;
+    for(int i = 0;i<grid.length;i++){
+        for(int j =0;j<grid[0].length;j++){
+            if(grid[i][j]=='1'){
+                dfs(grid,i,j);
+                ++cnt;
+            }
+        }
+    }
+    return cnt;
+}
+private void dfs(char[][] grid,int x,int y){
+    if(x<0||x>grid.length-1||y<0||y>grid[0].length-1||grid[x][y]=='0')
+        return;
+    grid[x][y] = '0';
+    dfs(grid,x+1,y);
+    dfs(grid,x-1,y);
+    dfs(grid,x,y+1);
+    dfs(grid,x,y-1);
+}
+```
+{% endfold %}
+并查集模板
+find O(1)判断是否在同一个集合中（同一个parent)
+![unionfind2.jpg](/images/unionfind.jpg)
+1.找到一个‘1’
+2.用并查集把相邻的‘1’都union起来，本来8个‘1’，每次合并两个不同分量的就cnt--
+22% 8ms
+```java
+//union find模板
+class UnionFind{
+    int [] parent;
+    int m,n;
+    int count = 0;
+    UnionFind(char[][] grid){
+        m = grid.length;
+        n = grid[0].length;
+        parent = new int[m*n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if(grid[i][j] == '1'){
+                    int id = i*n+j;
+                    parent[id] = id;
+                    count++;
+                }
+
+            }
+        }
+//            System.out.println(Arrays.toString(parent));
+//            System.out.println("初始化完成");
+    }
+    public void union(int node1,int node2){
+        int find1 = find(node1);
+        int find2 = find(node2);
+        System.out.println("int union:"+node1+" "+node2);
+        System.out.println("find1,find2:"+find1+" "+find2);
+        if(find1 != find2){
+            parent[find1] = find2;
+            count--;
+        }
+    }
+    public int find (int node){
+        if(parent[node] == node)return node;
+        parent[node] = find(parent[node]);
+        return parent[node];
+    }
+}
+int[][] distance = {{1,0},{-1,0},{0,1},{0,-1}};
+public int numIslands(char[][] grid){
+    //
+    if(grid==null||grid.length<1||grid[0].length<1)
+        return 0;
+    UnionFind uf = new UnionFind(grid);
+    int rows = grid.length;
+    int cols = grid[0].length;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j <cols ; j++) {
+            
+            if(grid[i][j] == '1'){
+                for(int[] d :distance){
+                    int x = i+d[0];
+                    int y = j+d[1];
+                
+                    if(x>=0&&x<rows&&y>=0&&y<cols&&grid[x][y] == '1'){
+                        int id1 = i*cols+j;
+                        int id2 = x*cols+y;
+                        uf.union(id1,id2);
+                        System.out.println(Arrays.toString(uf.parent));
+                    }
+                }
+            }
+
+        }
+
+    }
+    return uf.count;
+    }
+```
+
+### ！684 多余的连接（构成环）
+用UF模板 uf可以改到97%
+```java
+//Unifind模板
+class UnionFind{
+    int [] parent;
+    UnionFind(int size){
+        parent = new int[size+1];
+        for (int i = 0; i < size+1; i++) {
+            parent[i] = i;
+        }
+    }
+    public boolean union(int node1,int node2){
+        int find1 = find(node1);
+        int find2 = find(node2);
+        //已经在一个集合里了
+        if(find1==find2)return false;
+        if(find1 != find2){
+            parent[find1] = find2;
+        }
+        return true;
+    }
+    public int find (int node){
+        if(parent[node] == node)return node;
+        parent[node] = find(parent[node]);
+        return parent[node];
+    }
+}
+public int[] findRedundantConnectionUF(int[][] edges) {
+    UnionFind uf = new UnionFind(edges.length);
+    for(int[]edge:edges){
+        if(!uf.union(edge[0],edge[1] ))
+            return edge;
+    }
+    return new int[]{};
+}
+```
+其他方法//todo
+
+
+### 547 互相是朋友的圈子有几个
+```java
+
+```
+
+
+### Celebrity Problem 所有人都认识他但是他不认识所有人
+方法1：找全是0的行，O(n^2)
+方法2： 如果A认识B，则A肯定不是名人 O(N)；A不认识B，则A可能是名人，B肯定不是名人
+A,B不认识，重新入栈A
+![celebrity.jpg](/images/celebrity.jpg)
+A,C认识，入栈C
+![celebrity2.jpg](/images/celebrity2.jpg)
+![celebrity3.jpg](/images/celebrity3.jpg)
+方法3：双指针
+```java
+int findCele(int[][]Matrix){
+    int n = Matrix.length;
+    int a = 0;
+    int b = n-1;
+    while (a<b){
+        if(Matrix[a][b]==1){
+            a++;
+        }
+        else{
+            b--;
+        }
+    }
+    for (int i = 0; i <n ; i++) {
+        //不是自己，但是别人不认识他，或者他认识别人
+        if(i!=a&&Matrix[i][a]!=1||Matrix[a][i]==1)
+            return -1;
+    }
+    return a;
+}
+```
+
+### 排序数组中小于target的
+2 4 6 8 9 target=14
+1. 2+9<14 cnt+=4
+2. 4+9<14 cnt+=3
+3. 6+9>14,6+8==14,start==end 结束
+
+### 给定一个数字范围，找到其中有几个首尾相同的数字
+![digits.jpg](/images/digits.jpg)
+
+### 百万数字中找最大20个
+用开始20个数字构造20个node的最小堆，接下来的数字比root大则replace，insert
+
+### 每秒最大桶数量减半，求t时刻一共消耗了多少
+方法1：按递减排序，减半，再排序，一共排序t次
+方法2：维持最大堆，每次取root减半再插入
+
+### 445 链表数字相加
+> Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
+> Output: 7 -> 8 -> 0 -> 7
+
+
 ### 896有正负的数列判断单调
 ```java
  public boolean isMonotonic(int[] A) {
@@ -38,13 +240,9 @@ public String longestCommonPrefix(String[] strs) {
 }
 ```
 
-### 208 前缀树
-实现String`insert` `search` `startsWith`
-![trieTree.jpg](/images/trieTree.jpg)
-插入和查找的time都是O(len(s))
 
+### 211 单词查询`.`匹配Trie
 
-### 211 单词查询正则匹配数据结构
 
 ### lc205区间最小数LogN 查询时间
 ```java
@@ -1385,16 +1583,65 @@ if(n==1||n==2)return n;
 long ans = 0;
 //死循环之后外面不需要return语句了
 for(int i =1;;i++){
-    ans+=(long)n;
+    ans+=(long)i;
     if(ans>=(long)n)
         return i;
 }
 ```
 
-### lt 584 m个蛋，n层楼最少次数
-
-
-
+### 887 K个蛋，N层楼
+drop(9,3)9层楼3个鸡蛋，在6层落下碎了继续[0~5]层drop(5,2),没碎继续[6~9]层drop(3,3)
+![eggdrop.jpg](/images/eggdrop.jpg)
+![eggdrop2.jpg](/images/eggdrop2.jpg)
+超时原因 复杂度O(K\*N^2)
+{% fold %}
+超时递归
+```java
+int eggDrop(int k,int n){
+    //1层/0层
+    if(n==0||n==1)return n;
+    if(k==1)return n;
+    int min = Integer.MAX_VALUE;
+    //[0~5]6[7~9]
+    for(int i =1;i<=n;i++){
+        int res = Math.max(eggDrop(k-1,i-1),eggDrop(k,n-i));
+        min = Math.min(res,min);
+    }
+    return min+1;
+}
+```
+超时dp
+![eggdropdp.jpg](/images/eggdropdp.jpg)
+初始化第一行（鸡蛋）和前两列（楼）
+```java
+public int superEggDrop(int K, int N) {
+    int[][] dp= new int[K+1][N+1];
+    //有鸡蛋 两列楼
+    for(int i=1;i<=K;i++){
+        dp[i][0] = 0;
+        dp[i][1] = 1;
+    }
+    //1个鸡蛋 有楼 一列行 没鸡蛋也没楼第一行默认0
+    for(int i =1;i<=N;i++){
+        dp[1][i] = i;
+    }
+    int min = Integer.MAX_VALUE;
+    //鸡蛋
+    int i,j;
+    for( i =2;i<=K;i++){
+       
+        for( j =2;j<=N;j++){
+             dp[i][j] = Integer.MAX_VALUE;
+            for(int x = 1;x<=j;x++){
+                int res = 1+Math.max(dp[i-1][x-1],dp[i][j-x]);
+                dp[i][j] =Math.min(dp[i][j],res);
+            }
+        }
+    }
+    return dp[K][N];
+}
+```
+{% endfold %}
 
 ### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
 226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
