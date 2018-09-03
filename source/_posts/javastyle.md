@@ -4,6 +4,8 @@ date: 2018-03-07 14:18:24
 tags: [java]
 category: java
 ---
+
+
 ### LinkedHashMap:LRU的写法
 ```java
 @param  accessOrder the ordering mode 
@@ -337,6 +339,27 @@ for(Map.Entry<String,String> entry:map.entrySet()){}
 ---
 ### Random
 1. (1L << 48) - 1
+
+### Character也有cache
+```java
+private static class CharacterCache {
+    private CharacterCache(){}
+
+    static final Character cache[] = new Character[127 + 1];
+
+    static {
+        for (int i = 0; i < cache.length; i++)
+            cache[i] = new Character((char)i);
+    }
+}
+//This method will always cache values in the range '\u0000' to '\u007F', inclusive,
+public static Character valueOf(char c) {
+    if (c <= 127) { // must cache
+        return CharacterCache.cache[(int)c];
+    }
+    return new Character(c);
+}
+```
 
 ---
 ### Integer

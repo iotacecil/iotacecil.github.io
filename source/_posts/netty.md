@@ -3,6 +3,144 @@ title: netty
 date: 2018-06-04 09:32:40
 tags:
 ---
+### 阻塞与非阻塞是线程访问资源是否就绪的一种处理方式
+
+### 同步和异步 数据访问的机制 数据处理完毕后会通知线程
+
+![IOs.jpg](/images/IOs.jpg)
+
+### 同步阻塞BIO
+一个线程一个连接，用线程池 伪异步io
+
+### NIO 同步非阻塞IO
+一个server一个selector多路复用器，是一个单线程，client注册到selector，每个client创建一个channel（双向通道），数据读写都会到缓冲区buffer，非堵塞地读取buffer
+客户端增加不会影响selector性能
+
+同步表示要Selector主动轮询channel数据准备好没有
+异步是等人通知
+
+### AIO 异步非阻塞IO NIO2.0
+在NIO原有基础上，读写的返回类型是Feature对象，Feature有事件监听,等待通知回调
+
+### Netty三种线程模型
+Reactor线程模型 
+1. 单线程模型 一个NIO线程处理所有请求
+2. 多线程模型，一组NIO县城处理IO操作，reactor线程池
+3. 主从线程模型，两个线程池，一组用于接收请求，一组用于处理IO
+
+![handler.jpg](/images/handler.jpg)
+
+### HTTP服务器
+主从模型
+```java
+public class HelloServer {
+    public static void main(String[] args) throws InterruptedException {
+        //主线程组
+        EventLoopGroup parentGroup = new NioEventLoopGroup();
+        //从线程组
+        EventLoopGroup childGroup = new NioEventLoopGroup();
+        //启动类
+        try {
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
+            //设置主从线程组和双向通道和child的处理器
+            serverBootstrap.group(parentGroup, childGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .childHandler(new HelloServerInitializer());
+            //启动server 同步方式
+            ChannelFuture channelFuture = serverBootstrap.bind(8088).sync();
+            //监听
+            channelFuture.channel().closeFuture().sync();
+        }finally {
+            parentGroup.shutdownGracefully();
+            childGroup.shutdownGracefully();
+        }
+    }
+}
+```
+初始化child线程的处理器pipLine
+```java
+public class HelloServerInitializer extends ChannelInitializer<SocketChannel>{
+    @Override
+    protected void initChannel(SocketChannel channel) throws Exception {
+        //获得管道
+        ChannelPipeline pipeline = channel.pipeline();
+        pipeline.addLast("HttpServerCodec",new HttpServerCodec());
+        pipeline.addLast("customHandler",new CustomHandler());
+    }
+}
+```
+添加自定义的http处理拦截
+```java
+//入站拦截
+public class CustomHandler extends SimpleChannelInboundHandler<HttpObject> {
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
+        //从上下文对象里获得当前channel
+        System.out.println(msg.toString());
+        System.out.println("--------------");
+        Channel channel = ctx.channel();
+        //发送了两次，因为有个图标的请求
+        //没加路由，所有所有访问8088的请求都会被拦截
+        if(msg instanceof HttpRequest){
+            //远程地址
+            System.out.println(channel.remoteAddress());
+            //消息big-endian buffer
+            ByteBuf content  = Unpooled.copiedBuffer("hello netty", CharsetUtil.UTF_8);
+            //Connection: keep-alive 1.1默认开启
+            FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                    HttpResponseStatus.OK,content);
+            //数据类型
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE,"text/plain");
+            //长度bytes
+            response.headers().set(HttpHeaderNames.CONTENT_LENGTH,content.readableBytes());
+            //写到缓冲区再刷到客户端
+            ctx.writeAndFlush(response);
+        }
+    }
+}
+```
+测试`curl 192.168.3.100:8088`
+```
+--------------
+DefaultHttpRequest(decodeResult: success, version: HTTP/1.1)
+GET / HTTP/1.1
+User-Agent: curl/7.29.0
+Host: 192.168.3.100:8088
+Accept: */*
+--------------
+/192.168.3.109:58586
+--------------
+EmptyLastHttpContent
+--------------
+```
+
+生命周期 curl每次发送完会关闭 没有长链接
+重写`SimpleChannelInboundHandler`的方法
+```
+handlerAdded
+channelRegistered
+channelActive
+--------------
+DefaultHttpRequest(decodeResult: success, version: HTTP/1.1)
+GET / HTTP/1.1
+User-Agent: curl/7.29.0
+Host: 192.168.3.100:8088
+Accept: */*
+--------------
+/192.168.3.109:58588
+--------------
+EmptyLastHttpContent
+--------------
+channelReadComplete
+channelReadComplete
+channelInactive
+channelUnregistered
+handlerRemoved
+```
+
+### 实时通信
+ajax轮询、Long pull、websocket
+
 ### 零拷贝
 java读文件:
 io流->缓冲区->java堆
@@ -541,6 +679,7 @@ buf.readBytes(responseData);
     ReferenceCountUtil.release(msg);
 }
 ```
+
 ---
 ### Netty阻塞io服务端
 ```java

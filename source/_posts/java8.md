@@ -201,6 +201,10 @@ public interface Comparator<T> {
 ```java
 list.sort(Comparator.comparing(Integer::intValue).reversed().thenComparing(Integer::byteValue));
 ```
+泛型数组 需要知道类型`(Item item)`
+```java
+arr.sort(Comparator.comparing((Item item )-> item.value / item.weight).reversed());
+```
 
 #### 谓词复合`.negate()`,`.and()`,`.or()`
 
