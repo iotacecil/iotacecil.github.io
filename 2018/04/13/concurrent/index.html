@@ -88,17 +88,17 @@
 <meta property="og:site_name" content="vue&amp;java Mark">
 <meta property="og:description" content="PV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进程&amp;amp;线程Apache C10K问题2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高3.协程Golang Erlang Lua TreeMap是非线程安全的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://iotaa.xyz/images/mesi.jpg.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/mesi.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/jmeter.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/viewtree.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/countdown.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/threadstate.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/suspend.jpg">
-<meta property="og:updated_time" content="2018-08-30T02:07:46.856Z">
+<meta property="og:updated_time" content="2018-09-02T04:40:12.392Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="concurrent并发多线程">
 <meta name="twitter:description" content="PV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进程&amp;amp;线程Apache C10K问题2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高3.协程Golang Erlang Lua TreeMap是非线程安全的">
-<meta name="twitter:image" content="http://iotaa.xyz/images/mesi.jpg.jpg">
+<meta name="twitter:image" content="http://iotaa.xyz/images/mesi.jpg">
 
 
 
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-30T10:07:46+08:00">
-                2018-08-30
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-02T12:40:12+08:00">
+                2018-09-02
               </time>
             
           </span>
@@ -392,7 +392,8 @@
 <h3 id="Stream在背后引入Fork-join框架"><a href="#Stream在背后引入Fork-join框架" class="headerlink" title="Stream在背后引入Fork/join框架"></a>Stream在背后引入Fork/join框架</h3><h3 id="Future接口"><a href="#Future接口" class="headerlink" title="Future接口"></a>Future接口</h3><p>目标：实现并发，充分利用cpu的核，最大化程序吞吐量，避免因为等待远程服务返回/数据库查询。阻塞线程。<br>对计算结果的建模，返回一个运算结果的引用给调用方。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executor = Executors.newCachedThreadPool();</span><br><span class="line">        Future&lt;Double&gt; future = executor.submit(<span class="keyword">new</span> Callable&lt;Double&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Double <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="comment">//异步操作</span></span><br><span class="line">                <span class="keyword">return</span> doSomeLongComputation();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//异步操作运行同时也能执行</span></span><br><span class="line">        doSomeThingElse();</span><br></pre></td></tr></table></figure></p>
 <h3 id="Fork-Join"><a href="#Fork-Join" class="headerlink" title="Fork/Join"></a>Fork/Join</h3><p>工作窃取算法</p>
 <p>发布对象：可以得到成员变量引用<br>对象溢出：内部类</p>
-<h3 id="AQS-两个node的队列"><a href="#AQS-两个node的队列" class="headerlink" title="AQS 两个node的队列"></a>AQS 两个node的队列</h3><h3 id="多个CPU缓存一致性-MESI缓存一致性！！！"><a href="#多个CPU缓存一致性-MESI缓存一致性！！！" class="headerlink" title="多个CPU缓存一致性 MESI缓存一致性！！！"></a>多个CPU缓存一致性 MESI缓存一致性！！！</h3><p><img src="/images/mesi.jpg.jpg" alt="mesi"><br>4种数据状态，4种状态转换的cpu操作。<br>M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存<br>Exlusive独享：缓存行只在该CPU的缓存中，未被修改，与主存一致。其它CPU读取内存时变成S状态。被修改则变成M。<br>Share共享：该缓存行被多个CPU缓存，且与主存相同。当一个CPU修改时其它CPU的变成I。<br>Invaild无效。</p>
+<h3 id="AQS-两个node的队列"><a href="#AQS-两个node的队列" class="headerlink" title="AQS 两个node的队列"></a>AQS 两个node的队列</h3><h3 id="多个CPU缓存一致性-MESI缓存一致性！！！"><a href="#多个CPU缓存一致性-MESI缓存一致性！！！" class="headerlink" title="多个CPU缓存一致性 MESI缓存一致性！！！"></a>多个CPU缓存一致性 MESI缓存一致性！！！</h3><p><img src="/images/mesi.jpg" alt="mesi"></p>
+<p>4种数据状态，4种状态转换的cpu操作。<br>M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存<br>Exlusive独享：缓存行只在该CPU的缓存中，未被修改，与主存一致。其它CPU读取内存时变成S状态。被修改则变成M。<br>Share共享：该缓存行被多个CPU缓存，且与主存相同。当一个CPU修改时其它CPU的变成I。<br>Invaild无效。</p>
 <p><code>local read</code>读本地缓存中数据<code>local write</code>写本地缓存<br><code>remote read</code>读取内存数据 <code>remote write</code>写回主存</p>
 <h4 id="Cache伪共享"><a href="#Cache伪共享" class="headerlink" title="Cache伪共享"></a>Cache伪共享</h4><p>X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）<br>则可能加载在一个cache line中。<br>当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache line1和2。<br>当线程1写a则2上的cache line变成Invalid，当2要读b需要重新从内存中读。<br><strong>本来无关的两个线程，并行变成串行。</strong></p>
 <ul>
@@ -628,7 +629,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
