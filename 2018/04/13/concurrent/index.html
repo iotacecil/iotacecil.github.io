@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/countdown.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/threadstate.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/suspend.jpg">
-<meta property="og:updated_time" content="2018-09-02T04:40:12.392Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.304Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="concurrent并发多线程">
 <meta name="twitter:description" content="PV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进程&amp;amp;线程Apache C10K问题2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高3.协程Golang Erlang Lua TreeMap是非线程安全的">
@@ -344,12 +344,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-02T12:40:12+08:00">
-                2018-09-02
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
+                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -407,7 +429,7 @@
 <li>安装apahce服务器bin下的<code>ab -n 1000 -c 50 http://localhost:8080/test</code><br>本次测试请求总数1000次，同时并发数50</li>
 </ol>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> 并发量</span><br><span class="line">Concurrency Level:      50 </span><br><span class="line">整个测试所用的时间</span><br><span class="line">Time taken for tests:   0.667 seconds </span><br><span class="line">完成的请求数</span><br><span class="line">Complete requests:      1000 </span><br><span class="line">失败请求数</span><br><span class="line">Failed requests:        0 </span><br><span class="line">所有响应数据长度总和，包括http头信息和正文数据长度，不包括http请求信息的长度</span><br><span class="line">Total transferred:      136000 bytes </span><br><span class="line">所有正文数据长度</span><br><span class="line">HTML transferred:       4000 bytes </span><br><span class="line">吞吐率（与并发数相关）=Complete requests:/Time taken for tests</span><br><span class="line">Requests per second:    1498.52 [#/sec] (mean) </span><br><span class="line">用户平均请求等待时间</span><br><span class="line">Time per request:       33.366 [ms] (mean) </span><br><span class="line">服务器平均请求等待时间</span><br><span class="line">Time per request:       0.667 [ms] (mean, across all concurrent requests) </span><br><span class="line">单位时间从服务器获取的数据长度=Total transferred/Time taken for tests</span><br><span class="line">Transfer rate:          199.02 [Kbytes/sec] received</span><br></pre></td></tr></table></figure>
-<ol>
+<ol start="3">
 <li>JMeter <ol>
 <li>添加线程组File-Test Plan-Add-Threads- Thread Group<br>用户数：50<br>虚拟用户增长时长(Ramp-Up Period): 1<br>Loop Count循环次数：一个虚拟用户做多少次测试 20（共1000次）</li>
 <li>添加实例请求 add Sanper HttpRequest</li>
@@ -502,7 +524,7 @@
 <h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><ol>
 <li>synchronized独占加锁</li>
 </ol>
-<h2 id="java-util-concurrent-并发工具包"><a href="#java-util-concurrent-并发工具包" class="headerlink" title="java.util.concurrent 并发工具包"></a>java.util.concurrent 并发工具包</h2><ol>
+<h2 id="java-util-concurrent-并发工具包"><a href="#java-util-concurrent-并发工具包" class="headerlink" title="java.util.concurrent 并发工具包"></a>java.util.concurrent 并发工具包</h2><ol start="3">
 <li>CyclicBarrier(int num)等待多个线程到达预定点</li>
 <li>执行器</li>
 <li>并发集合</li>
@@ -640,7 +662,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -651,7 +673,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

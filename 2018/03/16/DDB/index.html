@@ -82,15 +82,15 @@
 
 <meta name="description" content="隔离级别是对一致性的破坏。事务之间的Happen-before关系：4种 【读写，写读，读读】，写写  排他锁 排队：序列化读写 不需要冲突控制，无死锁 排他锁：用n个队列，发生共享数据冲突就并行，不然就串行。对数据加锁，只允许一个线程访问。 读写锁：读写分离。读可以并行（可重复读），写写、写读、读写依然串行。对于读多写少的应用性能提升并行度。针对读读、读写优化。 读写锁的第二种（读已提交，不可重">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DDB">
+<meta property="og:title" content="数据库锁">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/16/DDB/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
 <meta property="og:description" content="隔离级别是对一致性的破坏。事务之间的Happen-before关系：4种 【读写，写读，读读】，写写  排他锁 排队：序列化读写 不需要冲突控制，无死锁 排他锁：用n个队列，发生共享数据冲突就并行，不然就串行。对数据加锁，只允许一个线程访问。 读写锁：读写分离。读可以并行（可重复读），写写、写读、读写依然串行。对于读多写少的应用性能提升并行度。针对读读、读写优化。 读写锁的第二种（读已提交，不可重">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/hash.jpg">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.301Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.269Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DDB">
+<meta name="twitter:title" content="数据库锁">
 <meta name="twitter:description" content="隔离级别是对一致性的破坏。事务之间的Happen-before关系：4种 【读写，写读，读读】，写写  排他锁 排队：序列化读写 不需要冲突控制，无死锁 排他锁：用n个队列，发生共享数据冲突就并行，不然就串行。对数据加锁，只允许一个线程访问。 读写锁：读写分离。读可以并行（可重复读），写写、写读、读写依然串行。对于读多写少的应用性能提升并行度。针对读读、读写优化。 读写锁的第二种（读已提交，不可重">
 <meta name="twitter:image" content="http://iotaa.xyz/images/hash.jpg">
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>DDB | vue&java Mark</title>
+  <title>数据库锁 | vue&java Mark</title>
   
 
 
@@ -309,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">DDB</h1>
+          <h1 class="post-title" itemprop="name headline">数据库锁</h1>
         
 
         <div class="post-meta">
@@ -338,12 +338,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库dockerHadoop微服务/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库dockerHadoop微服务</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -383,14 +405,14 @@
 </li>
 </ol>
 <hr>
-<ol>
+<ol start="5">
 <li>mvcc多版本并发控制 本质：copy on write。每次写都是写一个新的数据，写在log里，不是原地更新。针对写读场景优化，例如：当前数据版本号v10,读版本号v5则去log里找v5的数据。在写操作加锁时，依然可以并发读。现在主流做法：实现写读、读读、读写不冲突。<br>当写&gt;读 记录的日志很多 会增加延迟。</li>
 </ol>
 <p>减小锁的覆盖范围：原地锁-&gt;MVCC多版本锁<br>增加锁上可并行的线程数：读写分离</p>
 <ul>
 <li>有的数据库不能支持大事务原因在于写读冲突，读在外面等待。</li>
 </ul>
-<ol>
+<ol start="6">
 <li>隔离性的扩展：SNAPSHOT 快照隔离级别：就是mvcc copy on write 无锁编程。<br> 快照读：读事务开始之前的版本。达到读未提交的并行度。保证读到一致性的数据。</li>
 </ol>
 <p>悲观锁：数据加锁使线程bloking状态，等到等待的锁ok回到runnable状态。把寄存器的数据换成另一个线程，把缓存清空，cpu的cache清空，增加系统开销。适合并发争抢严重的场景。<br>乐观锁：</p>
@@ -571,7 +593,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -582,7 +604,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

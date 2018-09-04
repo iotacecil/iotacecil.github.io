@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/dsexcept.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/transaction.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/mvc_front.jpg">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.289Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.257Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About SpringBoot">
 <meta name="twitter:description" content="spring自动装配context.getBean(.class)获取对象 AnnotationConfigApplicationContext(App.class)注解形式上下文，用component标识bean,scan扫描自动执行component的构造函数,@Autowire加在有参构造函数上，自动装配参数到当前类，实现类的关联 ClassPathXmlApplicationContext">
@@ -346,8 +346,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
@@ -365,8 +365,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
+                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
+                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
                   </a>
                 </span>
 
@@ -430,7 +430,7 @@
 </li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/user/login"</span>)</span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">login</span><span class="params">(@RequestParam(<span class="string">"name"</span>)</span> String name,@<span class="title">RequestParam</span><span class="params">(<span class="string">"password"</span>)</span>String password)<span class="keyword">throws</span> IOexception</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<ol>
+<ol start="4">
 <li>上传文件<br>定义bean<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span> = <span class="string">"multipartResolver"</span><span class="attr">class</span>=<span class="string">"...CommonsMultipartResolver"</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -649,7 +649,7 @@
 -多环境配置文件格式</code>application-{profile}.properties<br>-激活spring.profiles.active = dev</p>
 </li>
 </ul>
-<ol>
+<ol start="4">
 <li>@RestController -&gt; @RequestMappint(value=”users”)<br>等于<code>@controller</code>+<code>ResponseBody</code> 将java类用Jackason转换为JSON<ol>
 <li>RequestMapping(“/“)</li>
 <li>GetMapping(“/get1”)</li>
@@ -668,7 +668,7 @@
 </li>
 </ol>
 <h4 id="使用Swagger2"><a href="#使用Swagger2" class="headerlink" title="使用Swagger2"></a>使用Swagger2</h4><h5 id="mvn依赖写法检索-mvnrepository"><a href="#mvn依赖写法检索-mvnrepository" class="headerlink" title="mvn依赖写法检索 mvnrepository"></a>mvn依赖写法检索 <a href="http://mvnrepository.com/search?q=spring+boot" target="_blank" rel="noopener">mvnrepository</a></h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<ol>
+<ol start="10">
 <li>@Configuration 加载类配置</li>
 <li>@Bean</li>
 </ol>
@@ -889,7 +889,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -900,7 +900,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

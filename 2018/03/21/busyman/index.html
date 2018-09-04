@@ -90,7 +90,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/pl.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/throwable.jpg">
-<meta property="og:updated_time" content="2018-08-18T12:32:30.477Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="busyman Notes">
 <meta name="twitter:description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL  拆分单词  12String contents = new String(Files.readAllBytes(Paths.get(&quot;&quot;),StandardCharsets.U">
@@ -340,12 +340,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-18T20:32:30+08:00">
-                2018-08-18
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
+                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -473,10 +495,10 @@
 </ol>
 <h3 id="Logger代替print：7种级别"><a href="#Logger代替print：7种级别" class="headerlink" title="Logger代替print：7种级别"></a>Logger代替print：7种级别</h3><p>默认会记录INFO及更高级别。CONFIG/FINE/FINER.FINEST对用户无意义<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Logger.getGlobal().info(()-&gt;ex.getMessage());</span><br><span class="line">Logger logger = Logger.getLogger(<span class="string">"com.Logger"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>log输出到文件用户文件夹下java<code>n</code>.log<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FileHandler handler = <span class="keyword">new</span> FileHandler();</span><br><span class="line">logger.addHandler(handler);</span><br></pre></td></tr></table></figure></p>
-<ol>
+<ol start="2">
 <li>未检查：逻辑错误：NullPointerExcepter<br><code>Class.forName(str)</code>不可能知道类能否成功加载。</li>
 </ol>
-<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><ol>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><ol start="2">
 <li><p>要使用子类的方法，强制cast，先检查类型</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (a <span class="keyword">instanceof</span> B)&#123;</span><br><span class="line">	B b = (B)a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
@@ -534,7 +556,7 @@ Comparator&lt;? super U&gt; keyComparator)`
 <li><code>nullsLast`</code>nullsFirst`避免null抛出异常</li>
 <li><code>naturalOrder()</code>适合实现了<code>Comparable</code>的类</li>
 </ul>
-<ol>
+<ol start="2">
 <li>thenComparing</li>
 </ol>
 <hr>
@@ -580,8 +602,8 @@ Comparator&lt;? super U&gt; keyComparator)`
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/16/DDB/" rel="next" title="DDB">
-                <i class="fa fa-chevron-left"></i> DDB
+              <a href="/2018/03/16/DDB/" rel="next" title="数据库锁">
+                <i class="fa fa-chevron-left"></i> 数据库锁
               </a>
             
           </div>
@@ -680,7 +702,7 @@ Comparator&lt;? super U&gt; keyComparator)`
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -691,7 +713,7 @@ Comparator&lt;? super U&gt; keyComparator)`
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

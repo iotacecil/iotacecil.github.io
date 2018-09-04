@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="java," />
+  <meta name="keywords" content="java,io," />
 
 
 
@@ -81,14 +81,14 @@
 
 
 <meta name="description" content="JNI java native interface 本地接口堆外内存：ByteBuffer1.wrap可以包装一个数组，保证不被直接修改2.ByteBuffer.allocateDirect() 堆外内存。123public static ByteBuffer allocateDirect(int capacity) &amp;#123;    return new DirectByteBuffer(ca">
-<meta name="keywords" content="java">
+<meta name="keywords" content="java,io">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java-io-file">
 <meta property="og:url" content="http://iotaa.xyz/2018/05/04/java-io-file/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
 <meta property="og:description" content="JNI java native interface 本地接口堆外内存：ByteBuffer1.wrap可以包装一个数组，保证不被直接修改2.ByteBuffer.allocateDirect() 堆外内存。123public static ByteBuffer allocateDirect(int capacity) &amp;#123;    return new DirectByteBuffer(ca">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-30T02:12:11.525Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.324Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java-io-file">
 <meta name="twitter:description" content="JNI java native interface 本地接口堆外内存：ByteBuffer1.wrap可以包装一个数组，保证不被直接修改2.ByteBuffer.allocateDirect() 堆外内存。123public static ByteBuffer allocateDirect(int capacity) &amp;#123;    return new DirectByteBuffer(ca">
@@ -337,12 +337,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-30T10:12:11+08:00">
-                2018-08-30
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
+                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -388,7 +410,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PersonHandler</span> <span class="keyword">extends</span> <span class="title">DefaultHandler</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Person&gt; <span class="title">getPersons</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> persons;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Person&gt; persons = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">private</span> Person p= <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//用于记录当前正在解析的标签</span></span><br><span class="line">    <span class="keyword">private</span> String tag;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startDocument</span><span class="params">()</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.startDocument();</span><br><span class="line">        <span class="comment">//开始解析文档</span></span><br><span class="line">        persons = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        System.out.println(<span class="string">"开始解析标签"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endDocument</span><span class="params">()</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.endDocument();</span><br><span class="line">        System.out.println(<span class="string">"结束解析"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * @param uri        命名空间</span></span><br><span class="line"><span class="comment">     * @param localName  不带前缀的标签</span></span><br><span class="line"><span class="comment">     * @param qName      带前缀的标签&lt;aa:</span></span><br><span class="line"><span class="comment">     * @param attributes 标签里的属性集合</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startElement</span><span class="params">(String uri, String localName, String qName, Attributes attributes)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.startElement(uri, localName, qName, attributes);</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"Person"</span>.equals(qName))&#123;</span><br><span class="line">            p=<span class="keyword">new</span> Person();</span><br><span class="line">            <span class="keyword">int</span> id = Integer.parseInt(attributes.getValue(<span class="string">"id"</span>));</span><br><span class="line">           p.setId(id);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//开始解析标签时记录名字</span></span><br><span class="line">        tag = qName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endElement</span><span class="params">(String uri, String localName, String qName)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.endElement(uri, localName, qName);</span><br><span class="line">        <span class="comment">//每次结束标记就把tag置空</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"Person"</span>.equals(qName)) &#123;</span><br><span class="line">            persons.add(p);</span><br><span class="line">        &#125;</span><br><span class="line">        tag = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">//解析文本内容时</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">characters</span><span class="params">(<span class="keyword">char</span>[] ch, <span class="keyword">int</span> start, <span class="keyword">int</span> length)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.characters(ch, start, length);</span><br><span class="line">        <span class="comment">//ch是整个xml文件的内容</span></span><br><span class="line">        <span class="keyword">if</span> (tag != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="string">"name"</span>.equals(tag))&#123;</span><br><span class="line">                p.setName(<span class="keyword">new</span> String(ch,start,length));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </div></div>
-<ol>
+<ol start="4">
 <li>开始解析<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(<span class="string">"person.xml"</span>);</span><br><span class="line">saxParser.parse(is,personHandler);</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -531,6 +553,8 @@
           
             <a href="/tags/java/" rel="tag"># java</a>
           
+            <a href="/tags/io/" rel="tag"># io</a>
+          
         </div>
       
 
@@ -642,7 +666,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -653,7 +677,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/bibao.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/prototype.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/BOM.jpg">
-<meta property="og:updated_time" content="2018-09-03T05:45:48.353Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About-js">
 <meta name="twitter:description" content="prototypehttp://prototypejs.org/learn/event-delegation.html js unicode-&amp;gt;中文1unescape(&apos;&apos;); h5视频控制到指定位置并播放12345var v = document.getElementsByTagName(&quot;video&quot;)[0];v.currentTime = 10.0;v.play()//暂停v.paus">
@@ -357,12 +357,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-03T13:45:48+08:00">
-                2018-09-03
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js前端常用svgcanvasVue框架jquery源码/" itemprop="url" rel="index">
+                    <span itemprop="name">js前端常用svgcanvasVue框架jquery源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -481,7 +503,7 @@
 </ol>
 <p>8897:任何服务都能访问这个服务<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">200</span>,&#123;<span class="string">'Access-Control-Allow-Origin'</span>:<span class="string">'*'</span>&#125;)</span><br></pre></td></tr></table></figure></p>
 <p>或者特定域名<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.writeHead(<span class="number">200</span>,</span><br><span class="line">  &#123;<span class="string">'Access-Control-Allow-Origin'</span>:<span class="string">'http://localhost:8898'</span>&#125;)</span><br></pre></td></tr></table></figure></p>
-<ol>
+<ol start="2">
 <li>jsonp标签里允许跨域不用添加allow-origin<br>type:script<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"http://127.0.0.1:8897"</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -581,7 +603,7 @@ application/x-www.form-urlencoded</code><br>html：报错<code>not allowed by Ac
 </li>
 </ol>
 <p>任意数求和<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="comment">//类数组转化成数组</span></span><br><span class="line">  <span class="keyword">var</span> ary = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">eval</span>(ary.join(<span class="string">'+'</span>))</span><br><span class="line">&#125;</span><br><span class="line">fn(<span class="number">12</span>,<span class="number">23</span>,<span class="number">34</span>)</span><br></pre></td></tr></table></figure></p>
-<ol>
+<ol start="3">
 <li>函数与对象的创建相同也是地址，函数把js代码当作字符串存到空间中</li>
 <li>js中栈内存是作用域，用于执行代码，存放基本数据类型。堆内存用于存储键值对or函数字符串<br>调用栈是连续空间。后进先释放，要节约栈空间。堆是链表。</li>
 <li>变量提升：在当前作用域，浏览器把所有<ol>
@@ -637,7 +659,7 @@ application/x-www.form-urlencoded</code><br>html：报错<code>not allowed by Ac
 </ol>
 <p>对fun.prototype添加的方法<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fun.prototype.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">"prototypesay"</span>)&#125;</span><br></pre></td></tr></table></figure></p>
 <p>对f1来说<code>f1.hasOwnProperty(&#39;say&#39;)</code> false . 是公共方法</p>
-<ol>
+<ol start="4">
 <li><code>fun.prototype.__proto__</code>是Object.prototype</li>
 <li><code>Object.prototype</code>没有<code>__proto__</code> 有也指向自己</li>
 </ol>
@@ -863,7 +885,7 @@ writable:false,value:&#39;male&#39;
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -874,7 +896,7 @@ writable:false,value:&#39;male&#39;
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

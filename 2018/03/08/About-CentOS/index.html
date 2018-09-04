@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="netstat -tunplss -t tcp连接 shell wordcount:1cat wordcount.txt |sed &apos;s/[,.:;/!?]/ /g&apos;|awk &apos;&amp;#123;for(i=1;i&amp;lt;=NF;i++)array[$i]++;&amp;#125;END&amp;#123;for(i in array) print i,array[i]&amp;#125;&apos; centos装python3123">
+<meta name="description" content="lsof123456789101112-a：列出打开文件存在的进程；-c&amp;lt;进程名&amp;gt;：列出指定进程所打开的文件；-g：列出GID号进程详情；-d&amp;lt;文件号&amp;gt;：列出占用该文件号的进程；+d&amp;lt;目录&amp;gt;：列出目录下被打开的文件；+D&amp;lt;目录&amp;gt;：递归列出目录下被打开的文件；-n&amp;lt;目录&amp;gt;：列出使用NFS的文件；-i&amp;lt;条件&amp;gt;：列出符合条件的进程。">
 <meta name="keywords" content="CentOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="About CentOS">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/08/About-CentOS/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="netstat -tunplss -t tcp连接 shell wordcount:1cat wordcount.txt |sed &apos;s/[,.:;/!?]/ /g&apos;|awk &apos;&amp;#123;for(i=1;i&amp;lt;=NF;i++)array[$i]++;&amp;#125;END&amp;#123;for(i in array) print i,array[i]&amp;#125;&apos; centos装python3123">
+<meta property="og:description" content="lsof123456789101112-a：列出打开文件存在的进程；-c&amp;lt;进程名&amp;gt;：列出指定进程所打开的文件；-g：列出GID号进程详情；-d&amp;lt;文件号&amp;gt;：列出占用该文件号的进程；+d&amp;lt;目录&amp;gt;：列出目录下被打开的文件；+D&amp;lt;目录&amp;gt;：递归列出目录下被打开的文件；-n&amp;lt;目录&amp;gt;：列出使用NFS的文件；-i&amp;lt;条件&amp;gt;：列出符合条件的进程。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-16T06:09:36.899Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About CentOS">
-<meta name="twitter:description" content="netstat -tunplss -t tcp连接 shell wordcount:1cat wordcount.txt |sed &apos;s/[,.:;/!?]/ /g&apos;|awk &apos;&amp;#123;for(i=1;i&amp;lt;=NF;i++)array[$i]++;&amp;#125;END&amp;#123;for(i in array) print i,array[i]&amp;#125;&apos; centos装python3123">
+<meta name="twitter:description" content="lsof123456789101112-a：列出打开文件存在的进程；-c&amp;lt;进程名&amp;gt;：列出指定进程所打开的文件；-g：列出GID号进程详情；-d&amp;lt;文件号&amp;gt;：列出占用该文件号的进程；+d&amp;lt;目录&amp;gt;：列出目录下被打开的文件；+D&amp;lt;目录&amp;gt;：递归列出目录下被打开的文件；-n&amp;lt;目录&amp;gt;：列出使用NFS的文件；-i&amp;lt;条件&amp;gt;：列出符合条件的进程。">
 
 
 
@@ -337,12 +337,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-16T14:09:36+08:00">
-                2018-08-16
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVMlinux常用备注nginxredis配置/" itemprop="url" rel="index">
+                    <span itemprop="name">JVMlinux常用备注nginxredis配置</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -371,7 +393,8 @@
       
 
       
-        <p><code>netstat -tunpl</code><br><code>ss -t</code> tcp连接</p>
+        <h3 id="lsof"><a href="#lsof" class="headerlink" title="lsof"></a>lsof</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-a：列出打开文件存在的进程；</span><br><span class="line">-c&lt;进程名&gt;：列出指定进程所打开的文件；</span><br><span class="line">-g：列出GID号进程详情；</span><br><span class="line">-d&lt;文件号&gt;：列出占用该文件号的进程；</span><br><span class="line">+d&lt;目录&gt;：列出目录下被打开的文件；</span><br><span class="line">+D&lt;目录&gt;：递归列出目录下被打开的文件；</span><br><span class="line">-n&lt;目录&gt;：列出使用NFS的文件；</span><br><span class="line">-i&lt;条件&gt;：列出符合条件的进程。（4、6、协议、:端口、 @ip ）</span><br><span class="line">-p&lt;进程号&gt;：列出指定进程号所打开的文件；</span><br><span class="line">-u：列出UID号进程详情；</span><br><span class="line">-h：显示帮助信息；</span><br><span class="line">-v：显示版本信息。</span><br></pre></td></tr></table></figure>
+<p><code>netstat -tunpl</code><br><code>ss -t</code> tcp连接</p>
 <h3 id="shell-wordcount"><a href="#shell-wordcount" class="headerlink" title="shell wordcount:"></a>shell wordcount:</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat wordcount.txt |sed 's/[,.:;/!?]/ /g'|awk '&#123;for(i=1;i&lt;=NF;i++)array[$i]++;&#125;END&#123;for(i in array) print i,array[i]&#125;'</span><br></pre></td></tr></table></figure>
 <h3 id="centos装python3"><a href="#centos装python3" class="headerlink" title="centos装python3"></a>centos装python3</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</span><br><span class="line">yum -y install epel-release</span><br><span class="line">yum install python-pip</span><br><span class="line">wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz</span><br><span class="line"><span class="comment">#解压</span></span><br><span class="line">xz -d Python-3.6.4.tar.xz</span><br><span class="line">tar -xf Python-3.6.4.tar</span><br><span class="line"></span><br><span class="line"><span class="comment">#进入解压后的目录，依次执行下面命令进行手动编译</span></span><br><span class="line">./configure prefix=/usr/<span class="built_in">local</span>/python3</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"><span class="comment">#将原来的链接备份</span></span><br><span class="line">mv /usr/bin/python /usr/bin/python.bak</span><br><span class="line"></span><br><span class="line"><span class="comment">#添加python3的软链接</span></span><br><span class="line">ln -s /usr/<span class="built_in">local</span>/python3/bin/python3.6 /usr/bin/python</span><br><span class="line"></span><br><span class="line"><span class="comment">#测试是否安装成功了</span></span><br><span class="line">python -V</span><br><span class="line">vi /usr/bin/yum</span><br><span class="line">把<span class="comment">#! /usr/bin/python修改为#! /usr/bin/python2</span></span><br><span class="line"></span><br><span class="line">vi /usr/libexec/urlgrabber-ext-down</span><br><span class="line">把<span class="comment">#! /usr/bin/python 修改为#! /usr/bin/python2</span></span><br></pre></td></tr></table></figure>
 <h3 id="visualbox扩容"><a href="#visualbox扩容" class="headerlink" title="visualbox扩容"></a>visualbox扩容</h3><p>全局工具-虚拟硬盘<br><code>df -lh</code> 查看磁盘使用<br>删掉一个docker<br><code>docker images</code><br><code>docker ps -a</code><br><code>docker stop j1</code><br><code>docker rm j1</code><br><code>docker rmi d23bdf5b1b1b</code></p>
@@ -564,7 +587,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -575,7 +598,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -608,7 +631,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#shell-wordcount"><span class="nav-number">1.</span> <span class="nav-text">shell wordcount:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#centos装python3"><span class="nav-number">2.</span> <span class="nav-text">centos装python3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#visualbox扩容"><span class="nav-number">3.</span> <span class="nav-text">visualbox扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7种文件类型（-文件-d目录-l软链接）"><span class="nav-number">4.</span> <span class="nav-text">7种文件类型（-文件 d目录 l软链接）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#chmod-模式-文件名-修改权限"><span class="nav-number">4.1.</span> <span class="nav-text">chmod [] 模式 文件名 修改权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RPM"><span class="nav-number">5.</span> <span class="nav-text">RPM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行java"><span class="nav-number">6.</span> <span class="nav-text">运行java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件系统-FHS文件层次结构标准"><span class="nav-number">7.</span> <span class="nav-text">文件系统 FHS文件层次结构标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#颜色"><span class="nav-number"></span> <span class="nav-text">颜色</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#lsof"><span class="nav-number">1.</span> <span class="nav-text">lsof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell-wordcount"><span class="nav-number">2.</span> <span class="nav-text">shell wordcount:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#centos装python3"><span class="nav-number">3.</span> <span class="nav-text">centos装python3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#visualbox扩容"><span class="nav-number">4.</span> <span class="nav-text">visualbox扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7种文件类型（-文件-d目录-l软链接）"><span class="nav-number">5.</span> <span class="nav-text">7种文件类型（-文件 d目录 l软链接）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#chmod-模式-文件名-修改权限"><span class="nav-number">5.1.</span> <span class="nav-text">chmod [] 模式 文件名 修改权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RPM"><span class="nav-number">6.</span> <span class="nav-text">RPM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行java"><span class="nav-number">7.</span> <span class="nav-text">运行java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件系统-FHS文件层次结构标准"><span class="nav-number">8.</span> <span class="nav-text">文件系统 FHS文件层次结构标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#颜色"><span class="nav-number"></span> <span class="nav-text">颜色</span></a></div>
             
 
           </div>

@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/collection.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/collection2.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/rotate.jpg">
-<meta property="og:updated_time" content="2018-08-19T01:45:43.412Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.322Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java-Collection">
 <meta name="twitter:description" content="集合框架  三大接口：Iterator,Collection,Map 工具类：Collections Arrays  Arrays.asListString可以12String[] ss = &amp;#123;&quot;da&quot;,&quot;da&quot;&amp;#125;;List&amp;lt;String&amp;gt; strings = Arrays.asList(ss); 基本数据类型不行12int[] ss = &amp;#123;1,2&amp;#12">
@@ -341,12 +341,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-19T09:45:43+08:00">
-                2018-08-19
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
+                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -392,7 +414,7 @@
 <ul>
 <li>多个限定<code>T extends Runnable &amp; AutoCloseable</code>,只能有一个限定类，放在第一个，其它都是接口</li>
 </ul>
-<ol>
+<ol start="2">
 <li>Manager是Employee子类但<code>ArrayList&lt;Manger&gt;</code>不是<code>ArrayList&lt;Employee&gt;</code>子类<br>因为<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Manger&gt; bosses = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">ArrayList&lt;Employee&gt; empls = bosses; <span class="comment">//非法</span></span><br><span class="line">empls.add(<span class="keyword">new</span> Employee(...)); <span class="comment">//可以在管理员列里添加普通成员</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -410,7 +432,7 @@
 </ol>
 <h3 id="泛型类型擦除"><a href="#泛型类型擦除" class="headerlink" title="泛型类型擦除"></a>泛型类型擦除</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; l1 = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">List&lt;Integer&gt; l2 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line"><span class="comment">//true</span></span><br><span class="line">System.out.println(l1.getClass() == l2.getClass());</span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; l2 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">l2.add(<span class="number">1</span>);</span><br><span class="line">Method madd = l2.getClass().getDeclaredMethod(<span class="string">"add"</span>,Object.class);</span><br><span class="line"><span class="comment">//[1, abc]</span></span><br><span class="line">madd.invoke(l2,<span class="string">"abc"</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="泛型约束"><a href="#泛型约束" class="headerlink" title="泛型约束"></a>泛型约束</h3><ol>
+<h3 id="泛型约束"><a href="#泛型约束" class="headerlink" title="泛型约束"></a>泛型约束</h3><ol start="3">
 <li><p>类型变量不能实例化 <code>T[] result = new T[n];</code>错误</p>
 <ol>
 <li>以【方法引用】方式提供数组的构造函数<code>Sting[]::new</code><br><code>IntFunction&lt;T[]&gt; constr</code> <code>T[] result = constr.apply(n)</code></li>
@@ -435,7 +457,7 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; lit = Lists.newArrayList(<span class="string">"aaa"</span>,<span class="string">"ddd"</span>,<span class="string">"bbb"</span>);</span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;String&gt; cl =Collections2.filter(lit,(e)-&gt;e.toUpperCase().startsWith(<span class="string">"a"</span>));</span><br></pre></td></tr></table></figure>
-<ol>
+<ol start="3">
 <li><p>转换 (有问题)日期</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;Long&gt; set = Sets.newHashSet(<span class="number">20170801L</span>,<span class="number">20980320L</span>,<span class="number">19950730L</span>);</span><br><span class="line">Collection&lt;String&gt; col = Collections2.transform(set,(e)-&gt;<span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd"</span>).format(e));</span><br></pre></td></tr></table></figure>
 </li>
@@ -550,7 +572,7 @@
 </li>
 </ol>
 <p>实验：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = (<span class="number">65535</span>&lt;&lt;<span class="number">2</span>)+<span class="number">1</span>;</span><br><span class="line"><span class="comment">//262141 111111111111111101</span></span><br><span class="line">System.out.println(a+<span class="string">" "</span>+Integer.toBinaryString(a));</span><br><span class="line"><span class="comment">//32是表长</span></span><br><span class="line"><span class="keyword">int</span> hash=a^(a&gt;&gt;&gt;<span class="number">16</span>);</span><br><span class="line"><span class="comment">//输出：11 反转最后两位 </span></span><br><span class="line"><span class="comment">//扰动(如果&gt;65536，右移16位) </span></span><br><span class="line"><span class="comment">//低16与高16位`^`,混合hash的高位低位</span></span><br><span class="line">System.out.println(Integer.toBinaryString(a&gt;&gt;&gt;<span class="number">16</span>));</span><br><span class="line"><span class="keyword">int</span> index = (<span class="number">32</span>-<span class="number">1</span>)&amp;hash;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">111111111111111110</span></span><br><span class="line"><span class="comment">11111//只取了低位</span></span><br><span class="line"><span class="comment">-------------</span></span><br><span class="line"><span class="comment">11110-&gt;30</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">System.out.println(Integer.toBinaryString(hash));</span><br><span class="line">System.out.println(Integer.toBinaryString(<span class="number">31</span>));</span><br><span class="line">System.out.println(<span class="string">"-------------"</span>);</span><br><span class="line">System.out.println(Integer.toBinaryString(index));</span><br><span class="line"><span class="comment">//262142 30</span></span><br><span class="line">System.out.println(hash+<span class="string">" "</span>+index);</span><br></pre></td></tr></table></figure></p>
-<ol>
+<ol start="2">
 <li><code>put(K key, V value) {return putVal(hash(key), key</code></li>
 <li><p><code>putVal</code></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">n = (tab = resize()).length;</span><br><span class="line"><span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)<span class="comment">//n=length=16</span></span><br><span class="line">           tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
@@ -566,7 +588,7 @@
 <ul>
 <li>为了用<code>&amp;2^n-1</code>取模 2^n的table长不是素数很容易冲突</li>
 </ul>
-<ol>
+<ol start="2">
 <li><strong>*spreads the impact of higher bits downward</strong></li>
 </ol>
 <ul>
@@ -723,7 +745,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -734,7 +756,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

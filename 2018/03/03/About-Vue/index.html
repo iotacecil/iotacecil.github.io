@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="vue&amp;java Mark">
 <meta property="og:description" content="123app.$watch(&quot;text&quot;,(newV,oldV)=&amp;gt;&amp;#123;  console.log(`$&amp;#123;newV&amp;#125;,``)&amp;#125; value、selected、checked默认情况下会被忽略  data是函数因为这样多次引用一个组件都创建新的的data实例  钩子函数create在 data初始化后调用，this指向vm，专门用来发送ajax   axi">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-12T07:58:00.291Z">
+<meta property="og:updated_time" content="2018-09-04T01:28:38.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About Vue&amp;JS">
 <meta name="twitter:description" content="123app.$watch(&quot;text&quot;,(newV,oldV)=&amp;gt;&amp;#123;  console.log(`$&amp;#123;newV&amp;#125;,``)&amp;#125; value、selected、checked默认情况下会被忽略  data是函数因为这样多次引用一个组件都创建新的的data实例  钩子函数create在 data初始化后调用，this指向vm，专门用来发送ajax   axi">
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-12T15:58:00+08:00">
-                2018-07-12
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+                2018-09-04
               </time>
             
           </span>
@@ -356,8 +356,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/js/" itemprop="url" rel="index">
-                    <span itemprop="name">js</span>
+                  <a href="/categories/js前端常用svgcanvasVue框架jquery源码/" itemprop="url" rel="index">
+                    <span itemprop="name">js前端常用svgcanvasVue框架jquery源码</span>
                   </a>
                 </span>
 
@@ -426,7 +426,7 @@
 <ol>
 <li>call和apply的区别是apply第2个参数传数组</li>
 </ol>
-<ol>
+<ol start="2">
 <li><code>var vm = new Vue({el:&#39;#app&#39;})</code>给body加#app表示body里面的dom都是vue的管理区域</li>
 <li>弹窗效果=两个div嵌套，遮罩div width整个屏幕，显示在所有图层上，现在body最上或最上，<code>v-if=&quot;!modal.show</code> <code>v-on:click=&quot;modal.show=!modal.show&quot;</code></li>
 <li><p><code>ready:function(){this.getData()}</code>与methods\data同级，对象加载好执行 ,this.methods中的方法（ajax请求更新data）</p>
@@ -454,7 +454,7 @@
 <li><strong>directive 自定义指令</strong></li>
 </ol>
 <h4 id="vuex难点"><a href="#vuex难点" class="headerlink" title="vuex难点"></a>vuex难点</h4><p>dom上的行间属性<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册</span></span><br><span class="line">Vue.directive(<span class="string">'my-directive'</span>, &#123;</span><br><span class="line">  bind: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  inserted: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  update: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  componentUpdated: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  unbind: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 注册 (指令函数)</span></span><br><span class="line">Vue.directive(<span class="string">'my-directive'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 这里将会被 `bind` 和 `update` 调用</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// getter，返回已注册的指令</span></span><br><span class="line"><span class="keyword">var</span> myDirective = Vue.directive(<span class="string">'my-directive'</span>)</span><br></pre></td></tr></table></figure></p>
-<ol>
+<ol start="4">
 <li>minxins 混入<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个混入对象</span></span><br><span class="line"><span class="keyword">var</span> myMixin = &#123;</span><br><span class="line">  created: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.hello()</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    hello: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'hello from mixin!'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义一个使用混入对象的组件</span></span><br><span class="line"><span class="keyword">var</span> Component = Vue.extend(&#123;</span><br><span class="line">  mixins: [myMixin]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> component = <span class="keyword">new</span> Component() <span class="comment">// =&gt; "hello from mixin!"</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -488,13 +488,13 @@
 <li>request.send(data) </li>
 <li>request.responseText<br>请求参数：Request Payload</li>
 </ul>
-<ol>
+<ol start="4">
 <li>eval 解析json字符串 eval(‘(‘+json+”)”);</li>
 </ol>
 <ul>
 <li>eval 中 值为alert() 会被执行<br>Json.parse(request.responseText)<br>JSONLint 格式化校验工具<br>标记约定 “success”:true</li>
 </ul>
-<ol>
+<ol start="5">
 <li>产生跨域 localhost-&gt;127.0.0.1 </li>
 </ol>
 <ul>
@@ -651,7 +651,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -662,7 +662,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
