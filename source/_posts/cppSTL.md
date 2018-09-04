@@ -2,6 +2,7 @@
 title: cppSTL
 date: 2018-08-12 19:14:53
 tags:
+category: [cpp学习操作系统]
 ---
 ### 操作符重载
 https://en.cppreference.com/w/cpp/language/operators

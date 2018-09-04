@@ -2,7 +2,7 @@
 title: About Java
 date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
-category: java
+category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 ### 打印整数的二进制表示
 0x8000000 表示100000...0

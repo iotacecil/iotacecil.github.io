@@ -2,6 +2,7 @@
 title: jQueryCode
 date: 2018-03-15 11:13:05
 tags:
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 
 ## browser sync

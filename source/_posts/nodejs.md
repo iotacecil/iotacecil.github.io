@@ -2,6 +2,7 @@
 title: nodejs
 date: 2018-07-22 12:58:32
 tags:
+category: [nodejs]
 ---
 ### CommonJS nodejs的模块规范
 global对象和process对象

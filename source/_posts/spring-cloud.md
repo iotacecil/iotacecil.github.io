@@ -2,6 +2,7 @@
 title: spring-cloud
 date: 2018-05-08 16:17:37
 tags:
+categories: [数据库dockerHadoop微服务]
 ---
 `@EnableEurekaServer`
 

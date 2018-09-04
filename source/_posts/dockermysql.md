@@ -2,6 +2,7 @@
 title: dockermysql
 date: 2018-07-05 13:20:56
 tags:
+categories: [数据库dockerHadoop微服务]
 ---
 ### CentOS7 安装mysql
 1.下载mysql源

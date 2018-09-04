@@ -2,9 +2,8 @@
 title: flowRecommend图计算
 date: 2018-03-15 12:17:32
 tags: [grap]
+categories: [机器学习和数据处理python备忘]
 ---
-### 斯坦纳树：包含给定k个节点的最小生成树
-
 
 ### 偏态系数 和 峰态系数
 中位数和均值的偏差，均值大叫正偏

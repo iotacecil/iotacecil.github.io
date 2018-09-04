@@ -2,6 +2,7 @@
 title: 数据结构模板&模板题
 date: 2018-09-01 15:29:18
 tags:
+categories: [算法备忘]
 ---
 ### 连通分量
 ![connect.jpg](/images/connect.jpg)

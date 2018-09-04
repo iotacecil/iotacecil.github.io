@@ -2,6 +2,7 @@
 title: MVVM
 date: 2018-04-19 20:34:27
 tags:
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 ### 实现myvue.b=222页面刷新
 1. 

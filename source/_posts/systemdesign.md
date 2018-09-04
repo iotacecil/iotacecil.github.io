@@ -2,6 +2,7 @@
 title: systemdesign
 date: 2018-08-07 16:47:36
 tags:
+categories: [算法备忘]
 ---
 https://www.educative.io/collection/page/5668639101419520/5649050225344512/5668600916475904
 ### gohash

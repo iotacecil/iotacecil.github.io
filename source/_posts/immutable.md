@@ -2,6 +2,7 @@
 title: 可变对象和不可变对象
 date: 2018-08-30 09:23:15
 tags:
+category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 ### 可变对象
 #### (可变Integer)

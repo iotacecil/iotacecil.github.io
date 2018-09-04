@@ -2,7 +2,7 @@
 title: About Vue&JS
 date: 2018-03-03 08:49:13
 tags: [vue,javascript]
-categories: js
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 
 ```javascript

@@ -2,6 +2,7 @@
 title: svg
 date: 2018-07-20 12:42:39
 tags:
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 ### 基本图形
 `<elipse>`椭圆，cx,cy是圆心

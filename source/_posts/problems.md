@@ -1,7 +1,8 @@
 ---
 title: problems
 date: 2018-03-09 08:39:10
-tags: [leetcode]
+tags: [git,hexo]
+category: [JVMlinux常用备注nginxredis配置]
 ---
 javac -encoding UTF-8 xxx.java
 idea ctrl+Q document

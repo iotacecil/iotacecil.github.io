@@ -2,6 +2,7 @@
 title: cpp
 date: 2018-04-23 08:59:30
 tags:
+category: [cpp学习操作系统]
 ---
 
 ### `#include<pthread.h>`

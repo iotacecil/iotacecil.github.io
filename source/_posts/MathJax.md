@@ -2,6 +2,7 @@
 title: MathJax
 date: 2018-03-06 19:39:40
 tags:
+ategory: [博客相关操作]
 ---
 [变量](http://whatbeg.com/2016/04/25/latexsyntax.html)
 [MATH](https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference)

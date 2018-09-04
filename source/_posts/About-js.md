@@ -2,6 +2,7 @@
 title: About-js
 date: 2018-04-17 17:06:31
 tags:
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 ### prototype
 http://prototypejs.org/learn/event-delegation.html

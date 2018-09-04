@@ -1,7 +1,8 @@
 ---
 title: java-io-file
 date: 2018-05-04 20:34:13
-tags: [java]
+tags: [java,io]
+category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 JNI java native interface 本地接口
 堆外内存：

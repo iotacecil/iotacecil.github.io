@@ -2,6 +2,7 @@
 title: alg
 date: 2018-03-24 03:07:34
 tags: [alg]
+categories: [算法备忘]
 ---
 ### Celebrity Problem 所有人都认识他但是他不认识所有人
 方法1：找全是0的行，O(n^2)

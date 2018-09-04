@@ -2,6 +2,7 @@
 title: 'canvas'
 date: 2018-04-04 10:55:22
 tags: [js]
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 # 创建
 ## 1. canvas正确绘制时，标签内容会被忽略 不能在css中定大小

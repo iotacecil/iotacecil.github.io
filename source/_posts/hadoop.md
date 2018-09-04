@@ -2,6 +2,7 @@
 title: hadoop
 date: 2018-08-09 21:35:43
 tags:
+categories: [数据库dockerHadoop微服务]
 ---
 Mapper.java
 模板模式

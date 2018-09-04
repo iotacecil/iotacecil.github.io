@@ -2,6 +2,7 @@
 title: ToDoAgain
 date: 2018-09-03 14:44:31
 tags:
+categories: [算法备忘]
 ---
 ### 106 中序+后序建树
 

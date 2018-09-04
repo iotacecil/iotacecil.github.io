@@ -2,6 +2,7 @@
 title: javanet
 date: 2018-03-11 23:05:52
 tags: [javaNet,java]
+category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 ### 模块化开发
 1. 按业务层次划分，将dao层和service层单独划分成模块

@@ -2,7 +2,28 @@
 title: Python modules
 date: 2018-03-08 10:50:38
 tags:
+categories: [机器学习和数据处理python备忘]
 ---
+### 方法默认参数是不可变对象
+```python
+>>> def add_end(L=[]):
+...     L.append('END')
+...     return L
+...
+>>> add_end()
+['END']
+>>> add_end()
+['END', 'END']
+```
+正确方法：
+```python
+def add_end(L=None):
+    if L is None:
+        L = []
+    L.append('END')
+    return L
+```
+
 ### 协程和异步io
 
 ### deque GIL线程安全的 list不安全

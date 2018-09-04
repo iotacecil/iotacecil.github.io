@@ -2,6 +2,7 @@
 title: Apriori_FP
 date: 2018-03-24 09:43:42
 tags: [ml]
+categories: [机器学习和数据处理python备忘]
 ---
 
 ## Apriori 算法

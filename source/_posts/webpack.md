@@ -2,6 +2,7 @@
 title: webpack
 date: 2018-04-11 23:55:05
 tags:
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 1. npm init 生成package.json文件
 2. npm i webpack

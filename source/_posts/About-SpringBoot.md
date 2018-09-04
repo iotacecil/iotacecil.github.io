@@ -2,7 +2,7 @@
 title: About SpringBoot
 date: 2018-03-06 07:51:17
 tags: [java]
-category: java
+category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 ## spring
 ### 自动装配`context.getBean(.class)`获取对象

@@ -2,6 +2,7 @@
 title: 原子性 可见性 有序性
 date: 2018-05-07 20:40:21
 tags: [java]
+category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 # 原子性： 互斥 同一时间只有一个线程操作
 ## atomic

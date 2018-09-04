@@ -2,6 +2,7 @@
 title: go
 date: 2018-08-27 14:02:17
 tags:
+category: [go语言]
 ---
 ### 对象 没有继承和多态 只有封装 只有struct
 构造

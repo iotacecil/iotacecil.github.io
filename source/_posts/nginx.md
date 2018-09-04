@@ -2,6 +2,7 @@
 title: 'nginx'
 date: 2018-04-02 13:18:31
 tags:
+category: [JVMlinux常用备注nginxredis配置]
 ---
 
 # Nginx

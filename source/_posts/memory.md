@@ -2,6 +2,7 @@
 title: 操作系统+内存知识
 date: 2018-03-05 20:43:15
 tags: [os,memory]
+category: [cpp学习操作系统]
 ---
 ### Windows API让cpu使用率划出一条直线
 一个时钟周期可以执行多少条指令？ CPU流水线？

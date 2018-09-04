@@ -1,7 +1,8 @@
 ---
-title: DDB
+title: 数据库锁
 date: 2018-03-16 15:31:34
 tags:
+categories: [数据库dockerHadoop微服务]
 ---
 隔离级别是对一致性的破坏。
 事务之间的Happen-before关系：4种 【读写，写读，读读】，写写

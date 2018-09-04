@@ -2,6 +2,7 @@
 title: JVM
 date: 2018-04-23 21:21:18
 tags:
+category: [JVMlinux常用备注nginxredis配置]
 ---
 
 ### javap 字节码指令

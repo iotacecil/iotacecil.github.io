@@ -2,6 +2,7 @@
 title: mySQL
 date: 2018-04-08 18:48:55
 tags:
+categories: [数据库dockerHadoop微服务]
 ---
 ## mybatis逆向工程`generatorConfig.xml`
 

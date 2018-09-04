@@ -2,6 +2,7 @@
 title: 前端性能优化
 date: 2018-04-12 21:29:48
 tags: [js]
+category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 > 谷歌 PageSpeed团队的测试表明，30~50 KB（压缩后）是每个 JavaScript 文件大小的合适范围：既大到了能够减少小文件带来的网络延迟，还能确保递增及分层式的执行。
 

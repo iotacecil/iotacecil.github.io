@@ -2,6 +2,7 @@
 title: java8
 date: 2018-06-06 14:18:51
 tags:
+category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 其它库Guava，Apache Commons Collections ,ambdaj
 
