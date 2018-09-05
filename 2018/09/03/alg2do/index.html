@@ -80,17 +80,17 @@
 
 
 
-<meta name="description" content="106 中序+后序建树698 将数组分成sum相等的k份？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种239Monotonic queue 前后可以修改o(1)，并且可以随机访问维护一个单调递减的序列，读一个窗口输出单调队列的first 818 A加速，R掉头并减速，到指定位置最少需要多少条指令15 3sum=0 荷兰国旗写法3指针1p：从0~len-2，3个数的和 右边至少留">
+<meta name="description" content="前序中序构造二叉树A BDEG CFDBGE A CF1234567891011121314public TreeNodeT&amp;lt;Character&amp;gt; createTree(String preOrder,String inOrder)&amp;#123;    if(preOrder.isEmpty())return null;    char rootVal = preOrder.charAt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ToDoAgain">
 <meta property="og:url" content="http://iotaa.xyz/2018/09/03/alg2do/index.html">
 <meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="106 中序+后序建树698 将数组分成sum相等的k份？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种239Monotonic queue 前后可以修改o(1)，并且可以随机访问维护一个单调递减的序列，读一个窗口输出单调队列的first 818 A加速，R掉头并减速，到指定位置最少需要多少条指令15 3sum=0 荷兰国旗写法3指针1p：从0~len-2，3个数的和 右边至少留">
+<meta property="og:description" content="前序中序构造二叉树A BDEG CFDBGE A CF1234567891011121314public TreeNodeT&amp;lt;Character&amp;gt; createTree(String preOrder,String inOrder)&amp;#123;    if(preOrder.isEmpty())return null;    char rootVal = preOrder.charAt">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.295Z">
+<meta property="og:updated_time" content="2018-09-05T13:55:28.254Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ToDoAgain">
-<meta name="twitter:description" content="106 中序+后序建树698 将数组分成sum相等的k份？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种239Monotonic queue 前后可以修改o(1)，并且可以随机访问维护一个单调递减的序列，读一个窗口输出单调队列的first 818 A加速，R掉头并减速，到指定位置最少需要多少条指令15 3sum=0 荷兰国旗写法3指针1p：从0~len-2，3个数的和 右边至少留">
+<meta name="twitter:description" content="前序中序构造二叉树A BDEG CFDBGE A CF1234567891011121314public TreeNodeT&amp;lt;Character&amp;gt; createTree(String preOrder,String inOrder)&amp;#123;    if(preOrder.isEmpty())return null;    char rootVal = preOrder.charAt">
 
 
 
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
-                2018-09-04
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-05T21:55:28+08:00">
+                2018-09-05
               </time>
             
           </span>
@@ -392,7 +392,8 @@
       
 
       
-        <h3 id="106-中序-后序建树"><a href="#106-中序-后序建树" class="headerlink" title="106 中序+后序建树"></a>106 中序+后序建树</h3><h3 id="698-将数组分成sum相等的k份"><a href="#698-将数组分成sum相等的k份" class="headerlink" title="698 将数组分成sum相等的k份"></a>698 将数组分成sum相等的k份</h3><h3 id="？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种"><a href="#？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种" class="headerlink" title="？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种"></a>？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种</h3><h3 id="239"><a href="#239" class="headerlink" title="239"></a>239</h3><p>Monotonic queue 前后可以修改o(1)，并且可以随机访问<br>维护一个单调递减的序列，读一个窗口输出单调队列的first</p>
+        <h3 id="前序中序构造二叉树"><a href="#前序中序构造二叉树" class="headerlink" title="前序中序构造二叉树"></a>前序中序构造二叉树</h3><p>A BDEG CF<br>DBGE A CF<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> TreeNodeT&lt;Character&gt; <span class="title">createTree</span><span class="params">(String preOrder,String inOrder)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(preOrder.isEmpty())<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">char</span> rootVal = preOrder.charAt(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">int</span> leftLen = inOrder.indexOf(rootVal);</span><br><span class="line">    TreeNodeT&lt;Character&gt; root = <span class="keyword">new</span> TreeNodeT&lt;Character&gt;(rootVal);</span><br><span class="line">    root.left = createTree(</span><br><span class="line">            preOrder.substring(<span class="number">1</span>,<span class="number">1</span>+leftLen),</span><br><span class="line">            inOrder.substring(<span class="number">0</span>,leftLen));</span><br><span class="line"></span><br><span class="line">    root.right = createTree(</span><br><span class="line">            preOrder.substring(<span class="number">1</span>+leftLen),</span><br><span class="line">            inOrder.substring(leftLen+<span class="number">1</span>));</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="106-中序-后序建树"><a href="#106-中序-后序建树" class="headerlink" title="106 中序+后序建树"></a>106 中序+后序建树</h3><h3 id="698-将数组分成sum相等的k份"><a href="#698-将数组分成sum相等的k份" class="headerlink" title="698 将数组分成sum相等的k份"></a>698 将数组分成sum相等的k份</h3><h3 id="？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种"><a href="#？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种" class="headerlink" title="？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种"></a>？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种</h3><h3 id="239"><a href="#239" class="headerlink" title="239"></a>239</h3><p>Monotonic queue 前后可以修改o(1)，并且可以随机访问<br>维护一个单调递减的序列，读一个窗口输出单调队列的first</p>
 <h3 id="818-A加速，R掉头并减速，到指定位置最少需要多少条指令"><a href="#818-A加速，R掉头并减速，到指定位置最少需要多少条指令" class="headerlink" title="818 A加速，R掉头并减速，到指定位置最少需要多少条指令"></a>818 A加速，R掉头并减速，到指定位置最少需要多少条指令</h3><h3 id="15-3sum-0-荷兰国旗写法3指针"><a href="#15-3sum-0-荷兰国旗写法3指针" class="headerlink" title="15 3sum=0 荷兰国旗写法3指针"></a>15 3sum=0 荷兰国旗写法3指针</h3><p>1p：从0~len-2，3个数的和 右边至少留两个数 sum=0-nums[i]转化成2sum问题<br>去重：当num[i]=num[i-1]:continue<br>另外两个指针从1p往后从len-1往前。<br>去重：预判：nums[low]=nums[low+1]:low++;nums[high]=nums[high-1]:high–;</p>
 <h3 id="3-连续最长不重复子序列"><a href="#3-连续最长不重复子序列" class="headerlink" title="?3 连续最长不重复子序列"></a>?3 连续最长不重复子序列</h3><p>两指针i从左向右遍历到最后<br>j指示i之前不重复的最高位置。<br>i-j+1为当前最长结果</p>
 <h3 id="409-string中字符组成回文串的最大长度"><a href="#409-string中字符组成回文串的最大长度" class="headerlink" title="?409 string中字符组成回文串的最大长度"></a>?409 string中字符组成回文串的最大长度</h3><p>1.开int[128]，直接用int[char]++计数<br>2.奇数-1变偶数&amp;(~1)<br>3.判断奇数(&amp;1)&gt;0</p>
@@ -519,7 +520,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -574,7 +575,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#106-中序-后序建树"><span class="nav-number">1.</span> <span class="nav-text">106 中序+后序建树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#698-将数组分成sum相等的k份"><span class="nav-number">2.</span> <span class="nav-text">698 将数组分成sum相等的k份</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种"><span class="nav-number">3.</span> <span class="nav-text">？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#239"><span class="nav-number">4.</span> <span class="nav-text">239</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#818-A加速，R掉头并减速，到指定位置最少需要多少条指令"><span class="nav-number">5.</span> <span class="nav-text">818 A加速，R掉头并减速，到指定位置最少需要多少条指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-3sum-0-荷兰国旗写法3指针"><span class="nav-number">6.</span> <span class="nav-text">15 3sum=0 荷兰国旗写法3指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-连续最长不重复子序列"><span class="nav-number">7.</span> <span class="nav-text">?3 连续最长不重复子序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#409-string中字符组成回文串的最大长度"><span class="nav-number">8.</span> <span class="nav-text">?409 string中字符组成回文串的最大长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#！30-字典中单词连续出现在字符串中的位置-AC自动机（？"><span class="nav-number">9.</span> <span class="nav-text">！30 字典中单词连续出现在字符串中的位置 AC自动机（？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#139-word-break"><span class="nav-number">10.</span> <span class="nav-text">139 word break</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#55-jump-game"><span class="nav-number">11.</span> <span class="nav-text">55 ?jump game</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#45-jump-game最少跳跃次数"><span class="nav-number">12.</span> <span class="nav-text">45 ?jump game最少跳跃次数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前序中序构造二叉树"><span class="nav-number">1.</span> <span class="nav-text">前序中序构造二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#106-中序-后序建树"><span class="nav-number">2.</span> <span class="nav-text">106 中序+后序建树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#698-将数组分成sum相等的k份"><span class="nav-number">3.</span> <span class="nav-text">698 将数组分成sum相等的k份</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种"><span class="nav-number">4.</span> <span class="nav-text">？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#239"><span class="nav-number">5.</span> <span class="nav-text">239</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#818-A加速，R掉头并减速，到指定位置最少需要多少条指令"><span class="nav-number">6.</span> <span class="nav-text">818 A加速，R掉头并减速，到指定位置最少需要多少条指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-3sum-0-荷兰国旗写法3指针"><span class="nav-number">7.</span> <span class="nav-text">15 3sum=0 荷兰国旗写法3指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-连续最长不重复子序列"><span class="nav-number">8.</span> <span class="nav-text">?3 连续最长不重复子序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#409-string中字符组成回文串的最大长度"><span class="nav-number">9.</span> <span class="nav-text">?409 string中字符组成回文串的最大长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#！30-字典中单词连续出现在字符串中的位置-AC自动机（？"><span class="nav-number">10.</span> <span class="nav-text">！30 字典中单词连续出现在字符串中的位置 AC自动机（？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#139-word-break"><span class="nav-number">11.</span> <span class="nav-text">139 word break</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#55-jump-game"><span class="nav-number">12.</span> <span class="nav-text">55 ?jump game</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#45-jump-game最少跳跃次数"><span class="nav-number">13.</span> <span class="nav-text">45 ?jump game最少跳跃次数</span></a></li></ol></div>
             
 
           </div>
