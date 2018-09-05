@@ -4,10 +4,17 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### redis 10w OPS
+
+
+### Disruptor
+
 ### PV和QPS估计
 每天300w PV 80%会在24小时的20%的时间里
 $3000 000\*0.8)/(86400\*0.2*)=139(QPS)$
 如果一台机器QPS是58，则需要139/58=3台机器
+
+
 
 ### 并发模型
 1.进程&线程Apache C10K问题

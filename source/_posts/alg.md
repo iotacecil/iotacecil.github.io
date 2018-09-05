@@ -4,36 +4,7 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
 ---
-### Celebrity Problem 所有人都认识他但是他不认识所有人
-方法1：找全是0的行，O(n^2)
-方法2： 如果A认识B，则A肯定不是名人 O(N)；A不认识B，则A可能是名人，B肯定不是名人
-A,B不认识，重新入栈A
-![celebrity.jpg](/images/celebrity.jpg)
-A,C认识，入栈C
-![celebrity2.jpg](/images/celebrity2.jpg)
-![celebrity3.jpg](/images/celebrity3.jpg)
-方法3：双指针
-```java
-int findCele(int[][]Matrix){
-    int n = Matrix.length;
-    int a = 0;
-    int b = n-1;
-    while (a<b){
-        if(Matrix[a][b]==1){
-            a++;
-        }
-        else{
-            b--;
-        }
-    }
-    for (int i = 0; i <n ; i++) {
-        //不是自己，但是别人不认识他，或者他认识别人
-        if(i!=a&&Matrix[i][a]!=1||Matrix[a][i]==1)
-            return -1;
-    }
-    return a;
-}
-```
+
 
 ### 排序数组中小于target的
 2 4 6 8 9 target=14
@@ -58,23 +29,19 @@ int findCele(int[][]Matrix){
 ？递归写法
 
 ### 896有正负的数列判断单调
+用首尾判断up/down，中间相邻遍历判断up/down和之前不符return false
+20ms
 ```java
- public boolean isMonotonic(int[] A) {
-        if(A==null||A.length<1)return false;
-        int n = A.length;
-        if(n==1)return true;
-        int flag = 1;
-       for(int i=1;i<n-1;i++){
-           if(A[i]==A[i-1])continue;
-           flag = A[i]-A[i-1];
-          while(i<n-1){
-              while(i<n-1&&A[i+1]-A[i]==0)i++;
-              if(i<n-1&&(A[i+1]-A[i])*flag<0)return false;
-              i++;
-          }   
-       }
-        return true;
-    }
+public boolean isMonotonic(int[] A) {
+    if (A.length==1) return true;
+    int n=A.length;
+    //关键
+    boolean up= (A[n-1]-A[0])>0;
+    for (int i=0; i<n-1; i++)
+        if (A[i+1]!=A[i] && (A[i+1]-A[i]>0)!=up) 
+            return false;
+    return true;
+}
 ```
 
 ### 14 最长公共前缀
@@ -92,61 +59,6 @@ public String longestCommonPrefix(String[] strs) {
 }
 ```
 
-
-
-
-
-### lc205区间最小数LogN 查询时间
-```java
-class segMinNode{
-    public int start,end,min;
-    public segMinNode left,right;
-    public segMinNode(int start,int end,int min){
-        this.start = start;
-        this.end = end;
-        this.min = min;
-        this.left = null;
-        this.right = null;
-    }
-}
-private segMinNode build(int[] A,int start,int end){
-    if(start>end)return null;
-    if(start == end)return new segMinNode(start,end,A[start]);
-    segMinNode root = new segMinNode(start,end,A[0]);
-    int mid = (start+end)/2;
-    root.left = build(A,start,left);
-    root.right = build(A,left+1,end);
-    root.min = Math.min(root.left.min,root.right.min);
-    return root;
-}
-public int query(segMinNode root,int start,int end){
-    if(start == root.start&&root.end ==end)return root.min;
-    int mid = (root.start+root.end)/2;
-    int left = Integer.MAX_VALUE,right = Integer.MAX_VALUE;
-    //查询区间<=mid，肯定全在左边
-    if(end<=mid){
-        left = query(root.left,start,end);
-    }
-    if(mid<end){
-        //查询区间开始在mid或者mid左边，必须查左子树
-        if(start<=mid){
-            left = query(root.left,start,mid);
-            right = query(root.right,mid+1,end);
-        }else{
-            right = query(root.right,start,end);
-        }
-    }
-    return Math.min(left,right);
-}
-public List<Integer> intervalMinNumber(int[] A, List<Interval> queries) {
-    segMinNode root = build(A,0,A.length-1);
-    List<Integer> rst = new ArrayList<>(queries.size());
-    for(Interval in:queries){
-        rst.add(query(root, in.start,in.end ));
-    }
-    return rst;
-}
-```
 
 
 
@@ -183,7 +95,7 @@ private int minReversal(String s){
 ```
 
 
-### 字符串匹配暴力
+### 28字符串indexOf匹配暴力
 ![backup](/images/backup.jpg)
 方法1是维持一个pattern长度的buffer
 ![substring.jpg](/images/substring.jpg)
@@ -193,28 +105,301 @@ ADA B RAC
 ADA[C]R i-=j
  ADACR
 ```
+
+#### Boyer-Moore 74% 5ms
+alg4
+1.构建right表示target中字符的最右位置是NEEDLE
+![boyerright.jpg](/images/boyerright.jpg)
+2.source从左到右扫描，target从右向左
+如果出现不匹配T是target里没有的，i到j+1
+如果出现不匹配N是target里的，则用right，将target里N的位置和它对齐
+![boyerright2.jpg](/images/boyerright2.jpg)
+当前j=3,right['N'] = 0,skip=3
+第三种情况，至少保证i不能回退
+![boyer3.jpg](/images/boyer3.jpg)
+
+```java
+ public int strStr(String source, String target) {
+    if(source.length()<target.length())return -1;
+        if(target==null||target.length()==0)return 0;
+        int R = 256;
+        int[] right = new int[R];
+        for (int c = 0; c < R; c++)
+        right[c] = -1;
+        for (int j = 0; j < target.length(); j++)
+            right[target.charAt(j)] = j;
+        int m = target.length();
+        int n = source.length();
+        int skip;
+        for (int i = 0; i <= n - m; i += skip) {
+            skip = 0;
+            for (int j = m-1; j >= 0; j--) {
+                if (target.charAt(j) != source.charAt(i+j)) {
+                    skip = Math.max(1, j - right[source.charAt(i+j)]);
+                    break;
+                }
+            }
+            if (skip == 0) return i;
+        }
+        return -1;
+}
+```
+
+#### RabinKarp 31% 8ms
+![rabin-karp](/images/rabin-karp.jpg)
+![ranbinmod.jpg](/images/ranbinmod.jpg)
+线性求mod
+```java
+//    private long longRandomPrime(){
+//        BigInteger prime = BigInteger.probablePrime(31,new Random());
+//        return prime.longValue();
+//    }
+int R = 256;
+long q;
+
+private long hash(String key, int m) {
+    long h = 0;
+    for (int j = 0; j < m; j++)
+        h = (R * h + key.charAt(j)) % q;
+    return h;
+}
+private boolean check(String source,String target, int i) {
+    for (int j = 0; j <target.length() ; j++)
+        if (target.charAt(j) != source.charAt(i + j))
+            return false;
+    return true;
+}
+public  int searchRabinKarp(String source,String target){
+    if(source.length()<target.length())return -1;
+    if(target==null||target.length()==0)return 0;
+    int R = 256;
+    int m = target.length();
+    int n = source.length();
+    long RM = 1;
+    q = 1877124611;
+    for (int i = 1; i <=m-1 ; i++) {
+        RM = (R * RM) % q;
+    }
+    long patHash = hash(target,m);
+    long txtHash = hash(source, m);
+   
+
+    if ((patHash == txtHash) && check(source,target, 0))
+        return 0;
+
+    // check for hash match; if hash match, check for exact match
+    for (int i = m; i < n; i++) {
+        // Remove leading digit, add trailing digit, check for match.
+        txtHash = (txtHash + q - RM*source.charAt(i-m) % q) % q;
+        txtHash = (txtHash*R + source.charAt(i)) % q;
+
+        // match
+        int offset = i - m + 1;
+        if ((patHash == txtHash) && check(source, target,offset))
+            return offset;
+    }
+
+    // no match
+    return -1;
+
+}
+```
+
+#### 187 rolling-hash DNA序列中出现2次以上长为10的子串
+//todo
+
 双指针
 i的位置是txt已匹配过的最后位置
+15% 13ms
 ```java
-public static int search(String pat,String txt){
-    int j,M = pat.length();
-    int i,N = txt.length();
-    for(int i =0,j=0;i<N&&j<M;j++){
-        if(txt.charAt(i) == pat.charAt(j))j++;
-        else{i-=j;j=0;}
+public int strStr(String source, String target) {
+    if(source.length()<target.length())return -1;
+    if(source==null||source.length()==0)return 0;
+    int i,N = source.length();
+    int j,M = target.length();
+    for (i = 0,j=0; i <N&&j<M ; i++) {
+        if(source.charAt(i)==target.charAt(j))j++;
+        else{
+            i-=j;
+            j=0;
+        }
     }
     if(j==M)return i-M;
     else return -1;
 }
 ```
+
+按indexOf简化 43% 7ms
+```java
+public int strStr(String source, String target) {
+if(source.length()<target.length())return -1;
+    if(target==null||target.length()==0)return 0;
+    int lens = source.length();
+    int tar = target.length();
+    char[] targetArr = target.toCharArray();
+    char[] sourceArr = source.toCharArray();
+    char first = targetArr[0];
+    int max = lens-tar;
+    for (int i = 0; i <= max ; i++) {
+        if(sourceArr[i]!=first){
+            while (++i<=max&&sourceArr[i]!=first);
+        }
+        if(i<=max){
+            int j = i+1;
+            int end = j+tar-1;
+            for (int k = 1; j <end&&sourceArr[j]==targetArr[k] ; k++,j++) ;
+            if(j == end)return i;
+        }
+    }
+    return -1;
+}
+```
+
+java `indexOf`实现
+- 最长公共前缀：indexOf
+73% 5ms
+```java
+public int strStr(String source, String target) {
+   return indexOf( source.toCharArray(),0,source.length(),target.toCharArray(),0,target.length(),0);
+}
+```
+
+{% fold %}
+```java
+/*
+@param source:左值（被查找）
+@param count长度
+*/
+ static int indexOf(char[] source, int sourceOffset, int sourceCount,
+            char[] target, int targetOffset, int targetCount,
+            int fromIndex) {
+        // 查找位置>=左值长度
+        if (fromIndex >= sourceCount) {
+            //traget空？返回左值长度
+            return (targetCount == 0 ? sourceCount : -1);
+        }
+        if (fromIndex < 0) {
+            fromIndex = 0;
+        }
+        // 右值为0，返回查找位置
+        if (targetCount == 0) {
+            return fromIndex;
+        }
+
+        char first = target[targetOffset];
+        //最后一个匹配的下标，至少减去右值的长度
+        int max = sourceOffset + (sourceCount - targetCount);
+
+        for (int i = sourceOffset + fromIndex; i <= max; i++) {
+            /* Look for first character. */
+            if (source[i] != first) {
+                while (++i <= max && source[i] != first);
+            }
+
+            /* Found first character, now look at the rest of v2 */
+            if (i <= max) {
+                int j = i + 1;
+                int end = j + targetCount - 1;
+                for (int k = targetOffset + 1; j < end && source[j]
+                        == target[k]; j++, k++);
+
+                if (j == end) {
+                    /* Found whole string. */
+                    return i - sourceOffset;
+                }
+            }
+        }
+        return -1;
+    }
+```
+{% endfold %}
  
+### KMP-Knuth-Morris-Pratt 适合查找自我重复的字符串
+基于DFA
+![DFA.jpg](/images/DFA.jpg)
+用一个dfa[][]记录j回退多远
+1对target构建dfa
+构造DFA的时间是O（MR）的，可以对每个状态设置一个匹配/非匹配去掉R
+9ms 24%
+```java
+public static int serachByKMP(String source,String target){
+    if(source.length()<target.length())return -1;
+    if(target==null||target.length()==0)return 0;
+    int M = target.length();
+    int N = source.length();
+    int[] dfa = new int[M];
+    int k = 0;
+    dfa[0] =0;
+    //For the pattern “AAACAAAAAC”,
+    //lps[] is [0, 1, 2, 0, 1, 2, 3, 3, 3, 4]
+    for (int i = 1; i < M; i++) {
+        while (k>0&&target.charAt(k)!=target.charAt(i))
+            k = dfa[k-1];
+        if(target.charAt(k)==target.charAt(i)){
+            k++;
+        }
+        dfa[i]=k;
+    }
+    int q = 0;
+    //[0, 0, 0, 1, 0]
+    //"mississippi", 
+    // "issip"     q=4 i=5 dfa[3]=1
+    // "issip"     q=1 i=5
+    //    "issip" 
+    for (int i = 0; i <N ; i++) {
+        while(q>0&&target.charAt(q)!=source.charAt(i))
+            q = dfa[q-1];
+        if(target.charAt(q)==source.charAt(i))
+            q++;
+        if(q==M)
+            return i-M+1;
+    }
+    return -1;
+}
+```
+![dfaconstruction.jpg](/images/dfaconstruction.jpg)
+![KMPDFA.jpg](/images/KMPDFA.jpg)
+2.对source遍历一遍dfa
+12.44% 39ms
+```java
+public int strStr(String source, String target) {
+ if(source.length()<target.length())return -1;
+    if(target==null||target.length()==0)return 0;
+    int R = 256;
+    int M = target.length();
+    int[][] dfa = new int[R][M];
+    //构建DFA
+    dfa[target.charAt(0)][0] =1;
+    for(int X = 0,j=1;j<M;j++){
+        for (int c = 0; c < R; c++)
+            dfa[c][j] = dfa[c][X];//复制上一列匹配失败
+        dfa[target.charAt(j)][j] = j+1;//更新匹配成功
+        X = dfa[target.charAt(j)][X];//重启状态
+    }
+    //模拟一遍DFA
+    int i,j,N = source.length();
+    for (i = 0,j=0; i  < N&&j< M; i++) {
+        j = dfa[source.charAt(i)][j];
+    }
+    if(j==M) return i-M;
+    else return -1;
+}
+```
+文本串T某个前缀的后缀是模式串P的前缀。取最长的后缀。
+1 子序列 不连续 2 字串 连续
+KMP:getIndexOf
+d之前【最长前缀】和【最长后缀】的匹配长度
+(abcabc)d 前缀：(a->ab->abc->...->abcab) 后缀:(c->bc->abc->...->bcabc)
+所以最长匹配是3：abc,记录在d位置上
+int[]next =  f("abcabcd")={-1,0,0,1，2，3}
+关键加速求解匹配
 
 ### 127 bfs最短单词转换路径
 //todo双向bfs
 
 注意marked和dfs的不同，
 单纯bfs访问wordlist里每个单词1.79% 1097ms
-//list.size()*cur.length()
+//`list.size()*cur.length()`
 {% fold %}
 ```java
 private boolean dif(String difword,String cur){
@@ -500,6 +685,8 @@ public String mostCommonWord(String paragraph, String[] banned) {
 
 
 ### 743 从一个node广播，让所有节点收到最多要多久 单源最短路径
+> time[[2,1,1],[2,3,1],[3,4,1]] times[i] = (u, v, w) u到v花费w
+> N个节点，从K发送
 dijkstra如果用heap可以从$N^2$->$NlogN+E$ O(N+E)
 Bellman-Ford O(NE)稠密图不好 空间O(N)
 
@@ -1408,92 +1595,7 @@ dp[0~n-2][m]和dp[n][0~m-2]都是非法值，为了取min设置MAX_VALUE
 dp[i][j]=Math.max(1,Math.min(dp[i+1][j],dp[i][j+1])-dungeon[i][j]);
 ```
 
-### lt 254 2个鸡蛋从n层楼中找到可以丢碎鸡蛋的楼层，最少几次
-1.只能从低往高试，碎了鸡蛋就-1
-2.第一次选择楼层n，再向上跳n-1层，再n-2层
-假如100层的楼，
-$n+(n-1)+(n-2)+...+1>=100$->$(n+1)n/2>=100$ ->n=14
-第一次从n层楼投没破，则需要再跳一段再投，cnt++，
-当在 n层破了，则需要搜索1~n-1层。
-为了平衡向上跳一大格和单步搜索，
-**minimize max regret**
-所以每次往上跳一大格应该缩短破了之后搜索的间隔，弥补一下cnt的计算。
-每次跳一大格，减少单步搜索的次数。
 
-第一次跳到14，如果没破，搜索1~13，在13层破，则最坏情况14步
-如果最坏情况跳了14步到达100层破了，跳了14步。
-
-假如10层：策略：
-$(1+n)\*n/2>=10$
-```python
-print(scipy.optimize.fsolve(lambda x: x**2 + 2*x - 20, 0))
-```
-输出3.58所以4,即4步就能把10层楼遍历掉 4->7->9->10
-
-```java
-if(n==1||n==2)return n;
-long ans = 0;
-//死循环之后外面不需要return语句了
-for(int i =1;;i++){
-    ans+=(long)i;
-    if(ans>=(long)n)
-        return i;
-}
-```
-
-### 887 K个蛋，N层楼
-drop(9,3)9层楼3个鸡蛋，在6层落下碎了继续[0~5]层drop(5,2),没碎继续[6~9]层drop(3,3)
-![eggdrop.jpg](/images/eggdrop.jpg)
-![eggdrop2.jpg](/images/eggdrop2.jpg)
-超时原因 复杂度O(K\*N^2)
-{% fold %}
-超时递归
-```java
-int eggDrop(int k,int n){
-    //1层/0层
-    if(n==0||n==1)return n;
-    if(k==1)return n;
-    int min = Integer.MAX_VALUE;
-    //[0~5]6[7~9]
-    for(int i =1;i<=n;i++){
-        int res = Math.max(eggDrop(k-1,i-1),eggDrop(k,n-i));
-        min = Math.min(res,min);
-    }
-    return min+1;
-}
-```
-超时dp
-![eggdropdp.jpg](/images/eggdropdp.jpg)
-初始化第一行（鸡蛋）和前两列（楼）
-```java
-public int superEggDrop(int K, int N) {
-    int[][] dp= new int[K+1][N+1];
-    //有鸡蛋 两列楼
-    for(int i=1;i<=K;i++){
-        dp[i][0] = 0;
-        dp[i][1] = 1;
-    }
-    //1个鸡蛋 有楼 一列行 没鸡蛋也没楼第一行默认0
-    for(int i =1;i<=N;i++){
-        dp[1][i] = i;
-    }
-    int min = Integer.MAX_VALUE;
-    //鸡蛋
-    int i,j;
-    for( i =2;i<=K;i++){
-       
-        for( j =2;j<=N;j++){
-             dp[i][j] = Integer.MAX_VALUE;
-            for(int x = 1;x<=j;x++){
-                int res = 1+Math.max(dp[i-1][x-1],dp[i][j-x]);
-                dp[i][j] =Math.min(dp[i][j],res);
-            }
-        }
-    }
-    return dp[K][N];
-}
-```
-{% endfold %}
 
 ### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
 226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
@@ -2132,55 +2234,7 @@ rst[1]=j;
 ```
 
 ---
-### 307 求数组范围和，并且带更新元素
-#### Binary Index Tree
-与dp不同，dp[i]存储了前i个的总和 e只存部分
-[visualgo可视化](https://visualgo.net/bn/fenwicktree)
-1.update树
-每个叶子节点的父节点的计算方法i+lowbit(i)
-1的父节点=001+001=010
-2的父节点=010+010=100==4
-4的父节点=100+100 = 1000==8
-***
-最低位：lowbit(5) = 101&((010+1)==011)=001
-5的父节点=101+001=110==6
-沿着path向上更新，最多只会更新logn(树高个节点)
-```java
-void update(int i,int val){
-    int dif = val-nums[i];
-    nums[i++]=val;
-    while(i<e.length){
-        e[i]+=dif;
-        i+=(i&-i);
-    }
-}
-```
-![BIT](/images/BIT.jpg)
-2.sum树 前7个元素的和=7+11+10
-```java
-int query(int i){
-    int sum = 0;
-    while(i>0){
-        sum+=e[i];
-        i-=(i&-i);
-    }
-    return sum;
-}
-int rangeSum(int i,int j){
-    return query(j+1)-query(i);
-}
-```
 
-| k=末尾零个数 | 二进制末尾有k个0则e[i] 是2^k个元素的和 |
-| ---------| ------------------------ |
-| 1 -> 1   | e[1]=a[1]                |
-| 2 -> 10  | e[2]=a[1]+a[2]           |
-| 3 -> 11  | e[3]=a[3]                |
-| 4 -> 100 | e[4]=a[1]+a[2]+a[3]+a[4] = e[2]+e[3]+a[4] |
-| 5 -> 101 | e[5]=a[5] |
-| 6 -> 110 | e[6] = e[5]+e[6] |
-| 7 -> 111 | e[7] = a[7] |
-| 8 -> 1000 | e[8] = e[4]+e[6]+e[7]+a[8] |
 
 #### ？？？315 输出数组每个位置后有多少个数字比它小
 
@@ -2797,15 +2851,7 @@ for(int i =1;i<4;i++){
 {% endfold %}
 
 ---
-### KMP
-文本串T某个前缀的后缀是模式串P的前缀。取最长的后缀。
-1 子序列 不连续 2 字串 连续
-KMP:getIndexOf
-d之前【最长前缀】和【最长后缀】的匹配长度
-(abcabc)d 前缀：(a->ab->abc->...->abcab) 后缀:(c->bc->abc->...->bcabc)
-所以最长匹配是3：abc,记录在d位置上
-int[]next =  f("abcabcd")={-1,0,0,1，2，3}
-关键加速求解匹配
+
 
 ---
 ### ?90 有重复的subset[1,2,2,2]

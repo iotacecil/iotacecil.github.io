@@ -578,66 +578,7 @@ put putAll
 
 > in-place 原地算法 删除重复元素 用!=略过并用unique的覆盖
 
-- 最长公共前缀：indexOf
-> if else语句中，是不能直接用break和continue的???
 
-```java
-//[2]不一样
- if (source[i] != first) {
- 	//[3]也不一样，
-                while (++i <= max && source[i] != first);
-            } 	
-     //直到下一个匹配的继续for中内容
-```
-
-```java
-/*
-@param source:左值（被查找）
-@param count长度
-*/
- static int indexOf(char[] source, int sourceOffset, int sourceCount,
-            char[] target, int targetOffset, int targetCount,
-            int fromIndex) {
-        // 查找位置>=左值长度
-        if (fromIndex >= sourceCount) {
-        	//traget空？返回左值长度
-            return (targetCount == 0 ? sourceCount : -1);
-        }
-        if (fromIndex < 0) {
-            fromIndex = 0;
-        }
-        // 右值为0，返回查找位置
-        if (targetCount == 0) {
-            return fromIndex;
-        }
-
-        char first = target[targetOffset];
-        //最后一个匹配的下标，至少减去右值的长度
-        int max = sourceOffset + (sourceCount - targetCount);
-
-        for (int i = sourceOffset + fromIndex; i <= max; i++) {
-            /* Look for first character. */
-            if (source[i] != first) {
-            	// 跳过这次循环？
-                while (++i <= max && source[i] != first);
-            }
-
-            /* Found first character, now look at the rest of v2 */
-            if (i <= max) {
-                int j = i + 1;
-                int end = j + targetCount - 1;
-                for (int k = targetOffset + 1; j < end && source[j]
-                        == target[k]; j++, k++);
-
-                if (j == end) {
-                    /* Found whole string. */
-                    return i - sourceOffset;
-                }
-            }
-        }
-        return -1;
-    }
-```
 
 
 

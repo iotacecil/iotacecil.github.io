@@ -4,11 +4,31 @@ date: 2018-04-08 18:48:55
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
-## mybatis逆向工程`generatorConfig.xml`
+### 开启mysql查询日志
+https://blog.csdn.net/leshami/article/details/39779225
+```sql
+show variables like '%general%';
++------------------+------------------------------+
+| Variable_name    | Value                        |
++------------------+------------------------------+
+| general_log      | ON                           |
+| general_log_file | /var/lib/mysql/localhost.log |
++------------------+------------------------------+
+set @@global.general_log=1;
+cat /var/lib/mysql/localhost.log
+/usr/sbin/mysqld, Version: 5.6.41 (MySQL Community Server (GPL)). started with:
+Tcp port: 3306  Unix socket: /var/lib/mysql/mysql.sock
+Time                 Id Command    Argument
+180905 18:24:55     5 Query select id,name from poi where lng between 116.3284 and 116.3296 and lat between 39.9682 and 39.9694
+180905 18:26:00     5 Query show variables like '%general%'
+180905 18:28:44     5 Query select * from poi where 1=1
+```
+
+### mybatis逆向工程`generatorConfig.xml`
 
 `explain`执行计划 ：select,update,insert,replace,delete
 
-## 分区
+### 分区
 `show plugins;`
 可以看到partition 则可以分区。逻辑上一个表，物理上多个文件中。
 在create table的最后加上`partition by hash(id) partitions 4`
@@ -50,7 +70,7 @@ alter table t2 ENGINE=ARCHIVE;
 password用char(32)
 `timestamp on update CURRENT_TIMESTAMP`字段会在表被修改时自动更新
 
-## Mybatis
+### Mybatis
 1. mybatis-3-config.dtd: 可以用`<properties>`导入配置文件
 在`<mappers>`里可以用`<package>`导入整个有mapper.xml的文件夹
 2. mybatis-3-mapper.dtd

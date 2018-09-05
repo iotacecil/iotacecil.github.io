@@ -4,6 +4,7 @@ date: 2018-05-04 20:34:13
 tags: [java,io]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+http://blog.jmecn.net/java-iostream/
 JNI java native interface 本地接口
 堆外内存：
 ByteBuffer

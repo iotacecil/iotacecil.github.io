@@ -4,6 +4,10 @@ date: 2018-04-17 17:06:31
 tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
+### 手机端查看页面
+`npm install http-server -g`
+`http-server`
+
 ### prototype
 http://prototypejs.org/learn/event-delegation.html
 

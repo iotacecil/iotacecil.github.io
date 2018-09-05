@@ -1,7 +1,7 @@
 ---
 title: 数据结构模板&模板题
 date: 2018-09-01 15:29:18
-tags:
+tags: [并查集,Trie,线段树]
 categories: [算法备忘]
 ---
 ### 连通分量
@@ -119,7 +119,6 @@ public int numIslands(char[][] grid){
             }
 
         }
-
     }
     return uf.count;
     }
@@ -242,9 +241,213 @@ https://leetcode.com/problems/implement-trie-prefix-tree/solution/
 ### 线段树Segment Tree
 定义：
 1.叶节点是输入
-2。每个内部节点是为不同问题设计的，叶节点的组合（和/最大值/最小值）
+2.每个内部节点是为不同问题设计的，叶节点的组合（和/最大值/最小值）
 ![segmentTree.jpg](/images/segmentTree.jpg)
 查找范围内的最小值/和 只需要Log(n)
+
+数组实现
+https://leetcode.com/articles/a-recursive-approach-to-segment-trees-range-sum-queries-lazy-propagation/
+
+### lc307 sum线段树
+> Given nums = [1, 3, 5]
+> sumRange(0, 2) -> 9
+> update(1, 2)
+> sumRange(0, 2) -> 8
+
+#### Binary Index Tree/ Fenwick Tree 34% 106ms
+O(logN) sum和update
+与dp不同，dp[i]存储了前i个的总和 e只存部分
+[visualgo可视化](https://visualgo.net/bn/fenwicktree)
+1.树
+```java
+class NumArray {
+
+    int[] nums=null;
+    int[] e = null;
+    int len =0;
+    public NumArray(int[] nums) {
+        len = nums.length;
+         e = new int[len+1];
+        this.nums = new int[len];
+        for(int i =0;i<len;i++){
+            update(i,nums[i]);
+        } 
+    }
+```
+每个叶子节点的父节点的计算方法i+lowbit(i)
+1的父节点=001+001=010
+2的父节点=010+010=100==4
+4的父节点=100+100 = 1000==8
+![BITFT.jpg](/images/BITFT.jpg)
+***
+最低位：lowbit(5) = 101&((010+1)==011)=001
+5的父节点=101+001=110==6
+沿着path向上更新，最多只会更新logn(树高个节点)
+```java
+void update(int i,int val){
+    int dif = val-nums[i];
+    nums[i++]=val;
+    while(i<e.length){
+        e[i]+=dif;
+        i+=(i&-i);
+    }
+}
+```
+![BITFT2.jpg](/images/BITFT2.jpg)
+![BIT](/images/BIT.jpg)
+2.sum树 前7个元素的和=7+11+10
+```java
+int query(int i){
+    int sum = 0;
+    while(i>0){
+        sum+=e[i];
+        i-=(i&-i);
+    }
+    return sum;
+}
+int rangeSum(int i,int j){
+    return query(j+1)-query(i);
+}
+```
+
+| k=末尾零个数 | 二进制末尾有k个0则e[i] 是2^k个元素的和 |
+| ---------| ------------------------ |
+| 1 -> 1   | e[1]=a[1]                |
+| 2 -> 10  | e[2]=a[1]+a[2]           |
+| 3 -> 11  | e[3]=a[3]                |
+| 4 -> 100 | e[4]=a[1]+a[2]+a[3]+a[4] = e[2]+e[3]+a[4] |
+| 5 -> 101 | e[5]=a[5] |
+| 6 -> 110 | e[6] = e[5]+e[6] |
+| 7 -> 111 | e[7] = a[7] |
+| 8 -> 1000 | e[8] = e[4]+e[6]+e[7]+a[8] |
+
+
+
+
+###  区间和查询305+修改307
+1.线段树用模板 59% 80ms
+```java
+class SegmentTreeNode {
+    int start, end;
+    SegmentTreeNode left, right;
+    int sum;
+
+    public SegmentTreeNode(int start, int end) {
+        this.start = start;
+        this.end = end;
+        this.left = null;
+        this.right = null;
+        this.sum = 0;
+    }
+}
+
+SegmentTreeNode root = null;
+private SegmentTreeNode build(int[] nums, int start, int end) {
+    if (start > end) {
+        return null;
+    } else {
+        SegmentTreeNode ret = new SegmentTreeNode(start, end);
+        if (start == end) {
+            ret.sum = nums[start];
+        } else {
+            int mid = start  + (end - start) / 2;
+            ret.left = build(nums, start, mid);
+            ret.right = build(nums, mid + 1, end);
+            ret.sum = ret.left.sum + ret.right.sum;
+        }
+        return ret;
+    }
+}
+public int query(SegmentTreeNode root, int start, int end) {
+    if (root.end == end && root.start == start) {
+        return root.sum;
+    } else {
+        int mid = root.start + (root.end - root.start) / 2;
+        if (end <= mid) {
+            return query(root.left, start, end);
+        } else if (start >= mid+1) {
+            return query(root.right, start, end);
+        }  else {
+            return query(root.right, mid+1, end) + query(root.left, start, mid);
+        }
+    }
+}
+void modify(SegmentTreeNode root, int pos, int val) {
+    if (root.start == root.end) {
+        root.sum = val;
+    } else {
+        int mid = (root.end + root.start) / 2;
+        if (pos <= mid) {
+            modify(root.left, pos, val);
+        } else {
+            modify(root.right, pos, val);
+        }
+        root.sum = root.left.sum + root.right.sum;
+    }
+}
+
+public NumArray(int[] nums) {
+    root = build(nums, 0, nums.length-1);
+}
+void update(int i, int val) {
+    modify(root, i, val);
+}
+public int sumRange(int i, int j) {
+    return query(root, i, j);
+}
+```
+ 
+2.用数组实现的线段树 太复杂就快3ms
+https://leetcode.com/problems/range-sum-query-mutable/solution/
+
+#### sqrt(n)复杂度拆分成sqrt份和 8% 308ms
+![sqrtrm.jpg](/images/sqrtrm.jpg)
+```java
+private int[] b;
+private int len;
+private int[] nums;
+public NumArray(int[] nums){
+    this.nums = nums;
+    double l = Math.sqrt(nums.length);
+    len = (int)Math.ceil(nums.length/l);
+    b = new int[len];
+    for (int i = 0; i < nums.length; i++) {
+        b[i/len]+=nums[i];
+    }
+}
+public int sumRange(int i,int j){
+    int sum = 0;
+    int startBlock = i/len;
+    int endBlock = i/len;
+    //在同一个区间里
+    if(startBlock == endBlock){
+        for (int k = i; k <= j ; k++) {
+            sum+=nums[k];
+
+        }
+    }else{
+        //start所在区间
+        //len =  3,start =0
+        for (int k = i; k <(startBlock+1)*len ; k++) {
+            sum += nums[k];
+        }
+        //1-2)
+        for (int k = startBlock+1; k <endBlock ; k++) {
+            sum += b[k];
+        }
+        for (int k = endBlock*len; k <j ; k++) {
+            sum += nums[k];
+        }
+    }
+    return sum;
+}
+public void update(int i,int val){
+    int bidx  = i/len;
+    b[bidx] = b[bidx]-nums[i]+val;
+    nums[i] = val;
+}
+```
+
 
 ### lt206区间求和
 
@@ -439,5 +642,56 @@ public void modify(SegmentTreeNode root, int index, int value) {
         modify(root.right,index,value);
     }
     root.max = Math.max(root.left.max,root.right.max);
+}
+```
+### lt205区间最小数LogN 查询时间
+```java
+class segMinNode{
+    public int start,end,min;
+    public segMinNode left,right;
+    public segMinNode(int start,int end,int min){
+        this.start = start;
+        this.end = end;
+        this.min = min;
+        this.left = null;
+        this.right = null;
+    }
+}
+private segMinNode build(int[] A,int start,int end){
+    if(start>end)return null;
+    if(start == end)return new segMinNode(start,end,A[start]);
+    segMinNode root = new segMinNode(start,end,A[0]);
+    int mid = (start+end)/2;
+    root.left = build(A,start,left);
+    root.right = build(A,left+1,end);
+    root.min = Math.min(root.left.min,root.right.min);
+    return root;
+}
+public int query(segMinNode root,int start,int end){
+    if(start == root.start&&root.end ==end)return root.min;
+    int mid = (root.start+root.end)/2;
+    int left = Integer.MAX_VALUE,right = Integer.MAX_VALUE;
+    //查询区间<=mid，肯定全在左边
+    if(end<=mid){
+        left = query(root.left,start,end);
+    }
+    if(mid<end){
+        //查询区间开始在mid或者mid左边，必须查左子树
+        if(start<=mid){
+            left = query(root.left,start,mid);
+            right = query(root.right,mid+1,end);
+        }else{
+            right = query(root.right,start,end);
+        }
+    }
+    return Math.min(left,right);
+}
+public List<Integer> intervalMinNumber(int[] A, List<Interval> queries) {
+    segMinNode root = build(A,0,A.length-1);
+    List<Integer> rst = new ArrayList<>(queries.size());
+    for(Interval in:queries){
+        rst.add(query(root, in.start,in.end ));
+    }
+    return rst;
 }
 ```

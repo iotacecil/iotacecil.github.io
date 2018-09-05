@@ -462,7 +462,7 @@ public Room getRoomById(
 ```
 
 10. @Configuration 加载类配置
-11. @Bean
+11. @Bean 标记的方法会在容器启动自动执行，并且创建的对象是单例的
 
 #### 跨域问题
 [cors](https://hectorguo.com/zh/cross-origin-solve/)
@@ -568,5 +568,3 @@ public class JavaConfig {
 
 
 
-### 2.0的坑
-1.server.context-path->server.servlet.context-path

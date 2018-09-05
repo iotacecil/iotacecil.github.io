@@ -4,6 +4,28 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### 查文件
+```
+find / -size 1500c，字符 c 表明这个要查找的文件的大小是以bytes为单位
+find / -amin -10 # 查找在系统中最后10分钟访问的文件
+find / -atime -2 # 查找在系统中最后48小时访问的文件
+find / -empty # 查找在系统中为空的文件或者文件夹
+find / -group cat # 查找在系统中属于 groupcat的文件
+find / -mmin -5 # 查找在系统中最后5分钟里修改过的文件
+find / -mtime -1 #查找在系统中最后24小时里修改过的文件
+find / -nouser #查找在系统中属于作废用户的文件
+find / -user fred #查找在系统中属于FRED这个用户的文件
+```
+
+`mysql -u root -p -h 192.168.3.109 -P 3306 -D lbs`
+
+### 软链接
+
+### 验证redis
+`ps-ef |grep redis`
+`netstat -antpl|grep redis`
+`redis-cli -h ip -p port ping`
+
 ### lsof 
 ```sh
 -a：列出打开文件存在的进程；

@@ -4,6 +4,26 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+### 前序中序构造二叉树
+A BDEG CF
+DBGE A CF
+```java
+public TreeNodeT<Character> createTree(String preOrder,String inOrder){
+    if(preOrder.isEmpty())return null;
+    char rootVal = preOrder.charAt(0);
+    int leftLen = inOrder.indexOf(rootVal);
+    TreeNodeT<Character> root = new TreeNodeT<Character>(rootVal);
+    root.left = createTree(
+            preOrder.substring(1,1+leftLen),
+            inOrder.substring(0,leftLen));
+
+    root.right = createTree(
+            preOrder.substring(1+leftLen),
+            inOrder.substring(leftLen+1));
+    return root;
+}
+```
+
 ### 106 中序+后序建树
 
 ### 698 将数组分成sum相等的k份

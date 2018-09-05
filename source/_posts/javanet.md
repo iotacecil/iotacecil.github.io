@@ -1475,62 +1475,7 @@ public Result<Boolean> dbTx() {
 Duplicate entry '1' for key 'PRIMARY'
 MySQLIntegrityConstraintViolationException:
 
-### 4.搭建redis服务器
 
-```shell
-cd /usr/local
-tar -zvxf 
-yum -y install gcc gcc-c++ libstdc++-devel
-make MALLOC=libc
-yum install tcl
-make test
-vi tests/integration/replication-2.tcl 1000->10000
-make install
-redis-server
-vi redis.conf
-    bind 127.0.0.1->0.0.0.0所有ip都能访问
-    :/dae
-    daemonize yes 允许后台执行
-redis-server ./redis.conf
-#Redis version=4.0.2, bits=64, commit=00000000, modified=0, pid=10217, just started
-ps -ef |grep redis
-#root     10218     1  0 10:42 ?        00:00:00 redis-server 0.0.0.0:6379
-redis-cli
-#给redis加密码
-vi redis.conf
-    :/requirepass
-     # requirepass foobared -> requirepass 123456
-#重启
-redis-cli
-    shutdown save
-    exit
-ps -ef | grep redis
-redis-server ./redis.conf
-redis-cli
-    auth 123456
-# 变成系统服务
-cd utils
-./install_server.sh
-# 配置文件位置
-    /usr/local/redis-4.0.2/redis.conf
-# log位置
-    /usr/local/redis-4.0.2/redis.log
-# data位置
-    /usr/local/redis-4.0.2/data
-# 可执行文件路径
-chkconfig --list |grep redis
-# redis_6379        0:关 1:关 2:开 3:开 4:开 5:开 6:关
-systemctl status redis_6379
-systemctl stop redis_6379
-systemctl start redis_6379
-ps -ef |grep redis
-# 改服务名
-vi /etc/init.d/redis_6379
-# ！打开防火墙
-firewall-cmd --zone=public --add-port=6379/tcp --permanent
-firewall-cmd --reload
-firewall-cmd --list-ports
-```
 
 ### 5.集成Redis
 ```xml
