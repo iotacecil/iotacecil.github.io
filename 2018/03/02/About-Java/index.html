@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/access.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/finalnoname.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/refnoname.jpg">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.255Z">
+<meta property="og:updated_time" content="2018-09-04T05:45:26.788Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About Java">
 <meta name="twitter:description" content="打印整数的二进制表示0x8000000 表示100000…0 123456int a = -6;for(int i =0;i&amp;lt;32;i++)&amp;#123;    //取第一位，右移    int t = (a&amp;amp;0x8000000&amp;gt;&amp;gt;&amp;gt;i)&amp;gt;&amp;gt;&amp;gt;(31-i);    out(t);&amp;#125; System.exit结束一个jvm。 状态0是正常退出1">
@@ -341,7 +341,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T13:45:26+08:00">
                 2018-09-04
               </time>
             
@@ -620,14 +620,6 @@
 <blockquote>
 <p>in-place 原地算法 删除重复元素 用!=略过并用unique的覆盖</p>
 </blockquote>
-<ul>
-<li>最长公共前缀：indexOf<blockquote>
-<p>if else语句中，是不能直接用break和continue的???</p>
-</blockquote>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//[2]不一样</span></span><br><span class="line"> <span class="keyword">if</span> (source[i] != first) &#123;</span><br><span class="line"> 	<span class="comment">//[3]也不一样，</span></span><br><span class="line">                <span class="keyword">while</span> (++i &lt;= max &amp;&amp; source[i] != first);</span><br><span class="line">            &#125; 	</span><br><span class="line">     <span class="comment">//直到下一个匹配的继续for中内容</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">@param source:左值（被查找）</span></span><br><span class="line"><span class="comment">@param count长度</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"> <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(<span class="keyword">char</span>[] source, <span class="keyword">int</span> sourceOffset, <span class="keyword">int</span> sourceCount,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">char</span>[] target, <span class="keyword">int</span> targetOffset, <span class="keyword">int</span> targetCount,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">int</span> fromIndex)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 查找位置&gt;=左值长度</span></span><br><span class="line">        <span class="keyword">if</span> (fromIndex &gt;= sourceCount) &#123;</span><br><span class="line">        	<span class="comment">//traget空？返回左值长度</span></span><br><span class="line">            <span class="keyword">return</span> (targetCount == <span class="number">0</span> ? sourceCount : -<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (fromIndex &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            fromIndex = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 右值为0，返回查找位置</span></span><br><span class="line">        <span class="keyword">if</span> (targetCount == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> fromIndex;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span> first = target[targetOffset];</span><br><span class="line">        <span class="comment">//最后一个匹配的下标，至少减去右值的长度</span></span><br><span class="line">        <span class="keyword">int</span> max = sourceOffset + (sourceCount - targetCount);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = sourceOffset + fromIndex; i &lt;= max; i++) &#123;</span><br><span class="line">            <span class="comment">/* Look for first character. */</span></span><br><span class="line">            <span class="keyword">if</span> (source[i] != first) &#123;</span><br><span class="line">            	<span class="comment">// 跳过这次循环？</span></span><br><span class="line">                <span class="keyword">while</span> (++i &lt;= max &amp;&amp; source[i] != first);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/* Found first character, now look at the rest of v2 */</span></span><br><span class="line">            <span class="keyword">if</span> (i &lt;= max) &#123;</span><br><span class="line">                <span class="keyword">int</span> j = i + <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">int</span> end = j + targetCount - <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> k = targetOffset + <span class="number">1</span>; j &lt; end &amp;&amp; source[j]</span><br><span class="line">                        == target[k]; j++, k++);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (j == end) &#123;</span><br><span class="line">                    <span class="comment">/* Found whole string. */</span></span><br><span class="line">                    <span class="keyword">return</span> i - sourceOffset;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -747,7 +739,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -769,7 +761,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
