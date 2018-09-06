@@ -4,6 +4,130 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+### 34 二分查找数字的first+last idx？？？？？？
+> Input: nums = [5,7,7,8,8,10], target = 8
+> Output: [3,4]
+
+二分查找获取最左/右边相等的
+```java
+//获取最右
+while(i<j){
+ int mid = (i+j)/2+1;
+ if(nums[mid]>target)j = mid-1;
+ //找到了继续向右找
+ else i =mid;}
+rst[1]=j;
+```
+
+### 5只猴子分桃，每次拿走一个正好分成5堆，问桃子数
+
+### !543树中两点的最远路径，自己到自己0
+> [4,2,1,3]路径长度3
+
+![lc545](/images/lc545.jpg)
+将每个点试当成转折点,在更新左右最长高度的同时更新rst = Max(rst,l+r);
+
+### ！！687树中值相等的点的路径长
+
+### !!!114原地将二叉树变成链表
+1.入栈迭代40%
+    1. 先入栈右子树，再入栈左子树，更新右节点为栈顶。
+    2. 将当前左子树变成null。下一次循环cur是栈顶（原左子树）
+2. 后序遍历 递归6%
+```java
+pre = null;
+flat(root.right);
+flat(root.left);
+root.right = pre;
+root.left = null;
+pre = root;
+```
+
+### 438 Anagrams in a String 滑动窗口`Arryas.equals`
+> Anagrams 字母相同，顺序不同的单词 连续
+> s: "cbaebabacd" p: "abc" 
+> Output:[0, 6] 输出起始位置
+
+[Sliding Window algorithm](https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)
+![anagram](/images/anagram.jpg)
+![anagram2](/images/anagram2.jpg)
+16ms 50%
+```java
+public List<Integer> findAnagrams(String s, String p) {
+    List<Integer> rst = new ArrayList<>();
+    int[] ch = new int[26];
+    int wcn = p.length();
+    for(char c:p.toCharArray()){
+        ch[c-'a']++;
+    }
+    int[] window = new int[26];
+    for (int i = 0; i <s.length() ; i++) {
+        if(i>=wcn){
+            --window[s.charAt(i-wcn)-'a'];
+        }
+        window[s.charAt(i)-'a']++;
+        if(Arrays.equals(window, ch)){
+            rst.add(i-wcn+1);
+        }
+    }
+    return rst;
+}
+```
+
+### ！！！！76 最小的子串窗口 很重要的题
+
+
+### ！5 最长回文串
+http://windliang.cc/2018/08/05/leetCode-5-Longest-Palindromic-Substring/
+!!反转做法不行:abcxyzcba -> abczyxcba ->相同的abc并不是回文
+!! 不能用LCS
+“cba”是“abc”的 reversed copy
+中心扩展法：回文的中心有奇数：n个，偶数：n-1个位置
+会输出靠后的abab->输出bab
+```java
+int len;
+public String longestPalindrome(String s) {
+    if(s==null||s.length()<2)return s;
+    len = s.length();
+    int start = 0;int end = 0;
+    // int max = 0;
+    for(int i =0;i<len;i++){
+        //"babad" ->"bab" ->i =1 len = 3   
+        //"cbbd" -> "bb" ->i=1 len = 2
+        int len1 = help(s,i,i);//奇数扩展
+        int len2 = help(s,i,i+1);//偶数扩展
+        int max = Math.max(len1,len2);
+        if(max>end-start){
+            start = i - (max-1)/2;//去掉中间那个左边长度的一半
+            end = i+max/2;//右边长度的一半
+        }//end-start= i+max/2-i+(max-1)/2 = max-1/2
+    }
+    return s.substring(start,end+1);     
+    
+}
+private int help(String s,int left,int right){
+    while(left>=0&&right<len&&s.charAt(left)==s.charAt(right)){
+        left--;
+        right++;
+        
+    }
+    return right-left-1;
+}
+```
+#### Manacher's 算法 O(n)
+https://algs4.cs.princeton.edu/53substring/Manacher.java.html
+前缀/
+
+#### 回文树
+`next[i][c]` 编号为i的节点表示的回文串两边添加c后变成的回文串编号。
+`fail[i]`节点i失配后
+`cnt[i]`
+
+### K-D tree
+
+### 快速排序的各种优化
+https://algs4.cs.princeton.edu/23quicksort/
+
 ### 前序中序构造二叉树
 A BDEG CF
 DBGE A CF

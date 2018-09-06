@@ -59,7 +59,23 @@ public String longestCommonPrefix(String[] strs) {
 }
 ```
 
-
+### 718 最长公共子串40ms 90%
+```java
+public int findLength(int[] a,int[] b){
+    int m = a.length,n = b.length;
+    if(m==0||n==0)return 0;
+    int[][] dp = new int[m+1][n+1];
+    int max= 0;
+    for(int i=m-1;i>=0;i--){
+        for(int j=n-1;j>=0;j--){
+            max = Math.max(max,dp[i][j]=a[i]==b[j]?1+dp[i+1][j+1]:0);
+        }
+    }
+    return max;
+}
+```
+rolling hash
+https://leetcode.com/problems/maximum-length-of-repeated-subarray/solution/
 
 
 ### 括号串达到匹配需要最小的逆转次数
@@ -95,7 +111,11 @@ private int minReversal(String s){
 ```
 
 
-### 28字符串indexOf匹配暴力
+### 28字符串indexOf匹配暴力 Substring Search
+各种字符串匹配算法
+http://www-igm.univ-mlv.fr/~lecroq/string/
+![strstrbest.jpg](/images/strstrbest.jpg)
+https://algs4.cs.princeton.edu/53substring/
 ![backup](/images/backup.jpg)
 方法1是维持一个pattern长度的buffer
 ![substring.jpg](/images/substring.jpg)
@@ -106,7 +126,7 @@ ADA[C]R i-=j
  ADACR
 ```
 
-#### Boyer-Moore 74% 5ms
+#### !!!Boyer-Moore 74% 5ms 亚线性
 alg4
 1.构建right表示target中字符的最右位置是NEEDLE
 ![boyerright.jpg](/images/boyerright.jpg)
@@ -145,9 +165,12 @@ alg4
 }
 ```
 
-#### RabinKarp 31% 8ms
+#### RabinKarp 31% 8ms 线性
 ![rabin-karp](/images/rabin-karp.jpg)
 ![ranbinmod.jpg](/images/ranbinmod.jpg)
+
+正确性：
+![kbright.jpg](/images/kbright.jpg)
 线性求mod
 ```java
 //    private long longRandomPrime(){
@@ -163,6 +186,7 @@ private long hash(String key, int m) {
         h = (R * h + key.charAt(j)) % q;
     return h;
 }
+    //变成拉斯维加斯算法
 private boolean check(String source,String target, int i) {
     for (int j = 0; j <target.length() ; j++)
         if (target.charAt(j) != source.charAt(i + j))
@@ -176,14 +200,14 @@ public  int searchRabinKarp(String source,String target){
     int m = target.length();
     int n = source.length();
     long RM = 1;
-    q = 1877124611;
+    q = 1877124611;//保证不冲突
     for (int i = 1; i <=m-1 ; i++) {
         RM = (R * RM) % q;
     }
     long patHash = hash(target,m);
     long txtHash = hash(source, m);
    
-
+    //一开始就匹配成功
     if ((patHash == txtHash) && check(source,target, 0))
         return 0;
 
@@ -208,6 +232,7 @@ public  int searchRabinKarp(String source,String target){
 #### 187 rolling-hash DNA序列中出现2次以上长为10的子串
 //todo
 
+#### 暴力 O（MN）
 双指针
 i的位置是txt已匹配过的最后位置
 15% 13ms
@@ -314,7 +339,7 @@ public int strStr(String source, String target) {
 ```
 {% endfold %}
  
-### KMP-Knuth-Morris-Pratt 适合查找自我重复的字符串
+### KMP-Knuth-Morris-Pratt 适合查找自我重复的字符串 线性的M倍
 基于DFA
 ![DFA.jpg](/images/DFA.jpg)
 用一个dfa[][]记录j回退多远
@@ -1563,29 +1588,7 @@ boolean hasCircle(int idx,int[] visited){
 
 #### lc481 返回kolakoski前N中有几个1
 
-### 5只猴子分桃，每次拿走一个正好分成5堆，问桃子数
 
-### !543树中两点的最远路径，自己到自己0
-> [4,2,1,3]路径长度3
-
-![lc545](/images/lc545.jpg)
-将每个点试当成转折点,在更新左右最长高度的同时更新rst = Max(rst,l+r);
-
-### ！！687树中值相等的点的路径长
-
-### !!!114原地将二叉树变成链表
-1.入栈迭代40%
-    1. 先入栈右子树，再入栈左子树，更新右节点为栈顶。
-    2. 将当前左子树变成null。下一次循环cur是栈顶（原左子树）
-2. 后序遍历 递归6%
-```java
-pre = null;
-flat(root.right);
-flat(root.left);
-root.right = pre;
-root.left = null;
-pre = root;
-```
 
 ### 174 骑士从左上到右下找公主，求初始血量
 dp[i][j]表示到i,j的最少血量，因为右下角一格也要减
@@ -2216,21 +2219,6 @@ while(l<r){
 }
 //如果l==r [1,1)表示空的
 return -1;
-```
-
-### 34 二分查找数字的first+last idx？？？？？？
-> Input: nums = [5,7,7,8,8,10], target = 8
-> Output: [3,4]
-
-二分查找获取最左/右边相等的
-```java
-//获取最右
-while(i<j){
- int mid = (i+j)/2+1;
- if(nums[mid]>target)j = mid-1;
- //找到了继续向右找
- else i =mid;}
-rst[1]=j;
 ```
 
 ---
@@ -2973,49 +2961,7 @@ int fib(int n){
 
 
 ---
-### ！5 最长回文串
-bealen[i][j]表示[i]-[j]是回文串
-反转做法不行:abcxyzcba -> abczyxcba ->相同的abc并不是回文
-“cba”是“abc”的 reversed copy
-中心扩展法：回文的中心有奇数：n个，偶数：n-1个位置
-会输出靠后的abab->输出bab
-```java
-int len;
-public String longestPalindrome(String s) {
-    if(s==null||s.length()<2)return s;
-    len = s.length();
-    int start = 0;int end = 0;
-    // int max = 0;
-    for(int i =0;i<len;i++){
-        //"babad" ->"bab" ->i =1 len = 3   
-        //"cbbd" -> "bb" ->i=1 len = 2
-        int len1 = help(s,i,i);//奇数扩展
-        int len2 = help(s,i,i+1);//偶数扩展
-        int max = Math.max(len1,len2);
-        if(max>end-start){
-            start = i - (max-1)/2;//去掉中间那个左边长度的一半
-            end = i+max/2;//右边长度的一半
-        }//end-start= i+max/2-i+(max-1)/2 = max-1/2
-    }
-    return s.substring(start,end+1);     
-    
-}
-private int help(String s,int left,int right){
-    while(left>=0&&right<len&&s.charAt(left)==s.charAt(right)){
-        left--;
-        right++;
-        
-    }
-    return right-left-1;
-}
-```
-#### Manacher's 算法 O(n)
-前缀/
 
-#### 回文树
-`next[i][c]` 编号为i的节点表示的回文串两边添加c后变成的回文串编号。
-`fail[i]`节点i失配后
-`cnt[i]`
 
 ---
 ### ?347桶排序 int数组中最常出现的n个
@@ -3360,18 +3306,8 @@ public static int fid(int[]A){
 [single number](https://leetcode.com/articles/single-number/)
 $$2(a+b+c)-(a+a+b+b+c)$$ `2*sum(set(list))-sum(list)`
 
-### 438 Anagrams in a String 滑动窗口
-[Sliding Window algorithm](https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)
-![anagram](/images/anagram.jpg)
-![anagram2](/images/anagram2.jpg)
-两个数组一样，则找到index，不一样，则窗口向前滑动一哥
-输出0，1，4
-s: "cbaebabacd" p: "abc" 顺序无关，连续出现在s中
-Output:
-[0, 6]
-> **Anagram** result of [rearranging the letter of a word to produce a new word using all the orginal letters exactly once]
-> 1) The first count array store frequencies of characters in pattern.
-2) The second count array stores frequencies of characters in current window of text.
+
+
 
 ### 141链表环检测
 空间O(1) 快慢指针：快指针走2步，慢指针走一步，当快指针遇到慢指针
