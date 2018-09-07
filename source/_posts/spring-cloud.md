@@ -4,6 +4,9 @@ date: 2018-05-08 16:17:37
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+分布式：节点之间如何通信
+微服务：按业务划分模块
+
 `@EnableEurekaServer`
 
 ## 静态文件用Nginx+Lua实现高性能网关

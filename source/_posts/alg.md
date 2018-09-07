@@ -4,7 +4,33 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
 ---
+### 287 O(1)空间，找到数组中重复的数字
 
+### 查找第二小/大的元素
+```java
+static int secondMin2(int[] arr){
+    int first = Integer.MAX_VALUE,second = Integer.MAX_VALUE;
+    for (int j = 0; j < arr.length; j++) {
+        if(arr[j]<=first){
+            second = first;
+            first = arr[j];
+        }else if(arr[j]<=second&&arr[j]!=first)
+            second = arr[j];
+    }
+    return second;
+}
+static int secondMax(int[] arr){
+    int first = Integer.MIN_VALUE,second = Integer.MIN_VALUE;
+    for (int j = 0; j < arr.length; j++) {
+        if(arr[j]>=first){
+            second = first;
+            first = arr[j];
+        }else if(arr[j]>=second&&arr[j]!=first)
+            second = arr[j];
+    }
+    return second;
+}
+```
 
 ### 排序数组中小于target的
 2 4 6 8 9 target=14
@@ -2080,6 +2106,94 @@ for(int i =0;i<n;i++){
 }
 ```
 
+
+### 01背包 bb解法
+{% fold %}
+```java
+class Item{
+    double weight;
+    int value;}
+class Node{
+    // level  --> Level of node in decision tree (or index
+    //             in arr[]
+    // profit --> Profit of nodes on path from root to this
+    //            node (including this node)
+    // bound ---> Upper bound of maximum profit in subtree
+    //            of this node/
+    int level,profit,bound;
+    double weight;}
+public class BBpack {
+    //用分数背包问题的贪心法求接下去可能的最大值
+    public static  int bound(Node u,int n,int W,List<Item> arr){
+        if(u.weight>=W)return 0;
+        int profit_bound = u.profit;
+        int j = u.level+1;
+        int totweight = (int)u.weight;
+        while(j<n&&(totweight+arr.get(j).weight<=W)){
+            totweight += arr.get(j).weight;
+            profit_bound += arr.get(j).value;
+            j++;
+        }
+        if(j<n){
+            profit_bound+=(W-totweight)*arr.get(j).value/arr.get(j).weight;
+        }
+        return profit_bound;
+    }
+    public static int knapsack(int W,List<Item>arr,int n){
+        //1. 排序
+//        Comparator<Item> comparing = Comparator.comparing(item -> item.value / item.weight);
+//        arr.sort(comparing.reversed());
+        arr.sort(Comparator.comparing((Item item )-> item.value / item.weight).reversed());
+        //2.队列
+        System.out.println(arr);
+        Deque<Node> que = new ArrayDeque<>();
+        // dummy node
+        Node u = new Node(-1,0,0);
+        Node v = new Node(-1,0,0);
+        que.add(u);
+        int MaxProfit = 0;
+        while(!que.isEmpty()){
+            u = que.poll();
+
+            if(u.level == -1){
+                v.level =0;
+            }
+            if(u.level == n-1)continue;
+            v.level = u.level+1;
+            //装
+            v.weight = u.weight+arr.get(v.level).weight;
+            v.profit = u.profit+arr.get(v.level).value;
+            //如果不超重 更新当前最大收益
+            if(v.weight<=W&&v.profit>MaxProfit)
+                MaxProfit = v.profit;
+            v.bound = bound(v,n ,W ,arr );
+
+            //不装
+            if(v.bound>MaxProfit)
+                que.add(new Node(v));
+            v.weight = u.weight;
+            v.profit = u.profit;
+            v.bound = bound(v,n,W ,arr);
+            //不装也有可能
+            if(v.bound>MaxProfit){
+                que.add(new Node(v));
+            }
+        }
+        return MaxProfit;
+      }
+public static void main(String[] args) {
+        List<Item> arr= new ArrayList<Item>(5);
+        arr.add(new Item(2,40));
+        arr.add(new Item(3.14,50));
+        arr.add(new Item(1.98,100));
+        arr.add(new Item(5,95));
+        arr.add(new Item(3,30));
+        int W = 10;
+        System.out.println(knapsack(W, arr, arr.size()));
+    }
+```
+{% endfold %}
+
 ---
 #### ！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。
 ```java
@@ -3331,26 +3445,7 @@ class Solution{
 ```
 {% endfold %}
 
-### 142 环起始于哪个node
-![loops](/images/loops.jpg)
-1->2->3->4->5->6->7->3 meet:6
-a: 从head到环 
-b：快指针走了两次的环内距离(慢指针到环起点的距离)
-c: 慢指针没走完的环内距离
-已知快指针走的距离是slow的两倍
-慢=a+b  快=a+2b+c
-则a=c
-从len(head - 环起点) == 慢指针没走完的环距离
-head与慢指针能在环起点相遇。
-```java
-if(slow==fast){
-    while(head!=slow){
-        head=head.next;
-        slow=slow.next;
-    }
-    return slow;
-}
-```
+
 
 ## 160 链表相交于哪一点
 ```

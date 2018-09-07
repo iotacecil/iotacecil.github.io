@@ -4,6 +4,56 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+### 287 数组中重复元素
+> containing n + 1 integers where each integer is between 1 and n (inclusive)
+
+将数组的数字想象成链表，找环
+> 1 4 6 6 6 2 3
+
+慢指针走`num[slow]`
+快指针走`num[num[fast]]`
+
+慢指针会在环与head指针相遇
+```java
+public int findDuplicate(int[] nums) {
+// use only constant, O(1) extra space
+    int slow = nums[0];
+    int fast = nums[0];
+    do{
+        slow = nums[slow];
+        fast =  nums[nums[fast]];
+    }while(slow != fast);
+    
+    int head = nums[0];
+    while(head!=slow){
+        head= nums[head];
+        slow = nums[slow];
+    }
+    return head;
+}
+```
+
+### 142 环起始于哪个node
+![loops](/images/loops.jpg)
+1->2->3->4->5->6->7->3 meet:6
+a: 从head到环 
+b：快指针走了两次的环内距离(慢指针到环起点的距离)
+c: 慢指针没走完的环内距离
+已知快指针走的距离是slow的两倍
+慢=a+b  快=a+2b+c
+则a=c
+从len(head - 环起点) == 慢指针没走完的环距离
+**head与慢指针能在环起点相遇。**
+```java
+if(slow==fast){
+    while(head!=slow){
+        head=head.next;
+        slow=slow.next;
+    }
+    return slow;
+}
+```
+
 ### 34 二分查找数字的first+last idx？？？？？？
 > Input: nums = [5,7,7,8,8,10], target = 8
 > Output: [3,4]

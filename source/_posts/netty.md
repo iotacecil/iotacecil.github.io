@@ -4,6 +4,17 @@ date: 2018-06-04 09:32:40
 tags:
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### select模型
+1. 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）
+`FD_SETSIZE` 在哪
+2. 每次select调用会扫描所有fd
+3. 内核拷贝fd的消息到用户空间
+
+### epoll
+最大打开的文件数量（并发量）
+`cat /proc/sys/fs/file-max`
+
+
 ### mui文档
 http://dev.dcloud.net.cn/mui/util/
 http://www.html5plus.org/doc/zh_cn/webview.html

@@ -4,6 +4,50 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+### 大端小端
+union的存放顺序是所有成员都从低地址开始存放
+一般操作系统都是小端，而通讯协议是大端的。
+常见文件的字节序
+```
+Adobe PS – Big Endian
+BMP – Little Endian
+DXF(AutoCAD) – Variable
+GIF – Little Endian
+JPEG – Big Endian
+MacPaint – Big Endian
+RTF – Little Endian
+```
+```cpp
+#include<bits/stdc++.h>
+bool IsBigEndian2()
+{
+    union NUM
+    {   //低地址
+        int a;
+        char b;
+    }num;
+    num.a = 0x1234;
+    if( num.b == 0x12 )
+    {
+        return true;
+    }
+    return false;
+}
+bool IsBigEndian()
+{
+    //8bit的char
+    int a = 0x1234; 
+    //通过将int强制类型转换成char单字节，通过判断起始存储位置。即等于 取b等于a的低地址部分
+    char b =  *(char *)&a; 
+    if( b == 0x12)
+    {
+            std::cout<<b;
+        return true;
+    }
+    return false;
+}
+```
+
 
 ### `#include<pthread.h>`
 https://sourceware.org/pthreads-win32/ 
