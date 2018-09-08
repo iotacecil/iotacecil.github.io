@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="Windows API让cpu使用率划出一条直线一个时钟周期可以执行多少条指令？ CPU流水线？CPU每个时钟周期可以执行两条以上代码2.4Ghz主频则1秒可以执行2.4G*2行汇编指令10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起资源管理器大约是1秒更新一次4核cpu一个线程死循环占用大概是25%SetThreadAffinityMask() https://hit-ali">
+<meta name="description" content="死锁的4个条件Windows API让cpu使用率划出一条直线一个时钟周期可以执行多少条指令？ CPU流水线？CPU每个时钟周期可以执行两条以上代码2.4Ghz主频则1秒可以执行2.4G*2行汇编指令10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起资源管理器大约是1秒更新一次4核cpu一个线程死循环占用大概是25%SetThreadAffinityMask() https://">
 <meta name="keywords" content="os,memory">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统+内存知识">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/05/memory/index.html">
-<meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="Windows API让cpu使用率划出一条直线一个时钟周期可以执行多少条指令？ CPU流水线？CPU每个时钟周期可以执行两条以上代码2.4Ghz主频则1秒可以执行2.4G*2行汇编指令10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起资源管理器大约是1秒更新一次4核cpu一个线程死循环占用大概是25%SetThreadAffinityMask() https://hit-ali">
+<meta property="og:site_name" content="Learn &amp; practice">
+<meta property="og:description" content="死锁的4个条件Windows API让cpu使用率划出一条直线一个时钟周期可以执行多少条指令？ CPU流水线？CPU每个时钟周期可以执行两条以上代码2.4Ghz主频则1秒可以执行2.4G*2行汇编指令10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起资源管理器大约是1秒更新一次4核cpu一个线程死循环占用大概是25%SetThreadAffinityMask() https://">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/dictuse.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/diaodushiji.jpg">
@@ -112,10 +112,10 @@
 <meta property="og:image" content="http://iotaa.xyz/images/heep.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/registers.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/cposix.jpg">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.334Z">
+<meta property="og:updated_time" content="2018-09-07T06:25:54.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统+内存知识">
-<meta name="twitter:description" content="Windows API让cpu使用率划出一条直线一个时钟周期可以执行多少条指令？ CPU流水线？CPU每个时钟周期可以执行两条以上代码2.4Ghz主频则1秒可以执行2.4G*2行汇编指令10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起资源管理器大约是1秒更新一次4核cpu一个线程死循环占用大概是25%SetThreadAffinityMask() https://hit-ali">
+<meta name="twitter:description" content="死锁的4个条件Windows API让cpu使用率划出一条直线一个时钟周期可以执行多少条指令？ CPU流水线？CPU每个时钟周期可以执行两条以上代码2.4Ghz主频则1秒可以执行2.4G*2行汇编指令10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起资源管理器大约是1秒更新一次4核cpu一个线程死循环占用大概是25%SetThreadAffinityMask() https://">
 <meta name="twitter:image" content="http://iotaa.xyz/images/dictuse.jpg">
 
 
@@ -152,7 +152,7 @@
 
 
 
-  <title>操作系统+内存知识 | vue&java Mark</title>
+  <title>操作系统+内存知识 | Learn & practice</title>
   
 
 
@@ -185,7 +185,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">vue&java Mark</span>
+        <span class="site-title">Learn & practice</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -325,7 +325,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="vue&java Mark">
+      <meta itemprop="name" content="Learn & practice">
     </span>
 
     
@@ -362,8 +362,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
-                2018-09-04
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-07T14:25:54+08:00">
+                2018-09-07
               </time>
             
           </span>
@@ -418,7 +418,7 @@
       
 
       
-        <h3 id="Windows-API让cpu使用率划出一条直线"><a href="#Windows-API让cpu使用率划出一条直线" class="headerlink" title="Windows API让cpu使用率划出一条直线"></a>Windows API让cpu使用率划出一条直线</h3><p>一个时钟周期可以执行多少条指令？ CPU流水线？<br>CPU每个时钟周期可以执行两条以上代码<br>2.4Ghz主频则1秒可以执行2.4G*2行汇编指令<br>10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起<br>资源管理器大约是1秒更新一次<br>4核cpu一个线程死循环占用大概是25%<br><code>SetThreadAffinityMask()</code></p>
+        <h3 id="死锁的4个条件"><a href="#死锁的4个条件" class="headerlink" title="死锁的4个条件"></a>死锁的4个条件</h3><h3 id="Windows-API让cpu使用率划出一条直线"><a href="#Windows-API让cpu使用率划出一条直线" class="headerlink" title="Windows API让cpu使用率划出一条直线"></a>Windows API让cpu使用率划出一条直线</h3><p>一个时钟周期可以执行多少条指令？ CPU流水线？<br>CPU每个时钟周期可以执行两条以上代码<br>2.4Ghz主频则1秒可以执行2.4G*2行汇编指令<br>10毫秒接近Windows调度时间片，1毫秒会导致线程频繁被唤醒挂起<br>资源管理器大约是1秒更新一次<br>4核cpu一个线程死循环占用大概是25%<br><code>SetThreadAffinityMask()</code></p>
 <p><a href="https://hit-alibaba.github.io/interview/basic/arch/Concurrency.html" target="_blank" rel="noopener">https://hit-alibaba.github.io/interview/basic/arch/Concurrency.html</a></p>
 <h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p><a href="http://www.cnblogs.com/Anker/archive/2013/08/14/3258674.html" target="_blank" rel="noopener">http://www.cnblogs.com/Anker/archive/2013/08/14/3258674.html</a></p>
 <h3 id="磁盘驱动"><a href="#磁盘驱动" class="headerlink" title="磁盘驱动"></a>磁盘驱动</h3><p><a href="https://my.oschina.net/manmao/blog/746492" target="_blank" rel="noopener">https://my.oschina.net/manmao/blog/746492</a></p>
@@ -712,7 +712,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name"></p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">学习一个技术不要轻易过去，要有技术深度做一个demo</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -722,7 +722,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -777,7 +777,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-API让cpu使用率划出一条直线"><span class="nav-number">1.</span> <span class="nav-text">Windows API让cpu使用率划出一条直线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO多路复用"><span class="nav-number">2.</span> <span class="nav-text">IO多路复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘驱动"><span class="nav-number">3.</span> <span class="nav-text">磁盘驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘调度算法"><span class="nav-number">4.</span> <span class="nav-text">磁盘调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程调度"><span class="nav-number">5.</span> <span class="nav-text">进程调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调度算法"><span class="nav-number">6.</span> <span class="nav-text">调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FC-Fibre-Channel"><span class="nav-number">7.</span> <span class="nav-text">FC: Fibre Channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#银行家算法"><span class="nav-number">8.</span> <span class="nav-text">银行家算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要用反码"><span class="nav-number">9.</span> <span class="nav-text">为什么要用反码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核缓冲区？"><span class="nav-number">10.</span> <span class="nav-text">内核缓冲区？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时重定位，进程血环根据pcb切换换基地址"><span class="nav-number">11.</span> <span class="nav-text">运行时重定位，进程血环根据pcb切换换基地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程序分段"><span class="nav-number">12.</span> <span class="nav-text">程序分段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管程：一种同步机制"><span class="nav-number">13.</span> <span class="nav-text">管程：一种同步机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pthread互斥-lock操作互斥量-同步-wait-signal条件变量"><span class="nav-number">14.</span> <span class="nav-text">Pthread互斥(lock操作互斥量)同步(wait/signal条件变量)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程通信"><span class="nav-number">15.</span> <span class="nav-text">进程通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享内存"><span class="nav-number">16.</span> <span class="nav-text">共享内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道通信PIPE"><span class="nav-number">17.</span> <span class="nav-text">管道通信PIPE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux，windows常用通信机制"><span class="nav-number">18.</span> <span class="nav-text">linux，windows常用通信机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#屏障barrier"><span class="nav-number">19.</span> <span class="nav-text">屏障barrier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU型进程和IO型进程的调度"><span class="nav-number">20.</span> <span class="nav-text">CPU型进程和IO型进程的调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘IO的代价主要是查找时间（磁头找到柱面）"><span class="nav-number">21.</span> <span class="nav-text">磁盘IO的代价主要是查找时间（磁头找到柱面）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行和并发的区别"><span class="nav-number">22.</span> <span class="nav-text">并行和并发的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件-网络句柄handle-所有进程共有"><span class="nav-number">23.</span> <span class="nav-text">文件/网络句柄handle 所有进程共有</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟内存"><span class="nav-number">24.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺页中断"><span class="nav-number">25.</span> <span class="nav-text">缺页中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存虚拟化方案"><span class="nav-number">26.</span> <span class="nav-text">内存虚拟化方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可执行文件格式"><span class="nav-number">27.</span> <span class="nav-text">可执行文件格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的虚地址空间"><span class="nav-number">28.</span> <span class="nav-text">进程的虚地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内存布局"><span class="nav-number">29.</span> <span class="nav-text">Linux内存布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈"><span class="nav-number">30.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆"><span class="nav-number">31.</span> <span class="nav-text">堆</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#malloc的实现"><span class="nav-number">31.1.</span> <span class="nav-text">malloc的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-虚拟地址空间"><span class="nav-number">32.</span> <span class="nav-text">windows 虚拟地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆分配算法"><span class="nav-number">33.</span> <span class="nav-text">堆分配算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpp返回对象的临时对象"><span class="nav-number">34.</span> <span class="nav-text">cpp返回对象的临时对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编寄存器-gcc-hellow-c-gt-a-out"><span class="nav-number">35.</span> <span class="nav-text">汇编寄存器 gcc hellow.c -&gt;./a.out</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟内存-1"><span class="nav-number">36.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inode"><span class="nav-number">37.</span> <span class="nav-text">inode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统调用、POSIX、C库、系统命令和内核函数"><span class="nav-number">38.</span> <span class="nav-text">系统调用、POSIX、C库、系统命令和内核函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第4章-线程、对称多处理和微内核"><span class="nav-number">38.1.</span> <span class="nav-text">第4章 线程、对称多处理和微内核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第7章-内存管理"><span class="nav-number">38.2.</span> <span class="nav-text">第7章 内存管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第8章-虚拟内存"><span class="nav-number">38.3.</span> <span class="nav-text">第8章    虚拟内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第10章-多处理器和实时调度"><span class="nav-number">38.4.</span> <span class="nav-text">第10章    多处理器和实时调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第11章-I-O管理和磁盘调度"><span class="nav-number">38.5.</span> <span class="nav-text">第11章   I/O管理和磁盘调度</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁的4个条件"><span class="nav-number">1.</span> <span class="nav-text">死锁的4个条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows-API让cpu使用率划出一条直线"><span class="nav-number">2.</span> <span class="nav-text">Windows API让cpu使用率划出一条直线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO多路复用"><span class="nav-number">3.</span> <span class="nav-text">IO多路复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘驱动"><span class="nav-number">4.</span> <span class="nav-text">磁盘驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘调度算法"><span class="nav-number">5.</span> <span class="nav-text">磁盘调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程调度"><span class="nav-number">6.</span> <span class="nav-text">进程调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调度算法"><span class="nav-number">7.</span> <span class="nav-text">调度算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FC-Fibre-Channel"><span class="nav-number">8.</span> <span class="nav-text">FC: Fibre Channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#银行家算法"><span class="nav-number">9.</span> <span class="nav-text">银行家算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要用反码"><span class="nav-number">10.</span> <span class="nav-text">为什么要用反码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核缓冲区？"><span class="nav-number">11.</span> <span class="nav-text">内核缓冲区？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时重定位，进程血环根据pcb切换换基地址"><span class="nav-number">12.</span> <span class="nav-text">运行时重定位，进程血环根据pcb切换换基地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程序分段"><span class="nav-number">13.</span> <span class="nav-text">程序分段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管程：一种同步机制"><span class="nav-number">14.</span> <span class="nav-text">管程：一种同步机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pthread互斥-lock操作互斥量-同步-wait-signal条件变量"><span class="nav-number">15.</span> <span class="nav-text">Pthread互斥(lock操作互斥量)同步(wait/signal条件变量)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程通信"><span class="nav-number">16.</span> <span class="nav-text">进程通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享内存"><span class="nav-number">17.</span> <span class="nav-text">共享内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道通信PIPE"><span class="nav-number">18.</span> <span class="nav-text">管道通信PIPE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux，windows常用通信机制"><span class="nav-number">19.</span> <span class="nav-text">linux，windows常用通信机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#屏障barrier"><span class="nav-number">20.</span> <span class="nav-text">屏障barrier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU型进程和IO型进程的调度"><span class="nav-number">21.</span> <span class="nav-text">CPU型进程和IO型进程的调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘IO的代价主要是查找时间（磁头找到柱面）"><span class="nav-number">22.</span> <span class="nav-text">磁盘IO的代价主要是查找时间（磁头找到柱面）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并行和并发的区别"><span class="nav-number">23.</span> <span class="nav-text">并行和并发的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件-网络句柄handle-所有进程共有"><span class="nav-number">24.</span> <span class="nav-text">文件/网络句柄handle 所有进程共有</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟内存"><span class="nav-number">25.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺页中断"><span class="nav-number">26.</span> <span class="nav-text">缺页中断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存虚拟化方案"><span class="nav-number">27.</span> <span class="nav-text">内存虚拟化方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可执行文件格式"><span class="nav-number">28.</span> <span class="nav-text">可执行文件格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程的虚地址空间"><span class="nav-number">29.</span> <span class="nav-text">进程的虚地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux内存布局"><span class="nav-number">30.</span> <span class="nav-text">Linux内存布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈"><span class="nav-number">31.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆"><span class="nav-number">32.</span> <span class="nav-text">堆</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#malloc的实现"><span class="nav-number">32.1.</span> <span class="nav-text">malloc的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-虚拟地址空间"><span class="nav-number">33.</span> <span class="nav-text">windows 虚拟地址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆分配算法"><span class="nav-number">34.</span> <span class="nav-text">堆分配算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpp返回对象的临时对象"><span class="nav-number">35.</span> <span class="nav-text">cpp返回对象的临时对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汇编寄存器-gcc-hellow-c-gt-a-out"><span class="nav-number">36.</span> <span class="nav-text">汇编寄存器 gcc hellow.c -&gt;./a.out</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟内存-1"><span class="nav-number">37.</span> <span class="nav-text">虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inode"><span class="nav-number">38.</span> <span class="nav-text">inode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统调用、POSIX、C库、系统命令和内核函数"><span class="nav-number">39.</span> <span class="nav-text">系统调用、POSIX、C库、系统命令和内核函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第4章-线程、对称多处理和微内核"><span class="nav-number">39.1.</span> <span class="nav-text">第4章 线程、对称多处理和微内核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第7章-内存管理"><span class="nav-number">39.2.</span> <span class="nav-text">第7章 内存管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第8章-虚拟内存"><span class="nav-number">39.3.</span> <span class="nav-text">第8章    虚拟内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第10章-多处理器和实时调度"><span class="nav-number">39.4.</span> <span class="nav-text">第10章    多处理器和实时调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第11章-I-O管理和磁盘调度"><span class="nav-number">39.5.</span> <span class="nav-text">第11章   I/O管理和磁盘调度</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime 时间单元 session超时等initLimit">
+<meta name="description" content="分布式：节点之间如何通信微服务：按业务划分模块 @EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spring-cloud">
 <meta property="og:url" content="http://iotaa.xyz/2018/05/08/spring-cloud/index.html">
-<meta property="og:site_name" content="vue&amp;java Mark">
-<meta property="og:description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime 时间单元 session超时等initLimit">
+<meta property="og:site_name" content="Learn &amp; practice">
+<meta property="og:description" content="分布式：节点之间如何通信微服务：按业务划分模块 @EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/zid.png">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.358Z">
+<meta property="og:updated_time" content="2018-09-07T06:53:52.658Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring-cloud">
-<meta name="twitter:description" content="@EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime 时间单元 session超时等initLimit">
+<meta name="twitter:description" content="分布式：节点之间如何通信微服务：按业务划分模块 @EnableEurekaServer 静态文件用Nginx+Lua实现高性能网关文件服务器 FastDFSzk客户端 curator解决watcher注册一次就失效分布式锁 dockerZooKeeper1.安装jdk到/usr/ 安装zookeeper到/usr/local/2.cp zoo_sample.cfg zoo.cfgtickTime">
 <meta name="twitter:image" content="http://iotaa.xyz/images/zid.png">
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>spring-cloud | vue&java Mark</title>
+  <title>spring-cloud | Learn & practice</title>
   
 
 
@@ -161,7 +161,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">vue&java Mark</span>
+        <span class="site-title">Learn & practice</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -301,7 +301,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="vue&java Mark">
+      <meta itemprop="name" content="Learn & practice">
     </span>
 
     
@@ -338,8 +338,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
-                2018-09-04
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-07T14:53:52+08:00">
+                2018-09-07
               </time>
             
           </span>
@@ -394,7 +394,8 @@
       
 
       
-        <p><code>@EnableEurekaServer</code></p>
+        <p>分布式：节点之间如何通信<br>微服务：按业务划分模块</p>
+<p><code>@EnableEurekaServer</code></p>
 <h2 id="静态文件用Nginx-Lua实现高性能网关"><a href="#静态文件用Nginx-Lua实现高性能网关" class="headerlink" title="静态文件用Nginx+Lua实现高性能网关"></a>静态文件用Nginx+Lua实现高性能网关</h2><h2 id="文件服务器-FastDFS"><a href="#文件服务器-FastDFS" class="headerlink" title="文件服务器 FastDFS"></a>文件服务器 FastDFS</h2><h2 id="zk客户端-curator"><a href="#zk客户端-curator" class="headerlink" title="zk客户端 curator"></a>zk客户端 curator</h2><p>解决watcher注册一次就失效<br>分布式锁</p>
 <h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><h2 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h2><p>1.安装jdk到/usr/ 安装zookeeper到/usr/local/<br>2.<code>cp zoo_sample.cfg zoo.cfg</code><br>tickTime 时间单元 session超时等<br>initLimit=N 集群 初始化链接时间 表示是tickTime的N倍<br>syncLimit=N 主发送给从 的请求应答时间长度（心跳）表示是tickTime的N倍</p>
 <p>dataDir=/usr/zookeeper/dataDir<br>dataLogDir=/usr/zooKeeper/dataLogDir<br>并创建dataDir和dataLogDir</p>
@@ -510,7 +511,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name"></p>
-              <p class="site-description motion-element" itemprop="description"></p>
+              <p class="site-description motion-element" itemprop="description">学习一个技术不要轻易过去，要有技术深度做一个demo</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -520,7 +521,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
