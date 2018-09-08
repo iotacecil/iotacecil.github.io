@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/zwhf.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/wldz.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/backlog.jpg">
-<meta property="og:updated_time" content="2018-09-07T10:41:41.597Z">
+<meta property="og:updated_time" content="2018-09-08T07:35:16.454Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty">
 <meta name="twitter:description" content="select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）FD_SETSIZE 在哪 每次select调用会扫描所有fd 内核拷贝fd的消息到用户空间  epoll最大打开的文件数量（并发量）cat /proc/sys/fs/file-max mui文档http://dev.dcloud.net.cn/mui/util/http://www.html5plus.org">
@@ -350,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-07T18:41:41+08:00">
-                2018-09-07
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-08T15:35:16+08:00">
+                2018-09-08
               </time>
             
           </span>
@@ -475,7 +475,15 @@
 <h3 id="TCP-fast-open-TFO"><a href="#TCP-fast-open-TFO" class="headerlink" title="TCP fast open TFO"></a>TCP fast open TFO</h3><p><img src="/images/TFO.jpg" alt="TFO.jpg"><br>每个 ACK 分组都会携带相应的最新 接收窗口大小rwnd 值，以便两端动态调整数据流速，使之适应发送端和接收端的容量及处理能力。<br><img src="/images/scalling.jpg" alt="scalling.jpg"></p>
 <h3 id="RARP"><a href="#RARP" class="headerlink" title="RARP"></a>RARP</h3><p>无盘工作站，没有存储，无法记录自己的IP地址，用物理地址向服务器查询自身IP地址。</p>
 <p>数据链路层、网络层、传输层在内核空间中实现（内核缓冲区）<br>应用层在用户空间</p>
-<h3 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h3><p><img src="/images/zwym.jpg" alt="zwym"><br><img src="/images/zwhf.jpg" alt="zwhf"><br>得到子网的网络地址<br><img src="/images/wldz.jpg" alt="wldz"></p>
+<h3 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h3><p><a href="https://blog.csdn.net/yinshitaoyuan/article/details/51782330" target="_blank" rel="noopener">https://blog.csdn.net/yinshitaoyuan/article/details/51782330</a></p>
+<p><img src="/images/zwym.jpg" alt="zwym"><br><img src="/images/zwhf.jpg" alt="zwhf"><br>得到子网的网络地址<br><img src="/images/wldz.jpg" alt="wldz"></p>
+<p>每个子网络能容纳500台主机，它的子网掩码是多少？<br>500-&gt;111110100 一共9位<br>子网掩码255.255.255.255从后向前的9位变成0<br>（11111111.11111111.11111110.00000000）255.255.254.0。</p>
+<p>3、利用子网掩码计算最大有效子网数</p>
+<p>A类IP地址，子网掩码为255.224.0.0，它所能划分的最大有效子网数是多少？</p>
+<p>①将子网掩码转换成二进制表示11111111.11100000.00000000.00000000</p>
+<p>②统计一下它的网络位共有11位</p>
+<p>③A类地址网络位的基础数是8，二者之间的位数差是3</p>
+<p>④最大有效子网数就是2的3次方，即最多可以划分8个子网络。</p>
 <p>以太网 Frame帧<br>IP packet 分组（不是分片<br>TCP segment 分节<br>应用层 message消息</p>
 <h3 id="NIO-Reactor模式"><a href="#NIO-Reactor模式" class="headerlink" title="NIO:Reactor模式"></a>NIO:Reactor模式</h3><p>reactor对所有客户端的socket套接字做事件处理，派发到不同的线程。</p>
 <h3 id="AIO-Proactor模式"><a href="#AIO-Proactor模式" class="headerlink" title="AIO:Proactor模式"></a>AIO:Proactor模式</h3><p>动作完成后调用handler</p>

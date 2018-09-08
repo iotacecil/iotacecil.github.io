@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="很详细的中文泰坦尼克号 pandas操作：1.userpd.columns=userpd.columns.droplevel([0,1])2.df.set_index(&amp;#39;date&amp;#39;, inplace=True)列 -&amp;gt;索引3.df[&amp;#39;index&amp;#39;] = df.index,df.reset_index(level=0, inplace=True)4.user_c">
+<meta name="description" content="垃圾短信分类 练习TODOhttps://blog.csdn.net/github_36922345/article/details/53455401 很详细的中文泰坦尼克号 pandas操作：1.userpd.columns=userpd.columns.droplevel([0,1])2.df.set_index(&amp;#39;date&amp;#39;, inplace=True)列 -&amp;gt;索引3.">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mlpractice">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/09/mlpractice/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="很详细的中文泰坦尼克号 pandas操作：1.userpd.columns=userpd.columns.droplevel([0,1])2.df.set_index(&amp;#39;date&amp;#39;, inplace=True)列 -&amp;gt;索引3.df[&amp;#39;index&amp;#39;] = df.index,df.reset_index(level=0, inplace=True)4.user_c">
+<meta property="og:description" content="垃圾短信分类 练习TODOhttps://blog.csdn.net/github_36922345/article/details/53455401 很详细的中文泰坦尼克号 pandas操作：1.userpd.columns=userpd.columns.droplevel([0,1])2.df.set_index(&amp;#39;date&amp;#39;, inplace=True)列 -&amp;gt;索引3.">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/pandasttt.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/logi.jpg">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="http://iotaa.xyz/images/lance.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/FCM.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/distance.jpg">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.337Z">
+<meta property="og:updated_time" content="2018-09-08T13:26:25.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mlpractice">
-<meta name="twitter:description" content="很详细的中文泰坦尼克号 pandas操作：1.userpd.columns=userpd.columns.droplevel([0,1])2.df.set_index(&amp;#39;date&amp;#39;, inplace=True)列 -&amp;gt;索引3.df[&amp;#39;index&amp;#39;] = df.index,df.reset_index(level=0, inplace=True)4.user_c">
+<meta name="twitter:description" content="垃圾短信分类 练习TODOhttps://blog.csdn.net/github_36922345/article/details/53455401 很详细的中文泰坦尼克号 pandas操作：1.userpd.columns=userpd.columns.droplevel([0,1])2.df.set_index(&amp;#39;date&amp;#39;, inplace=True)列 -&amp;gt;索引3.">
 <meta name="twitter:image" content="http://iotaa.xyz/images/pandasttt.jpg">
 
 
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
-                2018-09-04
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-08T21:26:25+08:00">
+                2018-09-08
               </time>
             
           </span>
@@ -400,7 +400,8 @@
       
 
       
-        <p><a href="https://blog.csdn.net/Koala_Tree/article/details/78725881" target="_blank" rel="noopener">很详细的中文泰坦尼克号</a></p>
+        <p>垃圾短信分类 练习TODO<br><a href="https://blog.csdn.net/github_36922345/article/details/53455401" target="_blank" rel="noopener">https://blog.csdn.net/github_36922345/article/details/53455401</a></p>
+<p><a href="https://blog.csdn.net/Koala_Tree/article/details/78725881" target="_blank" rel="noopener">很详细的中文泰坦尼克号</a></p>
 <h3 id="pandas操作："><a href="#pandas操作：" class="headerlink" title="pandas操作："></a>pandas操作：</h3><p>1.<code>userpd.columns=userpd.columns.droplevel([0,1])</code><br>2.<code>df.set_index(&#39;date&#39;, inplace=True)</code>列 -&gt;索引<br>3.<code>df[&#39;index&#39;] = df.index</code>,<code>df.reset_index(level=0, inplace=True)</code><br><img src="/images/pandasttt.jpg" alt="pandasttt.jpg"><br>4.<code>user_ca_ph.unstack(level=1)</code><br>5.去掉不用的复合索引<br><code>user_ca_ph_cnt.columns=user_ca_ph_cnt.columns.droplevel([0,1])</code><br>6.填空<code>user_ca_ph_cnt=user_ca_ph_cnt.fillna(0.)</code><br>7.<code>train_data[[&quot;Age_int&quot;, &quot;Survived&quot;]].groupby([&#39;Age_int&#39;],as_index=False).mean()</code><br>8.找null<code>age_df_isnull = age_df.loc[(train_data[&#39;Age&#39;].isnull())]</code><br>9.用dict替换掉一列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user_weight =[i/sum([<span class="number">30</span>,<span class="number">53</span>,<span class="number">334</span>,<span class="number">16</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">30</span>,<span class="number">53</span>,<span class="number">334</span>,<span class="number">16</span>]]</span><br><span class="line">dict(zip([<span class="string">"Amusement"</span>,<span class="string">"Entertainment"</span>,<span class="string">"Historical"</span>,<span class="string">"Park"</span>],user_weight))</span><br><span class="line">Osaka_cost[<span class="string">"userweight"</span>]=Osaka_cost[<span class="string">"category"</span>].map(usr_weight)</span><br></pre></td></tr></table></figure></p>
 <p>10.全部onehot<code>pd.get_dummies(df)</code><br>11.离散化，分桶,再向量化/onehot<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">train_data[<span class="string">'Fare_bin'</span>] = pd.qcut(train_data[<span class="string">'Fare'</span>], <span class="number">5</span>)</span><br><span class="line"><span class="number">0</span>      (<span class="number">-0.001</span>, <span class="number">7.854</span>]</span><br><span class="line"><span class="number">1</span>    (<span class="number">39.688</span>, <span class="number">512.329</span>]</span><br><span class="line"><span class="number">2</span>        (<span class="number">7.854</span>, <span class="number">10.5</span>]</span><br><span class="line"><span class="number">3</span>    (<span class="number">39.688</span>, <span class="number">512.329</span>]</span><br><span class="line"><span class="number">4</span>        (<span class="number">7.854</span>, <span class="number">10.5</span>]</span><br><span class="line">    <span class="comment"># factorize</span></span><br><span class="line">train_data[<span class="string">'Fare_bin_id'</span>] = pd.factorize(train_data[<span class="string">'Fare_bin'</span>])[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># dummies</span></span><br><span class="line">fare_bin_dummies_df = pd.get_dummies(train_data[<span class="string">'Fare_bin'</span>]).rename(columns=<span class="keyword">lambda</span> x: <span class="string">'Fare_'</span> + str(x))</span><br><span class="line">train_data = pd.concat([train_data, fare_bin_dummies_df], axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
 <h3 id="pip镜像"><a href="#pip镜像" class="headerlink" title="pip镜像"></a>pip镜像</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyclustering</span><br></pre></td></tr></table></figure>
