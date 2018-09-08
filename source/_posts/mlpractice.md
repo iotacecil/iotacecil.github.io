@@ -4,6 +4,8 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+垃圾短信分类 练习TODO
+https://blog.csdn.net/github_36922345/article/details/53455401
 
 [很详细的中文泰坦尼克号](https://blog.csdn.net/Koala_Tree/article/details/78725881)
 ### pandas操作：

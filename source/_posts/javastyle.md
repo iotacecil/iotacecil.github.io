@@ -4,6 +4,22 @@ date: 2018-03-07 14:18:24
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### BigInteger
+`numberOfTrailingZeros` 二进制末尾0的个数 用时27
+比`>>=2`，`while(i&1==0)`快很多 用时172
+```java
+public static int numberOfTrailingZeros(int i) {
+    // HD, Figure 5-14
+    int y;
+    if (i == 0) return 32;
+    int n = 31;
+    y = i <<16; if (y != 0) { n = n -16; i = y; }
+    y = i << 8; if (y != 0) { n = n - 8; i = y; }
+    y = i << 4; if (y != 0) { n = n - 4; i = y; }
+    y = i << 2; if (y != 0) { n = n - 2; i = y; }
+    return n - ((i << 1) >>> 31);
+}
+```
 
 
 ### LinkedHashMap:LRU的写法

@@ -4,6 +4,39 @@ date: 2018-03-05 20:43:15
 tags: [os,memory]
 category: [cpp学习操作系统]
 ---
+### 伙伴系统：Linux内存分配方案，空闲块链表
+伙伴：如果需要的空间s需要`2^(n-1)<s<2^n`则空间/2，两个叫伙伴。
+![huoban.jpg](/images/huoban.jpg)
+
+伙伴分割与合并（每次分割小的空闲块，系统中始终保持大的空闲快）
+![huoban2.jpg](/images/huoban2.jpg)
+
+### 内存管理方案
+装载单位： 进程
+1.单一连续区域:只有一个进程在内存
+![memoryalloc.jpg](/images/memoryalloc.jpg)
+
+2.固定分区：内存分区，每个分区只装1个进程，进程在各个分区排队
+![memoryalloc2.jpg](/images/memoryalloc2.jpg)
+
+3.可变分区：内存按需分配给进程
+外碎片：进程和进程之间的空隙
+![memoryalloc3.jpg](/images/memoryalloc3.jpg)
+memory compaction:在内存移动程序，合并空闲区域
+进程IO时不能移动。
+
+#### 进程进入内存不是连续区域，而是进入内存若干个不连续区域。
+//todo
+https://www.coursera.org/lecture/os-pku/ji-ben-nei-cun-guan-li-fang-an-2-p4N0u
+1.页式
+![pagememory.jpg](/images/pagememory.jpg)
+如果是32位的计算机,如果页面大小4k,0~11 12位为偏移
+![pagememory2.jpg](/images/pagememory2.jpg)
+ 页表项记录了逻辑页号 到页框号的一个映射关系
+ 每个进程都有一张页表，页表放在内存，一个进程上CPU之后 这个进程的页表的起始地址要推送到某一个寄存器
+ 页表的起始地址在哪个数据结构？
+用 bitmap 位图管理物理内存
+
 ### 死锁的4个条件
 
 ### Windows API让cpu使用率划出一条直线
