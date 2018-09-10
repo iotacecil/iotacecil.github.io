@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="91 1-26数字对应26个字母，问一个数字对应多少种解码方式226-&amp;gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z)1递归：8%1234567891011121314Map&amp;lt;String,Integer&amp;gt; map = new HashMap&amp;lt;&amp;gt;();public int numDecodings(String s)&amp;#123;    if(s.le">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些DFS,BFS可以变成DP,BB的计数题">
+<meta property="og:url" content="http://iotaa.xyz/2018/09/09/dfs2bfs2dp2bb/index.html">
+<meta property="og:site_name" content="Learn &amp; practice">
+<meta property="og:description" content="91 1-26数字对应26个字母，问一个数字对应多少种解码方式226-&amp;gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z)1递归：8%1234567891011121314Map&amp;lt;String,Integer&amp;gt; map = new HashMap&amp;lt;&amp;gt;();public int numDecodings(String s)&amp;#123;    if(s.le">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://iotaa.xyz/images/numbst.jpg">
+<meta property="og:image" content="http://iotaa.xyz/2018/09/09/dfs2bfs2dp2bb/numbst2.jpg">
+<meta property="og:image" content="http://iotaa.xyz/2018/09/09/dfs2bfs2dp2bb/numbst3.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/catalannum.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/catalanformu.jpg">
+<meta property="og:updated_time" content="2018-09-10T07:13:18.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些DFS,BFS可以变成DP,BB的计数题">
+<meta name="twitter:description" content="91 1-26数字对应26个字母，问一个数字对应多少种解码方式226-&amp;gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z)1递归：8%1234567891011121314Map&amp;lt;String,Integer&amp;gt; map = new HashMap&amp;lt;&amp;gt;();public int numDecodings(String s)&amp;#123;    if(s.le">
+<meta name="twitter:image" content="http://iotaa.xyz/images/numbst.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://iotaa.xyz/2018/09/09/dfs2bfs2dp2bb/"/>
+
+
+
+
+
+  <title>一些DFS,BFS可以变成DP,BB的计数题 | Learn & practice</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn & practice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/09/09/dfs2bfs2dp2bb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一些DFS,BFS可以变成DP,BB的计数题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-09T15:22:54+08:00">
+                2018-09-09
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-10T15:13:18+08:00">
+                2018-09-10
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><a href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式" class="headerlink" title="91 1-26数字对应26个字母，问一个数字对应多少种解码方式"></a>91 1-26数字对应26个字母，问一个数字对应多少种解码方式</h3><p>226-&gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z)<br>1递归：8%<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s.length()&lt;<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(map.containsKey(s))<span class="keyword">return</span> map.get(s);</span><br><span class="line">    <span class="keyword">if</span>(s.charAt(<span class="number">0</span>)==<span class="string">'0'</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(s.length()==<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    w = numDecodings(s.substring(<span class="number">1</span>));</span><br><span class="line">    <span class="keyword">int</span> pre2 = Integer.parseInt(s.substring(<span class="number">0</span>,<span class="number">2</span>));</span><br><span class="line">    <span class="keyword">if</span>(pre2&lt;=<span class="number">26</span>)&#123;</span><br><span class="line">        w+=numDecodings(s.substring(<span class="number">2</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    map.put(s,w);</span><br><span class="line">    <span class="keyword">return</span> w;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2递归改成index 63%<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> help(s,<span class="number">0</span>,s.length()-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">help</span><span class="params">(String s,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l&gt;s.length()-<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(s.charAt(<span class="number">0</span>)==<span class="string">'0'</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(l&gt;=r)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    w = help(s,l+<span class="number">1</span>,r);</span><br><span class="line">    <span class="keyword">int</span> pre2 = (s.charAt(l)-<span class="string">'0'</span>)*<span class="number">10</span>+s.charAt(l+<span class="number">1</span>)-<span class="string">'0'</span>;</span><br><span class="line">    <span class="keyword">if</span>(pre2&lt;=<span class="number">26</span>)&#123;</span><br><span class="line">        w+=help(s,l+<span class="number">2</span>,r);</span><br><span class="line">    &#125;</span><br><span class="line">    map2.put(l,w);</span><br><span class="line">    <span class="keyword">return</span> w;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.dp[i]表示s[0..i]的解码方式？？？<br>dp[0]=1<br>226-&gt;s[‘2’]-&gt;dp[1]=dp[0]=1<br>   -&gt;s[‘2’]-&gt;s[‘22’]-&gt;dp[2]=dp[1]+dp[0]=2<br>   -&gt;s[‘6’]-&gt;s[‘26’]-&gt;dp[3]=dp[2]+dp[1]=3</p>
+<p>102<br>当s[i]合法,dp[i]=dp[i-1], dp[1]=dp[0]<br>当s[i][i-1]合法dp[i]=dp[i-2] ,dp[2]=dp[0]<br>当s[i-1]s[i]合法，dp[i]=dp[i-1]+dp[i-2]</p>
+<h3 id="343-整数分割求乘积最大值"><a href="#343-整数分割求乘积最大值" class="headerlink" title="343 整数分割求乘积最大值"></a>343 整数分割求乘积最大值</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] memo;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">IntegerBread</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    memo = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">return</span> ib(n);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">ib</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(memo[n]!=<span class="number">0</span>)<span class="keyword">return</span> memo[n];</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> res = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;n;i++)&#123;</span><br><span class="line">        res = Math.max(res,Math.max(i*(n-i),i*ib(n-i)));</span><br><span class="line">        memo[n]=res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>dp：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i] = Math.max(dp[i],Math.max(j*(i-j),j*dp[i-j]));</span><br></pre></td></tr></table></figure></p>
+<h3 id="787-中间最多停留k次的，最小花费路线"><a href="#787-中间最多停留k次的，最小花费路线" class="headerlink" title="787 中间最多停留k次的，最小花费路线"></a>787 中间最多停留k次的，最小花费路线</h3><blockquote>
+<p>Input: n = 3, edges = [[0,1,100],[1,2,100],[0,2,500]]<br>src = 0, dst = 2, k = 1<br>from src to dst with up to k stops 最小花费<br>Output: 200</p>
+</blockquote>
+<p>dfs：复杂度n^(k+1)<br>1.cost边集-&gt;邻接表<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, Map&lt;Integer, Integer&gt;&gt; edgeC2graph(<span class="keyword">int</span>[][]edges,<span class="keyword">int</span> n)&#123;</span><br><span class="line">    Map&lt;Integer, Map&lt;Integer, Integer&gt;&gt; graph = <span class="keyword">new</span> HashMap&lt;&gt;(n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>[] edge : edges) &#123;</span><br><span class="line">        graph.putIfAbsent(edge[<span class="number">0</span>], <span class="keyword">new</span> HashMap&lt;&gt;());</span><br><span class="line">        graph.get(edge[<span class="number">0</span>]).put(edge[<span class="number">1</span>], edge[<span class="number">2</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> graph;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>dfs 常规回溯<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, Map&lt;Integer, Integer&gt;&gt; graph;</span><br><span class="line"><span class="keyword">boolean</span>[] visited;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findCheapestPrice</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[][] flights, <span class="keyword">int</span> src, <span class="keyword">int</span> dst, <span class="keyword">int</span> K)</span> </span>&#123;</span><br><span class="line">    graph = <span class="keyword">new</span> HashMap&lt;&gt;(n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>[] edge : flights) &#123;</span><br><span class="line">        graph.putIfAbsent(edge[<span class="number">0</span>], <span class="keyword">new</span> HashMap&lt;&gt;());</span><br><span class="line">        graph.get(edge[<span class="number">0</span>]).put(edge[<span class="number">1</span>], edge[<span class="number">2</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[n];</span><br><span class="line">    visited[src] = <span class="keyword">true</span>;</span><br><span class="line">    dfs(graph, src, dst, K + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ans == Integer.MAX_VALUE ? -<span class="number">1</span> : ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> ans = Integer.MAX_VALUE;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(Map&lt;Integer, Map&lt;Integer, Integer&gt;&gt; graph, <span class="keyword">int</span> src, <span class="keyword">int</span> dst, <span class="keyword">int</span> k, <span class="keyword">int</span> cost)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (src == dst) &#123;</span><br><span class="line">        ans = cost;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (k == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">    Map&lt;Integer, Integer&gt; adj = graph.getOrDefault(src,<span class="keyword">new</span> HashMap&lt;&gt;());</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> key : adj.keySet()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (visited[key]) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span> (cost + adj.get(key) &gt; ans) <span class="keyword">continue</span>;</span><br><span class="line">        visited[key] = <span class="keyword">true</span>;</span><br><span class="line">        dfs(graph, key, dst, k - <span class="number">1</span>, cost + adj.get(key));</span><br><span class="line">        visited[key] = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>94ms<br>bfs:复杂度n^(k+1) Dijkstra 最小优先队列扩展，先扩展加上下一个点cost最小的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findCheapestPriceDj</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[][] flights, <span class="keyword">int</span> src, <span class="keyword">int</span> dst, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    Map&lt;Integer, Map&lt;Integer, Integer&gt;&gt; graph = edgeC2graph(flights, n);</span><br><span class="line">    <span class="comment">//每次选cost最小的先扩展</span></span><br><span class="line">    Queue&lt;<span class="keyword">int</span>[]&gt; que = <span class="keyword">new</span> PriorityQueue&lt;&gt;(Comparator.comparingInt(a -&gt; a[<span class="number">0</span>]));</span><br><span class="line">    que.add(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">0</span>,src,k+<span class="number">1</span>&#125;);</span><br><span class="line">    <span class="keyword">while</span>(!que.isEmpty())&#123;</span><br><span class="line">        <span class="keyword">int</span>[] top = que.remove();</span><br><span class="line">        <span class="keyword">int</span> price = top[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> city = top[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> stops = top[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">if</span>(city == dst)<span class="keyword">return</span> price;</span><br><span class="line">        <span class="keyword">if</span>(stops&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            Map&lt;Integer, Integer&gt; adj = graph.getOrDefault(city, <span class="keyword">new</span> HashMap&lt;&gt;());</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> a:adj.keySet())&#123;</span><br><span class="line">                que.add(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;price+adj.get(a),a,stops-<span class="number">1</span>&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>bellman-ford 单源到所有点的最短路径kn^2 dp<br><code>dp[k][v]</code> 从起点到v最多k次stop的最小花费<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findCheapestPriceDp</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span>[][] flights, <span class="keyword">int</span> src, <span class="keyword">int</span> dst, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">10001</span>*(k+<span class="number">2</span>);</span><br><span class="line">    <span class="comment">//走1~k+1步</span></span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[k+<span class="number">2</span>][n];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span>[] ints:dp)&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            ints[j] = max;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dp[<span class="number">0</span>][src] = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//如果不限制中间k个点，则可以遍历n次</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= k+<span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="comment">//走i步走到src ， cost 0</span></span><br><span class="line">        dp[i][src] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span>[] flight:flights)&#123;</span><br><span class="line">            <span class="comment">//关键</span></span><br><span class="line">            dp[i][flight[<span class="number">1</span>]] = Math.min(dp[i][flight[<span class="number">1</span>]],dp[i-<span class="number">1</span>][flight[<span class="number">0</span>]]+flight[<span class="number">2</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[k+<span class="number">1</span>][dst]&gt;=max?-<span class="number">1</span>:dp[k+<span class="number">1</span>][dst];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="？96-不同的BST数量-catalan数"><a href="#？96-不同的BST数量-catalan数" class="headerlink" title="？96 不同的BST数量 catalan数"></a>？96 不同的BST数量 catalan数</h3><p><img src="/images/numbst.jpg" alt="numbst.jpg"><br>(为什么是乘)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1个节点只有1种，2个节点1    2 一共两种</span><br><span class="line">                      \  /</span><br><span class="line">                      2  1</span><br><span class="line">3个节点1      2      3</span><br><span class="line">      / \    / \    / \</span><br><span class="line">   （0）(2) (1)(1) (2)(0)</span><br><span class="line">      1x2  + 1x1  + 2x1</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2018/09/09/dfs2bfs2dp2bb/numbst2.jpg" alt="numbst2.jpg"><br><img src="/2018/09/09/dfs2bfs2dp2bb/numbst3.jpg" alt="numbst3.jpg"><br>当n=5 $T[4]+T[1][3]+T[2][2]+T[3][1]+T[4]$</p>
+<p>左子树有j个节点，右子树有n-j-1个节点<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"><span class="comment">//节点个数</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">    <span class="comment">//左边j个</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">        <span class="comment">//注意是累加</span></span><br><span class="line">        dp[i]+=dp[j]*dp[i-j-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> dp[n];</span><br></pre></td></tr></table></figure></p>
+<p>dfs:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numTreesDfs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] memory = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">return</span> dfs(n,memory);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> n,<span class="keyword">int</span>[] memroy)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>||n==<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(memroy[n-<span class="number">1</span>]!=<span class="number">0</span>)<span class="keyword">return</span> memroy[n-<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;=n ; i++) &#123;</span><br><span class="line">        sum+=dfs(i-<span class="number">1</span>,memroy)*dfs(n-i,memroy);</span><br><span class="line">    &#125;</span><br><span class="line">    memroy[n-<span class="number">1</span>] = sum;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/catalannum.jpg" alt="catalannum.jpg"><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ans[] = &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">14</span>, <span class="number">42</span>, <span class="number">132</span>, <span class="number">429</span>, <span class="number">1430</span>, <span class="number">4862</span>, <span class="number">16796</span>, <span class="number">58786</span>, <span class="number">208012</span>, <span class="number">742900</span>, <span class="number">2674440</span>, <span class="number">9694845</span>, <span class="number">35357670</span>, <span class="number">129644790</span>, <span class="number">477638700</span>, <span class="number">1767263190</span>&#125;;</span><br><span class="line"><span class="keyword">return</span> ans[n];</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">if</span>(n&lt;=<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    res += catalan(i) * catalan(n - i - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>二项式系数<br><img src="/images/catalanformu.jpg" alt="catalanformu.jpg"><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">C</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> res = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;Math.min(b,a-b);i++)&#123;</span><br><span class="line">        res=res*(a-i)/(i+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">int</span>)res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//C(2n,n)/(n+1)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">catalen2</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c =C(<span class="number">2</span>*n,n);</span><br><span class="line">    <span class="keyword">return</span> c/(n+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="BFS边可以重复访问的访问所有点的最短路径"><a href="#BFS边可以重复访问的访问所有点的最短路径" class="headerlink" title="BFS边可以重复访问的访问所有点的最短路径"></a>BFS边可以重复访问的访问所有点的最短路径</h3><p>graph.length = N</p>
+<blockquote>
+<p>Input: [[1,2,3],[0],[0],[0]] 邻接表<br>Output: 4<br>Explanation: One possible path is [1,0,2,0,3]</p>
+</blockquote>
+<div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pair</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span>&#123;</span><br><span class="line">        K key;</span><br><span class="line">        V value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">shortestPathLength</span><span class="params">(<span class="keyword">int</span>[][] graph)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = graph.length;</span><br><span class="line">    <span class="keyword">int</span> endState = (<span class="number">1</span>&lt;&lt;n)-<span class="number">1</span>;</span><br><span class="line">    Deque&lt;Pair&lt;Integer,Integer&gt;&gt; que = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    <span class="keyword">boolean</span> [][] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[n][<span class="number">1</span>&lt;&lt;n];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">        que.add(<span class="keyword">new</span> Pair&lt;&gt;(i,<span class="number">1</span>&lt;&lt;i));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> step =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(!que.isEmpty())&#123;</span><br><span class="line">        <span class="keyword">int</span> size = que.size();</span><br><span class="line">        <span class="keyword">while</span>(size--&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            Pair&lt;Integer, Integer&gt; front = que.poll();</span><br><span class="line">            Integer cur = front.key;</span><br><span class="line">            Integer state = front.value;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(state == endState) <span class="keyword">return</span> step;</span><br><span class="line">            <span class="keyword">if</span>(visited[cur][state])<span class="keyword">continue</span>;</span><br><span class="line">            visited[cur][state] = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> next:graph[cur])&#123;</span><br><span class="line">                que.add(<span class="keyword">new</span> Pair&lt;&gt;(next,state|(<span class="number">1</span>&lt;&lt;next)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        step++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/07/need2Learn/" rel="next" title="need2Learn">
+                <i class="fa fa-chevron-left"></i> need2Learn
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">学习一个技术不要轻易过去，要有技术深度做一个demo</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><span class="nav-number">1.</span> <span class="nav-text">91 1-26数字对应26个字母，问一个数字对应多少种解码方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#343-整数分割求乘积最大值"><span class="nav-number">2.</span> <span class="nav-text">343 整数分割求乘积最大值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#787-中间最多停留k次的，最小花费路线"><span class="nav-number">3.</span> <span class="nav-text">787 中间最多停留k次的，最小花费路线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#？96-不同的BST数量-catalan数"><span class="nav-number">4.</span> <span class="nav-text">？96 不同的BST数量 catalan数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BFS边可以重复访问的访问所有点的最短路径"><span class="nav-number">5.</span> <span class="nav-text">BFS边可以重复访问的访问所有点的最短路径</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

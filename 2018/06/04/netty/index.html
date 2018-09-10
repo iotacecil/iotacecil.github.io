@@ -80,12 +80,12 @@
 
 
 
-<meta name="description" content="select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）FD_SETSIZE 在哪 每次select调用会扫描所有fd 内核拷贝fd的消息到用户空间  epoll最大打开的文件数量（并发量）cat /proc/sys/fs/file-max mui文档http://dev.dcloud.net.cn/mui/util/http://www.html5plus.org">
+<meta name="description" content="select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）FD_SETSIZE 在哪 每次select调用会扫描所有fd 内核拷贝fd的消息到用户空间  epollhttps://www.cnblogs.com/xiehongfeng100/p/4636118.html最大打开的文件数量（并发量）cat /proc/sys/fs/file-max mui文档http:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty">
 <meta property="og:url" content="http://iotaa.xyz/2018/06/04/netty/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）FD_SETSIZE 在哪 每次select调用会扫描所有fd 内核拷贝fd的消息到用户空间  epoll最大打开的文件数量（并发量）cat /proc/sys/fs/file-max mui文档http://dev.dcloud.net.cn/mui/util/http://www.html5plus.org">
+<meta property="og:description" content="select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）FD_SETSIZE 在哪 每次select调用会扫描所有fd 内核拷贝fd的消息到用户空间  epollhttps://www.cnblogs.com/xiehongfeng100/p/4636118.html最大打开的文件数量（并发量）cat /proc/sys/fs/file-max mui文档http:">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/IOs.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/handler.jpg">
@@ -100,10 +100,10 @@
 <meta property="og:image" content="http://iotaa.xyz/images/zwhf.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/wldz.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/backlog.jpg">
-<meta property="og:updated_time" content="2018-09-08T07:35:16.454Z">
+<meta property="og:updated_time" content="2018-09-10T08:32:20.766Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty">
-<meta name="twitter:description" content="select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）FD_SETSIZE 在哪 每次select调用会扫描所有fd 内核拷贝fd的消息到用户空间  epoll最大打开的文件数量（并发量）cat /proc/sys/fs/file-max mui文档http://dev.dcloud.net.cn/mui/util/http://www.html5plus.org">
+<meta name="twitter:description" content="select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）FD_SETSIZE 在哪 每次select调用会扫描所有fd 内核拷贝fd的消息到用户空间  epollhttps://www.cnblogs.com/xiehongfeng100/p/4636118.html最大打开的文件数量（并发量）cat /proc/sys/fs/file-max mui文档http:">
 <meta name="twitter:image" content="http://iotaa.xyz/images/IOs.jpg">
 
 
@@ -350,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-08T15:35:16+08:00">
-                2018-09-08
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-10T16:32:20+08:00">
+                2018-09-10
               </time>
             
           </span>
@@ -411,7 +411,7 @@
 <li>每次select调用会扫描所有fd</li>
 <li>内核拷贝fd的消息到用户空间</li>
 </ol>
-<h3 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h3><p>最大打开的文件数量（并发量）<br><code>cat /proc/sys/fs/file-max</code></p>
+<h3 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h3><p><a href="https://www.cnblogs.com/xiehongfeng100/p/4636118.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiehongfeng100/p/4636118.html</a><br>最大打开的文件数量（并发量）<br><code>cat /proc/sys/fs/file-max</code></p>
 <h3 id="mui文档"><a href="#mui文档" class="headerlink" title="mui文档"></a>mui文档</h3><p><a href="http://dev.dcloud.net.cn/mui/util/" target="_blank" rel="noopener">http://dev.dcloud.net.cn/mui/util/</a><br><a href="http://www.html5plus.org/doc/zh_cn/webview.html" target="_blank" rel="noopener">http://www.html5plus.org/doc/zh_cn/webview.html</a></p>
 <h3 id="阻塞与非阻塞是线程访问资源是否就绪的一种处理方式"><a href="#阻塞与非阻塞是线程访问资源是否就绪的一种处理方式" class="headerlink" title="阻塞与非阻塞是线程访问资源是否就绪的一种处理方式"></a>阻塞与非阻塞是线程访问资源是否就绪的一种处理方式</h3><h3 id="同步和异步-数据访问的机制-数据处理完毕后会通知线程"><a href="#同步和异步-数据访问的机制-数据处理完毕后会通知线程" class="headerlink" title="同步和异步 数据访问的机制 数据处理完毕后会通知线程"></a>同步和异步 数据访问的机制 数据处理完毕后会通知线程</h3><p><img src="/images/IOs.jpg" alt="IOs.jpg"></p>
 <h3 id="同步阻塞BIO"><a href="#同步阻塞BIO" class="headerlink" title="同步阻塞BIO"></a>同步阻塞BIO</h3><p>一个线程一个连接，用线程池 伪异步io</p>
@@ -648,7 +648,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
