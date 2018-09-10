@@ -4,21 +4,33 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
 ---
+### 42
+
+
+
 ### 最长01串
 
 ### 53 最大子串和
 维持最小sum和最大sum，更新差值
 
-### 不重复字符的字符串最大划分 greedy
-> Input: S = "ababcbacadefegdehijhklij"
-Output: [9,7,8]
-Explanation:
-The partition is "ababcbaca", "defegde", "hijhklij".
+
 
 ### 倒水问题 BFS
-poj 3414
-容量A3 B5 获得4升水的最短序列
+#### poj 3414 Pots
+http://poj.org/problem?id=3414
+> 输入：3 5 4
+> 输出
+> 容量A3 B5 获得4升水的最短序列
+> 6
+> FILL(2)
+> POUR(2,1)
+> DROP(1)
+> POUR(2,1)
+> FILL(2)
+> POUR(2,1)
+
 Accepted    3128K   1125MS  Java    3840B
+
 ```java
 class pathNode{
     int a,b;
@@ -106,13 +118,13 @@ void Bfs(int A,int B,int C){
 }
 ```
 
+#### poj 1606
+
 
 ### 2^N 大整数
 
 快速幂
-```java
-int quickPow
-```
+
 
 
 ### 287 O(1)空间，找到数组中重复的数字
@@ -682,6 +694,12 @@ Items can be broen down 贪心按value/weight排序
 ![knapsack.jpg](/images/knapsack.jpg)
 
 ### tsp
+tsp with profit（在顶点上）分3种
+1. PTP(profitable tour problem)找到最小 cost-profit 的circuit
+2. OP(orienteering problem),也叫selective TSP。cost是约束，求不超过cost的最大profit
+3. PCTSP（prize-collecting)profit是约束，目的是找到不低于profit的最小cost。
+
+
 0~3的tspdp解法
 ![tspdp.jpg](/images/tspdp.jpg)
 
@@ -1737,76 +1755,6 @@ dp[i][j]=Math.max(1,Math.min(dp[i+1][j],dp[i][j+1])-dungeon[i][j]);
 
 
 
-### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
-226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
-1递归：8%
-```java
-Map<String,Integer> map = new HashMap<>();
-public int numDecodings(String s){
-    if(s.length()<1)return 1;
-    if(map.containsKey(s))return map.get(s);
-    if(s.charAt(0)=='0')return 0;
-    if(s.length()==1)return 1;
-    w = numDecodings(s.substring(1));
-    int pre2 = Integer.parseInt(s.substring(0,2));
-    if(pre2<=26){
-        w+=numDecodings(s.substring(2));
-    }
-    map.put(s,w);
-    return w;
-}
-```
-2递归改成index 63%
-```java
-public int numDecodings(String s){
-    return help(s,0,s.length()-1);
-    }
-private int help(String s,int l,int r){
-    if(l>s.length()-1)return 1;
-    if(s.charAt(0)=='0')return 0;
-    if(l>=r)return 1;
-    w = help(s,l+1,r);
-    int pre2 = (s.charAt(l)-'0')*10+s.charAt(l+1)-'0';
-    if(pre2<=26){
-        w+=help(s,l+2,r);
-    }
-    map2.put(l,w);
-    return w;
-}
-```
-3.dp[i]表示s[0..i]的解码方式？？？
-dp[0]=1
-226->s['2']->dp[1]=dp[0]=1
-   ->s['2']->s['22']->dp[2]=dp[1]+dp[0]=2
-   ->s['6']->s['26']->dp[3]=dp[2]+dp[1]=3
-
-102
-当s[i]合法,dp[i]=dp[i-1], dp[1]=dp[0]
-当s[i][i-1]合法dp[i]=dp[i-2] ,dp[2]=dp[0]
-当s[i-1]s[i]合法，dp[i]=dp[i-1]+dp[i-2]
-
-### 343 整数分割求乘积最大值
-```java
-int[] memo;
-public int IntegerBread(int n){
-    memo = new int[n+1];
-    return ib(n);
-}
-private int ib(int n){
-    if(memo[n]!=0)return memo[n];
-    if(n==1)return 1;
-    int res = -1;
-    for(int i=1;i<n;i++){
-        res = Math.max(res,Math.max(i*(n-i),i*ib(n-i)));
-        memo[n]=res;
-    }
-    return res;
-}
-```
-dp：
-```java
-dp[i] = Math.max(dp[i],Math.max(j*(i-j),j*dp[i-j]));
-```
 
 
 ### 671 根的值<=子树的值的二叉树中的第二小元素
@@ -1915,6 +1863,10 @@ XYZ YYZ XZZ XYY XXY
 dp[i] 表示N = i的时候有多少种解
 其实是费fib数列
 
+#### poj 2411
+http://poj.org/problem?id=2411
+输入：大矩阵的h高，和w宽
+输出:用宽2，高1的骨牌一共有多少种拼法
 
 
 ### !!97 s1和s2是否交错组成s3
@@ -2008,94 +1960,7 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
   从右向左扫描，同理更新max，当左括号>右括号重置0.
 
 ---
-### ？96 不同的BST数量 catalan数
-![numbst.jpg](/images/numbst.jpg)
-(为什么是乘)
-```
-1个节点只有1种，2个节点1    2 一共两种
-                      \  /
-                      2  1
-3个节点1      2      3
-      / \    / \    / \
-   （0）(2) (1)(1) (2)(0)
-      1x2  + 1x1  + 2x1
-```
-![numbst2.jpg](numbst2.jpg)
-![numbst3.jpg](numbst3.jpg)
-当n=5 $T[4]+T[1][3]+T[2][2]+T[3][1]+T[4]$
 
-左子树有j个节点，右子树有n-j-1个节点
-```java
-int[] dp = new int[n+1];
-dp[0] = 1;
-dp[1] = 1;
-//节点个数
-for(int i =2;i<=n;i++){
-    //左边j个
-    for(int j =0;j<i;j++){
-        //注意是累加
-        dp[i]+=dp[j]*dp[i-j-1];
-    }
-}
-return dp[n];
-```
-dfs:
-```java
-public int numTreesDfs(int n) {
-    int[] memory = new int[n+1];
-    return dfs(n,memory);
-}
-public int dfs(int n,int[] memroy){
-    if(n==0||n==1)return 1;
-    if(memroy[n-1]!=0)return memroy[n-1];
-    int sum = 0;
-    for (int i = 1; i <=n ; i++) {
-        sum+=dfs(i-1,memroy)*dfs(n-i,memroy);
-    }
-    memroy[n-1] = sum;
-    return sum;
-}
-```
-
-![catalannum.jpg](/images/catalannum.jpg)
-```java
-int ans[] = {1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190};
-return ans[n];
-```
-
-```java
-int res = 0;
-if(n<=1)return 1;
-for (int i = 0; i < n; i++) {
-    res += catalan(i) * catalan(n - i - 1);
-}
-```
-
-二项式系数
-![catalanformu.jpg](/images/catalanformu.jpg)
-```java
-private int C(int a,int b){
-    long res = 1;
-    for(int i =0;i<Math.min(b,a-b);i++){
-        res=res*(a-i)/(i+1);
-    }
-    return (int)res;
-}
-//C(2n,n)/(n+1)
-public int catalen2(int n){
-    int c =C(2*n,n);
-    return c/(n+1);
-}
-```
-
-
-### ！？？？95 输出全部不同的BST
-[1~n]组成的BST
-```
-1.......k...n
-       / \
-[1~k-1]  [k+1,n] 与上一层的构建过程是一样的
-```
 
 ---
 
@@ -2377,26 +2242,6 @@ $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 
 ### 本福特定律
 以1为首位的数字的概率为30%
-
-### 786 数组中可能组成的分数排序后第k大的是哪个组合
-数组长度2000 n^2的算法是超时
-> A = [1, 2, 3, 5], K = 3
-> Output: [2, 5]
-Explanation:
-The fractions to be considered in sorted order are:
-1/5, 1/3, 2/5, 1/2, 3/5, 2/3.
-The third fraction is 2/5.
-
-`M[i][j]=A[i]/A[j]`肯定在右上角最小
-```
-1/2 1/3 1/5 
--   2/3 2/5
--   -   3/5
-```
-1 查比0.5小有1/2,1/3,2/5 大于3个 r =0.5
-2 查比0.25小的有1/5 l=0.25
-3 查比0.375小的有1/3,1/5 l=0.375
-4 查比0.475小的正好3个
 
 
 
@@ -2923,36 +2768,6 @@ private void dfs(int amount,int idx,int[] coins,int count){
  
 
 ---
-### 网络流
-1. 最小割 st-cut 去掉这几条边，源点S和终点T就会被分为两个不相交的set，S到不了T。这种边集的最小值
-断掉两点间的通信的最小代价。
-2. 最大流max-flow 边的流量小于capacity。每个点的入流和出流相等。除了源点S和终点T。求源点/终点能发出/接收的最大值。
-
-其实可以是一个问题。
-
-#### Ford-fulkerson算法
-1 先假设每条边的当前流量是0/capacity
-2 找到S到T的路径，并最大化这条路径上的空的边的当前流量 
-3 继续找路径，如果可以通过一条边的反向到达T，经过的是一条边的反向流，则减少这条边逆向流过去。
-4 每条边到达正向包和或者负向为0 不能remove from backward edge
-
-#### flow value lemma :最小cut上的流量 == 最大网络流
-flow <= capacity of cut
-max flw == min cut
-
-#### 已知最大流(cur/capacity) 求cut
-从S点 正向走最不满的正向流。走最满的逆向流，满正向流和空逆向流当作不存在。
-
-#### 如何找augmenting path BFS
-如果容量都是integer
-number of augemntation <= maxflow value 每次增加至少1
-
-查找
-![trie.jpg](/images/trie.jpg)
-插入
-![tirinsert.jpg](/images/tirinsert.jpg)
-
----
 
 
 
@@ -3009,7 +2824,7 @@ A变成冠军需要赢没比过的另外8个队
 如果1/2赛  8个是一组
 ![shijiebei](/images/shijiebei.jpg)
 
-{% fold %}
+
 ```java
 for(int i =1;i<4;i++){
  int inergroup = 1<<i;
@@ -3023,6 +2838,7 @@ for(int i =1;i<4;i++){
         dp[i][j] += dp[i - 1][j] * dp[i - 1][k] * p[j][k];
 }}}}}
 ```
+{% fold %}
 第一轮：1进入1/8赢的概率是[1][2] 1打败2的概率=0.133
 第二轮：1赢了1/8进入1/4赢的概率是
 ```
@@ -3615,6 +3431,62 @@ public class Solution {
     1. 深度优先
 ![mounting](\images\mounting.jpg)
     2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
+
+BFS优先队列
+{% fold %}
+```java
+void swap(int[][] matrix,int x,int y,int newX,int newY){
+    int tmp = matrix[x][y];
+    matrix[x][y] = matrix[newX][newY];
+    matrix[newX][newY] = tmp;
+}
+void printPath(Node root){
+    if(root == null)return;
+    printPath(root.parent);
+    print2D(root.mat);
+    System.out.println();
+}
+Node createNode(int[][] matrix,int x,int y,int newX,int newY,int level,Node parent){
+    Node node = new Node();
+    node.parent = parent;
+
+    node.mat = new int[matrix.length][];
+    for (int i = 0; i < matrix.length; i++) {
+        node.mat[i] = matrix[i].clone();
+    }
+    swap(node.mat,x ,y , newX,newY);
+    node.cost = Integer.MAX_VALUE;
+    node.x = newX;
+    node.y = newY;
+    return node;
+}
+void slove(int[][] from,int x,int y,int[][] end){
+    //扩展距离小的
+    PriorityQueue<Node> que = new PriorityQueue<>(
+            Comparator.comparingInt(node -> (node.cost + node.level))
+    );
+    Node root = createNode(from,x ,y ,x ,y ,0 , null);
+    root.cost = calCost(from,end );
+    que.add(root);
+    while(!que.isEmpty()){
+        Node min = que.poll();
+        //结果，从子节点向上递归打印
+        if(min.cost==0) {
+            printPath(min);
+            return;
+        }
+        //4个方向挪动白块四个方向为什么不会重复状态死循环
+        for (int i = 0; i < 4; i++) {
+            if(isInBoard(min.x+row[i],min.y+col[i])){
+                Node child = createNode(min.mat,min.x ,min.y , min.x+row[i], min.y+col[i], min.level+1, min);
+                child.cost = calCost(child.mat,end );
+                que.add(child);
+            }
+        }
+    }
+}
+```
+{% endfold %}
 
 ### Best-First搜索：全局最优贪心
 - 当前所有可扩展节点中启发函数最优点
