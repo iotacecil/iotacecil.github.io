@@ -4,11 +4,81 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+
 ### lc393 判断合法UTF8编码
 
 ### 287 数组中重复元素
+
+### 网络流
+https://algs4.cs.princeton.edu/64maxflow/
+https://www.geeksforgeeks.org/minimum-cut-in-a-directed-graph/
+1. 最小割 st-cut 去掉这几条边，源点S和终点T就会被分为两个不相交的set，S到不了T。这种边集的最小值
+断掉两点间的通信的最小代价。
+2. 最大流max-flow 边的流量小于capacity。每个点的入流和出流相等。除了源点S和终点T。求源点/终点能发出/接收的最大值。
+
+其实可以是一个问题。
+
+#### Ford-fulkerson算法
+1 先假设每条边的当前流量是0/capacity
+2 找到S到T的路径，并最大化这条路径上的空的边的当前流量 
+3 继续找路径，如果可以通过一条边的反向到达T，经过的是一条边的反向流，则减少这条边逆向流过去。
+4 每条边到达正向包和或者负向为0 不能remove from backward edge
+
+#### flow value lemma :最小cut上的流量 == 最大网络流
+flow <= capacity of cut
+max flw == min cut
+
+#### 已知最大流(cur/capacity) 求cut
+从S点 正向走最不满的正向流。走最满的逆向流，满正向流和空逆向流当作不存在。
+
+#### 如何找augmenting path BFS
+如果容量都是integer
+number of augemntation <= maxflow value 每次增加至少1
+
+查找
+![trie.jpg](/images/trie.jpg)
+插入
+![tirinsert.jpg](/images/tirinsert.jpg)
+
+---
+
+### 786 数组中可能组成的分数排序后第k大的是哪个组合
+数组长度2000 n^2的算法是超时
+> A = [1, 2, 3, 5], K = 3
+> Output: [2, 5]
+Explanation:
+The fractions to be considered in sorted order are:
+1/5, 1/3, 2/5, 1/2, 3/5, 2/3.
+The third fraction is 2/5.
+
+`M[i][j]=A[i]/A[j]`肯定在右上角最小
+```
+1/2 1/3 1/5 
+-   2/3 2/5
+-   -   3/5
+```
+1 查比0.5小有1/2,1/3,2/5 大于3个 r =0.5
+2 查比0.25小的有1/5 l=0.25
+3 查比0.375小的有1/3,1/5 l=0.375
+4 查比0.475小的正好3个
+
+
+
+### ！？？？95 输出全部不同的BST
+[1~n]组成的BST
+```
+1.......k...n
+       / \
+[1~k-1]  [k+1,n] 与上一层的构建过程是一样的
+```
+
+
+
+### 287 数组中只有1个重复元素 返回元素
+
 > containing n + 1 integers where each integer is between 1 and n (inclusive)
 
+不用set，空间降为O(1)
 将数组的数字想象成链表，找环
 > 1 4 6 6 6 2 3
 
@@ -130,9 +200,9 @@ public List<Integer> findAnagrams(String s, String p) {
 
 
 ### ！5 最长回文串
+//todo
 http://windliang.cc/2018/08/05/leetCode-5-Longest-Palindromic-Substring/
-!!反转做法不行:abcxyzcba -> abczyxcba ->相同的abc并不是回文
-!! 不能用LCS
+!!反转做法不行:abcxyzcba -> abczyxcba ->相同的abc并不是回文!! 不能用LCS
 “cba”是“abc”的 reversed copy
 中心扩展法：回文的中心有奇数：n个，偶数：n-1个位置
 会输出靠后的abab->输出bab
@@ -166,6 +236,7 @@ private int help(String s,int left,int right){
     return right-left-1;
 }
 ```
+
 #### Manacher's 算法 O(n)
 https://algs4.cs.princeton.edu/53substring/Manacher.java.html
 前缀/
@@ -206,7 +277,7 @@ public TreeNodeT<Character> createTree(String preOrder,String inOrder){
 
 ### ？？？有100个帽子，每个人有几顶，问每个人戴出来都不一样有多少种
 
-### 239
+### 239 数组给定滑动窗口大小的最大值
 Monotonic queue 前后可以修改o(1)，并且可以随机访问
 维护一个单调递减的序列，读一个窗口输出单调队列的first
 
@@ -218,10 +289,57 @@ Monotonic queue 前后可以修改o(1)，并且可以随机访问
 另外两个指针从1p往后从len-1往前。
 去重：预判：nums[low]=nums[low+1]:low++;nums[high]=nums[high-1]:high--;
 
-### ?3 连续最长不重复子序列
-两指针i从左向右遍历到最后
-j指示i之前不重复的最高位置。
-i-j+1为当前最长结果
+### poj2406 字符串周期 power string
+https://my.oschina.net/hosee/blog/661974
+http://poj.org/problem?id=2406
+abcd 1
+aaaa 4
+ababab 3
+
+### 459 判断字符串有重复模式 KMP
+kmp89% todo
+
+
+### !!!3 连续最长不重复子序列
+
+32%
+用set维护一个`[i,j)`窗口，不重复则窗口向右扩展，重复则窗口右移。
+```java
+public int lengthOfLongestSubstring(String s){
+    int n = s.length();
+    Set<Character> set = new HashSet<>();
+    int ans = 0,i=0,j=0;
+    while(i<n&&j<n){
+        if(!set.contains(s.charAt(j))){
+            set.add(s.charAt(j++));
+            ans = Math.max(ans,j-i);
+        }
+        else set.remove(s.charAt(i++));
+    }  
+    return ans;
+}
+```
+优化： todo
+`int[26]` for Letters 'a' - 'z' or 'A' - 'Z'
+`int[128]` for ASCII
+`int[256]` for Extended ASCII
+
+### 659 数组
+
+### 413 数组划分 能组成的等差数列个数
+> A = [1, 2, 3, 4]
+> 返回: 3, A 中有三个子等差数组: [1, 2, 3], [2, 3, 4] 以及自身 [1, 2, 3, 4]。
+
+### 725链表划分成k份子集
+
+### lt886 判断凸包
+https://www.lintcode.com/problem/convex-polygon/description
+
+### 763不重复字符的字符串最大划分 greedy
+> Input: S = "ababcbacadefegdehijhklij"
+Output: [9,7,8]
+Explanation:
+The partition is "ababcbaca", "defegde", "hijhklij".
 
 ### ?409 string中字符组成回文串的最大长度
 1.开int[128]，直接用int[char]++计数

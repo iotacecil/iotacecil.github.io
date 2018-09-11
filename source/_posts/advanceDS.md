@@ -238,6 +238,9 @@ https://leetcode.com/problems/implement-trie-prefix-tree/solution/
 
 #### 677计算单词前缀的累积和
 
+### RMQ
+https://www.jianshu.com/p/bb2e6b355b31
+
 ### 线段树Segment Tree
 定义：
 1.叶节点是输入
@@ -320,7 +323,6 @@ int rangeSum(int i,int j){
 | 6 -> 110 | e[6] = e[5]+e[6] |
 | 7 -> 111 | e[7] = a[7] |
 | 8 -> 1000 | e[8] = e[4]+e[6]+e[7]+a[8] |
-
 
 
 

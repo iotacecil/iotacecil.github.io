@@ -4,6 +4,17 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+### `emplace_back()`和`push_back()`
+emplace_back()更节省空间
+边集`<u,v,cost>`->邻接表
+```cpp
+unordered_map<int,vector<pair<int,int> > > g_;
+for(const auto& e: flights){
+    g_[e[0]].emplace_back(e[1],e[2]);
+}
+```
+
+
 ### 大端小端
 union的存放顺序是所有成员都从低地址开始存放
 一般操作系统都是小端，而通讯协议是大端的。
