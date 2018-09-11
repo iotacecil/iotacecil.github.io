@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/JDBC_conn.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/zangdu.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/geli.jpg">
-<meta property="og:updated_time" content="2018-09-05T10:34:13.298Z">
+<meta property="og:updated_time" content="2018-09-11T10:23:05.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mySQL">
 <meta name="twitter:description" content="开启mysql查询日志https://blog.csdn.net/leshami/article/details/39779225123456789101112131415show variables like &apos;%general%&apos;;+------------------+------------------------------+| Variable_name    | Value">
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-05T18:34:13+08:00">
-                2018-09-05
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-11T18:23:05+08:00">
+                2018-09-11
               </time>
             
           </span>
@@ -546,8 +546,44 @@
 <h4 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h4><ul>
 <li><strong>脏读</strong>：一个事务读取了一个事务未提交的更新<br><img src="/images/zangdu.jpg" alt="zangdu"></li>
 <li>不可重复读：同一个事务，两次读取值不一样。</li>
-<li>幻读：同一个事务，两次读取行记录数目不一样。插入了新记录<br><img src="/images/geli.jpg" alt="geli"><br>| 隔离级别 | 脏读 | 可重复读 | 幻读 |<br>| ——| —— | —— | —— |<br>| 读未提交 | √ |  X | √ |<br>| 读提交 | X | X | √ |<br>| 可重复读 | X  | √ | √ |<br>| 串行化 | X | √ | X |</li>
+<li>幻读：同一个事务，两次读取行记录数目不一样。插入了新记录<br><img src="/images/geli.jpg" alt="geli"></li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读未提交</td>
+<td>√</td>
+<td>X</td>
+<td>√</td>
+</tr>
+<tr>
+<td>读提交</td>
+<td>X</td>
+<td>X</td>
+<td>√</td>
+</tr>
+<tr>
+<td>可重复读</td>
+<td>X</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>串行化</td>
+<td>X</td>
+<td>√</td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
 <ol>
 <li>读未提交：允许脏读</li>
 <li>读提交：不允许脏读，可以不可重复读</li>
