@@ -4,6 +4,10 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 二进制
+`System.out.println(0b101);`//二进制:5  （0b开头的）
+`System.out.println(011);` //八进制9
+
 ### `List<String>` 2 `String[]`
 > [Ljava.lang.Object; cannot be cast to [Ljava.lang.String;
 

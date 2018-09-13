@@ -11,7 +11,8 @@ Bellman-Ford O(NE)稠密图不好 空间O(N) 可以有负的路径
 Floyd-Warshall O(N^3)
 
 heapDijkstra 
-//todo faster
+78%
+//todo faster 
 
 dijkstra:每次扩展距离最近的点 70% 32ms
 ```java
@@ -37,6 +38,7 @@ public int networkDelayTimeDFSDj(int[][] times, int N, int K) {
             }
         }
 //            System.out.println(candNode);
+        //都当作扩展点过了,
         if(candNode<0)break;
         marked[candNode] = true;
         //最近点的邻接
