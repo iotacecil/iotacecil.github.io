@@ -3,6 +3,245 @@ title: 一些DFS,BFS可以变成DP,BB的计数题
 date: 2018-09-09 15:22:54
 tags:
 ---
+### 743 从一个node广播，让所有节点收到最多要多久 单源最短路径
+> time[[2,1,1],[2,3,1],[3,4,1]] times[i] = (u, v, w) u到v花费w
+> N个节点，从K发送
+dijkstra如果用heap可以从$N^2$->$NlogN+E$ O(N+E)
+Bellman-Ford O(NE)稠密图不好 空间O(N) 可以有负的路径
+Floyd-Warshall O(N^3)
+
+heapDijkstra 
+//todo faster
+
+dijkstra:每次扩展距离最近的点 70% 32ms
+```java
+public int networkDelayTimeDFSDj(int[][] times, int N, int K) {
+    Map<Integer,List<int[]>> graph = new HashMap<>();
+    for(int[] edge:times) {
+        if (!graph.containsKey(edge[0]))
+            graph.put(edge[0], new ArrayList<int[]>());
+        graph.get(edge[0]).add(new int[]{edge[1], edge[2]});
+    }
+    int[] dis = new int[N];
+    Arrays.fill(dis, Integer.MAX_VALUE);
+    dis[K-1]=0;
+    boolean[] marked = new boolean[N+1];
+    while (true){
+        int candNode =-1;
+        int canDist = Integer.MAX_VALUE;
+        for (int i = 1; i <= N ; i++) {
+            //最近的点
+            if(!marked[i]&&dis[i-1]<canDist){
+                canDist = dis[i-1];
+                candNode = i;
+            }
+        }
+//            System.out.println(candNode);
+        if(candNode<0)break;
+        marked[candNode] = true;
+        //最近点的邻接
+        if(graph.containsKey(candNode))
+            for(int[] next:graph.get(candNode))
+                dis[next[0]-1] = Math.min(dis[next[0]-1],dis[candNode-1]+next[1]);
+//            System.out.println(Arrays.toString(dis));
+    }
+    int ans = 0;
+    for(int cost:dis){
+        if(cost==Integer.MAX_VALUE)return -1;
+        ans= Math.max(ans,cost);
+    }
+    return ans;
+}
+```
+
+dfs: 邻接表 建图，递归终止条件:到达所有点花费的时间已经是最小的了
+dfs Hashmap6% 改成数组11% 124ms
+```java
+public int networkDelayTimeDFS(int[][] times, int N, int K) {
+    //creategraph
+    Map<Integer,List<int[]>> graph = new HashMap<>();
+    for(int[] edge:times) {
+        if (!graph.containsKey(edge[0]))
+            graph.put(edge[0], new ArrayList<int[]>());
+        graph.get(edge[0]).add(new int[]{edge[1], edge[2]});
+    }//end-creategraph
+    //只是为了加速， 不排序2.8% 352ms
+    for(int node:graph.keySet()){
+        Collections.sort(graph.get(node),(a,b)->a[1]-b[1]);
+    }
+    dis = new int[N];
+    Arrays.fill(dis, Integer.MAX_VALUE);
+    dfs(graph,K,0);
+    int ans = 0;
+    for(int cost:dis){
+        ans = Math.max(ans,cost);
+    }
+    return ans==Integer.MAX_VALUE?-1:ans;
+}
+//用于记录到某点的距离，如果到这个点花费的时间已经超过记录的最小值了，不对这个点dfs了。
+int[] dis;
+private void dfs(Map<Integer,List<int[]>> graph,int node,int elased){
+    if(elased>=dis[node-1])return;
+    dis[node-1]=elased;
+    if(graph.containsKey(node)){
+        for(int[] nei:graph.get(node))
+            dfs(graph,nei[0],elased+nei[1]);
+    }
+}
+```
+
+```java
+/**Bellman Ford 边集
+ * 从K点广播给N个点需要的最少时间
+ * @param times u到v花费w秒 1 <= w <= 100.
+ * @param N N will be in the range [1, 100].
+ * @param K
+ * @return
+ */
+public int networkDelayTime(int[][] times, int N, int K) {
+    int max_time = 100*101;
+    int[] dis = new int[N];
+    int rst = Integer.MIN_VALUE;
+    Arrays.fill(dis,max_time);
+    //起点
+    dis[K-1] = 0;
+    //其他N-1个点
+    for (int i = 1; i <N ; i++) {
+        //遍历n次边的数组
+        for(int[] edge:times){
+            int u = edge[0]-1;
+            int v = edge[1]-1;
+            int w = edge[2];
+            //动态规划
+            dis[v] = Math.min(dis[v],dis[u]+w);
+        }
+
+    }
+    for(int cost:dis){
+        rst = Math.max(cost,rst );
+    }
+    return rst == max_time?-1:rst;
+}
+```
+
+弗洛伊德算法 边集
+```java
+public int networkDelayTimeF(int[][] times, int N, int K) {
+    int max_time = 100*101;
+    //二维数组 表示i到j的最短路径
+    int[][] dis = new int[N][N];
+    for(int[] d:dis){
+        Arrays.fill(d,max_time);
+    }
+    for(int[] time:times){
+        dis[time[0]-1][time[1]-1] = time[2];
+    }
+    for (int i = 0; i <N ; i++) {
+        dis[i][i] =0;
+    }
+    for (int k = 0; k <N ; k++) 
+        for (int i = 0; i <N ; i++) 
+            for (int j = 0; j <N ; j++) 
+                //三维动态规划
+                dis[i][j] = Math.min(dis[i][j],dis[i][k]+dis[k][j]);
+    int ans = Integer.MIN_VALUE;
+    for (int i = 0; i <N ; i++) {
+        if(dis[K-1][i]>=max_time)return -1;
+        ans = Math.max(ans,dis[K-1][i]);
+    }
+    return ans;
+}
+```
+
+### 322找钱最少硬币数
+贪心算法一般考举反例。
+不能用贪心的原因：如果coin={1,2,5,7,10}则使用2个7组成14是最少的，贪心不成立。
+满足贪心则需要coin满足倍数关系{1,5,10,20,100,200}
+
+
+> 输入：coins = [1, 2, 5], amount = 11
+> 输出：3 (11 = 5 + 5 + 1)
+
+1. 递归mincoins(coins,11)=mincoins(coins,11-1)+1=(mincoins,10-1)+1+1..=(mincoins,0)+n
+
+![coinchange.jpg](/images/coinchange.jpg)
+递归 记忆子问题 剩下3，用2的硬币变成剩下1的子问题和 剩下2，用1的硬币 剩下1的子问题是相同的。递归给count赋值是从下往上的。
+```java
+public int coinChange3(int[] coins, int amount) {
+    if(amount<1)return 0;
+    return coinChange2(coins,amount,new int[amount]);
+}
+private int coinC(int[] coins,int left,int[] count){
+    if(left<0)return -1;
+    if(left==0)return 0;
+    //关键，不然超时
+    if(count[left]!=0)return count[left];
+    int min = Integer.MAX_VALUE;
+    for(int coin:coins){
+        int useCoin = coinC(coins,left-coin,count);
+        if(useCoin >=0&&useCoin<min){
+            min = 1+useCoin;
+        }
+    }
+    return count[left] = (min==Integer.MAX_VALUE)?-1:min;  
+}
+```
+
+![coin](/images/coin.jpg)
+
+2. dp:
+    注意点：初值如果设为Int的max，两个都是max的话+1变成负数，所以设amount+1
+    j 从coin开始
+81%~94% 不稳定
+```java
+int[] dp = new int[amount+1];
+Arrays.fill(dp,amount+1);
+dp[0] =0;
+for(int coin:coins){
+    for(int j = coin;j<=amount;j++){
+        dp[j]=Math.min(dp[j],dp[j-coin]+1);
+    }
+}
+return dp[amount]>amount?-1:dp[amount];    
+```
+
+3. 最正确的方法：dfs分支限界
+    1.逆序coins数组 贪心从大硬币开始试
+    2.dfs终止条件是 找到硬币整除了，或者idx==0但是不能整除
+    3.剪枝条件是 考虑用当前`coins[idx]`i个之后，用下一个硬币至少1个，如果超了break
+99%
+```java
+int minCnt = Integer.MAX_VALUE;
+public int coinChangedfs(int[] coins,int amount){
+    Arrays.sort(coins);
+    dfs(amount,coins.length-1,)
+    return minCount == Integer.MAX_VALUE?-1:minCount;
+}
+private void dfs(int amount,int idx,int[] coins,int count){
+    if(amount%coins[idx]==0){
+        int bestCnt = count+amount/coins[idx];
+        //当[1,2,5] 11, 用掉两个5，count=2 idx=0,cnt+1=3 return
+        if(bestCnt<minCnt){
+            minCnt = bestCnt;
+            //这个return放在里面97%
+            return;
+        }
+        //本来应该放在这里 94%
+    }
+    if(idx==0)return;
+    for(int i = amount/coins[idx];i>=0;i--){
+        int leftA = amount - i*coins[idx];
+        int useCnt = count+i;
+        int nextCoin = coins[idx-1];
+        //保证只要left>0都还需要至少1枚硬币
+        //或者简单一点if(useCnt+1>minCount)break; 98%
+        if(useCnt+(leftA+nextCoin-1)/nextCoin>=minCount)break;
+        dfs(leftA,idx-1,coins,useCnt);
+    }
+}
+```
+
+
 ### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
 226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
 1递归：8%
@@ -265,11 +504,47 @@ public int catalen2(int n){
 ```
 
 
-### BFS边可以重复访问的访问所有点的最短路径
+### 847 BFS边可以重复访问的访问所有点的最短路径
 graph.length = N
 > Input: [[1,2,3],[0],[0],[0]] 邻接表
 > Output: 4
 > Explanation: One possible path is [1,0,2,0,3]
+
+
+
+dp：比tsp少判断一次next已经是访问过的点
+```java
+public int shortestPathLengthDP(int[][] graph) {
+    int n = graph.length;
+    int[][] dp = new int[n][1<<n];
+    Deque<State> que = new ArrayDeque<>();
+    for (int i = 0; i < n; i++) {
+        Arrays.fill(dp[i],Integer.MAX_VALUE);
+        dp[i][1<<i]=0;
+        que.add(new State(i,1<<i));
+    }
+    while(!que.isEmpty()){
+        State state = que.poll();
+        for(int next:graph[state.source]){
+            int nextMask = state.mask|(1<<next);
+            if(dp[next][nextMask]>dp[state.source][state.mask]+1){
+                dp[next][nextMask] = dp[state.source][state.mask]+1;
+                que.add(new State(next,nextMask));
+            }
+        }
+    }
+    int res = Integer.MAX_VALUE;
+    for (int i = 0; i <n ; i++) {
+        res = Math.min(res, dp[i][(1<<n)-1]);
+    }
+    return res;
+}
+```
+
+BFS：
+1. 定点可以访问多次，用当前搜索节点和当前访问过的节点mask作为visited数组
+2. bfs第一层每个顶点都可以作为出发点
+3. que中存储`pair<当前节点，访问过的节点>`
 
 {% fold %}
 ```java
@@ -292,7 +567,7 @@ public int shortestPathLength(int[][] graph) {
             Pair<Integer, Integer> front = que.poll();
             Integer cur = front.key;
             Integer state = front.value;
-
+            // mask全是1，访问了所有点
             if(state == endState) return step;
             if(visited[cur][state])continue;
             visited[cur][state] = true;

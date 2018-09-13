@@ -5,6 +5,13 @@ tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
 
+### centos 安装GLPK
+`tar -xzvf glpk-4.60.tar.gz` 
+`configure` 
+`make` 
+`make install`
+`glpsol --math orienteering_problem.mod --data a8.dat --output "./out"`
+
 ` kill -s 9 1827`
 ### 查文件
 ```

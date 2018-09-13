@@ -4,6 +4,7 @@ date: 2018-03-05 20:43:15
 tags: [os,memory]
 category: [cpp学习操作系统]
 ---
+https://www.polarxiong.com/archives/%E8%AF%BB-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-%E7%9A%84%E6%80%BB%E7%BB%93.html
 ### 伙伴系统：Linux内存分配方案，空闲块链表
 伙伴：如果需要的空间s需要`2^(n-1)<s<2^n`则空间/2，两个叫伙伴。
 ![huoban.jpg](/images/huoban.jpg)

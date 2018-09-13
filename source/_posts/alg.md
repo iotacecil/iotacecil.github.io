@@ -4,9 +4,178 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
 ---
+刷题顺序
+https://vjudge.net/article/6
+https://www.cnblogs.com/JuneWang/p/3773880.html
+
+
+
+
+### 179 一组非负数，拼接成最大的正整数
+> Input: [10,2]
+> Output: "210"
+
+
+String s1 = "9";
+String s2 = "31";
+
+String case1 =  s1 + s2; // 931
+String case2 = s2 + s1; // 319
+> String concatenation may be O(n^2) in Java (depends on if the compiler optimizes). Using StringBuilder is O(n).
+
+```java
+public String largestNumber(int[] nums) {
+    if(nums==null||nums.length<1)return "";
+    String[] strs = new String[nums.length];
+    //变成String数组
+    for (int i = 0; i <nums.length ; i++) {
+        strs[i] = String.valueOf(nums[i]);
+    }
+    //关键
+    Arrays.sort(strs,(a,b)->(b+a).compareTo(a+b));
+    if(strs[0].equals("0"))return "0";
+    StringBuilder sb = new StringBuilder();
+    for(String str:strs){
+        sb.append(str);
+    }
+    return sb.toString();
+}
+```
+
+
+### 500 判断字符串是不是在键盘的同一行
+流： 正则很慢 流也很慢
+```java
+public String[] findWords(String[] words){
+    return Stream.of(words).parallel().filter(s->s.toLowerCase().matches("[qwertyuiop]*|[asdfghjkl]*|[zxcvbnm]*")).toArray(String[]::new);
+}
+```
+
+### lt920 meeting room
+给定一系列的会议时间间隔，包括起始和结束时间[[s1,e1]，[s2,e2]，…(si < ei)，确定一个人是否可以参加所有会议。
+[[0,30]，[5,10]，[15,20]]，返回false。
+贪心
+```java
+public boolean canAttendMeetings(List<Interval> intervals) {
+    if(intervals == null||intervals.size() == 0)return true;
+    Collections.sort(intervals,(o1,o2)->o1.start-o2.start);
+    int end = intervals.get(0).end;
+    for (int i = 1; i < intervals.size(); i++) {
+        if(intervals.get(i).start<end)return false;
+        end = Math.max(end,intervals.get(i).end);
+    }
+    return true;
+}
+```
+
+### lt919 !!!需要几个会议室
+不能贪心：
+> `[[1, 5][2, 8][6, 9]]`
+> 这种情况本来只需要2间房，但是直接贪心就会需要3间房
+
+```java
+/**
+ |___| |______|
+   |_____|  |____|
+ starts:
+ | |   |    |
+ i
+ ends:
+      |  |     | |
+     end
+ res++;
+ ---------
+    i
+     end
+ res++; 这个end之前有2个start，前一个会议没有结束
+ ---------
+        i
+     end
+ end++; start>end表示有个room的会议已经结束，可以安排到这个room
+ ---------
+ */
+//251ms 74%
+public int minMeetingRooms2Arr(List<Interval> intervals) {
+    int[] starts = new int[intervals.size()];
+    int[] ends = new int[intervals.size()];
+    for(int i=0;i<intervals.size();i++){
+        starts[i] = intervals.get(i).start;
+        ends[i] = intervals.get(i).end;
+    }
+    Arrays.sort(starts);
+    Arrays.sort(ends);
+    int cnt =0;
+    int end = 0;
+    for (int i = 0; i < intervals.size(); i++) {
+        if(starts[i]<ends[end])cnt++;
+        else end++;
+    }
+    return cnt;
+}
+```
+
+用TreeMap
+```java
+//240ms 75%
+public int minMeetingRooms(List<Interval> intervals) {
+    TreeMap<Integer,Integer> map = new TreeMap<>();
+    for(Interval i:intervals){
+        map.put(i.start,map.getOrDefault(i.start,0)+1);
+        map.put(i.end,map.getOrDefault(i.end,0)-1);
+    }
+    int room = 0;
+    int max = 0;
+    for(int num:map.values()){
+        room+=num;
+        max = Math.max(max,room);
+    }
+    return max;
+}
+```
+
+用PriorityQ
+```java
+//403ms 54%
+public int minMeetingRoomsPQ(List<Interval> intervals) {
+    Collections.sort(intervals,(o1, o2)->o1.start-o2.start);
+    PriorityQueue<Interval> heap = new PriorityQueue<>(intervals.size(),(o1, o2)->o1.end-o2.end);
+    heap.add(intervals.get(0));
+    for (int i = 1; i <intervals.size() ; i++) {
+        if(intervals.get(i).start>=heap.peek().end)heap.poll();
+        heap.add(intervals.get(i));
+    }
+    return heap.size();
+}
+```
+
+### 452 重叠线段
+```java
+int cnt =0;
+//按结束顺序排序不会出现
+//  |__|     只有：  |___| 和 |____|
+//|______|的情况  |____|       |_|
+Arrays.sort(points,(a,b)->a[1]>b[1])
+for(int i =0;i<points.length;i++){
+    int cur = points[i][1];
+    cnt++;
+    while(i+1<points.length&&points[i+1][0]<=cur&&cur<=points[i+1][1]){
+        i++;
+    }
+}
+return cnt;
+```
+前一个的end在i+1的线段中，则跳过。
+问题：
+```
+{{1,3},{2,5},{4,7},{6,9}}输出2还是3？
+```
+
+
+
 ### 42
 
 
+### 683 - K Empty Slots
 
 ### 最长01串
 
@@ -693,12 +862,67 @@ public int LS(String s){
 Items can be broen down 贪心按value/weight排序
 ![knapsack.jpg](/images/knapsack.jpg)
 
-### tsp
-tsp with profit（在顶点上）分3种
+### 顶点覆盖
+![pointcover.jpg](/images/pointcover.jpg)
+![vetexcover.jpg](/images/vetexcover.jpg)
+
+### 最大团：在一个无向图中找出一个点数最多的完全图
+
+### 任务分配问题一般可以在多项式时间内转化成最大流量问题
+
+### hdu 1813 IDA*搜索Iterative Deepening A*,
+
+
+### tsp 
+最小生成树解TSP
+![MSTTSP.jpg](/images/MSTTSP.jpg)
+这样求得的最优解不超过真正最优解的2倍
+证明：2-近似算法
+任何一个哈密顿回路OPT删去一条边就是一个生成树。
+我们找的是最小生成树T肯定小于哈密顿回路减1条边的生成树长度
+所以T<OPT
+所以欧拉回路<2OPT
+因为抄近路不会增加长度所以MST生成的结果不会超过2OPT
+
+最小权匹配算法MM
+![MMTSP.jpg](/images/MMTSP.jpg)
+1.奇数度的顶点一定是偶数个，将偶数个奇数度定点两两配对
+2.将每个匹配加入最小生成树，每个顶点都变成偶数度，得到欧拉图
+3.沿着欧拉回路跳过走过的点抄近路 得到哈密顿回路
+证明：不超过最优解的1.5倍
+
+代价函数：
+在搜索树结点计算的最大化问题以该节点为根的值（可行解/目标函数）的上界。
+父节点不小于子节点（最大化问题）
+
+界：到达叶节点得到的最优值
+![pagbb.jpg](/images/pagbb.jpg)
+![bbtsp.jpg](/images/bbtsp.jpg)
+
+
+optaPlanner
+![optaplanner.jpg](/images/optaplanner.jpg)
+1. 数学公式定义
+2. 随机算法模板
+2.1 迭代局部搜索
+
+tsp数据集
+https://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/
+
+https://docs.optaplanner.org/7.10.0.Final/optaplanner-docs/html_single/index.html#travelingTournament
+TSPP:tsp with profit（在顶点上）分3种
 1. PTP(profitable tour problem)找到最小 cost-profit 的circuit
-2. OP(orienteering problem),也叫selective TSP。cost是约束，求不超过cost的最大profit
+2. OP(orienteering problem),也叫selective TSP(STSP)。cost是约束，求不超过cost的最大profit
 3. PCTSP（prize-collecting)profit是约束，目的是找到不低于profit的最小cost。
 
+数据：
+遗传算法：
+最大效益中國郵差問題
+
+
+time window on vertex OP 
+
+ VRP
 
 0~3的tspdp解法
 ![tspdp.jpg](/images/tspdp.jpg)
@@ -736,6 +960,10 @@ private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
     }
 }
 ```
+
+### ip2cidr
+找末尾1的位置`x & -x`
+
 
 
 ### 131 
@@ -864,11 +1092,7 @@ public String mostCommonWord(String paragraph, String[] banned) {
 ```
 
 
-### 743 从一个node广播，让所有节点收到最多要多久 单源最短路径
-> time[[2,1,1],[2,3,1],[3,4,1]] times[i] = (u, v, w) u到v花费w
-> N个节点，从K发送
-dijkstra如果用heap可以从$N^2$->$NlogN+E$ O(N+E)
-Bellman-Ford O(NE)稠密图不好 空间O(N)
+
 
 ### 亚线性算法o(n)小于输入规模
 亚线性时间：
@@ -1970,6 +2194,7 @@ N个物品，背包容量V
 F[i,v]前i件物品放入容量v的背包可获得的最大价值。
 如果放第i件，转化为前i-i件放入容量为v-Ci的背包中，最大价值是F[i-1,v-Ci]+Wi
 $F[i,v]=max{F[i-1,v],F[i-1,v-C_i]+W_i}$
+递归
 ```java
 private int zoknap(int W,int[] val,int[] wt,int n){
     if(n == 0||W == 0){
@@ -1979,19 +2204,22 @@ private int zoknap(int W,int[] val,int[] wt,int n){
     if(wt[n-1]>W)return zoknap(W, val, wt,n-1 );
     else return Math.max(val[n-1]+zoknap(W-wt[n-1],val ,wt ,n-1 ),zoknap(W,val ,wt ,n-1) );
 }
- private int zoknapdp(int W,int[] wt,int[] val,int n){
-    int[][] dp = new int[n+1][W+1];
-    for (int i = 0; i <=n ; i++) {
-        for (int w = 0; w <=W ; w++) {
-            if(i ==0||w==0)dp[i][w] = 0;
-            else if(wt[i-1]<=w)
-                dp[i][w]=Math.max(val[i-1]+dp[i-1][w-wt[i-1]],dp[i-1][w]);
-            else
-                dp[i][w] = dp[i-1][w];
-        }
+```
+dp
 
+```java
+private int zoknapdp(int W,int[] wt,int[] val,int n){
+int[][] dp = new int[n+1][W+1];
+for (int i = 0; i <=n ; i++) {
+    for (int w = 0; w <=W ; w++) {
+        if(i ==0||w==0)dp[i][w] = 0;
+        else if(wt[i-1]<=w)
+            dp[i][w]=Math.max(val[i-1]+dp[i-1][w-wt[i-1]],dp[i-1][w]);
+        else
+            dp[i][w] = dp[i-1][w];
     }
-    return dp[n][W];
+}
+return dp[n][W];
 }
 ```
 
@@ -2294,98 +2522,7 @@ return -1;
 ---
 
 
-#### ？？？315 输出数组每个位置后有多少个数字比它小
 
-暴力n^2复杂度一般只能到1k数量级
-
-方法一：
-1.把input倒序，并映射到argsort的index
-2.建立unique frequence list 原数组中unique的元素+1
-3.逆序扫描input，更新相应的frequence[rank]++。
-    并求frequence rank-1前的sum #有几个元素比当前元素小
-4.依次读入的sum list 倒序就是结果
-
-方法2：BST
-1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
-
-方法3：归并排序
-![nixu315.jpg](/images/nixu315.jpg)
-
-#### 小和问题(右边有多少个数比它大)
-```
-1 3  4 2 5
-   /   \
-1 3 4  2 5
-  /\   
-13  4     
-```
-归并1,3得小和->+1
-归并13，4 得小和->+1,+3 并且merge好了[1,3,4]
-归并2,5 得小和->+2
-归并134,25 :
-1比右边多少个数小：2的位置是mid+1，所以通过index可以得到 小和1x2个
-p1指向3，p2指2，无小和
-p1=3 p2=5 小和3x1个
-p1=4 p2=5 小和4x1
-
-例子2
-```
-1 3 4 5 6 7
-1比多少个数小：
-13)->1
-13)4)->1
-13)4)567)->1*3
-```
-
-如果[p1...][p2...]
-如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
-比归并排序就多这一句
-```java
-res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
-```
-{% fold %}
-```java
-//数组每个数左边比当前小的数累加起来叫这个 组数的小和。
-//[1,3,4,2,5]->1 +1+3 +1 +1+3+4+2
-    public int xiaohe(int[] arr){
-        if(arr==null||arr.length<2)return 0;
-        return mergesort(arr,0,arr.length-1);
-
-    }
-    private int mergesort(int[] arr,int l,int r){
-        if(l==r)return 0;
-        int mid = l+((r-l)>>2);
-        return mergesort(arr,l,mid)+mergesort(arr,mid+1,r)+merge(arr,l,mid,r);
-    }
-//    如果[p1...][p2...]
-//    如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
-    private static int merge(int[] arr,int l,int mid,int r){
-        int[] help = new int[r-l+1];
-        int i = 0;
-        int p1 = l;
-        int p2 = mid+1;
-        int res = 0;
-        while (p1<=mid&&p2<=r){
-            System.out.println(res);
-            res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
-            help[i++] = arr[p1]<arr[p2]?arr[p1++]:arr[p2++];
-            System.out.println(Arrays.toString(help));
-
-        }
-        while (p1<=mid){
-            help[i++] = arr[p1++];
-        }
-        while (p2<=r){
-            help[i++] = arr[p2++];
-        }
-        for (int j = 0; j <help.length ; j++) {
-            arr[l+j] = help[j];
-        }
-        System.out.println(Arrays.toString(help));
-        return res;
-    }
-```
-{% endfold %}
 
 ### !!!169 众数 Boyer-Moore Voting Algorithm 
 1.hashmap,直到有计数>n/2 break->return 11%
@@ -2499,29 +2636,6 @@ $=>x=12$
 树的前/中/后序遍历本质都是DFS
 
 
-
-### 452 重叠线段
-```java
-int cnt =0;
-//按结束顺序排序不会出现
-//  |__|     只有：  |___| 和 |____|
-//|______|的情况  |____|       |_|
-Arrays.sort(points,(a,b)->a[1]>b[1])
-for(int i =0;i<points.length;i++){
-    int cur = points[i][1];
-    cnt++;
-    while(i+1<points.length&&points[i+1][0]<=cur&&cur<=points[i+1][1]){
-        i++;
-    }
-}
-return cnt;
-```
-前一个的end在i+1的线段中，则跳过。
-问题：
-```
-{{1,3},{2,5},{4,7},{6,9}}输出2还是3？
-```
-
 ---
 ### 402 去掉数字串中k个数字留下最小的数字
 Input: num = "1432219", k = 3
@@ -2543,7 +2657,6 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
     stack[top++]=num.charAt(i);
 }
 ```
-
 
 ---
 ### 236 最低的二叉树公共祖先LCA
@@ -2677,93 +2790,6 @@ board[i][j]='0';
 > ```
 
 
-### 322找钱最少硬币数
-贪心算法一般考举反例。
-不能用贪心的原因：如果coin={1,2,5,7,10}则使用2个7组成14是最少的，贪心不成立。
-满足贪心则需要coin满足倍数关系{1,5,10,20,100,200}
-
-
-> 输入：coins = [1, 2, 5], amount = 11
-> 输出：3 (11 = 5 + 5 + 1)
-
-1. 递归mincoins(coins,11)=mincoins(coins,11-1)+1=(mincoins,10-1)+1+1..=(mincoins,0)+n
-
-![coinchange.jpg](/images/coinchange.jpg)
-递归 记忆子问题 剩下3，用2的硬币变成剩下1的子问题和 剩下2，用1的硬币 剩下1的子问题是相同的。递归给count赋值是从下往上的。
-```java
-public int coinChange3(int[] coins, int amount) {
-    if(amount<1)return 0;
-    return coinChange2(coins,amount,new int[amount]);
-}
-private int coinC(int[] coins,int left,int[] count){
-    if(left<0)return -1;
-    if(left==0)return 0;
-    //关键，不然超时
-    if(count[left]!=0)return count[left];
-    int min = Integer.MAX_VALUE;
-    for(int coin:coins){
-        int useCoin = coinC(coins,left-coin,count);
-        if(useCoin >=0&&useCoin<min){
-            min = 1+useCoin;
-        }
-    }
-    return count[left] = (min==Integer.MAX_VALUE)?-1:min;  
-}
-```
-
-![coin](/images/coin.jpg)
-
-2. dp:
-    注意点：初值如果设为Int的max，两个都是max的话+1变成负数，所以设amount+1
-    j 从coin开始
-81%~94% 不稳定
-```java
-int[] dp = new int[amount+1];
-Arrays.fill(dp,amount+1);
-dp[0] =0;
-for(int coin:coins){
-    for(int j = coin;j<=amount;j++){
-        dp[j]=Math.min(dp[j],dp[j-coin]+1);
-    }
-}
-return dp[amount]>amount?-1:dp[amount];    
-```
-
-3. 最正确的方法：dfs分支限界
-    1.逆序coins数组 贪心从大硬币开始试
-    2.dfs终止条件是 找到硬币整除了，或者idx==0但是不能整除
-    3.剪枝条件是 考虑用当前`coins[idx]`i个之后，用下一个硬币至少1个，如果超了break
-99%
-```java
-int minCnt = Integer.MAX_VALUE;
-public int coinChangedfs(int[] coins,int amount){
-    Arrays.sort(coins);
-    dfs(amount,coins.length-1,)
-    return minCount == Integer.MAX_VALUE?-1:minCount;
-}
-private void dfs(int amount,int idx,int[] coins,int count){
-    if(amount%coins[idx]==0){
-        int bestCnt = count+amount/coins[idx];
-        //当[1,2,5] 11, 用掉两个5，count=2 idx=0,cnt+1=3 return
-        if(bestCnt<minCnt){
-            minCnt = bestCnt;
-            //这个return放在里面97%
-            return;
-        }
-        //本来应该放在这里 94%
-    }
-    if(idx==0)return;
-    for(int i = amount/coins[idx];i>=0;i--){
-        int leftA = amount - i*coins[idx];
-        int useCnt = count+i;
-        int nextCoin = coins[idx-1];
-        //保证只要left>0都还需要至少1枚硬币
-        //或者简单一点if(useCnt+1>minCount)break; 98%
-        if(useCnt+(leftA+nextCoin-1)/nextCoin>=minCount)break;
-        dfs(leftA,idx-1,coins,useCnt);
-    }
-}
-```
 
  
 
@@ -2997,8 +3023,6 @@ int fib(int n){
 
 ---
 ### 11 数组index当底边，值当杯子两侧，最大面积
-
----
 
 
 ---
@@ -3244,58 +3268,6 @@ else if(pre.right!=null){
 }
 ```
 
-### ??Convert BST to Greater Tree
-[17ms 66% Reverse Morris In-order Traversal](https://leetcode.com/problems/convert-bst-to-greater-tree/solution/)
-{% fold %}
-```java
- public TreeNode convertBST(TreeNode root) {
-     int sum = 0;
-     TreeNode cur = root;
-     while(cur!=null){
-         //最右 
-         if(cur.right==null){
-             sum+=cur.val;
-             cur.val=sum;
-             cur=cur.left;
-         }else{
-             //找前继，键link
-             TreeNode pre = cur.right;
-             //一直向左
-             while(pre.left!=null&&pre.left!=cur){
-                 pre=pre.left;
-             }
-            //找到了pre 联立链接
-             if(pre.left== null){
-                pre.left = cur;
-                cur=cur.right;
-             }
-             //右边没了，并且左连接向上
-             else{
-                 pre.left=null;
-                 sum+=cur.val;
-                 cur.val= sum;
-                 cur=cur.left;
-                 
-             }
-         }
-         
-     }
-        return root;
-    }
-```
-{% endfold %}
-
-正常做法递归中序 15ms 99%
-```java
-public TreeNode convertBST(TreeNode root) {
-if(root==null)return root;
-convertBST(root.right);
-sum+=root.val;
-root.val=sum;
-convertBST(root.left);
-return root;
-}
-```
 
 ### 110 判断树平衡 在计算高度时同时判断平衡只需要O(n)
 ```java

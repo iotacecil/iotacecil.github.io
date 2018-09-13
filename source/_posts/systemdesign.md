@@ -4,6 +4,8 @@ date: 2018-08-07 16:47:36
 tags:
 categories: [算法备忘]
 ---
+https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.html
+https://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B
 https://www.educative.io/collection/page/5668639101419520/5649050225344512/5668600916475904
 
 ### 布隆过滤器 url去重

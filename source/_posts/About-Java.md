@@ -4,6 +4,20 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### `List<String>` 2 `String[]`
+> [Ljava.lang.Object; cannot be cast to [Ljava.lang.String;
+
+`rst.toArray(new String[rst.size()]);`
+
+http://wiki.jikexueyuan.com/project/java-enhancement/java-thirtysix.html
+### 二维数组clone
+```java
+this.mat = new int[matrix.length][];
+    for (int i = 0; i < matrix.length; i++) {
+        this.mat[i] = matrix[i].clone();
+    }
+```
+
 ### ThreadLocal
 
 ### Timer

@@ -4,6 +4,153 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+
+#### ？？？315 输出数组每个位置后有多少个数字比它小
+
+暴力n^2复杂度一般只能到1k数量级
+
+方法一：
+1.把input倒序，并映射到argsort的index
+2.建立unique frequence list 原数组中unique的元素+1
+3.逆序扫描input，更新相应的frequence[rank]++。
+    并求frequence rank-1前的sum #有几个元素比当前元素小
+4.依次读入的sum list 倒序就是结果
+
+方法2：BST
+1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
+
+方法3：归并排序
+![nixu315.jpg](/images/nixu315.jpg)
+
+#### 小和问题(右边有多少个数比它大)
+```
+1 3  4 2 5
+   /   \
+1 3 4  2 5
+  /\   
+13  4     
+```
+归并1,3得小和->+1
+归并13，4 得小和->+1,+3 并且merge好了[1,3,4]
+归并2,5 得小和->+2
+归并134,25 :
+1比右边多少个数小：2的位置是mid+1，所以通过index可以得到 小和1x2个
+p1指向3，p2指2，无小和
+p1=3 p2=5 小和3x1个
+p1=4 p2=5 小和4x1
+
+例子2
+```
+1 3 4 5 6 7
+1比多少个数小：
+13)->1
+13)4)->1
+13)4)567)->1*3
+```
+
+如果[p1...][p2...]
+如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+比归并排序就多这一句
+```java
+res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+```
+{% fold %}
+```java
+//数组每个数左边比当前小的数累加起来叫这个 组数的小和。
+//[1,3,4,2,5]->1 +1+3 +1 +1+3+4+2
+    public int xiaohe(int[] arr){
+        if(arr==null||arr.length<2)return 0;
+        return mergesort(arr,0,arr.length-1);
+
+    }
+    private int mergesort(int[] arr,int l,int r){
+        if(l==r)return 0;
+        int mid = l+((r-l)>>2);
+        return mergesort(arr,l,mid)+mergesort(arr,mid+1,r)+merge(arr,l,mid,r);
+    }
+//    如果[p1...][p2...]
+//    如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+    private static int merge(int[] arr,int l,int mid,int r){
+        int[] help = new int[r-l+1];
+        int i = 0;
+        int p1 = l;
+        int p2 = mid+1;
+        int res = 0;
+        while (p1<=mid&&p2<=r){
+            System.out.println(res);
+            res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+            help[i++] = arr[p1]<arr[p2]?arr[p1++]:arr[p2++];
+            System.out.println(Arrays.toString(help));
+
+        }
+        while (p1<=mid){
+            help[i++] = arr[p1++];
+        }
+        while (p2<=r){
+            help[i++] = arr[p2++];
+        }
+        for (int j = 0; j <help.length ; j++) {
+            arr[l+j] = help[j];
+        }
+        System.out.println(Arrays.toString(help));
+        return res;
+    }
+```
+{% endfold %}
+
+### ??Convert BST to Greater Tree
+[17ms 66% Reverse Morris In-order Traversal](https://leetcode.com/problems/convert-bst-to-greater-tree/solution/)
+{% fold %}
+```java
+ public TreeNode convertBST(TreeNode root) {
+     int sum = 0;
+     TreeNode cur = root;
+     while(cur!=null){
+         //最右 
+         if(cur.right==null){
+             sum+=cur.val;
+             cur.val=sum;
+             cur=cur.left;
+         }else{
+             //找前继，键link
+             TreeNode pre = cur.right;
+             //一直向左
+             while(pre.left!=null&&pre.left!=cur){
+                 pre=pre.left;
+             }
+            //找到了pre 联立链接
+             if(pre.left== null){
+                pre.left = cur;
+                cur=cur.right;
+             }
+             //右边没了，并且左连接向上
+             else{
+                 pre.left=null;
+                 sum+=cur.val;
+                 cur.val= sum;
+                 cur=cur.left;           
+             }
+         }
+         
+     }
+        return root;
+    }
+```
+{% endfold %}
+
+正常做法递归中序 15ms 99%
+```java
+public TreeNode convertBST(TreeNode root) {
+if(root==null)return root;
+convertBST(root.right);
+sum+=root.val;
+root.val=sum;
+convertBST(root.left);
+return root;
+}
+```
+
+
 ### 网络流
 https://algs4.cs.princeton.edu/64maxflow/
 https://www.geeksforgeeks.org/minimum-cut-in-a-directed-graph/
@@ -134,6 +281,8 @@ while(i<j){
  else i =mid;}
 rst[1]=j;
 ```
+
+### 410 分割数组使Max(Sum(subarr))最小
 
 ### 5只猴子分桃，每次拿走一个正好分成5堆，问桃子数
 
@@ -464,7 +613,77 @@ for(int i =len-1;i>=0;i--)
 return lastp==0;
 ```
 
-### 45 ?jump game最少跳跃次数
-1.在本次可跳跃的长度范围内如果不能达到len-1则表示一定要跳跃
-2.BFS
+### 45 ??????jump game最少跳跃次数
+超时递归（？
+递归终止条件是from==end，如果有0不可达
+{% fold %}
+```java
+public int minJumpRecur(int[] arr){
+    int n = arr.length;
+    memo = new int[n][n];
+    return jump(arr, 0, n-1);
+}
+int[][] memo;
+private int jump(int[] steps,int from,int end){
+//        System.out.println(from+" "+end);
+    if(from==end)return 0;
+    //不可达
+    if(memo[from][end]!=0)return memo[from][end];
+    if(steps[from]==0)return Integer.MAX_VALUE;
+    int min = Integer.MAX_VALUE;
+    //当前可以到达的范围是[from,from+step[from]]
+    for(int i = from+1;i<=end&&i<=from+steps[from];i++){
+        int jumps = jump(steps,i , end);
+        if(jumps!=Integer.MAX_VALUE&&jumps+1<min){
+            min = jumps+1;
+            memo[from][end] = min;
+        }
+    }
+    return min;
+}
+```
+{% endfold %}
+1.在本次可跳跃的长度范围内如果不能达到len-1则表示一定要跳跃//不懂
+```java
+public int jump(int[] nums) {
+    if(nums==null||nums.length<2)return 0;
+    int res = 0;
+    int curMax = 0;
+    int maxNext = 0;
+    //i=0,max = 2 i==cur ->res++,cur = max=2
+    //i=1,max = max(2,4)=4, i!=cur
+    //i=2,max = max(4,3)=4, i==cur res++,cur = max=4
+    //i=3,max = max(4,4)=4, i!=cur break
+    //不需要走到i=4,max = max(4,4+4)=8,i==cur res++,cur=max
+    for (int i = 0; i < nums.length-1; i++) {
+        maxNext = Math.max(maxNext,i+nums[i] );
+        if(i==curMax){
+          res++;
+          curMax = maxNext;
+        }
+    }
+    return res;
+}
+```
+2.!!!BFS
+```java
+public int jumpBFS(int[] nums){
+    if(nums==null||nums.length<2)return 0;
+    int level = 0;
+    int cur = 0;
+    int max =0;
+    int i =0;
+    //cur-i+1=1,level++; i<=cur,i++,max = 2;cur = 2;
+    //cur=2,i=1;level++; i<=2,i++,max = 4,max>=n-1 return 2;
+    while (cur-i+1>0){
+        level++;
+        for(;i<=cur;i++){
+            max = Math.max(max,nums[i]+i);
+            if(max>=nums.length-1)return level;
+        }
+        cur = max;
+    }
+    return 0;
+}
+```
 

@@ -4,6 +4,49 @@ date: 2018-09-04 11:12:53
 tags:
 categories: [算法备忘]
 ---
+### 装配线调度问题Assembly Line
+![assemblyline1.jpg](/images/assemblyline1.jpg)
+两条装配线分别有相同的n个station
+每个任务必须依次通过这n种station
+在j号station从装配线1/2换到装配线2/1有额外cost T1(j),T2(j)
+每条线用时要加上开始用时10/12和结束用时18/7
+![assem.jpg](/images/assem.jpg)
+```java
+public class assembleLine {
+    public int assembly(int[][]line,int[][]t,int[]e,int[]x){
+        int n = line[0].length;
+        int[] T1 = new int[n];
+        int[] T2 = new int[n];
+        //两条线经过第一个station后的用时
+        T1[0] = e[0]+line[0][0];
+        T2[0] = e[1]+line[1][0];
+        for(int i =1;i<n;i++){
+            //line1上第二个station用时是line1前一个用时+当前station 和 从line2上跳过来的用时的min
+            T1[i] = Math.min(T1[i-1]+line[0][i],T2[i-1]+t[1][i]+line[0][i]);
+            T2[i] = Math.min(T2[i-1]+line[1][i],T1[i-1]+t[0][i]+line[1][i]);
+        }
+        return Math.min(T1[n-1]+x[0],T2[n-1]+x[1]);
+    }
+    public static void main(String[] args) {
+        //statin num
+        int n = 4;
+        //[2][4]两条装配线上4个station的耗时
+        int[][] line ={
+                {4, 5, 3, 2},
+                {2, 10, 1, 4}};
+        //两条装配线上换装配线到下一个station的额外开销
+        int[][] t = {{0, 7, 4, 5},
+                {0, 9, 2, 8}};
+//        entry time ei and exit time xi
+        //要加上的开始时间和结束时间
+        int e[] = {10,12};
+        int x[] = {18,7};
+        assembleLine sl = new assembleLine();
+        System.out.println(sl.assembly(line, t, e, x));
+    }
+}
+```
+
 ### lt 254 2个鸡蛋从n层楼中找到可以丢碎鸡蛋的楼层，最少几次
 1.只能从低往高试，碎了鸡蛋就-1
 2.第一次选择楼层n，再向上跳n-1层，再n-2层

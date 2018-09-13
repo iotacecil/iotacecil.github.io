@@ -4,6 +4,13 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### location相关数据和数据处理
+关于time/location 数据处理
+https://www.kaggle.com/bqlearner/location-based-recommendation-system
+Gowalla数据集：
+https://snap.stanford.edu/data/loc-gowalla.html
+
+
 垃圾短信分类 练习TODO
 https://blog.csdn.net/github_36922345/article/details/53455401
 

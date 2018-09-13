@@ -8,6 +8,8 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 
 
 ### Disruptor
+https://tech.meituan.com/disruptor.html
+http://ifeve.com/locks-are-bad/
 
 ### PV和QPS估计
 每天300w PV 80%会在24小时的20%的时间里

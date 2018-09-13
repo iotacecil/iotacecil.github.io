@@ -4,6 +4,8 @@ date: 2018-04-23 21:21:18
 tags:
 category: [JVMlinux常用备注nginxredis配置]
 ---
+堆内存-Xmx12m
+https://www.jianshu.com/p/1b1c998c4448
 
 ### javap 字节码指令
 ```shell

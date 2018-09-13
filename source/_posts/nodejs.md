@@ -5,6 +5,7 @@ tags:
 category: [nodejs]
 ---
 ### CommonJS nodejs的模块规范
+https://morning.work/page/nodejs/ready-to-async-await.html
 global对象和process对象
 一个文件是一个模块
 使用requirejs需要自己写包裹函数，nodejs省了这一步
