@@ -5,6 +5,7 @@ tags:
 categories: [算法备忘]
 ---
 
+
 #### ？？？315 输出数组每个位置后有多少个数字比它小
 
 暴力n^2复杂度一般只能到1k数量级
@@ -151,6 +152,11 @@ return root;
 ```
 
 
+### lc393 判断合法UTF8编码
+
+### 287 数组中重复元素
+
+
 ### 网络流
 https://algs4.cs.princeton.edu/64maxflow/
 https://www.geeksforgeeks.org/minimum-cut-in-a-directed-graph/
@@ -217,6 +223,7 @@ The third fraction is 2/5.
 
 
 ### 287 数组中只有1个重复元素 返回元素
+
 > containing n + 1 integers where each integer is between 1 and n (inclusive)
 
 不用set，空间降为O(1)
@@ -379,6 +386,7 @@ private int help(String s,int left,int right){
     return right-left-1;
 }
 ```
+
 #### Manacher's 算法 O(n)
 https://algs4.cs.princeton.edu/53substring/Manacher.java.html
 前缀/

@@ -5,6 +5,7 @@ tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
 
+
 ### centos 安装GLPK
 `tar -xzvf glpk-4.60.tar.gz` 
 `configure` 
@@ -13,6 +14,7 @@ category: [JVMlinux常用备注nginxredis配置]
 `glpsol --math orienteering_problem.mod --data a8.dat --output "./out"`
 
 ` kill -s 9 1827`
+
 ### 查文件
 ```
 find / -size 1500c，字符 c 表明这个要查找的文件的大小是以bytes为单位

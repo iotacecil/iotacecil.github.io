@@ -4,8 +4,15 @@ date: 2018-04-23 21:21:18
 tags:
 category: [JVMlinux常用备注nginxredis配置]
 ---
+
 堆内存-Xmx12m
 https://www.jianshu.com/p/1b1c998c4448
+
+### jstack 
+https://toutiao.io/posts/1ogbep/preview
+打印所有工作线程 包括析构Finalizer，JIT还有debug的
+线程状态有6个
+
 
 ### javap 字节码指令
 ```shell
