@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="伙伴系统：Linux内存分配方案，空闲块链表伙伴：如果需要的空间s需要2^(n-1)&amp;lt;s&amp;lt;2^n则空间/2，两个叫伙伴。 伙伴分割与合并（每次分割小的空闲块，系统中始终保持大的空闲快） 内存管理方案装载单位： 进程1.单一连续区域:只有一个进程在内存 2.固定分区：内存分区，每个分区只装1个进程，进程在各个分区排队 3.可变分区：内存按需分配给进程外碎片：进程和进程之间的空隙memor">
+<meta name="description" content="https://www.polarxiong.com/archives/%E8%AF%BB-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-%E7%9A%84%E6%80%BB%E7%BB%93.html 伙伴系统：Linux内存分配方案，空闲块链表伙伴：如果需要的空间s需要2^(n-1)&amp;lt;s&amp;">
 <meta name="keywords" content="os,memory">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统+内存知识">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/05/memory/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="伙伴系统：Linux内存分配方案，空闲块链表伙伴：如果需要的空间s需要2^(n-1)&amp;lt;s&amp;lt;2^n则空间/2，两个叫伙伴。 伙伴分割与合并（每次分割小的空闲块，系统中始终保持大的空闲快） 内存管理方案装载单位： 进程1.单一连续区域:只有一个进程在内存 2.固定分区：内存分区，每个分区只装1个进程，进程在各个分区排队 3.可变分区：内存按需分配给进程外碎片：进程和进程之间的空隙memor">
+<meta property="og:description" content="https://www.polarxiong.com/archives/%E8%AF%BB-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-%E7%9A%84%E6%80%BB%E7%BB%93.html 伙伴系统：Linux内存分配方案，空闲块链表伙伴：如果需要的空间s需要2^(n-1)&amp;lt;s&amp;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/huoban.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/huoban2.jpg">
@@ -119,10 +119,10 @@
 <meta property="og:image" content="http://iotaa.xyz/images/heep.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/registers.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/cposix.jpg">
-<meta property="og:updated_time" content="2018-09-08T14:11:02.746Z">
+<meta property="og:updated_time" content="2018-09-13T07:19:48.784Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统+内存知识">
-<meta name="twitter:description" content="伙伴系统：Linux内存分配方案，空闲块链表伙伴：如果需要的空间s需要2^(n-1)&amp;lt;s&amp;lt;2^n则空间/2，两个叫伙伴。 伙伴分割与合并（每次分割小的空闲块，系统中始终保持大的空闲快） 内存管理方案装载单位： 进程1.单一连续区域:只有一个进程在内存 2.固定分区：内存分区，每个分区只装1个进程，进程在各个分区排队 3.可变分区：内存按需分配给进程外碎片：进程和进程之间的空隙memor">
+<meta name="twitter:description" content="https://www.polarxiong.com/archives/%E8%AF%BB-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-%E7%9A%84%E6%80%BB%E7%BB%93.html 伙伴系统：Linux内存分配方案，空闲块链表伙伴：如果需要的空间s需要2^(n-1)&amp;lt;s&amp;">
 <meta name="twitter:image" content="http://iotaa.xyz/images/huoban.jpg">
 
 
@@ -369,8 +369,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-08T22:11:02+08:00">
-                2018-09-08
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-13T15:19:48+08:00">
+                2018-09-13
               </time>
             
           </span>
@@ -425,7 +425,8 @@
       
 
       
-        <h3 id="伙伴系统：Linux内存分配方案，空闲块链表"><a href="#伙伴系统：Linux内存分配方案，空闲块链表" class="headerlink" title="伙伴系统：Linux内存分配方案，空闲块链表"></a>伙伴系统：Linux内存分配方案，空闲块链表</h3><p>伙伴：如果需要的空间s需要<code>2^(n-1)&lt;s&lt;2^n</code>则空间/2，两个叫伙伴。<br><img src="/images/huoban.jpg" alt="huoban.jpg"></p>
+        <p><a href="https://www.polarxiong.com/archives/%E8%AF%BB-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-%E7%9A%84%E6%80%BB%E7%BB%93.html" target="_blank" rel="noopener">https://www.polarxiong.com/archives/%E8%AF%BB-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-%E7%9A%84%E6%80%BB%E7%BB%93.html</a></p>
+<h3 id="伙伴系统：Linux内存分配方案，空闲块链表"><a href="#伙伴系统：Linux内存分配方案，空闲块链表" class="headerlink" title="伙伴系统：Linux内存分配方案，空闲块链表"></a>伙伴系统：Linux内存分配方案，空闲块链表</h3><p>伙伴：如果需要的空间s需要<code>2^(n-1)&lt;s&lt;2^n</code>则空间/2，两个叫伙伴。<br><img src="/images/huoban.jpg" alt="huoban.jpg"></p>
 <p>伙伴分割与合并（每次分割小的空闲块，系统中始终保持大的空闲快）<br><img src="/images/huoban2.jpg" alt="huoban2.jpg"></p>
 <h3 id="内存管理方案"><a href="#内存管理方案" class="headerlink" title="内存管理方案"></a>内存管理方案</h3><p>装载单位： 进程<br>1.单一连续区域:只有一个进程在内存<br><img src="/images/memoryalloc.jpg" alt="memoryalloc.jpg"></p>
 <p>2.固定分区：内存分区，每个分区只装1个进程，进程在各个分区排队<br><img src="/images/memoryalloc2.jpg" alt="memoryalloc2.jpg"></p>

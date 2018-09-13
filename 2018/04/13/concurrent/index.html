@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="redis 10w OPSDisruptorPV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进程&amp;amp;线程Apache C10K问题2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高3.协程Golang Erl">
+<meta name="description" content="redis 10w OPSDisruptorhttps://tech.meituan.com/disruptor.htmlhttp://ifeve.com/locks-are-bad/ PV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="concurrent并发多线程">
 <meta property="og:url" content="http://iotaa.xyz/2018/04/13/concurrent/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="redis 10w OPSDisruptorPV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进程&amp;amp;线程Apache C10K问题2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高3.协程Golang Erl">
+<meta property="og:description" content="redis 10w OPSDisruptorhttps://tech.meituan.com/disruptor.htmlhttp://ifeve.com/locks-are-bad/ PV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/mesi.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/jmeter.jpg">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="http://iotaa.xyz/images/countdown.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/threadstate.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/suspend.jpg">
-<meta property="og:updated_time" content="2018-09-05T05:58:28.438Z">
+<meta property="og:updated_time" content="2018-09-12T06:41:43.682Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="concurrent并发多线程">
-<meta name="twitter:description" content="redis 10w OPSDisruptorPV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进程&amp;amp;线程Apache C10K问题2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高3.协程Golang Erl">
+<meta name="twitter:description" content="redis 10w OPSDisruptorhttps://tech.meituan.com/disruptor.htmlhttp://ifeve.com/locks-are-bad/ PV和QPS估计每天300w PV 80%会在24小时的20%的时间里$3000 000*0.8)/(86400*0.2*)=139(QPS)$如果一台机器QPS是58，则需要139/58=3台机器 并发模型1.进">
 <meta name="twitter:image" content="http://iotaa.xyz/images/mesi.jpg">
 
 
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-05T13:58:28+08:00">
-                2018-09-05
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-12T14:41:43+08:00">
+                2018-09-12
               </time>
             
           </span>
@@ -400,7 +400,8 @@
       
 
       
-        <h3 id="redis-10w-OPS"><a href="#redis-10w-OPS" class="headerlink" title="redis 10w OPS"></a>redis 10w OPS</h3><h3 id="Disruptor"><a href="#Disruptor" class="headerlink" title="Disruptor"></a>Disruptor</h3><h3 id="PV和QPS估计"><a href="#PV和QPS估计" class="headerlink" title="PV和QPS估计"></a>PV和QPS估计</h3><p>每天300w PV 80%会在24小时的20%的时间里<br>$3000 000*0.8)/(86400*0.2*)=139(QPS)$<br>如果一台机器QPS是58，则需要139/58=3台机器</p>
+        <h3 id="redis-10w-OPS"><a href="#redis-10w-OPS" class="headerlink" title="redis 10w OPS"></a>redis 10w OPS</h3><h3 id="Disruptor"><a href="#Disruptor" class="headerlink" title="Disruptor"></a>Disruptor</h3><p><a href="https://tech.meituan.com/disruptor.html" target="_blank" rel="noopener">https://tech.meituan.com/disruptor.html</a><br><a href="http://ifeve.com/locks-are-bad/" target="_blank" rel="noopener">http://ifeve.com/locks-are-bad/</a></p>
+<h3 id="PV和QPS估计"><a href="#PV和QPS估计" class="headerlink" title="PV和QPS估计"></a>PV和QPS估计</h3><p>每天300w PV 80%会在24小时的20%的时间里<br>$3000 000*0.8)/(86400*0.2*)=139(QPS)$<br>如果一台机器QPS是58，则需要139/58=3台机器</p>
 <h3 id="并发模型"><a href="#并发模型" class="headerlink" title="并发模型"></a>并发模型</h3><p>1.进程&amp;线程Apache C10K问题<br>2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高<br>3.协程Golang Erlang Lua</p>
 <p>TreeMap是非线程安全的。<br>跳表：<br>数据大时性能高于红黑树<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> HeadIndex&lt;K,V&gt; head;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadIndex</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">Index</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> level;</span><br><span class="line">    HeadIndex(Node&lt;K,V&gt; node, Index&lt;K,V&gt; down, Index&lt;K,V&gt; right, <span class="keyword">int</span> level) &#123;</span><br><span class="line">        <span class="keyword">super</span>(node, down, right);</span><br><span class="line">        <span class="keyword">this</span>.level = level;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    <span class="keyword">volatile</span> Object value;</span><br><span class="line">    <span class="keyword">volatile</span> Node&lt;K,V&gt; next;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Index</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Node&lt;K,V&gt; node;</span><br><span class="line">        <span class="keyword">final</span> Index&lt;K,V&gt; down;</span><br><span class="line">        <span class="keyword">volatile</span> Index&lt;K,V&gt; right;&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="ConcurrentMap的实现类"><a href="#ConcurrentMap的实现类" class="headerlink" title="ConcurrentMap的实现类"></a>ConcurrentMap的实现类</h3><p><code>ConcurrentSkipListMap</code>跳表 redis的实现方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentSkipListMap&lt;Dish.Type, Double&gt; collect = menu.stream().collect(Collectors.groupingByConcurrent(Dish::getType, ConcurrentSkipListMap::<span class="keyword">new</span>, Collectors.averagingInt(Dish::getCalories)));</span><br></pre></td></tr></table></figure></p>
