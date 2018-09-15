@@ -5,6 +5,7 @@ tags:
 category: [JVMlinux常用备注nginxredis配置]
 ---
 
+27个点 内存占20G
 堆内存-Xmx12m
 https://www.jianshu.com/p/1b1c998c4448
 

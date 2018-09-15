@@ -4,6 +4,48 @@ date: 2018-09-04 11:12:53
 tags:
 categories: [算法备忘]
 ---
+### 找钱的方案数
+```java
+public int waysNCents(int n) {
+  int[] coins = {1,5,10,25};    
+  int[] dp = new int[n+1];
+  dp[0] = 1;
+  for(int i =0;i<4;i++){
+    for(int j = 1;j<=n;j++){
+        if(j-coins[i]>=0)
+        dp[j] += dp[j-coins[i]];
+    }
+  }
+  return dp[n];
+}
+```
+lt740 coin change2
+```java
+public int change(int amount, int[] coins) {
+    int n = coins.length;
+    int[] dp = new int[amount+1];
+    dp[0] =1;
+    for(int i=0;i<n;i++){
+        for(int j = 1;j<=amount;j++){
+            if(j>=coins[i])
+                dp[j]+=dp[j-coins[i]];
+        }
+    }
+    return dp[amount];
+}
+```
+递归
+```java
+int count(int[] coins,int N,int idx){
+    if(N==0)return 1;
+    if(N<0)return 0;
+    if(coins==null||(idx<=0&&N>=1))
+        return 0;
+    //用/不用这枚硬币(无限次)换
+    return count(coins,N ,idx-1)+count(coins,N-coins[idx-1] ,idx);
+}
+```
+
 ### 装配线调度问题Assembly Line
 ![assemblyline1.jpg](/images/assemblyline1.jpg)
 两条装配线分别有相同的n个station

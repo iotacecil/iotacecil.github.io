@@ -4,6 +4,25 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### hashset的实现
+`static final` 静态类对象 所有实例共享
+
+```java
+private transient HashMap<E,Object> map;
+
+// Dummy value to associate with an Object in the backing Map
+private static final Object PRESENT = new Object();
+public boolean add(E e) {
+    return map.put(e, PRESENT)==null;
+}
+public boolean remove(Object o) {
+    return map.remove(o)==PRESENT;
+}
+public Iterator<E> iterator() {
+    return map.keySet().iterator();
+}
+```
+
 ### 二进制
 `System.out.println(0b101);`//二进制:5  （0b开头的）
 `System.out.println(011);` //八进制9

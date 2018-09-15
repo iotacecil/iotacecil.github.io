@@ -8,8 +8,43 @@ categories: [算法备忘]
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html
 
+### 24两个一组交换链表
 
+### NqueenBB
+![nqueenbb.jpg](/images/nqueenbb.jpg)
+N – 1’ in the backslash code is there to ensure that the codes are never negative because we will be using the codes as indices in an array.
+```
+slash /
+ 0  1  2  3  4  5  6  7 
+ 1  2  3  4  5  6  7  8 
+ 2  3  4  5  6  7  8  9 
+ 3  4  5  6  7  8  9 10 
+ 4  5  6  7  8  9 10 11 
+ 5  6  7  8  9 10 11 12 
+ 6  7  8  9 10 11 12 13 
+ 7  8  9 10 11 12 13 14 
+```
 
+```
+backslash \
+ 7  6  5  4  3  2  1  0 
+ 8  7  6  5  4  3  2  1 
+ 9  8  7  6  5  4  3  2 
+10  9  8  7  6  5  4  3 
+11 10  9  8  7  6  5  4 
+12 11 10  9  8  7  6  5 
+13 12 11 10  9  8  7  6 
+14 13 12 11 10  9  8  7 
+```
+```java
+for (int r = 0; r <N ; r++) {
+    for (int c = 0; c <N ; c++) {
+       slashCode[r][c]=r+c;
+       backslashCode[r][c]=r-c+(N-1);
+    }
+}
+```
+check whether slash code ( j + i ) or backslash code ( j – i + 7 ) are used (keep two arrays that will tell us which diagonals are occupied). 
 
 ### 179 一组非负数，拼接成最大的正整数
 > Input: [10,2]
@@ -1402,6 +1437,8 @@ System.out.println(Arrays.toString(acu()));
 String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 ```
 
+### 611数组中符合三角形边长的对数
+
 ### 数组组成三角形的最大周长
 贪心，排序，如果 $a[i]<a[i-1]+a[i-2]$ 则没有其他两条边可以两边之和`>`第三边了，换下一条当最长边。
 
@@ -1556,63 +1593,7 @@ private void dfs(LinkedList<String> rst,Map<String,PriorityQueue<String> > map,S
 
 ```
 
-### 784 大小写字母的permutation
-`'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快
-小写和数字都加上这一位继续dfs，大写要
-```java
-if(idxchar-'A'>=0&&idxchar-'A'<26||idxchar-'a'>=0&&idxchar-'a'<26){
-    idxchar = (char)(idxchar^(1<<5));
-    dfs(s,idx+1,cur+idxchar);
-    idxchar = (char)(idxchar^(1<<5));
-}
-    dfs(s,idx+1,cur+idxchar);
-```
 
-$C(n,r) = P(n,r)/r!$
-
-### 46 permutations
-给定{1..n-1}的排列，存在n种方法将n插入得到{1..n}的排列
-n个球放入r个盒子里
-分步递推：$P(n,r)=nP(n-1,r-1)$
-分类递推：不选第一个球，方案数$P(n-1,r)$,选第一个球方案数$rP(n-1,r-1)$->$P(n,r)=P(n-1,r)+rP(n-1,r-1)$
-O(2^n)复杂度 3ms
-```java
-if(tmp.size()==nums.length){         
-    rst.add(new ArrayList<Integer>(tmp));
-    return;
-}
-```
-一定要复制一份tmp，不然tmp是对象最后tmp会被remove为空
-```java
-for(int i =0;i<nums.length;i++){
-    if(tmp.contains(nums[i]))continue;
-    tmp.add(nums[i]);
-    help(rst,nums,tmp);
-    tmp.remove(tmp.size()-1);
-}
-```
-O(n!)复杂度
-
-方法2 swap java不能int[]->List<Integer>
-[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,2,1],[3,1,2]]
-```cpp
-vector<vector<int>> permute(vector<int>& nums) {
-    vector<vector<int> > ans;
-    help(nums,0,ans);
-    return ans;
-}
-void help(vector<int> &num,int begin,vector<vector<int> > &ans){
-    if(begin>=num.size()){
-        ans.push_back(num);
-        return;
-    }
-    for(int i =begin;i<num.size();i++){
-        swap(num[begin],num[i]);
-        help(num,begin+1,ans);
-        swap(num[begin],num[i]);
-    }
-}
-```
 
 ### 两个帅不能处在同一条直线上的所有可行位置
 ```
@@ -1635,8 +1616,7 @@ int main(){
 
 ### 翻煎饼排序的最少次数
 
-### 39 等于target的每个数字无限次的combination
-关键：加上start，防止出现3,2,2的重复
+
 
 ### 279完美平方数？？？
 
@@ -2909,53 +2889,7 @@ for(int i =1;i<4;i++){
 
 
 ---
-### ?90 有重复的subset[1,2,2,2]
-1. 选不同的2得到{1,2}是重复的
-2. 次序不同得到{1,2},{2,1}是重复的
-先排序，再去重。
 
-### 78 subset[1,2,3]->[1][1,2][1,2,3][2,3][2][3]
-回溯法：[[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]
-```java
-public List<List<Integer>> subsets(int[] nums) {
-    List<List<Integer>> rst = new ArrayList<>();
-    back(rst,new ArrayList<>(),nums,0);
-    return rst;
-    }
-private void back(List<List<Integer>> rst,List<Integer> item,int[] nums,int index){
-    rst.add(new ArrayList<>(item));
-    for(int i =index;i<nums.length;i++){
-        item.add(nums[i]);
-        back(rst,item,nums,i+1);
-        item.remove(item.size()-1);
-    }
-}
-```
-位运算法 集合每一项可以用0，1表示取不取
-输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]] 从000到111的过程
-{A,B,C}=111=7
-{A,B}=110=6
-{A}=100=5...
-一共有2^3种
-A用100表示
-B用010表示
-C用001表示
-如果i=011=3,添加j=0,001,j=1,010到item；i=100=4,添加j==2,1<<2=4
-```java
-public List<List<Integer>> subsets(int[] nums) {
-    List<List<Integer>> rst = new ArrayList<>();
-    for(int i=0;i<(1<<nums.length);i++){
-        List<Integer> tmp = new ArrayList<>();
-        for(int j =0;j<nums.length;j++){
-            if((i&(1<<j))!=0){
-                tmp.add(nums[j]);
-            }
-        }
-        rst.add(new ArrayList<>(tmp));
-    }
-    return rst;
-}
-```
 
 ---
 ### !815 换公交 BFS
@@ -3381,7 +3315,7 @@ public class Solution {
 ```
 {% endfold %}
 
-### 168
+### 168 lt1350
 1 -> A
 2 -> B
 3 -> C
@@ -3394,6 +3328,16 @@ public class Solution {
  public String convertToTitle(int n) {
     return n == 0 ? "" : convertToTitle(--n / 26) + (char)('A' + (n % 26));
 }
+```
+88%
+```java
+StringBuilder sb = new StringBuilder();
+while (n!=0){
+   --n;
+   sb.insert(0,(char)(n%26+'A' ));
+   n/=26;
+}
+return sb.toString();
 ```
 
 

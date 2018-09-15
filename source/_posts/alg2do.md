@@ -349,8 +349,71 @@ public List<Integer> findAnagrams(String s, String p) {
 ### ！！！！76 最小的子串窗口 很重要的题
 
 
-### ！5 最长回文串
-//todo
+### ！5 最长回文串 lt893
+最快最正确的做法8ms 99%:
+版本2
+```java
+public String longestPalindrome(String s) {
+    if (s == null || s.length() == 0){
+        return s;
+    }
+    char[] ca = s.toCharArray();
+    int rs = 0, re = 0;
+    int max = 0;
+    for(int i = 0; i < ca.length; i++) {
+        if(isPalindrome(ca, i - max - 1, i)) {
+            rs = i - max - 1; re = i;
+            max += 2;
+        } else if(isPalindrome(ca, i - max, i)) {
+            rs = i - max; re = i;
+            max += 1;
+        }
+    }
+    return s.substring(rs, re + 1);
+}
+
+private boolean isPalindrome(char[] ca, int s, int e) {
+    if(s < 0) return false;
+    
+    while(s < e) {
+        if(ca[s++] != ca[e--]) return false;
+    }
+    return true;
+}
+```
+版本1
+```java
+int max = 0;
+int left = 0;
+char[] chars;
+public String longestPalindrome(String s) {
+    if (s == null || s.length() == 0){
+        return s;
+    }
+    chars = s.toCharArray();
+    for (int i = 0; i < chars.length; i++){
+        i = longestPalindrome(i);
+    }
+    return s.substring(left, left + max);
+}
+
+private int longestPalindrome(int index){
+    int ll = index, rr = index;
+    while (rr + 1 < chars.length && chars[rr] == chars[rr + 1]){
+        rr++;
+    }
+    int temp = rr;
+    while (ll - 1 >= 0 && rr + 1 < chars.length && chars[ll - 1] == chars[rr + 1]){
+        ll--;
+        rr++;
+    }
+    if (rr - ll  + 1 > max){
+        max = rr - ll + 1;
+        left = ll;
+    }
+    return temp;
+}
+```
 http://windliang.cc/2018/08/05/leetCode-5-Longest-Palindromic-Substring/
 !!反转做法不行:abcxyzcba -> abczyxcba ->相同的abc并不是回文!! 不能用LCS
 “cba”是“abc”的 reversed copy
@@ -387,9 +450,43 @@ private int help(String s,int left,int right){
 }
 ```
 
-#### Manacher's 算法 O(n)
+#### Manacher's 算法 O(n) 并不理解
 https://algs4.cs.princeton.edu/53substring/Manacher.java.html
 前缀/
+
+73%
+```java
+public String longestPalindrome2(String s) {
+    StringBuilder sb = new StringBuilder("^#");
+    for (int i = 0; i !=s.length() ; i++)
+        sb.append(s.charAt(i)).append("#");
+    sb.append("$");
+    final int N = sb.length();
+    int[] p = new int[N];
+    //id是长度为mx的回文串的中心(?
+    int id = 0,mx = 0;
+    int maxLen = 0,maxId= 0;
+    for (int i = 1; i <N-1 ; i++) {
+        //注意
+//            System.out.println(2*id-i);
+
+        p[i] = mx > i ? Math.min(p[2 * id - i], mx - i ) : 1;
+
+        while(sb.charAt(i+p[i])==sb.charAt(i-p[i]))
+            p[i]++;
+        if(mx < i+p[i]){
+            mx = i+p[i];
+            id = i;
+        }
+        if(maxLen < p[i]){
+            maxLen = p[i];
+            maxId = i;
+        }
+    }
+    int start = (maxId-maxLen)/2;
+    return s.substring(start,start+maxLen-1);
+}
+```
 
 #### 回文树
 `next[i][c]` 编号为i的节点表示的回文串两边添加c后变成的回文串编号。

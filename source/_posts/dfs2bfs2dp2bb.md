@@ -3,6 +3,364 @@ title: 一些DFS,BFS可以变成DP,BB的计数题
 date: 2018-09-09 15:22:54
 tags:
 ---
+### 784 大小写字母的permutation
+`'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快
+小写和数字都加上这一位继续dfs，大写要
+```java
+if(idxchar-'A'>=0&&idxchar-'A'<26||idxchar-'a'>=0&&idxchar-'a'<26){
+    idxchar = (char)(idxchar^(1<<5));
+    dfs(s,idx+1,cur+idxchar);
+    idxchar = (char)(idxchar^(1<<5));
+}
+    dfs(s,idx+1,cur+idxchar);
+```
+
+$C(n,r) = P(n,r)/r!$
+
+### 46 permutations
+给定{1..n-1}的排列，存在n种方法将n插入得到{1..n}的排列
+n个球放入r个盒子里
+分步递推：$P(n,r)=nP(n-1,r-1)$
+分类递推：不选第一个球，方案数$P(n-1,r)$,选第一个球方案数$rP(n-1,r-1)$->$P(n,r)=P(n-1,r)+rP(n-1,r-1)$
+O(2^n)复杂度 3ms
+```java
+if(tmp.size()==nums.length){         
+    rst.add(new ArrayList<Integer>(tmp));
+    return;
+}
+```
+一定要复制一份tmp，不然tmp是对象最后tmp会被remove为空
+```java
+for(int i =0;i<nums.length;i++){
+    //dfs的marked
+    if(tmp.contains(nums[i]))continue;
+    tmp.add(nums[i]);
+    help(rst,nums,tmp);
+    tmp.remove(tmp.size()-1);
+}
+```
+O(n!)复杂度
+不用contains 用markd数组 3ms
+{% fold %}
+```java
+boolean[] used;
+private void dfs(int idx,List<List<Integer>> rst,List<Integer> tmp,int[] nums){
+    if(idx>=nums.length){
+        rst.add(new ArrayList<>(tmp));
+        return;
+    }
+    //注意 排列无顺序 每次从0开始，但是要去重
+    for(int i = 0;i<nums.length;i++){
+        if(used[i]) continue;
+          used[i] = true;
+        tmp.add(nums[i]);
+        dfs(idx+1,rst,tmp,nums);
+        tmp.remove(tmp.size()-1);
+        used[i] = false;   
+        }
+}
+public List<List<Integer>> permute(int[] nums) {
+    List<List<Integer>> rst = new ArrayList<>();
+    int n = nums.length;
+    used = new boolean[n];
+    dfs(0,rst,new ArrayList<>(),nums);
+    return rst;
+}
+```
+{% endfold %}
+
+方法2 swap java不能int[]->List<Integer>
+[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,2,1],[3,1,2]]
+```cpp
+vector<vector<int>> permute(vector<int>& nums) {
+    vector<vector<int> > ans;
+    help(nums,0,ans);
+    return ans;
+}
+void help(vector<int> &num,int begin,vector<vector<int> > &ans){
+    if(begin>=num.size()){
+        ans.push_back(num);
+        return;
+    }
+    for(int i =begin;i<num.size();i++){
+        swap(num[begin],num[i]);
+        help(num,begin+1,ans);
+        swap(num[begin],num[i]);
+    }
+}
+```
+
+---
+
+### 39 Combination tum target 不重复元素组合求目标
+>candidates = [2,3,6,7], target = 7,
+> A solution set is:
+>[
+>  [7],
+>  [2,2,3]
+>] 
+
+**注意这种写法 如果输入[1,1,1] 有重复元素的不行**
+关键：加上start，防止出现3,2,2的重复
+组合比排列dfs的时候多一个`start`,每次只向后取数字 
+先输出[2,2,3]
+44% 15ms
+```java
+public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    List<List<Integer>> rst = new ArrayList<>();
+    Arrays.sort(candidates);
+    help(rst,candidates,target,new ArrayList<>(),0);
+    return rst;
+}
+private void help(List<List<Integer>> rst,int[] candi,int target,List<Integer> tmp,int idx){
+if(target<0)return;
+    if (target == 0) {
+        rst.add(new ArrayList<>(tmp));
+        return;
+    }
+
+for (int i = idx ; i <candi.length; i++) {
+    //因为排序了，如果之后元素都大则不用向装这个向后找了
+    if(candi[i]>target)break;
+        tmp.add(candi[i]);
+        //可以使用重复元素则idx,不能重复则idx+1
+        help(rst,candi, target-candi[i], tmp,i);
+        tmp.remove(tmp.size()-1);
+    }
+}
+```
+
+如果要先输出长度短的：先输出[7] 加个长度d和总长度len
+可以作为从N个数里选len个数的模板
+```java
+public List<List<Integer>> combinationSumLenOrder(int[] candidates, int target) {
+    List<List<Integer>> rst = new ArrayList<>();
+    Arrays.sort(candidates);
+    //最长用第一个元素target/candi[0]次
+    for (int i = 1; i <=target/candidates[0] ; i++) {
+        dfs(rst,candidates,new ArrayList<>(),target,0,0,i);
+    }
+    return rst;
+}
+private void dfs(List<List<Integer>> rst,int[] candi,List<Integer> tmp,int target,int d,int idx,int len){
+
+    if(d==len){
+        if(target==0)rst.add(new ArrayList<>(tmp));
+        return;
+    }
+    for (int i = idx; i <candi.length ; i++) {
+        if(candi[i]>target)break;
+        tmp.add(candi[i]);
+        dfs(rst,candi,tmp,target-candi[i],d+1,i,len);
+        tmp.remove(tmp.size()-1);
+    }
+}
+```
+
+### lt135 有重复元素的可以利用一个元素多次的comb sum
+>>输入[1,1,1],target = 2 -> [[1,1]]
+
+1.用set去重 
+```java
+Set<Integer> set = new HashSet<>();
+    for(int i:candidates)set.add(i);
+    int[] nums = new int[set.size()];
+    int idx =0;
+    for(int i:set){
+        nums[idx++] = i;
+    }
+```
+2.加一行
+```java
+for(int i = idx;i<candidates.length;i++){
+    if(candidates[i]>target)break;
+    //跳过重复的
+    if(i>0&&candidates[i]==candidates[i-1])continue;
+    tmp.add(candidates[i]);
+    dfs(rst,candidates,target-candidates[i],tmp,i);
+    tmp.remove(tmp.size()-1);
+}
+```
+
+### 40 有重复元素且每个元素只能用一次的combsum
+1.直接用`Set<List>`->`List<List>` 34ms 11%
+2. 加上注意一定是`>idx`,不然[1,1]会被跳过
+`if(i>idx&&candi[i]==candi[i-1])continue;` 
+并且`dfs(rst,candi, target-candi[i], tmp,i+1);`
+
+```java
+public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+    List<List<Integer>> rst = new ArrayList<>();
+    Arrays.sort(candidates);
+    dfs(rst,candidates,target,new ArrayList<>(),0);
+    return new ArrayList<>(rst);
+}
+private void dfs(List<List<Integer>> rst,int[] candi,int target,List<Integer> tmp,int idx){
+    if(target<0)return;
+    if (target == 0) {
+        rst.add(new ArrayList<>(tmp));
+        return;
+    }
+    for (int i = idx ; i <candi.length; i++) {
+        if(candi[i]>target)break;
+        //不是第一个元素，如果是[1,1,1] 这一层不找相同的元素
+       if(i>idx&&candi[i]==candi[i-1])continue;
+        tmp.add(candi[i]);
+        //可以使用重复元素则idx,不能重复则idx+1
+        dfs(rst,candi, target-candi[i], tmp,i+1);
+        tmp.remove(tmp.size()-1);
+    }
+}
+```
+
+### 216 从1-9中选k个数字组成target
+> 输入: k = 3, n = 9
+输出: [[1,2,6], [1,3,5], [2,3,4]]
+
+AC 78% 1ms
+
+### ?90 有重复的subset[1,2,2,2]
+1. 选不同的2得到{1,2}是重复的
+2. 次序不同得到{1,2},{2,1}是重复的
+先排序，再去重。
+
+### 78 subset[1,2,3]->[1][1,2][1,2,3][2,3][2][3]
+回溯法：[[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]
+```java
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> rst = new ArrayList<>();
+    back(rst,new ArrayList<>(),nums,0);
+    return rst;
+    }
+private void back(List<List<Integer>> rst,List<Integer> item,int[] nums,int index){
+    rst.add(new ArrayList<>(item));
+    for(int i =index;i<nums.length;i++){
+        item.add(nums[i]);
+        back(rst,item,nums,i+1);
+        item.remove(item.size()-1);
+    }
+}
+```
+位运算法 集合每一项可以用0，1表示取不取
+输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]] 从000到111的过程
+{A,B,C}=111=7
+{A,B}=110=6
+{A}=100=5...
+一共有2^3种
+A用100表示
+B用010表示
+C用001表示
+如果i=011=3,添加j=0,001,j=1,010到item；i=100=4,添加j==2,1<<2=4
+```java
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> rst = new ArrayList<>();
+    for(int i=0;i<(1<<nums.length);i++){
+        List<Integer> tmp = new ArrayList<>();
+        for(int j =0;j<nums.length;j++){
+            if((i&(1<<j))!=0){
+                tmp.add(nums[j]);
+            }
+        }
+        rst.add(new ArrayList<>(tmp));
+    }
+    return rst;
+}
+```
+
+
+
+### 45jump game cnt 2do next time
+dp:
+```java
+ private int jumpdp(int[] nums){
+    int n = nums.length;
+    int[] dp =  new int[n];
+    if(n == 0||nums[0] ==0)return 0;
+    dp[0] = 0;
+    for (int i = 1; i < n; i++) {
+        dp[i] = Integer.MAX_VALUE;
+        for (int j = 0; j <i ; j++) {
+            if(i<=j+nums[j]&&dp[j]!= Integer.MAX_VALUE){
+                dp[i] = Math.min(dp[i],dp[j]+1);
+                break;
+            }
+        }
+    }
+    return dp[n-1];
+}
+```
+BFS：
+```java
+public int jumpBFS(int[] nums){
+    if(nums==null||nums.length<2)return 0;
+    int level = 0;
+    int cur = 0;
+    int max =0;
+    int i =0;
+    //cur-i+1=1,level++; i<=cur,i++,max = 2;cur = 2;
+    //cur=2,i=1;level++; i<=2,i++,max = 4,max>=n-1 return 2;
+    while (cur-i+1>0){
+        level++;
+        for(;i<=cur;i++){
+            max = Math.max(max,nums[i]+i);
+            if(max>=nums.length-1)return level;
+        }
+        cur = max;
+    }
+
+    return 0;
+}
+```
+递归
+```java
+public int minJumpRecur(int[] arr){
+    int n = arr.length;
+    memo = new int[n][n];
+    return jump(arr, 0, n-1);
+}
+int[][] memo;
+private int jump(int[] steps,int from,int end){
+//        System.out.println(from+" "+end);
+    if(from==end)return 0;
+    //不可达
+    if(memo[from][end]!=0)return memo[from][end];
+    if(steps[from]==0)return Integer.MAX_VALUE;
+    int min = Integer.MAX_VALUE;
+    //当前可以到达的范围是[from,from+step[from]]
+    for(int i = from+1;i<=end&&i<=from+steps[from];i++){
+        int jumps = jump(steps,i , end);
+        if(jumps!=Integer.MAX_VALUE&&jumps+1<min){
+            min = jumps+1;
+            memo[from][end] = min;
+        }
+    }
+    return min;
+}
+```
+最正常的做法：
+```java
+public int jump(int[] nums) {
+    if(nums==null||nums.length<2)return 0;
+    int res = 0;
+    int curMax = 0;
+    int maxNext = 0;
+    //i=0,max = 2 i==cur ->res++,cur = max=2
+    //i=1,max = max(2,4)=4, i!=cur
+    //i=2,max = max(4,3)=4, i==cur res++,cur = max=4
+    //i=3,max = max(4,4)=4, i!=cur break
+    //不需要走到i=4,max = max(4,4+4)=8,i==cur res++,cur=max
+    for (int i = 0; i < nums.length-1; i++) {
+        maxNext = Math.max(maxNext,i+nums[i] );
+        if(i==curMax){
+          res++;
+          curMax = maxNext;
+        }
+    }
+    return res;
+}
+```
+
+
 ### 743 从一个node广播，让所有节点收到最多要多久 单源最短路径
 > time[[2,1,1],[2,3,1],[3,4,1]] times[i] = (u, v, w) u到v花费w
 > N个节点，从K发送
