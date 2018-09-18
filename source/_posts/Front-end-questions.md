@@ -4,6 +4,13 @@ date: 2018-03-07 02:20:53
 tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
+## html元素
+`<base href="/">` 基础路径
+`a[href,target]` 默认target是当前页面（在新窗口打开）
+`img[src,alt]` alt图片显示失败的字
+`label[for]` 加上点单选框复选框的文字也可以选中框
+
+
 
 ## queryURLParameter
 ### 字符串拆分法

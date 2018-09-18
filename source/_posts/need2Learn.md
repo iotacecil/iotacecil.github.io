@@ -3,6 +3,11 @@ title: need2Learn
 date: 2018-09-07 19:02:14
 tags:
 ---
+
+### todoList
+1. Octotree 分屏翻译chrome插件
+2. 排值日小程序
+
 ### 商汤java开发实习
 2.具备扎实的Java基础知识和良好的编码风格，深入理解Java虚拟机，反射机制以及常用的设计模式。
 3.熟悉MVC设计模式，掌握SpringMVC、Mybatis等主流MVC框架的工作原理。

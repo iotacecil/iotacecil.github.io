@@ -4,7 +4,363 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+### 464 博弈
+A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。
+1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)
+2.因为1,2...和2,1...是一样的，所以可以降为$2^n$
+状态压缩
 
+1. 子状态，m个数state[m+1]表示visited
+2. 记忆化递归key是子状态，`Arrays.toString(state)`
+3. 遍历state中还是0的没选的数，
+    如果d-i选这个数赢了或者另一个人递归d-i的子问题不能赢，
+    更新map中这个state为true，可以先state[i]=0回溯return true到之前的选择(上一层递归)
+    ```java
+    if(d-i<0||!canwin(d-i,hmap)){
+        hmap.put(key,true);
+        state[i]=0;
+        return true;
+    }
+    ```
+    如果对方赢了，不选这个state[i]=0，继续尝试循环中其它state
+   如果所有的state都试过了也不行，说明当前子问题
+   `hamp.put(key,false)`,`return false`
+
+优化19ms：用二进制存一个int表示状态 用`byte[i<<M+1]`记忆化
+```java
+int byte[] m_;
+m = new byte[1<<M+1];
+```
+遍历M个数
+```java
+if(state&(1<<i)>0)continue;
+if(!canwin(d-i,state|(1<<i))){
+    m_[state]=1;
+    return true;
+}
+```
+出循环，表示这个状态不行
+```java
+m_[state]=-1;
+return false;
+```
+- 优化2：如果用byte[1<<M] 遍历0~M ,`canwin(d-i+1,state|(1<<i))`只需要15ms
+
+1左移i位`int mask=1<<i`表示选这个数的状态
+如果`(mask&visited)==0`表示没使用过这个数
+另一个玩家能不能赢的state：`mask|visited` 在visited（上一个状态）的基础将i位也置1
+
+---
+
+
+
+### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
+https://leetcode.com/problems/predict-the-winner/solution/
+{3，9，1，2}
+1. 二维数组dp：`[i][j]`只用右上三角表示两个人都从list取1个数，2个数，3个数到list长能获得的最大差值
+1. 填对角线，如果两个人只剩下一个数为3：{A取3，B取0}，剩下9：{A取9，B取0}...
+2. 如果剩下2个数，剩下{3,9}`[1][2]`：{A取9，B剩下{3}回到1的情况}...
+3. 如果剩下3个数，剩下{3,9,1}`[1][3]`:{A取3,B剩下{9,1}即表格`[2][3]`的情况}
+4. 剩下4个数，填`[1][4]`即为答案
+
+递归：但是会有很多重复计算复杂度$2^n$
+比如让对手选[3,9,1]后，自己选[9,1]和[3,9]/让对手选[9,1,2]后，自己选[9,1]和[1,2]
+[9,1]被计算了两次。可以进行存储
+```java
+//最大的分数差
+int dif(int[] nums,int left,int right){
+    //如果长度为1，获得的差值就是这个数
+    if(left==right)return nums[left];
+    //选一个数之后 交给对手用相同策略选
+    return max(nums[left]-dif(nums,left+1,right),nums[right]-dif(nums,left,right+1));
+}
+```
+用一维数组存储key是`left*len+right`
+{% fold %}
+```java
+int[] m;
+int len =0;
+public boolean PredictTheWinner(int[] nums) {
+    this.len = nums.length;
+    if(len==1)return true;
+    this.m= new int[len*len];
+  return help(nums,0,len-1)>=0;
+}
+private int help(int[] nums,int l,int r){
+    if(l==r)return nums[l];
+    int index = l*len+r;
+    if(m[index]>0)return m[index];
+    m[index]=Math.max(nums[l]-help(nums,l+1,r),nums[r]-help(nums,l,r-1));
+    return m[index];
+}
+```
+{% endfold %}
+
+#### lt 1470 
+> 1号玩家先取。问最后谁将获胜。 他们只能从数组的两头进行取数，且一次只能取一个。
+> 若1号玩家必胜或两人打成平局，返回1，若2号玩家必胜，返回2。
+> 如果数组长度是偶数 先手必胜只要return 1就行了
+
+```java
+public int theGameOfTakeNumbers(int[] arr) {
+   if(dif(arr,0,arr.length-1)>=0)return 1;
+   else return 2;
+}
+private int dif(int[] nums,int left,int right){
+    if(left<right)return 0;
+    if(left==right)return nums[left];
+    return Math.max(nums[left]-dif(nums,left+1,right),nums[right]-dif(nums,left,right-1));
+}
+```
+
+#### lc 877
+> 偶数堆石子排成一行，每堆都有正整数颗石子 piles[i] 
+> 输入： [5,3,4,5]
+
+先手可以拿1+3 或者2+4 对手反之拿2+4或者1+3，所以先手选大的那个肯定赢。
+递归同上 77%
+dp 记住子问题：
+
+
+### lt920 meeting room
+给定一系列的会议时间间隔，包括起始和结束时间[[s1,e1]，[s2,e2]，…(si < ei)，确定一个人是否可以参加所有会议。
+[[0,30]，[5,10]，[15,20]]，返回false。
+贪心
+```java
+public boolean canAttendMeetings(List<Interval> intervals) {
+    if(intervals == null||intervals.size() == 0)return true;
+    Collections.sort(intervals,(o1,o2)->o1.start-o2.start);
+    int end = intervals.get(0).end;
+    for (int i = 1; i < intervals.size(); i++) {
+        if(intervals.get(i).start<end)return false;
+        end = Math.max(end,intervals.get(i).end);
+    }
+    return true;
+}
+```
+
+### lt919 !!!需要几个会议室
+不能贪心：
+> `[[1, 5][2, 8][6, 9]]`
+> 这种情况本来只需要2间房，但是直接贪心就会需要3间房
+
+```java
+/**
+ |___| |______|
+   |_____|  |____|
+ starts:
+ | |   |    |
+ i
+ ends:
+      |  |     | |
+     end
+ res++;
+ ---------
+    i
+     end
+ res++; 这个end之前有2个start，前一个会议没有结束
+ ---------
+        i
+     end
+ end++; start>end表示有个room的会议已经结束，可以安排到这个room
+ ---------
+ */
+//251ms 74%
+public int minMeetingRooms2Arr(List<Interval> intervals) {
+    int[] starts = new int[intervals.size()];
+    int[] ends = new int[intervals.size()];
+    for(int i=0;i<intervals.size();i++){
+        starts[i] = intervals.get(i).start;
+        ends[i] = intervals.get(i).end;
+    }
+    Arrays.sort(starts);
+    Arrays.sort(ends);
+    int cnt =0;
+    int end = 0;
+    for (int i = 0; i < intervals.size(); i++) {
+        if(starts[i]<ends[end])cnt++;
+        else end++;
+    }
+    return cnt;
+}
+```
+
+用TreeMap
+```java
+//240ms 75%
+public int minMeetingRooms(List<Interval> intervals) {
+    TreeMap<Integer,Integer> map = new TreeMap<>();
+    for(Interval i:intervals){
+        map.put(i.start,map.getOrDefault(i.start,0)+1);
+        map.put(i.end,map.getOrDefault(i.end,0)-1);
+    }
+    int room = 0;
+    int max = 0;
+    for(int num:map.values()){
+        room+=num;
+        max = Math.max(max,room);
+    }
+    return max;
+}
+```
+
+用PriorityQ
+```java
+//403ms 54%
+public int minMeetingRoomsPQ(List<Interval> intervals) {
+    Collections.sort(intervals,(o1, o2)->o1.start-o2.start);
+    PriorityQueue<Interval> heap = new PriorityQueue<>(intervals.size(),(o1, o2)->o1.end-o2.end);
+    heap.add(intervals.get(0));
+    for (int i = 1; i <intervals.size() ; i++) {
+        if(intervals.get(i).start>=heap.peek().end)heap.poll();
+        heap.add(intervals.get(i));
+    }
+    return heap.size();
+}
+```
+
+### 452 重叠线段？？
+```java
+int cnt =0;
+//按结束顺序排序不会出现
+//  |__|     只有：  |___| 和 |____|
+//|______|的情况  |____|       |_|
+Arrays.sort(points,(a,b)->a[1]>b[1])
+for(int i =0;i<points.length;i++){
+    int cur = points[i][1];
+    cnt++;
+    while(i+1<points.length&&points[i+1][0]<=cur&&cur<=points[i+1][1]){
+        i++;
+    }
+}
+return cnt;
+```
+前一个的end在i+1的线段中，则跳过。
+问题：
+```
+{{1,3},{2,5},{4,7},{6,9}}输出2还是3？
+```
+
+
+
+### 56 合并区间 扫描线
+>Input: [[1,4],[4,5]]
+Output: [[1,5]]
+
+
+方法1：O(nLogn) 需要O(n)空间
+1.按起点排序，
+2.push第一个interval
+3.for全部interval：
+  a.不交叉，push
+  b.交叉,更新栈顶的end
+
+59ms 27%
+{% fold %}
+```java
+public List<Interval> merge(List<Interval> intervals) {
+  if(intervals==null||intervals.size()<2)return intervals;
+    intervals.sort((a,b)->a.start-b.start);
+    List<Interval> rst = new ArrayList<>();
+    for(Interval interval:intervals){
+        if(rst.size()<1){       
+            rst.add(interval);
+        }
+        else if(rst.get(rst.size()-1).end>=interval.start){
+            // 不用新建 只需要更新栈顶
+            // Interval newInter = rst.get(rst.size()-1);
+            // rst.remove(rst.size()-1);
+            // newInter.end = Math.max(newInter.end,interval.end);
+            // rst.add(newInter);
+            rst.get(rst.size()-1).end =Math.max(rst.get(rst.size()-1).end,interval.end); 
+        }else{
+            rst.add(interval );
+        }
+    }
+    return rst;
+}
+```
+{% endfold %}
+
+方法2：分解成`start[],end[]`
+思想：后一个区间的start(i+1)一定要大于前一个区间的end(i)
+98% 10ms
+```
+starts:   1    2    8    15
+               i    i+1
+ends:     3    6    10    18
+          j
+```
+add(1,6)
+`start[i+1]>end[i]` 直到找的第一个start>end `add(start[j],end[i])` `j=i+1`
+如果start到了最后一个，这个区间肯定是从上一个区间(j)开始，到end(i)结束
+```java
+public List<Interval> merge(List<Interval> intervals) {
+    int len = intervals.size();
+    int[] start = new int[len];
+    int[] end = new int[len];
+    for(int i =0;i<len;i++){
+        start[i] = intervals.get(i).start;
+         end[i] = intervals.get(i).end;
+    }
+    Arrays.sort(start);
+    Arrays.sort(end);
+    List<Interval> rst = new ArrayList<>();
+    for(int i =0,j=0;i<len;i++){
+        //关键 当start扫描到最后一个 ，直接建立起最后一个区间
+        if(i==len-1||start[i+1]>end[i]){
+            rst.add(new Interval(start[j],end[i]));
+            //下一个区间起点
+            j=i+1;
+        }
+    }
+}
+```
+
+方法3：原地算法
+1.按地点降序排序
+2. a如果不是第一个，并且和前一个可以合并，则合并
+   b push当前
+
+#### lt156合并区间
+> ```
+[                     [
+  (1, 3),               (1, 6),
+  (2, 6),      =>       (8, 10),
+  (8, 10),              (15, 18)
+  (15, 18)            ]
+]
+```
+O(n log n) 的时间和 O(1) 的额外空间。 原地算法
+
+
+
+
+
+### 57 插入一个区间并合并
+方法1： 将区间插到newInterval.start>interval.start之前的位置，用56的和last比较合并
+方法2： 分成left+new+right三部分并合并 中间部分取自身和重叠区间的min/max
+```java
+public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+     List<Interval> left = new ArrayList<>();
+     List<Interval> right = new ArrayList<>();
+     int start =newInterval.start;
+     int end =newInterval.end;
+     for(Interval interval:intervals){
+         if(interval.end<newInterval.start){
+             left.add(interval);
+         }else if(interval.start>newInterval.end){
+             right.add(interval);
+         }else {
+             start = Math.min(start,interval.start);
+             end = Math.max(end,interval.end);
+         }
+     }
+     left.add(new Interval(start,end));
+     left.addAll(right);
+    return left;
+}
+```
 
 #### ？？？315 输出数组每个位置后有多少个数字比它小
 
@@ -274,20 +630,29 @@ if(slow==fast){
 }
 ```
 
-### 34 二分查找数字的first+last idx？？？？？？
+### lt 458 lastIndexOf
+```java
+public int lastPosition(int[] nums, int target) {
+    if(nums==null||nums.length<1)return -1;
+    int i = 0, j = nums.length-1;
+    while(i<=j){
+        int mid = (i+j)/2;
+        if(nums[mid]>target)j = mid-1;
+        //找到了继续向右找
+        else i =mid+1;
+    }
+    if(j<0)return-1;
+    if(nums[j]==target) return j; 
+        return -1;
+}
+```
+
+### 34 ？？？？？？二分查找数字的first+last idx
 > Input: nums = [5,7,7,8,8,10], target = 8
 > Output: [3,4]
 
 二分查找获取最左/右边相等的
-```java
-//获取最右
-while(i<j){
- int mid = (i+j)/2+1;
- if(nums[mid]>target)j = mid-1;
- //找到了继续向右找
- else i =mid;}
-rst[1]=j;
-```
+
 
 ### 410 分割数组使Max(Sum(subarr))最小
 

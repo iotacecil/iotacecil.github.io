@@ -4,6 +4,7 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### 固定ip
 
 
 ### centos 安装GLPK

@@ -8,6 +8,211 @@ categories: [算法备忘]
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html
 
+
+### 分配问题及应用
+![fenpei.jpg](/images/fenpei.jpg)
+
+正正反 甲赢 正反反 乙赢
+
+http://www.matrix67.com/blog/archives/3638
+> 所有 1 都不相邻的 k 位 01 串有 Fk+2 个 Fi 表示 Fibonacci 数列中的第 i 项
+
+抛掷第 k 次才出现连续两个正面”的意思就是， k 位 01 串的末三位是 011，并且前面 k – 3 位中的数字 1 都不相邻。 k-3位的01不相邻的串有F(k-1)个
+
+>平均需要抛掷多少次硬币，才会首次出现连续的 n 个正面？
+
+答案是 2^(n+1) – 2 
+
+> 扔硬币直到连续两次出现正面，求扔的期望次数
+
+• 扔到的是反面，那么还期望抛 E 次，因为抛到反面完全没用，总数就期望抛 E+1，所以是0.5*(1 + E)
+• 扔到的是正面，如果下一次是反面，那么相当于重头来过，总数就期望抛，则是0.25*(2 + E)
+• 扔到两次，都是正面，总数是 2，则是0.25*2
+所以递归来看E = 0.5*(1 + E) + 0.25*(2 + E) + 0.25*2，解得E = 6
+
+
+>A赢： 先正后反， B赢 连续两次反面：A胜的概率 3/4
+
+B 赢概率是1/2*1/2 = 1/4
+
+
+多重排列：pingpang中有重复2个p 2个n 2个g
+1. 标记为p1p2n1n2g1g2ia 全排列个数是8!
+2. p的重复度 为p1p2的全排列 2!
+3. P(N,r1,r2...rt)  标记为P(8;2,2,2,1,1)
+4. P(8;2,2,2,1,1)\*2!\*2!\*2! = 8!
+
+理解二项式定理(a+b)^n
+![abbinary.jpg](/images/abbinary.jpg)
+通项是a^k b^(n-k) 前面的系数表示 n个数的可重排列，a有k个，b有n-k个
+
+不仅是二项式 
+通项是a1^(r1) a2^(r2) at^(rt)
+![nbinary.jpg](/images/nbinary.jpg)
+(x1+x2+…+xm)^n 展开式的项数等于C(n+m-1,n).
+
+> 有6个洞 编号1-9个球，求球入洞的方案数
+
+隔板法：
+1. 划分6个洞需要5个隔板，用1~9填充隔板的空间。变成5个隔板和9个球的全排列。
+2. 5个隔板是相同的，P（14,5,1,1,1,1,1,1,1,1,1,1) = 14!/5!
+
+
+另一种方法：
+1. 1号球可以放6个位置
+2.  1号球等于把空间又划分成了1前和1后，2球有5+2种可能
+3.  同理 3号球有7-1+2 =8个可能...
+4.  6乘到14 = 14!/5!
+
+
+
+> 52张牌分发给4个人，每人13张，问每人有一张A的概率有多少？ 
+> 10.55%
+
+52张牌分发给4个人，每人13张的方法数为52！/(13!)^4 。
+每人发一张A的方法数为4！* 48！/(12!)^4 .
+
+> 4个相同的桔子和6个不同的苹果放到5个不同的盒子中，问每个盒子里有2个水果的概率有多大？
+> 7.4%
+
+把4个相同桔子放入5个不同盒子的放法数为C(5,4),
+把6个不同苹果放入5个不同盒子的放法数为5^6 .因此总的分配方法数为C(5,4)*5^6 .
+
+每个盒子有2个水果，有如下三种情况：
+1、（AA)(AA)(AA)(OO)(OO)
+C(5,2)*6!/2!/2!/2!
+2、AA)(AA)(OA)(OA)(OO)
+C(5,1)*C(4,2)*6!/2!/2!
+3.（AA)(OA)(OA)(OA)(OA)
+C(5,4)*6!/2!
+
+> 将n个不同的球放入编号为1,2,…,k的k个盒子中，试求：
+
+1. 第一个盒子是空盒的概率: 第一个盒子是空盒的方案数为(k－1) n 。
+2. 设k≥n,求n个球落入n个不同盒子的概率:  n个球落入n个不同盒子的方案数为C(k,n)n!。
+3. 第一盒或第二盒两盒中至少一个是空盒的概率。该方案数为第一个盒子是空盒的方案数加上第二个
+盒子是空盒的方案数，再减去两个盒子都是空盒的方案
+数。
+
+
+> 随机地将15名插班生分配到三个班级，每班各5名。设15名插班生中有3为女生。试求：
+将15名插班生分配到三个班级，每班各5名的方案数为C(15,5)C(10,5)C(5,5)=15!/(5!5!5!)。
+
+1. 每一个班级分到一名女生的概率:3!*12!/(4!4!4!)
+2. 三名女生分到同一班的概率: 3*12!/(5!5!2!)
+
+
+
+
+### 649 2种n个参议员，2种操作 无限多轮，直到所有票在同一个阵营
+禁止一名参议员的权利：
+参议员可以让另一位参议员在这一轮和随后的几轮中丧失所有的权利。
+
+宣布胜利：如果参议员发现有权利投票的参议员都是同一个阵营的，他可以宣布胜利并决定在游戏中的有关变化。
+> 输入: "RD"
+输出: "Radiant"
+解释:  第一个参议员来自  Radiant 阵营并且他可以使用第一项权利让第二个参议员失去权力，因此第二个参议员将被跳过因为他没有任何权利。然后在第二轮的时候，第一个参议员可以宣布胜利，因为他是唯一一个有投票权的人
+
+> 输入: "RDD"
+输出: "Dire"
+解释: 
+第一轮中,第一个来自 Radiant 阵营的参议员可以使用第一项权利禁止第二个参议员的权利
+第二个来自 Dire 阵营的参议员会被跳过因为他的权利被禁止
+第三个来自 Dire 阵营的参议员可以使用他的第一项权利禁止第一个参议员的权利
+因此在第二轮只剩下第三个参议员拥有投票的权利,于是他可以宣布胜利
+
+
+
+### 495 给定攻击时间和中毒状态持续时间，问中毒状态总时长
+> Input: [1,2], 2
+Output: 3 (1-2-4)
+
+8ms
+```java
+public int findPoisonedDuration(int[] timeSeries, int duration) {
+    if(timeSeries==null||timeSeries.length<1||duration==0)return 0;
+    int rst = 0;
+    for(int i =0;i<timeSeries.length-1;i++){
+        //每次取间隔或者duration
+      rst += Math.min(duration,timeSeries[i+1]-timeSeries[i]);
+    }
+    rst += duration;
+    return rst;
+}
+```
+//todo again
+按 区间的做法：100% 4ms
+```java
+public int findPoisonedDuration(int[] timeSeries, int duration) {
+    if(timeSeries==null||timeSeries.length<1||duration==0)return 0;
+    int rst = 0;
+    int start = timeSeries[0];
+    int end = timeSeries[0]+duration;
+    for(int i = 1;i<timeSeries.length;i++){
+        //Input: [1,4], 2 
+        if(timeSeries[i]>end){
+            result += (end-start);
+            start = timeSeries[i];
+        }
+        end = timeSeries[i]+duration;
+    }
+        result+=(end-start);
+        return result;
+}
+```
+
+### 899 操作字符串前k个字符放到最后 输出字典序最小的
+> Input: S = "cba", K = 1
+> Output: "acb"
+> 
+> Input: S = "baaca", K = 3
+> Output: "aaabc"
+> Explanation: 
+> In the first move, we move the 1st character ("b") to the end, obtaining the string "aacab".
+> In the second move, we move the 3rd character ("c") to the end, obtaining the final result "aaabc".
+
+当k=1 字符串只能旋转
+当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
+
+
+### 77combinations  C(n,k)=C(n-1,k-1)+C(n-1,k)
+
+`C(n-1,k-1)`表示选这个数，`C(n-1,k)`表示不选这个数
+88%的写法：
+```java
+public List<List<Integer>> combineFast(int n,int k) {
+    List<List<Integer>> result = new ArrayList<>();
+    if(k>n||k<0)return result;
+    if(k==0){
+        result.add(new ArrayList<>());
+        return result;
+    }
+    result = combine(n-1,k-1 );
+    for(List<Integer> list:result){
+        list.add(n);
+    }
+    result.addAll(combine(n-1,k ));
+    return result;
+}
+```
+
+```java
+//    math 8% C(n,k)=C(n-1,k-1)+C(n-1,k)
+public List<List<Integer>> combineMath(int n,int k){
+    if(k==n||k==0){
+        List<Integer> row = new ArrayList<>();
+        for (int i = 1; i <=k ; i++) {
+            row.add(i);
+        }
+        return new ArrayList<>(Arrays.asList(row));
+    }
+    List<List<Integer>> result = this.combineMath(n-1,k-1 );
+    result.forEach(e->e.add(n));
+    result.addAll(this.combineMath(n-1,k ));
+    return result;
+}
+```
+
 ### 24两个一组交换链表
 
 ### NqueenBB
@@ -44,6 +249,70 @@ for (int r = 0; r <N ; r++) {
     }
 }
 ```
+bb 5ms 78%
+```java
+int[][] slashCode, backslashCode;
+//记录这个code是不是已经占用了
+boolean[] rowocc;
+boolean[] slashocc,backslashocc;
+public List<List<String>> solveNQueens(int n) {
+    List<List<String>> rst = new ArrayList<>();
+    int[][] board = new int[n][n];
+     slashCode = new int[n][n];
+    backslashCode = new int[n][n];
+    rowocc = new boolean[n];
+     slashocc = new boolean[2*n-1];
+    backslashocc = new boolean[2*n-1];
+    for (int r = 0; r <n ; r++) {
+        for (int c = 0; c <n ; c++) {
+           slashCode[r][c]=r+c;
+           backslashCode[r][c]=r-c+(n-1);
+        }
+    }
+    nqueen(rst,0,n,board);
+    return rst;
+}
+private List<String> addBoard(int[][] board){
+    List<String> rst  = new ArrayList<>();
+    for(int[] row:board){
+        StringBuilder sb = new StringBuilder();
+        for(int i:row){
+            sb.append((i==0?".":"Q"));
+        }
+        rst.add(sb.toString());
+    }
+    return rst;
+}
+boolean isSafe(int[][] board,int row, int col)
+{
+    if (slashocc[slashCode[row][col]] ||
+            backslashocc[backslashCode[row][col]] ||
+            rowocc[row])
+        return false;
+
+    return true;
+}
+private void nqueen(List<List<String>> rst,int col,int n,int[][] board){
+    if(col>=n){
+        rst.add(addBoard(board));
+        return;
+    }
+    for(int i=0;i<n;i++){
+        if(isSafe(board,i,col)){
+             board[i][col] = 1;
+             rowocc[i] = true;
+            slashocc[slashCode[i][col]] = true;
+            backslashocc[backslashCode[i][col]] = true;
+            nqueen(rst,col+1,n,board);
+            rowocc[i] = false;
+            slashocc[slashCode[i][col]] = false;
+            backslashocc[backslashCode[i][col]] = false;
+            board[i][col] =0;
+        }
+    }
+}
+```
+
 check whether slash code ( j + i ) or backslash code ( j – i + 7 ) are used (keep two arrays that will tell us which diagonals are occupied). 
 
 ### 179 一组非负数，拼接成最大的正整数
@@ -84,125 +353,6 @@ public String largestNumber(int[] nums) {
 public String[] findWords(String[] words){
     return Stream.of(words).parallel().filter(s->s.toLowerCase().matches("[qwertyuiop]*|[asdfghjkl]*|[zxcvbnm]*")).toArray(String[]::new);
 }
-```
-
-### lt920 meeting room
-给定一系列的会议时间间隔，包括起始和结束时间[[s1,e1]，[s2,e2]，…(si < ei)，确定一个人是否可以参加所有会议。
-[[0,30]，[5,10]，[15,20]]，返回false。
-贪心
-```java
-public boolean canAttendMeetings(List<Interval> intervals) {
-    if(intervals == null||intervals.size() == 0)return true;
-    Collections.sort(intervals,(o1,o2)->o1.start-o2.start);
-    int end = intervals.get(0).end;
-    for (int i = 1; i < intervals.size(); i++) {
-        if(intervals.get(i).start<end)return false;
-        end = Math.max(end,intervals.get(i).end);
-    }
-    return true;
-}
-```
-
-### lt919 !!!需要几个会议室
-不能贪心：
-> `[[1, 5][2, 8][6, 9]]`
-> 这种情况本来只需要2间房，但是直接贪心就会需要3间房
-
-```java
-/**
- |___| |______|
-   |_____|  |____|
- starts:
- | |   |    |
- i
- ends:
-      |  |     | |
-     end
- res++;
- ---------
-    i
-     end
- res++; 这个end之前有2个start，前一个会议没有结束
- ---------
-        i
-     end
- end++; start>end表示有个room的会议已经结束，可以安排到这个room
- ---------
- */
-//251ms 74%
-public int minMeetingRooms2Arr(List<Interval> intervals) {
-    int[] starts = new int[intervals.size()];
-    int[] ends = new int[intervals.size()];
-    for(int i=0;i<intervals.size();i++){
-        starts[i] = intervals.get(i).start;
-        ends[i] = intervals.get(i).end;
-    }
-    Arrays.sort(starts);
-    Arrays.sort(ends);
-    int cnt =0;
-    int end = 0;
-    for (int i = 0; i < intervals.size(); i++) {
-        if(starts[i]<ends[end])cnt++;
-        else end++;
-    }
-    return cnt;
-}
-```
-
-用TreeMap
-```java
-//240ms 75%
-public int minMeetingRooms(List<Interval> intervals) {
-    TreeMap<Integer,Integer> map = new TreeMap<>();
-    for(Interval i:intervals){
-        map.put(i.start,map.getOrDefault(i.start,0)+1);
-        map.put(i.end,map.getOrDefault(i.end,0)-1);
-    }
-    int room = 0;
-    int max = 0;
-    for(int num:map.values()){
-        room+=num;
-        max = Math.max(max,room);
-    }
-    return max;
-}
-```
-
-用PriorityQ
-```java
-//403ms 54%
-public int minMeetingRoomsPQ(List<Interval> intervals) {
-    Collections.sort(intervals,(o1, o2)->o1.start-o2.start);
-    PriorityQueue<Interval> heap = new PriorityQueue<>(intervals.size(),(o1, o2)->o1.end-o2.end);
-    heap.add(intervals.get(0));
-    for (int i = 1; i <intervals.size() ; i++) {
-        if(intervals.get(i).start>=heap.peek().end)heap.poll();
-        heap.add(intervals.get(i));
-    }
-    return heap.size();
-}
-```
-
-### 452 重叠线段
-```java
-int cnt =0;
-//按结束顺序排序不会出现
-//  |__|     只有：  |___| 和 |____|
-//|______|的情况  |____|       |_|
-Arrays.sort(points,(a,b)->a[1]>b[1])
-for(int i =0;i<points.length;i++){
-    int cur = points[i][1];
-    cnt++;
-    while(i+1<points.length&&points[i+1][0]<=cur&&cur<=points[i+1][1]){
-        i++;
-    }
-}
-return cnt;
-```
-前一个的end在i+1的线段中，则跳过。
-问题：
-```
-{{1,3},{2,5},{4,7},{6,9}}输出2还是3？
 ```
 
 
@@ -890,6 +1040,12 @@ public int LS(String s){
 
 
 ### 879
+G 名成员 第i种犯罪会产生`profit[i]` 利润，需要`group[i]`名成员参与。计划产生P利润有多少种方案。
+>Input: G = 5, P = 3, group = [2,2], profit = [2,3]
+>output: 2
+
+`dp[k][i][j]` 产生i利润 用j个人 完成前k个任务 的方案数
+
 
 ### 576 无向图访问所有点的最短边数
 
@@ -1019,49 +1175,8 @@ i=3:3赋值给12
 直接拿CharArray的sort重建String当key 49%
 
 
-### 56 合并区间 扫描线
-方法1：O(nLogn) 需要O(n)空间
-1.按起点排序，
-2.push第一个interval
-3.for全部interval：
-  a.不交叉，push
-  b.交叉,更新栈顶的end
 
-方法2：分解成`start[],end[]`
-starts:   1    2    8    15
-ends:     3    6    10    18
-push(1,6)
-当`start[i+1]<end[i]` `push(start[j],end[i])` 更新`j=i+1`
 
-方法3：原地算法
-1.按地点降序排序
-2. a如果不是第一个，并且和前一个可以合并，则合并
-   b push当前
-
-### 57 插入一个区间并合并
-方法1： 将区间插到newInterval.start>interval.start之前的位置，用56的和last比较合并
-方法2： 分成left+new+right三部分并合并
-```java
-public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
-     List<Interval> left = new ArrayList<>();
-     List<Interval> right = new ArrayList<>();
-     int start =newInterval.start;
-     int end =newInterval.end;
-     for(Interval interval:intervals){
-         if(interval.end<newInterval.start){
-             left.add(interval);
-         }else if(interval.start>newInterval.end){
-             right.add(interval);
-         }else {
-             start = Math.min(start,interval.start);
-             end = Math.max(end,interval.end);
-         }
-     }
-     left.add(new Interval(start,end));
-     left.addAll(right);
-    return left;
-}
-```
 
 ### 435 去掉最少区间使区间不重叠
 ```java
@@ -1992,53 +2107,7 @@ private dfs(TreeNode rote){
 ```
 
 
-### 654 二叉树根是数组中最大元素，左子树是左边元素建子树，右子树是右边元素建子树
-stack：
-[3,2,1,6,0,5]
-1.栈底是数组最大值，即树根
-```
-3left->
- right->2->1 stack:3,2,1
-将栈里比cur小的右链变成当前最大值的左链，pop所有比6小的元素
-6left->3
-        ->right->2->1 stack：6
-6left->3
- right->0 stack:6,0
-5left->0,6right->5
-6->left->3
-         ->right->2->1
- ->right->5
-          ->left->0
-```
-68%
-```java
-Deque<Integer> stack = new ArrayDeque<>();
-for(int i =0;i<nums.length;i++){
-    TreeNode cur = nums[i];
-    while(!stack.isEmpty()&&stack.peek().val<cur.val){
-        cur.left = stack.pop();
-    }
-    if(!stack.isEmpty())
-        stack.peek().right=cur;
-    stack.push(cur);
-    }
-return stack.isEmpty()?null:stack.removeLast();
-```
-递归95%
-```java
-build(nums,0,nums.length-1);
-private TreeNode build(int[] nums,int start,int end){
-    if(start>end)return null;
-    int max = start;
-    for(int i =start+1;i<=end;i++){
-        max = nums[]
-    }
-    TreeNode root = new TreeNode(nums[max]);
-    root.left = build(nums,start,max-1);
-    root.right = build(nums,max+1,end);
-    return root;
-}
-```
+
 
 ### 伪多项式时间
 一个整数是否是素数
@@ -2498,6 +2567,28 @@ while(l<r){
 //如果l==r [1,1)表示空的
 return -1;
 ```
+
+### 153 Roataed Sorted Array的最小值 二分logN
+```java
+public int findMin(int[] nums) {
+      if(nums.length==1)return nums[0];
+    return findMin(nums,0,nums.length-1);
+}
+private int findMin(int[] nums,int low,int hi){
+    //只有1个或者2个
+    if(low+1>=hi)return Math.min(nums[low],nums[hi]);
+    if(nums[low]<nums[hi])return nums[low];
+    int mid = low+(hi-low)/2;
+    //无缝
+    return Math.min(findMin(nums,low,mid-1),findMin(nums,mid ,hi));
+}
+```
+#### 154 有重复元素Roataed Sorted Array 
+> Input: [2,2,2,0,1]
+> Output: 0
+
+去掉第二个递归条件。
+
 
 ---
 
@@ -3071,94 +3162,9 @@ public static int highestOneBit(int i) {
 ```
 
 ---
-### 464 博弈
-A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。
-1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)
-2.因为1,2...和2,1...是一样的，所以可以降为$2^n$
-状态压缩
 
-1. 子状态，m个数state[m+1]表示visited
-2. 记忆化递归key是子状态，`Arrays.toString(state)`
-3. 遍历state中还是0的没选的数，
-    如果d-i选这个数赢了或者另一个人递归d-i的子问题不能赢，
-    更新map中这个state为true，可以先state[i]=0回溯return true到之前的选择(上一层递归)
-    ```java
-    if(d-i<0||!canwin(d-i,hmap)){
-        hmap.put(key,true);
-        state[i]=0;
-        return true;
-    }
-    ```
-    如果对方赢了，不选这个state[i]=0，继续尝试循环中其它state
-   如果所有的state都试过了也不行，说明当前子问题
-   `hamp.put(key,false)`,`return false`
 
-优化19ms：用二进制存一个int表示状态 用`byte[i<<M+1]`记忆化
-```java
-int byte[] m_;
-m = new byte[1<<M+1];
-```
-遍历M个数
-```java
-if(state&(1<<i)>0)continue;
-if(!canwin(d-i,state|(1<<i))){
-    m_[state]=1;
-    return true;
-}
-```
-出循环，表示这个状态不行
-```java
-m_[state]=-1;
-return false;
-```
-- 优化2：如果用byte[1<<M] 遍历0~M ,`canwin(d-i+1,state|(1<<i))`只需要15ms
 
-1左移i位`int mask=1<<i`表示选这个数的状态
-如果`(mask&visited)==0`表示没使用过这个数
-另一个玩家能不能赢的state：`mask|visited` 在visited（上一个状态）的基础将i位也置1
-
----
-
-### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
-{3，9，1，2}
-1. 二维数组dp：`[i][j]`只用右上三角表示两个人都从list取1个数，2个数，3个数到list长能获得的最大差值
-1. 填对角线，如果两个人只剩下一个数为3：{A取3，B取0}，剩下9：{A取9，B取0}...
-2. 如果剩下2个数，剩下{3,9}`[1][2]`：{A取9，B剩下{3}回到1的情况}...
-3. 如果剩下3个数，剩下{3,9,1}`[1][3]`:{A取3,B剩下{9,1}即表格`[2][3]`的情况}
-4. 剩下4个数，填`[1][4]`即为答案
-
-递归：但是会有很多重复计算复杂度$2^n$
-比如让对手选[3,9,1]后，自己选[9,1]和[3,9]/让对手选[9,1,2]后，自己选[9,1]和[1,2]
-[9,1]被计算了两次。可以进行存储
-```java
-//最大的分数差
-int dif(int[] nums,int left,int right){
-    //如果长度为1，获得的差值就是这个数
-    if(left==right)return nums[left];
-    //选一个数之后 交给对手用相同策略选
-    return max(nums[left]-dif(nums,left+1,right),nums[right]-dif(nums,left,right+1));
-}
-```
-用一维数组存储key是`left*len+right`
-{% fold %}
-```java
-int[] m;
-int len =0;
-public boolean PredictTheWinner(int[] nums) {
-    this.len = nums.length;
-    if(len==1)return true;
-    this.m= new int[len*len];
-  return help(nums,0,len-1)>=0;
-}
-private int help(int[] nums,int l,int r){
-    if(l==r)return nums[l];
-    int index = l*len+r;
-    if(m[index]>0)return m[index];
-    m[index]=Math.max(nums[l]-help(nums,l+1,r),nums[r]-help(nums,l,r-1));
-    return m[index];
-}
-```
-{% endfold %}
 
 ### 292每个人可以拿1-3块石头，拿到最后一块的赢，所有4的倍数的情况先手不能赢 
 
@@ -3348,7 +3354,7 @@ return sb.toString();
 ![mounting](\images\mounting.jpg)
     2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
 
-BFS优先队列
+8数码BFS优先队列
 {% fold %}
 ```java
 void swap(int[][] matrix,int x,int y,int newX,int newY){
@@ -3564,4 +3570,53 @@ for i in range(2,n)
         if a[i]>a[j]: # ai为终点的更长
         #？？ maxlen[i]也更新了，可能比manlen[j]+1大
             maxlen[i]=max(maxlen[j]+1,maxlen[i])
+```
+
+
+### 654 二叉树根是数组中最大元素，左子树是左边元素建子树，右子树是右边元素建子树
+stack：
+[3,2,1,6,0,5]
+1.栈底是数组最大值，即树根
+```
+3left->
+ right->2->1 stack:3,2,1
+将栈里比cur小的右链变成当前最大值的左链，pop所有比6小的元素
+6left->3
+        ->right->2->1 stack：6
+6left->3
+ right->0 stack:6,0
+5left->0,6right->5
+6->left->3
+         ->right->2->1
+ ->right->5
+          ->left->0
+```
+68%
+```java
+Deque<Integer> stack = new ArrayDeque<>();
+for(int i =0;i<nums.length;i++){
+    TreeNode cur = nums[i];
+    while(!stack.isEmpty()&&stack.peek().val<cur.val){
+        cur.left = stack.pop();
+    }
+    if(!stack.isEmpty())
+        stack.peek().right=cur;
+    stack.push(cur);
+    }
+return stack.isEmpty()?null:stack.removeLast();
+```
+递归95% 递归熟练 11ms
+```java
+build(nums,0,nums.length-1);
+private TreeNode build(int[] nums,int start,int end){
+    if(start>end)return null;
+    int max = start;
+    for(int i =start+1;i<=end;i++){
+        max = nums[]
+    }
+    TreeNode root = new TreeNode(nums[max]);
+    root.left = build(nums,start,max-1);
+    root.right = build(nums,max+1,end);
+    return root;
+}
 ```

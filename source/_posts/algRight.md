@@ -45,6 +45,24 @@ int count(int[] coins,int N,int idx){
     return count(coins,N ,idx-1)+count(coins,N-coins[idx-1] ,idx);
 }
 ```
+二维dp
+```java
+public int coinDp2(int amount, int[] coins){
+    int n = coins.length;
+//        Arrays.sort(coins);
+    int[][] dp = new int[n+1][amount+1];
+    dp[0][0] =1;
+    for (int i = 1; i <=n ; i++) {
+        for (int j = 0; j <= amount; j++) {
+            if(coins[i-1]<=j)
+                dp[i][j] += dp[i][j - coins[i-1]];
+            dp[i][j]+= dp[i - 1][j];
+        }
+
+    }
+    return dp[n][amount];
+}
+```
 
 ### 装配线调度问题Assembly Line
 ![assemblyline1.jpg](/images/assemblyline1.jpg)

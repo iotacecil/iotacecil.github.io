@@ -18,6 +18,11 @@ if(idxchar-'A'>=0&&idxchar-'A'<26||idxchar-'a'>=0&&idxchar-'a'<26){
 $C(n,r) = P(n,r)/r!$
 
 ### 46 permutations
+生成全排列的算法: 移动高位
+1的全排列只有1，
+1，2的全排列考虑2 放在1前，1后
+1，2，3的全排列考虑3 放在 1，2 的全排列的左中右3个位置 一共3*2 = 6种
+
 给定{1..n-1}的排列，存在n种方法将n插入得到{1..n}的排列
 n个球放入r个盒子里
 分步递推：$P(n,r)=nP(n-1,r-1)$
@@ -39,7 +44,7 @@ for(int i =0;i<nums.length;i++){
     tmp.remove(tmp.size()-1);
 }
 ```
-O(n!)复杂度
+O(n!)复杂度 只能处理10个数字
 不用contains 用markd数组 3ms
 {% fold %}
 ```java
@@ -70,6 +75,20 @@ public List<List<Integer>> permute(int[] nums) {
 {% endfold %}
 
 方法2 swap java不能int[]->List<Integer>
+思想：字典序全排列算法：保证尽可能长的前缀不变，后缀慢慢增加
+ abc 保证前面不变，后面增加一点点 -> acb ，cb不能增大了，->bac
+ 从右向左扫描 例如 321 是递增的 表示不能再增加
+ 从右向左扫描到第一次增大的位置，和右边比较大的数交换。1 2 3 扫描到2，和3交换。
+ 1 3 2 扫描到1降了，1和2交换 2 3 1  31不是最小后缀 变成2 1 3 
+
+算法：
+![lexpermu.jpg](/images/lexpermu.jpg)
+ 1.从右想左 找到第一次下降位置
+ 2.用后缀中比当前位置大的最小数字交换
+ 3.保证后缀最小（翻转？）
+
+SJI算法：可移动数
+
 [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,2,1],[3,1,2]]
 ```cpp
 vector<vector<int>> permute(vector<int>& nums) {
