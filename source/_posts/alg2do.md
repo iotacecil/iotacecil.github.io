@@ -4,6 +4,120 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+
+### 152 最大子列乘积 保留当前值之前的最大积和最小积
+负数的最小积有潜力变成最大积
+4ms 11.99%
+```java
+public int maxProduct(int[] nums) {
+    int sum = nums[0],min = nums[0],max = nums[0];
+    for(int i=1;i<nums.length;i++){
+        int nextmax = nums[i]*max;
+        int nextmin = nums[i]*min;
+        max = Math.max(Math.max(nextmax,nextmin),nums[i]);
+        min = Math.min(Math.min(nextmax,nextmin),nums[i]);
+        sum = Math.max(max,sum);
+    }
+    return sum;
+}
+```
+
+### 127 word Ladder bfs最短单词转换路径
+//todo双向bfs
+
+注意marked和dfs的不同，
+单纯bfs访问wordlist里每个单词1.79% 1097ms
+//`list.size()*cur.length()`
+{% fold %}
+```java
+private boolean dif(String difword,String cur){
+    int cnt=0;
+    for(int i =0;i<difword.length();i++){
+        if(difword.charAt(i)!=cur.charAt(i)){
+            cnt++;
+            if(cnt>1)return false;
+        }
+    }
+    return true;
+}
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+    int cnt = 0;
+    HashSet<String> words = new HashSet<>();
+    for(String word:wordList){
+        words.add(word);
+    }
+    Set<String> marked = new HashSet<>();
+    Deque<String> que = new ArrayDeque<>();
+    que.add(beginWord);
+    marked.add(beginWord);
+    while(!que.isEmpty()){
+    cnt++;
+    int size = que.size();
+    while(size>0){
+        size--;
+        String cur = que.poll();
+        for(String difword:words){
+            if(dif(difword,cur)){
+                if(difword.equals(endWord))return cnt+1;
+                if(!marked.contains(difword)){
+                que.add(difword);
+                marked.add(difword);}}}}}
+    return 0;
+}
+```
+{% endfold %}
+先改变单词cur.length()*25再查表
+47% 97ms
+{% fold %}
+```java
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        int cnt = 0;
+        HashSet<String> words = new HashSet<>();
+        for(String word:wordList){
+            words.add(word);
+        }
+        Set<String> marked = new HashSet<>();
+        Deque<String> que = new ArrayDeque<>();
+        que.add(beginWord);
+        marked.add(beginWord);
+        while(!que.isEmpty()){
+            cnt++;
+            int size = que.size();
+            while(size>0){
+                size--;
+                String cur = que.poll();
+                //System.out.println(cur);
+             
+                char[] curr = cur.toCharArray();
+                for(int i =0;i<curr.length;i++){
+                    char ori = curr[i];
+                    for(char c='a';c<='z';c++){
+                        if(curr[i]!=c){
+                            curr[i]=c;
+                            String next = new String(curr);
+                          
+
+                            if(words.contains(next)){
+                               
+                                if(next.equals(endWord))return cnt+1;
+                                if(!marked.contains(next)){
+                                     
+                                    que.add(next);
+                                    marked.add(next);
+                                }
+                            }
+                        }
+                    }
+                    curr[i] = ori;
+                }
+              
+            }
+        }
+        return 0;
+    }
+```
+{% endfold %}
+
 ### 464 博弈
 A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。
 1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)
@@ -118,9 +232,43 @@ private int dif(int[] nums,int left,int right){
 > 输入： [5,3,4,5]
 
 先手可以拿1+3 或者2+4 对手反之拿2+4或者1+3，所以先手选大的那个肯定赢。
-递归同上 77%
-dp 记住子问题：
+递归同上 77% 
+可以加一个`memo[l][r]` 从2^n->n^2 因为l和r一共有n^2个子问题
 
+dp ：
+```java
+public boolean stoneGame(int[] piles) {
+    int n = piles.length;
+    int[][] dp = new int[n][n];
+    //left=i,right=i的子问题
+    for (int i = 0; i <n ; i++) {
+        dp[i][i] = piles[i];
+    }
+    //长度为[2,n]的子问题
+    for (int i = 2; i <=n ; i++) {
+        for (int l = 0; l <n-i+1 ; l++) {
+            int r = i+l-1;
+            //[l+1][r]的长度比[l][r]小 已经计算过了
+            dp[l][r] = Math.max(piles[l]-dp[l+1][r],piles[r]-dp[l][r-1]);
+        }
+    }
+    return dp[0][n-1]>0;
+}
+```
+子问题是 长度-1的dp 降维
+```java
+public boolean stoneGameDP1D(int[] piles) {
+    int n  = piles.length;
+    int[] dp = piles.clone();
+    for (int i = 2; i <=n ; i++) {
+        for (int l = 0; l<n-i+1 ; l++) {
+            //dp[i] 还没有更新,都是长度i-1的值
+            dp[i] = Math.max(piles[l]-dp[i+1],piles[l+i-1]-dp[i] );
+        }
+    }
+    return dp[0]>0;
+}
+```
 
 ### lt920 meeting room
 给定一系列的会议时间间隔，包括起始和结束时间[[s1,e1]，[s2,e2]，…(si < ei)，确定一个人是否可以参加所有会议。
@@ -655,6 +803,59 @@ public int lastPosition(int[] nums, int target) {
 
 
 ### 410 分割数组使Max(Sum(subarr))最小
+>Input:
+nums = [7,2,5,10,8]
+m = 2
+Output:
+18  [7,2,5] and [10,8],
+
+复杂度： mn^2
+//todo
+`dp[i][j]` 长度为i的数组划分成j组的最大值
+
+二分：复杂度(log(sum(nums))*n) 空间O(1)
+lower bound 数组中的最大元素max(nums)
+up bound 分成1组 sum(nums)
+```java
+public int splitArray(int[] nums, int m) {
+    int max = 0;long sum = 0;
+    for(int num:nums){
+        max = Math.max(num,max );
+        sum+=num;
+    }
+    if(m==1)return (int)sum;
+    long l = max,r = sum;
+    while (l<=r){
+        long mid = (l+r)/2;
+        //用这个最小值能不能划分成m组 可以更小一点
+        if(valid(mid,nums ,m )){
+            r = mid-1;
+        }
+        else{
+            l = mid+1;
+        }
+    }
+return (int)l;
+}
+private boolean valid(long target,int[] nums,int m){
+    int cnt =1;
+    long total = 0;
+    for(int num:nums){
+        total += num;
+        if(total>target){
+            total = num;
+            //需要一个新的分组
+            cnt++;
+            if(cnt> m)return false;
+        }
+    }
+    return true;
+}
+```
+
+
+
+
 
 ### 5只猴子分桃，每次拿走一个正好分成5堆，问桃子数
 
@@ -711,7 +912,6 @@ public List<Integer> findAnagrams(String s, String p) {
 }
 ```
 
-### ！！！！76 最小的子串窗口 很重要的题
 
 
 ### ！5 最长回文串 lt893

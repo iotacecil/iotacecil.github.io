@@ -8,11 +8,174 @@ categories: [算法备忘]
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html
 
+https://www.educative.io/collection/page/5642554087309312/5679846214598656/140001
+
+https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
+
+### 621 todo
+26 种不同种类的任务  每个任务都可以在 1 个单位时间内执行完
+两个相同种类的任务之间必须有长度为 n 的冷却时间
+> 输入: tasks = ["A","A","A","B","B","B"], n = 2
+输出: 8
+
+
+执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
+
+
+### ！！！！76 最小的子串窗口 很重要的题
+
+### 516 最长回文子序列
+
+### Rearrange a string
+https://www.geeksforgeeks.org/rearrange-a-string-so-that-all-same-characters-become-at-least-d-distance-away/
+
+### !!386 字典序数字 todo
+
+dfs 112ms 71%
+```
+   1        2        3    ...
+  /\        /\       /\
+10 ...19  20...29  30...39   ....
+```
+
+```java
+public List<Integer> lexicalOrder(int n) {
+     List<Integer> rst = new ArrayList<>();
+    for (int i = 1; i < 10; i++) {
+        dfs(rst,n,i);
+    }
+    return rst;
+}
+private void dfs(List<Integer> rst,int n,int cur){
+    if(cur>n)return;
+    else{
+        rst.add(cur);
+        for (int i = 0; i <10 ; i++) {
+            if(cur*10+i>n)return;
+            dfs(rst,n,10*cur+i);
+        }
+    }
+}
+```
+
+
+相关：
+permutation的字典序
+思想：字典序全排列算法：保证尽可能长的前缀不变，后缀慢慢增加
+ abc 保证前面不变，后面增加一点点 -> acb ，cb不能增大了，->bac
+ 从右向左扫描 例如 321 是递增的 表示不能再增加
+ 从右向左扫描到第一次增大的位置，和右边比较大的数交换。1 2 3 扫描到2，和3交换。
+ 1 3 2 扫描到1降了，1和2交换 2 3 1  31不是最小后缀 变成2 1 3 
+
+算法：
+![lexpermu.jpg](/images/lexpermu.jpg)
+ 1.从右想左 找到第一次下降位置
+ 2.用后缀中比当前位置大的最小数字交换
+ 3.保证后缀最小（翻转？）
+
+
+### 636
+日志是具有以下格式的字符串：function_id：start_or_end：timestamp。例如："0:start:0" 表示函数 0 从 0 时刻开始运行。"0:end:0" 表示函数 0 在 0 时刻结束。
+
+函数的独占时间定义是在该方法中花费的时间，调用其他函数花费的时间不算该函数的独占时间。
+> 输入 n = 2
+logs = 
+["0:start:0",
+ "1:start:2",
+ "1:end:5",
+ "0:end:6"]
+输出：[3, 4]
+
+函数 0 在时刻 0 开始，在执行了  2个时间单位结束于时刻 1。
+现在函数 0 调用函数 1，函数 1 在时刻 2 开始，执行 4 个时间单位后结束于时刻 5。
+函数 0 再次在时刻 6 开始执行，并在时刻 6 结束运行，从而执行了 1 个时间单位。
+所以函数 0 总共的执行了 2 +1 =3 个时间单位，函数 1 总共执行了 4 个时间单位。
+
+stack + start[] ac 15%
+
+
+
+### 378 矩阵从左到右从上到下有序，找第k小的元素
+1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
+```java
+public int kthSmallest(int[][] matrix, int k) {
+  PriorityQueue<Integer> que = new PriorityQueue(k);
+     for(int[] row:matrix){
+         for(int x :row){
+             que.add(x);
+         }
+     }
+     for(int i = 0;i<k-1;i++){
+         que.poll();
+     }
+     return que.peek();
+}
+```
+2.
+
+### 373
+
+
+### 概率生成函数 概率母函数
+1.x的系数是a1,a2,…an 的单个组合的全体。
+2. x^2的系数是a1,a2,…a2的两个组合的全体。
+………
+n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。
+
+> 有1克、2克、3克、4克的砝码各一枚，能称出哪几种重量？每种重量各有几种可能方案？
+
+设x表示砝码，x的指数表示砝码的重量
+1个1克的砝码可以用函数1+1*x^1表示，
+1个2克的砝码可以用函数1+1*x^2表示，
+1个3克的砝码可以用函数1+1*x^3表示，
+1个4克的砝码可以用函数1+1*x^4表示，
+
+- 1表示数量0个
+例如1个2克的砝码：1+x^2
+1其实应该写为：1*x^0,即1代表重量为2的砝码数量为0个。
+
+- 系数表示状态数（方案数）
+1+x^2，也就是1*x^0 + 1*x^2，不取2克砝码，有1种状态；或者取2克砝码，也有1种
+状态。
+
+(1+x)(1+x^2)(1+x^3)(1+x^4)
+=(1+x+x^2+x^4)(1+x^3+^4+x^7)
+=1 + x + x^2 + 2*x^3 + 2*x^4 + 2*x^5 + 2*x^6 + 2*x^7 + x^8 + x^9 + x^10
+从上面的函数知道：可称出从1克到10克，系数便是方案数。
+有2*x^5 项，即称出5克的方案有2种：5=3+2=4+1；
+
+
+> 求用1分、2分、3分的邮票贴出不同数值的方案数：每种是无限的。
+
+
 
 ### 分配问题及应用
 ![fenpei.jpg](/images/fenpei.jpg)
 
-正正反 甲赢 正反反 乙赢
+
+### 硬币相关问题
+http://www.raychase.net/3144
+正正反 甲赢 正反反 乙赢 Penney's game
+
+![penneygame.jpg](/images/penneygame.jpg)
+> 使用长度为3字节的序列，玩家B相对玩家A有优势。这是因为这个游戏是一个非传递博弈，所以无论如何选定第一个序列，总会有一个序列有更大的获胜概率。
+
+
+反反正:正反反 = 1：3 
+因为只要出现一次正，想得到反反正的人就必输了，他肯定得先看到两次反，我就得到正反反了。
+两个硬币4种情况有3种有正
+
+正正反：反正正 = 1：3
+只要出现一次反，反正正就赢了。
+
+正反反HTT：正正反HHT = 1:2
+反正正thh:反反正tth = 1：2
+
+https://en.wikipedia.org/wiki/Penney%27s_game
+对于二号玩家：1-2-3 ->  (not-2)-1-2
+第一个字节与1号玩家的第二个字节相反，
+第二个字节与1号玩家的第一个字节相同，
+第三个字节与1号玩家的第二个字节相同。
 
 http://www.matrix67.com/blog/archives/3638
 > 所有 1 都不相邻的 k 位 01 串有 Fk+2 个 Fi 表示 Fibonacci 数列中的第 i 项
@@ -22,6 +185,10 @@ http://www.matrix67.com/blog/archives/3638
 >平均需要抛掷多少次硬币，才会首次出现连续的 n 个正面？
 
 答案是 2^(n+1) – 2 
+神奇的模式概率与“鞅”//todo
+http://www.math-engineering.uestc.edu.cn/
+模式的平均等待时间：
+模式 HHHHHH 的平均等待时间 126
 
 > 扔硬币直到连续两次出现正面，求扔的期望次数
 
@@ -82,7 +249,7 @@ B 赢概率是1/2*1/2 = 1/4
 1、（AA)(AA)(AA)(OO)(OO)
 C(5,2)*6!/2!/2!/2!
 2、AA)(AA)(OA)(OA)(OO)
-C(5,1)*C(4,2)*6!/2!/2!
+C(5,1)\*C(4,2)\*6!/2!/2!
 3.（AA)(OA)(OA)(OA)(OA)
 C(5,4)*6!/2!
 
@@ -922,101 +1089,7 @@ d之前【最长前缀】和【最长后缀】的匹配长度
 int[]next =  f("abcabcd")={-1,0,0,1，2，3}
 关键加速求解匹配
 
-### 127 bfs最短单词转换路径
-//todo双向bfs
 
-注意marked和dfs的不同，
-单纯bfs访问wordlist里每个单词1.79% 1097ms
-//`list.size()*cur.length()`
-{% fold %}
-```java
-private boolean dif(String difword,String cur){
-    int cnt=0;
-    for(int i =0;i<difword.length();i++){
-        if(difword.charAt(i)!=cur.charAt(i)){
-            cnt++;
-            if(cnt>1)return false;
-        }
-    }
-    return true;
-}
-public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-    int cnt = 0;
-    HashSet<String> words = new HashSet<>();
-    for(String word:wordList){
-        words.add(word);
-    }
-    Set<String> marked = new HashSet<>();
-    Deque<String> que = new ArrayDeque<>();
-    que.add(beginWord);
-    marked.add(beginWord);
-    while(!que.isEmpty()){
-    cnt++;
-    int size = que.size();
-    while(size>0){
-        size--;
-        String cur = que.poll();
-        for(String difword:words){
-            if(dif(difword,cur)){
-                if(difword.equals(endWord))return cnt+1;
-                if(!marked.contains(difword)){
-                que.add(difword);
-                marked.add(difword);}}}}}
-    return 0;
-}
-```
-{% endfold %}
-先改变单词cur.length()*25再查表
-47% 97ms
-{% fold %}
-```java
-public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        int cnt = 0;
-        HashSet<String> words = new HashSet<>();
-        for(String word:wordList){
-            words.add(word);
-        }
-        Set<String> marked = new HashSet<>();
-        Deque<String> que = new ArrayDeque<>();
-        que.add(beginWord);
-        marked.add(beginWord);
-        while(!que.isEmpty()){
-            cnt++;
-            int size = que.size();
-            while(size>0){
-                size--;
-                String cur = que.poll();
-                //System.out.println(cur);
-             
-                char[] curr = cur.toCharArray();
-                for(int i =0;i<curr.length;i++){
-                    char ori = curr[i];
-                    for(char c='a';c<='z';c++){
-                        if(curr[i]!=c){
-                            curr[i]=c;
-                            String next = new String(curr);
-                          
-
-                            if(words.contains(next)){
-                               
-                                if(next.equals(endWord))return cnt+1;
-                                if(!marked.contains(next)){
-                                     
-                                    que.add(next);
-                                    marked.add(next);
-                                }
-                            }
-                        }
-                    }
-                    curr[i] = ori;
-                }
-              
-            }
-        }
-        return 0;
-    }
-```
-{% endfold %}
 
 
 ### 3 最长不重复字串
@@ -1552,7 +1625,9 @@ System.out.println(Arrays.toString(acu()));
 String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 ```
 
-### 611数组中符合三角形边长的对数
+### 611数组中符合三角形边长的对数 
+线性扫描 复杂度n^2
+![lc611.jpg](/images/lc611.jpg)
 
 ### 数组组成三角形的最大周长
 贪心，排序，如果 $a[i]<a[i-1]+a[i-2]$ 则没有其他两条边可以两边之和`>`第三边了，换下一条当最长边。
@@ -2522,9 +2597,8 @@ $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 
 
 
-### 378 矩阵从左到右从上到下有序，找第k大个元素
-1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
-2.
+
+
 
 ### 719
 
@@ -3125,17 +3199,7 @@ public int getSum(int a, int b) {
 ```
 
 
-### 152 最大子列乘积 保留当前值之前的最大积和最小积
-负数的最小积有潜力变成最大积
-```java
-for(int i =1;i<nums.length;i++){
-    int nextmax = nums[i]*curmax;
-    int nextmin = nums[i]*curmin;
-    curmax=Math.max(Math.max(nextmax,nextmin),nums[i]);
-    curmin=Math.min(Math.min(nextmax,nextmin),nums[i]);
-    sum = Math.max(curmax,sum);
-}
-```
+
 
 
 

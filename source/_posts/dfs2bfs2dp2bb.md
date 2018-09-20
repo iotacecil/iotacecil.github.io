@@ -75,17 +75,6 @@ public List<List<Integer>> permute(int[] nums) {
 {% endfold %}
 
 方法2 swap java不能int[]->List<Integer>
-思想：字典序全排列算法：保证尽可能长的前缀不变，后缀慢慢增加
- abc 保证前面不变，后面增加一点点 -> acb ，cb不能增大了，->bac
- 从右向左扫描 例如 321 是递增的 表示不能再增加
- 从右向左扫描到第一次增大的位置，和右边比较大的数交换。1 2 3 扫描到2，和3交换。
- 1 3 2 扫描到1降了，1和2交换 2 3 1  31不是最小后缀 变成2 1 3 
-
-算法：
-![lexpermu.jpg](/images/lexpermu.jpg)
- 1.从右想左 找到第一次下降位置
- 2.用后缀中比当前位置大的最小数字交换
- 3.保证后缀最小（翻转？）
 
 SJI算法：可移动数
 
@@ -669,7 +658,11 @@ dp[0]=1
 当s[i][i-1]合法dp[i]=dp[i-2] ,dp[2]=dp[0]
 当s[i-1]s[i]合法，dp[i]=dp[i-1]+dp[i-2]
 
-### 343 整数分割求乘积最大值
+### 343 整数拆分 并使乘机最大
+>Input: 2
+Output: 1
+Explanation: 2 = 1 + 1, 1 × 1 = 1.
+
 ```java
 int[] memo;
 public int IntegerBread(int n){
@@ -689,8 +682,39 @@ private int ib(int n){
 ```
 dp：
 ```java
-dp[i] = Math.max(dp[i],Math.max(j*(i-j),j*dp[i-j]));
+public  int integerBreak(int n) {
+   int[] dp = new int[n+1];
+    dp[1]=1;
+    
+    for(int i =2;i<=n;i++){
+        for(int j=1;j<=i-1;j++){
+            dp[i] = Math.max(dp[i],Math.max(j*(i-j),j*dp[i-j]));
+        }
+    }
+    return dp[n];
 ```
+
+数学方法：
+考虑f=x(N-x) 当x=N/2的时候取最大值。
+所以当N是偶数时，最大值是(N/2)*(N/2)
+当N是奇数， 最大值是(N-1)/2 *(N+1)/2 
+`6, 3 * 3>2 * 2 * 2`
+```java
+public int integerBreak(int n) {
+    if(n==2) return 1;
+    if(n==3) return 2;
+    int product = 1;
+    while(n>4){
+        product*=3;
+        n-=3;
+    }
+    product*=n;
+    
+    return product;
+}
+```
+
+
 
 
 ### 787 中间最多停留k次的，最小花费路线

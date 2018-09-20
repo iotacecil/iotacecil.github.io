@@ -16,6 +16,8 @@ https://blog.csdn.net/github_36922345/article/details/53455401
 
 [很详细的中文泰坦尼克号](https://blog.csdn.net/Koala_Tree/article/details/78725881)
 ### pandas操作：
+1. 读csv多了一列unname `pd.read_csv("Osaka_user_localtime.csv",index_col=0)`
+
 1.`userpd.columns=userpd.columns.droplevel([0,1])`
 2.`df.set_index('date', inplace=True)`列 ->索引
 3.`df['index'] = df.index`,`df.reset_index(level=0, inplace=True)`

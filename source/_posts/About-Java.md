@@ -4,6 +4,64 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+
+### String的字典序比较
+{% fold %}
+```java
+/**
+ * Compares two strings lexicographically.
+
+ * The comparison is based on the Unicode value of each character in
+ * the strings. 
+
+  The result is * a negative integer if this {@code String} object
+ * lexicographically precedes the argument string.
+ */
+public int compareTo(String anotherString) {
+    int len1 = value.length;
+    int len2 = anotherString.value.length;
+    int lim = Math.min(len1, len2);
+    char v1[] = value;
+    char v2[] = anotherString.value;
+
+    int k = 0;
+    while (k < lim) {
+        char c1 = v1[k];
+        char c2 = v2[k];
+        if (c1 != c2) {
+            return c1 - c2;
+        }
+        k++;
+    }
+    return len1 - len2;
+}
+```
+{% endfold %}
+
+### replace和replaceAll都是全部替换
+```java
+public String replaceAll(String regex, String replacement) {
+    return Pattern.compile(regex).matcher(this).replaceAll(replacement);
+}
+
+/**
+ * Replaces each substring of this string that matches the literal target
+ * sequence with the specified literal replacement sequence. The
+ * replacement proceeds from the beginning of the string to the end, for
+ * example, replacing "aa" with "b" in the string "aaa" will result in
+ * "ba" rather than "ab".
+ *
+ * @param  target The sequence of char values to be replaced
+ * @param  replacement The replacement sequence of char values
+ * @return  The resulting string
+ * @since 1.5
+ */
+public String replace(CharSequence target, CharSequence replacement) {
+    return Pattern.compile(target.toString(), Pattern.LITERAL).matcher(
+            this).replaceAll(Matcher.quoteReplacement(replacement.toString()));
+}
+```
+
 ### hashset的实现
 `static final` 静态类对象 所有实例共享
 
