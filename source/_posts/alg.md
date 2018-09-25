@@ -8,9 +8,187 @@ categories: [算法备忘]
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html
 
+微软187
+https://blog.csdn.net/v_july_v/article/details/6697883
+面试
+https://blog.csdn.net/v_july_v/article/details/6803368
+https://www.cnblogs.com/JuneWang/p/3773880.html
+
 https://www.educative.io/collection/page/5642554087309312/5679846214598656/140001
 
 https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
+
+### lt168 吹气球
+每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
+>in [4, 1, 5, 10]
+out 返回 270
+```
+nums = [4, 1, 5, 10] burst 1, 得分 4 * 1 * 5 = 20
+nums = [4, 5, 10]    burst 5, 得分 4 * 5 * 10 = 200 
+nums = [4, 10]       burst 4, 得分 1 * 4 * 10 = 40
+nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
+总共的分数为 20 + 200 + 40 + 10 = 270
+```
+
+
+### 矩阵链乘法O(n^3)的dp
+ 
+
+### interval max overLap
+https://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/
+```
+ arr[]  = {1, 2, 10, 5, 5}
+ dep[]  = {4, 5, 12, 9, 12}
+
+Below are all events sorted by time.  Note that in sorting, if two
+events have same time, then arrival is preferred over exit.
+ Time     Event Type         Total Number of Guests Present
+------------------------------------------------------------
+   1        Arrival                  1
+   2        Arrival                  2
+   4        Exit                     1
+   5        Arrival                  2
+   5        Arrival                  3    // Max Guests
+   5        Exit                     2
+   9        Exit                     1
+   10       Arrival                  2 
+   12       Exit                     1
+   12       Exit                     0 
+```
+
+### 最大值为k的不重叠子数组的长度和？??
+https://www.geeksforgeeks.org/maximum-sum-lengths-non-overlapping-subarrays-k-max-element/
+>Input : arr[] = {2, 1, 4,   9,   2, 3,   8,   3, 4}  k = 4
+Output : 5
+{2, 1, 4} => Length = 3
+{3, 4} => Length = 2
+So, 3 + 2 = 5 is the answer
+
+```java
+public int lensum(int[] arr,int k){
+    int n = arr.length;
+    int ans = 0;
+
+    for (int i = 0; i < n ; i++) {
+        int cnt=0;
+        int flag = 0;
+        while (i<n&&arr[i]<=k){
+            cnt++;
+            if(arr[i] == k)flag = 1;
+            i++;
+        }
+        //？？？
+        if(flag == 1) ans+=cnt;
+        while (i<n&&arr[i]>k)i++;
+    }
+    return ans;
+}
+```
+
+
+### 689!!!高频题 找到三个长度为k互不重叠的子数组的最大和
+> Input: [1,2,1,2,6,7,5,1], 2
+> 不重叠窗口为2的数组的和  `[1, 2], [2, 6], [7, 5]`
+> 返回 起始索引为 [0, 3, 5]。
+> 也可以取 [2, 1], 但是结果 [1, 3, 5] 在字典序上更大。
+
+https://leetcode.com/articles/maximum-sum-of-3-non-overlapping-intervals/
+https://www.jiuzhang.com/solution/maximum-sum-of-3-non-overlapping-subarrays/
+
+### 121 只能买卖一次 买卖股票的利润
+> 输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+
+方法1：两次for，找最大差值 10% 262ms
+方法2：Kadane算法(maximum subarray)先找到最低值，保留并更新最低值，并更新最大差值 2ms 36%
+
+```java
+public int maxProfit(int[] prices){
+    int minP = Integer.MAX_VALUE;
+    int maxP = 0;
+    int n = prices.length;
+    for(int i =0;i<n;i++){
+        if(prices[i]<minP)minP = prices[i];
+        else if(prices[i]-minP>maxP)maxP = prices[i]-minP;
+    }
+    return maxP;
+}
+```
+
+dp 保留前i天的最低值 更新第i天的最大差值 3ms 19%
+```java
+ public int maxProfit(int[] prices) {
+    int n = prices.length;
+    if(n<1)return 0;
+    int[] mindp = new int[n];
+    int[] maxdp = new int[n];
+    mindp[0] = prices[0];
+    maxdp[0] =0;
+    for(int i =1;i<n;i++){
+        mindp[i] = Math.min(mindp[i-1],prices[i]);
+       //当天的股价-前i-1天的min价格
+        maxdp[i] = Math.max(maxdp[i-1],prices[i]-mindp[i-1]);
+    }
+    return maxdp[n-1];
+}
+```
+dp2: 4 ms 15%
+转换成53 将price reduce成每天的收益
+`[7,1,5,3,6,4]->[ ,-6,4,-2,3,-2]`
+在[4,-2,3]持有股票，从day2 [1]买进后的累积和最大
+```java
+```
+
+
+
+#### 53!!!最大subarray sum
+Kadane 14ms 19%
+```java
+public int maxSubArray(int[] nums){
+    int sum = nums[0],rst = nums[0];
+    for(int i=1;i<nums.length;i++){
+        sum = Math.max(nums[i],sum+nums[i]);
+        rst = Math.max(rst,sum);
+    }
+    return rst;
+}
+```
+greedy:
+
+
+
+
+
+### 122 可以买卖多次 买股票的利润
+> 输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+### 123 最多买卖2次的 买股票利润 考到
+> 输入: [3,3,5,0,0,3,1,4]
+输出: 6
+解释: 在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
+ 随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
+
+### 188 最多k次买卖的 买卖股票利润
+> 输入: [3,2,6,5,0,3], k = 2
+输出: 7
+解释: 在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
+随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
+
+### 重复元素很多的数组排序
+https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
+> AVL or Red-Black to sort in O(n Log m) time where m is number of distinct elements.
+//todo
+
+### lt476石子合并 区间dp
+> 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
+> in : 4 1 1 4 out: 18
+
+
+
 
 ### 621 todo
 26 种不同种类的任务  每个任务都可以在 1 个单位时间内执行完
@@ -530,10 +708,6 @@ public String[] findWords(String[] words){
 ### 683 - K Empty Slots
 
 ### 最长01串
-
-### 53 最大子串和
-维持最小sum和最大sum，更新差值
-
 
 
 ### 倒水问题 BFS

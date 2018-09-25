@@ -4,6 +4,28 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 求`int[]`最大值的正确写法
+`int maxa = Arrays.stream(arr).max().getAsInt();`
+
+### List remove的index不能是Integer
+```java
+public boolean remove(Object o) {
+    if (o == null) {
+        for (int index = 0; index < size; index++)
+            if (elementData[index] == null) {
+                fastRemove(index);
+                return true;
+            }
+    } else {
+        for (int index = 0; index < size; index++)
+            if (o.equals(elementData[index])) {
+                fastRemove(index);
+                return true;
+            }
+    }
+    return false;
+}
+```
 
 ### String的字典序比较
 {% fold %}

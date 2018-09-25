@@ -4,6 +4,11 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### hsudfotgg距离
+衡量2个点集的距离
+度量了两个点集间的最大不匹配程度
+
+
 ### location相关数据和数据处理
 关于time/location 数据处理
 https://www.kaggle.com/bqlearner/location-based-recommendation-system
