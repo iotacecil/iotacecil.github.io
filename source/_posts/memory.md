@@ -4,6 +4,7 @@ date: 2018-03-05 20:43:15
 tags: [os,memory]
 category: [cpp学习操作系统]
 ---
+### 安全序列
 
 https://www.nowcoder.com/ta/nine-chapter?query=&asc=true&order=&page=3
 ### 软中断 和 硬中断

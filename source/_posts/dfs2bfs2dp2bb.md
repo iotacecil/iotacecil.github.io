@@ -168,7 +168,7 @@ private void dfs(List<List<Integer>> rst,int[] candi,List<Integer> tmp,int targe
 ### lt135 有重复元素的可以利用一个元素多次的comb sum
 >>输入[1,1,1],target = 2 -> [[1,1]]
 
-1.用set去重 
+方法1.用set去重 
 ```java
 Set<Integer> set = new HashSet<>();
     for(int i:candidates)set.add(i);
@@ -178,7 +178,7 @@ Set<Integer> set = new HashSet<>();
         nums[idx++] = i;
     }
 ```
-2.加一行
+方法2.加一行
 ```java
 for(int i = idx;i<candidates.length;i++){
     if(candidates[i]>target)break;
@@ -226,6 +226,19 @@ private void dfs(List<List<Integer>> rst,int[] candi,int target,List<Integer> tm
 输出: [[1,2,6], [1,3,5], [2,3,4]]
 
 AC 78% 1ms
+
+### lt564 无重复，可用多次，顺序不一样也计数，组成target的个数 dp
+>给出 nums = [1, 2, 4], target = 4
+可能的所有组合有：
+[1, 1, 1, 1]
+[1, 1, 2]
+[1, 2, 1]
+[2, 1, 1]
+[2, 2]
+[4]
+返回 6
+
+
 
 ### ?90 有重复的subset[1,2,2,2]
 1. 选不同的2得到{1,2}是重复的
