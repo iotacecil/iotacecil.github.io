@@ -550,7 +550,7 @@ http://poj.org/problem?id=3414
 > FILL(2)
 > POUR(2,1)
 
-Accepted    3128K   1125MS  Java    3840B
+Accepted    3128K   1125MS 
 
 ```java
 class pathNode{
@@ -2519,6 +2519,7 @@ public static void main(String[] args) {
         int W = 10;
         System.out.println(knapsack(W, arr, arr.size()));
     }
+}
 ```
 {% endfold %}
 
@@ -2597,12 +2598,9 @@ $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 
 
 
-
-
-
 ### 719
 
-### 正确二分查找的写法
+### 正确二分查找的写法 lc35
 1.查找范围是 [0,len-1]
 [0]：l=0,r=1-1，while(l==r)的时候应该继续
 ```java
@@ -2640,6 +2638,88 @@ while(l<r){
 }
 //如果l==r [1,1)表示空的
 return -1;
+```
+
+3.(-1,len] from jpbook
+```java
+public int searchInsert(int[] a, int k) {
+    int l = -1,h = a.length;
+    while (h-l>1){
+        int mid = (l+h)/2;
+        if(a[mid]>=k){
+            h = mid;
+        }else{
+            l = mid;
+        }
+    }
+    //l+1=h
+    return h;
+}
+```
+
+#### poj1064 n条线段切割成等长k段 的最大长度
+> in: 4 11 8.02 7.43 4.57 5.39
+> out:2.00 (4+3+2+2=11)
+
+{% fold %}
+```java
+/**
+ * 长度为L的绳子 最多可以切 floor(L/x)段
+ * @param x
+ * @return
+ */
+public static boolean C(double x){
+    int num = 0;
+    for (int i = 0; i <n ; i++) {
+        num+=(int)(lines[i]/x);
+    }
+    return num>=k;
+}
+public static double howlong(double[] lines,int k){
+    //All cables are at least 1 meter and at most 100 kilometers in length.
+    double l = 0,h = 100001;
+    // while ((h-l)>1e-6){
+     //可以达到10^-30的精度
+    for (int i = 0; i <100 ; i++) {
+        double mid = (l+h)/2;
+        if(C(mid))l = mid;
+        else h = mid;
+    }
+    return Math.floor(h*100)/100;
+}
+```
+{% endfold %}
+
+#### poj2456 最大化最小值 最大化最近两头牛的距离
+> in:5 3 [1,2,8,4,9]
+> out: 3 在1，4，9 分别放入这三头牛
+
+```java
+private static boolean C(int d){
+    int last = 0;
+    for (int i = 1; i <m ; i++) {
+        int crt = last + 1;
+        //找到间隔>d的房间
+        while (crt < n && room[crt] - room[last] < d) {
+            crt++;
+        }
+        if (crt == n) return false;
+        last = crt;
+    }
+    return true;
+}
+public static int maxmin(int[] room,int m){
+    Arrays.sort(room);
+    // positions x1,...,xN (0 <= xi <= 1,000,000,000).
+    int l = 0,h = 1000000+1;
+  while (h-l>1){
+      int mid = (h+l)/2;
+      if(C(mid))l = mid;
+      else h = mid;
+  }
+  //为什么这里是low
+  return l;
+}
 ```
 
 ### 153 Roataed Sorted Array的最小值 二分logN
