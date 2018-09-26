@@ -4,6 +4,9 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### standardscaler
+（x-列均值）/ 列标准差
+
 ### hsudfotgg距离
 衡量2个点集的距离
 度量了两个点集间的最大不匹配程度

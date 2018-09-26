@@ -18,6 +18,48 @@ https://www.educative.io/collection/page/5642554087309312/5679846214598656/14000
 
 https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 
+### 7 整数反转 integer越界
+{% fold %}
+```java
+public int reverse(int x) {
+    int flag = x<0?-1:1;
+    int rst = 0;
+    while(x!=0){
+        int add = x%10;
+        x/=10;
+        if(rst>Integer.MAX_VALUE/10||(rst==Integer.MAX_VALUE/10&&add>7))return 0;
+        if(rst<Integer.MIN_VALUE/10||(rst==Integer.MIN_VALUE/10&&add<-8))return 0;
+        rst = rst*10+add;
+    }
+    return rst;
+}
+```
+{% endfold %}
+
+### 319 n个灯泡 n轮开关
+初始时有 n 个灯泡关闭。 第 1 轮，你打开所有的灯泡。 第 2 轮，每两个灯泡你关闭一次。 第 3 轮，每三个灯泡切换一次开关（如果关闭则开启，如果开启则关闭）。第 i 轮，每 i 个灯泡切换一次开关。 对于第 n 轮，你只切换最后一个灯泡的开关。 找出 n 轮后有多少个亮着的灯泡。
+>输入: 3
+输出: 1 
+解释: 
+初始时, 灯泡状态 [关闭, 关闭, 关闭].
+第一轮后, 灯泡状态 [开启, 开启, 开启].
+第二轮后, 灯泡状态 [开启, 关闭, 开启].
+第三轮后, 灯泡状态 [开启, 关闭, 关闭]. 
+
+你应该返回 1，因为只有一个灯泡还亮着。
+```java
+int bulbSwitch(int n) {
+    return sqrt(n);
+}
+```
+被按奇数下的灯泡还亮着。
+当第d轮可以整除i灯泡i被按下。所以如果i有奇个除数，则最后是开的。
+例如12，
+
+
+### 451 字符串按频率排序 桶排序
+
+
 ### lt168 吹气球
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
 >in [4, 1, 5, 10]
@@ -29,6 +71,7 @@ nums = [4, 10]       burst 4, 得分 1 * 4 * 10 = 40
 nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 总共的分数为 20 + 200 + 40 + 10 = 270
 ```
+
 
 
 ### 矩阵链乘法O(n^3)的dp

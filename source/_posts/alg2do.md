@@ -801,6 +801,7 @@ public int lastPosition(int[] nums, int target) {
 
 二分查找获取最左/右边相等的
 
+### 719
 
 ### 410 分割数组使Max(Sum(subarr))最小
 >Input:
@@ -809,11 +810,17 @@ m = 2
 Output:
 18  [7,2,5] and [10,8],
 
-复杂度： mn^2
-//todo
-`dp[i][j]` 长度为i的数组划分成j组的最大值
+复杂度： mn^2 有mn个子问题 每个子问题找最佳k
 
-二分：复杂度(log(sum(nums))*n) 空间O(1)
+`dp[i][j]` 长度为j的数组划分成i组的最大值
+1.`dp[1][j]= sum(0,j)`
+2.找分割点k，k左边划成i-1组的解和右边划分为1组 取max，在所有分割点k中取最小值 
+`dp[i][j] = min(max(dp[i-1][k],sum(k+1,j))`
+递归：76ms 6%
+
+
+
+二分：复杂度(log(sum(nums))*n) 空间O(1) ok //todo next
 lower bound 数组中的最大元素max(nums)
 up bound 分成1组 sum(nums)
 ```java
