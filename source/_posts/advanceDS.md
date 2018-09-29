@@ -21,6 +21,9 @@ https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html
 和拓扑排序一样Tarjan算法的运行效率也比Kosaraju算法高30%左右
 每个顶点都被访问了一次，且只进出了一次堆栈，每条边也只被访问了一次，所以该算法的时间复杂度为O(N+M)。
 
+### 130 围棋 用并查集
+dfs ac100%
+
 ### !200 number of islands
 dfs 52% 5ms
 {% fold %}

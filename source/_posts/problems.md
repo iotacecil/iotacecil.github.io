@@ -4,6 +4,16 @@ date: 2018-03-09 08:39:10
 tags: [git,hexo]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### javaC 编码
+错误: 编码GBK的不可映射字符
+    //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?
+Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”解决方法是添加encoding 参数：javac -encoding gbk WordCount.java
+
+
+Windows下为GBK编码，javac编译utf-8编码的java文件时，容易出现“错误: 编码GBK的不可映射字符”解决方法是添加encoding 参数：javac -encoding utf-8 WordCount.java
+
+
+
 javac -encoding UTF-8 xxx.java
 idea ctrl+Q document
 

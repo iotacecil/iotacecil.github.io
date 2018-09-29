@@ -200,9 +200,6 @@ public int maxSubArray(int[] nums){
 greedy:
 
 
-
-
-
 ### 122 可以买卖多次 买股票的利润
 > 输入: [7,1,5,3,6,4]
 输出: 7
@@ -243,7 +240,7 @@ https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
 执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
 
 
-### ！！！！76 最小的子串窗口 很重要的题
+
 
 ### 516 最长回文子序列
 
