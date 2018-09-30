@@ -4,6 +4,17 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+#### Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。
+X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）
+则可能加载在一个cache line中。
+当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache line1和2。
+当线程1写a则2上的cache line变成Invalid，当2要读b需要重新从内存中读。
+**本来无关的两个线程，并行变成串行。**
+- 解决方法：
+将a,b分到不同的cache line 采用`@Contended`
+
+https://www.jianshu.com/p/7f89650367b8
+
 ### redis 10w OPS
 
 
@@ -125,14 +136,7 @@ Invaild无效。
 `local read`读本地缓存中数据`local write`写本地缓存
 `remote read`读取内存数据 `remote write`写回主存
 
-#### Cache伪共享
-X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）
-则可能加载在一个cache line中。
-当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache line1和2。
-当线程1写a则2上的cache line变成Invalid，当2要读b需要重新从内存中读。
-**本来无关的两个线程，并行变成串行。**
-- 解决方法：
-将a,b分到不同的cache line 采用`@Contended`
+
 
 ---
 ###  NUMA架构：内存分割，被CPU私有化：一致性协议MESIF：目录表

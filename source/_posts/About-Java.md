@@ -126,6 +126,13 @@ this.mat = new int[matrix.length][];
 ### Timer
 
 
+### 对象头8字节
+前4保存对象hash(3)，锁状态(1)
+后4存储对象所属类的引用。
+
+数组还有4字节保存数组大小。
+
+
 ### java内存
 https://algs4.cs.princeton.edu/14analysis/
 http://yueyemaitian.iteye.com/blog/2034305
