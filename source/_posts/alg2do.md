@@ -1171,11 +1171,6 @@ public int lengthOfLongestSubstring(String s){
 ### lt886 判断凸包
 https://www.lintcode.com/problem/convex-polygon/description
 
-### 763不重复字符的字符串最大划分 greedy
-> Input: S = "ababcbacadefegdehijhklij"
-Output: [9,7,8]
-Explanation:
-The partition is "ababcbaca", "defegde", "hijhklij".
 
 ### ?409 string中字符组成回文串的最大长度
 1.开int[128]，直接用int[char]++计数

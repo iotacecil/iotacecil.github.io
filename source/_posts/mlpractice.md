@@ -7,7 +7,7 @@ categories: [机器学习和数据处理python备忘]
 ### standardscaler
 （x-列均值）/ 列标准差
 
-### hsudfotgg距离
+### hausdorff距离
 衡量2个点集的距离
 度量了两个点集间的最大不匹配程度
 
@@ -187,6 +187,7 @@ $da^{[1]} = -y/a + (1-y)/(1-a)$
 $+\frac{λ}2m||w||_2^2$
 2. L1正则:$\frac{λ}m||w||_1$ 使用`L1`正则化，`w`最终会稀疏,`w`向量有很多0
 ---
+
 #### Dropout随机失活 多用于图像
 1. a3 表示三层网络各节点的值, $a3=[a^{[1]},a^{[2]},a^{[3]}]$
 2. 权重转成0或1：d3=np.random.rand(a3.shape[0], a3.shape[1]) < keepProb 

@@ -4,6 +4,13 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### `UnsupportedOperationException`
+>从Arrays.asList()转化过来的List的不支持add()和remove()方法，这是由于从Arrays.asList()返回的是返回java.util.Arrays$ArrayList，而不是ArrayList。Arrays$ArrayList和ArrayList都是继承AbstractList，add() 和remove()等方法在AbstractList中默认throw UnsupportedOperationException而不做任何操作。ArrayList重写这些方法对List进行操作，而Arrays$ArrayList却没有重写add()和 remove()等方法，所以对从Arrays.asList()转化过来的List进行add()和remove()会出现UnsupportedOperationException异常。
+
+Arrays.asList返回的是Arrays的内部类java.util.Arrays.ArrayList 该类继承了AbstractList但是并没有实现所有的方法，和java.util.ArrayList还是有区别的。 AbstractList的add方法：
+
+`res.add(new ArrayList<>(Arrays.asList(num[i],num[lo],num[hi])));`
+
 ### 求`int[]`最大值的正确写法
 `int maxa = Arrays.stream(arr).max().getAsInt();`
 

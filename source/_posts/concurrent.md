@@ -4,6 +4,9 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+#### ThreadLocal<T> 
+可以看成是 Map<Thread,T> 特定于该线程的值
+
 #### Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。
 X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）
 则可能加载在一个cache line中。

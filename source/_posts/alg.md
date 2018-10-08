@@ -18,6 +18,165 @@ https://www.educative.io/collection/page/5642554087309312/5679846214598656/14000
 
 https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 
+### 763 划分尽可能多字母区间
+>输入: S = "ababcbacadefegdehijhklij"
+输出: [9,7,8]
+解释:
+划分结果为 "ababcbaca", "defegde", "hijhklij"。
+每个字母最多出现在一个片段中。
+像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
+ababcba 从第一个a到最后一个a是必须包含的长度
+
+```java
+//45%
+public List<Integer> partitionLabels(String S) {
+    List<Integer> rst = new ArrayList<>();
+    //每个字母最后出现的index
+    int[] last = new int[26];
+
+    for(int i=0;i<S.length();i++){
+      last[S.charAt(i)-'a'] = i;
+    }
+    int start=0,end=0;
+    for(int i = 0;i<S.length();i++){
+        //更新当前字母的区间
+        end = Math.max(end,last[S.charAt(i)-'a']);
+        //关键
+        if(i==end){
+            rst.add(end-start+1);
+            start = end+1;
+        }
+    }
+    return rst;
+}
+```
+
+### 769 0-n的排列切割，块排序后连接是排序的原数组
+>输入: arr = [1,0,2,3,4]
+输出: 4
+解释:
+我们可以把它分成两块，例如 [1, 0], [2, 3, 4]。
+然而，分成 [1, 0], [2], [3], [4] 可以得到最多的块数。
+
+```
+idx:0 1 2 3 4
+arr:1 0 2 3 4
+max:0 1 2 3 4
+当前index==当前max 表示可以切分
+```
+
+```java
+public int maxChunksToSorted(int[] arr) {
+    int res = 0;
+    for(int i =0,max = 0;i<arr.length;i++){
+        if(i==(max=Math.max(max,arr[i])))
+            res++;
+    }
+    return res;
+}
+```
+
+### 768
+
+
+
+
+
+
+### 532 数组中有几个相差k的pair
+> 输入: [3, 1, 4, 1, 5], k = 2
+输出: 2
+解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
+尽管数组中有两个1，但我们只应返回不同的数对的数量。
+
+set的解法33% //todo比双指针慢 
+
+
+### 15 3sum a + b + c = 0
+> Given array nums = [-1, 0, 1, 2, -1, -4],
+A solution set is:
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+关键：去重技巧
+```java
+//75%
+public List<List<Integer>> threeSum(int[] num) {
+    Arrays.sort(num);
+    List<List<Integer>> res = new ArrayList<>();
+    for (int i = 0; i <num.length-2; i++) {
+        //关键去重
+        if(i==0||(i>0&&num[i]!=num[i-1])){
+            int lo = i+1,hi=num.length-1,sum = 0-num[i];
+            //关键
+            while (lo<hi){
+                if(num[lo]+num[hi] == sum){
+                    res.add(Arrays.asList(num[i],num[lo],num[hi]));
+                    //去重
+                    while (lo<hi&&num[lo]==num[lo+1])lo++;
+                    while (lo<hi&&num[hi]==num[hi-1])hi--;
+                    lo++;hi--;
+                }else if(num[lo]+num[hi]<sum)lo++;
+                else hi--;
+            }
+        }
+      }
+      return res;
+}
+```
+
+### 16 3sum 最接近target的值
+//todo nexttime
+
+### 18 4sum 外层for 用3sum找`target-nums[i]`
+
+
+### 914 相同数字的牌划分成一组，每组数量相同 能否划分
+> 输入：[1,2,3,4,4,3,2,1]
+输出：true
+解释：可行的分组是 [1,1]，[2,2]，[3,3]，[4,4]
+
+计数，求最大公约数
+```java
+public boolean hasGroupsSizeX(int[] deck) {
+    if(deck==null||deck.length<2)return false;
+   Map<Integer, Integer> count = new HashMap<>();
+    int res = 0;
+    for (int i : deck) count.put(i, count.getOrDefault(i, 0) + 1);
+    for (int i : count.values()) res = gcd(i, res);
+    return res > 1;
+}
+
+public int gcd(int a, int b) {
+    return b > 0 ? gcd(b, a % b) : a;
+}
+```
+
+### 915 Max(left)<=Min(right)
+画折线图，当前`A[i]<left` 则把切分线抬到`globalMax`
+![lc915](/images/lc915.jpg)
+7ms 60%
+```java
+public int partitionDisjoint(int[] A) {
+    int n = A.length;
+    int leftMax = A[0];
+    int global = leftMax;
+    int parti = 0;
+    for(int i = 1;i<n;i++){
+        if(leftMax>A[i]){
+            leftMax = global;
+            parti = i;
+        }else global = Math.max(global,A[i]);
+    }
+    return parti+1;
+}
+```
+
+### 916
+> b 中的每个字母都出现在 a 中，包括重复出现的字母，那么称单词 b 是单词 a 的子集。 例如，“wrr” 是 “warrior” 的子集，但不是 “world” 
+
 ### 7 整数反转 integer越界
 {% fold %}
 ```java
@@ -1446,7 +1605,7 @@ private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
 
 ### 131 
 
-### 旋转矩阵
+### 54旋转矩阵
 ![rotate2d.jpg](/images/rotate2d.jpg)
 top=0,bot=3,left=0,right = 3
 n是矩阵大小n>1的时候继续，每一圈，矩阵大小-=2
@@ -1457,6 +1616,8 @@ i=3:3赋值给12
 外层完了之后子问题是top++,left++,right--,bot--,n-=2
 
 方法2：翻转？
+
+### 59 生成nxn的旋转矩阵
 
 ### 49 
 直接拿CharArray的sort重建String当key 49%
