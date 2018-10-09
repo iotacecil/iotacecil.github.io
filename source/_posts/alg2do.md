@@ -4,6 +4,70 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
+### 153 Roataed Sorted Array的最小值 二分logN
+```java
+public int findMin(int[] nums) {
+      if(nums.length==1)return nums[0];
+    return findMin(nums,0,nums.length-1);
+}
+private int findMin(int[] nums,int low,int hi){
+    //只有1个或者2个
+    if(low+1>=hi)return Math.min(nums[low],nums[hi]);
+    if(nums[low]<nums[hi])return nums[low];
+    int mid = low+(hi-low)/2;
+    //无缝
+    return Math.min(findMin(nums,low,mid-1),findMin(nums,mid ,hi));
+}
+```
+#### 154 有重复元素Roataed Sorted Array 
+> Input: [2,2,2,0,1]
+> Output: 0
+
+去掉第二个递归条件。
+
+
+---
+
+### 138
+https://leetcode.com/problems/copy-list-with-random-pointer/solution/
+
+### poj3617构造最小字典序
+
+```java
+/**
+ * 不断取Min(S头/尾)放到T末尾
+ * 相等：判断下一个字符希望先用到小的字符
+ * 可以的操作：
+ * 从S头删除一个加到T尾
+ * 从S尾删除一个加到T尾
+ *
+ * @param S ACDBCB
+ * @return 构造字典序尽可能小的字符串T ABCBCD
+ */
+public static String BestCowLine(String S){
+      int a = 0,b = S.length()-1;
+      StringBuilder sb = new StringBuilder();
+      while (a<=b){
+          //关键
+          boolean left = false;
+          //a+i<b关键
+          for (int i = 0; a+i <= b ; i++) {
+              if(S.charAt(a+i)<S.charAt(b-i)){
+                  left = true;
+                  break;
+              }else if(S.charAt(a+i)>S.charAt(b-i)){
+                  left = false;
+                  break;
+              }
+          }
+          if(left)sb.append(S.charAt(a++));
+          else sb.append(S.charAt(b--));
+      }
+      return sb.toString();
+  }
+```
+
+
 ### 818 A加速，R掉头并减速，到指定位置最少需要多少条指令
 >当车得到指令 "A" 时, 将会做出以下操作： position += speed, speed *= 2。
 
@@ -300,6 +364,23 @@ public boolean canAttendMeetings(List<Interval> intervals) {
         end = Math.max(end,intervals.get(i).end);
     }
     return true;
+}
+```
+
+### 一个人最多可以参加几个会议
+```java
+public int howmany(List<Interval> intervals){
+    intervals.sort((a,b)->a.end-b.end);
+    int cnt = 0;
+    int end = 0;
+    for (int i = 0; i <intervals.length ; i++) {
+        if(end<intervals.get(i).start){
+            // System.out.println(i);
+            cnt++;
+            end = intervals.get(i).end;
+        }
+    }
+    return cnt;
 }
 ```
 
@@ -794,28 +875,7 @@ if(slow==fast){
 }
 ```
 
-### lt 458 lastIndexOf
-```java
-public int lastPosition(int[] nums, int target) {
-    if(nums==null||nums.length<1)return -1;
-    int i = 0, j = nums.length-1;
-    while(i<=j){
-        int mid = (i+j)/2;
-        if(nums[mid]>target)j = mid-1;
-        //找到了继续向右找
-        else i =mid+1;
-    }
-    if(j<0)return-1;
-    if(nums[j]==target) return j; 
-        return -1;
-}
-```
 
-### 34 ？？？？？？二分查找数字的first+last idx
-> Input: nums = [5,7,7,8,8,10], target = 8
-> Output: [3,4]
-
-二分查找获取最左/右边相等的
 
 ### 719
 

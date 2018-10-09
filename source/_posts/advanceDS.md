@@ -330,6 +330,8 @@ int rangeSum(int i,int j){
 
 
 ###  区间和查询305+修改307
+**n个元素线段树的初始化时间复杂度和空间复杂度都是O(n)**
+因为节点数是n+n/2+n/4+...=2n
 1.线段树用模板 59% 80ms
 ```java
 class SegmentTreeNode {

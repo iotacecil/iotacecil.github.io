@@ -4,6 +4,19 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+
+### 矩阵乘法
+```python
+>>> a = np.array([[1,1],[1,0]])
+# 对应元素相乘
+>>>  np.multiply(a,a)
+array([[1, 1],
+       [1, 0]])
+>>> np.dot(a,a) #线代的乘积
+array([[2, 1],
+       [1, 1]])
+```
+
 ### standardscaler
 （x-列均值）/ 列标准差
 

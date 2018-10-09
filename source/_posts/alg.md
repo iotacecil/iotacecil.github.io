@@ -18,6 +18,163 @@ https://www.educative.io/collection/page/5642554087309312/5679846214598656/14000
 
 https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 
+笔试题todo
+https://www.nowcoder.com/test/4575457/summary
+
+
+---
+矩阵乘法相关题目：
+http://www.matrix67.com/blog/archives/276
+
+### poj3734
+
+### 790 L型，XX型骨牌覆盖2xN的board
+> Input: 3
+Output: 5
+Explanation: 
+The five different ways are listed below, different letters indicates different tiles:
+XYZ XXZ XYY XXY XYY
+XYZ YYZ XZZ XYY XXY
+
+![lc790.jpg](/images/lc790.jpg)
+1.如果只XX骨牌
+dp[i] 表示N = i的时候有多少种解
+其实是费fib数列
+
+#### poj 2411
+http://poj.org/problem?id=2411
+输入：大矩阵的h高，和w宽
+输出:用宽2，高1的骨牌一共有多少种拼法
+
+
+### 图中长度为k的路径计数
+https://www.nowcoder.com/acm/contest/185/B
+>求出从 1 号点 到 n 号点长度为k的路径的数目.
+
+{% fold %}
+```java
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+    //AC
+//    final static int M = 10000;
+    public static long[][] mul(long[][] A,long[][] B){
+        long[][] rst = new long[A.length][B[0].length];
+        for (int i = 0; i <A.length ; i++) {
+            for (int k = 0; k <B.length ; k++) {
+                for (int j = 0; j <B[0].length ; j++) {
+                    rst[i][j] = (rst[i][j]+A[i][k]*B[k][j]);
+                }
+            }
+        }
+        return rst;
+    }
+    public static long[][] pow(long[][] A,int n){
+        long[][] rst =new long[A.length][A.length];
+        for (int i = 0; i <A.length ; i++) {
+            rst[i][i] = 1;
+        }
+        while (n>0){
+            if((n&1)!=0){
+                rst = mul(rst,A );
+            }
+            A = mul(A, A);
+            n>>=1;
+        }
+        return rst;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        long[][] graph = new long[n][n];
+        for (int i = 0; i <n ; i++) {
+            for (int j = 0; j <n ; j++) {
+                graph[i][j] = sc.nextInt();
+            }
+        }
+        long[][] Gn = pow(graph, k);
+        System.out.println(Gn[0][n-1]);
+    }
+}
+
+```
+{% endfold %}
+
+有向图 从A点走K步到达B(边可重复)的方案数
+`G[u][v]`表示u到v 长度为k的路径数量
+k=1 1条边可达的点 G1是图的邻接矩阵
+![kpath.jpg](/images/kpath.jpg)
+
+### 快速幂logN完成幂运算
+carmichael number
+```java
+//this^exponent mod m
+public BigInteger modPow(BigInteger exponent, BigInteger m)
+```
+
+### 递推公式
+![ditui.jpg](/images/ditui.jpg)
+实际上求m项地推公式的第n项 可以用初项线性表示，通过快速幂O(m^2logn)
+
+### fibo递推公式
+[特征方程](https://baike.baidu.com/item/%E7%89%B9%E5%BE%81%E6%96%B9%E7%A8%8B)
+1.二阶递推公式的特征方程
+递推公式Xn = aXn-1 - bXn-2
+特征方程x^2-ax+b =0
+解得x1,x2则存在F(n) = Ax1+Bx2
+带入F(0),F(1) 可得通项
+
+2.矩阵解法
+二阶递推式存在2x2矩阵A
+![fibo.jpg](/images/fibo.jpg)
+
+矩阵乘法：
+```java
+final int M = 10000;
+public int[][] mul(int[][] A,int[][] B){
+    int[][] rst = new int[A.length][B[0].length];
+    for (int i = 0; i <A.length ; i++) {
+        for (int k = 0; k <B.length ; k++) {
+            for (int j = 0; j <B[0].length ; j++) {
+                rst[i][j] = (rst[i][j]+A[i][k]*B[k][j])%M;
+            }
+        }
+    }
+    return rst;
+}
+```
+![quickmi](/images/quickmi.jpg)
+快速幂，将n用二进制表示，5->101表示A^5 = A^4+A^1,
+A每次翻倍，n一直右移，n最右为1的时候加上当前A翻倍的结果。
+矩阵的幂
+```java
+public  int[][] pow(int[][] A,int n){
+    int[][] rst =new int[A.length][A.length];
+    for (int i = 0; i <A.length ; i++) {
+        rst[i][i] = 1;
+    }
+    //for(;n>0;n>>=1)
+    while (n>0){
+        //快速幂
+        if((n&1)!=0)rst = mul(rst,A );
+        A = mul(A, A);
+        n>>=1;
+    }
+    return rst;
+}
+```
+
+解fibo：
+```java
+int[][] A = {{1,1},{1,0}};
+int[][] rst = sl.pow(A, n);
+System.out.println(rst[1][0]);
+```
+
+
+
 ### 763 划分尽可能多字母区间
 >输入: S = "ababcbacadefegdehijhklij"
 输出: [9,7,8]
@@ -131,6 +288,12 @@ public List<List<Integer>> threeSum(int[] num) {
 //todo nexttime
 
 ### 18 4sum 外层for 用3sum找`target-nums[i]`
+
+### poj2785 4 Values whose Sum is 0
+4个分别有n个数字的数组ABCD，每个数组中取一个，合为0的组合数。
+c+d = -a-b
+从A,B中找出n^2种组合，从C,D中找出n^2种组合，排序二分。
+
 
 
 ### 914 相同数字的牌划分成一组，每组数量相同 能否划分
@@ -1017,7 +1180,7 @@ void Bfs(int A,int B,int C){
 
 ### 2^N 大整数
 
-快速幂
+
 
 
 
@@ -2574,23 +2737,6 @@ def isPrime(n):
 421 ：‭‭000110100101‬
 
 ---
-### 790 L型，XX型骨牌覆盖2xN的board
-> Input: 3
-Output: 5
-Explanation: 
-The five different ways are listed below, different letters indicates different tiles:
-XYZ XXZ XYY XXY XYY
-XYZ YYZ XZZ XYY XXY
-
-![lc790.jpg](/images/lc790.jpg)
-1.如果只XX骨牌
-dp[i] 表示N = i的时候有多少种解
-其实是费fib数列
-
-#### poj 2411
-http://poj.org/problem?id=2411
-输入：大矩阵的h高，和w宽
-输出:用宽2，高1的骨牌一共有多少种拼法
 
 
 ### !!97 s1和s2是否交错组成s3
@@ -2705,69 +2851,9 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
 
 ### 719
 
-### 正确二分查找的写法
-1.查找范围是 [0,len-1]
-[0]：l=0,r=1-1，while(l==r)的时候应该继续
-```java
-int l = 0,r=n-1;
-while(l<=r){
-    int mid = l+(r-l)/2;
-    if(arr[mid]==target){
-        return mid;
-    }
-    else if(arr[mid]<target){
-        l=mid+1;//
-    }
-    else{
-        r=mid-1;
-    }
-}
-//如果l>r
-return -1;
-```
-2.[0,len) 保持len取不到 
-[0]:l=0,r=1,l++,while(l==r)的时候应该结束
-好处：len就是长度[a,a+len)，[a,b)+[b,c)=[a,c),[a,a)是空的
-```java
-int l = 0,r = n;
-while(l<r){
-    int mid = l+(r-l)/2;
-    if(arr[mid]==target)return mid;
-    if(arr[mid]>target){
-        //在左边，边界为取不到的数
-        r=mid;//[l,mid)
-    }else{
-        //左闭又开
-        l = mid+1;//[mid+1,r)
-    }
-}
-//如果l==r [1,1)表示空的
-return -1;
-```
-
-### 153 Roataed Sorted Array的最小值 二分logN
-```java
-public int findMin(int[] nums) {
-      if(nums.length==1)return nums[0];
-    return findMin(nums,0,nums.length-1);
-}
-private int findMin(int[] nums,int low,int hi){
-    //只有1个或者2个
-    if(low+1>=hi)return Math.min(nums[low],nums[hi]);
-    if(nums[low]<nums[hi])return nums[low];
-    int mid = low+(hi-low)/2;
-    //无缝
-    return Math.min(findMin(nums,low,mid-1),findMin(nums,mid ,hi));
-}
-```
-#### 154 有重复元素Roataed Sorted Array 
-> Input: [2,2,2,0,1]
-> Output: 0
-
-去掉第二个递归条件。
 
 
----
+
 
 
 
