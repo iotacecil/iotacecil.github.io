@@ -851,8 +851,8 @@ public int findCheapestPriceDp(int n, int[][] flights, int src, int dst, int k) 
    （0）(2) (1)(1) (2)(0)
       1x2  + 1x1  + 2x1
 ```
-![numbst2.jpg](numbst2.jpg)
-![numbst3.jpg](numbst3.jpg)
+![numbst2.jpg](/images/numbst2.jpg)
+![numbst3.jpg](/images/numbst3.jpg)
 当n=5 $T[4]+T[1][3]+T[2][2]+T[3][1]+T[4]$
 
 左子树有j个节点，右子树有n-j-1个节点

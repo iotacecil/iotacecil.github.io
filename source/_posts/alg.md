@@ -2039,6 +2039,7 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 
 ### 145 后序遍历二叉树 
 1.函数式编程 不用help函数（可变数组），复制数组
+
 {% fold %}
 ```java
 public List<Integer> post(TreeNode root){
@@ -2127,8 +2128,8 @@ path里加入{0},{2}头插法{2,0}//保证远的在后面
 dfs回到1，继续找封闭回路
 ![Hierholzer](/images/Hierholzer2.jpg)
 
-> Input: tickets = [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
-> Output: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+> Input: tickets = `[["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]`
+> Output: `["JFK", "MUC", "LHR", "SFO", "SJC"]`
 
 1. 用hashmap记录每个点的出度的点，建图
 2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
@@ -3182,6 +3183,7 @@ for(int i =1;i<4;i++){
  {15,20,21,23,29},
  {29}};
 ```
+
  S=4 T=21
 bfs，起点入队，遍历起点可以到达的所有公交(4可以达公交2)，遍历所有公交2上的可达`stop{4,10,12,20,24,28,33},`
 如果没到T，则4乘的公交换一辆，再遍历有4公交上的其他可达stop。
@@ -3517,7 +3519,7 @@ return sb.toString();
 ### 1. 爬山：局部贪心，快速找到可行解，局部最优
 - 8数码:启发函数：当前状态和目标状态的距离：错位方块个数。
     1. 深度优先
-![mounting](\images\mounting.jpg)
+![mounting](/images/mounting.jpg)
     2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
 
 8数码BFS优先队列
@@ -3584,7 +3586,7 @@ void slove(int[][] from,int x,int y,int[][] end){
 - 多阶段图搜索：最短路径
     - 爬山与BF算法得到最优解都需要遍历整个空间
     1. 用爬山生成界限(可行解or最优解的上限)
-![fenzhi](\images\fenzhi.jpg)
+![fenzhi](/images/fenzhi.jpg)
 
 
 

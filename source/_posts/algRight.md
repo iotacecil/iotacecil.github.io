@@ -4,6 +4,7 @@ date: 2018-09-04 11:12:53
 tags:
 categories: [算法备忘]
 ---
+
 ### LCS 最长公共子序列 长度
 > "abcd" "becd" ->3("bcd")
 
@@ -83,8 +84,8 @@ public int bigW01bag(int[] A,int[] V,int W)
 
 #### 01背包
 N个物品，背包容量V
-F[i,v]前i件物品放入容量v的背包可获得的最大价值。
-如果放第i件，转化为前i-i件放入容量为v-Ci的背包中，最大价值是F[i-1,v-Ci]+Wi
+`F[i,v]`前i件物品放入容量v的背包可获得的最大价值。
+如果放第i件，转化为前i-i件放入容量为v-Ci的背包中，最大价值是`F[i-1,v-Ci]+Wi`
 $F[i,v]=max{F[i-1,v],F[i-1,v-C_i]+W_i}$
 递归
 终止条件1：所有物品都装过了->0 2.这个物品w装不下->下一个物品
@@ -159,7 +160,7 @@ public int frontDp(int n,int W,int[][] wv){
 }
 ```
 
-从前i个物品中选不超过j的状态->前i+1中选不超过j，前i+1不超过j+w[i]
+从前i个物品中选不超过j的状态->前i+1中选不超过j，前i+1不超过`j+w[i]`
 ![dpbag3.jpg](/images/dpbag3.jpg)
 ```java
 public int maxbag(int n,int w,int[][]wv){
@@ -337,6 +338,8 @@ public static void main(String[] args) {
 ```
 {% endfold %}
 
+
+
 ---
 #### ！！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。
 ```java
@@ -364,14 +367,15 @@ public boolean canPartition(int[] nums){
 
 - 不用装满，F全部为0
   任何容量的背包，什么都不装，价值F都为0也是合法解。
+  
 ---
 
 #### lt440完全背包 每个物品可用无限次
-> n = 3; {{3,4},{4,5},{2,3}}; W = 7;
+> n = 3; `[3,4],[4,5],[2,3]`; W = 7;
 > out 10 (0选1个，2选2个)
 
 ![dpcompbag.jpg](/images/dpcompbag.jpg)
-dp[i+1][j]计算k的循环和dp[i+1][j-w[i]]计算k-1的循环是重复的
+`dp[i+1][j]`计算k的循环和`dp[i+1][j-w[i]]`计算k-1的循环是重复的
 
 记忆化递归：终止条件，当n==0的时候还要继续削减w
 ```java
@@ -428,7 +432,7 @@ public int backPackIII(int[] A, int[] V, int m) {
 }
 ```
 
-#### 利用奇偶性简化空间dp[2]
+#### 利用奇偶性简化空间`dp[2]`
 ```java
 public int backpackdp2(int[] A, int[] V, int m){
     //只需要计算dp[i+1]和dp[i]
@@ -446,14 +450,14 @@ public int backpackdp2(int[] A, int[] V, int m){
 ```
  
 - 两个状态转移方程
-$F[i,v] = max {F[i-1,v-kC_i]+kW_i|0<=kC_i<=v} $
+$F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=kC_i<=v}$
 $F[i,v] = max(F[i-1,v],F[i,v-C_i]+W_i)$
 
 #### exactly装满背包需要的最少/最大物品数量
 > Input : W = 100
-       val[]  = {1, 30}
-       wt[] = {1, 50}
-Output : 100 放100个{1，1}是物品数最多的方案
+       `val[]  = {1, 30}`
+       `wt[] = {1, 50}`
+Output : 100 放100个`{1，1}`是物品数最多的方案
 
 ```java
 private int multicnt(int W,int n,int[] val,int[] wt){
@@ -542,7 +546,6 @@ public static int multibagans(int[]a,int n,int m,int M){
 }
 ```
 
-
 ### 找钱的方案数
 ```java
 public int waysNCents(int n) {
@@ -602,6 +605,7 @@ public int coinDp2(int amount, int[] coins){
     return dp[n][amount];
 }
 ```
+
 
 ### 装配线调度问题Assembly Line
 ![assemblyline1.jpg](/images/assemblyline1.jpg)

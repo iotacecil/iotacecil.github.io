@@ -287,8 +287,8 @@ public boolean stoneGameDP1D(int[] piles) {
 ```
 
 ### lt920 meeting room
-给定一系列的会议时间间隔，包括起始和结束时间[[s1,e1]，[s2,e2]，…(si < ei)，确定一个人是否可以参加所有会议。
-[[0,30]，[5,10]，[15,20]]，返回false。
+给定一系列的会议时间间隔，包括起始和结束时间`[[s1,e1]，[s2,e2]，…(si < ei)`，确定一个人是否可以参加所有会议。
+`[[0,30]，[5,10]，[15,20]]`，返回false。
 贪心
 ```java
 public boolean canAttendMeetings(List<Interval> intervals) {
