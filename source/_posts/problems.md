@@ -4,6 +4,8 @@ date: 2018-03-09 08:39:10
 tags: [git,hexo]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### windows bat
+
 ### javaC 编码
 错误: 编码GBK的不可映射字符
     //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?
