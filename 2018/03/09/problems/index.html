@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="windows batjavaC 编码错误: 编码GBK的不可映射字符    //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”解决方法是添加encoding 参数：javac -encoding gbk WordCount.java Windows下为GBK编码，javac编译u">
+<meta name="description" content="windows bat定时自动提交123456789101112schtasks  /create  /tn  autoPush /tr  D:\iotacecil.github.io\pushBlog\pushBlog.bat  /sc  DAILY /st  09:49:00# pushBlog.batcd D:\iotacecil.github.iocall hexo g -dcall gi">
 <meta name="keywords" content="git,hexo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="problems">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/09/problems/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="windows batjavaC 编码错误: 编码GBK的不可映射字符    //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”解决方法是添加encoding 参数：javac -encoding gbk WordCount.java Windows下为GBK编码，javac编译u">
+<meta property="og:description" content="windows bat定时自动提交123456789101112schtasks  /create  /tn  autoPush /tr  D:\iotacecil.github.io\pushBlog\pushBlog.bat  /sc  DAILY /st  09:49:00# pushBlog.batcd D:\iotacecil.github.iocall hexo g -dcall gi">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-11T01:45:17.534Z">
+<meta property="og:updated_time" content="2018-10-11T01:57:43.020Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="problems">
-<meta name="twitter:description" content="windows batjavaC 编码错误: 编码GBK的不可映射字符    //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”解决方法是添加encoding 参数：javac -encoding gbk WordCount.java Windows下为GBK编码，javac编译u">
+<meta name="twitter:description" content="windows bat定时自动提交123456789101112schtasks  /create  /tn  autoPush /tr  D:\iotacecil.github.io\pushBlog\pushBlog.bat  /sc  DAILY /st  09:49:00# pushBlog.batcd D:\iotacecil.github.iocall hexo g -dcall gi">
 
 
 
@@ -337,7 +337,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-11T09:45:17+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-11T09:57:43+08:00">
                 2018-10-11
               </time>
             
@@ -393,7 +393,8 @@
       
 
       
-        <h3 id="windows-bat"><a href="#windows-bat" class="headerlink" title="windows bat"></a>windows bat</h3><h3 id="javaC-编码"><a href="#javaC-编码" class="headerlink" title="javaC 编码"></a>javaC 编码</h3><p>错误: 编码GBK的不可映射字符<br>    //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?<br>Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”解决方法是添加encoding 参数：javac -encoding gbk WordCount.java</p>
+        <h3 id="windows-bat定时自动提交"><a href="#windows-bat定时自动提交" class="headerlink" title="windows bat定时自动提交"></a>windows bat定时自动提交</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">schtasks  /create  /tn  autoPush /tr  D:\iotacecil.github.io\pushBlog\pushBlog.bat  /sc  DAILY /st  09:49:00</span><br><span class="line"><span class="comment"># pushBlog.bat</span></span><br><span class="line"><span class="built_in">cd</span> D:\iotacecil.github.io</span><br><span class="line">call hexo g -d</span><br><span class="line">call git fetch</span><br><span class="line">call git merge</span><br><span class="line">call git add .</span><br><span class="line">call git commit -m<span class="string">"windows×Ô¶¯Ìá½»"</span></span><br><span class="line">call git push</span><br><span class="line">schtasks  /Delete  /tn  autoPush</span><br><span class="line">    </span><br><span class="line">chcp 437</span><br></pre></td></tr></table></figure>
+<h3 id="javaC-编码"><a href="#javaC-编码" class="headerlink" title="javaC 编码"></a>javaC 编码</h3><p>错误: 编码GBK的不可映射字符<br>    //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?<br>Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”解决方法是添加encoding 参数：javac -encoding gbk WordCount.java</p>
 <p>Windows下为GBK编码，javac编译utf-8编码的java文件时，容易出现“错误: 编码GBK的不可映射字符”解决方法是添加encoding 参数：javac -encoding utf-8 WordCount.java</p>
 <p>javac -encoding UTF-8 xxx.java<br>idea ctrl+Q document</p>
 <p>git config –global gui.encoding utf-8 </p>
@@ -608,7 +609,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-bat"><span class="nav-number">1.</span> <span class="nav-text">windows bat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javaC-编码"><span class="nav-number">2.</span> <span class="nav-text">javaC 编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-toolo安装"><span class="nav-number">3.</span> <span class="nav-text">docker toolo安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netty-in-action-gt-gt"><span class="nav-number">4.</span> <span class="nav-text">netty in action&gt;&gt;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding-UTF-8"><span class="nav-number"></span> <span class="nav-text">coding=UTF-8</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-bat定时自动提交"><span class="nav-number">1.</span> <span class="nav-text">windows bat定时自动提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javaC-编码"><span class="nav-number">2.</span> <span class="nav-text">javaC 编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-toolo安装"><span class="nav-number">3.</span> <span class="nav-text">docker toolo安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netty-in-action-gt-gt"><span class="nav-number">4.</span> <span class="nav-text">netty in action&gt;&gt;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding-UTF-8"><span class="nav-number"></span> <span class="nav-text">coding=UTF-8</span></a></div>
             
 
           </div>
