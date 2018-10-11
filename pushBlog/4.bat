@@ -1,2 +1,0 @@
-hexo g -d
-pause

@@ -6,18 +6,23 @@ category: [JVMlinux常用备注nginxredis配置]
 ---
 ### windows bat定时自动提交
 ```sh
-schtasks  /create  /tn  autoPush /tr  D:\iotacecil.github.io\pushBlog\pushBlog.bat  /sc  DAILY /st  09:49:00
-# pushBlog.bat
-cd D:\iotacecil.github.io
+schtasks  /create  /tn  autoPush /tr  "cmd /c
+D:\iotacecil.github.io\pushBlog\_pushBlog.bat"  /sc  DAILY /st  10:31:
+00^
+# _pushBlog.bat
+call chcp 437
+call D:
+call cd D:\iotacecil.github.io
+
 call hexo g -d
 call git fetch
 call git merge
 call git add .
-call git commit -m"windows×Ô¶¯Ìá½»"
+call git commit -m"windows×Ô¶¯Ìá½»bat"
 call git push
-schtasks  /Delete  /tn  autoPush
+#pause
     
-chcp 437
+
 
 ```
 
