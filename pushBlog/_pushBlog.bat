@@ -1,4 +1,3 @@
-call chcp 437
 call D:
 call cd D:\iotacecil.github.io
 

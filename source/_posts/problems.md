@@ -10,7 +10,6 @@ schtasks  /create  /tn  autoPush /tr  "cmd /c
 D:\iotacecil.github.io\pushBlog\_pushBlog.bat"  /sc  DAILY /st  10:31:
 00^
 # _pushBlog.bat
-call chcp 437
 call D:
 call cd D:\iotacecil.github.io
 
@@ -21,7 +20,7 @@ call git add .
 call git commit -m"windows×Ô¶¯Ìá½»bat"
 call git push
 #pause
-    
+# call chcp 437
 
 
 ```
