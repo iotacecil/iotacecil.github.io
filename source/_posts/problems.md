@@ -4,7 +4,22 @@ date: 2018-03-09 08:39:10
 tags: [git,hexo]
 category: [JVMlinux常用备注nginxredis配置]
 ---
-### windows bat
+### windows bat定时自动提交
+```sh
+schtasks  /create  /tn  autoPush /tr  D:\iotacecil.github.io\pushBlog\pushBlog.bat  /sc  DAILY /st  09:49:00
+# pushBlog.bat
+cd D:\iotacecil.github.io
+call hexo g -d
+call git fetch
+call git merge
+call git add .
+call git commit -m"windows×Ô¶¯Ìá½»"
+call git push
+schtasks  /Delete  /tn  autoPush
+    
+chcp 437
+
+```
 
 ### javaC 编码
 错误: 编码GBK的不可映射字符
