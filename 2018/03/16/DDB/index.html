@@ -80,19 +80,20 @@
 
 
 
-<meta name="description" content="隔离级别是对一致性的破坏。事务之间的Happen-before关系：4种 【读写，写读，读读】，写写  排他锁 排队：序列化读写 不需要冲突控制，无死锁 排他锁：用n个队列，发生共享数据冲突就并行，不然就串行。对数据加锁，只允许一个线程访问。 读写锁：读写分离。读可以并行（可重复读），写写、写读、读写依然串行。对于读多写少的应用性能提升并行度。针对读读、读写优化。 读写锁的第二种（读已提交，不可重">
+<meta name="description" content="B+树数据库中，B+树的高度一般在2到3层。也就是说查找某一键值的记录，最多只需要2到3次IO开销。按磁盘每秒100次IO来计算，查询时间只需0.0.2到0.03秒 不确定：100w个Integer B+树需要多少层 磁盘最小单位扇区512字节文件系统最小单位 块 4kInnoDB最小单元 页 16k指针大小在6字节都是16的整数倍1234567mysql&amp;gt; show variables l">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库锁">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/16/DDB/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="隔离级别是对一致性的破坏。事务之间的Happen-before关系：4种 【读写，写读，读读】，写写  排他锁 排队：序列化读写 不需要冲突控制，无死锁 排他锁：用n个队列，发生共享数据冲突就并行，不然就串行。对数据加锁，只允许一个线程访问。 读写锁：读写分离。读可以并行（可重复读），写写、写读、读写依然串行。对于读多写少的应用性能提升并行度。针对读读、读写优化。 读写锁的第二种（读已提交，不可重">
+<meta property="og:description" content="B+树数据库中，B+树的高度一般在2到3层。也就是说查找某一键值的记录，最多只需要2到3次IO开销。按磁盘每秒100次IO来计算，查询时间只需0.0.2到0.03秒 不确定：100w个Integer B+树需要多少层 磁盘最小单位扇区512字节文件系统最小单位 块 4kInnoDB最小单元 页 16k指针大小在6字节都是16的整数倍1234567mysql&amp;gt; show variables l">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://iotaa.xyz/images/innodb16k.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/hash.jpg">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.269Z">
+<meta property="og:updated_time" content="2018-10-11T01:21:54.458Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库锁">
-<meta name="twitter:description" content="隔离级别是对一致性的破坏。事务之间的Happen-before关系：4种 【读写，写读，读读】，写写  排他锁 排队：序列化读写 不需要冲突控制，无死锁 排他锁：用n个队列，发生共享数据冲突就并行，不然就串行。对数据加锁，只允许一个线程访问。 读写锁：读写分离。读可以并行（可重复读），写写、写读、读写依然串行。对于读多写少的应用性能提升并行度。针对读读、读写优化。 读写锁的第二种（读已提交，不可重">
-<meta name="twitter:image" content="http://iotaa.xyz/images/hash.jpg">
+<meta name="twitter:description" content="B+树数据库中，B+树的高度一般在2到3层。也就是说查找某一键值的记录，最多只需要2到3次IO开销。按磁盘每秒100次IO来计算，查询时间只需0.0.2到0.03秒 不确定：100w个Integer B+树需要多少层 磁盘最小单位扇区512字节文件系统最小单位 块 4kInnoDB最小单元 页 16k指针大小在6字节都是16的整数倍1234567mysql&amp;gt; show variables l">
+<meta name="twitter:image" content="http://iotaa.xyz/images/innodb16k.jpg">
 
 
 
@@ -338,8 +339,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
-                2018-09-04
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-11T09:21:54+08:00">
+                2018-10-11
               </time>
             
           </span>
@@ -394,7 +395,13 @@
       
 
       
-        <p>隔离级别是对一致性的破坏。<br>事务之间的Happen-before关系：4种 【读写，写读，读读】，写写</p>
+        <h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><p>数据库中，B+树的高度一般在2到3层。也就是说查找某一键值的记录，最多只需要2到3次IO开销。按磁盘每秒100次IO来计算，查询时间只需0.0.2到0.03秒</p>
+<p>不确定：<br>100w个Integer B+树需要多少层</p>
+<p>磁盘最小单位扇区512字节<br>文件系统最小单位 块 4k<br>InnoDB最小单元 页 16k<br>指针大小在6字节<br><img src="/images/innodb16k.jpg" alt="innodb16k.jpg"><br>都是16的整数倍<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like 'innodb_page_size';</span><br><span class="line">+<span class="comment">------------------+-------+</span></span><br><span class="line">| Variable_name    | Value |</span><br><span class="line">+<span class="comment">------------------+-------+</span></span><br><span class="line">| innodb_page_size | 16384 |</span><br><span class="line">+<span class="comment">------------------+-------+</span></span><br><span class="line">1 row in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>单个叶子节点（页）中的记录数=16K/1K=16。（这里假设一行记录的数据大小为1k，实际上现在很多互联网业务数据记录大小通常就是1K左右）。</p>
+<p>那么现在我们需要计算出非叶子节点能存放多少指针，其实这也很好算，我们假设主键ID为bigint类型，长度为8字节，而指针大小在InnoDB源码中设置为6字节，这样一共14字节，我们一个页中能存放多少这样的单元，其实就代表有多少指针，即16384/14=1170。那么可以算出一棵高度为2的B+树，能存放1170*16=18720条这样的数据记录。</p>
+<p>根据同样的原理我们可以算出一个高度为3的B+树可以存放：1170<em>1170</em>16=21902400条这样的记录。所以在InnoDB中B+树高度一般为1-3层，它就能满足千万级的数据存储。在查找数据时一次页的查找代表一次IO，所以通过主键索引查询通常只需要1-3次IO操作即可查找到数据。</p>
+<p>隔离级别是对一致性的破坏。<br>事务之间的Happen-before关系：4种 【读写，写读，读读】，写写</p>
 <ol>
 <li>排他锁 排队：序列化读写 不需要冲突控制，无死锁</li>
 <li>排他锁：用n个队列，发生共享数据冲突就并行，不然就串行。对数据加锁，只允许一个线程访问。</li>
@@ -637,7 +644,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#持久性延迟："><span class="nav-number">1.</span> <span class="nav-text">持久性延迟：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#故障恢复："><span class="nav-number">2.</span> <span class="nav-text">故障恢复：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁检测：碰撞检测-等锁超时"><span class="nav-number">3.</span> <span class="nav-text">死锁检测：碰撞检测/等锁超时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-分片"><span class="nav-number">4.</span> <span class="nav-text">Hash 分片</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-一致性哈希：和弦（chord）系统中提出。"><span class="nav-number">4.1.</span> <span class="nav-text">3. 一致性哈希：和弦（chord）系统中提出。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查询"><span class="nav-number">4.1.1.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新节点"><span class="nav-number">4.1.2.</span> <span class="nav-text">新节点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#稳定性检测"><span class="nav-number">4.1.3.</span> <span class="nav-text">稳定性检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP-一致性-多副本对外单副本-可用性（延迟）-分区容忍性（网络分区现象仍工作）"><span class="nav-number">5.</span> <span class="nav-text">CAP 一致性(多副本对外单副本) 可用性（延迟） 分区容忍性（网络分区现象仍工作）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幂等性："><span class="nav-number">6.</span> <span class="nav-text">幂等性：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一致性协议"><span class="nav-number">7.</span> <span class="nav-text">一致性协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#脏读"><span class="nav-number">7.1.</span> <span class="nav-text">脏读</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据日知录"><span class="nav-number"></span> <span class="nav-text">大数据日知录</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#B-树"><span class="nav-number">1.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久性延迟："><span class="nav-number">2.</span> <span class="nav-text">持久性延迟：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#故障恢复："><span class="nav-number">3.</span> <span class="nav-text">故障恢复：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁检测：碰撞检测-等锁超时"><span class="nav-number">4.</span> <span class="nav-text">死锁检测：碰撞检测/等锁超时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-分片"><span class="nav-number">5.</span> <span class="nav-text">Hash 分片</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-一致性哈希：和弦（chord）系统中提出。"><span class="nav-number">5.1.</span> <span class="nav-text">3. 一致性哈希：和弦（chord）系统中提出。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查询"><span class="nav-number">5.1.1.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新节点"><span class="nav-number">5.1.2.</span> <span class="nav-text">新节点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#稳定性检测"><span class="nav-number">5.1.3.</span> <span class="nav-text">稳定性检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP-一致性-多副本对外单副本-可用性（延迟）-分区容忍性（网络分区现象仍工作）"><span class="nav-number">6.</span> <span class="nav-text">CAP 一致性(多副本对外单副本) 可用性（延迟） 分区容忍性（网络分区现象仍工作）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幂等性："><span class="nav-number">7.</span> <span class="nav-text">幂等性：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一致性协议"><span class="nav-number">8.</span> <span class="nav-text">一致性协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#脏读"><span class="nav-number">8.1.</span> <span class="nav-text">脏读</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据日知录"><span class="nav-number"></span> <span class="nav-text">大数据日知录</span></a></div>
             
 
           </div>
