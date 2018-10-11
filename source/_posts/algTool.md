@@ -1,9 +1,44 @@
 ---
-title: algTool
+title: algTool 正则
 date: 2018-10-09 19:16:41
 tags: 
 categories: [算法备忘]
 ---
+### 65 Valid Number
+
+
+### 无向图 弗洛伊德算法 扩充全部最短路径
+```java
+// 读取无向图 cost矩阵
+//[i][i] = 0 没有路径是inf
+map = new int[n][n];
+for (int i = 0; i < n; i++) {
+    Arrays.fill(map[i], inf);
+    map[i][i] = 0;
+}
+//path 只保留最短
+for (int i = 1; i <= m; i++) {
+    u = nextInt();
+    v = nextInt();
+    val = nextInt();
+    map[v][u] = map[u][v] = Math.min(map[u][v], val);
+}
+//弗洛伊德
+for (int k = 0; k < n; k++)
+for (int i = 0; i < n; i++) {
+    //可去
+    if (map[i][k] == inf)
+        continue;
+    for (int j = 0; j < n; j++) {
+        //可去
+        if (map[k][j] == inf)
+            continue;
+        map[j][i] = map[i][j] = Math.min(map[i][j], map[i][k]
+                + map[k][j]);
+    }
+}
+```
+
 ### 最大公约数gcd
 ```java
 public static long gcd(long a, long b) {
@@ -12,8 +47,8 @@ public static long gcd(long a, long b) {
 ```
 
 ### 素数
-```java
-```
+
+
 ### 正确二分查找的写法
 1.查找范围是 [0,len-1]
 [0]：l=0,r=1-1，while(l==r)的时候应该继续
@@ -71,7 +106,7 @@ public int lastPosition(int[] nums, int target) {
 }
 ```
 
-### 34 ？？？？？？二分查找数字的first+last idx
+### 34 二分查找数字的first+last idx
 > Input: nums = [5,7,7,8,8,10], target = 8
 > Output: [3,4]
 > Input: nums = [5,7,7,8,8,10], target = 6
@@ -130,3 +165,48 @@ public static int upper_bound(int[] a,int k){
 }
 ```
 
+### java快速io
+```java
+import java.io.*;
+int test = nextInt();
+out.println("Case #" + ttt + ":");
+out.println(ans);
+
+out.flush();
+out.close();
+
+static BufferedReader br = new BufferedReader(new InputStreamReader(
+        System.in));
+static StreamTokenizer in = new StreamTokenizer(br);
+static PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out));
+
+static String next() throws IOException {
+    in.nextToken();
+    return in.sval;
+}
+
+static char nextChar() throws IOException {
+    in.nextToken();
+    return in.sval.charAt(0);
+}
+
+static int nextInt() throws IOException {
+    in.nextToken();
+    return (int) in.nval;
+}
+
+static long nextLong() throws IOException {
+    in.nextToken();
+    return (long) in.nval;
+}
+
+static float nextFloat() throws IOException {
+    in.nextToken();
+    return (float) in.nval;
+}
+
+static double nextDouble() throws IOException {
+    in.nextToken();
+    return in.nval;
+}
+```

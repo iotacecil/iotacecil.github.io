@@ -5,6 +5,56 @@ tags:
 categories: [算法备忘]
 ---
 
+### poj2686 车票约束的最短路径
+![traveldp.jpg](images/traveldp.jpg)
+```java
+/**
+ *
+ * 3 4 3路径数量 1 4
+ 3 1 2
+ 1 2 10
+ 2 3 30
+ 3 4 20
+ time = graph[v][w]/hourse[i]
+ * @param n ticket number 一张票只能走一条路
+ * @param m city number
+ * @param graph
+ * @param a 起点
+ * @param b 终点
+ * @param hourse 马的数量
+ * @return
+ */
+public static double mintime(int n,int m,int[][] graph,int a,int b,int[] hourse){
+    // dp[S][v]剩下车票S 当前在城市v的最小花费
+    double[][] dp = new double[1<<n][m];
+    for (int i = 0; i <1<<n ; i++) {
+        Arrays.fill(dp[i], inf);
+    }
+    //起点
+    dp[(1<<n)-1][a-1] = 0;
+    double res = inf;
+    //n = 3 S = 111 用哪个车票的子集
+    for (int S = (1<<n)-1; S >=0 ; S--) {
+        res = Math.min(res, dp[S][b-1]);
+        for (int v = 0; v < m ; v++) {
+            //车票i
+            for (int i = 0; i < n ; i++) {
+                if((S>>i & 1)!=0){
+                    for (int u = 0; u <m ; u++) {
+                        if(graph[v][u]>=0){
+                            dp[S&~(1<<i)][u] = Math.min(dp[S&~(1<<i)][u],dp[S][v]+(double)graph[v][u]/hourse[i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if(res == inf){
+        return -1;
+    }else return res;
+}
+```
+
 ### LCS 最长公共子序列 长度
 > "abcd" "becd" ->3("bcd")
 
@@ -51,6 +101,7 @@ for i in range(2,n)
 
 #### 超大背包v和w都很大，n很小
 
+//364
 
 #### `1<wi<10^7` `1<w<10^9`重量范围很大的01背包！！！ 
 测试lt125
@@ -479,7 +530,7 @@ private int multicnt(int W,int n,int[] val,int[] wt){
 
 #### 填满背包的方案数
 
-#### 多重背包 第i种物品最多Mi件可用 
+#### 多重背包 第i种物品最多Mi件可用 能否恰好装满 p62
 $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 n个不同的数字，每种m个，能否和恰好为K
 每种数字，每个最多用m次，能否求和K

@@ -69,6 +69,34 @@ static class Index<K,V> {
 ConcurrentSkipListMap<Dish.Type, Double> collect = menu.stream().collect(Collectors.groupingByConcurrent(Dish::getType, ConcurrentSkipListMap::new, Collectors.averagingInt(Dish::getCalories)));
 ```
 
+### ConcurrentHashMap 读不加锁
+HashMap的迭代器用modCount 不允许读的时候修改。
+HashMap的node
+`static class Node<K,V> implements Map.Entry<K,V>`
+HashTable的entry
+`private static class Entry<K,V> implements Map.Entry<K,V> `
+ConcurrentHashMap 的entry
+value是可以改的
+value可能是null
+```java
+static final class MapEntry<K,V> implements Map.Entry<K,V> {
+        final K key; // non-null
+        V val;       // non-null
+        final ConcurrentHashMap<K,V> map;
+```
+
+V是volatile 线程同步
+```java
+/*这个类不会被暴露出去当用户可变的 Map.Entry 
+ *但是可以用于只读遍历
+ */
+static class Node<K,V> implements Map.Entry<K,V> {
+    final int hash;
+    final K key;
+    volatile V val;
+    volatile Node<K,V> next;}
+```
+
 ### 线程池`ThreadPoolExecutor`
 ```java
 private final BlockingQueue<Runnable> workQueue;

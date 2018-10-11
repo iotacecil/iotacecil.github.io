@@ -4,6 +4,9 @@ date: 2018-09-01 15:29:18
 tags: [并查集,Trie,线段树]
 categories: [算法备忘]
 ---
+### 归并树
+每个节点对应区间排好序的结果 O(nlogn)建立树
+
 ### 连通分量
 ![connect.jpg](/images/connect.jpg)
 无向图的连通分量可以用并查集（集合）来做
@@ -331,6 +334,8 @@ int rangeSum(int i,int j){
 
 ###  区间和查询305+修改307
 **n个元素线段树的初始化时间复杂度和空间复杂度都是O(n)**
+![sparsetable.jpg](/images/sparsetable.jpg)
+*Spare Table 预处理时空复杂度都是O(nlogn) 但是二分查询i只需要O(loglogn)*
 因为节点数是n+n/2+n/4+...=2n
 1.线段树用模板 59% 80ms
 ```java

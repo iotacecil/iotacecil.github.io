@@ -21,6 +21,73 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 火车编组 1,2,3,4不可能的出栈顺序 ACM列车长的烦恼
+>3节车厢，按照1，2，3依次入轨编组，可以在左边形成1 2 3，1 3 2，2 1 3，2 3 1，321。
+>问1-2-3-4能否编程4，1，3，2
+
+```java
+//假设序列是1,2,3,4
+public static void main(String[] args) {
+    int[] train = {4,1,3,2};
+    boolean flag = false;
+    int m = train.length;
+    for (int i = 0; i < m ; i++) {
+        for (int j = i+1; j < m; j++) {
+            for (int k = j+1; k < m ; k++) {
+                if(train[i]>train[j]&&train[i]>train[k]&&train[k]>train[j]){
+                    flag = true;
+                    break;
+                }
+            }
+        }
+    }
+    if(!flag) System.out.println("Yes");
+    else System.out.println("No");
+}
+```
+
+### 区间dp
+
+### lt476石子合并 区间dp
+> 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
+> in : 4 1 1 4 out: 18
+
+### 二叉树深度
+```java
+public int maxDepth(TreeNode root) {
+     if(root== null)return 0;
+    return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
+}
+```
+dfs
+```java
+
+```
+bfs
+```java
+public static int maxDepth(TreeNode root) {
+   if(root == null)return 0;
+    Deque<TreeNode> que = new LinkedList<>();
+    que.add(root);
+    int cnt = 0;
+    while (!que.isEmpty()){
+        int size = que.size();
+        while (size-->0){
+            TreeNode cur = que.poll();
+            if(cur.left!=null)que.add(cur.left);
+            if(cur.right!=null)que.add(cur.right);
+        }
+        cnt++;
+    }
+    return cnt;
+}
+```
+
+### lc84直方图中的最大矩形poj2559
+![histo1.jpg](/images/histo1.jpg)
+```java
+//todo next
+```
 
 ---
 矩阵乘法相关题目：
@@ -289,10 +356,31 @@ public List<List<Integer>> threeSum(int[] num) {
 
 ### 18 4sum 外层for 用3sum找`target-nums[i]`
 
-### poj2785 4 Values whose Sum is 0
+### 454 4 sum 2 poj2785 4 Values whose Sum is 0
+用poj的方法11%
 4个分别有n个数字的数组ABCD，每个数组中取一个，合为0的组合数。
 c+d = -a-b
-从A,B中找出n^2种组合，从C,D中找出n^2种组合，排序二分。
+从A,B中找出n^2种组合，从C,D中找出n^2种组合，排序二分找到lowerbound和upbound。
+
+正确方法：计算c+d的时候放入hashmap计数
+```java
+public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+    Map<Integer,Integer> map = new HashMap<>();
+    for (int i = 0; i <C.length ; i++) {
+        for (int j = 0; j <D.length ; j++) {
+            int sum = C[i] + D[j];
+            map.put(sum,map.getOrDefault(sum,0 )+1 );
+        }
+    }
+    int res = 0;
+    for (int i = 0; i <A.length ; i++) {
+        for (int j = 0; j <B.length ; j++) {
+            res += map.getOrDefault(-(A[i]+B[j]),0 );
+        }
+    }
+    return res;
+}
+```
 
 
 
@@ -545,9 +633,7 @@ https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
 > AVL or Red-Black to sort in O(n Log m) time where m is number of distinct elements.
 //todo
 
-### lt476石子合并 区间dp
-> 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
-> in : 4 1 1 4 out: 18
+
 
 
 
@@ -2167,8 +2253,18 @@ String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 线性扫描 复杂度n^2
 ![lc611.jpg](/images/lc611.jpg)
 
-### 数组组成三角形的最大周长
+### 数组组成三角形的最大周长nlogn
 贪心，排序，如果 $a[i]<a[i-1]+a[i-2]$ 则没有其他两条边可以两边之和`>`第三边了，换下一条当最长边。
+```java
+public int maxC(int[] A){
+    Arrays.sort(A);
+    int n = A.length;
+    for (int i = n-1; i >=2 ; i--) {
+        if(A[i]<A[i-1]+A[i-2])return A[i]+A[i-1]+A[i-2];
+    }
+    return 0;
+}
+```
 
 ### MST：
 将图的点分成2个集合，用边连接两个集合中的点，最小的边集是MST
@@ -2830,31 +2926,12 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
   从右向左扫描，同理更新max，当左括号>右括号重置0.
 
 ---
-
-
----
-
-
-
-
----
-
-
-
 ### 本福特定律
 以1为首位的数字的概率为30%
 
 
 
-
-
-
 ### 719
-
-
-
-
-
 
 
 
