@@ -93,7 +93,7 @@ private int findMin(int[] nums,int low,int hi){
     return Math.min(findMin(nums,low,mid-1),findMin(nums,mid ,hi));
 }
 ```
-#### 154 有重复元素Roataed Sorted Array 
+### 154 有重复元素Roataed Sorted Array 
 > Input: [2,2,2,0,1]
 > Output: 0
 
