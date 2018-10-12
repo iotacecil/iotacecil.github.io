@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="git,hexo," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -80,18 +80,17 @@
 
 
 
-<meta name="description" content="windows bat定时自动提交123456789101112131415schtasks  /create  /tn  autoPush /tr  &quot;cmd /cD:\iotacecil.github.io\pushBlog\_pushBlog.bat&quot;  /sc  DAILY /st  10:31:00# _pushBlog.batcall D:call cd D:\iotacecil.gi">
-<meta name="keywords" content="git,hexo">
+<meta name="description" content="4 两个排序数组的中位数 nums1 = [1, 2]nums2 = [3, 4]中位数是 (2 + 3)/2 = 2.5  考虑找第k大1.merge k个数就得到第k大O(k)2.比较两个数组的k/2如果A[k/2]&amp;lt;B[k/2]则A[0..k/2]&amp;lt;B[k/2]  33 rotate Sort Array 中查找！！81数组去重88合并排序数组lc162 find peak//t">
 <meta property="og:type" content="article">
-<meta property="og:title" content="problems">
-<meta property="og:url" content="http://iotaa.xyz/2018/03/09/problems/index.html">
+<meta property="og:title" content="基础二分查找例题">
+<meta property="og:url" content="http://iotaa.xyz/2018/10/11/algBinarySearch/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="windows bat定时自动提交123456789101112131415schtasks  /create  /tn  autoPush /tr  &quot;cmd /cD:\iotacecil.github.io\pushBlog\_pushBlog.bat&quot;  /sc  DAILY /st  10:31:00# _pushBlog.batcall D:call cd D:\iotacecil.gi">
+<meta property="og:description" content="4 两个排序数组的中位数 nums1 = [1, 2]nums2 = [3, 4]中位数是 (2 + 3)/2 = 2.5  考虑找第k大1.merge k个数就得到第k大O(k)2.比较两个数组的k/2如果A[k/2]&amp;lt;B[k/2]则A[0..k/2]&amp;lt;B[k/2]  33 rotate Sort Array 中查找！！81数组去重88合并排序数组lc162 find peak//t">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-11T02:47:27.740Z">
+<meta property="og:updated_time" content="2018-10-11T14:28:07.788Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="problems">
-<meta name="twitter:description" content="windows bat定时自动提交123456789101112131415schtasks  /create  /tn  autoPush /tr  &quot;cmd /cD:\iotacecil.github.io\pushBlog\_pushBlog.bat&quot;  /sc  DAILY /st  10:31:00# _pushBlog.batcall D:call cd D:\iotacecil.gi">
+<meta name="twitter:title" content="基础二分查找例题">
+<meta name="twitter:description" content="4 两个排序数组的中位数 nums1 = [1, 2]nums2 = [3, 4]中位数是 (2 + 3)/2 = 2.5  考虑找第k大1.merge k个数就得到第k大O(k)2.比较两个数组的k/2如果A[k/2]&amp;lt;B[k/2]则A[0..k/2]&amp;lt;B[k/2]  33 rotate Sort Array 中查找！！81数组去重88合并排序数组lc162 find peak//t">
 
 
 
@@ -121,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://iotaa.xyz/2018/03/09/problems/"/>
+  <link rel="canonical" href="http://iotaa.xyz/2018/10/11/algBinarySearch/"/>
 
 
 
 
 
-  <title>problems | Learn & practice</title>
+  <title>基础二分查找例题 | Learn & practice</title>
   
 
 
@@ -291,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/03/09/problems/">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/10/11/algBinarySearch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -308,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">problems</h1>
+          <h1 class="post-title" itemprop="name headline">基础二分查找例题</h1>
         
 
         <div class="post-meta">
@@ -321,8 +320,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T08:39:10+08:00">
-                2018-03-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-11T21:26:30+08:00">
+                2018-10-11
               </time>
             
 
@@ -337,7 +336,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-11T10:47:27+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-11T22:28:07+08:00">
                 2018-10-11
               </time>
             
@@ -356,8 +355,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVMlinux常用备注nginxredis配置/" itemprop="url" rel="index">
-                    <span itemprop="name">JVMlinux常用备注nginxredis配置</span>
+                  <a href="/categories/算法备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">算法备忘</span>
                   </a>
                 </span>
 
@@ -393,46 +392,19 @@
       
 
       
-        <h3 id="windows-bat定时自动提交"><a href="#windows-bat定时自动提交" class="headerlink" title="windows bat定时自动提交"></a>windows bat定时自动提交</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">schtasks  /create  /tn  autoPush /tr  <span class="string">"cmd /c</span></span><br><span class="line"><span class="string">D:\iotacecil.github.io\pushBlog\_pushBlog.bat"</span>  /sc  DAILY /st  10:31:</span><br><span class="line">00</span><br><span class="line"><span class="comment"># _pushBlog.bat</span></span><br><span class="line">call D:</span><br><span class="line">call <span class="built_in">cd</span> D:\iotacecil.github.io</span><br><span class="line"></span><br><span class="line">call hexo g -d</span><br><span class="line">call git fetch</span><br><span class="line">call git merge</span><br><span class="line">call git add .</span><br><span class="line">call git commit -m<span class="string">"windows自动提交定时任务"</span></span><br><span class="line">call git push</span><br><span class="line"><span class="comment">#pause</span></span><br><span class="line"><span class="comment"># call chcp 437</span></span><br></pre></td></tr></table></figure>
-<h3 id="javaC-编码"><a href="#javaC-编码" class="headerlink" title="javaC 编码"></a>javaC 编码</h3><p>错误: 编码GBK的不可映射字符<br>    //todo 鍐欑殑鐪熸槸闅剧湅 娓呴啋浜嗗啀鍐?<br>Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”解决方法是添加encoding 参数：javac -encoding gbk WordCount.java</p>
-<p>Windows下为GBK编码，javac编译utf-8编码的java文件时，容易出现“错误: 编码GBK的不可映射字符”解决方法是添加encoding 参数：javac -encoding utf-8 WordCount.java</p>
-<p>javac -encoding UTF-8 xxx.java<br>idea ctrl+Q document</p>
-<p>git config –global gui.encoding utf-8 </p>
-<p>GC overhead limit exceeded</p>
-<p>0x7fffffff指的不是单个数组的字间，而是整个用户态程序的寻址空间</p>
-<p>32位的处理器的地址长度是32位,所以他能表示大最大地址是 2^32， 指针表示的是地址，所以指针也是32位的， 但是 windows 对内存做了分区, 进程可用的内存地址范围是 0x00010000 ~ 0x7FFFFFFF，</p>
-<p>虚拟机traceroute超时没回应</p>
-<p>不要把xshell的ctrl-c变成复制，不然没办法结束程序</p>
-<p>IBM的文档总是跳转登录页面，左上角禁用js。</p>
-<p>tampermonkey一直在向//cr-input.mxpnl.net发请求 </p>
-<hr>
-<ul>
-<li>fallthrough 是什么<br>idea提示代码过长怎么办？</li>
-</ul>
-<h3 id="docker-toolo安装"><a href="#docker-toolo安装" class="headerlink" title="docker toolo安装"></a>docker toolo安装</h3><ol>
-<li>vb环境变量后面要加’\’</li>
-<li>获取不到ip 等</li>
-<li>加速器DaoCloud 要在etc/docker/deamon.json里去掉最后的逗号 并且要<code>service docker restart</code></li>
-</ol>
-<h3 id="netty-in-action-gt-gt"><a href="#netty-in-action-gt-gt" class="headerlink" title="netty in action&gt;&gt;"></a>netty in action&gt;&gt;</h3><p><code>The POM for nia:utils:jar:2.0-SNAPSHOT is missing, no dependency information available</code><br><code>mvn install -pl utils</code></p>
-<ol>
-<li>java ASM</li>
-<li><h1 id="coding-UTF-8"><a href="#coding-UTF-8" class="headerlink" title="coding=UTF-8"></a>coding=UTF-8</h1></li>
-<li><p>IDEA Push failed: Failed with error: fatal: Could not read from remote repository<br><code>IDEA-&gt;setting-&gt;git -&gt; ssh executable -&gt;native</code></p>
-</li>
-<li><p>PYDEVD_LOAD_VALUES_ASYNC=True;</p>
-</li>
-</ol>
-<ul>
-<li>disable “Show command line afterwards”<br><a href="https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000749030-How-to-stop-interactive-console-running" target="_blank" rel="noopener">https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000749030-How-to-stop-interactive-console-running</a></li>
-</ul>
-<ol start="3">
-<li>Intel MKL FATAL ERROR: Cannot load mkl_intel_thread.dll.</li>
-<li><p>hexo markdown的坑小胡子语法两个大括号会报错！！！！二维数组！！</p>
-</li>
-<li><p>windows 启动zookeeper Server闪退；环境变量里要设置JAVA_HOME变量</p>
-</li>
-</ol>
+        <h3 id="4-两个排序数组的中位数"><a href="#4-两个排序数组的中位数" class="headerlink" title="4 两个排序数组的中位数"></a>4 两个排序数组的中位数</h3><blockquote>
+<p>nums1 = [1, 2]<br>nums2 = [3, 4]<br>中位数是 (2 + 3)/2 = 2.5</p>
+</blockquote>
+<p>考虑找第k大<br>1.merge k个数就得到第k大O(k)<br>2.比较两个数组的k/2<br>如果<code>A[k/2]&lt;B[k/2]</code>则<code>A[0..k/2]&lt;B[k/2]</code> </p>
+<h3 id="33-rotate-Sort-Array-中查找！！"><a href="#33-rotate-Sort-Array-中查找！！" class="headerlink" title="33 rotate Sort Array 中查找！！"></a>33 rotate Sort Array 中查找！！</h3><h3 id="81"><a href="#81" class="headerlink" title="81"></a>81</h3><h3 id="数组去重"><a href="#数组去重" class="headerlink" title="数组去重"></a>数组去重</h3><h3 id="88合并排序数组"><a href="#88合并排序数组" class="headerlink" title="88合并排序数组"></a>88合并排序数组</h3><h3 id="lc162-find-peak-todo"><a href="#lc162-find-peak-todo" class="headerlink" title="lc162 find peak//todo"></a>lc162 find peak//todo</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findPeakElement</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> s = -<span class="number">1</span>,e = nums.length-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(s+<span class="number">1</span>&lt;e)&#123;</span><br><span class="line">        <span class="keyword">int</span> mid = (s+e)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> left = nums[mid]-nums[mid+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">if</span>(left&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            e = mid;</span><br><span class="line">        &#125;<span class="keyword">else</span> s = mid;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="lc240-行列排序的2d矩阵二分查找-O-m-n"><a href="#lc240-行列排序的2d矩阵二分查找-O-m-n" class="headerlink" title="lc240 行列排序的2d矩阵二分查找 O(m+n)"></a>lc240 行列排序的2d矩阵二分查找 O(m+n)</h3><p>从左下角或者右上角开始找<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">searchMatrix</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(matrix == <span class="keyword">null</span> || matrix.length &lt; <span class="number">1</span> || matrix[<span class="number">0</span>].length &lt;<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> col = matrix[<span class="number">0</span>].length-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> row = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(col &gt;= <span class="number">0</span> &amp;&amp; row &lt;= matrix.length-<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(target == matrix[row][col]) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            <span class="comment">//左</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(target &lt; matrix[row][col]) &#123;</span><br><span class="line">            col--;</span><br><span class="line">            <span class="comment">//往下</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(target &gt; matrix[row][col]) &#123;</span><br><span class="line">            row++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="153-Roataed-Sorted-Array的最小值-二分logN"><a href="#153-Roataed-Sorted-Array的最小值-二分logN" class="headerlink" title="153 Roataed Sorted Array的最小值 二分logN"></a>153 Roataed Sorted Array的最小值 二分logN</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findMin</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">int</span> s = <span class="number">0</span>,e = nums.length-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(s + <span class="number">1</span> &lt; e)&#123;</span><br><span class="line">        <span class="keyword">int</span> mid = (e+s)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span>(nums[mid] &gt;= nums[e])&#123;</span><br><span class="line">            s = mid;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            e = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//只剩下2个数之后 取个小的</span></span><br><span class="line">    <span class="keyword">if</span>(nums[s]&lt;nums[e])<span class="keyword">return</span> nums[s];</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> nums[e];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findMin</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(nums.length==<span class="number">1</span>)<span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">return</span> findMin(nums,<span class="number">0</span>,nums.length-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">findMin</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> low,<span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">    <span class="comment">//只有1个或者2个</span></span><br><span class="line">    <span class="keyword">if</span>(low+<span class="number">1</span>&gt;=hi)<span class="keyword">return</span> Math.min(nums[low],nums[hi]);</span><br><span class="line">    <span class="keyword">if</span>(nums[low]&lt;nums[hi])<span class="keyword">return</span> nums[low];</span><br><span class="line">    <span class="keyword">int</span> mid = low+(hi-low)/<span class="number">2</span>;</span><br><span class="line">    <span class="comment">//无缝</span></span><br><span class="line">    <span class="keyword">return</span> Math.min(findMin(nums,low,mid-<span class="number">1</span>),findMin(nums,mid ,hi));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="154-有重复元素Roataed-Sorted-Array"><a href="#154-有重复元素Roataed-Sorted-Array" class="headerlink" title="154 有重复元素Roataed Sorted Array"></a>154 有重复元素Roataed Sorted Array</h4><blockquote>
+<p>Input: [2,2,2,0,1]<br>Output: 0</p>
+</blockquote>
+<p>不能用二分了 不能Ologn 要O(N)<br>//比遍历都慢<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findMin</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> s = <span class="number">0</span>, e = nums.length-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (s+<span class="number">1</span>&lt;e)&#123;</span><br><span class="line">        <span class="keyword">int</span> mid = (s+e)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span>(nums[mid]&gt;nums[e])&#123;</span><br><span class="line">          s = mid;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums[mid]&lt;nums[e])&#123;</span><br><span class="line">            e = mid;</span><br><span class="line">            <span class="comment">//关键</span></span><br><span class="line">        &#125;<span class="keyword">else</span> e--;</span><br><span class="line">       </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Math.min(nums[s],nums[e] );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>去掉第二个递归条件。 跟遍历一个速度</p>
 
       
     </div>
@@ -448,14 +420,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/git/" rel="tag"># git</a>
-          
-            <a href="/tags/hexo/" rel="tag"># hexo</a>
-          
-        </div>
-      
 
       
       
@@ -465,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/09/CS231/" rel="next" title="CS231">
-                <i class="fa fa-chevron-left"></i> CS231
+              <a href="/2018/10/11/algInterval/" rel="next" title="algInterval">
+                <i class="fa fa-chevron-left"></i> algInterval
               </a>
             
           </div>
@@ -474,10 +438,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/09/mlpractice/" rel="prev" title="mlpractice">
-                mlpractice <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -609,7 +569,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#windows-bat定时自动提交"><span class="nav-number">1.</span> <span class="nav-text">windows bat定时自动提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javaC-编码"><span class="nav-number">2.</span> <span class="nav-text">javaC 编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker-toolo安装"><span class="nav-number">3.</span> <span class="nav-text">docker toolo安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netty-in-action-gt-gt"><span class="nav-number">4.</span> <span class="nav-text">netty in action&gt;&gt;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coding-UTF-8"><span class="nav-number"></span> <span class="nav-text">coding=UTF-8</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-两个排序数组的中位数"><span class="nav-number">1.</span> <span class="nav-text">4 两个排序数组的中位数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#33-rotate-Sort-Array-中查找！！"><span class="nav-number">2.</span> <span class="nav-text">33 rotate Sort Array 中查找！！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#81"><span class="nav-number">3.</span> <span class="nav-text">81</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组去重"><span class="nav-number">4.</span> <span class="nav-text">数组去重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#88合并排序数组"><span class="nav-number">5.</span> <span class="nav-text">88合并排序数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lc162-find-peak-todo"><span class="nav-number">6.</span> <span class="nav-text">lc162 find peak//todo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lc240-行列排序的2d矩阵二分查找-O-m-n"><span class="nav-number">7.</span> <span class="nav-text">lc240 行列排序的2d矩阵二分查找 O(m+n)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#153-Roataed-Sorted-Array的最小值-二分logN"><span class="nav-number">8.</span> <span class="nav-text">153 Roataed Sorted Array的最小值 二分logN</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#154-有重复元素Roataed-Sorted-Array"><span class="nav-number">8.1.</span> <span class="nav-text">154 有重复元素Roataed Sorted Array</span></a></li></ol></li></ol></div>
             
 
           </div>

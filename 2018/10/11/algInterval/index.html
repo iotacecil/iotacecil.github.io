@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="interval max overLaphttps://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/1234567891011121314151617 arr[]  = &amp;#123;1, 2, 10, 5, 5&amp;#125; dep[]  = &amp;#123;4, 5, 12, 9, 12&amp;#125;Below">
+<meta property="og:type" content="article">
+<meta property="og:title" content="algInterval">
+<meta property="og:url" content="http://iotaa.xyz/2018/10/11/algInterval/index.html">
+<meta property="og:site_name" content="Learn &amp; practice">
+<meta property="og:description" content="interval max overLaphttps://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/1234567891011121314151617 arr[]  = &amp;#123;1, 2, 10, 5, 5&amp;#125; dep[]  = &amp;#123;4, 5, 12, 9, 12&amp;#125;Below">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-11T13:59:46.037Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="algInterval">
+<meta name="twitter:description" content="interval max overLaphttps://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/1234567891011121314151617 arr[]  = &amp;#123;1, 2, 10, 5, 5&amp;#125; dep[]  = &amp;#123;4, 5, 12, 9, 12&amp;#125;Below">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://iotaa.xyz/2018/10/11/algInterval/"/>
+
+
+
+
+
+  <title>algInterval | Learn & practice</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn & practice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/10/11/algInterval/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">algInterval</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-11T13:37:14+08:00">
+                2018-10-11
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-11T21:59:46+08:00">
+                2018-10-11
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="interval-max-overLap"><a href="#interval-max-overLap" class="headerlink" title="interval max overLap"></a>interval max overLap</h3><p><a href="https://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/" target="_blank" rel="noopener">https://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> arr[]  = &#123;1, 2, 10, 5, 5&#125;</span><br><span class="line"> dep[]  = &#123;4, 5, 12, 9, 12&#125;</span><br><span class="line"></span><br><span class="line">Below are all events sorted by time.  Note that in sorting, if two</span><br><span class="line">events have same time, then arrival is preferred over exit.</span><br><span class="line"> Time     Event Type         Total Number of Guests Present</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">   1        Arrival                  1</span><br><span class="line">   2        Arrival                  2</span><br><span class="line">   4        Exit                     1</span><br><span class="line">   5        Arrival                  2</span><br><span class="line">   5        Arrival                  3    // Max Guests</span><br><span class="line">   5        Exit                     2</span><br><span class="line">   9        Exit                     1</span><br><span class="line">   10       Arrival                  2 </span><br><span class="line">   12       Exit                     1</span><br><span class="line">   12       Exit                     0</span><br></pre></td></tr></table></figure></p>
+<h3 id="lt391-数飞机，interval最多同时多少个飞机"><a href="#lt391-数飞机，interval最多同时多少个飞机" class="headerlink" title="lt391 数飞机，interval最多同时多少个飞机"></a>lt391 数飞机，interval最多同时多少个飞机</h3><h3 id="lt920-meeting-room"><a href="#lt920-meeting-room" class="headerlink" title="lt920 meeting room"></a>lt920 meeting room</h3><p>给定一系列的会议时间间隔，包括起始和结束时间<code>[[s1,e1]，[s2,e2]，…(si &lt; ei)</code>，确定一个人是否可以参加所有会议。<br><code>[[0,30]，[5,10]，[15,20]]</code>，返回false。<br>贪心<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">canAttendMeetings</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(intervals == <span class="keyword">null</span>||intervals.size() == <span class="number">0</span>)<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    Collections.sort(intervals,(o1,o2)-&gt;o1.start-o2.start);</span><br><span class="line">    <span class="keyword">int</span> end = intervals.get(<span class="number">0</span>).end;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; intervals.size(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(intervals.get(i).start&lt;end)<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        end = Math.max(end,intervals.get(i).end);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="一个人最多可以参加几个会议"><a href="#一个人最多可以参加几个会议" class="headerlink" title="一个人最多可以参加几个会议"></a>一个人最多可以参加几个会议</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">howmany</span><span class="params">(List&lt;Interval&gt; intervals)</span></span>&#123;</span><br><span class="line">    intervals.sort((a,b)-&gt;a.end-b.end);</span><br><span class="line">    <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> end = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;intervals.length ; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(end&lt;intervals.get(i).start)&#123;</span><br><span class="line">            <span class="comment">// System.out.println(i);</span></span><br><span class="line">            cnt++;</span><br><span class="line">            end = intervals.get(i).end;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="lt919-需要几个会议室"><a href="#lt919-需要几个会议室" class="headerlink" title="lt919 !!!需要几个会议室"></a>lt919 !!!需要几个会议室</h3><p>不能贪心：</p>
+<blockquote>
+<p><code>[[1, 5][2, 8][6, 9]]</code><br>这种情况本来只需要2间房，但是直接贪心就会需要3间房</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> |___| |______|</span></span><br><span class="line"><span class="comment">   |_____|  |____|</span></span><br><span class="line"><span class="comment"> starts:</span></span><br><span class="line"><span class="comment"> | |   |    |</span></span><br><span class="line"><span class="comment"> i</span></span><br><span class="line"><span class="comment"> ends:</span></span><br><span class="line"><span class="comment">      |  |     | |</span></span><br><span class="line"><span class="comment">     end</span></span><br><span class="line"><span class="comment"> res++;</span></span><br><span class="line"><span class="comment"> ---------</span></span><br><span class="line"><span class="comment">    i</span></span><br><span class="line"><span class="comment">     end</span></span><br><span class="line"><span class="comment"> res++; 这个end之前有2个start，前一个会议没有结束</span></span><br><span class="line"><span class="comment"> ---------</span></span><br><span class="line"><span class="comment">        i</span></span><br><span class="line"><span class="comment">     end</span></span><br><span class="line"><span class="comment"> end++; start&gt;end表示有个room的会议已经结束，可以安排到这个room</span></span><br><span class="line"><span class="comment"> ---------</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//251ms 74%</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minMeetingRooms2Arr</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] starts = <span class="keyword">new</span> <span class="keyword">int</span>[intervals.size()];</span><br><span class="line">    <span class="keyword">int</span>[] ends = <span class="keyword">new</span> <span class="keyword">int</span>[intervals.size()];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;intervals.size();i++)&#123;</span><br><span class="line">        starts[i] = intervals.get(i).start;</span><br><span class="line">        ends[i] = intervals.get(i).end;</span><br><span class="line">    &#125;</span><br><span class="line">    Arrays.sort(starts);</span><br><span class="line">    Arrays.sort(ends);</span><br><span class="line">    <span class="keyword">int</span> cnt =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> end = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; intervals.size(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(starts[i]&lt;ends[end])cnt++;</span><br><span class="line">        <span class="keyword">else</span> end++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用TreeMap<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//240ms 75%</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minMeetingRooms</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">    TreeMap&lt;Integer,Integer&gt; map = <span class="keyword">new</span> TreeMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(Interval i:intervals)&#123;</span><br><span class="line">        map.put(i.start,map.getOrDefault(i.start,<span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">        map.put(i.end,map.getOrDefault(i.end,<span class="number">0</span>)-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> room = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> num:map.values())&#123;</span><br><span class="line">        room+=num;</span><br><span class="line">        max = Math.max(max,room);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>用PriorityQ<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//403ms 54%</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minMeetingRoomsPQ</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">    Collections.sort(intervals,(o1, o2)-&gt;o1.start-o2.start);</span><br><span class="line">    PriorityQueue&lt;Interval&gt; heap = <span class="keyword">new</span> PriorityQueue&lt;&gt;(intervals.size(),(o1, o2)-&gt;o1.end-o2.end);</span><br><span class="line">    heap.add(intervals.get(<span class="number">0</span>));</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;intervals.size() ; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(intervals.get(i).start&gt;=heap.peek().end)heap.poll();</span><br><span class="line">        heap.add(intervals.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> heap.size();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="452-重叠线段？？-射破全部气球需要的最少次数"><a href="#452-重叠线段？？-射破全部气球需要的最少次数" class="headerlink" title="452 重叠线段？？ 射破全部气球需要的最少次数"></a>452 重叠线段？？ 射破全部气球需要的最少次数</h3><blockquote>
+<p>Input:<br>[[10,16], [2,8], [1,6], [7,12]]<br>Output:<br>2</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> cnt =<span class="number">0</span>;</span><br><span class="line"><span class="comment">//按结束顺序排序不会出现</span></span><br><span class="line"><span class="comment">//  |__|     只有：  |___| 和 |____|</span></span><br><span class="line"><span class="comment">//|______|的情况  |____|       |_|</span></span><br><span class="line">Arrays.sort(points,(a,b)-&gt;a[<span class="number">1</span>]-b[<span class="number">1</span>]);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;points.length;i++)&#123;</span><br><span class="line">    <span class="keyword">int</span> cur = points[i][<span class="number">1</span>];</span><br><span class="line">    cnt++;</span><br><span class="line">    <span class="keyword">while</span>(i+<span class="number">1</span>&lt;points.length&amp;&amp;points[i+<span class="number">1</span>][<span class="number">0</span>]&lt;=cur&amp;&amp;cur&lt;=points[i+<span class="number">1</span>][<span class="number">1</span>])&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> cnt;</span><br></pre></td></tr></table></figure>
+<p>前一个的end在i+1的线段中，则跳过。</p>
+<h3 id="lt821时间交集-区间交集-扫描线"><a href="#lt821时间交集-区间交集-扫描线" class="headerlink" title="lt821时间交集 区间交集 扫描线"></a>lt821时间交集 区间交集 扫描线</h3><blockquote>
+<p>seqA = [(1,2),(5,100)], seqB = [(1,6)], 返回 [(1,2),(5,6)]</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Event</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Event</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> START = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> END = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> time,type;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Event</span><span class="params">(<span class="keyword">int</span> time, <span class="keyword">int</span> type)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.time = time;</span><br><span class="line">        <span class="keyword">this</span>.type = type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Event o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.time!=o.time)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.time - o.time;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.type-o.type;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Interval&gt; <span class="title">timeIntersection</span><span class="params">(List&lt;Interval&gt; seqA, List&lt;Interval&gt; seqB)</span> </span>&#123;</span><br><span class="line">    List&lt;Event&gt; events = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(Interval i:seqA)&#123;</span><br><span class="line">        events.add(<span class="keyword">new</span> Event(i.start,Event.START));</span><br><span class="line">        events.add(<span class="keyword">new</span> Event(i.end,Event.END));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(Interval i:seqB)&#123;</span><br><span class="line">        events.add(<span class="keyword">new</span> Event(i.start,Event.START));</span><br><span class="line">        events.add(<span class="keyword">new</span> Event(i.end,Event.END));</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(events);</span><br><span class="line">    Collections.sort(events);</span><br><span class="line">    System.out.println(events);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    Integer start = <span class="keyword">null</span>,end = <span class="keyword">null</span>;</span><br><span class="line">    List&lt;Interval&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(Event event : events)&#123;</span><br><span class="line">        <span class="keyword">if</span>(event.type == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">//用户上线</span></span><br><span class="line">            count++;</span><br><span class="line">            <span class="keyword">if</span>(count == <span class="number">2</span>)start = event.time;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//用户下线</span></span><br><span class="line">            count--;</span><br><span class="line">            <span class="keyword">if</span>(count == <span class="number">1</span>)end = event.time;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(start != <span class="keyword">null</span> &amp;&amp; end != <span class="keyword">null</span>)&#123;</span><br><span class="line">            res.add(<span class="keyword">new</span> Interval(start,end));</span><br><span class="line">            start = <span class="keyword">null</span>;end = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="56-合并区间-扫描线"><a href="#56-合并区间-扫描线" class="headerlink" title="56 合并区间 扫描线"></a>56 合并区间 扫描线</h3><blockquote>
+<p>Input: [[1,4],[4,5]]<br>Output: [[1,5]]</p>
+</blockquote>
+<p>方法1：O(nLogn) 需要O(n)空间<br>1.按起点排序，<br>2.push第一个interval<br>3.for全部interval：<br>  a.不交叉，push<br>  b.交叉,更新栈顶的end</p>
+<p>59ms 27%<br><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Interval&gt; <span class="title">merge</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(intervals==<span class="keyword">null</span>||intervals.size()&lt;<span class="number">2</span>)<span class="keyword">return</span> intervals;</span><br><span class="line">    intervals.sort((a,b)-&gt;a.start-b.start);</span><br><span class="line">    List&lt;Interval&gt; rst = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(Interval interval:intervals)&#123;</span><br><span class="line">        <span class="keyword">if</span>(rst.size()&lt;<span class="number">1</span>)&#123;       </span><br><span class="line">            rst.add(interval);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(rst.get(rst.size()-<span class="number">1</span>).end&gt;=interval.start)&#123;</span><br><span class="line">            <span class="comment">// 不用新建 只需要更新栈顶</span></span><br><span class="line">            <span class="comment">// Interval newInter = rst.get(rst.size()-1);</span></span><br><span class="line">            <span class="comment">// rst.remove(rst.size()-1);</span></span><br><span class="line">            <span class="comment">// newInter.end = Math.max(newInter.end,interval.end);</span></span><br><span class="line">            <span class="comment">// rst.add(newInter);</span></span><br><span class="line">            rst.get(rst.size()-<span class="number">1</span>).end =Math.max(rst.get(rst.size()-<span class="number">1</span>).end,interval.end); </span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            rst.add(interval );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rst;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div></p>
+<p>方法2：分解成<code>start[],end[]</code><br>思想：后一个区间的start(i+1)一定要大于前一个区间的end(i)<br>98% 10ms<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">starts:   1    2    8    15</span><br><span class="line">               i    i+1</span><br><span class="line">ends:     3    6    10    18</span><br><span class="line">          j</span><br></pre></td></tr></table></figure></p>
+<p>add(1,6)<br><code>start[i+1]&gt;end[i]</code> 直到找的第一个start&gt;end <code>add(start[j],end[i])</code> <code>j=i+1</code><br>如果start到了最后一个，这个区间肯定是从上一个区间(j)开始，到end(i)结束<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Interval&gt; <span class="title">merge</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len = intervals.size();</span><br><span class="line">    <span class="keyword">int</span>[] start = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">    <span class="keyword">int</span>[] end = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">        start[i] = intervals.get(i).start;</span><br><span class="line">         end[i] = intervals.get(i).end;</span><br><span class="line">    &#125;</span><br><span class="line">    Arrays.sort(start);</span><br><span class="line">    Arrays.sort(end);</span><br><span class="line">    List&lt;Interval&gt; rst = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>,j=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">        <span class="comment">//关键 当start扫描到最后一个 ，直接建立起最后一个区间</span></span><br><span class="line">        <span class="keyword">if</span>(i==len-<span class="number">1</span>||start[i+<span class="number">1</span>]&gt;end[i])&#123;</span><br><span class="line">            rst.add(<span class="keyword">new</span> Interval(start[j],end[i]));</span><br><span class="line">            <span class="comment">//下一个区间起点</span></span><br><span class="line">            j=i+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法3：原地算法<br>1.按地点降序排序</p>
+<ol start="2">
+<li>a如果不是第一个，并且和前一个可以合并，则合并<br>b push当前</li>
+</ol>
+<h4 id="lt156合并区间"><a href="#lt156合并区间" class="headerlink" title="lt156合并区间"></a>lt156合并区间</h4><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[                     [</span><br><span class="line">  (1, 3),               (1, 6),</span><br><span class="line">  (2, 6),      =&gt;       (8, 10),</span><br><span class="line">  (8, 10),              (15, 18)</span><br><span class="line">  (15, 18)            ]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>O(n log n) 的时间和 O(1) 的额外空间。 原地算法</p>
+<h3 id="57-插入一个区间并合并"><a href="#57-插入一个区间并合并" class="headerlink" title="57 插入一个区间并合并"></a>57 插入一个区间并合并</h3><p>方法1： 将区间插到newInterval.start&gt;interval.start之前的位置，用56的和last比较合并<br>方法2： 分成left+new+right三部分并合并 中间部分取自身和重叠区间的min/max<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Interval&gt; <span class="title">insert</span><span class="params">(List&lt;Interval&gt; intervals, Interval newInterval)</span> </span>&#123;</span><br><span class="line">     List&lt;Interval&gt; left = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">     List&lt;Interval&gt; right = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">     <span class="keyword">int</span> start =newInterval.start;</span><br><span class="line">     <span class="keyword">int</span> end =newInterval.end;</span><br><span class="line">     <span class="keyword">for</span>(Interval interval:intervals)&#123;</span><br><span class="line">         <span class="keyword">if</span>(interval.end&lt;newInterval.start)&#123;</span><br><span class="line">             left.add(interval);</span><br><span class="line">         &#125;<span class="keyword">else</span> <span class="keyword">if</span>(interval.start&gt;newInterval.end)&#123;</span><br><span class="line">             right.add(interval);</span><br><span class="line">         &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">             start = Math.min(start,interval.start);</span><br><span class="line">             end = Math.max(end,interval.end);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     left.add(<span class="keyword">new</span> Interval(start,end));</span><br><span class="line">     left.addAll(right);</span><br><span class="line">    <span class="keyword">return</span> left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/11/algDSbase/" rel="next" title="二叉树、链表基础操作">
+                <i class="fa fa-chevron-left"></i> 二叉树、链表基础操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/11/algBinarySearch/" rel="prev" title="基础二分查找例题">
+                基础二分查找例题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">学习一个技术不要轻易过去，要有技术深度做一个demo</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#interval-max-overLap"><span class="nav-number">1.</span> <span class="nav-text">interval max overLap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt391-数飞机，interval最多同时多少个飞机"><span class="nav-number">2.</span> <span class="nav-text">lt391 数飞机，interval最多同时多少个飞机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt920-meeting-room"><span class="nav-number">3.</span> <span class="nav-text">lt920 meeting room</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个人最多可以参加几个会议"><span class="nav-number">4.</span> <span class="nav-text">一个人最多可以参加几个会议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt919-需要几个会议室"><span class="nav-number">5.</span> <span class="nav-text">lt919 !!!需要几个会议室</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#452-重叠线段？？-射破全部气球需要的最少次数"><span class="nav-number">6.</span> <span class="nav-text">452 重叠线段？？ 射破全部气球需要的最少次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt821时间交集-区间交集-扫描线"><span class="nav-number">7.</span> <span class="nav-text">lt821时间交集 区间交集 扫描线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#56-合并区间-扫描线"><span class="nav-number">8.</span> <span class="nav-text">56 合并区间 扫描线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lt156合并区间"><span class="nav-number">8.1.</span> <span class="nav-text">lt156合并区间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#57-插入一个区间并合并"><span class="nav-number">9.</span> <span class="nav-text">57 插入一个区间并合并</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
