@@ -6,6 +6,8 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 # 安全
 
+## 基于角色->属性的加密算法 外边缘计算的加密算法
+
 ## java MD
 MD家族长128，MD2,MD5 JDK有实现 MD4（电驴)Bouncy Castle
 

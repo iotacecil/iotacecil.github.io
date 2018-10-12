@@ -4,8 +4,36 @@ date: 2018-10-09 19:16:41
 tags: 
 categories: [算法备忘]
 ---
-### 65 Valid Number
+### 65 Valid Number 常用判断是否是小数整数，带e的浮点数
+https://blog.csdn.net/mrzhangjwei/article/details/53409967
+//1.65%非常慢
+```java
+public boolean isNumber(String s) {
+  s = s.trim();
+  if (s.length() == 0 || s.equals("e")  || s.equals(".")) return false;
+  return isFloating(s) || isRegular(s);
+}
 
+// parses non-floating point literals
+private boolean isRegular(String s) {
+  return (s.matches("[+-]?[0-9]+[.]?[0-9]*") || s.matches("[+-]?[0-9]*[.]?[0-9]+"));
+}
+
+// parses floating point literals as defined here: http://en.cppreference.com/w/cpp/language/floating_literal
+private boolean isFloating(String s) {
+  //first one enforces an number after ., the second one enforces a number before .
+  // we want to make sure there's at least one number present.
+  return (s.matches("[+-]?[0-9]*[.]?[0-9]+[eE][-+]?[0-9]+[f]?") || s.matches("[+-]?[0-9]+[.]?[0-9]*[eE][-+]?[0-9]+[f]?"));
+}
+
+//4%
+public boolean isNumber(String s) {
+    if (s.trim().length()==0) return false;
+    String regexp = "^(\\+|-)?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)(e(\\+|-)?[0-9]+)?$";
+    return s.trim().replaceAll(regexp,"").length()==0;
+
+}
+```
 
 ### 无向图 弗洛伊德算法 扩充全部最短路径
 ```java
@@ -39,17 +67,50 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
-### 最大公约数gcd
+### 最大公约数gcd 复杂度O(log(max(a,b)))
 ```java
 public static long gcd(long a, long b) {
     return (b == 0) ? a : gcd(b, a % b);
 }
 ```
 
+
+
 ### 素数
 
 
 ### 正确二分查找的写法
+first/last po
+```java
+int binarySearch(int[] A,int target){
+    if(A.length==0){
+        return -1;
+    }
+    int start = 0;
+    int end = A.length-1;
+    int mid;
+    while(start+1<end){
+        mid = start + (end-start) / 2;
+        if(A[mid]==target){
+            //find last
+            //start = mid;
+            end = mid;
+        }else if(A[mid]<target){
+            start = mid;
+        }else{
+            end = mid;
+        }
+    }
+    //find last 先判断end的if
+    if(A[start] == target){
+        return start;
+    }
+    if(A[end] == target){
+        return end;
+    }
+    return -1;
+}
+```
 1.查找范围是 [0,len-1]
 [0]：l=0,r=1-1，while(l==r)的时候应该继续
 ```java
@@ -125,7 +186,7 @@ public int[] searchRange(int[] a, int k) {
 }
 ```
 
-### lower_bound
+### lower_bound lc35
 二分搜索
 lowerBound 
 ```java

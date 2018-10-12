@@ -2,6 +2,7 @@
 title: 一些DFS,BFS可以变成DP,BB的计数题
 date: 2018-09-09 15:22:54
 tags:
+categories: [算法备忘]
 ---
 ### 784 大小写字母的permutation
 `'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快

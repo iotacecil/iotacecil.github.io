@@ -21,6 +21,16 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+
+
+### 线段上格点的个数
+> P1=(1,11) P2=(5,3)
+> out: 3 (2,9) (3,7) (4,5)
+
+答案是gcd(|x1-x2|,|y1-y2|)-1
+最大公约数：共有约数中最大的一个
+x相差4，y相差8 求分成（/）最多多少份，x,y都是整数
+
 ### 火车编组 1,2,3,4不可能的出栈顺序 ACM列车长的烦恼
 >3节车厢，按照1，2，3依次入轨编组，可以在左边形成1 2 3，1 3 2，2 1 3，2 3 1，321。
 >问1-2-3-4能否编程4，1，3，2
@@ -52,36 +62,7 @@ public static void main(String[] args) {
 > 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
 > in : 4 1 1 4 out: 18
 
-### 二叉树深度
-```java
-public int maxDepth(TreeNode root) {
-     if(root== null)return 0;
-    return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
-}
-```
-dfs
-```java
 
-```
-bfs
-```java
-public static int maxDepth(TreeNode root) {
-   if(root == null)return 0;
-    Deque<TreeNode> que = new LinkedList<>();
-    que.add(root);
-    int cnt = 0;
-    while (!que.isEmpty()){
-        int size = que.size();
-        while (size-->0){
-            TreeNode cur = que.poll();
-            if(cur.left!=null)que.add(cur.left);
-            if(cur.right!=null)que.add(cur.right);
-        }
-        cnt++;
-    }
-    return cnt;
-}
-```
 
 ### lc84直方图中的最大矩形poj2559
 ![histo1.jpg](/images/histo1.jpg)
@@ -487,27 +468,7 @@ nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 ### 矩阵链乘法O(n^3)的dp
  
 
-### interval max overLap
-https://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/
-```
- arr[]  = {1, 2, 10, 5, 5}
- dep[]  = {4, 5, 12, 9, 12}
 
-Below are all events sorted by time.  Note that in sorting, if two
-events have same time, then arrival is preferred over exit.
- Time     Event Type         Total Number of Guests Present
-------------------------------------------------------------
-   1        Arrival                  1
-   2        Arrival                  2
-   4        Exit                     1
-   5        Arrival                  2
-   5        Arrival                  3    // Max Guests
-   5        Exit                     2
-   9        Exit                     1
-   10       Arrival                  2 
-   12       Exit                     1
-   12       Exit                     0 
-```
 
 ### 最大值为k的不重叠子数组的长度和？??
 https://www.geeksforgeeks.org/maximum-sum-lengths-non-overlapping-subarrays-k-max-element/
@@ -2524,6 +2485,39 @@ private boolean dfs(int[][] graph,int v){
 #### 886 给出dislike边集，能不能分成2组，组里没有互相讨厌的人
 边集->邻接表->二分图
 
+边集->邻接矩阵->二分图dfs染色
+```java
+public boolean possibleBiparitition(int N,int[][] dislikes){
+    int[][] graph = new int[N][N];
+    //边集->无向图 邻接矩阵
+    for(int[] d:dislikes){
+        graph[d[0]-1][d[1]-1] = 1;
+        graph[d[1]-1][d[0]-1] = 1;
+    }
+    int[] group = new int[N];
+    for (int i = 0; i < N; i++) {
+        if(group[i] == 0&& !dfs2d(graph,group,i,1))return false;
+    }
+    return true;
+}
+//可不可以分到g组
+private boolean dfs2d(int[][] graph,int[] group,int idx,int g){
+    group[idx] = g;
+    //行是邻边
+    for (int i = 0; i < graph.length; i++) {
+        if(graph[idx][i] == 1){
+            if(group[i] == g){
+             return false;
+            }
+            if(group[i] == 0&&!dfs2d(graph,group,i,-g))return false;
+
+        }
+    }
+    return true;
+}
+```
+
+
 
 ### 494 在数字中间放正负号使之==target
 递归的2种写法另一种void用全局变量累加
@@ -3214,6 +3208,19 @@ board[i][j]='0';
 ### 后缀树 对字典树路径压缩，一层多个字符 生成需要O(N^2)
 
 ### 后缀数组 A[]后缀的起始位置
+//Memory Limit Exceeded
+```java
+private final String[] suffixes;
+private final int N;
+public SuffixArray(String s){
+    N = s.length();
+    suffixes = new String[N];
+    for (int i = 0; i < N; i++) {
+        suffixes[i] = s.substring(i);
+    }
+    Arrays.sort(suffixes);
+}
+```
 "alohomora"
 1.按字典序排序所有可能的后缀S[0]="a",[1]="alohomora",[2]="homora"..[len-1]="ra"
 2.A[i]是S[A[i]]的索引,是后缀的真实起始位置.A[i]是i包括i位以后的后缀

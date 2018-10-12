@@ -8,7 +8,7 @@ category: [JVMlinux常用备注nginxredis配置]
 ```sh
 schtasks  /create  /tn  autoPush /tr  "cmd /c
 D:\iotacecil.github.io\pushBlog\_pushBlog.bat"  /sc  DAILY /st  10:31:
-00^
+00
 # _pushBlog.bat
 call D:
 call cd D:\iotacecil.github.io
@@ -17,12 +17,10 @@ call hexo g -d
 call git fetch
 call git merge
 call git add .
-call git commit -m"windows×Ô¶¯Ìá½»bat"
+call git commit -m"windows自动提交定时任务"
 call git push
 #pause
 # call chcp 437
-
-
 ```
 
 ### javaC 编码
