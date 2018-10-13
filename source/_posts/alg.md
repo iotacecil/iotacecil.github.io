@@ -21,7 +21,21 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 取模和取余rem
+java的`%`取余 python 取模
+求 整数商： c = a/b;
 
+计算模或者余数： r = a - c*b.
+例如：计算-7 Mod 4
+```python
+>>> -7%4
+1
+```
+那么：a = -7；b = 4；
+
+第一步：求整数商c，如进行求模运算c = -2（向负无穷方向舍入），求余c = -1（向0方向舍入）；
+
+第二步：计算模和余数的公式相同，但因c的值不同，求模时r = 1，求余时r = -3。
 
 ### 线段上格点的个数
 > P1=(1,11) P2=(5,3)

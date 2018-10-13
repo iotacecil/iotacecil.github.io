@@ -4,6 +4,22 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 取模和取余rem
+java的`%`取余 python 取模
+求 整数商： c = a/b;
+
+计算模或者余数： r = a - c*b.
+例如：计算-7 Mod 4
+```python
+>>> -7%4
+1
+```
+那么：a = -7；b = 4；
+
+第一步：求整数商c，如进行求模运算c = -2（向负无穷方向舍入），求余c = -1（向0方向舍入）；
+
+第二步：计算模和余数的公式相同，但因c的值不同，求模时r = 1，求余时r = -3。
+
 ### 获取当前目录 System.getProperty()参数大全
 `System.out.println(System.getProperty("user.dir"));`
 

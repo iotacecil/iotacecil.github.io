@@ -15,7 +15,36 @@ categories: [数据库dockerHadoop微服务]
 不确定：
 100w个Integer B+树需要多少层
 
+### inodb
 
+后台AIO 线程数
+```sql
+mysql> show variables like 'innodb_%io_threads'\G
+*************************** 1. row ***************************
+Variable_name: innodb_read_io_threads
+        Value: 4
+*************************** 2. row ***************************
+Variable_name: innodb_write_io_threads
+        Value: 4
+2 rows in set, 1 warning (0.01 sec)
+```
+
+读线程id小于写线程id
+```sql
+mysql> show engine innodb status\G;
+FILE I/O
+--------
+I/O thread 0 state: wait Windows aio (insert buffer thread)
+I/O thread 1 state: wait Windows aio (log thread)
+I/O thread 2 state: wait Windows aio (read thread)
+I/O thread 3 state: wait Windows aio (read thread)
+I/O thread 4 state: wait Windows aio (read thread)
+I/O thread 5 state: wait Windows aio (read thread)
+I/O thread 6 state: wait Windows aio (write thread)
+I/O thread 7 state: wait Windows aio (write thread)
+I/O thread 8 state: wait Windows aio (write thread)
+I/O thread 9 state: wait Windows aio (write thread)
+```
 
 磁盘最小单位扇区512字节
 文件系统最小单位 块 4k
