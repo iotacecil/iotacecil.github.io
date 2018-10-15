@@ -18,7 +18,22 @@ nums2 = [3, 4]
 
 ### 81
 
-### 数组去重 
+### lc26有序数组去重 双指针
+```java
+public int removeDuplicates(int[] nums) {
+    if(nums.length == 0)return 0;
+    // 关键
+    int cnt = 0;
+    for(int i = 1;i<nums.length;i++){
+        if(nums[i] != nums[cnt]){
+            // 关键
+            nums[++cnt] = nums[i];
+        }
+    }
+    // 关键
+    return cnt+1;
+}
+```
 
 ### 88合并排序数组
 

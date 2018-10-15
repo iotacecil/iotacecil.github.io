@@ -21,6 +21,159 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 401 二进制手表
+上排1,2,4,8表示小时 下排1,2,4,8,16,32表示分钟
+上1,2 下 16，8，1 表示3:25
+>Input: n = 1 两了几个led灯 所有可能的时间
+Return: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
+
+计算小时和分钟里有多少个1
+```java
+public List<String> readBinaryWatch(int num){
+    List<String> times = new ArrayList<>();
+    for (int h = 0; h < 12 ; h++) {
+        for (int m = 0; m < 60 ; m++) {
+            if(Integer.bitCount((h<<6) + m) == num){
+                times.add(String.format("%d:%02d",h,m));
+            }
+        }
+    }
+    return times;
+}
+```
+
+### 汉明重量 Hamming weight 32位int有多少个1
+>Input: 11
+>Output: 3
+>Integer 11 has binary representation 00000000000000000000000000001011
+
+>X与X-1相与得到的最低位永远是0
+
+| Expression | Value |
+| ------| ------ |
+| X | 0 1 0 0 0 1 0 0 0 1 0 0 0 0 |
+| X-1 | 0 1 0 0 0 1 0 0 0 0 1 1 1 1 |
+|X & (X-1) | 0 1 0 0 0 1 0 0 0 0 0 0 0 0 |
+
+### 477 全部汉明距离`Integer.bitCount(x ^ y)`
+> Input: 4, 14, 2
+> Output: 6 
+> HammingDistance(4, 14) + HammingDistance(4, 2) + HammingDistance(14, 2) = 2 + 2 + 2 = 6.
+
+4  = 0100
+14 = 1110
+2  = 0010
+0x3+2*1+2*1+1*2
+
+```java
+public int totalHammingDistance(int[] nums){
+    int total = 0,n = nums.length;
+    for (int i = 0; i < 32 ; i++) {
+        int bitCnt = 0;
+        //有几个num这个位是1
+        for (int j = 0; j < n ; j++) {
+            bitCnt += (nums[j] >> i) & 1;
+        }
+        total += bitCnt*(n-bitCnt);
+    }
+    return total;
+}
+```
+
+
+
+### 338 0~n每个数字有几个1位 O(n)复杂度
+>Input: 5
+Output: [0,1,1,2,1,2]
+
+```java
+public int[] countBits(int num){
+    int[] f = new int[num + 1];
+    for (int i = 1; i <= num ; i++) {
+        f[i] = f[i >> 1] + (i & 1);
+    }
+    return f;
+}
+```
+
+### 220 数组中是否有相差<=t,idx差<=k 的元素
+
+### 219 是否有重复元素 下标相差<=k
+>Input: nums = [1,2,3,1], k = 3
+Output: true
+
+放进一个FIFO大小为(k+1) 相差k 的set，当有add失败的时候就true
+
+### 442  `1 ≤ a[i] ≤ n` 找到所有出现2次的元素 O(1) 空间
+> some elements appear twice and others appear once.
+> Input:[4,3,2,7,8,2,3,1]
+> Output:[2,3]
+
+```
+4->[4,3,2,-7,8,2,3,1] 
+3->[4,3,-2,-7,8,2,3,1]
+2->[4,-3,-2,-7,8,2,3,1]
+7->[4,-3,-2,-7,8,2,-3,1]
+8->[4,-3,-2,-7,8,2,-3,-1]
+2->[4,[3],-2,-7,8,2,-3,-1]
+3->[4,[3],[2],-7,8,2,-3,-1]
+1->[-4,[3],[2],-7,8,2,-3,-1]
+```
+```java
+public List<Integer> findDuplicates(int[] nums){
+    List<Integer> res = new ArrayList<>();
+    for(int i = 0;i < nums.length;i++){
+        int idx = Math.abs(nums[i]) - 1;
+        if(nums[idx] < 0){
+            res.add(Math.abs(idx) + 1);
+        }
+        nums[idx] = -nums[idx];
+    }
+    return res;
+}
+```
+
+### lt 803 建筑物之间的最短距离
+```
+盖房子，在最短的距离内到达所有的建筑物。
+给定三个建筑物(0,0),(0,4),(2,2)和障碍物(0,2):
+
+    1 - 0 - 2 - 0 - 1
+    |   |   |   |   |
+    0 - 0 - 0! - 0 - 0
+    |   |   |   |   |
+    0 - 0 - 1 - 0 - 0
+点(1,2)是建造房屋理想的空地，因为3+3+1=7的总行程距离最小。所以返回7。
+```
+
+### lt640 字符串 S 和 T, 判断他们是否只差一步编辑 lc161
+```java
+public boolean isOneEditDistance(String s, String t) {
+    int sl = s.length();
+    int tl = t.length();
+    if(s.equals(t))return false;
+    if(Math.abs(sl-tl)>1)return false;
+    int idx = 0;
+    int len = Math.min(sl,tl);
+    for(int i = 0; i < len; i++){
+        idx = i+1;// >=1
+        // 前面已经相等了
+        if(s.charAt(i) != t.charAt(i)){
+            // 比较两个字符串的a, b的index+1, index+1 位以后是否相等
+            // 或者 index+1, index 是否相等，
+            // 或者index, index+1是否相等
+            return s.substring(idx).equals(t.substring(idx)) || 
+            s.substring(idx).equals(t.substring(idx-1)) || 
+            s.substring(idx-1).equals(t.substring(idx));
+        }
+    }
+    return true;
+}
+```
+
+### 72 编辑距离
+
+
 ### 取模和取余rem
 java的`%`取余 python 取模
 求 整数商： c = a/b;
@@ -3030,16 +3183,7 @@ int majorityElement(vector<int> & nums){
 7.分治???
 
 ---
-### 80 数组每个元素只保留<=2次
-cnt表示插入位置，i用于遍历 
-```java
-int cnt=2;
-for(int i =2;i<nums.length;i++){
-    if(nums[i]!=nums[cnt-2]){
-        nums[cnt++] = nums[i];
-    }
-}
-```
+
 
 ### 节点是随机变量的有向无环图=贝叶斯网络BN
 求联合概率会用到最小生成树

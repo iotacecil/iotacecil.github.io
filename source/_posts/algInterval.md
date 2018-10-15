@@ -3,6 +3,15 @@ title: algInterval
 date: 2018-10-11 13:37:14
 tags:
 ---
+### 539 时间diff
+>Input: ["23:59","00:00"]
+Output: 1
+
+最快的方法：9ms
+
+
+1.排序 变成一个循环链表
+
 ### interval max overLap
 https://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/
 ```

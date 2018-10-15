@@ -4,6 +4,10 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p01_start_stop_thread.html
+
+### pandas 行求和
+`df['Col_sum'] = df.apply(lambda x: x.sum(), axis=1)`
 
 ### 矩阵乘法
 ```python

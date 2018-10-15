@@ -4,6 +4,8 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+https://blog.csdn.net/javazejian/article/details/72828483
+
 #### ThreadLocal<T> 
 可以看成是 Map<Thread,T> 特定于该线程的值
 
