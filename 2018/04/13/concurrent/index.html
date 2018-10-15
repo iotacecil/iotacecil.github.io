@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能加载在一个cache line中。当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache">
+<meta name="description" content="https://blog.csdn.net/javazejian/article/details/72828483 ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="concurrent并发多线程">
 <meta property="og:url" content="http://iotaa.xyz/2018/04/13/concurrent/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能加载在一个cache line中。当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache">
+<meta property="og:description" content="https://blog.csdn.net/javazejian/article/details/72828483 ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/mesi.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/jmeter.jpg">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="http://iotaa.xyz/images/countdown.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/threadstate.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/suspend.jpg">
-<meta property="og:updated_time" content="2018-10-11T01:21:46.127Z">
+<meta property="og:updated_time" content="2018-10-15T01:10:25.010Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="concurrent并发多线程">
-<meta name="twitter:description" content="ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能加载在一个cache line中。当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache">
+<meta name="twitter:description" content="https://blog.csdn.net/javazejian/article/details/72828483 ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能">
 <meta name="twitter:image" content="http://iotaa.xyz/images/mesi.jpg">
 
 
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-11T09:21:46+08:00">
-                2018-10-11
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-15T09:10:25+08:00">
+                2018-10-15
               </time>
             
           </span>
@@ -400,7 +400,8 @@
       
 
       
-        <h4 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal<t></t></h4><p>可以看成是 Map&lt;Thread,T&gt; 特定于该线程的值</p>
+        <p><a href="https://blog.csdn.net/javazejian/article/details/72828483" target="_blank" rel="noopener">https://blog.csdn.net/javazejian/article/details/72828483</a></p>
+<h4 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal<t></t></h4><p>可以看成是 Map&lt;Thread,T&gt; 特定于该线程的值</p>
 <h4 id="Cache伪共享：多线程读同一cache-line的不同变量，变量无关却要线程同步。"><a href="#Cache伪共享：多线程读同一cache-line的不同变量，变量无关却要线程同步。" class="headerlink" title="Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。"></a>Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。</h4><p>X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）<br>则可能加载在一个cache line中。<br>当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache line1和2。<br>当线程1写a则2上的cache line变成Invalid，当2要读b需要重新从内存中读。<br><strong>本来无关的两个线程，并行变成串行。</strong></p>
 <ul>
 <li>解决方法：<br>将a,b分到不同的cache line 采用<code>@Contended</code></li>
