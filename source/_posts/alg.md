@@ -97,6 +97,15 @@ public int[] countBits(int num){
 ```
 
 ### 220 数组中是否有相差<=t,idx差<=k 的元素
+>Input: nums = [1,2,3,1], k = 3, t = 0
+Output: true
+
+2.桶
+
+
+1.40% 用容量k的TreeSet,超过k删除最左
+判断能否和ceiling合floor<=t
+如果不能 放入treeset等待
 
 ### 219 是否有重复元素 下标相差<=k
 >Input: nums = [1,2,3,1], k = 3
@@ -449,9 +458,6 @@ public int maxChunksToSorted(int[] arr) {
 ```
 
 ### 768
-
-
-
 
 
 
@@ -828,7 +834,7 @@ permutation的字典序
  3.保证后缀最小（翻转？）
 
 
-### 636
+### 636 单核cpu函数调用栈
 日志是具有以下格式的字符串：function_id：start_or_end：timestamp。例如："0:start:0" 表示函数 0 从 0 时刻开始运行。"0:end:0" 表示函数 0 在 0 时刻结束。
 
 函数的独占时间定义是在该方法中花费的时间，调用其他函数花费的时间不算该函数的独占时间。
