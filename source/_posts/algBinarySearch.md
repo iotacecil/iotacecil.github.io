@@ -22,18 +22,31 @@ nums2 = [3, 4]
 ```java
 public int removeDuplicates(int[] nums) {
     if(nums.length == 0)return 0;
-    // 关键
-    int cnt = 0;
+    int cnt = 1;
     for(int i = 1;i<nums.length;i++){
-        if(nums[i] != nums[cnt]){
-            // 关键
-            nums[++cnt] = nums[i];
+        if(nums[i] != nums[cnt-1]){
+            nums[cnt++] = nums[i];
         }
     }
-    // 关键
-    return cnt+1;
+    return cnt;
 }
 ```
+
+### 80 数组每个元素只保留<=2次
+cnt表示插入位置，i用于遍历 
+```java
+public int removeDuplicates(int[] nums) {
+    if(nums.length < 2)return nums.length;
+    int cnt = 2;
+    for(int i =2;i<nums.length;i++){
+        if(nums[cnt-2] != nums[i]){
+            nums[cnt++] = nums[i];
+        }
+    }
+    return cnt;
+}
+```
+
 
 ### 88合并排序数组
 

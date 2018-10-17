@@ -309,6 +309,7 @@ There was an unexpected error (type=Internal Server Error, status=500).
 
 
 ### 5.集成Redis
+https://github.com/xetorthio/jedis
 ```xml
 <dependency>
     <groupId>redis.clients</groupId>
@@ -323,18 +324,19 @@ There was an unexpected error (type=Internal Server Error, status=500).
 ```
 配置：
 ```
-redis.host=192.168.3.109
+redis.host=10.1.18.133
 redis.port=6379
 redis.timeout=3
 redis.password=123456
 redis.poolMaxTotal=10
 redis.poolMaxIdle=10
+spring.redis.pool.max-wait=3
 ```
 新建redis包
-配置类
+配置类`RedisConfig`
 ```java
 @Component
-//配置里的前缀
+//获取配置文件 配置里的前缀 
 @ConfigurationProperties(prefix="redis")
 public class RedisConfig {
     private String host;
@@ -372,6 +374,7 @@ public class RedisService{
 ```
 
 查看源码找JedisPool中的timeout是什么单位
+redis 默认6个库从0开始
 ```java
 JedisPool jp = new JedisPool(poolConfig, redisConfig.getHost(), redisConfig.getPort(),redisConfig.getTimeout()*1000, redisConfig.getPassword(), 0);
 //JedisPool.java
@@ -502,6 +505,8 @@ public <T> boolean set(String key,T value){
             returnToPool(jedis);
         }
 }
+```
+```java
 //任意类型转化成字符串
 import com.alibaba.fastjson.JSON;
 private <T> String beanToString(T value){
@@ -541,7 +546,7 @@ public class RedisService{
         }else if(clazz == long.class || clazz == Long.class) {
             return  (T)Long.valueOf(str);
         }else {
-            //fastJson 其他List类型要再写
+            //fastJson 只支持了bean类型 其他List类型要再写
             return JSON.toJavaObject(JSON.parseObject(str), clazz);
         }
 
@@ -594,7 +599,7 @@ public Result<String> redisGet() {
     return Result.success(name);
 }
 ```
-报错：
+报错：jedispoll循环引用 空指针
 > [redis.clients.jedis.JedisPool]: Circular reference involving containing bean 'redisService' - consider declaring the factory method as static for independence from its containing instance. Factory method 'JedisFactory' threw exception; nested exception is java.lang.NullPointerException
 
 因为Service里注入了pool
@@ -640,20 +645,44 @@ public Result<Boolean> redisSet() {
 127.0.0.1:6379> get key3
 "{\"id\":1,\"name\":\"1111\"}"
 
-#### 模板模式：封装缓存key，加上前缀
+#### 模板模式`[接口<-抽象类<-实现类]`：封装缓存key，加上前缀 
 优化：将key加上Prefix，按业务模块区分缓存的key
+`KeyPrefix` 接口 `BasePrefix` 抽象类 `UserKey` `OrderKey`等模块实现类
+效果：在不同的controllor模块调用service时传入模块ID
+controller使用:classname+prefix+key
+redis效果：`7) "UserKey:id1"`
+`UserKey.getById`
+```java
+ @RequestMapping("/redis/get")
+    @ResponseBody
+    public Result<User> redisGet() {
+        User  user  = redisService.get(UserKey.getById, "1", User.class);
+        return Result.success(user);
+    }
+    
+    @RequestMapping("/redis/set")
+    @ResponseBody
+    public Result<Boolean> redisSet() {
+        User user  = new User();
+        user.setId(1);
+        user.setName("1111");
+        //UserKey:id1
+        redisService.set(UserKey.getById,"1",user);
+        return Result.success(true);
+    }
+```
 接口：
 ```java
-public interface Prefix(){
+public interface KeyPrefix(){
     //有效期
     public int expireSeconds();
     //前缀
     public String getPrefix(); 
 }
 ```
-实现的抽象类 防止被创建
+实现的`抽象类` 防止被创建
 ```java
-public abstract class BasePrefix implements Prefix{
+public abstract class BasePrefix implements KeyPrefix{
     private int expireSeconds;
     private String prefix;
     //0表示永不过期
@@ -684,34 +713,18 @@ public class UserKey extends BasePrefix{
 ```java
 public class OrderKey extends BasePrefix
 ```
-controller使用:classname+prefix+key
-```java
- @RequestMapping("/redis/get")
-    @ResponseBody
-    public Result<User> redisGet() {
-        User  user  = redisService.get(UserKey.getById, "1", User.class);
-        return Result.success(user);
-    }
-    
-    @RequestMapping("/redis/set")
-    @ResponseBody
-    public Result<Boolean> redisSet() {
-        User user  = new User();
-        user.setId(1);
-        user.setName("1111");
-        //UserKey:id1
-        redisService.set(UserKey.getById,"1",user);
-        return Result.success(true);
-    }
-```
+
 修改Service中的get和set
 
 ```java
+/**
+ * 获取单个对象
+ */
 public<T> T get(Prefix prefix,String key,Class<T> clazz){
     Jedis jedis = null;
     try{
         jedis = jedisPool.getResource();
-    
+        //真正写到数据库的key
         String prefixKey = prefix.getPrefix()+key;
         String value =  jedis.get(prefixKey);
         T t = stringToBean(value,clazz);
@@ -813,7 +826,7 @@ public <T> Long decr(KeyPrefix prefix, String key) {
 }
 ```
 
-### 6.实现登陆
+### 6.实现登陆 数据库设计 2次MD5 JSR303参数校验 全局异常 分布式session
 数据库设计
 ```sql
 create table `miaosha_user`(
@@ -829,7 +842,7 @@ create table `miaosha_user`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-密码用户传给数据库先MDB(明文+salt)
+用户端先MD5(明文+固定salt)
 服务端存再一次md5(明文+随机salt)
 ```xml
 <dependency>
@@ -842,7 +855,8 @@ create table `miaosha_user`(
     <version>3.6</version>
 </dependency>
 ```
-新建util包MD5加密
+新建util包使用apacheMD5加密
+前端第一次salt是可以看到的 隐藏只能activeX控件之类的
 ```java
 import org.apache.commons.codec.digest.DigestUtils;
 public static String md5(String src){
@@ -875,15 +889,21 @@ public static void main(String[] args) {
 
 在controller添加path
 ```java
+@Controller
+@RequestMapping("/login")
+public class LoginController {
+
+    private static Logger log = LoggerFactory.getLogger(LoginController.class);
 @RequestMapping("/login")
     public String toLogin() {
         return "login";
     }
+}
 ```
 
-登陆页面
+##### 登陆页面 用bootstrap的css，jq的表单验证，layer的弹窗，md5加密
 
-登陆html页面：
+登陆html页面引入：
 ```html
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -946,26 +966,16 @@ jquery validate:
 http://www.runoob.com/jquery/jquery-plugin-validate.html
 ```js
 function login(){
+    // 在键盘按下并释放及提交后验证提交表单
     $("#loginForm").validate({
-        submitHandler:function(form){doLogin()}
+        submitHandler:function(form){
+            //如果成功 异步提交表单
+            doLogin()
+        }
     })
 ```
-layer.js弹窗
-http://layer.layui.com/
-common.js
-```js
-function g_showLoading(){
-    var idx = layer.msg('处理中...', {icon: 16,shade: [0.5, '#f5f5f5'],scrollbar: false,offset: '0px', time:100000}) ;  
-    return idx;
-}
-```
-在js中设置salt
-```js
-var g_passsword_salt="abcd1234"
-```
-
 使用ajax异步提交
-```java
+```js
 function doLogin(){
     //每次提交loading框
     g_showLoading()
@@ -999,6 +1009,21 @@ function doLogin(){
     })
 }
 ```
+layer.js弹窗
+http://layer.layui.com/
+common.js
+```js
+function g_showLoading(){
+    var idx = layer.msg('处理中...', {icon: 16,shade: [0.5, '#f5f5f5'],scrollbar: false,offset: '0px', time:100000}) ;  
+    return idx;
+}
+```
+在js中设置salt
+```js
+var g_passsword_salt="abcd1234"
+```
+
+#### 参数校验
 
 后台添加vo接收前端数据的类：
 ```java
@@ -1011,12 +1036,18 @@ public class LoginVo {
 添加errormessage
 CodeMsg.java
 ```java
-PASSWORD_EMPTY(500211, "登录密码不能为空"),
-MOBILE_EMPTY(500212, "手机号不能为空"),
-MOBILE_ERROR(500213, "手机号格式错误"),
-MOBILE_NOT_EXIST(500214, "手机号不存在"),
-PASSWORD_ERROR(500215, "密码错误");
+//登录模块 5002XX
+public static CodeMsg SESSION_ERROR = new CodeMsg(500210,"Session不存在或者已经失效");
+public static CodeMsg PASSWORD_ERROR = new CodeMsg(500211,"登陆密码不能为空");
+public static CodeMsg MOBILE_EMPTY = new CodeMsg(500212,"手机号不能为空");
+public static CodeMsg SESSION_ERROR = new CodeMsg(500210,"Session不存在或者已经失效");
+public static CodeMsg PASSWORD_EMPTY = new CodeMsg(500211,"登陆密码不能为空");
+public static CodeMsg MOBILE_EMPTY = new CodeMsg(500212,"手机号不能为空");
+public static CodeMsg MOBILE_ERROR = new CodeMsg(500213,"手机号格式错误");
+public static CodeMsg MOBILE_NOT_EXIST = new CodeMsg(500214,"手机号不存在");
+public static CodeMsg PASSWORD_ERROR = new CodeMsg(500215,"密码错误");
 ```
+
 
 ```java
 //添加log 可以查看前端传过来的form数据是什么
@@ -1040,6 +1071,7 @@ public Result<Boolean> doLogin(LoginVo loginVo) {
         return Result.error(CodeMsg.MOBILE_ERROR);
     }
 ```
+正则手机号
 手机号验证类ValidatorUtil.java
 ```java
 import java.util.regex.Matcher;
@@ -1082,6 +1114,7 @@ public class MiaoshaUser {
 public interface MiaoshaUserDao{
     @Select（"select * from miaosha user where id = #{id}")
     public MiaoshaUser getById(@Param("id") long id);
+    
 }
 ```
 

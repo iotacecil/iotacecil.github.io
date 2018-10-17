@@ -21,6 +21,192 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+
+### 532 数组中有几个相差k的pair
+> 输入: [3, 1, 4, 1, 5], k = 2
+输出: 2
+解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
+尽管数组中有两个1，但我们只应返回不同的数对的数量。
+
+set的解法33% //todo比双指针慢
+
+### 220 数组中是否有相差<=t,idx差<=k 的元素
+>Input: nums = [1,2,3,1], k = 3, t = 0
+Output: true
+
+2.桶
+
+
+1.40% 用容量k的TreeSet,超过k删除最左
+判断能否和ceiling合floor<=t
+如果不能 放入treeset等待
+
+### 219 是否有重复元素 下标相差<=k
+>Input: nums = [1,2,3,1], k = 3
+Output: true
+
+放进一个FIFO大小为(k+1) 相差k 的set，当有add失败的时候就true
+
+### 442  `1 ≤ a[i] ≤ n` 找到所有出现2次的元素 O(1) 空间
+> some elements appear twice and others appear once.
+> Input:[4,3,2,7,8,2,3,1]
+> Output:[2,3]
+
+```
+4->[4,3,2,-7,8,2,3,1] 
+3->[4,3,-2,-7,8,2,3,1]
+2->[4,-3,-2,-7,8,2,3,1]
+7->[4,-3,-2,-7,8,2,-3,1]
+8->[4,-3,-2,-7,8,2,-3,-1]
+2->[4,[3],-2,-7,8,2,-3,-1]
+3->[4,[3],[2],-7,8,2,-3,-1]
+1->[-4,[3],[2],-7,8,2,-3,-1]
+```
+```java
+public List<Integer> findDuplicates(int[] nums){
+    List<Integer> res = new ArrayList<>();
+    for(int i = 0;i < nums.length;i++){
+        int idx = Math.abs(nums[i]) - 1;
+        if(nums[idx] < 0){
+            res.add(Math.abs(idx) + 1);
+        }
+        nums[idx] = -nums[idx];
+    }
+    return res;
+}
+```
+
+### 769 最多能排序的块 0-n的排列切割，块排序后连接是排序的原数组 
+>输入: arr = [1,0,2,3,4]
+输出: 4
+解释:
+我们可以把它分成两块，例如 [1, 0], [2, 3, 4]。
+然而，分成 [1, 0], [2], [3], [4] 可以得到最多的块数。
+
+```
+idx:0 1 2 3 4
+arr:1 0 2 3 4
+max:0 1 2 3 4
+当前index<当前max 表示可以划分成一组，==max表示要换下一组
+```
+
+```java
+public int maxChunksToSorted(int[] arr) {
+    int res = 0;
+    for(int i =0,max = 0;i<arr.length;i++){
+        if(i==(max=Math.max(max,arr[i])))
+            res++;
+    }
+    return res;
+}
+```
+
+### 915 Max(left)<=Min(right)
+画折线图，当前`A[i]<left` 则把切分线抬到`globalMax`
+![lc915](/images/lc915.jpg)
+7ms 60%
+```java
+public int partitionDisjoint(int[] A) {
+    int n = A.length;
+    int leftMax = A[0];
+    int global = leftMax;
+    int parti = 0;
+    for(int i = 1;i<n;i++){
+        if(leftMax>A[i]){
+            leftMax = global;
+            parti = i;
+        }else global = Math.max(global,A[i]);
+    }
+    return parti+1;
+}
+```
+
+### 768 最多能排序的块 重复元素
+> 输入: arr = [2,1,3,4,4]
+输出: 4
+解释:
+我们可以把它分成两块，例如 [2, 1], [3, 4, 4]。
+然而，分成 [2, 1], [3], [4], [4] 可以得到最多的块数。 
+arr的长度在[1, 2000]之间。
+arr[i]的大小在[0, 10**8]之间。
+
+最快的100%： 只构造后缀min数组,线性扫描更新max,保证`leftMax<Rmin`的划分
+
+```java
+public int maxChunksToSorted100(int[] arr) {
+    int n = arr.length;
+    int[] minOfRight = new int[n];
+    minOfRight[n - 1] = arr[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+        minOfRight[i] = Math.min(minOfRight[i + 1], arr[i]);
+    }
+    int res = 0;
+    int max = Integer.MIN_VALUE;
+    for (int i = 0; i < n - 1; i++) {
+        max = Math.max(max,arr[i]);
+        // 等于 重复元素 去掉=就是第一题 68%
+        if (max <= minOfRight[i + 1]) res++;
+    }
+    return res + 1;
+}
+```
+
+
+56%：前缀max数组 后缀min数组
+left`[2,1]` right`[3,4,4]`
+`leftMax<rightMin`的时候
+```
+arr     [2, 1, 3, 4, 4]
+
+比较切分位置0~n-1：[0:i][i+1:n-1]
+leftMax    [2, !2, !3, !4, 4] 
+rightMin[1, 1, !3, !4, !4]
+```
+
+```java
+public int maxChunksToSorted(int[] arr) {
+    int n = arr.length;
+    int[] maxLeft = new int[n];
+    int[] minRight = new int[n];
+    maxLeft[0] = arr[0];
+    for (int i = 1; i < n; i++) {
+        maxLeft[i] = Math.max(maxLeft[i-1],arr[i]);
+    }
+    minRight[n-1] = arr[n-1];
+    for (int i = n-2; i >= 0 ; i--) {
+        minRight[i] = Math.min(minRight[i+1],arr[i]);
+    }
+
+    int res = 0;
+    for (int i = 0; i < n-1; i++) {
+        if(maxLeft[i] <= minRight[i+1]){
+            res++;
+        }
+    }
+    return res+1;
+}
+```
+
+
+
+44%拷贝一个数组排序，做累加,相等则可以划分
+`[2,1 |,3 |,4 |,4]`
+`[1,2 |,3 |,4 |,4]`
+```java
+public int maxChunksToSorted(int[] arr) {
+    int sum1 =0,sum2 =0,res = 0;
+    int[] copy = arr.clone();
+    for(int i =0;i<arr.length;i++){
+        sum1 += copy[i];
+        sum2 += arr[i];
+        if(sum1 == sum2)ans++;
+    }
+    return ans;
+}
+```
+
+
+
 ### 401 二进制手表
 上排1,2,4,8表示小时 下排1,2,4,8,16,32表示分钟
 上1,2 下 16，8，1 表示3:25
@@ -96,51 +282,7 @@ public int[] countBits(int num){
 }
 ```
 
-### 220 数组中是否有相差<=t,idx差<=k 的元素
->Input: nums = [1,2,3,1], k = 3, t = 0
-Output: true
 
-2.桶
-
-
-1.40% 用容量k的TreeSet,超过k删除最左
-判断能否和ceiling合floor<=t
-如果不能 放入treeset等待
-
-### 219 是否有重复元素 下标相差<=k
->Input: nums = [1,2,3,1], k = 3
-Output: true
-
-放进一个FIFO大小为(k+1) 相差k 的set，当有add失败的时候就true
-
-### 442  `1 ≤ a[i] ≤ n` 找到所有出现2次的元素 O(1) 空间
-> some elements appear twice and others appear once.
-> Input:[4,3,2,7,8,2,3,1]
-> Output:[2,3]
-
-```
-4->[4,3,2,-7,8,2,3,1] 
-3->[4,3,-2,-7,8,2,3,1]
-2->[4,-3,-2,-7,8,2,3,1]
-7->[4,-3,-2,-7,8,2,-3,1]
-8->[4,-3,-2,-7,8,2,-3,-1]
-2->[4,[3],-2,-7,8,2,-3,-1]
-3->[4,[3],[2],-7,8,2,-3,-1]
-1->[-4,[3],[2],-7,8,2,-3,-1]
-```
-```java
-public List<Integer> findDuplicates(int[] nums){
-    List<Integer> res = new ArrayList<>();
-    for(int i = 0;i < nums.length;i++){
-        int idx = Math.abs(nums[i]) - 1;
-        if(nums[idx] < 0){
-            res.add(Math.abs(idx) + 1);
-        }
-        nums[idx] = -nums[idx];
-    }
-    return res;
-}
-```
 
 ### lt 803 建筑物之间的最短距离
 ```
@@ -432,42 +574,8 @@ public List<Integer> partitionLabels(String S) {
 }
 ```
 
-### 769 0-n的排列切割，块排序后连接是排序的原数组
->输入: arr = [1,0,2,3,4]
-输出: 4
-解释:
-我们可以把它分成两块，例如 [1, 0], [2, 3, 4]。
-然而，分成 [1, 0], [2], [3], [4] 可以得到最多的块数。
 
-```
-idx:0 1 2 3 4
-arr:1 0 2 3 4
-max:0 1 2 3 4
-当前index==当前max 表示可以切分
-```
-
-```java
-public int maxChunksToSorted(int[] arr) {
-    int res = 0;
-    for(int i =0,max = 0;i<arr.length;i++){
-        if(i==(max=Math.max(max,arr[i])))
-            res++;
-    }
-    return res;
-}
-```
-
-### 768
-
-
-
-### 532 数组中有几个相差k的pair
-> 输入: [3, 1, 4, 1, 5], k = 2
-输出: 2
-解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
-尽管数组中有两个1，但我们只应返回不同的数对的数量。
-
-set的解法33% //todo比双指针慢 
+ 
 
 
 ### 15 3sum a + b + c = 0
@@ -559,25 +667,7 @@ public int gcd(int a, int b) {
 }
 ```
 
-### 915 Max(left)<=Min(right)
-画折线图，当前`A[i]<left` 则把切分线抬到`globalMax`
-![lc915](/images/lc915.jpg)
-7ms 60%
-```java
-public int partitionDisjoint(int[] A) {
-    int n = A.length;
-    int leftMax = A[0];
-    int global = leftMax;
-    int parti = 0;
-    for(int i = 1;i<n;i++){
-        if(leftMax>A[i]){
-            leftMax = global;
-            parti = i;
-        }else global = Math.max(global,A[i]);
-    }
-    return parti+1;
-}
-```
+
 
 ### 916
 > b 中的每个字母都出现在 a 中，包括重复出现的字母，那么称单词 b 是单词 a 的子集。 例如，“wrr” 是 “warrior” 的子集，但不是 “world” 
@@ -3568,6 +3658,47 @@ int fib(int n){
 ---
 ### ?347桶排序 int数组中最常出现的n个
 桶长度为数组长度，数字出现的最高次数为len，把频率相同的放在同一个桶。最后从桶序列高到低遍历。
+99%
+不用map，遍历一次找到max和min 建len = max-min+1的数组计数
+{% fold %}
+```java
+public List<Integer> topKFrequent(int[] nums, int k) {
+    List<Integer> rst = new ArrayList<>();
+    if(nums.length == 0) return rst;
+    int min = Integer.MAX_VALUE,max = Integer.MIN_VALUE;
+    for (int i = 0; i < nums.length; i++) {
+        if(nums[i] < min)min = nums[i];
+        if(nums[i] >max) max = nums[i];
+    }
+    int[] data = new int[max-min + 1];
+    for (int i = 0; i <nums.length ; i++) {
+        data[nums[i] - min]++;
+    }
+    List<Integer>[] bucket = new ArrayList[nums.length+1];
+    for(int i = 0;i<data.length;i++){
+        if(data[i]> 0){
+            if(bucket[data[i]]== null){
+                bucket[data[i]] = new ArrayList<Integer>();
+                bucket[data[i]].add(i+min);
+            }else{
+                bucket[data[i]].add(i+min);
+            }
+
+        }
+    }
+    for(int i =nums.length;i>0;i--){
+        if(k<=0)return rst;
+        if(bucket[i]!=null){
+            rst.addAll(bucket[i]);
+            k-=bucket[i].size();
+        }
+    }
+    return rst;
+
+}
+```
+{% endfold %}
+用map AC34%
 
 
 ### 242 Anagram 相同字母的单词

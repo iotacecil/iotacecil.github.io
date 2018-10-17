@@ -294,6 +294,7 @@ arr[[4,3,0,6]] 获取第4、3、0、6 行
 - zeros(10) ones(10) 全0or全1数组
 - empty((2,3,2)) 创建没有任何具体值的数组
 - np.dot(arr.T,arr) 内积
+
 #### nonzero(array)
 1. nonzeros(a)返回数组a中值不为零(Flase)的元素的下标
 2. transpose([])转成array

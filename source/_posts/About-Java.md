@@ -403,8 +403,6 @@ DateTime dt = df.parseDateTime("2015-04-20 2:2:2");
 return dt.toDate();
 ```
 
-### StringUtils
-`.isBlank(" ")`true
 
 ### `CollectionUtils.isEmpty(List)`
 

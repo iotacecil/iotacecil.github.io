@@ -4,6 +4,9 @@ date: 2018-03-06 07:51:17
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+测试网络
+https://httpbin.org/#/
+
 打车app API
 https://www.easyapi.com/api/?documentId=8067
 
