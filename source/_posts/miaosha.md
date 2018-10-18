@@ -1024,6 +1024,9 @@ var g_passsword_salt="abcd1234"
 ```
 
 #### 参数校验
+在controller 验证手机号之后
+再调用Service 用手机号查询dao数据库里面的密码，与前端传的密码做比较。
+页面参数用vo封装。
 
 后台添加vo接收前端数据的类：
 ```java
@@ -1114,7 +1117,9 @@ public class MiaoshaUser {
 public interface MiaoshaUserDao{
     @Select（"select * from miaosha user where id = #{id}")
     public MiaoshaUser getById(@Param("id") long id);
-    
+    @Insert("insert into user(id, name)values(#{id}, #{name})")
+    public int insert(User user);
+
 }
 ```
 
