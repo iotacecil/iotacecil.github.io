@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概率生成函数 概率母函数1.x的系数是a1,a2,…an 的单个组合的全体。  x^2的系数是a1,a2,…a2的两个组合的全体。………n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。   有1克、2克、3克、4克的砝码各一枚，能称出哪几种重量？每种重量各有几种可能方案？  设x表示砝码，x的指数表示砝码的重量1个1克的砝码可以用函数1+1x^1表示，1个2克的砝码可以用函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="probability">
+<meta property="og:url" content="http://iotaa.xyz/2018/10/18/probability/index.html">
+<meta property="og:site_name" content="Learn &amp; practice">
+<meta property="og:description" content="概率生成函数 概率母函数1.x的系数是a1,a2,…an 的单个组合的全体。  x^2的系数是a1,a2,…a2的两个组合的全体。………n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。   有1克、2克、3克、4克的砝码各一枚，能称出哪几种重量？每种重量各有几种可能方案？  设x表示砝码，x的指数表示砝码的重量1个1克的砝码可以用函数1+1x^1表示，1个2克的砝码可以用函数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://iotaa.xyz/images/fenpei.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/penneygame.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/abbinary.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/nbinary.jpg">
+<meta property="og:updated_time" content="2018-10-18T13:00:50.877Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="probability">
+<meta name="twitter:description" content="概率生成函数 概率母函数1.x的系数是a1,a2,…an 的单个组合的全体。  x^2的系数是a1,a2,…a2的两个组合的全体。………n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。   有1克、2克、3克、4克的砝码各一枚，能称出哪几种重量？每种重量各有几种可能方案？  设x表示砝码，x的指数表示砝码的重量1个1克的砝码可以用函数1+1x^1表示，1个2克的砝码可以用函数">
+<meta name="twitter:image" content="http://iotaa.xyz/images/fenpei.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://iotaa.xyz/2018/10/18/probability/"/>
+
+
+
+
+
+  <title>probability | Learn & practice</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn & practice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/10/18/probability/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">probability</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-18T20:59:40+08:00">
+                2018-10-18
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-18T21:00:50+08:00">
+                2018-10-18
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">算法备忘</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="概率生成函数-概率母函数"><a href="#概率生成函数-概率母函数" class="headerlink" title="概率生成函数 概率母函数"></a>概率生成函数 概率母函数</h3><p>1.x的系数是a1,a2,…an 的单个组合的全体。</p>
+<ol start="2">
+<li>x^2的系数是a1,a2,…a2的两个组合的全体。<br>………<br>n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。</li>
+</ol>
+<blockquote>
+<p>有1克、2克、3克、4克的砝码各一枚，能称出哪几种重量？每种重量各有几种可能方案？</p>
+</blockquote>
+<p>设x表示砝码，x的指数表示砝码的重量<br>1个1克的砝码可以用函数1+1<em>x^1表示，<br>1个2克的砝码可以用函数1+1</em>x^2表示，<br>1个3克的砝码可以用函数1+1<em>x^3表示，<br>1个4克的砝码可以用函数1+1</em>x^4表示，</p>
+<ul>
+<li><p>1表示数量0个<br>例如1个2克的砝码：1+x^2<br>1其实应该写为：1*x^0,即1代表重量为2的砝码数量为0个。</p>
+</li>
+<li><p>系数表示状态数（方案数）<br>1+x^2，也就是1<em>x^0 + 1</em>x^2，不取2克砝码，有1种状态；或者取2克砝码，也有1种<br>状态。</p>
+</li>
+</ul>
+<p>(1+x)(1+x^2)(1+x^3)(1+x^4)<br>=(1+x+x^2+x^4)(1+x^3+^4+x^7)<br>=1 + x + x^2 + 2<em>x^3 + 2</em>x^4 + 2<em>x^5 + 2</em>x^6 + 2<em>x^7 + x^8 + x^9 + x^10<br>从上面的函数知道：可称出从1克到10克，系数便是方案数。<br>有2</em>x^5 项，即称出5克的方案有2种：5=3+2=4+1；</p>
+<blockquote>
+<p>求用1分、2分、3分的邮票贴出不同数值的方案数：每种是无限的。</p>
+</blockquote>
+<h3 id="分配问题及应用"><a href="#分配问题及应用" class="headerlink" title="分配问题及应用"></a>分配问题及应用</h3><p><img src="/images/fenpei.jpg" alt="fenpei.jpg"></p>
+<h3 id="硬币相关问题"><a href="#硬币相关问题" class="headerlink" title="硬币相关问题"></a>硬币相关问题</h3><p><a href="http://www.raychase.net/3144" target="_blank" rel="noopener">http://www.raychase.net/3144</a><br>正正反 甲赢 正反反 乙赢 Penney’s game</p>
+<p><img src="/images/penneygame.jpg" alt="penneygame.jpg"></p>
+<blockquote>
+<p>使用长度为3字节的序列，玩家B相对玩家A有优势。这是因为这个游戏是一个非传递博弈，所以无论如何选定第一个序列，总会有一个序列有更大的获胜概率。</p>
+</blockquote>
+<p>反反正:正反反 = 1：3<br>因为只要出现一次正，想得到反反正的人就必输了，他肯定得先看到两次反，我就得到正反反了。<br>两个硬币4种情况有3种有正</p>
+<p>正正反：反正正 = 1：3<br>只要出现一次反，反正正就赢了。</p>
+<p>正反反HTT：正正反HHT = 1:2<br>反正正thh:反反正tth = 1：2</p>
+<p><a href="https://en.wikipedia.org/wiki/Penney%27s_game" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Penney%27s_game</a><br>对于二号玩家：1-2-3 -&gt;  (not-2)-1-2<br>第一个字节与1号玩家的第二个字节相反，<br>第二个字节与1号玩家的第一个字节相同，<br>第三个字节与1号玩家的第二个字节相同。</p>
+<p><a href="http://www.matrix67.com/blog/archives/3638" target="_blank" rel="noopener">http://www.matrix67.com/blog/archives/3638</a></p>
+<blockquote>
+<p>所有 1 都不相邻的 k 位 01 串有 Fk+2 个 Fi 表示 Fibonacci 数列中的第 i 项</p>
+</blockquote>
+<p>抛掷第 k 次才出现连续两个正面”的意思就是， k 位 01 串的末三位是 011，并且前面 k – 3 位中的数字 1 都不相邻。 k-3位的01不相邻的串有F(k-1)个</p>
+<blockquote>
+<p>平均需要抛掷多少次硬币，才会首次出现连续的 n 个正面？</p>
+</blockquote>
+<p>答案是 2^(n+1) – 2<br>神奇的模式概率与“鞅”//todo<br><a href="http://www.math-engineering.uestc.edu.cn/" target="_blank" rel="noopener">http://www.math-engineering.uestc.edu.cn/</a><br>模式的平均等待时间：<br>模式 HHHHHH 的平均等待时间 126</p>
+<blockquote>
+<p>扔硬币直到连续两次出现正面，求扔的期望次数</p>
+</blockquote>
+<p>• 扔到的是反面，那么还期望抛 E 次，因为抛到反面完全没用，总数就期望抛 E+1，所以是0.5<em>(1 + E)<br>• 扔到的是正面，如果下一次是反面，那么相当于重头来过，总数就期望抛，则是0.25</em>(2 + E)<br>• 扔到两次，都是正面，总数是 2，则是0.25<em>2<br>所以递归来看E = 0.5</em>(1 + E) + 0.25<em>(2 + E) + 0.25</em>2，解得E = 6</p>
+<blockquote>
+<p>A赢： 先正后反， B赢 连续两次反面：A胜的概率 3/4</p>
+</blockquote>
+<p>B 赢概率是1/2*1/2 = 1/4</p>
+<p>多重排列：pingpang中有重复2个p 2个n 2个g</p>
+<ol>
+<li>标记为p1p2n1n2g1g2ia 全排列个数是8!</li>
+<li>p的重复度 为p1p2的全排列 2!</li>
+<li>P(N,r1,r2…rt)  标记为P(8;2,2,2,1,1)</li>
+<li>P(8;2,2,2,1,1)*2!*2!*2! = 8!</li>
+</ol>
+<p>理解二项式定理(a+b)^n<br><img src="/images/abbinary.jpg" alt="abbinary.jpg"><br>通项是a^k b^(n-k) 前面的系数表示 n个数的可重排列，a有k个，b有n-k个</p>
+<p>不仅是二项式<br>通项是a1^(r1) a2^(r2) at^(rt)<br><img src="/images/nbinary.jpg" alt="nbinary.jpg"><br>(x1+x2+…+xm)^n 展开式的项数等于C(n+m-1,n).</p>
+<blockquote>
+<p>有6个洞 编号1-9个球，求球入洞的方案数</p>
+</blockquote>
+<p>隔板法：</p>
+<ol>
+<li>划分6个洞需要5个隔板，用1~9填充隔板的空间。变成5个隔板和9个球的全排列。</li>
+<li>5个隔板是相同的，P（14,5,1,1,1,1,1,1,1,1,1,1) = 14!/5!</li>
+</ol>
+<p>另一种方法：</p>
+<ol>
+<li>1号球可以放6个位置</li>
+<li>1号球等于把空间又划分成了1前和1后，2球有5+2种可能</li>
+<li>同理 3号球有7-1+2 =8个可能…</li>
+<li>6乘到14 = 14!/5!</li>
+</ol>
+<blockquote>
+<p>12本书按 4:4:4平均分给3个人，有多少种分法</p>
+</blockquote>
+<p>C(12,4)C(8,4)C(4,4)</p>
+<blockquote>
+<p>12本书按 3:3:2:2:2分给 ABCDE 5个人</p>
+</blockquote>
+<p>A(5,5)C(12,3)C(9,3)C(6,2)C(4,2)C(2,2)/(A(3,3)A(2,2))</p>
+<blockquote>
+<p>52张牌分发给4个人，每人13张，问每人有一张A的概率有多少？<br>10.55%</p>
+</blockquote>
+<p>52张牌分发给4个人，每人13张的方法数为52！/(13!)^4 。<br>每人发一张A的方法数为4！* 48！/(12!)^4 .</p>
+<blockquote>
+<p>4个相同的桔子和6个不同的苹果放到5个不同的盒子中，问每个盒子里有2个水果的概率有多大？<br>7.4%</p>
+</blockquote>
+<p>把4个相同桔子放入5个不同盒子的放法数为C(5,4),<br>把6个不同苹果放入5个不同盒子的放法数为5^6 .因此总的分配方法数为C(5,4)*5^6 .</p>
+<p>每个盒子有2个水果，有如下三种情况：<br>1、（AA)(AA)(AA)(OO)(OO)<br>C(5,2)<em>6!/2!/2!/2!<br>2、AA)(AA)(OA)(OA)(OO)<br>C(5,1)\</em>C(4,2)*6!/2!/2!<br>3.（AA)(OA)(OA)(OA)(OA)<br>C(5,4)*6!/2!</p>
+<blockquote>
+<p>将n个不同的球放入编号为1,2,…,k的k个盒子中，试求：</p>
+</blockquote>
+<ol>
+<li>第一个盒子是空盒的概率: 第一个盒子是空盒的方案数为(k－1) n 。</li>
+<li>设k≥n,求n个球落入n个不同盒子的概率:  n个球落入n个不同盒子的方案数为C(k,n)n!。</li>
+<li>第一盒或第二盒两盒中至少一个是空盒的概率。该方案数为第一个盒子是空盒的方案数加上第二个<br>盒子是空盒的方案数，再减去两个盒子都是空盒的方案<br>数。</li>
+</ol>
+<blockquote>
+<p>随机地将15名插班生分配到三个班级，每班各5名。设15名插班生中有3为女生。试求：<br>将15名插班生分配到三个班级，每班各5名的方案数为C(15,5)C(10,5)C(5,5)=15!/(5!5!5!)。</p>
+</blockquote>
+<ol>
+<li>每一个班级分到一名女生的概率:3!*12!/(4!4!4!)</li>
+<li>三名女生分到同一班的概率: 3*12!/(5!5!2!)</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/16/miaosha/" rel="next" title="java秒杀">
+                <i class="fa fa-chevron-left"></i> java秒杀
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">学习一个技术不要轻易过去，要有技术深度做一个demo</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概率生成函数-概率母函数"><span class="nav-number">1.</span> <span class="nav-text">概率生成函数 概率母函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分配问题及应用"><span class="nav-number">2.</span> <span class="nav-text">分配问题及应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬币相关问题"><span class="nav-number">3.</span> <span class="nav-text">硬币相关问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
