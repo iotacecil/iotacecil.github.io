@@ -1001,6 +1001,9 @@ function doLogin(){
             if(data.code==0){
                 layer.msg("成功")
                 console.log(data)
+            }else{
+                console.log("打印后端返回的错误信息")
+                layer.msg(data.msg);
             }
         },
         error:function(){
@@ -1159,18 +1162,21 @@ public class MiaoshaUserService{
 在controller中注入
 ```java
 @Autowired
-    MiaoshaUserService userService;
-    @RequestMapping("/do_login")
-    @ResponseBody
-    public Result<String> doLogin(LoginVo loginVo) {
-        //..参数校验
-        //登录
-        CodeMsg code = userService.login(loginVo);
-        if(code.getCode()==0)return Result.success("登录成功");
-        else return Result.error(code);
+MiaoshaUserService userService;
+
+@RequestMapping("/do_login")
+@ResponseBody
+public Result<String> doLogin(LoginVo loginVo) {
+    //..参数校验
+    //登录
+    CodeMsg code = userService.login(loginVo);
+    if(code.getCode()==0)return Result.success("登录成功");
+    else return Result.error(code);
 ```
 
 ### 7.JSR303参数校验+全局异常
+不是每个controller的方法里都要写参数校验，而是把参数校验放到vo类上，在controller只要打注解
+
 ```xml
 <dependency>
   <groupId>org.springframework.boot</groupId>
@@ -1189,15 +1195,26 @@ public class LoginVo {
 @Length(min=32)
 private String password;
 ```
+
+#### 自定义注解
 对手机号添加自定义验证注解
-新建validator包,新建IsMobile.java
-参考java.validation.constrains里的NotNull,将class改成class
+新建`validator`包,新建`IsMobile.java`
+参考`java.validation.constrains`里的`NotNull`,
 必须的，添加
+来自`Constraint.java`的注释：
+```java
+Each constraint annotation must host the following attributes:
+    String message() default [...]; which should default to an error message key made of the fully-qualified class name of the constraint followed by .message. For example "{com.acme.constraints.NotSafe.message}"
+    Class<?>[] groups() default {}; for user to customize the targeted groups
+    Class<? extends Payload>[] payload() default {}; for extensibility purposes
+```
+
 ```java
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = { })
+// 注解实现类
+@Constraint(validatedBy = {IsMobileValidator.class})
 public @interface IsMobile{
     //不能为空
     boolean required() default true;
@@ -1209,20 +1226,30 @@ public @interface IsMobile{
     Class<? extends Payload>[] payload() default { };
 }
 ```
+
+#### 注解实现类
 新建类`IsMobileValidator`并在`@interface`里添加`@Constraint(validatedBy = {IsMobileValidator.class})`
+
+```java
+public @interface Constraint {
+    Class<? extends ConstraintValidator<?, ?>>[] validatedBy();
+}
+```
+
 创建类<注解,检测的类型>，用上之前创建的ValidatorUtil
 ```java
-public class MobileValidator implements ConstraintValidator<Mobile,String> {
+public class MobileValidator implements ConstraintValidator<IsMobile,String> {
     //成员变量，接收注解定义
     private boolean required = false;
     @Override
-    public void initialize(Mobile constraintAnnotation) {
+    public void initialize(IsMobile constraintAnnotation) {
+        //初始化方法里可以获取注解对象
     required = constraintAnnotation.required();
     }
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if(required){
-            //如果是必须的，判断是否合法
+            //初始化获取注解 传的值 如果是必须的，判断是否合法
             return ValidatorUtil.isMobile(value);
         }else//如果不是必须的
             if(StringUtils.isEmpty(value)){
@@ -1240,28 +1267,33 @@ public class MobileValidator implements ConstraintValidator<Mobile,String> {
 @Mobile(required = true,message = "手机号错")
 private String mobile;
 ```
-返回controller的doLogin的参数校验
+返回controller的doLogin可以删掉之前的非空检验参数校验
 ```java
 @RequestMapping("/do_login")
 @ResponseBody
 public Result<String> doLogin(@Valid  LoginVo loginVo) {
     log.info(loginVo.toString());
+    // 登录
     CodeMsg code = userService.login(loginVo);
-    if(code.getCode()==0)return Result.success("登录成功");
-    else return Result.error(code);
+    // 如果有异常会给异常controller处理
+    return Result.success("登录成功");
 }
 ```
-可以得到完整错误信息
+可以得到完整错误信息 绑定异常
 ![error](/images/errormsg.jpg)
 
+
+#### 异常处理
 错误处理新建exception包
 添加`@ControllerAdvice` 和controller是一样的 
 ```java
 @ControllerAdvice
 @ResponseBody
 public class BindExceptionHandler {
+    // 拦截所有异常
     @ExceptionHandler(Exception.class)
     public Result<String> bindexp(HttpServletRequest request,Exception e){
+        // 刚刚手机号错报的绑定异常
         if(e instanceof BindException){
             BindException ex = (BindException) e;
             List<ObjectError> errors = ex.getAllErrors();
@@ -1276,7 +1308,9 @@ public class BindExceptionHandler {
     }
 }
 ```
-可传递参数的错误信息，原来定义的枚举类不能new
+
+#### 定义传参的错误信息
+可传递参数的错误信息，原来定义的枚举类不能new 所以不用枚举了
 `CodeMsg.BIND_ERROR.fillArgs(msg)`
 ```java
 public class  CodeMsg {
@@ -1289,6 +1323,7 @@ public class  CodeMsg {
     //通用的错误码
     public static CodeMsg SUCCESS = new CodeMsg(0, "success");
     public static CodeMsg SERVER_ERROR = new CodeMsg(500100, "服务端异常");
+    // 绑定异常
     public static CodeMsg BIND_ERROR = new CodeMsg(500101, "参数校验异常：%s");
     //登录模块 5002XX
     public static CodeMsg SESSION_ERROR = new CodeMsg(500210, "Session不存在或者已经失效");
@@ -1300,6 +1335,7 @@ public class  CodeMsg {
     //参数校验异常：%s
     public CodeMsg fillArgs(Object... args) {
         int code = this.code;
+        // this 关键
         String message = String.format(this.msg,args);
         return new CodeMsg(code,message);
     }
@@ -1307,7 +1343,8 @@ public class  CodeMsg {
 ```
 测试：200返回`{"code":500101,"msg":"参数校验异常：手机号错","data":null}`
 
-##### 定义全局异常
+##### 定义系统全局异常
+业务模块`MiaoshaUserService`中的`public CodeMsg login(LoginVo loginVo)`方法，不应该返回CodeMsg，应该定义系统全局异常(业务异常)
 ```java
 public class GlobalException extends RuntimeException{
 
@@ -1321,42 +1358,54 @@ public class GlobalException extends RuntimeException{
     }//get
 }
 ```
-UserService.java
+`MiaoshaUserService.java`
 修改业务代码直接抛异常而不是返回CodeMsg
 ```java
-public boolean login( LoginVo loginVo) {
-if(loginVo == null) {
-    throw new GlobalException(CodeMsg.SERVER_ERROR);
-}
-if(user == null) {
-    throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
-}
-if(!calcPass.equals(dbPass)) {
-    throw new GlobalException(CodeMsg.PASSWORD_ERROR);
-}
-return true;
+// 返回业务含义的 登陆 true false
+public boolean login(LoginVo loginVo){
+    if(loginVo == null){
+        throw new GlobalException( CodeMsg.SERVER_ERROR);
+    }
+    String mobile = loginVo.getMobile();
+    String formPass = loginVo.getPassword();
+    MiaoshaUser user = getById(Long.parseLong(mobile));
+    if(user == null) {
+        //用户/手机号不存在
+        throw new GlobalException( CodeMsg.MOBILE_NOT_EXIST);
+    }
+    //数据库中的密码,salt
+    String dbPass = user.getPassword();
+    String saltDB = user.getSalt();
+//      用前端密码+数据库salt是否等于数据库密码
+    String calcPass = MD5Util.formPassToDBPass(formPass, saltDB);
+    log.info(calcPass);
+    log.info(dbPass);
+    if(!calcPass.equals(dbPass)) {
+        throw new GlobalException( CodeMsg.PASSWORD_ERROR);
+    }
+    return true;
 }
 ```
-添加全局异常处理类,注意合并成一个异常处理，不要覆盖
+添加全局异常处理,注意合并成一个异常处理，不要覆盖
+// todo 应该先小异常还是先大异常
 ```java
-ControllerAdvice
+@ControllerAdvice
 @ResponseBody
 public class GlobalExceptionHandler {
-    //拦截任何的异常
     @ExceptionHandler(value=Exception.class)
     public Result<String> exceptionHandler(HttpServletRequest request, Exception e){
         e.printStackTrace();
-        if(e instanceof BindException) {
+        if(e instanceof GlobalException) {
+            GlobalException ex = (GlobalException)e;
+            return Result.error(ex.getCm());
+        }else if(e instanceof BindException) {
             BindException ex = (BindException)e;
             List<ObjectError> errors = ex.getAllErrors();
             ObjectError error = errors.get(0);
             String msg = error.getDefaultMessage();
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(msg));
-        }else if(e instanceof GlobalException) {
-            GlobalException ex = (GlobalException)e;
-            return Result.error(ex.getCm());
         }else {
-            return Result.error(CodeMsg.SESSION_ERROR);
+            return Result.error(CodeMsg.SERVER_ERROR);
         }
     }
 }
@@ -1369,7 +1418,9 @@ return Result.success("登录成功");
 
 ### 8.分布式Session
 1.容器session同步 比较复杂
-2.登陆成功后生成sessionID写道cookie传递给客户端，客户端每次访问上传cookie
+2.登陆成功后生成token(sessionID)写到cookie传递给客户端，客户端每次访问上传cookie
+
+新建生成ID的类
 用uuid，原生UUID带‘-’，去掉
 ```java
 public class UUIDUtil {
@@ -1378,18 +1429,11 @@ public class UUIDUtil {
     }
 }
 ```
-service中login比对密码正确后，生成token，并写到redis中
-新建redis前缀tokenKey
+service中login比对密码正确后，生成token，并写到`redis`中
+
+在service中引入`redisService`，设置cookie中的token name
 ```java
-public class tokenKey extends BasePrefix {
-    public tokenKey(String prefix) {
-        super(prefix);
-    }
-    public static tokenKey token = new tokenKey("tk");
-}
-```
-在service中引入，设置cookie中的token name
-```java
+// cookie key
 public static final String COOKI_NAME_TOKEN = "token";
 @Autowired
 RedisService redisService;
@@ -1414,17 +1458,30 @@ public boolean login( HttpServletResponse response,@Valid LoginVo loginVo) {
         throw new GlobalException(CodeMsg.PASSWORD_ERROR);
     }
     //生成cookie
-    String token= UUIDUtil.uuid();
-    redisService.set(tokenKey.token, token, user);
+    String token = UUIDUtil.uuid();
+    redisService.set(MiaoshaUserKey.token, token, user);
     Cookie cookie = new Cookie(COOKI_NAME_TOKEN,token);
-    cookie.setMaxAge(tokenKey.token.expireSeconds());
+    // 有效期 与redis中session有效期保持一致
+    cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
+    // 网站根目录
     cookie.setPath("./");
      //写到response要HttpResponse
     response.addCookie(cookie);
     return true;
 }
 ```
-修改login controller
+
+在`\redis\`新建`MiaoshaUserKey`
+```java
+public class MiaoshaUserKey extends BasePrefix{
+    public MiaoshaUserKey(String prefix) {
+            super(prefix);
+    }
+    public static tokenKey token = new tokenKey("tk");
+}
+```
+
+修改login controller 里也要添加`HttpServletResponse response`
 ```java
 @RequestMapping("/do_login")
 @ResponseBody

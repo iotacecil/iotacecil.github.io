@@ -22,6 +22,56 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 https://www.nowcoder.com/test/4575457/summary
 
 
+
+### 92反转从m到n的链表 一趟扫描
+```java
+public ListNode reverseBetween(ListNode head, int m, int n) {
+        
+    }
+```
+
+### 206反转链表
+空间是n
+```java
+public ListNode reverseList(ListNode head) {
+    if(head == null || head.next == null)return head;
+    ListNode second = reverseList(head.next);
+    // 注意 不是second.next 因为second永远是最后一个 5，5->4,5->4->3
+    // 而head.next肯定是second链表的最后一个非null的5,4,3..
+    head.next.next = head;
+    head.next = null;
+    return second;
+}
+```
+---
+迭代空间是1：
+三个指针pre,cur,next
+```java
+Npublic ListNode reverseList(ListNode head) {
+    if(head == null || head.next == null)return head;
+    ListNode prev = null;
+    ListNode curr = head;
+    while(curr != null){
+        ListNode next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+ 
+    return prev;
+}
+```
+
+
+转成栈浪费空间并且代码复杂
+
+### lt1472 s任意交换奇数位字符和偶数位字符 能否变成t
+>给出 s="abcd"，t="cdab"，返回"Yes"。
+第一次a与c交换，第二次b与d交换。
+
+对奇数位和偶数位计数
+
+
 ### 532 数组中有几个相差k的pair
 > 输入: [3, 1, 4, 1, 5], k = 2
 输出: 2
@@ -613,6 +663,8 @@ public List<List<Integer>> threeSum(int[] num) {
 }
 ```
 
+### lt 1487 2sum 最接近target
+
 ### 16 3sum 最接近target的值
 //todo nexttime
 
@@ -879,6 +931,8 @@ https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
 ### Rearrange a string
 https://www.geeksforgeeks.org/rearrange-a-string-so-that-all-same-characters-become-at-least-d-distance-away/
 
+### 440 第k小的字典序
+
 ### !!386 字典序数字 todo
 
 dfs 112ms 71%
@@ -965,158 +1019,6 @@ public int kthSmallest(int[][] matrix, int k) {
 
 ### 373
 
-
-### 概率生成函数 概率母函数
-1.x的系数是a1,a2,…an 的单个组合的全体。
-2. x^2的系数是a1,a2,…a2的两个组合的全体。
-………
-n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。
-
-> 有1克、2克、3克、4克的砝码各一枚，能称出哪几种重量？每种重量各有几种可能方案？
-
-设x表示砝码，x的指数表示砝码的重量
-1个1克的砝码可以用函数1+1*x^1表示，
-1个2克的砝码可以用函数1+1*x^2表示，
-1个3克的砝码可以用函数1+1*x^3表示，
-1个4克的砝码可以用函数1+1*x^4表示，
-
-- 1表示数量0个
-例如1个2克的砝码：1+x^2
-1其实应该写为：1*x^0,即1代表重量为2的砝码数量为0个。
-
-- 系数表示状态数（方案数）
-1+x^2，也就是1*x^0 + 1*x^2，不取2克砝码，有1种状态；或者取2克砝码，也有1种
-状态。
-
-(1+x)(1+x^2)(1+x^3)(1+x^4)
-=(1+x+x^2+x^4)(1+x^3+^4+x^7)
-=1 + x + x^2 + 2*x^3 + 2*x^4 + 2*x^5 + 2*x^6 + 2*x^7 + x^8 + x^9 + x^10
-从上面的函数知道：可称出从1克到10克，系数便是方案数。
-有2*x^5 项，即称出5克的方案有2种：5=3+2=4+1；
-
-
-> 求用1分、2分、3分的邮票贴出不同数值的方案数：每种是无限的。
-
-
-
-### 分配问题及应用
-![fenpei.jpg](/images/fenpei.jpg)
-
-
-### 硬币相关问题
-http://www.raychase.net/3144
-正正反 甲赢 正反反 乙赢 Penney's game
-
-![penneygame.jpg](/images/penneygame.jpg)
-> 使用长度为3字节的序列，玩家B相对玩家A有优势。这是因为这个游戏是一个非传递博弈，所以无论如何选定第一个序列，总会有一个序列有更大的获胜概率。
-
-
-反反正:正反反 = 1：3 
-因为只要出现一次正，想得到反反正的人就必输了，他肯定得先看到两次反，我就得到正反反了。
-两个硬币4种情况有3种有正
-
-正正反：反正正 = 1：3
-只要出现一次反，反正正就赢了。
-
-正反反HTT：正正反HHT = 1:2
-反正正thh:反反正tth = 1：2
-
-https://en.wikipedia.org/wiki/Penney%27s_game
-对于二号玩家：1-2-3 ->  (not-2)-1-2
-第一个字节与1号玩家的第二个字节相反，
-第二个字节与1号玩家的第一个字节相同，
-第三个字节与1号玩家的第二个字节相同。
-
-http://www.matrix67.com/blog/archives/3638
-> 所有 1 都不相邻的 k 位 01 串有 Fk+2 个 Fi 表示 Fibonacci 数列中的第 i 项
-
-抛掷第 k 次才出现连续两个正面”的意思就是， k 位 01 串的末三位是 011，并且前面 k – 3 位中的数字 1 都不相邻。 k-3位的01不相邻的串有F(k-1)个
-
->平均需要抛掷多少次硬币，才会首次出现连续的 n 个正面？
-
-答案是 2^(n+1) – 2 
-神奇的模式概率与“鞅”//todo
-http://www.math-engineering.uestc.edu.cn/
-模式的平均等待时间：
-模式 HHHHHH 的平均等待时间 126
-
-> 扔硬币直到连续两次出现正面，求扔的期望次数
-
-• 扔到的是反面，那么还期望抛 E 次，因为抛到反面完全没用，总数就期望抛 E+1，所以是0.5*(1 + E)
-• 扔到的是正面，如果下一次是反面，那么相当于重头来过，总数就期望抛，则是0.25*(2 + E)
-• 扔到两次，都是正面，总数是 2，则是0.25*2
-所以递归来看E = 0.5*(1 + E) + 0.25*(2 + E) + 0.25*2，解得E = 6
-
-
->A赢： 先正后反， B赢 连续两次反面：A胜的概率 3/4
-
-B 赢概率是1/2*1/2 = 1/4
-
-
-多重排列：pingpang中有重复2个p 2个n 2个g
-1. 标记为p1p2n1n2g1g2ia 全排列个数是8!
-2. p的重复度 为p1p2的全排列 2!
-3. P(N,r1,r2...rt)  标记为P(8;2,2,2,1,1)
-4. P(8;2,2,2,1,1)\*2!\*2!\*2! = 8!
-
-理解二项式定理(a+b)^n
-![abbinary.jpg](/images/abbinary.jpg)
-通项是a^k b^(n-k) 前面的系数表示 n个数的可重排列，a有k个，b有n-k个
-
-不仅是二项式 
-通项是a1^(r1) a2^(r2) at^(rt)
-![nbinary.jpg](/images/nbinary.jpg)
-(x1+x2+…+xm)^n 展开式的项数等于C(n+m-1,n).
-
-> 有6个洞 编号1-9个球，求球入洞的方案数
-
-隔板法：
-1. 划分6个洞需要5个隔板，用1~9填充隔板的空间。变成5个隔板和9个球的全排列。
-2. 5个隔板是相同的，P（14,5,1,1,1,1,1,1,1,1,1,1) = 14!/5!
-
-
-另一种方法：
-1. 1号球可以放6个位置
-2.  1号球等于把空间又划分成了1前和1后，2球有5+2种可能
-3.  同理 3号球有7-1+2 =8个可能...
-4.  6乘到14 = 14!/5!
-
-
-
-> 52张牌分发给4个人，每人13张，问每人有一张A的概率有多少？ 
-> 10.55%
-
-52张牌分发给4个人，每人13张的方法数为52！/(13!)^4 。
-每人发一张A的方法数为4！* 48！/(12!)^4 .
-
-> 4个相同的桔子和6个不同的苹果放到5个不同的盒子中，问每个盒子里有2个水果的概率有多大？
-> 7.4%
-
-把4个相同桔子放入5个不同盒子的放法数为C(5,4),
-把6个不同苹果放入5个不同盒子的放法数为5^6 .因此总的分配方法数为C(5,4)*5^6 .
-
-每个盒子有2个水果，有如下三种情况：
-1、（AA)(AA)(AA)(OO)(OO)
-C(5,2)*6!/2!/2!/2!
-2、AA)(AA)(OA)(OA)(OO)
-C(5,1)\*C(4,2)\*6!/2!/2!
-3.（AA)(OA)(OA)(OA)(OA)
-C(5,4)*6!/2!
-
-> 将n个不同的球放入编号为1,2,…,k的k个盒子中，试求：
-
-1. 第一个盒子是空盒的概率: 第一个盒子是空盒的方案数为(k－1) n 。
-2. 设k≥n,求n个球落入n个不同盒子的概率:  n个球落入n个不同盒子的方案数为C(k,n)n!。
-3. 第一盒或第二盒两盒中至少一个是空盒的概率。该方案数为第一个盒子是空盒的方案数加上第二个
-盒子是空盒的方案数，再减去两个盒子都是空盒的方案
-数。
-
-
-> 随机地将15名插班生分配到三个班级，每班各5名。设15名插班生中有3为女生。试求：
-将15名插班生分配到三个班级，每班各5名的方案数为C(15,5)C(10,5)C(5,5)=15!/(5!5!5!)。
-
-1. 每一个班级分到一名女生的概率:3!*12!/(4!4!4!)
-2. 三名女生分到同一班的概率: 3*12!/(5!5!2!)
 
 
 
@@ -4154,38 +4056,6 @@ for(1 to size){
 }
 return head;
 ```
-
-#### 反转链表
-```java
-Node reverse(Nodde head){
-    if(head==null)return null;
-    if(head.next == null)return head;
-    Node second = reverse(head.next);
-    second.next = head;
-    head.next = null;
-    return second;
-}
-```
----
-迭代：
-中间状态null<-1<-2<3 |  4->5->null
-3是newhead 反转成功的链表 | 4curhead是还没反转的链表
-newhead=null开始，curhead从第一个node开始，两个同时向右每次移一格，直到curhead=null
-```java
-Node newhead = null;
-Node curhead = head;
-while(head!=null){
-    Node tmp = curhead.next;
-    curhead.next = newhead;
-    curhead=tmp;
-    newhead = curhead;
-}
-return newhead;
-```
-
-
-转成栈浪费空间并且代码复杂
-
 
 
 
