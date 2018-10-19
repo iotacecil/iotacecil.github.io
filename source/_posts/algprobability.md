@@ -1,9 +1,13 @@
 ---
-title: probability
+title: 概率问题
 date: 2018-10-18 20:59:40
 tags:
 categories: [算法备忘]
 ---
+有分配对象的排列组合问题
+https://zhuanlan.zhihu.com/p/27017390
+分组分配问题
+http://blog.sina.com.cn/s/blog_50a269f00100haxo.html
 
 ### 概率生成函数 概率母函数
 1.x的系数是a1,a2,…an 的单个组合的全体。

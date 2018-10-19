@@ -21,7 +21,49 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 平面最近点对 分治
 
+### !!780 x,y可以向下x步，或者向右y步能否到达tx,ty
+>Input: sx = 1, sy = 1, tx = 3, ty = 5
+>One series of moves that transforms the starting point to the target is:
+(1, 1) -> (1, 2)
+(1, 2) -> (3, 2)
+(3, 2) -> (3, 5)
+out: True
+
+正常递归思路 超时
+
+### 532 数组中有几个相差k的pair
+> 输入: [3, 1, 4, 1, 5], k = 2
+输出: 2
+解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
+尽管数组中有两个1，但我们只应返回不同的数对的数量。
+
+set的解法33% //todo比双指针慢
+
+### 220 数组中是否有相差<=t,idx差<=k 的元素
+>Input: nums = [1,2,3,1], k = 3, t = 0
+Output: true
+
+2.桶
+
+
+1.40% 用容量k的TreeSet,超过k删除最左
+判断能否和ceiling合floor<=t
+如果不能 放入treeset等待
+
+### 373 start和end数组 拼成[start,end] 求start+end最小的k个点对
+
+### 719 数组中两两匹配，第k小的两数之差
+> nums = [1,3,1]
+k = 1
+输出：0 
+解释：
+所有数对如下：
+(1,3) -> 2
+(1,1) -> 0
+(3,1) -> 2
+因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
 
 ### 92反转从m到n的链表 一趟扫描
 ```java
@@ -72,24 +114,7 @@ Npublic ListNode reverseList(ListNode head) {
 对奇数位和偶数位计数
 
 
-### 532 数组中有几个相差k的pair
-> 输入: [3, 1, 4, 1, 5], k = 2
-输出: 2
-解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
-尽管数组中有两个1，但我们只应返回不同的数对的数量。
 
-set的解法33% //todo比双指针慢
-
-### 220 数组中是否有相差<=t,idx差<=k 的元素
->Input: nums = [1,2,3,1], k = 3, t = 0
-Output: true
-
-2.桶
-
-
-1.40% 用容量k的TreeSet,超过k删除最左
-判断能否和ceiling合floor<=t
-如果不能 放入treeset等待
 
 ### 219 是否有重复元素 下标相差<=k
 >Input: nums = [1,2,3,1], k = 3
@@ -390,6 +415,9 @@ java的`%`取余 python 取模
 第一步：求整数商c，如进行求模运算c = -2（向负无穷方向舍入），求余c = -1（向0方向舍入）；
 
 第二步：计算模和余数的公式相同，但因c的值不同，求模时r = 1，求余时r = -3。
+
+### 149 在同一条直线上最多的点数
+
 
 ### 线段上格点的个数
 > P1=(1,11) P2=(5,3)
@@ -1017,7 +1045,6 @@ public int kthSmallest(int[][] matrix, int k) {
 ```
 2.
 
-### 373
 
 
 
@@ -3090,7 +3117,7 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
 
 
 
-### 719
+
 
 
 

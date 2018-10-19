@@ -6,6 +6,9 @@ categories: [机器学习和数据处理python备忘]
 ---
 https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p01_start_stop_thread.html
 
+### 列求和
+`waitTime.apply(sum)`
+
 ### pandas 行求和
 `df['Col_sum'] = df.apply(lambda x: x.sum(), axis=1)`
 
