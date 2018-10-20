@@ -22,6 +22,778 @@ https://www.educative.io/collection/page/5642554087309312/5679846214598656/14000
 https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 
 
+笔试题todo
+https://www.nowcoder.com/test/4575457/summary
+
+### 平面最近点对 分治
+
+### !!780 x,y可以向下x步，或者向右y步能否到达tx,ty
+>Input: sx = 1, sy = 1, tx = 3, ty = 5
+>One series of moves that transforms the starting point to the target is:
+(1, 1) -> (1, 2)
+(1, 2) -> (3, 2)
+(3, 2) -> (3, 5)
+out: True
+
+正常递归思路 超时
+
+### 532 数组中有几个相差k的pair
+> 输入: [3, 1, 4, 1, 5], k = 2
+输出: 2
+解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
+尽管数组中有两个1，但我们只应返回不同的数对的数量。
+
+set的解法33% //todo比双指针慢
+
+### 220 数组中是否有相差<=t,idx差<=k 的元素
+>Input: nums = [1,2,3,1], k = 3, t = 0
+Output: true
+
+2.桶
+
+
+1.40% 用容量k的TreeSet,超过k删除最左
+判断能否和ceiling合floor<=t
+如果不能 放入treeset等待
+
+### 373 start和end数组 拼成[start,end] 求start+end最小的k个点对
+
+### 719 数组中两两匹配，第k小的两数之差
+> nums = [1,3,1]
+k = 1
+输出：0 
+解释：
+所有数对如下：
+(1,3) -> 2
+(1,1) -> 0
+(3,1) -> 2
+因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
+
+### 92反转从m到n的链表 一趟扫描
+
+
+### 206反转链表
+空间是n
+```java
+public ListNode reverseList(ListNode head) {
+    if(head == null || head.next == null)return head;
+    ListNode second = reverseList(head.next);
+    // 注意 不是second.next 因为second永远是最后一个 5，5->4,5->4->3
+    // 而head.next肯定是second链表的最后一个非null的5,4,3..
+    head.next.next = head;
+    head.next = null;
+    return second;
+}
+```
+---
+迭代空间是1：
+三个指针pre,cur,next
+```java
+Npublic ListNode reverseList(ListNode head) {
+    if(head == null || head.next == null)return head;
+    ListNode prev = null;
+    ListNode curr = head;
+    while(curr != null){
+        ListNode next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+ 
+    return prev;
+}
+```
+
+
+转成栈浪费空间并且代码复杂
+
+### lt1472 s任意交换奇数位字符和偶数位字符 能否变成t
+>给出 s="abcd"，t="cdab"，返回"Yes"。
+第一次a与c交换，第二次b与d交换。
+
+对奇数位和偶数位计数
+
+
+
+
+### 219 是否有重复元素 下标相差<=k
+>Input: nums = [1,2,3,1], k = 3
+Output: true
+
+放进一个FIFO大小为(k+1) 相差k 的set，当有add失败的时候就true
+
+### 442  `1 ≤ a[i] ≤ n` 找到所有出现2次的元素 O(1) 空间
+> some elements appear twice and others appear once.
+> Input:[4,3,2,7,8,2,3,1]
+> Output:[2,3]
+
+```
+4->[4,3,2,-7,8,2,3,1] 
+3->[4,3,-2,-7,8,2,3,1]
+2->[4,-3,-2,-7,8,2,3,1]
+7->[4,-3,-2,-7,8,2,-3,1]
+8->[4,-3,-2,-7,8,2,-3,-1]
+2->[4,[3],-2,-7,8,2,-3,-1]
+3->[4,[3],[2],-7,8,2,-3,-1]
+1->[-4,[3],[2],-7,8,2,-3,-1]
+```
+```java
+public List<Integer> findDuplicates(int[] nums){
+    List<Integer> res = new ArrayList<>();
+    for(int i = 0;i < nums.length;i++){
+        int idx = Math.abs(nums[i]) - 1;
+        if(nums[idx] < 0){
+            res.add(Math.abs(idx) + 1);
+        }
+        nums[idx] = -nums[idx];
+    }
+    return res;
+}
+```
+
+### 769 最多能排序的块 0-n的排列切割，块排序后连接是排序的原数组 
+>输入: arr = [1,0,2,3,4]
+输出: 4
+解释:
+我们可以把它分成两块，例如 [1, 0], [2, 3, 4]。
+然而，分成 [1, 0], [2], [3], [4] 可以得到最多的块数。
+
+```
+idx:0 1 2 3 4
+arr:1 0 2 3 4
+max:0 1 2 3 4
+当前index<当前max 表示可以划分成一组，==max表示要换下一组
+```
+
+```java
+public int maxChunksToSorted(int[] arr) {
+    int res = 0;
+    for(int i =0,max = 0;i<arr.length;i++){
+        if(i==(max=Math.max(max,arr[i])))
+            res++;
+    }
+    return res;
+}
+```
+
+### 915 Max(left)<=Min(right)
+画折线图，当前`A[i]<left` 则把切分线抬到`globalMax`
+![lc915](/images/lc915.jpg)
+7ms 60%
+```java
+public int partitionDisjoint(int[] A) {
+    int n = A.length;
+    int leftMax = A[0];
+    int global = leftMax;
+    int parti = 0;
+    for(int i = 1;i<n;i++){
+        if(leftMax>A[i]){
+            leftMax = global;
+            parti = i;
+        }else global = Math.max(global,A[i]);
+    }
+    return parti+1;
+}
+```
+
+### 768 最多能排序的块 重复元素
+> 输入: arr = [2,1,3,4,4]
+输出: 4
+解释:
+我们可以把它分成两块，例如 [2, 1], [3, 4, 4]。
+然而，分成 [2, 1], [3], [4], [4] 可以得到最多的块数。 
+arr的长度在[1, 2000]之间。
+arr[i]的大小在[0, 10**8]之间。
+
+最快的100%： 只构造后缀min数组,线性扫描更新max,保证`leftMax<Rmin`的划分
+
+```java
+public int maxChunksToSorted100(int[] arr) {
+    int n = arr.length;
+    int[] minOfRight = new int[n];
+    minOfRight[n - 1] = arr[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+        minOfRight[i] = Math.min(minOfRight[i + 1], arr[i]);
+    }
+    int res = 0;
+    int max = Integer.MIN_VALUE;
+    for (int i = 0; i < n - 1; i++) {
+        max = Math.max(max,arr[i]);
+        // 等于 重复元素 去掉=就是第一题 68%
+        if (max <= minOfRight[i + 1]) res++;
+    }
+    return res + 1;
+}
+```
+
+
+56%：前缀max数组 后缀min数组
+left`[2,1]` right`[3,4,4]`
+`leftMax<rightMin`的时候
+```
+arr     [2, 1, 3, 4, 4]
+
+比较切分位置0~n-1：[0:i][i+1:n-1]
+leftMax    [2, !2, !3, !4, 4] 
+rightMin[1, 1, !3, !4, !4]
+```
+
+```java
+public int maxChunksToSorted(int[] arr) {
+    int n = arr.length;
+    int[] maxLeft = new int[n];
+    int[] minRight = new int[n];
+    maxLeft[0] = arr[0];
+    for (int i = 1; i < n; i++) {
+        maxLeft[i] = Math.max(maxLeft[i-1],arr[i]);
+    }
+    minRight[n-1] = arr[n-1];
+    for (int i = n-2; i >= 0 ; i--) {
+        minRight[i] = Math.min(minRight[i+1],arr[i]);
+    }
+
+    int res = 0;
+    for (int i = 0; i < n-1; i++) {
+        if(maxLeft[i] <= minRight[i+1]){
+            res++;
+        }
+    }
+    return res+1;
+}
+```
+
+
+
+44%拷贝一个数组排序，做累加,相等则可以划分
+`[2,1 |,3 |,4 |,4]`
+`[1,2 |,3 |,4 |,4]`
+```java
+public int maxChunksToSorted(int[] arr) {
+    int sum1 =0,sum2 =0,res = 0;
+    int[] copy = arr.clone();
+    for(int i =0;i<arr.length;i++){
+        sum1 += copy[i];
+        sum2 += arr[i];
+        if(sum1 == sum2)ans++;
+    }
+    return ans;
+}
+```
+
+
+
+### 401 二进制手表
+上排1,2,4,8表示小时 下排1,2,4,8,16,32表示分钟
+上1,2 下 16，8，1 表示3:25
+>Input: n = 1 两了几个led灯 所有可能的时间
+Return: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
+
+计算小时和分钟里有多少个1
+```java
+public List<String> readBinaryWatch(int num){
+    List<String> times = new ArrayList<>();
+    for (int h = 0; h < 12 ; h++) {
+        for (int m = 0; m < 60 ; m++) {
+            if(Integer.bitCount((h<<6) + m) == num){
+                times.add(String.format("%d:%02d",h,m));
+            }
+        }
+    }
+    return times;
+}
+```
+
+### 汉明重量 Hamming weight 32位int有多少个1
+>Input: 11
+>Output: 3
+>Integer 11 has binary representation 00000000000000000000000000001011
+
+>X与X-1相与得到的最低位永远是0
+
+| Expression | Value |
+| ------| ------ |
+| X | 0 1 0 0 0 1 0 0 0 1 0 0 0 0 |
+| X-1 | 0 1 0 0 0 1 0 0 0 0 1 1 1 1 |
+|X & (X-1) | 0 1 0 0 0 1 0 0 0 0 0 0 0 0 |
+
+### 477 全部汉明距离`Integer.bitCount(x ^ y)`
+> Input: 4, 14, 2
+> Output: 6 
+> HammingDistance(4, 14) + HammingDistance(4, 2) + HammingDistance(14, 2) = 2 + 2 + 2 = 6.
+
+4  = 0100
+14 = 1110
+2  = 0010
+0x3+2*1+2*1+1*2
+
+```java
+public int totalHammingDistance(int[] nums){
+    int total = 0,n = nums.length;
+    for (int i = 0; i < 32 ; i++) {
+        int bitCnt = 0;
+        //有几个num这个位是1
+        for (int j = 0; j < n ; j++) {
+            bitCnt += (nums[j] >> i) & 1;
+        }
+        total += bitCnt*(n-bitCnt);
+    }
+    return total;
+}
+```
+
+
+
+### 338 0~n每个数字有几个1位 O(n)复杂度
+>Input: 5
+Output: [0,1,1,2,1,2]
+
+```java
+public int[] countBits(int num){
+    int[] f = new int[num + 1];
+    for (int i = 1; i <= num ; i++) {
+        f[i] = f[i >> 1] + (i & 1);
+    }
+    return f;
+}
+```
+
+
+
+### lt 803 建筑物之间的最短距离
+```
+盖房子，在最短的距离内到达所有的建筑物。
+给定三个建筑物(0,0),(0,4),(2,2)和障碍物(0,2):
+
+    1 - 0 - 2 - 0 - 1
+    |   |   |   |   |
+    0 - 0 - 0! - 0 - 0
+    |   |   |   |   |
+    0 - 0 - 1 - 0 - 0
+点(1,2)是建造房屋理想的空地，因为3+3+1=7的总行程距离最小。所以返回7。
+```
+
+### lt640 字符串 S 和 T, 判断他们是否只差一步编辑 lc161
+```java
+public boolean isOneEditDistance(String s, String t) {
+    int sl = s.length();
+    int tl = t.length();
+    if(s.equals(t))return false;
+    if(Math.abs(sl-tl)>1)return false;
+    int idx = 0;
+    int len = Math.min(sl,tl);
+    for(int i = 0; i < len; i++){
+        idx = i+1;// >=1
+        // 前面已经相等了
+        if(s.charAt(i) != t.charAt(i)){
+            // 比较两个字符串的a, b的index+1, index+1 位以后是否相等
+            // 或者 index+1, index 是否相等，
+            // 或者index, index+1是否相等
+            return s.substring(idx).equals(t.substring(idx)) || 
+            s.substring(idx).equals(t.substring(idx-1)) || 
+            s.substring(idx-1).equals(t.substring(idx));
+        }
+    }
+    return true;
+}
+```
+
+### 72 编辑距离
+
+
+### 取模和取余rem
+java的`%`取余 python 取模
+求 整数商： c = a/b;
+
+计算模或者余数： r = a - c*b.
+例如：计算-7 Mod 4
+```python
+>>> -7%4
+1
+```
+那么：a = -7；b = 4；
+
+第一步：求整数商c，如进行求模运算c = -2（向负无穷方向舍入），求余c = -1（向0方向舍入）；
+
+第二步：计算模和余数的公式相同，但因c的值不同，求模时r = 1，求余时r = -3。
+
+### 149 在同一条直线上最多的点数
+
+
+### 线段上格点的个数
+> P1=(1,11) P2=(5,3)
+> out: 3 (2,9) (3,7) (4,5)
+
+答案是gcd(|x1-x2|,|y1-y2|)-1
+最大公约数：共有约数中最大的一个
+x相差4，y相差8 求分成（/）最多多少份，x,y都是整数
+
+### 火车编组 1,2,3,4不可能的出栈顺序 ACM列车长的烦恼
+>3节车厢，按照1，2，3依次入轨编组，可以在左边形成1 2 3，1 3 2，2 1 3，2 3 1，321。
+>问1-2-3-4能否编程4，1，3，2
+
+```java
+//假设序列是1,2,3,4
+public static void main(String[] args) {
+    int[] train = {4,1,3,2};
+    boolean flag = false;
+    int m = train.length;
+    for (int i = 0; i < m ; i++) {
+        for (int j = i+1; j < m; j++) {
+            for (int k = j+1; k < m ; k++) {
+                if(train[i]>train[j]&&train[i]>train[k]&&train[k]>train[j]){
+                    flag = true;
+                    break;
+                }
+            }
+        }
+    }
+    if(!flag) System.out.println("Yes");
+    else System.out.println("No");
+}
+```
+
+### 区间dp
+
+### lt476石子合并 区间dp
+> 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
+> in : 4 1 1 4 out: 18
+
+
+
+### lc84直方图中的最大矩形poj2559
+![histo1.jpg](/images/histo1.jpg)
+```java
+//todo next
+```
+
+---
+矩阵乘法相关题目：
+http://www.matrix67.com/blog/archives/276
+
+### poj3734
+
+### 790 L型，XX型骨牌覆盖2xN的board
+> Input: 3
+Output: 5
+Explanation: 
+The five different ways are listed below, different letters indicates different tiles:
+XYZ XXZ XYY XXY XYY
+XYZ YYZ XZZ XYY XXY
+
+![lc790.jpg](/images/lc790.jpg)
+1.如果只XX骨牌
+dp[i] 表示N = i的时候有多少种解
+其实是费fib数列
+
+#### poj 2411
+http://poj.org/problem?id=2411
+输入：大矩阵的h高，和w宽
+输出:用宽2，高1的骨牌一共有多少种拼法
+
+
+### 图中长度为k的路径计数
+https://www.nowcoder.com/acm/contest/185/B
+>求出从 1 号点 到 n 号点长度为k的路径的数目.
+
+{% fold %}
+```java
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+    //AC
+//    final static int M = 10000;
+    public static long[][] mul(long[][] A,long[][] B){
+        long[][] rst = new long[A.length][B[0].length];
+        for (int i = 0; i <A.length ; i++) {
+            for (int k = 0; k <B.length ; k++) {
+                for (int j = 0; j <B[0].length ; j++) {
+                    rst[i][j] = (rst[i][j]+A[i][k]*B[k][j]);
+                }
+            }
+        }
+        return rst;
+    }
+    public static long[][] pow(long[][] A,int n){
+        long[][] rst =new long[A.length][A.length];
+        for (int i = 0; i <A.length ; i++) {
+            rst[i][i] = 1;
+        }
+        while (n>0){
+            if((n&1)!=0){
+                rst = mul(rst,A );
+            }
+            A = mul(A, A);
+            n>>=1;
+        }
+        return rst;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        long[][] graph = new long[n][n];
+        for (int i = 0; i <n ; i++) {
+            for (int j = 0; j <n ; j++) {
+                graph[i][j] = sc.nextInt();
+            }
+        }
+        long[][] Gn = pow(graph, k);
+        System.out.println(Gn[0][n-1]);
+    }
+}
+
+```
+{% endfold %}
+
+有向图 从A点走K步到达B(边可重复)的方案数
+`G[u][v]`表示u到v 长度为k的路径数量
+k=1 1条边可达的点 G1是图的邻接矩阵
+![kpath.jpg](/images/kpath.jpg)
+
+### 快速幂logN完成幂运算
+carmichael number
+```java
+//this^exponent mod m
+public BigInteger modPow(BigInteger exponent, BigInteger m)
+```
+
+### 递推公式
+![ditui.jpg](/images/ditui.jpg)
+实际上求m项地推公式的第n项 可以用初项线性表示，通过快速幂O(m^2logn)
+
+### fibo递推公式
+[特征方程](https://baike.baidu.com/item/%E7%89%B9%E5%BE%81%E6%96%B9%E7%A8%8B)
+1.二阶递推公式的特征方程
+递推公式Xn = aXn-1 - bXn-2
+特征方程x^2-ax+b =0
+解得x1,x2则存在F(n) = Ax1+Bx2
+带入F(0),F(1) 可得通项
+
+2.矩阵解法
+二阶递推式存在2x2矩阵A
+![fibo.jpg](/images/fibo.jpg)
+
+矩阵乘法：
+```java
+final int M = 10000;
+public int[][] mul(int[][] A,int[][] B){
+    int[][] rst = new int[A.length][B[0].length];
+    for (int i = 0; i <A.length ; i++) {
+        for (int k = 0; k <B.length ; k++) {
+            for (int j = 0; j <B[0].length ; j++) {
+                rst[i][j] = (rst[i][j]+A[i][k]*B[k][j])%M;
+            }
+        }
+    }
+    return rst;
+}
+```
+![quickmi](/images/quickmi.jpg)
+快速幂，将n用二进制表示，5->101表示A^5 = A^4+A^1,
+A每次翻倍，n一直右移，n最右为1的时候加上当前A翻倍的结果。
+矩阵的幂
+```java
+public  int[][] pow(int[][] A,int n){
+    int[][] rst =new int[A.length][A.length];
+    for (int i = 0; i <A.length ; i++) {
+        rst[i][i] = 1;
+    }
+    //for(;n>0;n>>=1)
+    while (n>0){
+        //快速幂
+        if((n&1)!=0)rst = mul(rst,A );
+        A = mul(A, A);
+        n>>=1;
+    }
+    return rst;
+}
+```
+
+解fibo：
+```java
+int[][] A = {{1,1},{1,0}};
+int[][] rst = sl.pow(A, n);
+System.out.println(rst[1][0]);
+```
+
+
+
+### 763 划分尽可能多字母区间
+>输入: S = "ababcbacadefegdehijhklij"
+输出: [9,7,8]
+解释:
+划分结果为 "ababcbaca", "defegde", "hijhklij"。
+每个字母最多出现在一个片段中。
+像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
+ababcba 从第一个a到最后一个a是必须包含的长度
+
+```java
+//45%
+public List<Integer> partitionLabels(String S) {
+    List<Integer> rst = new ArrayList<>();
+    //每个字母最后出现的index
+    int[] last = new int[26];
+
+    for(int i=0;i<S.length();i++){
+      last[S.charAt(i)-'a'] = i;
+    }
+    int start=0,end=0;
+    for(int i = 0;i<S.length();i++){
+        //更新当前字母的区间
+        end = Math.max(end,last[S.charAt(i)-'a']);
+        //关键
+        if(i==end){
+            rst.add(end-start+1);
+            start = end+1;
+        }
+    }
+    return rst;
+}
+```
+
+
+ 
+
+
+### 15 3sum a + b + c = 0
+> Given array nums = [-1, 0, 1, 2, -1, -4],
+A solution set is:
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+关键：去重技巧
+```java
+//75%
+public List<List<Integer>> threeSum(int[] num) {
+    Arrays.sort(num);
+    List<List<Integer>> res = new ArrayList<>();
+    for (int i = 0; i <num.length-2; i++) {
+        //关键去重
+        if(i==0||(i>0&&num[i]!=num[i-1])){
+            int lo = i+1,hi=num.length-1,sum = 0-num[i];
+            //关键
+            while (lo<hi){
+                if(num[lo]+num[hi] == sum){
+                    res.add(Arrays.asList(num[i],num[lo],num[hi]));
+                    //去重
+                    while (lo<hi&&num[lo]==num[lo+1])lo++;
+                    while (lo<hi&&num[hi]==num[hi-1])hi--;
+                    lo++;hi--;
+                }else if(num[lo]+num[hi]<sum)lo++;
+                else hi--;
+            }
+        }
+      }
+      return res;
+}
+```
+
+### lt 1487 2sum 最接近target
+
+### 16 3sum 最接近target的值
+//todo nexttime
+
+### 18 4sum 外层for 用3sum找`target-nums[i]`
+
+### 454 4 sum 2 poj2785 4 Values whose Sum is 0
+用poj的方法11%
+4个分别有n个数字的数组ABCD，每个数组中取一个，合为0的组合数。
+c+d = -a-b
+从A,B中找出n^2种组合，从C,D中找出n^2种组合，排序二分找到lowerbound和upbound。
+
+正确方法：计算c+d的时候放入hashmap计数
+```java
+public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+    Map<Integer,Integer> map = new HashMap<>();
+    for (int i = 0; i <C.length ; i++) {
+        for (int j = 0; j <D.length ; j++) {
+            int sum = C[i] + D[j];
+            map.put(sum,map.getOrDefault(sum,0 )+1 );
+        }
+    }
+    int res = 0;
+    for (int i = 0; i <A.length ; i++) {
+        for (int j = 0; j <B.length ; j++) {
+            res += map.getOrDefault(-(A[i]+B[j]),0 );
+        }
+    }
+    return res;
+}
+```
+
+
+
+### 914 相同数字的牌划分成一组，每组数量相同 能否划分
+> 输入：[1,2,3,4,4,3,2,1]
+输出：true
+解释：可行的分组是 [1,1]，[2,2]，[3,3]，[4,4]
+
+计数，求最大公约数
+```java
+public boolean hasGroupsSizeX(int[] deck) {
+    if(deck==null||deck.length<2)return false;
+   Map<Integer, Integer> count = new HashMap<>();
+    int res = 0;
+    for (int i : deck) count.put(i, count.getOrDefault(i, 0) + 1);
+    for (int i : count.values()) res = gcd(i, res);
+    return res > 1;
+}
+
+public int gcd(int a, int b) {
+    return b > 0 ? gcd(b, a % b) : a;
+}
+```
+
+
+
+### 916
+> b 中的每个字母都出现在 a 中，包括重复出现的字母，那么称单词 b 是单词 a 的子集。 例如，“wrr” 是 “warrior” 的子集，但不是 “world” 
+
+### 7 整数反转 integer越界
+{% fold %}
+```java
+public int reverse(int x) {
+    int flag = x<0?-1:1;
+    int rst = 0;
+    while(x!=0){
+        int add = x%10;
+        x/=10;
+        if(rst>Integer.MAX_VALUE/10||(rst==Integer.MAX_VALUE/10&&add>7))return 0;
+        if(rst<Integer.MIN_VALUE/10||(rst==Integer.MIN_VALUE/10&&add<-8))return 0;
+        rst = rst*10+add;
+    }
+    return rst;
+}
+```
+{% endfold %}
+
+### 319 n个灯泡 n轮开关
+初始时有 n 个灯泡关闭。 第 1 轮，你打开所有的灯泡。 第 2 轮，每两个灯泡你关闭一次。 第 3 轮，每三个灯泡切换一次开关（如果关闭则开启，如果开启则关闭）。第 i 轮，每 i 个灯泡切换一次开关。 对于第 n 轮，你只切换最后一个灯泡的开关。 找出 n 轮后有多少个亮着的灯泡。
+>输入: 3
+输出: 1 
+解释: 
+初始时, 灯泡状态 [关闭, 关闭, 关闭].
+第一轮后, 灯泡状态 [开启, 开启, 开启].
+第二轮后, 灯泡状态 [开启, 关闭, 开启].
+第三轮后, 灯泡状态 [开启, 关闭, 关闭]. 
+
+你应该返回 1，因为只有一个灯泡还亮着。
+```java
+int bulbSwitch(int n) {
+    return sqrt(n);
+}
+```
+被按奇数下的灯泡还亮着。
+当第d轮可以整除i灯泡i被按下。所以如果i有奇个除数，则最后是开的。
+例如12，
+
+
+### 451 字符串按频率排序 桶排序
+>>>>>>> refs/remotes/origin/hexo-edit
+
 
 ### lt168 吹气球
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
@@ -36,30 +808,11 @@ nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 ```
 
 
+
 ### 矩阵链乘法O(n^3)的dp
  
 
-### interval max overLap
-https://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/
-```
- arr[]  = {1, 2, 10, 5, 5}
- dep[]  = {4, 5, 12, 9, 12}
 
-Below are all events sorted by time.  Note that in sorting, if two
-events have same time, then arrival is preferred over exit.
- Time     Event Type         Total Number of Guests Present
-------------------------------------------------------------
-   1        Arrival                  1
-   2        Arrival                  2
-   4        Exit                     1
-   5        Arrival                  2
-   5        Arrival                  3    // Max Guests
-   5        Exit                     2
-   9        Exit                     1
-   10       Arrival                  2 
-   12       Exit                     1
-   12       Exit                     0 
-```
 
 ### 最大值为k的不重叠子数组的长度和？??
 https://www.geeksforgeeks.org/maximum-sum-lengths-non-overlapping-subarrays-k-max-element/
@@ -168,9 +921,6 @@ time O(col x col x row)
 ```
 
 
-
-
-
 ### 122 可以买卖多次 买股票的利润
 > 输入: [7,1,5,3,6,4]
 输出: 7
@@ -194,9 +944,7 @@ https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
 > AVL or Red-Black to sort in O(n Log m) time where m is number of distinct elements.
 //todo
 
-### lt476石子合并 区间dp
-> 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
-> in : 4 1 1 4 out: 18
+
 
 
 
@@ -211,12 +959,14 @@ https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
 执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
 
 
-### ！！！！76 最小的子串窗口 很重要的题
+
 
 ### 516 最长回文子序列
 
 ### Rearrange a string
 https://www.geeksforgeeks.org/rearrange-a-string-so-that-all-same-characters-become-at-least-d-distance-away/
+
+### 440 第k小的字典序
 
 ### !!386 字典序数字 todo
 
@@ -263,7 +1013,7 @@ permutation的字典序
  3.保证后缀最小（翻转？）
 
 
-### 636
+### 636 单核cpu函数调用栈
 日志是具有以下格式的字符串：function_id：start_or_end：timestamp。例如："0:start:0" 表示函数 0 从 0 时刻开始运行。"0:end:0" 表示函数 0 在 0 时刻结束。
 
 函数的独占时间定义是在该方法中花费的时间，调用其他函数花费的时间不算该函数的独占时间。
@@ -302,160 +1052,7 @@ public int kthSmallest(int[][] matrix, int k) {
 ```
 2.
 
-### 373
 
-
-### 概率生成函数 概率母函数
-1.x的系数是a1,a2,…an 的单个组合的全体。
-2. x^2的系数是a1,a2,…a2的两个组合的全体。
-………
-n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。
-
-> 有1克、2克、3克、4克的砝码各一枚，能称出哪几种重量？每种重量各有几种可能方案？
-
-设x表示砝码，x的指数表示砝码的重量
-1个1克的砝码可以用函数1+1*x^1表示，
-1个2克的砝码可以用函数1+1*x^2表示，
-1个3克的砝码可以用函数1+1*x^3表示，
-1个4克的砝码可以用函数1+1*x^4表示，
-
-- 1表示数量0个
-例如1个2克的砝码：1+x^2
-1其实应该写为：1*x^0,即1代表重量为2的砝码数量为0个。
-
-- 系数表示状态数（方案数）
-1+x^2，也就是1*x^0 + 1*x^2，不取2克砝码，有1种状态；或者取2克砝码，也有1种
-状态。
-
-(1+x)(1+x^2)(1+x^3)(1+x^4)
-=(1+x+x^2+x^4)(1+x^3+^4+x^7)
-=1 + x + x^2 + 2*x^3 + 2*x^4 + 2*x^5 + 2*x^6 + 2*x^7 + x^8 + x^9 + x^10
-从上面的函数知道：可称出从1克到10克，系数便是方案数。
-有2*x^5 项，即称出5克的方案有2种：5=3+2=4+1；
-
-
-> 求用1分、2分、3分的邮票贴出不同数值的方案数：每种是无限的。
-
-
-
-### 分配问题及应用
-![fenpei.jpg](/images/fenpei.jpg)
-
-
-### 硬币相关问题
-http://www.raychase.net/3144
-正正反 甲赢 正反反 乙赢 Penney's game
-
-![penneygame.jpg](/images/penneygame.jpg)
-> 使用长度为3字节的序列，玩家B相对玩家A有优势。这是因为这个游戏是一个非传递博弈，所以无论如何选定第一个序列，总会有一个序列有更大的获胜概率。
-
-
-反反正:正反反 = 1：3 
-因为只要出现一次正，想得到反反正的人就必输了，他肯定得先看到两次反，我就得到正反反了。
-两个硬币4种情况有3种有正
-
-正正反：反正正 = 1：3
-只要出现一次反，反正正就赢了。
-
-正反反HTT：正正反HHT = 1:2
-反正正thh:反反正tth = 1：2
-
-https://en.wikipedia.org/wiki/Penney%27s_game
-对于二号玩家：1-2-3 ->  (not-2)-1-2
-第一个字节与1号玩家的第二个字节相反，
-第二个字节与1号玩家的第一个字节相同，
-第三个字节与1号玩家的第二个字节相同。
-
-http://www.matrix67.com/blog/archives/3638
-> 所有 1 都不相邻的 k 位 01 串有 Fk+2 个 Fi 表示 Fibonacci 数列中的第 i 项
-
-抛掷第 k 次才出现连续两个正面”的意思就是， k 位 01 串的末三位是 011，并且前面 k – 3 位中的数字 1 都不相邻。 k-3位的01不相邻的串有F(k-1)个
-
->平均需要抛掷多少次硬币，才会首次出现连续的 n 个正面？
-
-答案是 2^(n+1) – 2 
-神奇的模式概率与“鞅”//todo
-http://www.math-engineering.uestc.edu.cn/
-模式的平均等待时间：
-模式 HHHHHH 的平均等待时间 126
-
-> 扔硬币直到连续两次出现正面，求扔的期望次数
-
-• 扔到的是反面，那么还期望抛 E 次，因为抛到反面完全没用，总数就期望抛 E+1，所以是0.5*(1 + E)
-• 扔到的是正面，如果下一次是反面，那么相当于重头来过，总数就期望抛，则是0.25*(2 + E)
-• 扔到两次，都是正面，总数是 2，则是0.25*2
-所以递归来看E = 0.5*(1 + E) + 0.25*(2 + E) + 0.25*2，解得E = 6
-
-
->A赢： 先正后反， B赢 连续两次反面：A胜的概率 3/4
-
-B 赢概率是1/2*1/2 = 1/4
-
-
-多重排列：pingpang中有重复2个p 2个n 2个g
-1. 标记为p1p2n1n2g1g2ia 全排列个数是8!
-2. p的重复度 为p1p2的全排列 2!
-3. P(N,r1,r2...rt)  标记为P(8;2,2,2,1,1)
-4. P(8;2,2,2,1,1)\*2!\*2!\*2! = 8!
-
-理解二项式定理(a+b)^n
-![abbinary.jpg](/images/abbinary.jpg)
-通项是a^k b^(n-k) 前面的系数表示 n个数的可重排列，a有k个，b有n-k个
-
-不仅是二项式 
-通项是a1^(r1) a2^(r2) at^(rt)
-![nbinary.jpg](/images/nbinary.jpg)
-(x1+x2+…+xm)^n 展开式的项数等于C(n+m-1,n).
-
-> 有6个洞 编号1-9个球，求球入洞的方案数
-
-隔板法：
-1. 划分6个洞需要5个隔板，用1~9填充隔板的空间。变成5个隔板和9个球的全排列。
-2. 5个隔板是相同的，P（14,5,1,1,1,1,1,1,1,1,1,1) = 14!/5!
-
-
-另一种方法：
-1. 1号球可以放6个位置
-2.  1号球等于把空间又划分成了1前和1后，2球有5+2种可能
-3.  同理 3号球有7-1+2 =8个可能...
-4.  6乘到14 = 14!/5!
-
-
-
-> 52张牌分发给4个人，每人13张，问每人有一张A的概率有多少？ 
-> 10.55%
-
-52张牌分发给4个人，每人13张的方法数为52！/(13!)^4 。
-每人发一张A的方法数为4！* 48！/(12!)^4 .
-
-> 4个相同的桔子和6个不同的苹果放到5个不同的盒子中，问每个盒子里有2个水果的概率有多大？
-> 7.4%
-
-把4个相同桔子放入5个不同盒子的放法数为C(5,4),
-把6个不同苹果放入5个不同盒子的放法数为5^6 .因此总的分配方法数为C(5,4)*5^6 .
-
-每个盒子有2个水果，有如下三种情况：
-1、（AA)(AA)(AA)(OO)(OO)
-C(5,2)*6!/2!/2!/2!
-2、AA)(AA)(OA)(OA)(OO)
-C(5,1)\*C(4,2)\*6!/2!/2!
-3.（AA)(OA)(OA)(OA)(OA)
-C(5,4)*6!/2!
-
-> 将n个不同的球放入编号为1,2,…,k的k个盒子中，试求：
-
-1. 第一个盒子是空盒的概率: 第一个盒子是空盒的方案数为(k－1) n 。
-2. 设k≥n,求n个球落入n个不同盒子的概率:  n个球落入n个不同盒子的方案数为C(k,n)n!。
-3. 第一盒或第二盒两盒中至少一个是空盒的概率。该方案数为第一个盒子是空盒的方案数加上第二个
-盒子是空盒的方案数，再减去两个盒子都是空盒的方案
-数。
-
-
-> 随机地将15名插班生分配到三个班级，每班各5名。设15名插班生中有3为女生。试求：
-将15名插班生分配到三个班级，每班各5名的方案数为C(15,5)C(10,5)C(5,5)=15!/(5!5!5!)。
-
-1. 每一个班级分到一名女生的概率:3!*12!/(4!4!4!)
-2. 三名女生分到同一班的概率: 3*12!/(5!5!2!)
 
 
 
@@ -829,7 +1426,7 @@ void Bfs(int A,int B,int C){
 
 ### 2^N 大整数
 
-快速幂
+
 
 
 
@@ -1417,7 +2014,7 @@ private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
 
 ### 131 
 
-### 旋转矩阵
+### 54旋转矩阵
 ![rotate2d.jpg](/images/rotate2d.jpg)
 top=0,bot=3,left=0,right = 3
 n是矩阵大小n>1的时候继续，每一圈，矩阵大小-=2
@@ -1428,6 +2025,8 @@ i=3:3赋值给12
 外层完了之后子问题是top++,left++,right--,bot--,n-=2
 
 方法2：翻转？
+
+### 59 生成nxn的旋转矩阵
 
 ### 49 
 直接拿CharArray的sort重建String当key 49%
@@ -1814,8 +2413,18 @@ String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 线性扫描 复杂度n^2
 ![lc611.jpg](/images/lc611.jpg)
 
-### 数组组成三角形的最大周长
+### 数组组成三角形的最大周长nlogn
 贪心，排序，如果 $a[i]<a[i-1]+a[i-2]$ 则没有其他两条边可以两边之和`>`第三边了，换下一条当最长边。
+```java
+public int maxC(int[] A){
+    Arrays.sort(A);
+    int n = A.length;
+    for (int i = n-1; i >=2 ; i--) {
+        if(A[i]<A[i-1]+A[i-2])return A[i]+A[i-1]+A[i-2];
+    }
+    return 0;
+}
+```
 
 ### MST：
 将图的点分成2个集合，用边连接两个集合中的点，最小的边集是MST
@@ -1849,6 +2458,7 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 
 ### 145 后序遍历二叉树 
 1.函数式编程 不用help函数（可变数组），复制数组
+
 {% fold %}
 ```java
 public List<Integer> post(TreeNode root){
@@ -1937,8 +2547,8 @@ path里加入{0},{2}头插法{2,0}//保证远的在后面
 dfs回到1，继续找封闭回路
 ![Hierholzer](/images/Hierholzer2.jpg)
 
-> Input: tickets = [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
-> Output: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+> Input: tickets = `[["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]`
+> Output: `["JFK", "MUC", "LHR", "SFO", "SJC"]`
 
 1. 用hashmap记录每个点的出度的点，建图
 2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
@@ -2073,6 +2683,39 @@ private boolean dfs(int[][] graph,int v){
 
 #### 886 给出dislike边集，能不能分成2组，组里没有互相讨厌的人
 边集->邻接表->二分图
+
+边集->邻接矩阵->二分图dfs染色
+```java
+public boolean possibleBiparitition(int N,int[][] dislikes){
+    int[][] graph = new int[N][N];
+    //边集->无向图 邻接矩阵
+    for(int[] d:dislikes){
+        graph[d[0]-1][d[1]-1] = 1;
+        graph[d[1]-1][d[0]-1] = 1;
+    }
+    int[] group = new int[N];
+    for (int i = 0; i < N; i++) {
+        if(group[i] == 0&& !dfs2d(graph,group,i,1))return false;
+    }
+    return true;
+}
+//可不可以分到g组
+private boolean dfs2d(int[][] graph,int[] group,int idx,int g){
+    group[idx] = g;
+    //行是邻边
+    for (int i = 0; i < graph.length; i++) {
+        if(graph[idx][i] == 1){
+            if(group[i] == g){
+             return false;
+            }
+            if(group[i] == 0&&!dfs2d(graph,group,i,-g))return false;
+
+        }
+    }
+    return true;
+}
+```
+
 
 
 ### 494 在数字中间放正负号使之==target
@@ -2383,23 +3026,6 @@ def isPrime(n):
 421 ：‭‭000110100101‬
 
 ---
-### 790 L型，XX型骨牌覆盖2xN的board
-> Input: 3
-Output: 5
-Explanation: 
-The five different ways are listed below, different letters indicates different tiles:
-XYZ XXZ XYY XXY XYY
-XYZ YYZ XZZ XYY XXY
-
-![lc790.jpg](/images/lc790.jpg)
-1.如果只XX骨牌
-dp[i] 表示N = i的时候有多少种解
-其实是费fib数列
-
-#### poj 2411
-http://poj.org/problem?id=2411
-输入：大矩阵的h高，和w宽
-输出:用宽2，高1的骨牌一共有多少种拼法
 
 
 ### !!97 s1和s2是否交错组成s3
@@ -2493,6 +3119,7 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
   从右向左扫描，同理更新max，当左括号>右括号重置0.
 
 ---
+<<<<<<< HEAD
 
 
 ---
@@ -2778,11 +3405,14 @@ private int multicnt(int W,int n,int[] val,int[] wt){
 #### 多重背包 第i种物品最多Mi件可用
 $F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
 
+=======
+>>>>>>> refs/remotes/origin/hexo-edit
 ### 本福特定律
 以1为首位的数字的概率为30%
 
 
 
+<<<<<<< HEAD
 ### 719
 
 ### 正确二分查找的写法 lc35
@@ -2930,6 +3560,8 @@ private int findMin(int[] nums,int low,int hi){
 
 
 ---
+=======
+>>>>>>> refs/remotes/origin/hexo-edit
 
 
 
@@ -3021,16 +3653,7 @@ int majorityElement(vector<int> & nums){
 7.分治???
 
 ---
-### 80 数组每个元素只保留<=2次
-cnt表示插入位置，i用于遍历 
-```java
-int cnt=2;
-for(int i =2;i<nums.length;i++){
-    if(nums[i]!=nums[cnt-2]){
-        nums[cnt++] = nums[i];
-    }
-}
-```
+
 
 ### 节点是随机变量的有向无环图=贝叶斯网络BN
 求联合概率会用到最小生成树
@@ -3213,6 +3836,19 @@ board[i][j]='0';
 ### 后缀树 对字典树路径压缩，一层多个字符 生成需要O(N^2)
 
 ### 后缀数组 A[]后缀的起始位置
+//Memory Limit Exceeded
+```java
+private final String[] suffixes;
+private final int N;
+public SuffixArray(String s){
+    N = s.length();
+    suffixes = new String[N];
+    for (int i = 0; i < N; i++) {
+        suffixes[i] = s.substring(i);
+    }
+    Arrays.sort(suffixes);
+}
+```
 "alohomora"
 1.按字典序排序所有可能的后缀S[0]="a",[1]="alohomora",[2]="homora"..[len-1]="ra"
 2.A[i]是S[A[i]]的索引,是后缀的真实起始位置.A[i]是i包括i位以后的后缀
@@ -3345,6 +3981,7 @@ for(int i =1;i<4;i++){
  {15,20,21,23,29},
  {29}};
 ```
+
  S=4 T=21
 bfs，起点入队，遍历起点可以到达的所有公交(4可以达公交2)，遍历所有公交2上的可达`stop{4,10,12,20,24,28,33},`
 如果没到T，则4乘的公交换一辆，再遍历有4公交上的其他可达stop。
@@ -3395,6 +4032,47 @@ int fib(int n){
 ---
 ### ?347桶排序 int数组中最常出现的n个
 桶长度为数组长度，数字出现的最高次数为len，把频率相同的放在同一个桶。最后从桶序列高到低遍历。
+99%
+不用map，遍历一次找到max和min 建len = max-min+1的数组计数
+{% fold %}
+```java
+public List<Integer> topKFrequent(int[] nums, int k) {
+    List<Integer> rst = new ArrayList<>();
+    if(nums.length == 0) return rst;
+    int min = Integer.MAX_VALUE,max = Integer.MIN_VALUE;
+    for (int i = 0; i < nums.length; i++) {
+        if(nums[i] < min)min = nums[i];
+        if(nums[i] >max) max = nums[i];
+    }
+    int[] data = new int[max-min + 1];
+    for (int i = 0; i <nums.length ; i++) {
+        data[nums[i] - min]++;
+    }
+    List<Integer>[] bucket = new ArrayList[nums.length+1];
+    for(int i = 0;i<data.length;i++){
+        if(data[i]> 0){
+            if(bucket[data[i]]== null){
+                bucket[data[i]] = new ArrayList<Integer>();
+                bucket[data[i]].add(i+min);
+            }else{
+                bucket[data[i]].add(i+min);
+            }
+
+        }
+    }
+    for(int i =nums.length;i>0;i--){
+        if(k<=0)return rst;
+        if(bucket[i]!=null){
+            rst.addAll(bucket[i]);
+            k-=bucket[i].size();
+        }
+    }
+    return rst;
+
+}
+```
+{% endfold %}
+用map AC34%
 
 
 ### 242 Anagram 相同字母的单词
@@ -3680,7 +4358,7 @@ return sb.toString();
 ### 1. 爬山：局部贪心，快速找到可行解，局部最优
 - 8数码:启发函数：当前状态和目标状态的距离：错位方块个数。
     1. 深度优先
-![mounting](\images\mounting.jpg)
+![mounting](/images/mounting.jpg)
     2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
 
 8数码BFS优先队列
@@ -3747,7 +4425,7 @@ void slove(int[][] from,int x,int y,int[][] end){
 - 多阶段图搜索：最短路径
     - 爬山与BF算法得到最优解都需要遍历整个空间
     1. 用爬山生成界限(可行解or最优解的上限)
-![fenzhi](\images\fenzhi.jpg)
+![fenzhi](/images/fenzhi.jpg)
 
 
 
@@ -3851,55 +4529,8 @@ for(1 to size){
 return head;
 ```
 
-#### 反转链表
-```java
-Node reverse(Nodde head){
-    if(head==null)return null;
-    if(head.next == null)return head;
-    Node second = reverse(head.next);
-    second.next = head;
-    head.next = null;
-    return second;
-}
-```
----
-迭代：
-中间状态null<-1<-2<3 |  4->5->null
-3是newhead 反转成功的链表 | 4curhead是还没反转的链表
-newhead=null开始，curhead从第一个node开始，两个同时向右每次移一格，直到curhead=null
-```java
-Node newhead = null;
-Node curhead = head;
-while(head!=null){
-    Node tmp = curhead.next;
-    curhead.next = newhead;
-    curhead=tmp;
-    newhead = curhead;
-}
-return newhead;
-```
 
 
-转成栈浪费空间并且代码复杂
-
-
-
-最长上升子序列
-无后效性：可写出递推式。之与子问题函数的状态函数值有关，与到达值的路径无关
-子问题：求以$a_k(k=1,2,3...N)$为终点的最长上升子序列长度
-max(n个子问题)
-- 如果ak比已得最长子序列的最后ai大，则长度+1
-`maxLen(k)=max(maxLen(i):i in range(1,k)且ai<ak且k!=1)+1`
-```python
-for i in range(1,n)
-    maxlen[i]=1
-for i in range(2,n)
-    ##求以ai 为终点的最长
-    for j in range(0,i)# ai左边所有的数
-        if a[i]>a[j]: # ai为终点的更长
-        #？？ maxlen[i]也更新了，可能比manlen[j]+1大
-            maxlen[i]=max(maxlen[j]+1,maxlen[i])
-```
 
 
 ### 654 二叉树根是数组中最大元素，左子树是左边元素建子树，右子树是右边元素建子树

@@ -4,6 +4,70 @@ date: 2018-03-16 15:31:34
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### 关系型数据库和对象
+表和类关联
+行和对象关联
+字段和属性关联
+
+### B+树
+数据库中，B+树的高度一般在2到3层。也就是说查找某一键值的记录，最多只需要2到3次IO开销。按磁盘每秒100次IO来计算，查询时间只需0.0.2到0.03秒
+
+不确定：
+100w个Integer B+树需要多少层
+
+### inodb
+
+后台AIO 线程数
+```sql
+mysql> show variables like 'innodb_%io_threads'\G
+*************************** 1. row ***************************
+Variable_name: innodb_read_io_threads
+        Value: 4
+*************************** 2. row ***************************
+Variable_name: innodb_write_io_threads
+        Value: 4
+2 rows in set, 1 warning (0.01 sec)
+```
+
+读线程id小于写线程id
+```sql
+mysql> show engine innodb status\G;
+FILE I/O
+--------
+I/O thread 0 state: wait Windows aio (insert buffer thread)
+I/O thread 1 state: wait Windows aio (log thread)
+I/O thread 2 state: wait Windows aio (read thread)
+I/O thread 3 state: wait Windows aio (read thread)
+I/O thread 4 state: wait Windows aio (read thread)
+I/O thread 5 state: wait Windows aio (read thread)
+I/O thread 6 state: wait Windows aio (write thread)
+I/O thread 7 state: wait Windows aio (write thread)
+I/O thread 8 state: wait Windows aio (write thread)
+I/O thread 9 state: wait Windows aio (write thread)
+```
+
+磁盘最小单位扇区512字节
+文件系统最小单位 块 4k
+InnoDB最小单元 页 16k
+指针大小在6字节
+![innodb16k.jpg](/images/innodb16k.jpg)
+都是16的整数倍
+```sql
+mysql> show variables like 'innodb_page_size';
++------------------+-------+
+| Variable_name    | Value |
++------------------+-------+
+| innodb_page_size | 16384 |
++------------------+-------+
+1 row in set, 1 warning (0.00 sec)
+```
+
+单个叶子节点（页）中的记录数=16K/1K=16。（这里假设一行记录的数据大小为1k，实际上现在很多互联网业务数据记录大小通常就是1K左右）。
+
+那么现在我们需要计算出非叶子节点能存放多少指针，其实这也很好算，我们假设主键ID为bigint类型，长度为8字节，而指针大小在InnoDB源码中设置为6字节，这样一共14字节，我们一个页中能存放多少这样的单元，其实就代表有多少指针，即16384/14=1170。那么可以算出一棵高度为2的B+树，能存放1170*16=18720条这样的数据记录。
+
+根据同样的原理我们可以算出一个高度为3的B+树可以存放：1170*1170*16=21902400条这样的记录。所以在InnoDB中B+树高度一般为1-3层，它就能满足千万级的数据存储。在查找数据时一次页的查找代表一次IO，所以通过主键索引查询通常只需要1-3次IO操作即可查找到数据。
+
 隔离级别是对一致性的破坏。
 事务之间的Happen-before关系：4种 【读写，写读，读读】，写写
 1. 排他锁 排队：序列化读写 不需要冲突控制，无死锁

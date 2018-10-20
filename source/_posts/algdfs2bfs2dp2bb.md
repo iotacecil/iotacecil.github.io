@@ -2,6 +2,7 @@
 title: 一些DFS,BFS可以变成DP,BB的计数题
 date: 2018-09-09 15:22:54
 tags:
+categories: [算法备忘]
 ---
 ### 784 大小写字母的permutation
 `'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快
@@ -166,7 +167,7 @@ private void dfs(List<List<Integer>> rst,int[] candi,List<Integer> tmp,int targe
 ```
 
 ### lt135 有重复元素的可以利用一个元素多次的comb sum
->>输入[1,1,1],target = 2 -> [[1,1]]
+> 输入[1,1,1],target = 2 -> [[1,1]]
 
 方法1.用set去重 
 ```java
@@ -851,8 +852,8 @@ public int findCheapestPriceDp(int n, int[][] flights, int src, int dst, int k) 
    （0）(2) (1)(1) (2)(0)
       1x2  + 1x1  + 2x1
 ```
-![numbst2.jpg](numbst2.jpg)
-![numbst3.jpg](numbst3.jpg)
+![numbst2.jpg](/images/numbst2.jpg)
+![numbst3.jpg](/images/numbst3.jpg)
 当n=5 $T[4]+T[1][3]+T[2][2]+T[3][1]+T[4]$
 
 左子树有j个节点，右子树有n-j-1个节点

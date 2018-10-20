@@ -8,6 +8,72 @@ https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.html
 https://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B
 https://www.educative.io/collection/page/5668639101419520/5649050225344512/5668600916475904
 
+### 729 Calendar1 时间区间有无重叠
+1.`List<int[]>`
+两个区间是否重叠`s1<e2&&e1>s2`
+另一种思考
+![729overlap.jpg](/images/729overlap.jpg)
+{% fold %}
+```java
+class MyCalendar {
+List<int[]> calendar;
+public MyCalendar() {
+    calendar = new ArrayList<>();
+}
+
+public boolean book(int start, int end) {
+    for(int[] it:calendar){
+        if(it[0]<end&&start<it[1])return false;
+    }
+    calendar.add(new int[]{start,end});
+    return true;
+}
+}
+```
+{% endfold %}
+
+2.维持一个排序的map(红黑树）二分查找，start当key，end当value
+
+#### TreeMap
+如果不存在，返回小于查询的最大key
+`final Entry<K,V> getFloorEntry(K key)`
+```java
+public K floorKey(K key) {
+        return keyOrNull(getFloorEntry(key));
+    }
+```
+如果不存在，返回大于查询的最小key
+```java
+public K ceilingKey(K key) {
+        return keyOrNull(getCeilingEntry(key));
+    }
+```
+只需要查找query start 的floor的end
+         query start 的ceil的start
+```java
+class MyCalendar {
+    TreeMap<Integer,Integer> calendar;
+    public MyCalendar() {
+        calendar = new TreeMap<>();
+    }
+    public boolean book(int start, int end) {
+        Integer prev = calendar.floorKey(start);
+        Integer next = calendar.ceilingKey(start);
+        if((prev==null||calendar.get(prev)<=start)
+            &&(next==null||end<=next)){
+            calendar.put(start,end);
+            return true;
+        }
+        return false;
+    }
+}
+```
+### 731 不三重预定的日历
+
+### Haversine formula
+计算经纬度之间的球面距离
+
+
 ### 布隆过滤器 url去重
 https://blog.csdn.net/v_july_v/article/details/6685894
 

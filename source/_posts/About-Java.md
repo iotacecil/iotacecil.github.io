@@ -4,6 +4,24 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+
+
+### 获取当前目录 System.getProperty()参数大全
+`System.out.println(System.getProperty("user.dir"));`
+
+### StringUtils源码学习
+
+### forEach 反编译是迭代器
+
+### modCount在线程不安全的迭代器里会抛异常
+
+### `UnsupportedOperationException`
+>从Arrays.asList()转化过来的List的不支持add()和remove()方法，这是由于从Arrays.asList()返回的是返回java.util.Arrays$ArrayList，而不是ArrayList。Arrays$ArrayList和ArrayList都是继承AbstractList，add() 和remove()等方法在AbstractList中默认throw UnsupportedOperationException而不做任何操作。ArrayList重写这些方法对List进行操作，而Arrays$ArrayList却没有重写add()和 remove()等方法，所以对从Arrays.asList()转化过来的List进行add()和remove()会出现UnsupportedOperationException异常。
+
+Arrays.asList返回的是Arrays的内部类java.util.Arrays.ArrayList 该类继承了AbstractList但是并没有实现所有的方法，和java.util.ArrayList还是有区别的。 AbstractList的add方法：
+
+`res.add(new ArrayList<>(Arrays.asList(num[i],num[lo],num[hi])));`
+
 ### 求`int[]`最大值的正确写法
 `int maxa = Arrays.stream(arr).max().getAsInt();`
 
@@ -126,6 +144,13 @@ this.mat = new int[matrix.length][];
 ### Timer
 
 
+### 对象头8字节
+前4保存对象hash(3)，锁状态(1)
+后4存储对象所属类的引用。
+
+数组还有4字节保存数组大小。
+
+
 ### java内存
 https://algs4.cs.princeton.edu/14analysis/
 http://yueyemaitian.iteye.com/blog/2034305
@@ -207,6 +232,9 @@ final void checkForComodification() {
 ```
 > Iterator 是工作在一个独立的线程中，并且拥有一个 mutex 锁。 Iterator 被创建之后会建立一个指向原来对象的单链索引表，当原来的对象数量发生变化时，这个索引表的内容不会同步改变，所以当索引指针往后移动的时候就找不到要迭代的对象，所以按照 fail-fast 原则 Iterator 会马上抛出 java.util.ConcurrentModificationException 异常。
 所以 Iterator 在工作的时候是不允许被迭代的对象被改变的。
+
+>在使用迭代器遍历的时候，如果使用ArrayList中的remove(int index) remove(Object o) remove(int fromIndex ,int toIndex) add等方法的时候都会修改modCount，在迭代的时候需要保持单线程的唯一操作，如果期间进行了插入或者删除，就会被迭代器检查获知，从而出现运行时异常
+
 
 
 ### 被动加载和主动加载
@@ -375,8 +403,6 @@ DateTime dt = df.parseDateTime("2015-04-20 2:2:2");
 return dt.toDate();
 ```
 
-### StringUtils
-`.isBlank(" ")`true
 
 ### `CollectionUtils.isEmpty(List)`
 

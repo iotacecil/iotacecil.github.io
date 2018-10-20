@@ -5,6 +5,66 @@ tags:
 categories: [算法备忘]
 ---
 
+
+---
+
+### 138
+https://leetcode.com/problems/copy-list-with-random-pointer/solution/
+
+### poj3617构造最小字典序
+
+```java
+/**
+ * 不断取Min(S头/尾)放到T末尾
+ * 相等：判断下一个字符希望先用到小的字符
+ * 可以的操作：
+ * 从S头删除一个加到T尾
+ * 从S尾删除一个加到T尾
+ *
+ * @param S ACDBCB
+ * @return 构造字典序尽可能小的字符串T ABCBCD
+ */
+public static String BestCowLine(String S){
+      int a = 0,b = S.length()-1;
+      StringBuilder sb = new StringBuilder();
+      while (a<=b){
+          //关键
+          boolean left = false;
+          //a+i<b关键
+          for (int i = 0; a+i <= b ; i++) {
+              if(S.charAt(a+i)<S.charAt(b-i)){
+                  left = true;
+                  break;
+              }else if(S.charAt(a+i)>S.charAt(b-i)){
+                  left = false;
+                  break;
+              }
+          }
+          if(left)sb.append(S.charAt(a++));
+          else sb.append(S.charAt(b--));
+      }
+      return sb.toString();
+  }
+```
+
+
+### 818 A加速，R掉头并减速，到指定位置最少需要多少条指令
+>当车得到指令 "A" 时, 将会做出以下操作： position += speed, speed *= 2。
+
+>当车得到指令 "R" 时, 将会做出以下操作：如果当前速度是正数，则将车速调整为 speed = -1 ；否则将车速调整为 speed = 1。  (当前所处位置不变。)
+
+例如，当得到一系列指令 "AAR" 后, 你的车将会走过位置 0->1->3->3，并且速度变化为 1->2->4->-1。
+
+>输入: 
+target = 3
+输出: 2
+解释: 
+最短指令列表为 "AA"
+位置变化为 0->1->3
+
+
+### ！！！！76 最小的子串窗口 很重要的题
+
 ### 152 最大子列乘积 保留当前值之前的最大积和最小积
 负数的最小积有潜力变成最大积
 4ms 11.99%
@@ -270,245 +330,7 @@ public boolean stoneGameDP1D(int[] piles) {
 }
 ```
 
-### lt920 meeting room
-给定一系列的会议时间间隔，包括起始和结束时间[[s1,e1]，[s2,e2]，…(si < ei)，确定一个人是否可以参加所有会议。
-[[0,30]，[5,10]，[15,20]]，返回false。
-贪心
-```java
-public boolean canAttendMeetings(List<Interval> intervals) {
-    if(intervals == null||intervals.size() == 0)return true;
-    Collections.sort(intervals,(o1,o2)->o1.start-o2.start);
-    int end = intervals.get(0).end;
-    for (int i = 1; i < intervals.size(); i++) {
-        if(intervals.get(i).start<end)return false;
-        end = Math.max(end,intervals.get(i).end);
-    }
-    return true;
-}
-```
 
-### lt919 !!!需要几个会议室
-不能贪心：
-> `[[1, 5][2, 8][6, 9]]`
-> 这种情况本来只需要2间房，但是直接贪心就会需要3间房
-
-```java
-/**
- |___| |______|
-   |_____|  |____|
- starts:
- | |   |    |
- i
- ends:
-      |  |     | |
-     end
- res++;
- ---------
-    i
-     end
- res++; 这个end之前有2个start，前一个会议没有结束
- ---------
-        i
-     end
- end++; start>end表示有个room的会议已经结束，可以安排到这个room
- ---------
- */
-//251ms 74%
-public int minMeetingRooms2Arr(List<Interval> intervals) {
-    int[] starts = new int[intervals.size()];
-    int[] ends = new int[intervals.size()];
-    for(int i=0;i<intervals.size();i++){
-        starts[i] = intervals.get(i).start;
-        ends[i] = intervals.get(i).end;
-    }
-    Arrays.sort(starts);
-    Arrays.sort(ends);
-    int cnt =0;
-    int end = 0;
-    for (int i = 0; i < intervals.size(); i++) {
-        if(starts[i]<ends[end])cnt++;
-        else end++;
-    }
-    return cnt;
-}
-```
-
-用TreeMap
-```java
-//240ms 75%
-public int minMeetingRooms(List<Interval> intervals) {
-    TreeMap<Integer,Integer> map = new TreeMap<>();
-    for(Interval i:intervals){
-        map.put(i.start,map.getOrDefault(i.start,0)+1);
-        map.put(i.end,map.getOrDefault(i.end,0)-1);
-    }
-    int room = 0;
-    int max = 0;
-    for(int num:map.values()){
-        room+=num;
-        max = Math.max(max,room);
-    }
-    return max;
-}
-```
-
-用PriorityQ
-```java
-//403ms 54%
-public int minMeetingRoomsPQ(List<Interval> intervals) {
-    Collections.sort(intervals,(o1, o2)->o1.start-o2.start);
-    PriorityQueue<Interval> heap = new PriorityQueue<>(intervals.size(),(o1, o2)->o1.end-o2.end);
-    heap.add(intervals.get(0));
-    for (int i = 1; i <intervals.size() ; i++) {
-        if(intervals.get(i).start>=heap.peek().end)heap.poll();
-        heap.add(intervals.get(i));
-    }
-    return heap.size();
-}
-```
-
-### 452 重叠线段？？
-```java
-int cnt =0;
-//按结束顺序排序不会出现
-//  |__|     只有：  |___| 和 |____|
-//|______|的情况  |____|       |_|
-Arrays.sort(points,(a,b)->a[1]>b[1])
-for(int i =0;i<points.length;i++){
-    int cur = points[i][1];
-    cnt++;
-    while(i+1<points.length&&points[i+1][0]<=cur&&cur<=points[i+1][1]){
-        i++;
-    }
-}
-return cnt;
-```
-前一个的end在i+1的线段中，则跳过。
-问题：
-```
-{{1,3},{2,5},{4,7},{6,9}}输出2还是3？
-```
-
-
-
-### 56 合并区间 扫描线
->Input: [[1,4],[4,5]]
-Output: [[1,5]]
-
-
-方法1：O(nLogn) 需要O(n)空间
-1.按起点排序，
-2.push第一个interval
-3.for全部interval：
-  a.不交叉，push
-  b.交叉,更新栈顶的end
-
-59ms 27%
-{% fold %}
-```java
-public List<Interval> merge(List<Interval> intervals) {
-  if(intervals==null||intervals.size()<2)return intervals;
-    intervals.sort((a,b)->a.start-b.start);
-    List<Interval> rst = new ArrayList<>();
-    for(Interval interval:intervals){
-        if(rst.size()<1){       
-            rst.add(interval);
-        }
-        else if(rst.get(rst.size()-1).end>=interval.start){
-            // 不用新建 只需要更新栈顶
-            // Interval newInter = rst.get(rst.size()-1);
-            // rst.remove(rst.size()-1);
-            // newInter.end = Math.max(newInter.end,interval.end);
-            // rst.add(newInter);
-            rst.get(rst.size()-1).end =Math.max(rst.get(rst.size()-1).end,interval.end); 
-        }else{
-            rst.add(interval );
-        }
-    }
-    return rst;
-}
-```
-{% endfold %}
-
-方法2：分解成`start[],end[]`
-思想：后一个区间的start(i+1)一定要大于前一个区间的end(i)
-98% 10ms
-```
-starts:   1    2    8    15
-               i    i+1
-ends:     3    6    10    18
-          j
-```
-add(1,6)
-`start[i+1]>end[i]` 直到找的第一个start>end `add(start[j],end[i])` `j=i+1`
-如果start到了最后一个，这个区间肯定是从上一个区间(j)开始，到end(i)结束
-```java
-public List<Interval> merge(List<Interval> intervals) {
-    int len = intervals.size();
-    int[] start = new int[len];
-    int[] end = new int[len];
-    for(int i =0;i<len;i++){
-        start[i] = intervals.get(i).start;
-         end[i] = intervals.get(i).end;
-    }
-    Arrays.sort(start);
-    Arrays.sort(end);
-    List<Interval> rst = new ArrayList<>();
-    for(int i =0,j=0;i<len;i++){
-        //关键 当start扫描到最后一个 ，直接建立起最后一个区间
-        if(i==len-1||start[i+1]>end[i]){
-            rst.add(new Interval(start[j],end[i]));
-            //下一个区间起点
-            j=i+1;
-        }
-    }
-}
-```
-
-方法3：原地算法
-1.按地点降序排序
-2. a如果不是第一个，并且和前一个可以合并，则合并
-   b push当前
-
-#### lt156合并区间
-> ```
-[                     [
-  (1, 3),               (1, 6),
-  (2, 6),      =>       (8, 10),
-  (8, 10),              (15, 18)
-  (15, 18)            ]
-]
-```
-O(n log n) 的时间和 O(1) 的额外空间。 原地算法
-
-
-
-
-
-### 57 插入一个区间并合并
-方法1： 将区间插到newInterval.start>interval.start之前的位置，用56的和last比较合并
-方法2： 分成left+new+right三部分并合并 中间部分取自身和重叠区间的min/max
-```java
-public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
-     List<Interval> left = new ArrayList<>();
-     List<Interval> right = new ArrayList<>();
-     int start =newInterval.start;
-     int end =newInterval.end;
-     for(Interval interval:intervals){
-         if(interval.end<newInterval.start){
-             left.add(interval);
-         }else if(interval.start>newInterval.end){
-             right.add(interval);
-         }else {
-             start = Math.min(start,interval.start);
-             end = Math.max(end,interval.end);
-         }
-     }
-     left.add(new Interval(start,end));
-     left.addAll(right);
-    return left;
-}
-```
 
 #### ？？？315 输出数组每个位置后有多少个数字比它小
 
@@ -778,29 +600,9 @@ if(slow==fast){
 }
 ```
 
-### lt 458 lastIndexOf
-```java
-public int lastPosition(int[] nums, int target) {
-    if(nums==null||nums.length<1)return -1;
-    int i = 0, j = nums.length-1;
-    while(i<=j){
-        int mid = (i+j)/2;
-        if(nums[mid]>target)j = mid-1;
-        //找到了继续向右找
-        else i =mid+1;
-    }
-    if(j<0)return-1;
-    if(nums[j]==target) return j; 
-        return -1;
-}
-```
 
-### 34 ？？？？？？二分查找数字的first+last idx
-> Input: nums = [5,7,7,8,8,10], target = 8
-> Output: [3,4]
 
-二分查找获取最左/右边相等的
-
+### 719
 
 ### 410 分割数组使Max(Sum(subarr))最小
 >Input:
@@ -809,11 +611,17 @@ m = 2
 Output:
 18  [7,2,5] and [10,8],
 
-复杂度： mn^2
-//todo
-`dp[i][j]` 长度为i的数组划分成j组的最大值
+复杂度： mn^2 有mn个子问题 每个子问题找最佳k
 
-二分：复杂度(log(sum(nums))*n) 空间O(1)
+`dp[i][j]` 长度为j的数组划分成i组的最大值
+1.`dp[1][j]= sum(0,j)`
+2.找分割点k，k左边划成i-1组的解和右边划分为1组 取max，在所有分割点k中取最小值 
+`dp[i][j] = min(max(dp[i-1][k],sum(k+1,j))`
+递归：76ms 6%
+
+
+
+二分：复杂度(log(sum(nums))*n) 空间O(1) ok //todo next
 lower bound 数组中的最大元素max(nums)
 up bound 分成1组 sum(nums)
 ```java
@@ -1063,25 +871,7 @@ public String longestPalindrome2(String s) {
 ### 快速排序的各种优化
 https://algs4.cs.princeton.edu/23quicksort/
 
-### 前序中序构造二叉树
-A BDEG CF
-DBGE A CF
-```java
-public TreeNodeT<Character> createTree(String preOrder,String inOrder){
-    if(preOrder.isEmpty())return null;
-    char rootVal = preOrder.charAt(0);
-    int leftLen = inOrder.indexOf(rootVal);
-    TreeNodeT<Character> root = new TreeNodeT<Character>(rootVal);
-    root.left = createTree(
-            preOrder.substring(1,1+leftLen),
-            inOrder.substring(0,leftLen));
 
-    root.right = createTree(
-            preOrder.substring(1+leftLen),
-            inOrder.substring(leftLen+1));
-    return root;
-}
-```
 
 ### 106 中序+后序建树
 
@@ -1093,7 +883,8 @@ public TreeNodeT<Character> createTree(String preOrder,String inOrder){
 Monotonic queue 前后可以修改o(1)，并且可以随机访问
 维护一个单调递减的序列，读一个窗口输出单调队列的first
 
-### 818 A加速，R掉头并减速，到指定位置最少需要多少条指令
+
+
 
 ### 15 3sum=0 荷兰国旗写法3指针
 1p：从0~len-2，3个数的和 右边至少留两个数 sum=0-nums[i]转化成2sum问题
@@ -1147,11 +938,6 @@ public int lengthOfLongestSubstring(String s){
 ### lt886 判断凸包
 https://www.lintcode.com/problem/convex-polygon/description
 
-### 763不重复字符的字符串最大划分 greedy
-> Input: S = "ababcbacadefegdehijhklij"
-Output: [9,7,8]
-Explanation:
-The partition is "ababcbaca", "defegde", "hijhklij".
 
 ### ?409 string中字符组成回文串的最大长度
 1.开int[128]，直接用int[char]++计数

@@ -4,6 +4,12 @@ date: 2018-03-06 07:51:17
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+测试网络
+https://httpbin.org/#/
+
+打车app API
+https://www.easyapi.com/api/?documentId=8067
+
 ## spring
 ### 自动装配`context.getBean(.class)`获取对象
 1. `AnnotationConfigApplicationContext(App.class)`注解形式上下文，用`component`标识bean,`scan`扫描自动执行component的构造函数,`@Autowire`加在有参构造函数上，自动装配参数到当前类，实现类的关联

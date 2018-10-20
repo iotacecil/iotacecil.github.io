@@ -4,6 +4,9 @@ date: 2018-09-01 15:29:18
 tags: [并查集,Trie,线段树]
 categories: [算法备忘]
 ---
+### 归并树
+每个节点对应区间排好序的结果 O(nlogn)建立树
+
 ### 连通分量
 ![connect.jpg](/images/connect.jpg)
 无向图的连通分量可以用并查集（集合）来做
@@ -20,6 +23,9 @@ categories: [算法备忘]
 https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html
 和拓扑排序一样Tarjan算法的运行效率也比Kosaraju算法高30%左右
 每个顶点都被访问了一次，且只进出了一次堆栈，每条边也只被访问了一次，所以该算法的时间复杂度为O(N+M)。
+
+### 130 围棋 用并查集
+dfs ac100%
 
 ### !200 number of islands
 dfs 52% 5ms
@@ -327,6 +333,10 @@ int rangeSum(int i,int j){
 
 
 ###  区间和查询305+修改307
+**n个元素线段树的初始化时间复杂度和空间复杂度都是O(n)**
+![sparsetable.jpg](/images/sparsetable.jpg)
+*Spare Table 预处理时空复杂度都是O(nlogn) 但是二分查询i只需要O(loglogn)*
+因为节点数是n+n/2+n/4+...=2n
 1.线段树用模板 59% 80ms
 ```java
 class SegmentTreeNode {

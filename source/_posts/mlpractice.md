@@ -4,7 +4,30 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
-### hsudfotgg距离
+https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p01_start_stop_thread.html
+
+### 列求和
+`waitTime.apply(sum)`
+
+### pandas 行求和
+`df['Col_sum'] = df.apply(lambda x: x.sum(), axis=1)`
+
+### 矩阵乘法
+```python
+>>> a = np.array([[1,1],[1,0]])
+# 对应元素相乘
+>>>  np.multiply(a,a)
+array([[1, 1],
+       [1, 0]])
+>>> np.dot(a,a) #线代的乘积
+array([[2, 1],
+       [1, 1]])
+```
+
+### standardscaler
+（x-列均值）/ 列标准差
+
+### hausdorff距离
 衡量2个点集的距离
 度量了两个点集间的最大不匹配程度
 
@@ -184,6 +207,7 @@ $da^{[1]} = -y/a + (1-y)/(1-a)$
 $+\frac{λ}2m||w||_2^2$
 2. L1正则:$\frac{λ}m||w||_1$ 使用`L1`正则化，`w`最终会稀疏,`w`向量有很多0
 ---
+
 #### Dropout随机失活 多用于图像
 1. a3 表示三层网络各节点的值, $a3=[a^{[1]},a^{[2]},a^{[3]}]$
 2. 权重转成0或1：d3=np.random.rand(a3.shape[0], a3.shape[1]) < keepProb 
@@ -273,6 +297,7 @@ arr[[4,3,0,6]] 获取第4、3、0、6 行
 - zeros(10) ones(10) 全0or全1数组
 - empty((2,3,2)) 创建没有任何具体值的数组
 - np.dot(arr.T,arr) 内积
+
 #### nonzero(array)
 1. nonzeros(a)返回数组a中值不为零(Flase)的元素的下标
 2. transpose([])转成array
