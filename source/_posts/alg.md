@@ -8,6 +8,9 @@ categories: [算法备忘]
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html
 
+网易
+https://www.nowcoder.com/discuss/105576?type=2
+
 微软187
 https://blog.csdn.net/v_july_v/article/details/6697883
 面试
@@ -17,6 +20,8 @@ https://www.cnblogs.com/JuneWang/p/3773880.html
 https://www.educative.io/collection/page/5642554087309312/5679846214598656/140001
 
 https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
+
+
 
 ### lt168 吹气球
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
@@ -155,6 +160,12 @@ public int maxSubArray(int[] nums){
 }
 ```
 greedy:
+
+### 最大子矩阵和
+https://www.youtube.com/watch?v=yCQN096CwWM
+time O(col x col x row)
+```java
+```
 
 
 

@@ -5,11 +5,14 @@ tags:
 category: [JVMlinux常用备注nginxredis配置]
 ---
 
+### jmx链接 远程tomecat配置Catalina.sh加上java_opt里的jmx端口
+本机virtlalVM直接输入远程ip:端口就能监控了
+
 27个点 内存占20G
 堆内存-Xmx12m
 https://www.jianshu.com/p/1b1c998c4448
 
-### jstack 
+### jstack 发现死锁 `jstack pid > out.txt`
 https://toutiao.io/posts/1ogbep/preview
 打印所有工作线程 包括析构Finalizer，JIT还有debug的
 线程状态有6个
@@ -111,8 +114,8 @@ GC最大停顿时间
 java代码是解释执行的，JIT编译信息 即时编译 java代码转化成本地代码
 `-Xint` 完全解释执行（不转换成本地代码
 `-Xcomp` 第一次就编译成本地代码
-`-Xmixed` 混合模式JVM自己决定是否本地代码
-mixed mode:
+`-Xmixed` 混合模式JVM自己决定是否将java代码转本地代码
+mixed mode: 
 ```sh
 java -version
 java version "1.8.0_144"
