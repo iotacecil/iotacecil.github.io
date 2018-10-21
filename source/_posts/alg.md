@@ -25,6 +25,38 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+
+### 925 是否是因长按重复的字符串
+> Input: name = "leelee", typed = "lleeelee"
+Output: true
+
+双指针
+```java
+public boolean isLongPressedNameCnt(String name, String typed) {
+    int ls1 = name.length();
+    int ls2 = typed.length();
+    if (ls1 < 1 || ls2 < ls1) {
+        return false;
+    }
+    int p2 = 0;
+    int p1 = 0;
+
+    while (p2 < ls2){
+        if(p1 < ls1 && name.charAt(p1) == typed.charAt(p2)){
+            p1++;
+            p2++;
+        }
+        // 关键 p1已经到下一个不相同的字符了，p2还在上一个
+        else if(p1>0 && name.charAt(p1-1) == typed.charAt(p2)){
+            p2++;
+        }
+        // 关键
+        else return false;
+    }
+    return p1 == ls1;
+}
+```
+
 ### 平面最近点对 分治
 
 ### !!780 x,y可以向下x步，或者向右y步能否到达tx,ty
