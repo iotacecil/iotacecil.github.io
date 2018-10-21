@@ -6,6 +6,15 @@ categories: [机器学习和数据处理python备忘]
 ---
 https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p01_start_stop_thread.html
 
+### list 平均值
+```python
+def averagenum(num):
+    nsum = 0
+    for i in range(len(num)):
+        nsum += num[i]
+    return nsum / len(num)
+```
+
 ### 列求和
 `waitTime.apply(sum)`
 
