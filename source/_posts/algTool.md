@@ -1,9 +1,36 @@
 ---
 title: algTool 正则
 date: 2018-10-09 19:16:41
-tags: 
+tags: [alg]
 categories: [算法备忘]
 ---
+### 判断小括号匹配
+```java
+public boolean isValid(String s){
+    int cnt = 0;
+    for (int i = 0; i < s.length() ; i++) {
+        char c = s.charAt(i);
+        if(c == '('){
+            cnt++;
+        }
+        if(c ==')' && cnt-- == 0){
+            return false;
+        }
+    }
+    return cnt == 0;
+}
+```
+
+### 459 一个字符串是不是由一个子串重复构成的
+>输入: "abab"
+>输出: True
+
+```java
+public boolean repeatedSubstringPattern(String str) {
+    //This is the kmp issue
+     return str.matches("(.+)\\1+");
+}
+```
 
 
 ### 65 Valid Number 常用判断是否是小数整数，带e的浮点数
@@ -75,7 +102,6 @@ public static long gcd(long a, long b) {
     return (b == 0) ? a : gcd(b, a % b);
 }
 ```
-
 
 
 ### 素数

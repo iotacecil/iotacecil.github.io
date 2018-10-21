@@ -6,6 +6,15 @@ categories: [机器学习和数据处理python备忘]
 ---
 https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p01_start_stop_thread.html
 
+https://jdtech.jd.com/#/more
+
+### python 二维list转置 
+星 解包
+```python
+>>> list(zip(*[[1,2],[3,4]]))
+[(1, 3), (2, 4)]
+```
+
 ### list 平均值
 ```python
 def averagenum(num):

@@ -26,6 +26,39 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 https://www.nowcoder.com/test/4575457/summary
 
 
+
+### 926!!将01串变成前0后1或全0或全1的最少flip次数 前缀！
+> Input: "010110"
+Output: 2
+Explanation: We flip to get 011111, or alternatively 000111.
+
+思路1：前缀`[1..i]` 变成全0或者变成`[000111]`的最小反转次数,推到整个数组
+```
+0101100011 S
+0112333345 oCnt(把所有1转0)
+0011123444 fCnt(第一个1之后0的个数)
+0011122333 fCnt更新为min(将当前位置之前的所有1转0，或者当前位置之前1后0转1)
+```
+
+```java
+public int minFlipsMonoIncr(String S) {
+    int oCnt = 0;
+    int fCnt = 0;
+    for(int i =0;i<S.length();i++){
+        if(S.charAt(i) == '1'){
+            oCnt ++;
+        }else if(oCnt >0){
+            fCnt ++;
+        }
+        // 关键 fCnt 随前缀更新
+       fCnt = oCnt < fCnt ? oCnt:fCnt;
+    }
+    return fCnt;
+}
+```
+
+
+
 ### 925 是否是因长按重复的字符串
 > Input: name = "leelee", typed = "lleeelee"
 Output: true
@@ -499,155 +532,7 @@ public static void main(String[] args) {
 ```
 
 ---
-矩阵乘法相关题目：
-http://www.matrix67.com/blog/archives/276
 
-### poj3734
-
-### 790 L型，XX型骨牌覆盖2xN的board
-> Input: 3
-Output: 5
-Explanation: 
-The five different ways are listed below, different letters indicates different tiles:
-XYZ XXZ XYY XXY XYY
-XYZ YYZ XZZ XYY XXY
-
-![lc790.jpg](/images/lc790.jpg)
-1.如果只XX骨牌
-dp[i] 表示N = i的时候有多少种解
-其实是费fib数列
-
-#### poj 2411
-http://poj.org/problem?id=2411
-输入：大矩阵的h高，和w宽
-输出:用宽2，高1的骨牌一共有多少种拼法
-
-
-### 图中长度为k的路径计数
-https://www.nowcoder.com/acm/contest/185/B
->求出从 1 号点 到 n 号点长度为k的路径的数目.
-
-{% fold %}
-```java
-import java.util.Arrays;
-import java.util.Scanner;
-
-public class Main {
-    //AC
-//    final static int M = 10000;
-    public static long[][] mul(long[][] A,long[][] B){
-        long[][] rst = new long[A.length][B[0].length];
-        for (int i = 0; i <A.length ; i++) {
-            for (int k = 0; k <B.length ; k++) {
-                for (int j = 0; j <B[0].length ; j++) {
-                    rst[i][j] = (rst[i][j]+A[i][k]*B[k][j]);
-                }
-            }
-        }
-        return rst;
-    }
-    public static long[][] pow(long[][] A,int n){
-        long[][] rst =new long[A.length][A.length];
-        for (int i = 0; i <A.length ; i++) {
-            rst[i][i] = 1;
-        }
-        while (n>0){
-            if((n&1)!=0){
-                rst = mul(rst,A );
-            }
-            A = mul(A, A);
-            n>>=1;
-        }
-        return rst;
-    }
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int k = sc.nextInt();
-        long[][] graph = new long[n][n];
-        for (int i = 0; i <n ; i++) {
-            for (int j = 0; j <n ; j++) {
-                graph[i][j] = sc.nextInt();
-            }
-        }
-        long[][] Gn = pow(graph, k);
-        System.out.println(Gn[0][n-1]);
-    }
-}
-
-```
-{% endfold %}
-
-有向图 从A点走K步到达B(边可重复)的方案数
-`G[u][v]`表示u到v 长度为k的路径数量
-k=1 1条边可达的点 G1是图的邻接矩阵
-![kpath.jpg](/images/kpath.jpg)
-
-### 快速幂logN完成幂运算
-carmichael number
-```java
-//this^exponent mod m
-public BigInteger modPow(BigInteger exponent, BigInteger m)
-```
-
-### 递推公式
-![ditui.jpg](/images/ditui.jpg)
-实际上求m项地推公式的第n项 可以用初项线性表示，通过快速幂O(m^2logn)
-
-### fibo递推公式
-[特征方程](https://baike.baidu.com/item/%E7%89%B9%E5%BE%81%E6%96%B9%E7%A8%8B)
-1.二阶递推公式的特征方程
-递推公式Xn = aXn-1 - bXn-2
-特征方程x^2-ax+b =0
-解得x1,x2则存在F(n) = Ax1+Bx2
-带入F(0),F(1) 可得通项
-
-2.矩阵解法
-二阶递推式存在2x2矩阵A
-![fibo.jpg](/images/fibo.jpg)
-
-矩阵乘法：
-```java
-final int M = 10000;
-public int[][] mul(int[][] A,int[][] B){
-    int[][] rst = new int[A.length][B[0].length];
-    for (int i = 0; i <A.length ; i++) {
-        for (int k = 0; k <B.length ; k++) {
-            for (int j = 0; j <B[0].length ; j++) {
-                rst[i][j] = (rst[i][j]+A[i][k]*B[k][j])%M;
-            }
-        }
-    }
-    return rst;
-}
-```
-![quickmi](/images/quickmi.jpg)
-快速幂，将n用二进制表示，5->101表示A^5 = A^4+A^1,
-A每次翻倍，n一直右移，n最右为1的时候加上当前A翻倍的结果。
-矩阵的幂
-```java
-public  int[][] pow(int[][] A,int n){
-    int[][] rst =new int[A.length][A.length];
-    for (int i = 0; i <A.length ; i++) {
-        rst[i][i] = 1;
-    }
-    //for(;n>0;n>>=1)
-    while (n>0){
-        //快速幂
-        if((n&1)!=0)rst = mul(rst,A );
-        A = mul(A, A);
-        n>>=1;
-    }
-    return rst;
-}
-```
-
-解fibo：
-```java
-int[][] A = {{1,1},{1,0}};
-int[][] rst = sl.pow(A, n);
-System.out.println(rst[1][0]);
-```
 
 
 
@@ -824,7 +709,7 @@ int bulbSwitch(int n) {
 
 
 ### 451 字符串按频率排序 桶排序
->>>>>>> refs/remotes/origin/hexo-edit
+
 
 
 ### lt168 吹气球
@@ -839,10 +724,6 @@ nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 总共的分数为 20 + 200 + 40 + 10 = 270
 ```
 
-
-
-### 矩阵链乘法O(n^3)的dp
- 
 
 
 
@@ -946,11 +827,7 @@ public int maxSubArray(int[] nums){
 ```
 greedy:
 
-### 最大子矩阵和
-https://www.youtube.com/watch?v=yCQN096CwWM
-time O(col x col x row)
-```java
-```
+
 
 
 ### 122 可以买卖多次 买股票的利润
@@ -1063,29 +940,6 @@ logs =
 所以函数 0 总共的执行了 2 +1 =3 个时间单位，函数 1 总共执行了 4 个时间单位。
 
 stack + start[] ac 15%
-
-
-
-### 378 矩阵从左到右从上到下有序，找第k小的元素
-1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
-```java
-public int kthSmallest(int[][] matrix, int k) {
-  PriorityQueue<Integer> que = new PriorityQueue(k);
-     for(int[] row:matrix){
-         for(int x :row){
-             que.add(x);
-         }
-     }
-     for(int i = 0;i<k-1;i++){
-         que.poll();
-     }
-     return que.peek();
-}
-```
-2.
-
-
-
 
 
 
@@ -1349,111 +1203,32 @@ public String[] findWords(String[] words){
 
 ### 最长01串
 
+### 799倒香槟第`[i,j]`个杯子的容积
+>输入: poured(倾倒香槟总杯数) = 2, 
+query_glass(杯子的位置数) = 1, query_row(行数) = 1
+输出: 0.5
+解释: 我们在顶层（下标是（0，0）倒了两杯香槟后，有一杯量的香槟将从顶层溢出，位于（1，0）的玻璃杯和（1，1）的玻璃杯平分了这一杯香槟，所以每个玻璃杯有一半的香槟。
 
-### 倒水问题 BFS
-#### poj 3414 Pots
-http://poj.org/problem?id=3414
-> 输入：3 5 4
-> 输出
-> 容量A3 B5 获得4升水的最短序列
-> 6
-> FILL(2)
-> POUR(2,1)
-> DROP(1)
-> POUR(2,1)
-> FILL(2)
-> POUR(2,1)
-
-Accepted    3128K   1125MS 
-
+第一行流过10杯，则第二行流过9杯，左边分到4.5 右边分到4.5
 ```java
-class pathNode{
-    int a,b;
-    int t;
-    public pathNode(int a, int b, int t) {
-        this.a = a;
-        this.b = b;
-        this.t = t;
-    }
-}
-class Cell{
-    int a,b;
-    public Cell(int a, int b) {
-        this.a = a;
-        this.b = b;
-    }
-}
-
-void Bfs(int A,int B,int C){
-    int cnt = 0;
-    int[][] marked = new int[A+1][B+1];
-    pathNode[] pathNodes = new pathNode[A+B+5];
-    int[][] pre =  new int[A+1][B+1];
-
-    Deque<Cell> que = new ArrayDeque<Cell>();
-    //初始状态 2个空桶
-    que.add(new Cell(0,0));
-    marked[0][0] = 1;
-    while (!que.isEmpty()){
-        Cell cell = que.poll();
-        int a = cell.a,b = cell.b;
-        //6种操作 满，空，互相倒 x2
-        for (int d = 0; d <6 ; d++) {
-            int na=0,nb=0;
-            //装满A
-            if(d==0){na=A;nb=b;}
-            else if(d==1){na= a;nb=B;}
-            else if(d==2){na=0;nb=b;}
-            else if(d==3){na=a; nb=0;}
-            //A->B
-            else if(d==4){
-                int all = a+b;
-                na = all>=B?all-B:0;
-                nb = all>=B?B:all;
-            }
-            //B->A
-            else if(d==5){
-                int all = a+b;
-                na = all>=A?A:all;
-                nb = all>=A?all-A:0;
-            }
-            //这个桶状态没试过
-            if(marked[na][nb]==0){
-                marked[na][nb] =1;
-                //关键：记录当前操作序号cnt是在node(a,b)是做d操作得来的
-                pathNodes[cnt] = new pathNode(a,b,d);
-                //可以查到对上一个的操作
-                pre[na][nb] = cnt;
-                cnt++;
-                if(na == C||nb==C){
-                    Deque<Integer> op = new ArrayDeque<Integer>();
-                    int enda = na,endb = nb;
-                    while (enda!=0||endb!=0){
-                        int p = pre[enda][endb];
-                        op.push(pathNodes[p].t);
-                        enda = pathNodes[p].a;
-                        endb = pathNodes[p].b;
-                    }
-                    System.out.println(op.size());
-                    while (!op.isEmpty()){
-                        int x = op.poll();
-                        if(x==0||x==1) System.out.printf("FILL(%d)\n",x+1);
-                        else if(x==2||x==3)System.out.printf("DROP(%d)\n",x-1);
-                        else if(x==4) System.out.printf("POUR(1,2)\n");
-                        else if(x==5)System.out.printf("POUR(2,1)\n");
-                    }
-                    return;
-                }
-                que.add(new Cell(na,nb));
+public double champagneTower(int poured, int query_row, int query_glass) {
+    double[][] A= new double[102][102];
+    A[0][0] = (double) poured;
+    for(int r = 0;r<= query_row;++r){
+        for(int c = 0;c<=r;c++){
+            double q = (A[r][c] - 1)/2;
+            if(q > 0){
+                A[r+1][c] += q;
+                A[r+1][c+1] += q;
             }
         }
-//            System.out.println("下一层");
     }
-    System.out.println("impossible");
+    return Math.min(1,A[query_row][query_glass]);
 }
 ```
 
-#### poj 1606
+
+
 
 
 ### 2^N 大整数
@@ -2046,19 +1821,7 @@ private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
 
 ### 131 
 
-### 54旋转矩阵
-![rotate2d.jpg](/images/rotate2d.jpg)
-top=0,bot=3,left=0,right = 3
-n是矩阵大小n>1的时候继续，每一圈，矩阵大小-=2
-将2赋值给8：
-[top+i][right]=[top][left+i]
-i=3:3赋值给12
-每个i要赋值4遍，上下左右
-外层完了之后子问题是top++,left++,right--,bot--,n-=2
 
-方法2：翻转？
-
-### 59 生成nxn的旋转矩阵
 
 ### 49 
 直接拿CharArray的sort重建String当key 49%

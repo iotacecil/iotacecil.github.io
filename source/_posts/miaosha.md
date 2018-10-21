@@ -1463,8 +1463,8 @@ public boolean login( HttpServletResponse response,@Valid LoginVo loginVo) {
     Cookie cookie = new Cookie(COOKI_NAME_TOKEN,token);
     // 有效期 与redis中session有效期保持一致
     cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
-    // 网站根目录
-    cookie.setPath("./");
+    // 网站根目录 注意不是 ./
+    cookie.setPath("/");
      //写到response要HttpResponse
     response.addCookie(cookie);
     return true;
@@ -1493,6 +1493,7 @@ public Result<String> doLogin(HttpServletResponse response,@Valid  LoginVo login
 ```
 
 #### 登录成功跳转页
+注意语法
 ```html
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -1539,3 +1540,483 @@ $.ajax({
     }
 });
 ```
+
+测试：登录后可以显示:hello:null
+查看do_login的response
+`Set-Cookie: token=1701f466f2904a568aa364d6992828eb; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=./`
+
+因为`Max-Age=0`所以to_list没有上传cookie
+给cookie设置默认有效期
+`MiaoshaUserKey.java`
+
+```java
+public class MiaoshaUserKey extends BasePrefix{
+
+    public static final int TOKEN_EXPIRE = 3600*24 * 2;
+
+    // 构造函数里加上过期时间
+    public MiaoshaUserKey(int expireSeconds,String prefix) {
+        super(expireSeconds,prefix);
+    }
+    // 调用构造函数
+    public static MiaoshaUserKey token = new MiaoshaUserKey(TOKEN_EXPIRE,"tk");
+
+```
+
+测试：do login的response
+`Set-Cookie: token=38407e1482e246519727d0041bbd781c; Max-Age=172800; Expires=Tue, 23-Oct-2018 11:07:50 GMT; Path=/`
+tolist 里会带着
+`Cookie: token=38407e1482e246519727d0041bbd781c`
+
+
+public方法一定要做参数校验
+
+实现用token从redis中得到MiaoshaUser
+```java
+public MiaoshaUser getByToken( String token) {
+    if(StringUtils.isEmpty(token)) {
+        return null;
+    }
+    return redisService.get(MiaoshaUserKey.token, token, MiaoshaUser.class);
+    }
+```
+
+controller：
+有的手机端会放到参数里传不在cookie里。设置优先级
+```java
+@RequestMapping("/to_list")
+public String toLogin(Model model,
+                      @CookieValue(value = MiaoshaUserService.COOKI_NAME_TOKEN,required = false)String cookieToken,
+                      @RequestParam(value = MiaoshaUserService.COOKI_NAME_TOKEN,required = false)String paramToken) {
+    if(StringUtils.isEmpty(cookieToken)&& StringUtils.isEmpty(paramToken)){
+        System.out.println("没获取到");
+        return "login";
+    }
+
+    String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
+    System.out.println("获取到了token");
+    MiaoshaUser user = userService.getByToken(token);
+    System.out.println("获取到了用户");
+    System.out.println(user);
+    model.addAttribute("user",user);
+    return "goods_list";
+}
+```
+
+### session内登陆时延长有效期
+每次response里都有set-cookie
+
+把生成cookie的代码独立成一个方法：
+```java
+private void addCookie(HttpServletResponse response, String token,MiaoshaUser user) {
+    redisService.set(MiaoshaUserKey.token, token, user);
+    Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
+    cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
+    cookie.setPath("/");
+    response.addCookie(cookie);
+}
+```
+
+每次token->User的时候重新对response更新cookie 
+
+```java
+public MiaoshaUser getByToken(HttpServletResponse response, String token) {
+    if(StringUtils.isEmpty(token)) {
+        return null;
+    }
+    MiaoshaUser user = redisService.get(MiaoshaUserKey.token, token, MiaoshaUser.class);
+//      延长有效期
+    if(user != null) {
+        addCookie(response,token,user);
+    }
+    return user;
+}
+```
+
+在controller加response
+
+### 判断登陆session的代码独立出来，Controller只传入一个User
+新建包config 
+`WebConfig.java`
+controller中的参数通过框架回调`WebMvcConfigurerAdapter`的`addArgumentResolvers` 赋值
+```java
+@Configuration
+public class WebConfig  extends WebMvcConfigurerAdapter {
+    
+    @Autowired
+    UserArgumentResolver userArgumentResolver;
+    
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(userArgumentResolver);
+    }
+    
+}
+```
+
+实现`HandlerMethodArgumentResolver` 解析
+```java
+@Service
+public class UserArgumentResolver implements HandlerMethodArgumentResolver {
+
+    @Autowired
+    MiaoshaUserService userService;
+    
+    public boolean supportsParameter(MethodParameter parameter) {
+        // 获取参数类型 是User类型才会做resolveArgument
+        Class<?> clazz = parameter.getParameterType();
+        return clazz==MiaoshaUser.class;
+    }
+
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
+
+        // 浏览器不同 token可能在cookie里也可能在参数里
+        String paramToken = request.getParameter(MiaoshaUserService.COOKI_NAME_TOKEN);
+        String cookieToken = getCookieValue(request, MiaoshaUserService.COOKI_NAME_TOKEN);
+        if(StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
+            return null;
+        }
+        String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
+        return userService.getByToken(response, token);
+    }
+
+    /**
+     * 遍历request里的所有cookie 找到对应那个的value
+     * @param request
+     * @param cookiName
+     * @return
+     */
+    private String getCookieValue(HttpServletRequest request, String cookiName) {
+        Cookie[]  cookies = request.getCookies();
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals(cookiName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+}
+```
+
+可以删掉controller里检测登陆的代码：
+```java
+@RequestMapping("/to_list")
+public String toLogin(Model model,MiaoshaUser user) {
+    model.addAttribute("user",user);
+    return "goods_list";
+}
+```
+
+完成分布式session
+
+---
+
+### 9.商品列表详情页 秒杀功能
+秒杀商品表、秒杀订单表 要独立，因为变化大
+新建数据库
+```sql
+create table `goods`(
+  `id` bigint(20) not null AUTO_INCREMENT comment '商品ID',
+  `goods_name` varchar(16) not null comment '商品名称',
+  `goods_title` varchar(64) default null comment '商品标题',
+  `goods_img` varchar(64) default null comment'商品图片',
+  `goods_detail` longtext comment '商品详情介绍',
+  `goods_price` decimal(10,2) default '0.00' comment '商品单价',
+  `goods_stock` int(11) default '0' comment '商品库存，-1表示没有限制',
+
+  primary key (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET=utf8;
+
+create table `miaosha_order`(
+  `id` bigint(20) not null AUTO_INCREMENT ,
+  `user_id` BIGINT(20) not null comment '用户ID',
+  `order_id` BIGINT(20) default null comment '订单ID',
+  `goods_id` BIGINT(20) default null comment'商品ID',
+
+  primary key (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET=utf8;
+
+
+create table `miaosha_goods`(
+  `id` bigint(20)  not null AUTO_INCREMENT comment '秒杀商品表',
+  `goods_id` BIGINT(20) DEFAULT null comment '商品id',
+  `miaosha_price` DECIMAL(10,2) default '0.00' comment '秒杀',
+  `stock_count` INT(11) default null comment'库存数量',
+  `start_date` DATETIME DEFAULT  NULL comment '秒杀开始时间',
+  `end_date` DATETIME DEFAULT  NULL comment '秒杀结束时间',
+
+  primary key (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT = 3 DEFAULT CHARSET=utf8;
+
+
+create table `order_info`(
+  `id` bigint(20) not null AUTO_INCREMENT ,
+  `user_id` BIGINT(20) not null comment '用户ID',
+  `goods_id` BIGINT(20) default null comment '商品ID',
+  `delivery_addr_id` BIGINT(20) default null comment'收获地址ID',
+  `goods_name` VARCHAR(16) DEFAULT  NULL comment '冗余商品名称',
+  `goods_count` INT(11) DEFAULT '0' comment '商品数量',
+  `goods_price` DECIMAL(10,2) DEFAULT '0.00' comment '商品单价',
+
+  `order_channel` TINYINT(4) DEFAULT '0' comment '1pc,2android,3ios',
+  `status` TINYINT(4) DEFAULT '0' comment '订单状态，0新建未支付，1已支付，3已收货，4已退款，5已完成',
+  `create_date` DATETIME DEFAULT NULL comment '订单创建时间',
+  `pay_date` DATETIME DEFAULT NULL comment '支付时间',
+
+  primary key (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET=utf8;
+```
+
+建立对应的domain对象
+```java
+public class Goods {
+    private Long id;
+    private String goodsName;
+    private String goodsTitle;
+    private String goodsImg;
+    private String goodsDetail;
+    private Double goodsPrice;
+    private Integer goodsStock;
+    }
+public class MiaoshaGoods {
+    private Long id;
+    private Long gooddsId;
+    private Integer stockCount;
+    private Date startDate;
+    private Date endDate;
+}
+public class OrderInfo {
+    private Long id;
+    private Long userId;
+    private Long goodsId;
+    private Long deliveryAddrId;
+    private String goodsName;
+    private Integer goodsCount;
+    private Double goodsPrice;
+    private Integer orderChannel;
+    private Integer status;
+    private Date createDate;
+    private Date payDate;
+}
+public class MiaoshaOrder {
+    private Long id;
+    private Long userId;
+    private Long orderId;
+    private Long goodsId;
+}
+```
+
+创建`GoodsService.java`和对应的`GoodsDao`
+
+查找商品希望同时查找到miaosha_goods中的秒杀信息
+建立vo
+```java
+public class GoodVo extends Goods{
+    private Double miaoshaPrice;
+    private Integer stockCount;
+    private Date startDate;
+    private Date endDate;
+```
+dao
+```java
+@Mapper
+public interface GoodsDao {
+
+    /**
+     * 查找商品信息和秒杀信息(库存和秒杀时间)
+     */
+    @Select("select g.*,mg.miaosha_price,mg.stock_count,mg.start_date,mg.end_date  from miaosha_goods mg left join goods g on mg.goods_id = g.id")
+    public List<GoodVo> listGoodsVo();
+}
+```
+service:
+```java
+@Service
+public class GoodsService {
+    @Autowired
+    GoodsDao goodsDao;
+
+    public List<GoodVo> listGoodsVo(){
+        return goodsDao.listGoodsVo();
+    }
+}
+```
+
+controller 中添加到页面
+```java
+@Autowired
+GoodsService goodsService;
+
+@RequestMapping("/to_list")
+public String toLogin(Model model,MiaoshaUser user) {
+    model.addAttribute("user",user);
+
+    // 秒杀商品列表
+    List<GoodVo> goodVos = goodsService.listGoodsVo();
+    model.addAttribute("goodsList",goodVos);
+
+    return "goods_list";
+}
+```
+在goods_list.html 添加遍历 在static下放img/iphoneX.png 数据库img存img/iphoneX.png
+```html
+<div class="panel panel-default">
+    <div class="panel-heading">秒杀商品列表</div>
+    <table class="table" id="goodslist">
+        <tr><td>商品名称</td><td>商品图片</td><td>商品原价</td><td>秒杀价</td><td>库存数量</td><td>详情</td></tr>
+        <tr  th:each="goods,goodsStat : ${goodsList}">
+            <td th:text="${goods.goodsName}"></td>
+            <td ><img th:src="@{${goods.goodsImg}}" width="100" height="100" /></td>
+            <td th:text="${goods.goodsPrice}"></td>
+            <td th:text="${goods.miaoshaPrice}"></td>
+            <td th:text="${goods.stockCount}"></td>
+            <td><a th:href="'/goods/to_detail/'+${goods.id}">详情</a></td>
+        </tr>
+    </table>
+</div>
+```
+
+测试：http://localhost:8080/goods/to_list 可以看到表格
+
+
+#### 商品详情页 倒计时
+为了防止数据库中id连号被遍历，一般使用`snowflake`算法
+
+html里`/goods/to_detail/'+${goods.id}`
+
+根据商品ID查询单个goodVO信息 并显示当前时间和秒杀时间的倒计时
+controller:
+```java
+@RequestMapping("/to_detail/{goodsId}")
+public String detail(Model model,MiaoshaUser user,
+                     @PathVariable("goodsId")long goodsId) {
+    model.addAttribute("user", user);
+
+    GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+    model.addAttribute("goods", goods);
+
+    long startAt = goods.getStartDate().getTime();
+    long endAt = goods.getEndDate().getTime();
+    long now = System.currentTimeMillis();
+    // 0：没开始 2：结束 1：进行中
+    int miaoshaStatus = 0;
+    // 倒计时
+    int remainSeconds = 0;
+    if(now < startAt ) {//秒杀还没开始，倒计时
+        miaoshaStatus = 0;
+        remainSeconds = (int)((startAt - now )/1000);
+    }else  if(now > endAt){//秒杀已经结束
+        miaoshaStatus = 2;
+        remainSeconds = -1;
+    }else {//秒杀进行中
+        miaoshaStatus = 1;
+        remainSeconds = 0;
+    }
+    model.addAttribute("miaoshaStatus", miaoshaStatus);
+    model.addAttribute("remainSeconds", remainSeconds);
+    return "goods_detail";
+}
+```
+
+service 和dao
+```java
+public GoodVo getGoodsVoByGoodsId(long goodsId) {
+        return goodsDao.getGoodsVoByGoodsId(goodsId);
+    }
+@Select("select g.*,mg.miaosha_price,mg.stock_count,mg.start_date,mg.end_date  from miaosha_goods mg left join goods g on mg.goods_id = g.id where g.id = #{goodId}" )
+GoodVo getGoodsVoByGoodsId( long goodsId);
+```
+商品详情html：
+```html
+<div class="panel panel-default">
+  <div class="panel-heading">秒杀商品详情</div>
+  <div class="panel-body">
+    <span th:if="${user eq null}"> 您还没有登录，请登陆后再操作<br/></span>
+    <span>没有收货地址的提示。。。</span>
+  </div>
+  <table class="table" id="goodslist">
+    <tr>  
+        <td>商品名称</td>  
+        <td colspan="3" th:text="${goods.goodsName}"></td> 
+     </tr>  
+     <tr>  
+        <td>商品图片</td>  
+        <td colspan="3"><img th:src="@{${goods.goodsImg}}" width="200" height="200" /></td>  
+     </tr>
+     <tr>  
+        <td>秒杀开始时间</td>  
+        <td th:text="${#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td id="miaoshaTip">    
+            <input type="hidden" id="remainSeconds" th:value="${remainSeconds}" />
+            <span th:if="${miaoshaStatus eq 0}">秒杀倒计时：<span id="countDown" th:text="${remainSeconds}"></span>秒</span>
+            <span th:if="${miaoshaStatus eq 1}">秒杀进行中</span>
+            <span th:if="${miaoshaStatus eq 2}">秒杀已结束</span>
+        </td>
+        <td>
+            <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
+                <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
+                <input type="hidden" name="goodsId" th:value="${goods.id}" />
+            </form>
+        </td>
+     </tr>
+     <tr>  
+        <td>商品原价</td>  
+        <td colspan="3" th:text="${goods.goodsPrice}"></td>  
+     </tr>
+      <tr>  
+        <td>秒杀价</td>  
+        <td colspan="3" th:text="${goods.miaoshaPrice}"></td>  
+     </tr>
+     <tr>  
+        <td>库存数量</td>  
+        <td colspan="3" th:text="${goods.stockCount}"></td>  
+     </tr>
+  </table>
+</div>
+```
+
+倒计时：`<span id="countDown" th:text="${remainSeconds}"></span>秒</span>`
+设置隐藏域保留`remainSeconds`(controller添加的) 这样`miaoshaStatus`是1或者2 js也能取到时间
+```html
+<input type="hidden" id="remainSeconds" th:value="${remainSeconds}" />
+<span th:if="${miaoshaStatus eq 0}">秒杀倒计时：<span id="countDown" th:text="${remainSeconds}"></span>秒</span>
+```
+
+js判断remainSeconds 三种情况，设置标签颜色和倒计时
+```js
+$(function(){
+    countDown();
+});
+
+function countDown(){
+    var remainSeconds = $("#remainSeconds").val();
+    var timeout;
+    if(remainSeconds > 0){//秒杀还没开始，倒计时
+        $("#buyButton").attr("disabled", true);
+        timeout = setTimeout(function(){
+            $("#countDown").text(remainSeconds - 1);
+            $("#remainSeconds").val(remainSeconds - 1);
+            countDown();
+        },1000);
+    }else if(remainSeconds == 0){//秒杀进行中
+        $("#buyButton").attr("disabled", false);
+        if(timeout){
+            clearTimeout(timeout);
+        }
+        $("#miaoshaTip").html("秒杀进行中");
+    }else{//秒杀已经结束
+        $("#buyButton").attr("disabled", true);
+        $("#miaoshaTip").html("秒杀已经结束");
+    }
+}
+```
+
+
+测试：http://localhost:8080/goods/to_detail/1
+
+#### 秒杀功能
+新建`MiaoshaController`
