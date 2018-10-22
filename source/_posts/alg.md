@@ -25,7 +25,14 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
-
+### 素数定理
+从不大于n的自然数随机选一个，它是素数的概率大约是1/ln(n)
+https://baike.baidu.com/item/%E7%B4%A0%E6%95%B0%E5%AE%9A%E7%90%86/1972457?fromtitle=%E8%B4%A8%E6%95%B0%E5%AE%9A%E7%90%86&fromid=4710126
+1-100有25个素数
+```python
+>>>math.log(100)
+4.605170185988092
+```
 
 ### 926!!将01串变成前0后1或全0或全1的最少flip次数 前缀！
 > Input: "010110"

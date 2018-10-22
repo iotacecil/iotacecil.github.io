@@ -4,6 +4,11 @@ date: 2018-03-05 20:43:15
 tags: [os,memory]
 category: [cpp学习操作系统]
 ---
+### 备份算法
+
+rdiff 原理
+rsync增量传输算法原理
+
 ### 安全序列
 
 https://www.nowcoder.com/ta/nine-chapter?query=&asc=true&order=&page=3
