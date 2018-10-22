@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="固定ipcentos 安装GLPKtar -xzvf glpk-4.60.tar.gzconfiguremakemake installglpsol --math orienteering_problem.mod --data a8.dat --output &amp;quot;./out&amp;quot; kill -s 9 1827 查文件123456789find / -size 1500c，字符 c 表">
+<meta name="description" content="localhost 免密访问：123$ ssh localhost$ ssh-keygen -t dsa -P &apos;&apos; -f ~/.ssh/id_dsa$ cat ~/.ssh/id_dsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys 固定ipcentos 安装GLPKtar -xzvf glpk-4.60.tar.gzconfiguremakemake installg">
 <meta name="keywords" content="CentOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="About CentOS">
 <meta property="og:url" content="http://iotaa.xyz/2018/03/08/About-CentOS/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="固定ipcentos 安装GLPKtar -xzvf glpk-4.60.tar.gzconfiguremakemake installglpsol --math orienteering_problem.mod --data a8.dat --output &amp;quot;./out&amp;quot; kill -s 9 1827 查文件123456789find / -size 1500c，字符 c 表">
+<meta property="og:description" content="localhost 免密访问：123$ ssh localhost$ ssh-keygen -t dsa -P &apos;&apos; -f ~/.ssh/id_dsa$ cat ~/.ssh/id_dsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys 固定ipcentos 安装GLPKtar -xzvf glpk-4.60.tar.gzconfiguremakemake installg">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-15T08:51:33.805Z">
+<meta property="og:updated_time" content="2018-10-22T14:24:06.171Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About CentOS">
-<meta name="twitter:description" content="固定ipcentos 安装GLPKtar -xzvf glpk-4.60.tar.gzconfiguremakemake installglpsol --math orienteering_problem.mod --data a8.dat --output &amp;quot;./out&amp;quot; kill -s 9 1827 查文件123456789find / -size 1500c，字符 c 表">
+<meta name="twitter:description" content="localhost 免密访问：123$ ssh localhost$ ssh-keygen -t dsa -P &apos;&apos; -f ~/.ssh/id_dsa$ cat ~/.ssh/id_dsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys 固定ipcentos 安装GLPKtar -xzvf glpk-4.60.tar.gzconfiguremakemake installg">
 
 
 
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-15T16:51:33+08:00">
-                2018-09-15
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-22T22:24:06+08:00">
+                2018-10-22
               </time>
             
           </span>
@@ -393,7 +393,8 @@
       
 
       
-        <h3 id="固定ip"><a href="#固定ip" class="headerlink" title="固定ip"></a>固定ip</h3><h3 id="centos-安装GLPK"><a href="#centos-安装GLPK" class="headerlink" title="centos 安装GLPK"></a>centos 安装GLPK</h3><p><code>tar -xzvf glpk-4.60.tar.gz</code><br><code>configure</code><br><code>make</code><br><code>make install</code><br><code>glpsol --math orienteering_problem.mod --data a8.dat --output &quot;./out&quot;</code></p>
+        <p>localhost 免密访问：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ssh localhost</span><br><span class="line">$ ssh-keygen -t dsa -P <span class="string">''</span> -f ~/.ssh/id_dsa</span><br><span class="line">$ cat ~/.ssh/id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<h3 id="固定ip"><a href="#固定ip" class="headerlink" title="固定ip"></a>固定ip</h3><h3 id="centos-安装GLPK"><a href="#centos-安装GLPK" class="headerlink" title="centos 安装GLPK"></a>centos 安装GLPK</h3><p><code>tar -xzvf glpk-4.60.tar.gz</code><br><code>configure</code><br><code>make</code><br><code>make install</code><br><code>glpsol --math orienteering_problem.mod --data a8.dat --output &quot;./out&quot;</code></p>
 <p><code>kill -s 9 1827</code></p>
 <h3 id="查文件"><a href="#查文件" class="headerlink" title="查文件"></a>查文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">find / -size 1500c，字符 c 表明这个要查找的文件的大小是以bytes为单位</span><br><span class="line">find / -amin -10 # 查找在系统中最后10分钟访问的文件</span><br><span class="line">find / -atime -2 # 查找在系统中最后48小时访问的文件</span><br><span class="line">find / -empty # 查找在系统中为空的文件或者文件夹</span><br><span class="line">find / -group cat # 查找在系统中属于 groupcat的文件</span><br><span class="line">find / -mmin -5 # 查找在系统中最后5分钟里修改过的文件</span><br><span class="line">find / -mtime -1 #查找在系统中最后24小时里修改过的文件</span><br><span class="line">find / -nouser #查找在系统中属于作废用户的文件</span><br><span class="line">find / -user fred #查找在系统中属于FRED这个用户的文件</span><br></pre></td></tr></table></figure>
 <p><code>mysql -u root -p -h 192.168.3.109 -P 3306 -D lbs</code></p>

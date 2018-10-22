@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="倒水问题 BFS ax + by = m 最大公约数365 容量x,y的两个杯子能否量出z Input: x = 3, y = 5, z = 4Output: TrueInput: x = 2, y = 6, z = 5Output: False  bfs 4种情况123456789101112131415161718192021222324252627public boolean canMeas">
+<meta name="description" content="bfs的并行倒水问题 BFS ax + by = m 最大公约数365 容量x,y的两个杯子能否量出z Input: x = 3, y = 5, z = 4Output: TrueInput: x = 2, y = 6, z = 5Output: False  bfs 4种情况123456789101112131415161718192021222324252627public boolean c">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="algbfs">
 <meta property="og:url" content="http://iotaa.xyz/2018/10/21/algbfs/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="倒水问题 BFS ax + by = m 最大公约数365 容量x,y的两个杯子能否量出z Input: x = 3, y = 5, z = 4Output: TrueInput: x = 2, y = 6, z = 5Output: False  bfs 4种情况123456789101112131415161718192021222324252627public boolean canMeas">
+<meta property="og:description" content="bfs的并行倒水问题 BFS ax + by = m 最大公约数365 容量x,y的两个杯子能否量出z Input: x = 3, y = 5, z = 4Output: TrueInput: x = 2, y = 6, z = 5Output: False  bfs 4种情况123456789101112131415161718192021222324252627public boolean c">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-21T10:19:52.303Z">
+<meta property="og:updated_time" content="2018-10-22T13:40:32.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="algbfs">
-<meta name="twitter:description" content="倒水问题 BFS ax + by = m 最大公约数365 容量x,y的两个杯子能否量出z Input: x = 3, y = 5, z = 4Output: TrueInput: x = 2, y = 6, z = 5Output: False  bfs 4种情况123456789101112131415161718192021222324252627public boolean canMeas">
+<meta name="twitter:description" content="bfs的并行倒水问题 BFS ax + by = m 最大公约数365 容量x,y的两个杯子能否量出z Input: x = 3, y = 5, z = 4Output: TrueInput: x = 2, y = 6, z = 5Output: False  bfs 4种情况123456789101112131415161718192021222324252627public boolean c">
 
 
 
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-21T18:19:52+08:00">
-                2018-10-21
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-22T21:40:32+08:00">
+                2018-10-22
               </time>
             
           </span>
@@ -393,7 +393,7 @@
       
 
       
-        <h3 id="倒水问题-BFS-ax-by-m-最大公约数"><a href="#倒水问题-BFS-ax-by-m-最大公约数" class="headerlink" title="倒水问题 BFS ax + by = m 最大公约数"></a>倒水问题 BFS ax + by = m 最大公约数</h3><h4 id="365-容量x-y的两个杯子能否量出z"><a href="#365-容量x-y的两个杯子能否量出z" class="headerlink" title="365 容量x,y的两个杯子能否量出z"></a>365 容量x,y的两个杯子能否量出z</h4><blockquote>
+        <h3 id="bfs的并行"><a href="#bfs的并行" class="headerlink" title="bfs的并行"></a>bfs的并行</h3><h3 id="倒水问题-BFS-ax-by-m-最大公约数"><a href="#倒水问题-BFS-ax-by-m-最大公约数" class="headerlink" title="倒水问题 BFS ax + by = m 最大公约数"></a>倒水问题 BFS ax + by = m 最大公约数</h3><h4 id="365-容量x-y的两个杯子能否量出z"><a href="#365-容量x-y的两个杯子能否量出z" class="headerlink" title="365 容量x,y的两个杯子能否量出z"></a>365 容量x,y的两个杯子能否量出z</h4><blockquote>
 <p>Input: x = 3, y = 5, z = 4<br>Output: True<br>Input: x = 2, y = 6, z = 5<br>Output: False</p>
 </blockquote>
 <p>bfs 4种情况<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">canMeasureWater</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(z == <span class="number">0</span>)<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">if</span>(x + y &lt; z)<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">int</span> total = x+y;</span><br><span class="line">    Set&lt;Integer&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    Queue&lt;Integer&gt; q = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    q.offer(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">while</span> (!q.isEmpty())&#123;</span><br><span class="line">        <span class="keyword">int</span> n = q.poll();</span><br><span class="line">        <span class="keyword">if</span>(n + x &lt;= total &amp;&amp; set.add(n + x))&#123;</span><br><span class="line">            q.offer(n + x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n + y &lt;= total &amp;&amp; set.add(n + y))&#123;</span><br><span class="line">            q.offer(n + y);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n - x &gt;=<span class="number">0</span> &amp;&amp; set.add(n -x))&#123;</span><br><span class="line">            q.offer(n-x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n -y &gt;=<span class="number">0</span> &amp;&amp;set.add(n - y))&#123;</span><br><span class="line">            q.offer(n - y);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(set.contains(z))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -584,7 +584,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#倒水问题-BFS-ax-by-m-最大公约数"><span class="nav-number">1.</span> <span class="nav-text">倒水问题 BFS ax + by = m 最大公约数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#365-容量x-y的两个杯子能否量出z"><span class="nav-number">1.1.</span> <span class="nav-text">365 容量x,y的两个杯子能否量出z</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hdu-1495-容量S-用N和M的平分"><span class="nav-number">1.2.</span> <span class="nav-text">hdu 1495 容量S 用N和M的平分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#poj-3414-Pots-容量A-B的容器-量出C升水"><span class="nav-number">1.3.</span> <span class="nav-text">poj 3414 Pots 容量A,B的容器 量出C升水</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#poj-1606"><span class="nav-number">1.4.</span> <span class="nav-text">poj 1606</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#bfs的并行"><span class="nav-number">1.</span> <span class="nav-text">bfs的并行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#倒水问题-BFS-ax-by-m-最大公约数"><span class="nav-number">2.</span> <span class="nav-text">倒水问题 BFS ax + by = m 最大公约数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#365-容量x-y的两个杯子能否量出z"><span class="nav-number">2.1.</span> <span class="nav-text">365 容量x,y的两个杯子能否量出z</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hdu-1495-容量S-用N和M的平分"><span class="nav-number">2.2.</span> <span class="nav-text">hdu 1495 容量S 用N和M的平分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#poj-3414-Pots-容量A-B的容器-量出C升水"><span class="nav-number">2.3.</span> <span class="nav-text">poj 3414 Pots 容量A,B的容器 量出C升水</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#poj-1606"><span class="nav-number">2.4.</span> <span class="nav-text">poj 1606</span></a></li></ol></li></ol></div>
             
 
           </div>
