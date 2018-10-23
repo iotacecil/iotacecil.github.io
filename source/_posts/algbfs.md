@@ -4,7 +4,7 @@ date: 2018-10-21 18:19:30
 tags: [alg]
 categories: [算法备忘]
 ---
-### bfs的并行
+### bfs dfs的并行
 
 ### 倒水问题 BFS ax + by = m 最大公约数
 
