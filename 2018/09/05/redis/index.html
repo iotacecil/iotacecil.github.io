@@ -87,10 +87,17 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-07T11:01:28.144Z">
+<meta property="og:image" content="http://iotaa.xyz/images/redisobject.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/redisIO.jpg">
+<meta property="og:image" content="http://iotaa.xyz/2018/09/05/redis/redisnget.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/redisvideo.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/redishash.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/redishashvideo.jpg">
+<meta property="og:updated_time" content="2018-10-23T14:18:38.743Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis">
 <meta name="twitter:description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
+<meta name="twitter:image" content="http://iotaa.xyz/images/redisobject.jpg">
 
 
 
@@ -336,8 +343,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-07T19:01:28+08:00">
-                2018-09-07
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-23T22:18:38+08:00">
+                2018-10-23
               </time>
             
           </span>
@@ -376,6 +383,15 @@
 <p><code>ttl</code> 命令可以查看键hello的剩余过期时间，单位：秒（&gt;0剩余过期时间；-1没设置过期时间；-2键不存在）<br><code>expire key seconds</code> 当超过过期时间，会自动删除，key在seconds秒后过期<br><code>persist key</code> 去掉过期时间</p>
 <p><code>type key</code> 如果键hello是字符串类型，则返回string；如果键不存在，则返回none</p>
 <p>所有key都是字符串</p>
+<p><img src="/images/redisobject.jpg" alt="redisobject.jpg"><br>redis 单线程 所以命令会等待<br>redis 使用epoll模型多路复用 redis自身实现的事件处理 将epoll的读写、连接、关闭转换成自身的事件。不在IO上浪费时间<br><img src="/images/redisIO.jpg" alt="redisIO.jpg"><br>fysnc file 是独立线程</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><h4 id="字符串-应用场景：-缓存、计数器、分布式锁"><a href="#字符串-应用场景：-缓存、计数器、分布式锁" class="headerlink" title="字符串 应用场景： 缓存、计数器、分布式锁"></a>字符串 应用场景： 缓存、计数器、分布式锁</h4><p>结构： key：value<br>因为单线程 所以无竞争 线程安全<br>mget和n次get mget省了很多网络开销 从n网络n命令-&gt;1网络n命令<br><img src="/2018/09/05/redis/redisnget.jpg" alt="redisnget.jpg"></p>
+<h5 id="场景1：-缓存视频基本信息redismysql"><a href="#场景1：-缓存视频基本信息redismysql" class="headerlink" title="场景1： 缓存视频基本信息redismysql"></a>场景1： 缓存视频基本信息redis<->mysql</-></h5><p><img src="/images/redisvideo.jpg" alt="redisvideo.jpg"></p>
+<h5 id="场景2：-分布式ID生成器"><a href="#场景2：-分布式ID生成器" class="headerlink" title="场景2： 分布式ID生成器"></a>场景2： 分布式ID生成器</h5><p><code>incr id</code></p>
+<hr>
+<h4 id="hash-可以更新属性"><a href="#hash-可以更新属性" class="headerlink" title="hash 可以更新属性"></a>hash 可以更新属性</h4><p>field 不能相同<br>结构 key-&gt;field,value<br><img src="/images/redishash.jpg" alt="redishash.jpg"></p>
+<p>id看成是一行，field是列</p>
+<h5 id="场景1：记录网站每个用户个人主页的访问量"><a href="#场景1：记录网站每个用户个人主页的访问量" class="headerlink" title="场景1：记录网站每个用户个人主页的访问量"></a>场景1：记录网站每个用户个人主页的访问量</h5><p><code>hincrby user:1:info pageview count</code></p>
+<h5 id="场景2：缓存视频基本信息redismysql"><a href="#场景2：缓存视频基本信息redismysql" class="headerlink" title="场景2：缓存视频基本信息redismysql"></a>场景2：缓存视频基本信息redis<->mysql</-></h5><p><img src="/images/redishashvideo.jpg" alt="redishashvideo.jpg"></p>
 <h3 id="epoll实现"><a href="#epoll实现" class="headerlink" title="epoll实现"></a>epoll实现</h3>
       
     </div>
@@ -410,8 +426,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/05/avtiviti/" rel="prev" title="avtiviti">
-                avtiviti <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/05/activiti/" rel="prev" title="activiti和项目整理">
+                activiti和项目整理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -489,7 +505,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -544,7 +560,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-number">1.</span> <span class="nav-text">ConcurrentSkipListMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-搭建redis服务器"><span class="nav-number">2.</span> <span class="nav-text">4.搭建redis服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看配置"><span class="nav-number">3.</span> <span class="nav-text">查看配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用API"><span class="nav-number">4.</span> <span class="nav-text">常用API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll实现"><span class="nav-number">5.</span> <span class="nav-text">epoll实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-number">1.</span> <span class="nav-text">ConcurrentSkipListMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-搭建redis服务器"><span class="nav-number">2.</span> <span class="nav-text">4.搭建redis服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看配置"><span class="nav-number">3.</span> <span class="nav-text">查看配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用API"><span class="nav-number">4.</span> <span class="nav-text">常用API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构"><span class="nav-number">5.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串-应用场景：-缓存、计数器、分布式锁"><span class="nav-number">5.1.</span> <span class="nav-text">字符串 应用场景： 缓存、计数器、分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景1：-缓存视频基本信息redismysql"><span class="nav-number">5.1.1.</span> <span class="nav-text">场景1： 缓存视频基本信息redismysql</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#场景2：-分布式ID生成器"><span class="nav-number">5.1.2.</span> <span class="nav-text">场景2： 分布式ID生成器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hash-可以更新属性"><span class="nav-number">5.2.</span> <span class="nav-text">hash 可以更新属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景1：记录网站每个用户个人主页的访问量"><span class="nav-number">5.2.1.</span> <span class="nav-text">场景1：记录网站每个用户个人主页的访问量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#场景2：缓存视频基本信息redismysql"><span class="nav-number">5.2.2.</span> <span class="nav-text">场景2：缓存视频基本信息redismysql</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll实现"><span class="nav-number">6.</span> <span class="nav-text">epoll实现</span></a></li></ol></div>
             
 
           </div>
