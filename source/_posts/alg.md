@@ -25,6 +25,17 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 数组嵌套
+> `S[i] = {A[i], A[A[i]], A[A[A[i]]], ... }`
+>  stop adding right before a duplicate element occurs in S.
+>  Input: A = [5,4,0,3,1,6,2]
+Output: 4
+Explanation: 
+A[0] = 5, A[1] = 4, A[2] = 0, A[3] = 3, A[4] = 1, A[5] = 6, A[6] = 2.
+
+>One of the longest S[K]:
+>S[0] = {A[0], A[5], A[6], A[2]} = {5, 6, 2, 0}
+
 ### 素数定理
 从不大于n的自然数随机选一个，它是素数的概率大约是1/ln(n)
 https://baike.baidu.com/item/%E7%B4%A0%E6%95%B0%E5%AE%9A%E7%90%86/1972457?fromtitle=%E8%B4%A8%E6%95%B0%E5%AE%9A%E7%90%86&fromid=4710126
@@ -3828,7 +3839,7 @@ int fib(int n){
 ### 11 数组index当底边，值当杯子两侧，最大面积
 
 
----
+
 
 
 ---
@@ -3875,6 +3886,8 @@ public List<Integer> topKFrequent(int[] nums, int k) {
 ```
 {% endfold %}
 用map AC34%
+
+优先队列O(nlogk)如果k和n的数量差不多 还能维护一个(n-k)的堆 复杂度变成nlog(n-k)
 
 
 ### 242 Anagram 相同字母的单词

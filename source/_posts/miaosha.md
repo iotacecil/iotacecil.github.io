@@ -1833,7 +1833,7 @@ public interface GoodsDao {
     public List<GoodVo> listGoodsVo();
 }
 ```
-service:
+service: 显示商品列表
 ```java
 @Service
 public class GoodsService {
@@ -1922,7 +1922,7 @@ public String detail(Model model,MiaoshaUser user,
 }
 ```
 
-service 和dao
+service 和dao 显示商品详情
 ```java
 public GoodVo getGoodsVoByGoodsId(long goodsId) {
         return goodsDao.getGoodsVoByGoodsId(goodsId);
@@ -2019,4 +2019,333 @@ function countDown(){
 测试：http://localhost:8080/goods/to_detail/1
 
 #### 秒杀功能
+用表单提交 传递的参数是商品id
+```html
+<form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
+    <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
+    <input type="hidden" name="goodsId" th:value="${goods.id}" />
+</form>
+```
+
+添加秒杀模块的Error Message
+```java
+public static CodeMsg MIAO_SHA_OVER = new CodeMsg(500500, "无库存");
+public static CodeMsg REPEATE_MIAOSHA = new CodeMsg(500501, "不能重复秒杀");
+```
+业务逻辑：
+1. 判断登陆 -> 登陆页面
+2. 判断商品库存 -> 秒杀失败
+3. 判断用户是否已经秒杀过该商品 ->秒杀失败 //todo 如果可以买好几件？
+4. 事务：减库存 下单 加入秒杀订单 -> 订单详情页
+定义`OrderService` 用于查询用户订单是否已经买过这个商品
+
+添加秒杀失败页面：
+```html
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>秒杀失败</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+秒杀失败：<p th:text="${errmsg}"></p>
+</body>
+</html>
+```
+
 新建`MiaoshaController`
+```java
+@Controller
+@RequestMapping("/miaosha")
+public class MiaoshaController {
+
+    @Autowired
+    GoodsService goodsService;
+    
+    @Autowired
+    OrderService orderService;
+    
+    @Autowired
+    MiaoshaService miaoshaService;
+    
+    @RequestMapping("/do_miaosha")
+    public String list(Model model, MiaoshaUser user,
+                       @RequestParam("goodsId")long goodsId) {
+        model.addAttribute("user", user);
+        // 没登陆
+        if(user == null) {
+            return "login";
+        }
+        //判断库存
+        GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+        int stock = goods.getStockCount();
+        if(stock <= 0) {
+            model.addAttribute("errmsg", CodeMsg.MIAO_SHA_OVER.getMsg());
+            return "miaosha_fail";
+        }
+//      从用户订单查询是否已经对这个物品下过单了
+        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+        if(order != null) {
+            model.addAttribute("errmsg", CodeMsg.REPEATE_MIAOSHA.getMsg());
+            return "miaosha_fail";
+        }
+        //1.减库存 2.下订单 3.写入秒杀订单 这三步是一个是事务
+        OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
+        model.addAttribute("orderInfo", orderInfo);
+        model.addAttribute("goods", goods);
+        return "order_detail";
+    }
+}
+```
+
+查订单 查询用户是否已经秒杀过该商品
+dao: 用 用户id和商品id 查询对应的订单
+```java
+@Mapper
+public interface OrderDao {
+    
+    @Select("select * from miaosha_order where user_id=#{userId} and goods_id=#{goodsId}")
+    public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(@Param("userId") long userId, @Param("goodsId") long goodsId);
+    }
+```
+
+OrderService: controller 里判断是不是非null
+```java
+@Service
+public class OrderService {
+    
+    @Autowired
+    OrderDao orderDao;
+    // 根据用户ID和商品ID查找相应订单
+    public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
+        return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+    }
+}
+```
+
+定义`MiaoshaService` 用于对1.减库存 2.下单 3.加入秒杀订单 包装成事务
+```java
+@Service
+public class MiaoshaService {
+    @Autowired
+    GoodsService goodsService;
+
+    @Autowired
+    OrderService orderService;
+
+    /**
+     * 输入用户和商品 返回订单
+     * @param user
+     * @param goods
+     * @return
+     */
+    @Transactional
+    public OrderInfo miaosha(MiaoshaUser user, GoodVo goods) {
+
+        //减库存 下订单 写入秒杀订单
+        goodsService.reduceStock(goods);
+        //order_info maiosha_order
+        return orderService.createOrder(user, goods);
+    }
+}
+```
+
+1. 减少库存：查找miaosha商品ID并更新数据库：
+
+更新：通过GoodVo更新goods信息
+要通过GoodsDao更新数据库，一般不引入其他Service，所以引入`GoodsService`
+同理写订单不是调用OrderDao 而是 OrderService
+
+减少库存的sql
+```java
+@Update("update miaosha_goods set stock_count = stock_count - 1 where goods_id = #{goodsId}")
+    public int reduceStock(MiaoshaGoods g);
+```
+GoodsService:
+```java
+@Service
+public class GoodsService {
+    @Autowired
+    GoodsDao goodsDao;
+
+    // 商品列表
+    public List<GoodVo> listGoodsVo(){
+        return goodsDao.listGoodsVo();
+
+    }
+    // 商品详情
+    public GoodVo getGoodsVoByGoodsId(long goodsId) {
+        return goodsDao.getGoodsVoByGoodsId(goodsId);
+    }
+    // 减库存
+    public void reduceStock(GoodVo goods) {
+        MiaoshaGoods g = new MiaoshaGoods();
+        g.setId(goods.getId());
+        goodsDao.reduceStock(g);
+    }
+}
+```
+
+2. 下单（生成订单）：生成订单Info
+`OrderServece`
+根据User，GoodVo 拼成OrderInfo
+```java
+Service
+public class OrderService {
+    
+    @Autowired
+    OrderDao orderDao;
+
+    // 根据用户ID和商品ID查找相应订单
+    public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
+        return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+    }
+
+    // 根据用户和商品信息创建订单信息
+    @Transactional
+    public OrderInfo createOrder(MiaoshaUser user, GoodVo goods) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setCreateDate(new Date());
+        orderInfo.setDeliveryAddrId(0L);
+        orderInfo.setGoodsCount(1);
+        orderInfo.setGoodsId(goods.getId());
+        orderInfo.setGoodsName(goods.getGoodsName());
+        orderInfo.setGoodsPrice(goods.getMiaoshaPrice());
+        orderInfo.setOrderChannel(1);
+        orderInfo.setStatus(0);
+        orderInfo.setUserId(user.getId());
+        // 数据库insert order表
+        long orderId = orderDao.insert(orderInfo);
+        MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
+        miaoshaOrder.setGoodsId(goods.getId());
+        miaoshaOrder.setOrderId(orderId);
+        miaoshaOrder.setUserId(user.getId());
+        // 数据库 miaoshaOrder表
+        orderDao.insertMiaoshaOrder(miaoshaOrder);
+        return orderInfo;
+    }
+    
+}
+```
+Dao 插入两个订单并且有返回值
+```java
+@Mapper
+public interface OrderDao {
+    // 用户id+商品id查找miaosha表订单信息
+    @Select("select * from miaosha_order where user_id=#{userId} and goods_id=#{goodsId}")
+    public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(@Param("userId") long userId, @Param("goodsId") long goodsId);
+    // 创建订单
+    @Insert("insert into order_info(user_id, goods_id, goods_name, goods_count, goods_price, order_channel, status, create_date)values("
+            + "#{userId}, #{goodsId}, #{goodsName}, #{goodsCount}, #{goodsPrice}, #{orderChannel},#{status},#{createDate} )")
+    @SelectKey(keyColumn="id", keyProperty="id", resultType=long.class, before=false, statement="select last_insert_id()")
+    public long insert(OrderInfo orderInfo);
+    // 创建秒杀订单
+    @Insert("insert into miaosha_order (user_id, goods_id, order_id)values(#{userId}, #{goodsId}, #{orderId})")
+    public int insertMiaoshaOrder(MiaoshaOrder miaoshaOrder);
+    
+}
+```
+
+新建订单详情页：
+```html
+<div class="panel panel-default">
+  <div class="panel-heading">秒杀订单详情</div>
+      <p th:text="${orderInfo.getId()}"></p>
+  <table class="table" id="goodslist">
+        <tr>  
+        <td>商品名称</td>  
+        <td th:text="${goods.goodsName}" colspan="3"></td> 
+     </tr>  
+     <tr>  
+        <td>商品图片</td>  
+        <td colspan="2"><img th:src="@{${goods.goodsImg}}" width="200" height="200" /></td>  
+     </tr>
+      <tr>  
+        <td>订单价格</td>  
+        <td colspan="2" th:text="${orderInfo.goodsPrice}"></td>  
+     </tr>
+     <tr>
+            <td>下单时间</td>  
+            <td th:text="${#dates.format(orderInfo.createDate, 'yyyy-MM-dd HH:mm:ss')}" colspan="2"></td>  
+     </tr>
+     <tr>
+        <td>订单状态</td>  
+        <td >
+            <span th:if="${orderInfo.status eq 0}">未支付</span>
+            <span th:if="${orderInfo.status eq 1}">待发货</span>
+            <span th:if="${orderInfo.status eq 2}">已发货</span>
+            <span th:if="${orderInfo.status eq 3}">已收货</span>
+            <span th:if="${orderInfo.status eq 4}">已退款</span>
+            <span th:if="${orderInfo.status eq 5}">已完成</span>
+        </td>  
+        <td>
+            <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+        </td>
+     </tr>
+      <tr>
+            <td>收货人</td>  
+            <td colspan="2">XXX  18812341234</td>  
+     </tr>
+     <tr>
+            <td>收货地址</td>  
+            <td colspan="2">北京市昌平区回龙观龙博一区</td>  
+     </tr>
+  </table>
+</div>
+```
+
+访问：http://localhost:8080/goods/to_detail/1 会发送post带着goodId token里有用户
+http://localhost:8080/miaosha/do_miaosha 完成秒杀
+
+
+### JMeter测试QPS压测 打成war包放到tomcat服务器上
+https://jmeter.apache.org/
+1 压测商品列表页 
+QPS说法：并发在1000的时候网站的QPS是1000或者500
+TPS 每秒钟完成了20笔订单
+`D:\apache-jmeter-5.0\bin\jmeter.bat`
+TestPlan-右键-ADD-thread group
+Number of Thread ： 10  线程数
+Ramp-Up Period ： 10 用10秒把10个线程都启动起来
+
+默认配置
+对线程组右键-add-Config Element -Http request default
+添加http和IP和端口
+
+对线程组右键-add-sample-http请求
+不用填 http ip 端口
+方法get，path：/goods/to_list
+
+对线程组右键-add-Listener-Aggregate Report
+也可以添加 Graph Results
+
+![jmeter.jpg](/images/jmeter.jpg)
+Average 平均花费时间 10ms
+Throughput 可以当作qps 表示一秒能处理11.5个请求
+添加监听器 View Results in Table
+先把监听器都右键清空
+![Jmetertable.jpg](/images/Jmetertable.jpg)
+报错空指针 修改位置：
+`UserArgumentResolver.java`
+```java
+private String getCookieValue(HttpServletRequest request, String cookiName) {
+        Cookie[]  cookies = request.getCookies();
+        // 添加空指针判断
+        if(cookies == null || cookies.length <= 0){
+            return null;
+        }
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals(cookiName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+```
+线程数1000的情况下 只有 35每秒qps
+![onekjmeter.jpg](/images/onekjmeter.jpg)
+打开数据库服务器的top
+10000个线程 大概因为虚拟机所以压榨主机需要的更多 照理说应该load average会超过1
+多核cpu负载超过表示很多进程在等待
+
+压测用户对象

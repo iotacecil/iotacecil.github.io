@@ -1,10 +1,108 @@
 ---
-title: algbfs
+title: 广度优先用于无权图的最短路径
 date: 2018-10-21 18:19:30
 tags: [alg]
 categories: [算法备忘]
 ---
+有权图的最短路径要用DijKstra
+
 ### bfs dfs的并行
+
+### 127 word Ladder bfs最短单词转换路径
+//todo双向bfs
+
+注意marked和dfs的不同，
+单纯bfs访问wordlist里每个单词1.79% 1097ms
+//`list.size()*cur.length()`
+{% fold %}
+```java
+private boolean dif(String difword,String cur){
+    int cnt=0;
+    for(int i =0;i<difword.length();i++){
+        if(difword.charAt(i)!=cur.charAt(i)){
+            cnt++;
+            if(cnt>1)return false;
+        }
+    }
+    return true;
+}
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+    int cnt = 0;
+    HashSet<String> words = new HashSet<>();
+    for(String word:wordList){
+        words.add(word);
+    }
+    Set<String> marked = new HashSet<>();
+    Deque<String> que = new ArrayDeque<>();
+    que.add(beginWord);
+    marked.add(beginWord);
+    while(!que.isEmpty()){
+    cnt++;
+    int size = que.size();
+    while(size>0){
+        size--;
+        String cur = que.poll();
+        for(String difword:words){
+            if(dif(difword,cur)){
+                if(difword.equals(endWord))return cnt+1;
+                if(!marked.contains(difword)){
+                que.add(difword);
+                marked.add(difword);}}}}}
+    return 0;
+}
+```
+{% endfold %}
+先改变单词cur.length()*25再查表
+47% 97ms
+{% fold %}
+```java
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        int cnt = 0;
+        HashSet<String> words = new HashSet<>();
+        for(String word:wordList){
+            words.add(word);
+        }
+        Set<String> marked = new HashSet<>();
+        Deque<String> que = new ArrayDeque<>();
+        que.add(beginWord);
+        marked.add(beginWord);
+        while(!que.isEmpty()){
+            cnt++;
+            int size = que.size();
+            while(size>0){
+                size--;
+                String cur = que.poll();
+                //System.out.println(cur);
+             
+                char[] curr = cur.toCharArray();
+                for(int i =0;i<curr.length;i++){
+                    char ori = curr[i];
+                    for(char c='a';c<='z';c++){
+                        if(curr[i]!=c){
+                            curr[i]=c;
+                            String next = new String(curr);
+                          
+
+                            if(words.contains(next)){
+                               
+                                if(next.equals(endWord))return cnt+1;
+                                if(!marked.contains(next)){
+                                     
+                                    que.add(next);
+                                    marked.add(next);
+                                }
+                            }
+                        }
+                    }
+                    curr[i] = ori;
+                }
+              
+            }
+        }
+        return 0;
+    }
+```
+{% endfold %}
 
 ### 倒水问题 BFS ax + by = m 最大公约数
 

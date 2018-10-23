@@ -67,8 +67,6 @@ firewall-cmd --list-ports
 
 ### 常用API
 
-
-
 `keys *` 查询所有的键，会遍历所有的键值，复杂度O(n)
 `dbsize` 查询键总数，直接获取redis内置的键总数变量，复杂度O(1)
 `exists key` 存在返回1，不存在返回0 O(1)
@@ -81,6 +79,36 @@ firewall-cmd --list-ports
 
 所有key都是字符串
 
+![redisobject.jpg](/images/redisobject.jpg)
+redis 单线程 所以命令会等待
+redis 使用epoll模型多路复用 redis自身实现的事件处理 将epoll的读写、连接、关闭转换成自身的事件。不在IO上浪费时间
+![redisIO.jpg](/images/redisIO.jpg)
+fysnc file 是独立线程
 
 
-### epoll实现
+### 数据结构
+
+#### 字符串 应用场景： 缓存、计数器、分布式锁
+结构： key：value
+因为单线程 所以无竞争 线程安全
+mget和n次get mget省了很多网络开销 从n网络n命令->1网络n命令
+![redisnget.jpg](redisnget.jpg)
+
+##### 场景1： 缓存视频基本信息redis<->mysql
+![redisvideo.jpg](/images/redisvideo.jpg)
+
+##### 场景2： 分布式ID生成器
+`incr id`
+
+---
+#### hash 可以更新属性
+用户信息用hash 可以部分更新属性 
+但是比较难控制过期时间，只能对一个key设置过期时间 不能对一个属性
+field 不能相同
+结构 key->field,value
+![redishash.jpg](/images/redishash.jpg)
+
+id看成是一行，field是列
+
+##### 场景1：记录网站每个用户个人主页的访问量
+`hincrby user:1:in

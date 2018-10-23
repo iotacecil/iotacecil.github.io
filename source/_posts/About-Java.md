@@ -4,6 +4,14 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### Maven 报错No plugin found for prefix 'tomcat7
+找到Maven的setting：
+```xml
+<pluginGroups>
+  <pluginGroup>org.apache.tomcat.maven</pluginGroup>
+</pluginGroups>
+```
+
 ### HTTP服务的性能测试图表
 
 ### snowflake

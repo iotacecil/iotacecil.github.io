@@ -5,6 +5,10 @@ tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
 
+### 网络模拟器？
+NS-3
+https://cloud.tencent.com/info/876b157473953159b1d582b9acec8d88.html
+
 localhost 免密访问：
 ```sh
 $ ssh localhost
