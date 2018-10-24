@@ -4,6 +4,155 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### 动量梯度下降
+vt 是之前梯度的均值，是梯度的积累值
+![SGDmomentum.jpg](/images/SGDmomentum.jpg)
+
+之前积累的梯度方向是momentum step,当前梯度是gradient step,这次的更新梯度是actual step
+1 模型刚开始 两个夹角小，则actual step 是2倍 可以加快训练
+2 当梯度为0的时候 有动量
+3 梯度改变方向 动量可以缓解动荡
+
+### 卷积计算是对应位置相乘
+每次卷积的输出size = 输入size - 卷积核size + 1
+多个卷积层图像size变成1或者非整数 所以加padding。使输入和输出size一样。
+每个通道独立做卷积，最后3个通道相加
+P = 边距(padding)
+S = 步长(stride)
+输出尺寸：(n-p)/s + 1
+
+参数数目 = kw x kh x ci x co
+kw,kh 卷积核长宽
+ci 输入通道数
+co 输出通道数
+
+### 池化 对应区域内的最大值 不用相乘
+还有平均值池化 不是求对应区域最大值 而是求平均
+
+步长和卷积核一样，每次移动的区域不重叠。不补0，不padding，多余的区域直接丢掉
+没有用于求导的参数
+池化层 参数为步长和池化核大小。
+先池化 有利于减少图片大小 然后再卷积。
+
+### 全连接层
+输出展开成一维连接到下一层每个神经元上。 之后就不能做卷积、池化了，已经是一维的了
+是普通神经网络的层
+参数数目为 输入通道数目/输出通道数目
+可以droupout 因为参数太多容易过拟合 随机丢掉几个不连接
+相当于训练了子网络并且进行组合
+
+### 激活函数
+为什么激活函数不用线性函数？
+因为高层和低层是全连接(参数矩阵W).
+如果不用激活函数，相当于每个层次进行矩阵操作，深层神经网络也相当于单层
+
+
+### !!!todo混淆矩阵 准确度,精准率，召回率F1调和平均值，PR曲线ROC曲线
+对于极度偏斜Skewed Data 
+如果癌症概率只有0.1%
+如果全部预测没病 就可以达到99.9%的准确率
+
+1混淆矩阵
+```python
+#真的不是
+def TN(y_true,y_predict):
+    return np.sum((y_true==0)&(y_predict==0))
+
+# 预测为1 错了
+def FP(y_true,y_predict):
+    return np.sum((y_true==0)&(y_predict==1))
+
+#其实是真的
+def FN(y_true,y_predict):
+    return np.sum((y_true==1)&(y_predict==0))
+
+#真的是真的
+def TP(y_true,y_predict):
+    return np.sum((y_true==1)&(y_predict==1))
+
+#混淆矩阵
+def confusion_matrix(y_true,y_predict):
+    return np.array([
+        [TN(y_test,y_log_predict),FP(y_test,y_log_predict)],
+        [FN(y_test,y_log_predict),TP(y_test,y_log_predict)]
+    ])
+confusion_matrix(y_test,y_log_predict)
+## 直接调库 顺序一样的
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_test,y_log_predict)
+```
+
+混淆矩阵可视化
+```python
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_test,y_predict)
+plt.matshow(confusion_matrix(y_test,y_predict),cmap=plt.cm.gray)#越亮数字越大
+```
+
+2.精准率presision_score tp/(tp+fp)
+//the ability of the classifier not to label as positive a sample
+    that is negative. 别把错的当对的的能力
+应用场景：股票预测 精准率 对于FP敏感 对于上升的但是没有预测出来TN的漏掉了不是很在意
+```python
+def precision_score(y_true,y_predict):
+    tp = TP(y_test,y_log_predict)
+    fp = FP(y_test,y_log_predict)
+    return tp/(tp+fp)
+## 直接调库
+from sklearn.metrics import precision_score
+precision_score(y_test,y_log_predict)
+```
+
+3.召回率recall_score tp/(tp+fn)
+//he ability of the classifier to find all the positive samples. 
+
+找到所有正确的的能力（找全）
+应用场景 : 医疗领域 召回率 希望所有有病的都要检查出来。FP没关系，即使没病说有病FN也没关系。
+```python
+def recall_score(y_true,y_predict):
+    tp = TP(y_test,y_log_predict)
+    fn = FN(y_test,y_log_predict)
+    return tp/(tp+fn)
+## 直接调库
+from sklearn.metrics import recall_score
+recall_score(y_test,y_log_predict)
+```
+
+4.F1调和平均值：两个不平衡的话很低，只有两个都很高才会高[0~1]
+```python
+def F1(precision,recall):
+    try:
+        return 2*precision*recall/(precision+recall)
+    except:
+        return 0.0
+## 直接调库
+from sklxearn.metrics import f1_score
+f1=f1_score(y_test,y_predict)
+```
+
+5.PR曲线precision_recall_curve 用于比较两个模型和不同的超参数
+threadholds？
+
+6.
+TPR == recall #真的是1/真实为1的所有预测
+FPR # 其实是假的/真实值是假的的所有预测
+```python
+def TPR(y_true,y_predict):
+    tp = TP(y_true,y_predict)
+    fn = FN(y_true,y_predict)
+    try:
+        return tp/(tp+fn)
+    except:
+        return 0
+def FPR(y_true,y_predict):#预测为1，预测错了 站真实值为0的百分比
+    fp = FP(y_true,y_predict)
+    tn = TN(y_true,y_predict)
+    try:
+        return fp/(fp+tn)
+    except:
+        return 0
+```
+
 https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p01_start_stop_thread.html
 
 https://jdtech.jd.com/#/more

@@ -4,7 +4,187 @@ date: 2018-10-11 11:13:55
 tags:
 categories: [算法备忘]
 ---
+
+### 23 k个链表merge
+正确解法：分治8ms 96% 复杂度kNlogk
+```java
+public ListNode mergeKLists(ListNode[] lists) {
+   if(lists.length ==0)return null;
+    if(lists.length == 1) return lists[0];
+    if(lists.length == 2){
+        return mergeTwoLists(lists[0],lists[1] );
+    }
+    int mid = lists.length / 2;
+    ListNode[] sub1 = new ListNode[mid];
+    ListNode[] sub2 = new ListNode[lists.length - mid];
+    for (int i = 0; i < mid; i++) {
+        sub1[i] = lists[i];
+    }
+    for (int i = mid; i <lists.length; i++) {
+        sub2[i-mid] =  lists[i];
+    }
+    ListNode listNode1 = mergeKLists(sub1);
+    ListNode listNode2 = mergeKLists(sub2);
+    return mergeTwoLists(listNode1, listNode2);
+}
+```
+
+解法2： 86ms全部先放在一起，排序，再遍历组成一个链表
+复杂度 knlog(kn) + kn
+```java
+ public ListNode mergeKLists(ListNode[] lists) {
+   List<ListNode> all = new ArrayList<>();
+
+    for(ListNode node : lists){
+       while (node!=null){
+            all.add(node);
+            node = node.next;
+        }
+    }
+    all.sort((l1,l2)->l1.val-l2.val);
+    ListNode tmp = new ListNode(-1);
+    ListNode pre = tmp;
+    for(ListNode node :all){
+        pre.next = node;
+        pre = pre.next;
+    }
+    return tmp.next;
+}
+```
+
+暴力解每次向后合并一个 309 ms
+复杂度： 有k个链表，平均长度n
+第一次最长比较(n+n)次， 第二次合并最差比较(2n+n)次....直到最后一步k-1个链表合并后和最后一个链表合并(k-1)n+n
+复杂度(k^2 n)
+```java
+public ListNode mergeKLists(ListNode[] lists) {
+    if(lists == null || lists.length <1){
+        return null;
+    }
+    if(lists.length == 1){
+        return lists[0];
+    }
+    ListNode tmp = lists[0];
+    for(int i =1;i<lists.length;i++){
+        tmp = mergeTwoLists(tmp,lists[i]);
+    }
+    return tmp;
+}
+```
+
+### 21 链表merge
+递归todo
+```java
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+   ListNode tem_head = new ListNode(-1);
+   ListNode pre = tem_head;
+   while (l1 != null && l2 != null){
+       if(l1.val < l2.val){
+         pre.next = l1;
+         l1 = l1.next;
+       }else{
+           pre.next = l2;
+           l2 = l2.next;
+       }
+       pre = pre.next;
+   }
+   if(l1!=null){
+       pre.next = l1;
+   }
+   if(l2!=null){
+       pre.next =l2;
+   }
+   return tem_head.next;
+}
+```
+
+### 24两个一组交换链表
+
+#### 创建链表    
+list->nodelist 会stackOverflow
+```java
+Node create(List<Integer> data){
+    Node first = new Node(data.get(0));
+    Node sub = create(data.subList(1,data.size()));
+    first.next=sub;
+    return first;
+}
+```
+---
+迭代：
+```java
+Node pre = null;
+Node head =null;
+for(1 to size){
+    Node node = new Node(i);
+    if(pre!=null){
+        pre.next =node;
+    }else{
+        head = node;
+    }
+    pre = node;
+}
+return head;
+```
+
+#### 链表DELETE_IF
+```java
+
+```
+
+### 92反转从m到n的链表 一趟扫描
+
+
+### 206反转链表
+空间是n
+```java
+public ListNode reverseList(ListNode head) {
+    if(head == null || head.next == null)return head;
+    ListNode second = reverseList(head.next);
+    // 注意 不是second.next 因为second永远是最后一个 5，5->4,5->4->3
+    // 而head.next肯定是second链表的最后一个非null的5,4,3..
+    head.next.next = head;
+    head.next = null;
+    return second;
+}
+```
+---
+迭代空间是1：
+三个指针pre,cur,next
+```java
+Npublic ListNode reverseList(ListNode head) {
+    if(head == null || head.next == null)return head;
+    ListNode prev = null;
+    ListNode curr = head;
+    while(curr != null){
+        ListNode next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+ 
+    return prev;
+}
+```
+
+
+转成栈浪费空间并且代码复杂
+
 ### 二叉树
+
+### !!!114原地将二叉树变成链表
+1.入栈迭代40%
+    1. 先入栈右子树，再入栈左子树，更新右节点为栈顶。
+    2. 将当前左子树变成null。下一次循环cur是栈顶（原左子树）
+2. 后序遍历 递归6%
+```java
+pre = null;
+flat(root.right);
+flat(root.left);
+root.right = pre;
+root.left = null;
+pre = root;
+```
 
 ### 前序中序构造二叉树
 A BDEG CF

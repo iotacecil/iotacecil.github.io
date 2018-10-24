@@ -152,43 +152,7 @@ k = 1
 (3,1) -> 2
 因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
 
-### 92反转从m到n的链表 一趟扫描
 
-
-### 206反转链表
-空间是n
-```java
-public ListNode reverseList(ListNode head) {
-    if(head == null || head.next == null)return head;
-    ListNode second = reverseList(head.next);
-    // 注意 不是second.next 因为second永远是最后一个 5，5->4,5->4->3
-    // 而head.next肯定是second链表的最后一个非null的5,4,3..
-    head.next.next = head;
-    head.next = null;
-    return second;
-}
-```
----
-迭代空间是1：
-三个指针pre,cur,next
-```java
-Npublic ListNode reverseList(ListNode head) {
-    if(head == null || head.next == null)return head;
-    ListNode prev = null;
-    ListNode curr = head;
-    while(curr != null){
-        ListNode next = curr.next;
-        curr.next = prev;
-        prev = curr;
-        curr = next;
-    }
- 
-    return prev;
-}
-```
-
-
-转成栈浪费空间并且代码复杂
 
 ### lt1472 s任意交换奇数位字符和偶数位字符 能否变成t
 >给出 s="abcd"，t="cdab"，返回"Yes"。
@@ -4311,38 +4275,7 @@ if(i<4){lights[i+1]^= switchs;}
     3. 回到0 A上n-2个移动到C，用B中转
 2. n皇后 递归代替多重循环
     
-#### 链表DELETE_IF
-```java
 
-```
-
-
-#### 创建链表    
-list->nodelist 会stackOverflow
-```java
-Node create(List<Integer> data){
-    Node first = new Node(data.get(0));
-    Node sub = create(data.subList(1,data.size()));
-    first.next=sub;
-    return first;
-}
-```
----
-迭代：
-```java
-Node pre = null;
-Node head =null;
-for(1 to size){
-    Node node = new Node(i);
-    if(pre!=null){
-        pre.next =node;
-    }else{
-        head = node;
-    }
-    pre = node;
-}
-return head;
-```
 
 
 

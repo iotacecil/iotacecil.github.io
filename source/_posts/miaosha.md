@@ -2319,7 +2319,7 @@ Ramp-Up Period ： 10 用10秒把10个线程都启动起来
 对线程组右键-add-Listener-Aggregate Report
 也可以添加 Graph Results
 
-![jmeter.jpg](/images/jmeter.jpg)
+![jmetermiaosha.jpg](/images/jmetermiaosha.jpg)
 Average 平均花费时间 10ms
 Throughput 可以当作qps 表示一秒能处理11.5个请求
 添加监听器 View Results in Table
