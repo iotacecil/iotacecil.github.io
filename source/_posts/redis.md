@@ -111,4 +111,15 @@ field 不能相同
 id看成是一行，field是列
 
 ##### 场景1：记录网站每个用户个人主页的访问量
-`hincrby user:1:in
+`hincrby user:1:info pageview count`
+
+##### 场景2：缓存视频基本信息redis<->mysql
+![redishashvideo.jpg](/images/redishashvideo.jpg)
+
+#### list 列表
+key：element 是有序（插入顺序）队列 双端队列 可以获得range
+
+##### 场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页
+每条微博作为一个对象，自己的微博id作为外联key
+
+### epoll实现
