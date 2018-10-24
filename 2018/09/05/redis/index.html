@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://iotaa.xyz/images/redisvideo.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/redishash.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/redishashvideo.jpg">
-<meta property="og:updated_time" content="2018-10-23T14:32:18.683Z">
+<meta property="og:updated_time" content="2018-10-24T01:16:33.111Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis">
 <meta name="twitter:description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
@@ -343,8 +343,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-23T22:32:18+08:00">
-                2018-10-23
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-24T09:16:33+08:00">
+                2018-10-24
               </time>
             
           </span>
@@ -392,7 +392,8 @@
 <p>id看成是一行，field是列</p>
 <h5 id="场景1：记录网站每个用户个人主页的访问量"><a href="#场景1：记录网站每个用户个人主页的访问量" class="headerlink" title="场景1：记录网站每个用户个人主页的访问量"></a>场景1：记录网站每个用户个人主页的访问量</h5><p><code>hincrby user:1:info pageview count</code></p>
 <h5 id="场景2：缓存视频基本信息redismysql"><a href="#场景2：缓存视频基本信息redismysql" class="headerlink" title="场景2：缓存视频基本信息redismysql"></a>场景2：缓存视频基本信息redis<->mysql</-></h5><p><img src="/images/redishashvideo.jpg" alt="redishashvideo.jpg"></p>
-<h4 id="list-列表"><a href="#list-列表" class="headerlink" title="list 列表"></a>list 列表</h4><p>key：element 是有序（插入顺序）队列 双端队列 可以获得range</p>
+<h4 id="list-列表"><a href="#list-列表" class="headerlink" title="list 列表"></a>list 列表</h4><p>key：element 是有序（插入顺序）队列 双端队列 可以获得range<br>阻塞插入，对空的队列进行pop，不是立刻返回 而是等一段时间拿到最新的弹出<br>用户生产者消费者模型 消息队列</p>
+<p>实现 capped collection 有固定数量的列表而不是无限放大 <code>LPUSH+LTRIM</code><br>消息队列 <code>LPUSH + BRPOP</code></p>
 <h5 id="场景1：微博TimeLine-将所有我关注的用户的最新微博按新旧排、分页"><a href="#场景1：微博TimeLine-将所有我关注的用户的最新微博按新旧排、分页" class="headerlink" title="场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页"></a>场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页</h5><p>每条微博作为一个对象，自己的微博id作为外联key</p>
 <h3 id="epoll实现"><a href="#epoll实现" class="headerlink" title="epoll实现"></a>epoll实现</h3>
       

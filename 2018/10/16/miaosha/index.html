@@ -88,10 +88,10 @@
 <meta property="og:description" content="1.前后台json格式实现效果，在Controller调用静态方法：    成功：Result.success(data); 成功时只返回数据    异常：Result.error(CodeMsg); 包括code和msg123456789101112131415161718192021222324252627282930313233class Result&amp;lt;T&amp;gt; &amp;#123;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://iotaa.xyz/images/errormsg.jpg">
-<meta property="og:image" content="http://iotaa.xyz/images/jmeter.jpg">
+<meta property="og:image" content="http://iotaa.xyz/images/jmetermiaosha.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/Jmetertable.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/onekjmeter.jpg">
-<meta property="og:updated_time" content="2018-10-23T13:43:34.662Z">
+<meta property="og:updated_time" content="2018-10-24T01:19:12.295Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java秒杀">
 <meta name="twitter:description" content="1.前后台json格式实现效果，在Controller调用静态方法：    成功：Result.success(data); 成功时只返回数据    异常：Result.error(CodeMsg); 包括code和msg123456789101112131415161718192021222324252627282930313233class Result&amp;lt;T&amp;gt; &amp;#123;">
@@ -341,8 +341,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-23T21:43:34+08:00">
-                2018-10-23
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-24T09:19:12+08:00">
+                2018-10-24
               </time>
             
           </span>
@@ -574,7 +574,7 @@
 <p>默认配置<br>对线程组右键-add-Config Element -Http request default<br>添加http和IP和端口</p>
 <p>对线程组右键-add-sample-http请求<br>不用填 http ip 端口<br>方法get，path：/goods/to_list</p>
 <p>对线程组右键-add-Listener-Aggregate Report<br>也可以添加 Graph Results</p>
-<p><img src="/images/jmeter.jpg" alt="jmeter.jpg"><br>Average 平均花费时间 10ms<br>Throughput 可以当作qps 表示一秒能处理11.5个请求<br>添加监听器 View Results in Table<br>先把监听器都右键清空<br><img src="/images/Jmetertable.jpg" alt="Jmetertable.jpg"><br>报错空指针 修改位置：<br><code>UserArgumentResolver.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">getCookieValue</span><span class="params">(HttpServletRequest request, String cookiName)</span> </span>&#123;</span><br><span class="line">        Cookie[]  cookies = request.getCookies();</span><br><span class="line">        <span class="comment">// 添加空指针判断</span></span><br><span class="line">        <span class="keyword">if</span>(cookies == <span class="keyword">null</span> || cookies.length &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(Cookie cookie : cookies) &#123;</span><br><span class="line">            <span class="keyword">if</span>(cookie.getName().equals(cookiName)) &#123;</span><br><span class="line">                <span class="keyword">return</span> cookie.getValue();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/jmetermiaosha.jpg" alt="jmetermiaosha.jpg"><br>Average 平均花费时间 10ms<br>Throughput 可以当作qps 表示一秒能处理11.5个请求<br>添加监听器 View Results in Table<br>先把监听器都右键清空<br><img src="/images/Jmetertable.jpg" alt="Jmetertable.jpg"><br>报错空指针 修改位置：<br><code>UserArgumentResolver.java</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">getCookieValue</span><span class="params">(HttpServletRequest request, String cookiName)</span> </span>&#123;</span><br><span class="line">        Cookie[]  cookies = request.getCookies();</span><br><span class="line">        <span class="comment">// 添加空指针判断</span></span><br><span class="line">        <span class="keyword">if</span>(cookies == <span class="keyword">null</span> || cookies.length &lt;= <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(Cookie cookie : cookies) &#123;</span><br><span class="line">            <span class="keyword">if</span>(cookie.getName().equals(cookiName)) &#123;</span><br><span class="line">                <span class="keyword">return</span> cookie.getValue();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>线程数1000的情况下 只有 35每秒qps<br><img src="/images/onekjmeter.jpg" alt="onekjmeter.jpg"><br>打开数据库服务器的top<br>10000个线程 大概因为虚拟机所以压榨主机需要的更多 照理说应该load average会超过1<br>多核cpu负载超过表示很多进程在等待</p>
 <p>压测用户对象</p>
 
