@@ -49,10 +49,11 @@ co 输出通道数
 
 ### !!!todo混淆矩阵 准确度,精准率，召回率F1调和平均值，PR曲线ROC曲线
 对于极度偏斜Skewed Data 
+正确率accuracy rate (TP+TN) / (TP+TN+FN+FP)
 如果癌症概率只有0.1%
 如果全部预测没病 就可以达到99.9%的准确率
 
-1混淆矩阵
+1混淆矩阵 TF是真实值 PN是预测值
 ```python
 #真的不是
 def TN(y_true,y_predict):
@@ -92,7 +93,8 @@ plt.matshow(confusion_matrix(y_test,y_predict),cmap=plt.cm.gray)#越亮数字越
 2.精准率presision_score tp/(tp+fp)
 //the ability of the classifier not to label as positive a sample
     that is negative. 别把错的当对的的能力
-应用场景：股票预测 精准率 对于FP敏感 对于上升的但是没有预测出来TN的漏掉了不是很在意
+应用场景：股票预测 精准率 对于FP敏感 对于上升的但是没有预测出来FN的漏掉了不是很在意
+判断为刷单的用户里，真的是刷单的有多少 但是FN也是刷单的 漏判数据不在乎
 ```python
 def precision_score(y_true,y_predict):
     tp = TP(y_test,y_log_predict)
@@ -103,7 +105,7 @@ from sklearn.metrics import precision_score
 precision_score(y_test,y_log_predict)
 ```
 
-3.召回率recall_score tp/(tp+fn)
+3.TPR 召回率recall_score tp/(tp+fn)
 //he ability of the classifier to find all the positive samples. 
 
 找到所有正确的的能力（找全）
@@ -130,12 +132,21 @@ from sklxearn.metrics import f1_score
 f1=f1_score(y_test,y_predict)
 ```
 
+5.多分类的混淆矩阵
+http://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html
+召回率和F值 ： 计算所有的TP和FN再二值方法计算
+`average : string, [None, ‘binary’ (default), ‘micro’, ‘macro’, ‘samples’, ‘weighted’]`
+binary 二值分类
+micro
+macro 不加权平均
+
 5.PR曲线precision_recall_curve 用于比较两个模型和不同的超参数
 threadholds？
 
 6.
 TPR == recall #真的是1/真实为1的所有预测
-FPR # 其实是假的/真实值是假的的所有预测
+FPR 错误接受率`FP/(FP+TN)` # 多少正类被划分为负类的比例
+FRR 错误拒绝率 `FN/(TP+FN)` # 多少正类没被判成正类
 ```python
 def TPR(y_true,y_predict):
     tp = TP(y_true,y_predict)
@@ -152,6 +163,15 @@ def FPR(y_true,y_predict):#预测为1，预测错了 站真实值为0的百分�
     except:
         return 0
 ```
+
+7.ROC和AUC 用于确定predict概率的阈值
+y_test = [0,1,0,0,0,1]
+y_pre = [0.1,0.8,0.6...] 是概率值
+确定一个阈值 超过才被判为正
+
+ROC ： x轴：FPR y轴：TPR
+
+
 
 https://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p01_start_stop_thread.html
 

@@ -581,19 +581,7 @@ private boolean valid(long target,int[] nums,int m){
 
 ### ！！687树中值相等的点的路径长
 
-### !!!114原地将二叉树变成链表
-1.入栈迭代40%
-    1. 先入栈右子树，再入栈左子树，更新右节点为栈顶。
-    2. 将当前左子树变成null。下一次循环cur是栈顶（原左子树）
-2. 后序遍历 递归6%
-```java
-pre = null;
-flat(root.right);
-flat(root.left);
-root.right = pre;
-root.left = null;
-pre = root;
-```
+
 
 ### 438 Anagrams in a String 滑动窗口`Arryas.equals`
 > Anagrams 字母相同，顺序不同的单词 连续
