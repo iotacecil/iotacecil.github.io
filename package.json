@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "3.7.1"
+    "version": "3.6.0"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -16,6 +16,7 @@
     "hexo-generator-index": "^0.2.0",
     "hexo-generator-searchdb": "^1.0.8",
     "hexo-generator-tag": "^0.2.0",
+    "hexo-qiniu-sync": "^1.4.7",
     "hexo-renderer-ejs": "^0.3.0",
     "hexo-renderer-marked": "^0.3.0",
     "hexo-renderer-stylus": "^0.3.1",

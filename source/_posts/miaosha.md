@@ -837,7 +837,7 @@ create table `miaosha_user`(
   `head` varchar(128) default null comment '头像',
   `register_date` datetime default null comment '注册时间',
   `last_login_date` datetime default null comment '上次登录时间',
-  `login_cnt` int(11) default '0' comment '登陆次数',
+  `login_count` int(11) default '0' comment '登陆次数',
   primary key (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
@@ -2349,3 +2349,323 @@ private String getCookieValue(HttpServletRequest request, String cookiName) {
 多核cpu负载超过表示很多进程在等待
 
 压测用户对象
+新建http request
+path：/user/info
+添加参数：token：ca5be550941349b7bb336f9451a41748
+
+新建controller
+```java
+@Controller
+@RequestMapping("/user")
+public class UserController {
+    private static Logger log = LoggerFactory.getLogger(GoodsController.class);
+    @RequestMapping("/info")
+    @ResponseBody
+    public Result<MiaoshaUser> info(Model model,MiaoshaUser user){
+        return Result.success(user);
+    }
+
+}
+```
+![userinfoqps.jpg](/images/userinfoqps.jpg)
+报错消息：`JedisException: Could not get a resource from the pool`
+redis获取不到连接
+修改配置
+```sh
+# redis
+redis.timeout=10
+redis.password=123456
+redis.poolMaxTotal=1000
+redis.poolMaxIdle=500
+spring.redis.pool.max-wait=500
+# jdbc
+spring.datasource.maxActive=1000
+spring.datasource.initialSize=100
+spring.datasource.maxWait=60000
+spring.datasource.minIdle=500
+```
+不报错了
+![userinfomax.jpg](/images/userinfomax.jpg)
+
+比商品列表的qps高很多，因为redis在内存
+
+多用户token测试
+在Jmeter中添加CSV data set config 
+在http请求里的参数是`${userToken}`
+
+在服务器上测试jmeter
+1.在windows上录好jmx
+2.运行`jmeter.sh -n -t xxx.jmx -l result.jtl`
+3.把result.jtl导入jmeter
+
+redis压测：
+100个并发 100000个请求
+`redis-benchmark -h 127.0.0.1 -p 6379 -c 100 -n 100000`
+```sh
+====== GET ======
+  100000 requests completed in 2.55 seconds
+  100 parallel clients
+  3 bytes payload
+  keep alive: 1
+
+7.87% <= 1 milliseconds
+72.82% <= 2 milliseconds
+94.64% <= 3 milliseconds
+97.13% <= 4 milliseconds
+98.74% <= 5 milliseconds
+99.65% <= 6 milliseconds
+99.98% <= 7 milliseconds
+100.00% <= 7 milliseconds
+39277.30 requests per second
+```
+1秒能4w get
+```sh
+[root@localhost ~]# redis-benchmark -h 127.0.0.1 -p 6379 -q -d 100
+PING_INLINE: 41806.02 requests per second
+PING_BULK: 41858.52 requests per second
+SET: 39184.95 requests per second
+GET: 41736.23 requests per second
+INCR: 41876.05 requests per second
+```
+
+### 打war包
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-tomcat</artifactId>
+  <!--编译时需要 运行时不需要-->
+  <scope>provided</scope>
+</dependency>
+
+
+ <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+```
+
+修改启动类
+```java
+@SpringBootApplication
+public class MainApplication extends SpringBootServletInitializer{
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(MainApplication.class, args);
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(MainApplication.class);
+    }
+}
+```
+
+命令行`mvn clean package`
+把war放到tomcat里`D:\apache-tomcat-8.5.31\webapps` 启动`startup.bat`
+访问`http://localhost:8080/miaoshaLearn/login/to_login`
+真实部署的时候放到ROOT下面就不需要tomcat路径了
+
+为了方便还是打jar包
+war包插件改jar包的 注释掉tomcat的依赖
+```xml
+<plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+</plugin>
+```
+启动类还原
+```java
+@SpringBootApplication
+public class MainApplication{
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(MainApplication.class, args);
+    }
+}
+```
+命令行`mvn clean package`
+打开jar包 `META-INF\META-INF`
+```java
+Main-Class: org.springframework.boot.loader.JarLauncher
+Start-Class: com.cloud.miaosha.MainApplication
+Spring-Boot-Classes: BOOT-INF/classes/
+Spring-Boot-Lib: BOOT-INF/lib/
+```
+
+上传jar包到linux
+`nohup java -jar miaosha.jar &`
+访问：`http://10.1.18.133:8080/goods/to_list`
+
+上传jmeter和jmx文件到linux
+```sh
+chmod 777  jmeter.sh
+chmod 777  jmeter
+```
+
+生成测试用户：
+用`HttpURLConnection` 发送post
+```java
+HttpURLConnection co = (HttpURLConnection)url.openConnection();
+co.setRequestMethod("POST");
+co.setDoOutput(true);
+OutputStream out = co.getOutputStream();
+String params = "mobile="+user.getId()+"&password="+MD5Util.inputPassToFormPass("123456");
+out.write(params.getBytes());
+out.flush();
+InputStream inputStream = co.getInputStream();
+ByteArrayOutputStream bout = new ByteArrayOutputStream();
+byte buff[] = new byte[1024];
+int len = 0;
+while((len = inputStream.read(buff) >=0)){
+    bout.write(buff,0,len);
+}
+inputStream.close();
+bout.close();
+String response = new String(bout.toByteArray());
+//fast json解析并获取token
+```
+
+修改login返回token
+```java
+@RequestMapping("/do_login")
+@ResponseBody
+public Result<String> doLogin(HttpServletResponse response,@Valid  LoginVo loginVo) {
+    log.info(loginVo.toString());
+//        登录
+    String token = userService.login(response, loginVo);
+    System.out.println("登陆成功");
+    return Result.success(token);
+}
+```
+
+dbutil
+```java
+public class DBUtil {
+    
+private static Properties props;
+
+static {
+    try {
+        InputStream in = DBUtil.class.getClassLoader().getResourceAsStream("application.properties");
+        props = new Properties();
+        props.load(in);
+        in.close();
+    }catch(Exception e) {
+        e.printStackTrace();
+    }
+}
+
+public static Connection getConn() throws Exception{
+    String url = props.getProperty("spring.datasource.url");
+    String username = props.getProperty("spring.datasource.username");
+    String password = props.getProperty("spring.datasource.password");
+    String driver = props.getProperty("spring.datasource.driver-class-name");
+    Class.forName(driver);
+    return DriverManager.getConnection(url,username, password);
+}
+}
+```
+删除数据库
+```sql
+delete from miaosha_user where nickname like 'user%';
+```
+
+userutil
+```java
+public class UserUtil {
+    
+    private static void createUser(int count) throws Exception{
+        List<MiaoshaUser> users = new ArrayList<MiaoshaUser>(count);
+        //生成用户
+        for(int i=0;i<count;i++) {
+            MiaoshaUser user = new MiaoshaUser();
+            user.setId(13000000000L+i);
+            user.setLoginCount(1);
+            user.setNickname("user"+i);
+            user.setRegisterDate(new Date());
+            user.setSalt("1a2b3c");
+            user.setPassword(MD5Util.inputPassToDbPass("123456", user.getSalt()));
+            users.add(user);
+        }
+        System.out.println("create user");
+//      //插入数据库
+        Connection conn = DBUtil.getConn();
+        String sql = "insert into miaosha_user(login_count, nickname, register_date, salt, password, id)values(?,?,?,?,?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        for(int i=0;i<users.size();i++) {
+            MiaoshaUser user = users.get(i);
+            pstmt.setInt(1, user.getLoginCount());
+            pstmt.setString(2, user.getNickname());
+            pstmt.setTimestamp(3, new Timestamp(user.getRegisterDate().getTime()));
+            pstmt.setString(4, user.getSalt());
+            pstmt.setString(5, user.getPassword());
+            pstmt.setLong(6, user.getId());
+            pstmt.addBatch();
+        }
+        pstmt.executeBatch();
+        pstmt.close();
+        conn.close();
+        System.out.println("insert to db");
+        //登录，生成token
+        String urlString = "http://localhost:8080/login/do_login";
+        File file = new File("D:/miaoshaLearn/tokens.txt");
+        if(file.exists()) {
+            file.delete();
+        }
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        file.createNewFile();
+        raf.seek(0);
+        for(int i=0;i<users.size();i++) {
+            MiaoshaUser user = users.get(i);
+            URL url = new URL(urlString);
+            HttpURLConnection co = (HttpURLConnection)url.openConnection();
+            co.setRequestMethod("POST");
+            co.setDoOutput(true);
+            OutputStream out = co.getOutputStream();
+            String params = "mobile="+user.getId()+"&password="+MD5Util.inputPassToFormPass("123456");
+            out.write(params.getBytes());
+            out.flush();
+            InputStream inputStream = co.getInputStream();
+            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+            byte buff[] = new byte[1024];
+            int len = 0;
+            while((len = inputStream.read(buff)) >= 0) {
+                bout.write(buff, 0 ,len);
+            }
+            inputStream.close();
+            bout.close();
+            String response = new String(bout.toByteArray());
+            JSONObject jo = JSON.parseObject(response);
+            String token = jo.getString("data");
+            System.out.println("create token : " + user.getId());
+            
+            String row = user.getId()+","+token;
+            raf.seek(raf.length());
+            raf.write(row.getBytes());
+            raf.write("\r\n".getBytes());
+            System.out.println("write to file : " + user.getId());
+        }
+        raf.close();
+        
+        System.out.println("over");
+    }
+    
+    public static void main(String[] args)throws Exception {
+        createUser(5000);
+    }
+}
+
+```
+// 虚拟机压测todo
+
+
+### 页面缓存
+页面静态化：前后端分离，通过ajax渲染页面
+浏览器会把html缓存在客户端，页面数据不需要重复下载，只下载动态数据

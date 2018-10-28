@@ -25,6 +25,8 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### lc 325 lt 919
+
 ### 数组嵌套
 > `S[i] = {A[i], A[A[i]], A[A[A[i]]], ... }`
 >  stop adding right before a duplicate element occurs in S.
@@ -1034,7 +1036,7 @@ public List<List<Integer>> combineMath(int n,int k){
 }
 ```
 
-### 24两个一组交换链表
+
 
 ### NqueenBB
 ![nqueenbb.jpg](/images/nqueenbb.jpg)

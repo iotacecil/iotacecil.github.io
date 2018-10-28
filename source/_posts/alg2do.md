@@ -65,22 +65,7 @@ target = 3
 
 ### ！！！！76 最小的子串窗口 很重要的题
 
-### 152 最大子列乘积 保留当前值之前的最大积和最小积
-负数的最小积有潜力变成最大积
-4ms 11.99%
-```java
-public int maxProduct(int[] nums) {
-    int sum = nums[0],min = nums[0],max = nums[0];
-    for(int i=1;i<nums.length;i++){
-        int nextmax = nums[i]*max;
-        int nextmin = nums[i]*min;
-        max = Math.max(Math.max(nextmax,nextmin),nums[i]);
-        min = Math.min(Math.min(nextmax,nextmin),nums[i]);
-        sum = Math.max(max,sum);
-    }
-    return sum;
-}
-```
+
 
 
 

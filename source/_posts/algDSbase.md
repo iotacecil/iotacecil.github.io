@@ -7,6 +7,8 @@ categories: [算法备忘]
 
 ### 23 k个链表merge
 正确解法：分治8ms 96% 复杂度kNlogk
+每次合并2个，需要2n,第一次有k/2对用mergeTwo.第一次的复杂度是 kn
+总共有log k 次迭代，总的复杂度 kn log k
 ```java
 public ListNode mergeKLists(ListNode[] lists) {
    if(lists.length ==0)return null;
@@ -28,6 +30,7 @@ public ListNode mergeKLists(ListNode[] lists) {
     return mergeTwoLists(listNode1, listNode2);
 }
 ```
+其他同样有nk log k的 用堆 heapify logk,从堆中取nk次最小
 
 解法2： 86ms全部先放在一起，排序，再遍历组成一个链表
 复杂度 knlog(kn) + kn
@@ -171,6 +174,44 @@ Npublic ListNode reverseList(ListNode head) {
 转成栈浪费空间并且代码复杂
 
 ### 二叉树
+
+### lt66二叉树前序遍历 分治方法
+分治方法，返回值 适合多线程
+```java
+public List<Integer> preorderTraversal(TreeNode root) {
+    List<Integer> rst = new ArrayList<>();
+    if(root == null){
+        return rst;
+    }
+    // Divide
+    List<Integer> left = preorderTraversal(root.left);
+    List<Integer> right = preorderTraversal(root.right);
+    // Conquer
+    rst.add(root.val);
+    rst.addAll(left);
+    rst.addAll(right);
+    return rst;
+}
+```
+
+一般方法，返回值void 用的返回值在参数里
+{% fold %}
+```java
+public List<Integer> preorderTraversal(TreeNode root) {
+   List<Integer> rst = new ArrayList<>();
+   helper(root,rst);
+   return rst;
+}
+private void helper(TreeNode root,List<Integer> rst){
+    if(root == null){
+        return;
+    }
+    rst.add(root.val);
+    helper(root.left,rst);
+    helper(root.right,rst);
+}
+```
+{% endfold %}
 
 ### !!!114原地将二叉树变成链表
 1.入栈迭代40%

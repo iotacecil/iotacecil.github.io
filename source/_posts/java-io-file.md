@@ -6,6 +6,82 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 http://blog.jmecn.net/java-iostream/
 JNI java native interface 本地接口
+
+### NIO
+原来IO流一个字节一个字节处理。NIO块。
+每一种java数据类型都有缓冲区
+![niobytebuffer.jpg](/images/niobytebuffer.jpg)
+1.`ByteBuffer bf = ByteBuffer.allocate(8);`
+2.添加 `bf.put((byte)10);` 获取`.get(index)`
+3.偏移量：`bf.position()`
+4.缓冲区反转：`bf.flip()`取值的数据变成position-limit
+
+```java
+public final Buffer flip() {
+    limit = position;
+    position = 0;
+    mark = -1;
+    return this;
+}
+```
+5.`bf.hasRemaining()`positon和limit之间有值,
+  `bf.remaining()`有多少个：`return limit - position;`
+```java
+bf.flip()
+if(bf.hasRemaining()){
+  for(int i =0;i<bf.remaining();i++){
+      byte b= bf.get(i);
+  }
+}
+```
+6.`campact`丢弃position及以前的数据，将position到limit的数据复制到之前，并将pisiton移到复制完的数据之后，用于写入新数据覆盖没被覆盖掉但是已经移到前面去的值，limit放到capacity上。
+
+#### Channel
+1. 文件只能通过`RandomAccessFile`,`FileInput/OutputStream`的`.getChannel()`打开只读/只写
+2. `socket`有`Socket`,`Server`,`Datagram`三种Channel
+
+#### selector是系统(native)调用`select()` `poll()`的封装
+注册:通道设置成非阻塞，File通道不能是非阻塞
+```java
+Selector sl = Selector.open();
+channel.configureBolcking(false);
+SelectionKey = channel.register(selector,Selection.OP_READ);
+```
+1. rigister的第二个参数监听四种不同类型：Connect，Accept，R/W
+可以用`|`位运算连接多个监听的值
+2. 返回的`SelectionKey`对象有4个boolean方法表示通道的就绪状态
+从键可以访问对应的通道和选择器：
+```java
+selectionKey.channel();
+selectionKey.selector();
+```
+2. `Selecotr`对象维护3个键的Set：
+每个键关联一个通道
+```java
+public abstract SelectorProvider provider();
+//已注册的键的集合
+public abstract Set<SelectionKey> keys();
+//已注册中的已经准备好的集合
+public abstract Set<SelectionKey> selectedKeys();
+```
+
+`select`方法返回上次select之后就绪的通道数(增量)
+通过就绪key访问通道
+```java
+Set selectedKeys = selector.selectedKeys();
+Iterator KeyIterator = selectedKeys.iterator();
+while(KeyIterator.hasNext){
+  SelectionKey key = KeyIterator.next();
+  //四种就绪状态
+  if(key.isAcceptable()){
+    ...
+  }
+  //从就绪集中移除，下次通道再就绪时再放入选择集
+  KeyIterator.remove();
+}
+```
+
+
 堆外内存：
 ByteBuffer
 1.`wrap`可以包装一个数组，保证不被直接修改
@@ -521,7 +597,8 @@ p.store(out,"updatatatata");
 ```
 可以通过类加载器加载
 ```java
-InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("src/a.p");```
+InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("src/a.p");
+```
 清除所有的键值对`p.clear();`
 
 ### 压缩`ZipOutputStream`
@@ -529,78 +606,6 @@ InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().ge
 `ZipEntry(String name)` 创建条目 
 解压 `zIn.getNextEntry()`
 
-### NIO
-原来IO流一个字节一个字节处理。NIO块。
-每一种java数据类型都有缓冲区
-1.`ByteBuffer bf = ByteBuffer.allocate(8);`
-2.添加 `bf.put((byte)10);` 获取`.get(index)`
-3.偏移量：`bf.position()`
-4.缓冲区反转：`bf.flip()`取值的数据变成position-limit
-
-```java
-public final Buffer flip() {
-    limit = position;
-    position = 0;
-    mark = -1;
-    return this;
-}
-```
-5.`bf.hasRemaining()`positon和limit之间有值,
-  `bf.remaining()`有多少个：`return limit - position;`
-```java
-bf.flip()
-if(bf.hasRemaining()){
-  for(int i =0;i<bf.remaining();i++){
-      byte b= bf.get(i);
-  }
-}
-```
-6.`campact`丢弃position及以前的数据，将position到limit的数据复制到之前，并将pisiton移到复制完的数据之后，用于写入新数据覆盖没被覆盖掉但是已经移到前面去的值，limit放到capacity上。
-
-#### Channel
-1. 文件只能通过`RandomAccessFile`,`FileInput/OutputStream`的`.getChannel()`打开只读/只写
-2. `socket`有`Socket`,`Server`,`Datagram`三种Channel
-
-#### selector是系统(native)调用`select()` `poll()`的封装
-注册:通道设置成非阻塞，File通道不能是非阻塞
-```java
-Selector sl = Selector.open();
-channel.configureBolcking(false);
-SelectionKey = channel.register(selector,Selection.OP_READ);
-```
-1. rigister的第二个参数监听四种不同类型：Connect，Accept，R/W
-可以用`|`位运算连接多个监听的值
-2. 返回的`SelectionKey`对象有4个boolean方法表示通道的就绪状态
-从键可以访问对应的通道和选择器：
-```java
-selectionKey.channel();
-selectionKey.selector();
-```
-2. `Selecotr`对象维护3个键的Set：
-每个键关联一个通道
-```java
-public abstract SelectorProvider provider();
-//已注册的键的集合
-public abstract Set<SelectionKey> keys();
-//已注册中的已经准备好的集合
-public abstract Set<SelectionKey> selectedKeys();
-```
-
-`select`方法返回上次select之后就绪的通道数(增量)
-通过就绪key访问通道
-```java
-Set selectedKeys = selector.selectedKeys();
-Iterator KeyIterator = selectedKeys.iterator();
-while(KeyIterator.hasNext){
-  SelectionKey key = KeyIterator.next();
-  //四种就绪状态
-  if(key.isAcceptable()){
-    ...
-  }
-  //从就绪集中移除，下次通道再就绪时再放入选择集
-  KeyIterator.remove();
-}
-```
 
 
 

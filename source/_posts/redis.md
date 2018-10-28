@@ -121,10 +121,86 @@ key：element 是有序（插入顺序）队列 双端队列 可以获得range
 阻塞插入，对空的队列进行pop，不是立刻返回 而是等一段时间拿到最新的弹出
 用户生产者消费者模型 消息队列
 
-实现 capped collection 有固定数量的列表而不是无限放大 `LPUSH+LTRIM`
-消息队列 `LPUSH + BRPOP`
+实现 
+1.capped collection `LPUSH+LTRIM` 有固定数量的列表而不是无限放大 
+2.消息队列 `LPUSH + BRPOP`
+3.stack `LPUSH + LPOP`
+4.queue `LPUSH + RPOP`
 
 ##### 场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页
 每条微博作为一个对象，自己的微博id作为外联key
+
+### set 集合
+key : values (values不能有)
+可以做 inter(共同）\diff\union操作
+
+1 打标签Tag ： `SADD`
+2 随机数 ：`SPOP/SRANDMEMBER`
+3 社交网络操作 ： `SADD + SINTER`
+
+##### 场景1： 抽奖`srandmember`,`spop`
+
+##### 场景2： like 、 点赞 、 踩
+
+##### 场景3： 给用户添加标签，给标签添加用户
+
+### zset 有序集合
+结构
+key : (score:value) value不重复 凭借score排序
+可以更新score
+
+##### 场景1： 畅销榜
+使用  时间戳、销售量 关注量作为score
+同样可以使用集合的交集、并、diff
+
+---
+### 慢查询
+可能发在生命周期4步里的第3步。 1 发送命令 2 排队 3 执行命令 4 返回结果
+配置 maxlen 一般设置成1ms 默认10ms
+希望一秒执行万次 每条0.1ms 超过1ms就应该记录这条命令了
+队列长度一般1000 慢查询定期要持久化
+```sh
+127.0.0.1:6379> config get slowlog*
+1) "slowlog-log-slower-than"
+2) "10000" 
+3) "slowlog-max-len"
+4) "128"
+```
+
+获取慢查询队列
+```sh
+slowlog get n
+slowlog len # 长度
+```
+
+### 流水线
+redis命令执行时间是微妙
+北京-上海 1300km， 光速3x10^8 m/s -> 300 000 km/s
+光线速度是2/3光速 = 200 000 km/s
+
+一条命令的传输时间是 (1300x2)/200 000 = 13 ms
+
+m操作是原子的，pipeline不是，还是排队，但是顺序是对的，只能操作在一个redis节点上
+```java
+Pipeline pipeline = jedis.pipelined();
+for (int i = 0; i <100 ; i++) {
+    pipeline.hset("hashkey:"+i,"field"+i ,"value"+i );
+}
+pipeline.syncAndReturnAll();
+```
+
+### 发布订阅 
+角色： 发布者 订阅者 频道
+不能消息堆积 现在订阅访问不到以前的
+```sh
+127.0.0.1:6379> publish cloud:tv "hello world"
+(integer) 0 #  订阅的人数
+127.0.0.1:6379> subscribe cloud:tv
+Reading messages... (press Ctrl-C to quit)
+1) "subscribe"
+2) "cloud:tv"
+3) (integer) 1
+
+```
 
 ### epoll实现
