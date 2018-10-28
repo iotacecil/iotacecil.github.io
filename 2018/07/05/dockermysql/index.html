@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="CentOS7 安装mysql1.下载mysql源1234567891011yum install wgetwget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpmrpm -ivh mysql-community-release-el7-5.noarch.rpmcd /etc/yum.repos.d/llyum inst">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://iotaa.xyz/images/junheng.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/junheng.jpg">
 <meta property="og:image" content="http://iotaa.xyz/images/doubleha.jpg">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.311Z">
+<meta property="og:updated_time" content="2018-10-28T16:30:41.613Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dockermysql">
 <meta name="twitter:description" content="CentOS7 安装mysql1.下载mysql源1234567891011yum install wgetwget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpmrpm -ivh mysql-community-release-el7-5.noarch.rpmcd /etc/yum.repos.d/llyum inst">
-<meta name="twitter:image" content="http://iotaa.xyz/images/junheng.jpg">
+<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/junheng.jpg">
 
 
 
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
-                2018-09-04
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
+                2018-10-29
               </time>
             
           </span>
@@ -425,7 +425,7 @@
 </ol>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p <span class="number">3306</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -v v1:/var/lib/mysql --privileged --name=node1 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">2</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3307</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v2:/var/lib/mysql --privileged --name=node2 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">3</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3308</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v3:/var/lib/mysql --privileged --name=node3 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">4</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3309</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v4:/var/lib/mysql --privileged --name=node4 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">5</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3310</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v5:/var/lib/mysql --privileged --name=node5 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">6</span> pxc</span><br></pre></td></tr></table></figure>
 <p>6.用navicat连接5个数据库在db1<code>create schema test1;</code> 刷新，其他节点也更新了。</p>
-<h3 id="负载均衡-Haproxy请求转发器"><a href="#负载均衡-Haproxy请求转发器" class="headerlink" title="负载均衡 Haproxy请求转发器"></a>负载均衡 Haproxy请求转发器</h3><p>nginx 支持http协议负载均衡，最近才支持TCP/IP<br><a href="https://zhangge.net/5125.html" target="_blank" rel="noopener">haproxy配置</a><br><img src="/images/junheng.jpg" alt="junheng"></p>
+<h3 id="负载均衡-Haproxy请求转发器"><a href="#负载均衡-Haproxy请求转发器" class="headerlink" title="负载均衡 Haproxy请求转发器"></a>负载均衡 Haproxy请求转发器</h3><p>nginx 支持http协议负载均衡，最近才支持TCP/IP<br><a href="https://zhangge.net/5125.html" target="_blank" rel="noopener">haproxy配置</a><br><img src="http://phb9yml10.bkt.clouddn.com/static/images/junheng.jpg"></p>
 <ol>
 <li><code>docker pull haproxy</code></li>
 <li><p>在宿主机创建配置文件<br><code>mkdir /home/soft/haproxy/</code><br><code>touch /home/soft/haproxy/haproxy.cfg</code></p>
@@ -578,7 +578,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -88,17 +88,17 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="https://blog.csdn.net/javazejian/article/details/72828483 ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://iotaa.xyz/images/mesi.jpg">
-<meta property="og:image" content="http://iotaa.xyz/images/jmeter.jpg">
-<meta property="og:image" content="http://iotaa.xyz/images/viewtree.jpg">
-<meta property="og:image" content="http://iotaa.xyz/images/countdown.jpg">
-<meta property="og:image" content="http://iotaa.xyz/images/threadstate.jpg">
-<meta property="og:image" content="http://iotaa.xyz/images/suspend.jpg">
-<meta property="og:updated_time" content="2018-10-15T01:10:25.010Z">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/mesi.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/jmeter.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/viewtree.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/countdown.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/threadstate.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/suspend.jpg">
+<meta property="og:updated_time" content="2018-10-28T16:27:05.496Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="concurrent并发多线程">
 <meta name="twitter:description" content="https://blog.csdn.net/javazejian/article/details/72828483 ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）则可能">
-<meta name="twitter:image" content="http://iotaa.xyz/images/mesi.jpg">
+<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/mesi.jpg">
 
 
 
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-15T09:10:25+08:00">
-                2018-10-15
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:27:05+08:00">
+                2018-10-29
               </time>
             
           </span>
@@ -424,7 +424,7 @@
 <h3 id="Stream在背后引入Fork-join框架"><a href="#Stream在背后引入Fork-join框架" class="headerlink" title="Stream在背后引入Fork/join框架"></a>Stream在背后引入Fork/join框架</h3><h3 id="Future接口"><a href="#Future接口" class="headerlink" title="Future接口"></a>Future接口</h3><p>目标：实现并发，充分利用cpu的核，最大化程序吞吐量，避免因为等待远程服务返回/数据库查询。阻塞线程。<br>对计算结果的建模，返回一个运算结果的引用给调用方。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executor = Executors.newCachedThreadPool();</span><br><span class="line">        Future&lt;Double&gt; future = executor.submit(<span class="keyword">new</span> Callable&lt;Double&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Double <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="comment">//异步操作</span></span><br><span class="line">                <span class="keyword">return</span> doSomeLongComputation();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//异步操作运行同时也能执行</span></span><br><span class="line">        doSomeThingElse();</span><br></pre></td></tr></table></figure></p>
 <h3 id="Fork-Join"><a href="#Fork-Join" class="headerlink" title="Fork/Join"></a>Fork/Join</h3><p>工作窃取算法</p>
 <p>发布对象：可以得到成员变量引用<br>对象溢出：内部类</p>
-<h3 id="AQS-两个node的队列"><a href="#AQS-两个node的队列" class="headerlink" title="AQS 两个node的队列"></a>AQS 两个node的队列</h3><h3 id="多个CPU缓存一致性-MESI缓存一致性！！！"><a href="#多个CPU缓存一致性-MESI缓存一致性！！！" class="headerlink" title="多个CPU缓存一致性 MESI缓存一致性！！！"></a>多个CPU缓存一致性 MESI缓存一致性！！！</h3><p><img src="/images/mesi.jpg" alt="mesi"></p>
+<h3 id="AQS-两个node的队列"><a href="#AQS-两个node的队列" class="headerlink" title="AQS 两个node的队列"></a>AQS 两个node的队列</h3><h3 id="多个CPU缓存一致性-MESI缓存一致性！！！"><a href="#多个CPU缓存一致性-MESI缓存一致性！！！" class="headerlink" title="多个CPU缓存一致性 MESI缓存一致性！！！"></a>多个CPU缓存一致性 MESI缓存一致性！！！</h3><img src="http://phb9yml10.bkt.clouddn.com/static/images/mesi.jpg">
 <p>4种数据状态，4种状态转换的cpu操作。<br>M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存<br>Exlusive独享：缓存行只在该CPU的缓存中，未被修改，与主存一致。其它CPU读取内存时变成S状态。被修改则变成M。<br>Share共享：该缓存行被多个CPU缓存，且与主存相同。当一个CPU修改时其它CPU的变成I。<br>Invaild无效。</p>
 <p><code>local read</code>读本地缓存中数据<code>local write</code>写本地缓存<br><code>remote read</code>读取内存数据 <code>remote write</code>写回主存</p>
 <hr>
@@ -435,13 +435,13 @@
 <li>安装apahce服务器bin下的<code>ab -n 1000 -c 50 http://localhost:8080/test</code><br>本次测试请求总数1000次，同时并发数50</li>
 </ol>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> 并发量</span><br><span class="line">Concurrency Level:      50 </span><br><span class="line">整个测试所用的时间</span><br><span class="line">Time taken for tests:   0.667 seconds </span><br><span class="line">完成的请求数</span><br><span class="line">Complete requests:      1000 </span><br><span class="line">失败请求数</span><br><span class="line">Failed requests:        0 </span><br><span class="line">所有响应数据长度总和，包括http头信息和正文数据长度，不包括http请求信息的长度</span><br><span class="line">Total transferred:      136000 bytes </span><br><span class="line">所有正文数据长度</span><br><span class="line">HTML transferred:       4000 bytes </span><br><span class="line">吞吐率（与并发数相关）=Complete requests:/Time taken for tests</span><br><span class="line">Requests per second:    1498.52 [#/sec] (mean) </span><br><span class="line">用户平均请求等待时间</span><br><span class="line">Time per request:       33.366 [ms] (mean) </span><br><span class="line">服务器平均请求等待时间</span><br><span class="line">Time per request:       0.667 [ms] (mean, across all concurrent requests) </span><br><span class="line">单位时间从服务器获取的数据长度=Total transferred/Time taken for tests</span><br><span class="line">Transfer rate:          199.02 [Kbytes/sec] received</span><br></pre></td></tr></table></figure>
-<ol start="3">
+<ol>
 <li>JMeter <ol>
 <li>添加线程组File-Test Plan-Add-Threads- Thread Group<br>用户数：50<br>虚拟用户增长时长(Ramp-Up Period): 1<br>Loop Count循环次数：一个虚拟用户做多少次测试 20（共1000次）</li>
 <li>添加实例请求 add Sanper HttpRequest</li>
 <li>添加监听器 图形结果、查看结果树</li>
 <li>Option 打开Logviewer<div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
-<p>Throughput吞吐量<br><img src="/images/jmeter.jpg" alt="jmeter"><br><img src="/images/viewtree.jpg" alt="viewtree"></p>
+<p>Throughput吞吐量<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/jmeter.jpg"><br><img src="http://phb9yml10.bkt.clouddn.com/static/images/viewtree.jpg"></p>
 
 </div></div>
 </li>
@@ -464,7 +464,7 @@
 <p>CountDownLatch()计数栓:必须发生指定数量的事件后才可以继续使用<br>阻塞线程，直到满足某种条件线程再继续执行,计数值（count）实际上就是闭锁需要等待的线程数量</p>
 </blockquote>
 <ul>
-<li>适合保证线程执行完再做其它处理<br><img src="/images/countdown.jpg" alt="countdown"></li>
+<li>适合保证线程执行完再做其它处理<img src="http://phb9yml10.bkt.clouddn.com/static/images/countdown.jpg"></li>
 <li>调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"><span class="comment">//主线程必须在启动其他线程后立即调用CountDownLatch.await()方法</span></span><br><span class="line">CountDownLatch.await();&#125;<span class="comment">//等待锁存器</span></span><br></pre></td></tr></table></figure>
@@ -476,7 +476,7 @@
 <hr>
 <hr>
 <p>汇编 jne有条件跳转 jmp无条件跳转<br>进程-详细-设置相关性：分配到指定cpu执行，开的线程只在指定的执行<br>java会把线程直接映射到操作系统</p>
-<p><img src="/images/threadstate.jpg" alt="threadstate"></p>
+<img src="http://phb9yml10.bkt.clouddn.com/static/images/threadstate.jpg">
 <p><code>javac xxx.java</code>-&gt;.class<br><code>javap -c -v xxx</code> 查看虚拟机字节码</p>
 <h3 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Condition sufficientFunds;</span><br><span class="line"><span class="keyword">if</span> (accounts[from] &lt; amount)</span><br><span class="line">    <span class="comment">//将该线程放到等待集</span></span><br><span class="line">    sufficientFunds.await();</span><br><span class="line"><span class="keyword">try</span>&#123;<span class="comment">////最后。账户发生变化，重新检查余额</span></span><br><span class="line">     sufficientFunds.signalAll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p>java每个对象有内部锁。并且该锁有一个内部条件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (accounts[from] &lt; amount)wait();</span><br><span class="line">notifyAll();</span><br></pre></td></tr></table></figure></p>
@@ -508,7 +508,7 @@
 </blockquote>
 <p>线程2resume线程1发生在线程1suspend之前，当线程1suspend之后没办法resume，导致线程1资源冻结。<br><div><div class="fold_hider"><div class="close hider_title">测试代码点击显/隐内容</div></div><div class="fold">
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> learnThr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">learnThread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object u = <span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">static</span> ChangeObjectThread t1 = <span class="keyword">new</span> ChangeObjectThread(<span class="string">"t1"</span>);</span><br><span class="line">    <span class="keyword">static</span> ChangeObjectThread t2 = <span class="keyword">new</span> ChangeObjectThread(<span class="string">"t2"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ChangeObjectThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ChangeObjectThread</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.setName(name);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="comment">//加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (u)&#123;</span><br><span class="line">                Thread.currentThread().suspend();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        t1.start();</span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.resume();</span><br><span class="line">        t2.resume();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/images/suspend.jpg" alt="suspend"></p>
+<p><img src="http://phb9yml10.bkt.clouddn.com/static/images/suspend.jpg"></p>
 
 </div></div></p>
 <h3 id="yield-amp-join"><a href="#yield-amp-join" class="headerlink" title="yield &amp; join"></a>yield &amp; join</h3><p><code>A.join(0)</code>等待A结束后执行 用wait实现<br>join实现</p>
@@ -530,7 +530,7 @@
 <h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><ol>
 <li>synchronized独占加锁</li>
 </ol>
-<h2 id="java-util-concurrent-并发工具包"><a href="#java-util-concurrent-并发工具包" class="headerlink" title="java.util.concurrent 并发工具包"></a>java.util.concurrent 并发工具包</h2><ol start="3">
+<h2 id="java-util-concurrent-并发工具包"><a href="#java-util-concurrent-并发工具包" class="headerlink" title="java.util.concurrent 并发工具包"></a>java.util.concurrent 并发工具包</h2><ol>
 <li>CyclicBarrier(int num)等待多个线程到达预定点</li>
 <li>执行器</li>
 <li>并发集合</li>
@@ -657,7 +657,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

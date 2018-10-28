@@ -445,7 +445,7 @@
 <li><code>of</code></li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;String&gt;str = Stream.of(<span class="string">"good"</span>,<span class="string">"study"</span>,<span class="string">"good"</span>);</span><br><span class="line">str.forEach((strr)-&gt; System.out.println(strr));</span><br></pre></td></tr></table></figure>
-<ol start="2">
+<ol>
 <li>合并两个Stream</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Stream&lt;T&gt; <span class="title">of</span><span class="params">(T... values)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Arrays.stream(values);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
@@ -580,7 +580,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

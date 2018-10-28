@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="alg," />
 
 
 
@@ -80,24 +80,18 @@
 
 
 
-<meta name="description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
+<meta name="description" content="930 01数组中有多少个和=target的子数组 输入：A = [1,0,1,0,1], S = 2输出：4   输入：A = [0,0,0,0,0], S = 0输出：15  5+4+3+2+1  思路： 计算前缀和[1,1,2,2,3]并放入map计数,{1:2,2:2,3:1}步骤[0,0,0,0,0] 初始化map{0:1},扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新">
+<meta name="keywords" content="alg">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis">
-<meta property="og:url" content="http://iotaa.xyz/2018/09/05/redis/index.html">
+<meta property="og:title" content="前缀和 滑动窗口 子数组问题">
+<meta property="og:url" content="http://iotaa.xyz/2018/10/28/algsubarrr/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
+<meta property="og:description" content="930 01数组中有多少个和=target的子数组 输入：A = [1,0,1,0,1], S = 2输出：4   输入：A = [0,0,0,0,0], S = 0输出：15  5+4+3+2+1  思路： 计算前缀和[1,1,2,2,3]并放入map计数,{1:2,2:2,3:1}步骤[0,0,0,0,0] 初始化map{0:1},扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/redisobject.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/redisIO.jpg">
-<meta property="og:image" content="http://iotaa.xyz/2018/09/05/redis/redisnget.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/redisvideo.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/redishash.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/redishashvideo.jpg">
-<meta property="og:updated_time" content="2018-10-28T16:26:54.024Z">
+<meta property="og:updated_time" content="2018-10-28T15:28:42.701Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis">
-<meta name="twitter:description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/redisobject.jpg">
+<meta name="twitter:title" content="前缀和 滑动窗口 子数组问题">
+<meta name="twitter:description" content="930 01数组中有多少个和=target的子数组 输入：A = [1,0,1,0,1], S = 2输出：4   输入：A = [0,0,0,0,0], S = 0输出：15  5+4+3+2+1  思路： 计算前缀和[1,1,2,2,3]并放入map计数,{1:2,2:2,3:1}步骤[0,0,0,0,0] 初始化map{0:1},扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新">
 
 
 
@@ -127,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://iotaa.xyz/2018/09/05/redis/"/>
+  <link rel="canonical" href="http://iotaa.xyz/2018/10/28/algsubarrr/"/>
 
 
 
 
 
-  <title>redis | Learn & practice</title>
+  <title>前缀和 滑动窗口 子数组问题 | Learn & practice</title>
   
 
 
@@ -297,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/09/05/redis/">
+    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/10/28/algsubarrr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -314,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">redis</h1>
+          <h1 class="post-title" itemprop="name headline">前缀和 滑动窗口 子数组问题</h1>
         
 
         <div class="post-meta">
@@ -327,8 +321,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T13:59:20+08:00">
-                2018-09-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-28T11:17:19+08:00">
+                2018-10-28
               </time>
             
 
@@ -343,12 +337,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:26:54+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-28T23:28:42+08:00">
+                2018-10-28
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">算法备忘</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -377,37 +393,31 @@
       
 
       
-        <h3 id="ConcurrentSkipListMap"><a href="#ConcurrentSkipListMap" class="headerlink" title="ConcurrentSkipListMap"></a><code>ConcurrentSkipListMap</code></h3><h3 id="4-搭建redis服务器"><a href="#4-搭建redis服务器" class="headerlink" title="4.搭建redis服务器"></a>4.搭建redis服务器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local</span><br><span class="line">tar -zvxf </span><br><span class="line">yum -y install gcc gcc-c++ libstdc++-devel</span><br><span class="line">make MALLOC=libc</span><br><span class="line">yum install tcl</span><br><span class="line">make test</span><br><span class="line">vi tests/integration/replication-2.tcl 1000-&gt;10000</span><br><span class="line">make install</span><br><span class="line">redis-server</span><br><span class="line">vi redis.conf</span><br><span class="line">    bind 127.0.0.1-&gt;0.0.0.0所有ip都能访问</span><br><span class="line">    :/dae</span><br><span class="line">    daemonize yes 允许后台执行</span><br><span class="line">redis-server ./redis.conf</span><br><span class="line"><span class="meta">#</span><span class="bash">Redis version=4.0.2, bits=64, commit=00000000, modified=0, pid=10217, just started</span></span><br><span class="line">ps -ef |grep redis</span><br><span class="line"><span class="meta">#</span><span class="bash">root     10218     1  0 10:42 ?        00:00:00 redis-server 0.0.0.0:6379</span></span><br><span class="line">redis-cli</span><br><span class="line"><span class="meta">#</span><span class="bash">给redis加密码</span></span><br><span class="line">vi redis.conf</span><br><span class="line">    :/requirepass</span><br><span class="line">     # requirepass foobared -&gt; requirepass 123456</span><br><span class="line"><span class="meta">#</span><span class="bash">重启</span></span><br><span class="line">redis-cli</span><br><span class="line">    shutdown save</span><br><span class="line">    exit</span><br><span class="line">ps -ef | grep redis</span><br><span class="line">redis-server ./redis.conf</span><br><span class="line">redis-cli</span><br><span class="line">    auth 123456</span><br><span class="line"><span class="meta">#</span><span class="bash"> 变成系统服务</span></span><br><span class="line">cd utils</span><br><span class="line">./install_server.sh</span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置文件位置</span></span><br><span class="line">    /usr/local/redis-4.0.2/redis.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">log</span>位置</span></span><br><span class="line">    /usr/local/redis-4.0.2/redis.log</span><br><span class="line"><span class="meta">#</span><span class="bash"> data位置</span></span><br><span class="line">    /usr/local/redis-4.0.2/data</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可执行文件路径</span></span><br><span class="line">chkconfig --list |grep redis</span><br><span class="line"><span class="meta">#</span><span class="bash"> redis_6379        0:关 1:关 2:开 3:开 4:开 5:开 6:关</span></span><br><span class="line">systemctl status redis_6379</span><br><span class="line">systemctl stop redis_6379</span><br><span class="line">systemctl start redis_6379</span><br><span class="line">ps -ef |grep redis</span><br><span class="line"><span class="meta">#</span><span class="bash"> 改服务名</span></span><br><span class="line">vi /etc/init.d/redis_6379</span><br><span class="line"><span class="meta">#</span><span class="bash"> ！打开防火墙</span></span><br><span class="line">firewall-cmd --zone=public --add-port=6379/tcp --permanent</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">firewall-cmd --list-ports</span><br></pre></td></tr></table></figure>
-<h3 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h3><p><code>config get *</code></p>
-<h3 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h3><p><code>keys *</code> 查询所有的键，会遍历所有的键值，复杂度O(n)<br><code>dbsize</code> 查询键总数，直接获取redis内置的键总数变量，复杂度O(1)<br><code>exists key</code> 存在返回1，不存在返回0 O(1)</p>
-<p><code>ttl</code> 命令可以查看键hello的剩余过期时间，单位：秒（&gt;0剩余过期时间；-1没设置过期时间；-2键不存在）<br><code>expire key seconds</code> 当超过过期时间，会自动删除，key在seconds秒后过期<br><code>persist key</code> 去掉过期时间</p>
-<p><code>type key</code> 如果键hello是字符串类型，则返回string；如果键不存在，则返回none</p>
-<p>所有key都是字符串</p>
-<img src="http://phb9yml10.bkt.clouddn.com/static/images/redisobject.jpg">
-<p>redis 单线程 所以命令会等待<br>redis 使用epoll模型多路复用 redis自身实现的事件处理 将epoll的读写、连接、关闭转换成自身的事件。不在IO上浪费时间<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/redisIO.jpg"><br>fysnc file 是独立线程</p>
-<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><h4 id="字符串-应用场景：-缓存、计数器、分布式锁"><a href="#字符串-应用场景：-缓存、计数器、分布式锁" class="headerlink" title="字符串 应用场景： 缓存、计数器、分布式锁"></a>字符串 应用场景： 缓存、计数器、分布式锁</h4><p>结构： key：value<br>因为单线程 所以无竞争 线程安全<br>mget和n次get mget省了很多网络开销 从n网络n命令-&gt;1网络n命令<br><img src="redisnget.jpg" alt="redisnget.jpg"></p>
-<h5 id="场景1：-缓存视频基本信息redismysql"><a href="#场景1：-缓存视频基本信息redismysql" class="headerlink" title="场景1： 缓存视频基本信息redismysql"></a>场景1： 缓存视频基本信息redis<->mysql</-></h5><img src="http://phb9yml10.bkt.clouddn.com/static/images/redisvideo.jpg">
-<h5 id="场景2：-分布式ID生成器"><a href="#场景2：-分布式ID生成器" class="headerlink" title="场景2： 分布式ID生成器"></a>场景2： 分布式ID生成器</h5><p><code>incr id</code></p>
-<hr>
-<h4 id="hash-可以更新属性"><a href="#hash-可以更新属性" class="headerlink" title="hash 可以更新属性"></a>hash 可以更新属性</h4><p>用户信息用hash 可以部分更新属性<br>但是比较难控制过期时间，只能对一个key设置过期时间 不能对一个属性<br>field 不能相同<br>结构 key-&gt;field,value<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/redishash.jpg"></p>
-<p>id看成是一行，field是列</p>
-<h5 id="场景1：记录网站每个用户个人主页的访问量"><a href="#场景1：记录网站每个用户个人主页的访问量" class="headerlink" title="场景1：记录网站每个用户个人主页的访问量"></a>场景1：记录网站每个用户个人主页的访问量</h5><p><code>hincrby user:1:info pageview count</code></p>
-<h5 id="场景2：缓存视频基本信息redismysql"><a href="#场景2：缓存视频基本信息redismysql" class="headerlink" title="场景2：缓存视频基本信息redismysql"></a>场景2：缓存视频基本信息redis<->mysql</-></h5><img src="http://phb9yml10.bkt.clouddn.com/static/images/redishashvideo.jpg">
-<h4 id="list-列表"><a href="#list-列表" class="headerlink" title="list 列表"></a>list 列表</h4><p>key：element 是有序（插入顺序）队列 双端队列 可以获得range<br>阻塞插入，对空的队列进行pop，不是立刻返回 而是等一段时间拿到最新的弹出<br>用户生产者消费者模型 消息队列</p>
-<p>实现<br>1.capped collection <code>LPUSH+LTRIM</code> 有固定数量的列表而不是无限放大<br>2.消息队列 <code>LPUSH + BRPOP</code><br>3.stack <code>LPUSH + LPOP</code><br>4.queue <code>LPUSH + RPOP</code></p>
-<h5 id="场景1：微博TimeLine-将所有我关注的用户的最新微博按新旧排、分页"><a href="#场景1：微博TimeLine-将所有我关注的用户的最新微博按新旧排、分页" class="headerlink" title="场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页"></a>场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页</h5><p>每条微博作为一个对象，自己的微博id作为外联key</p>
-<h3 id="set-集合"><a href="#set-集合" class="headerlink" title="set 集合"></a>set 集合</h3><p>key : values (values不能有)<br>可以做 inter(共同）\diff\union操作</p>
-<p>1 打标签Tag ： <code>SADD</code><br>2 随机数 ：<code>SPOP/SRANDMEMBER</code><br>3 社交网络操作 ： <code>SADD + SINTER</code></p>
-<h5 id="场景1：-抽奖srandmember-spop"><a href="#场景1：-抽奖srandmember-spop" class="headerlink" title="场景1： 抽奖srandmember,spop"></a>场景1： 抽奖<code>srandmember</code>,<code>spop</code></h5><h5 id="场景2：-like-、-点赞-、-踩"><a href="#场景2：-like-、-点赞-、-踩" class="headerlink" title="场景2： like 、 点赞 、 踩"></a>场景2： like 、 点赞 、 踩</h5><h5 id="场景3：-给用户添加标签，给标签添加用户"><a href="#场景3：-给用户添加标签，给标签添加用户" class="headerlink" title="场景3： 给用户添加标签，给标签添加用户"></a>场景3： 给用户添加标签，给标签添加用户</h5><h3 id="zset-有序集合"><a href="#zset-有序集合" class="headerlink" title="zset 有序集合"></a>zset 有序集合</h3><p>结构<br>key : (score:value) value不重复 凭借score排序<br>可以更新score</p>
-<h5 id="场景1：-畅销榜"><a href="#场景1：-畅销榜" class="headerlink" title="场景1： 畅销榜"></a>场景1： 畅销榜</h5><p>使用  时间戳、销售量 关注量作为score<br>同样可以使用集合的交集、并、diff</p>
-<hr>
-<h3 id="慢查询"><a href="#慢查询" class="headerlink" title="慢查询"></a>慢查询</h3><p>可能发在生命周期4步里的第3步。 1 发送命令 2 排队 3 执行命令 4 返回结果<br>配置 maxlen 一般设置成1ms 默认10ms<br>希望一秒执行万次 每条0.1ms 超过1ms就应该记录这条命令了<br>队列长度一般1000 慢查询定期要持久化<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; config get slowlog*</span><br><span class="line">1) <span class="string">"slowlog-log-slower-than"</span></span><br><span class="line">2) <span class="string">"10000"</span> </span><br><span class="line">3) <span class="string">"slowlog-max-len"</span></span><br><span class="line">4) <span class="string">"128"</span></span><br></pre></td></tr></table></figure></p>
-<p>获取慢查询队列<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slowlog get n</span><br><span class="line">slowlog len <span class="comment"># 长度</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="流水线"><a href="#流水线" class="headerlink" title="流水线"></a>流水线</h3><p>redis命令执行时间是微妙<br>北京-上海 1300km， 光速3x10^8 m/s -&gt; 300 000 km/s<br>光线速度是2/3光速 = 200 000 km/s</p>
-<p>一条命令的传输时间是 (1300x2)/200 000 = 13 ms</p>
-<p>m操作是原子的，pipeline不是，还是排队，但是顺序是对的，只能操作在一个redis节点上<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Pipeline pipeline = jedis.pipelined();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;<span class="number">100</span> ; i++) &#123;</span><br><span class="line">    pipeline.hset(<span class="string">"hashkey:"</span>+i,<span class="string">"field"</span>+i ,<span class="string">"value"</span>+i );</span><br><span class="line">&#125;</span><br><span class="line">pipeline.syncAndReturnAll();</span><br></pre></td></tr></table></figure></p>
-<h3 id="发布订阅"><a href="#发布订阅" class="headerlink" title="发布订阅"></a>发布订阅</h3><p>角色： 发布者 订阅者 频道<br>不能消息堆积 现在订阅访问不到以前的<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; publish cloud:tv <span class="string">"hello world"</span></span><br><span class="line">(<span class="built_in">integer</span>) 0 <span class="comment">#  订阅的人数</span></span><br><span class="line">127.0.0.1:6379&gt; subscribe cloud:tv</span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) <span class="string">"subscribe"</span></span><br><span class="line">2) <span class="string">"cloud:tv"</span></span><br><span class="line">3) (<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure></p>
-<h3 id="epoll实现"><a href="#epoll实现" class="headerlink" title="epoll实现"></a>epoll实现</h3>
+        <h3 id="930-01数组中有多少个和-target的子数组"><a href="#930-01数组中有多少个和-target的子数组" class="headerlink" title="930 01数组中有多少个和=target的子数组"></a>930 01数组中有多少个和=target的子数组</h3><blockquote>
+<p>输入：A = [1,0,1,0,1], S = 2<br>输出：4</p>
+</blockquote>
+<blockquote>
+<p>输入：A = [0,0,0,0,0], S = 0<br>输出：15  5+4+3+2+1</p>
+</blockquote>
+<p>思路： 计算前缀和<code>[1,1,2,2,3]</code>并放入map计数,<code>{1:2,2:2,3:1}</code><br>步骤[0,0,0,0,0] 初始化map<code>{0:1}</code>,扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新<code>map{0:2}</code> ,扫描到第二个0，cnt=1+2…最后一个0，cnt+1+2+3+4+5 = 15<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSubarraysWithSum</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span> S)</span> </span>&#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; c = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    c.put(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> psum = <span class="number">0</span>, res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i : A) &#123;</span><br><span class="line">        psum += i;</span><br><span class="line">        <span class="comment">// 查找前缀</span></span><br><span class="line">        res += c.getOrDefault(psum - S, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 当前前缀计数</span></span><br><span class="line">        c.put(psum, c.getOrDefault(psum, <span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="560-数组中有多少个和为k的子数组"><a href="#560-数组中有多少个和为k的子数组" class="headerlink" title="560 数组中有多少个和为k的子数组"></a>560 数组中有多少个和为k的子数组</h3><blockquote>
+<p>输入:nums = [1,1,1], k = 2<br>输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。</p>
+</blockquote>
+<p>同930 一模一样,查找可以组成k的前缀，计数前缀<br>69%<br><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> psum = <span class="number">0</span>;</span><br><span class="line">    Map&lt;Integer,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> cnt =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">        psum += nums[i];</span><br><span class="line">        cnt += map.getOrDefault(psum - k,<span class="number">0</span>);</span><br><span class="line">        map.put(psum,map.getOrDefault(psum,<span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div></div></p>
+<h3 id="713-乘积-lt-k的子数组的个数"><a href="#713-乘积-lt-k的子数组的个数" class="headerlink" title="713 乘积&lt;k的子数组的个数"></a>713 乘积<code>&lt;k</code>的子数组的个数</h3><p>输入[1,2,3,4] k = 10<br>当s = 0,e = 0 窗口只有[1]<br>窗口乘积p = 1 ，子数组个数 1 :[1]</p>
+<p>s = 0,e = 1 窗口[1,2]<br>p = 2 子数组个数3: <code>[[1],   [2],[1,2]]</code> (+2)</p>
+<p>s = 0,e = 2 窗口[1,2,3]<br>p = 6 子数组个数3: <code>[[1],[2][1,2],  [3],[2,3],[1,2,3]]</code> (+3)</p>
+<p>每次子数组的增长个数就是窗口大小<br>如果 p &gt;k 则s向右<br>s = 1,e = 3 窗口[2,3,4]<br>p = 24<br>s = 2,e = 3窗口[3,4]<br>p = 12 子数组个数<code>[[3],  [4][3,4]]]</code> (+2)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSubarrayProductLessThanK</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> p = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> cnt =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> s = <span class="number">0</span>, e = <span class="number">0</span>; e &lt; nums.length;e++)&#123;</span><br><span class="line">        p *= nums[e];</span><br><span class="line">        <span class="keyword">while</span>(p&gt;=k &amp;&amp; s&lt;e)&#123;</span><br><span class="line">            p /= nums[s++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p &lt; k)&#123;</span><br><span class="line">            cnt += (e - s + <span class="number">1</span>);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="152-最大子数组乘积-保留当前值之前的最大积和最小积"><a href="#152-最大子数组乘积-保留当前值之前的最大积和最小积" class="headerlink" title="152 最大子数组乘积 保留当前值之前的最大积和最小积"></a>152 最大子数组乘积 保留当前值之前的最大积和最小积</h3><blockquote>
+<p>输入: [-2,0,-1]<br>输出: 0<br>解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。</p>
+</blockquote>
+<p>负数的最小积有潜力变成最大积<br>4ms 11.99%<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = nums[<span class="number">0</span>],min = nums[<span class="number">0</span>],max = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> nextmax = nums[i]*max;</span><br><span class="line">        <span class="keyword">int</span> nextmin = nums[i]*min;</span><br><span class="line">        max = Math.max(Math.max(nextmax,nextmin),nums[i]);</span><br><span class="line">        min = Math.min(Math.min(nextmax,nextmin),nums[i]);</span><br><span class="line">        sum = Math.max(max,sum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>### </p>
+
       
     </div>
     
@@ -422,6 +432,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/alg/" rel="tag"># alg</a>
+          
+        </div>
+      
 
       
       
@@ -431,8 +447,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/04/algRight/" rel="next" title="经典问题 巧妙的算法和DP方程">
-                <i class="fa fa-chevron-left"></i> 经典问题 巧妙的算法和DP方程
+              <a href="/2018/10/23/javaDesignPattern/" rel="next" title="javaDesignPattern">
+                <i class="fa fa-chevron-left"></i> javaDesignPattern
               </a>
             
           </div>
@@ -440,10 +456,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/05/activiti/" rel="prev" title="activiti和项目整理">
-                activiti和项目整理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -575,7 +587,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentSkipListMap"><span class="nav-number">1.</span> <span class="nav-text">ConcurrentSkipListMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-搭建redis服务器"><span class="nav-number">2.</span> <span class="nav-text">4.搭建redis服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看配置"><span class="nav-number">3.</span> <span class="nav-text">查看配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用API"><span class="nav-number">4.</span> <span class="nav-text">常用API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构"><span class="nav-number">5.</span> <span class="nav-text">数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串-应用场景：-缓存、计数器、分布式锁"><span class="nav-number">5.1.</span> <span class="nav-text">字符串 应用场景： 缓存、计数器、分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景1：-缓存视频基本信息redismysql"><span class="nav-number">5.1.1.</span> <span class="nav-text">场景1： 缓存视频基本信息redismysql</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#场景2：-分布式ID生成器"><span class="nav-number">5.1.2.</span> <span class="nav-text">场景2： 分布式ID生成器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hash-可以更新属性"><span class="nav-number">5.2.</span> <span class="nav-text">hash 可以更新属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景1：记录网站每个用户个人主页的访问量"><span class="nav-number">5.2.1.</span> <span class="nav-text">场景1：记录网站每个用户个人主页的访问量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#场景2：缓存视频基本信息redismysql"><span class="nav-number">5.2.2.</span> <span class="nav-text">场景2：缓存视频基本信息redismysql</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list-列表"><span class="nav-number">5.3.</span> <span class="nav-text">list 列表</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景1：微博TimeLine-将所有我关注的用户的最新微博按新旧排、分页"><span class="nav-number">5.3.1.</span> <span class="nav-text">场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set-集合"><span class="nav-number">6.</span> <span class="nav-text">set 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景1：-抽奖srandmember-spop"><span class="nav-number">6.0.1.</span> <span class="nav-text">场景1： 抽奖srandmember,spop</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#场景2：-like-、-点赞-、-踩"><span class="nav-number">6.0.2.</span> <span class="nav-text">场景2： like 、 点赞 、 踩</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#场景3：-给用户添加标签，给标签添加用户"><span class="nav-number">6.0.3.</span> <span class="nav-text">场景3： 给用户添加标签，给标签添加用户</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zset-有序集合"><span class="nav-number">7.</span> <span class="nav-text">zset 有序集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#场景1：-畅销榜"><span class="nav-number">7.0.1.</span> <span class="nav-text">场景1： 畅销榜</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#慢查询"><span class="nav-number">8.</span> <span class="nav-text">慢查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流水线"><span class="nav-number">9.</span> <span class="nav-text">流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发布订阅"><span class="nav-number">10.</span> <span class="nav-text">发布订阅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll实现"><span class="nav-number">11.</span> <span class="nav-text">epoll实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#930-01数组中有多少个和-target的子数组"><span class="nav-number">1.</span> <span class="nav-text">930 01数组中有多少个和=target的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#560-数组中有多少个和为k的子数组"><span class="nav-number">2.</span> <span class="nav-text">560 数组中有多少个和为k的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#713-乘积-lt-k的子数组的个数"><span class="nav-number">3.</span> <span class="nav-text">713 乘积&lt;k的子数组的个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#152-最大子数组乘积-保留当前值之前的最大积和最小积"><span class="nav-number">4.</span> <span class="nav-text">152 最大子数组乘积 保留当前值之前的最大积和最小积</span></a></li></ol></div>
             
 
           </div>
