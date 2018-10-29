@@ -1,9 +1,39 @@
 ---
-title: 前缀和 滑动窗口 子数组问题
+title: 前缀和 滑动窗口 子数组、序列问题
 date: 2018-10-28 11:17:19
 tags: [alg]
 categories: [算法备忘]
 ---
+### !594 最长max min相差1的子序列(不是连续的数组)
+数组 hashmap 计数模板
+```java
+
+```
+
+### !!!152 最大子数组乘积 保留当前值之前的最大积和最小积
+>输入: [-2,0,-1]
+输出: 0
+解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
+
+负数的最小积有潜力变成最大积
+当前max是 `nums[i]*max`,`nums[i]*min`,`nums[i]` 三者的最大者
+当前min是 `nums[i]*max`,`nums[i]*min`,`nums[i]` 三者最小值
+更新全局max
+4ms 11.99%
+```java
+public int maxProduct(int[] nums) {
+    int sum = nums[0],min = nums[0],max = nums[0];
+    for(int i=1;i<nums.length;i++){
+        int nextmax = nums[i]*max;
+        int nextmin = nums[i]*min;
+        max = Math.max(Math.max(nextmax,nextmin),nums[i]);
+        min = Math.min(Math.min(nextmax,nextmin),nums[i]);
+        sum = Math.max(max,sum);
+    }
+    return sum;
+}
+```
+
 ### 930 01数组中有多少个和=target的子数组
 > 输入：A = [1,0,1,0,1], S = 2
 输出：4
@@ -87,26 +117,7 @@ public int numSubarrayProductLessThanK(int[] nums, int k) {
 }
 ```
 
-### 152 最大子数组乘积 保留当前值之前的最大积和最小积
->输入: [-2,0,-1]
-输出: 0
-解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
 
-负数的最小积有潜力变成最大积
-4ms 11.99%
-```java
-public int maxProduct(int[] nums) {
-    int sum = nums[0],min = nums[0],max = nums[0];
-    for(int i=1;i<nums.length;i++){
-        int nextmax = nums[i]*max;
-        int nextmin = nums[i]*min;
-        max = Math.max(Math.max(nextmax,nextmin),nums[i]);
-        min = Math.min(Math.min(nextmax,nextmin),nums[i]);
-        sum = Math.max(max,sum);
-    }
-    return sum;
-}
-```
 
 ### 
 
