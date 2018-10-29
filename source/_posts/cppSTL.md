@@ -160,7 +160,7 @@ return (p);
 ```
 
 ### STL
-![STL](/images/STL.jpg)
+{% qnimg STL.jpg %}
 
 分配器Allocator支持容器，处理容器的内存。
 容器Containers数据和算法Algorithms操作分开。不是OO设计，是模板编程。
@@ -479,7 +479,7 @@ __gnu_cxx::slist<string> c;
 
 ### deque
 分段连续
-![deque](/images/deque.jpg)
+{% qnimg deque.jpg %}
 milli-seconds : 6119
 deque.size()= 1000000
 deque.front()= 41

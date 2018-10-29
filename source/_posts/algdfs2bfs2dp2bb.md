@@ -546,7 +546,7 @@ public int networkDelayTimeF(int[][] times, int N, int K) {
 
 1. 递归mincoins(coins,11)=mincoins(coins,11-1)+1=(mincoins,10-1)+1+1..=(mincoins,0)+n
 
-![coinchange.jpg](/images/coinchange.jpg)
+{% qnimg coinchange.jpg %}
 递归 记忆子问题 剩下3，用2的硬币变成剩下1的子问题和 剩下2，用1的硬币 剩下1的子问题是相同的。递归给count赋值是从下往上的。
 ```java
 public int coinChange3(int[] coins, int amount) {
@@ -569,7 +569,7 @@ private int coinC(int[] coins,int left,int[] count){
 }
 ```
 
-![coin](/images/coin.jpg)
+{% qnimg coin.jpg %}
 
 2. dp:
     注意点：初值如果设为Int的max，两个都是max的话+1变成负数，所以设amount+1
@@ -841,7 +841,7 @@ public int findCheapestPriceDp(int n, int[][] flights, int src, int dst, int k) 
 
 
 ### ？96 不同的BST数量 catalan数
-![numbst.jpg](/images/numbst.jpg)
+{% qnimg numbst.jpg %}
 (为什么是乘)
 ```
 1个节点只有1种，2个节点1    2 一共两种
@@ -852,8 +852,8 @@ public int findCheapestPriceDp(int n, int[][] flights, int src, int dst, int k) 
    （0）(2) (1)(1) (2)(0)
       1x2  + 1x1  + 2x1
 ```
-![numbst2.jpg](/images/numbst2.jpg)
-![numbst3.jpg](/images/numbst3.jpg)
+{% qnimg numbst2.jpg %}
+{% qnimg numbst3.jpg %}
 当n=5 $T[4]+T[1][3]+T[2][2]+T[3][1]+T[4]$
 
 左子树有j个节点，右子树有n-j-1个节点
@@ -889,7 +889,7 @@ public int dfs(int n,int[] memroy){
 }
 ```
 
-![catalannum.jpg](/images/catalannum.jpg)
+{% qnimg catalannum.jpg %}
 ```java
 int ans[] = {1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190};
 return ans[n];
@@ -904,7 +904,7 @@ for (int i = 0; i < n; i++) {
 ```
 
 二项式系数
-![catalanformu.jpg](/images/catalanformu.jpg)
+{% qnimg catalanformu.jpg %}
 ```java
 private int C(int a,int b){
     long res = 1;

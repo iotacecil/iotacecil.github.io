@@ -152,7 +152,7 @@ dataLength = 0
 numChildren = 1 # 子节点有几个
 ```
 
-![zid](/images/zid.png)
+{% qnimg zid.png %}
 
 #### Session 的基本原理
 一个C/S连接存在一个会话，
@@ -454,7 +454,7 @@ Created /iznode/abc
 : cdrwa
 ```
 `[scheme:id:permissions]`权限列表
-![zkacl.jpg](/images/zkacl.jpg)
+{% qnimg zkacl.jpg %}
 c 创建
 r 读
 w 写

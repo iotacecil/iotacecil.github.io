@@ -50,7 +50,7 @@ public int subarraySum(int[] nums, int k) {
     return cnt;
 }
 ```
-{% fold %}
+{% endfold %}
 
 ### 713 乘积`<k`的子数组的个数
 输入[1,2,3,4] k = 10

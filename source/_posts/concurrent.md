@@ -158,7 +158,7 @@ ExecutorService executor = Executors.newCachedThreadPool();
 
 ### 多个CPU缓存一致性 MESI缓存一致性！！！
 
-![mesi](/images/mesi.jpg)
+{% qnimg mesi.jpg %}
 
 4种数据状态，4种状态转换的cpu操作。
 M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存
@@ -215,8 +215,8 @@ Transfer rate:          199.02 [Kbytes/sec] received
     4. Option 打开Logviewer
 {% fold %}
 Throughput吞吐量
-![jmeter](/images/jmeter.jpg)
-![viewtree](/images/viewtree.jpg)
+{% qnimg jmeter.jpg %}
+{% qnimg viewtree.jpg %}
 {% endfold %}
 
 ### 用代码并发模拟
@@ -262,7 +262,7 @@ A,B,C三个线程，A执行完后C才能开始执行。
 阻塞线程，直到满足某种条件线程再继续执行,计数值（count）实际上就是闭锁需要等待的线程数量
 
 * 适合保证线程执行完再做其它处理
-![countdown](/images/countdown.jpg)
+{% qnimg countdown.jpg %}
 * 调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
 
 ```java
@@ -296,7 +296,7 @@ CountDownLatch 类中主要的方法?
 进程-详细-设置相关性：分配到指定cpu执行，开的线程只在指定的执行
 java会把线程直接映射到操作系统
 
-![threadstate](/images/threadstate.jpg)
+{% qnimg threadstate.jpg %}
 
 `javac xxx.java`->.class
 `javap -c -v xxx` 查看虚拟机字节码
@@ -430,7 +430,7 @@ public class learnThread {
 }
 
 ```
-![suspend](/images/suspend.jpg)
+{% qnimg suspend.jpg %}
 {% endfold %}
 
 

@@ -1274,7 +1274,7 @@ private static Map<String, String> findServiceBeanDefinitions(ConfigurableListab
 
 
 chrome-network-preserve log
-![cookieresponse.jpg](/images/cookieresponse.jpg)
+{% qnimg cookieresponse.jpg %}
 
 ---
 
@@ -1509,7 +1509,7 @@ tx声明式事务配置文件
 ```
 
 ### Struts原理
-![struts2](/images/struts2.jpg)
+{% qnimg struts2.jpg %}
 {% note class_name %} 
 1. `HttpServltRequest`经过`ActionContextCleanUp`、各种`Filter` .action的请求会到ActionMapper返回Filter
 2. Filter发给`ActionProxy` 并读取struts的配置文件，找到具体的action类，通过`ActionProxy`代理创建Action实例
@@ -1548,7 +1548,7 @@ BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
 
 
 ### tomcat
-![tomcat](/images/tomcat.jpg)
+{% qnimg tomcat.jpg %}
 - server.xml
 ```xml
 <server>
@@ -1606,7 +1606,7 @@ mvn complie编译 test测试 package打包
 `mvn archetype:generate`
 
 ### git
-![git](/images/git.jpg)
+{% qnimg git.jpg %}
 `git push -u origin master`
 
 ### Servelet:运行在server端的java程序

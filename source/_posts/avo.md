@@ -225,10 +225,10 @@ CPU2修改了内存中的a，CPU1读取a只读取cache中的值，不可见
 ## `volatile`内存屏障，禁止重排序
 [volatile](http://www.ymq.io/2017/11/15/volatile/)
 写：会在写操作后加入一条`store`屏障指令它的修改会立刻刷新到主存，
-![volatilewrite](/images/volatilewrite.jpg)
+{% qnimg volatilewrite.jpg %}
 图有问题？？？
 读：读之前加入`load`屏障指令，c去内存中读取新值。
-![volatileread](/images/volatileread.jpg)
+{% qnimg volatileread.jpg %}
 
 使用volatile run(){count++}还是会出错
 volatile不具有原子性。

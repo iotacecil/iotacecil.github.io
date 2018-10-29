@@ -119,7 +119,7 @@ docker run -d -p 3310:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC 
 ### 负载均衡 Haproxy请求转发器
 nginx 支持http协议负载均衡，最近才支持TCP/IP
 [haproxy配置](https://zhangge.net/5125.html)
-![junheng](/images/junheng.jpg)
+{% qnimg junheng.jpg %}
 1. `docker pull haproxy`
 2. 在宿主机创建配置文件 
    `mkdir /home/soft/haproxy/`

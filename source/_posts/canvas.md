@@ -41,7 +41,7 @@ for(var i = 0;i<10;i++){
     //下一次.bgeinPath会重新规划路径
 }
 ```
-![canvas1](/images/canvas1.jpg)
+{% qnimg canvas1.jpg %}
 ## 5. `context.fill()`会把边框内测一半像素覆盖，fill写在路径和stroke中间
 ```js
 context.arc(50+i*100,60,40,0,2*Math.PI*(i+1)/10)
@@ -62,7 +62,7 @@ context.stroke()
 
 ---
 ## 8. 画星 5个角，一个角隔72° 大圆半径300，小圆半径150
-![canvas_star](/images/canvas_star.jpg)
+{% qnimg canvas_star.jpg %}
 ```js
 context.beginPath()
 for(var i =0;i<5;i++){
@@ -76,7 +76,7 @@ context.closePath()
 ```
 ## 9. lineJoin 线段连接处
 `bevel`线条顶端不会衍生自然形成尖角，形成纸带折叠效果
-![miterLimit](/images/miterLimit.jpg)
+{% qnimg miterLimit.jpg %}
 `context.lineJoin="miter"
 context.miterLimit=0.01`
 内角和外角的最大值。超过则使用bevel显示

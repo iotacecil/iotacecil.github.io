@@ -238,7 +238,7 @@ public boolean stoneGameDP1D(int[] piles) {
 1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
 
 方法3：归并排序
-![nixu315.jpg](/images/nixu315.jpg)
+{% qnimg nixu315.jpg %}
 
 #### 小和问题(右边有多少个数比它大)
 ```
@@ -401,9 +401,9 @@ max flw == min cut
 number of augemntation <= maxflow value 每次增加至少1
 
 查找
-![trie.jpg](/images/trie.jpg)
+{% qnimg trie.jpg %}
 插入
-![tirinsert.jpg](/images/tirinsert.jpg)
+{% qnimg tirinsert.jpg %}
 
 ---
 
@@ -471,7 +471,7 @@ public int findDuplicate(int[] nums) {
 ```
 
 ### 142 环起始于哪个node
-![loops](/images/loops.jpg)
+{% qnimg loops.jpg %}
 1->2->3->4->5->6->7->3 meet:6
 a: 从head到环 
 b：快指针走了两次的环内距离(慢指针到环起点的距离)
@@ -561,7 +561,7 @@ private boolean valid(long target,int[] nums,int m){
 ### !543树中两点的最远路径，自己到自己0
 > [4,2,1,3]路径长度3
 
-![lc545](/images/lc545.jpg)
+{% qnimg lc545.jpg %}
 将每个点试当成转折点,在更新左右最长高度的同时更新rst = Max(rst,l+r);
 
 ### ！！687树中值相等的点的路径长
@@ -574,8 +574,8 @@ private boolean valid(long target,int[] nums,int m){
 > Output:[0, 6] 输出起始位置
 
 [Sliding Window algorithm](https://leetcode.com/problems/find-all-anagrams-in-a-string/discuss/92007/Sliding-Window-algorithm-template-to-solve-all-the-Leetcode-substring-search-problem.)
-![anagram](/images/anagram.jpg)
-![anagram2](/images/anagram2.jpg)
+{% qnimg anagram.jpg %}
+{% qnimg anagram2.jpg %}
 16ms 50%
 ```java
 public List<Integer> findAnagrams(String s, String p) {

@@ -20,7 +20,7 @@ chrome打开
 exports是对外提供的接口/属性
 require依赖别的模块
 module是模块本身里export属性
-![nodemodule](/images/nodemodule.jpg)
+{% qnimg nodemodule.jpg %}
 
 
 

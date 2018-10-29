@@ -104,7 +104,7 @@ https://blog.csdn.net/u011514451/article/details/50675222
 强制类型转换
 
 ### 拓扑排序
-![topu](/images/topu.jpg)
+{% qnimg topu.jpg %}
 
 ### 树结构review
 树结构是为了对vector(数组)和list(链表)的静态操作(search)和动态操作(insert,remove)效率的平衡。
@@ -238,7 +238,7 @@ while(!s.empty()){
 
 ##### 迭代版本2：
 1. 沿着左孩子下行，到左侧空了之后向上遍历刚才没访问的右子树
-![pretrav](/images/prestack.jpg)
+{% qnimg prestack.jpg %}
 ```cpp
 template <typename T,typename VST>
 static void visitAlongLeftBranch(
@@ -273,7 +273,7 @@ void trapRE_v2(BinNodePosi(T) x,VST& visit){
 1.不是尾递归
 2.一直向左，到左边没有了visit，再访问右子树，回到原来左链上的上个节点访问并继续右子树
 左侧链上的每个节点是一个阶段，都是相同的，上一个节点访问的时候可以当下一个节点不存在
-![midtrav](/images/midtrav.jpg)
+{% qnimg midtrav.jpg %}
 将所有左节点入栈，最后弹出访问并访问右子树
 ```cpp
 template <typename T>
@@ -296,7 +296,7 @@ void traIn_v2(BinNodePosi(T) x,V& visit){
     }
 }
 ```
-![intravstack](/images/intravstack.jpg)
+{% qnimg intravstack.jpg %}
 
 #### 层次遍历
 ```cpp
@@ -327,7 +327,7 @@ void BinNode<T>::travLevel(VST & visit){
      [R][r] 左空
 
 每个节点的度是0或2的真二叉树可以由先序，后序还原。左右子树同时为空/非空
-![preback](/images/preback.jpg)
+{% qnimg preback.jpg %}
 
 ### 图 
 1. 简单路径：不含重复顶点

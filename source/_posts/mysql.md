@@ -88,7 +88,7 @@ password用char(32)
 菱形：联系集：把多对多变成1对多 用虚线连接联系集的属性
     双线：全参与：表示在联系集中的参与度`<advisor>`=student表示每个学生都要有导师，
 双边菱形：表示弱实体集和它依附的实体集。当弱实体集里放入依赖的实体集的id，则不需要联系集
-![weeken](/images/weeken.jpg)
+{% qnimg weeken.jpg %}
 
 椭圆：属性
 角色：<先修课联系集>和[课程]的联系通过course_id和prereq_id角色标识区分
@@ -200,14 +200,14 @@ select * from t;
 1. `inner join`内连接，两张表的公共部分 数据库会先在每个表里先查条件再生成笛卡儿积
 `select a.name from a A inner join b B on A.name =B.name;`
 2. `left outer join`左外连接，以左表为基础 内链接当左表中查询条件是null的时候被忽略，外连接则有
-![left_join](/images/left_join.jpg)
+{% qnimg left_join.jpg %}
 用左外连接查询只存在A中不存在B中的where B.Key is NULL (优化not in不会使用索引)
-![left_only_join](/images/left_only_join.jpg)
+{% qnimg left_only_join.jpg %}
 `select * from b left outer join a on a.name =b.name where a.Id is null;`
 3. `right outer join`
 `select * from a right outer join b on a.name =b.name where a.Id is null;`
 4. `full join`
-![full_join](/images/full_join.jpg)
+{% qnimg full_join.jpg %}
 
 ### `count(*),min(p.'price') group by p."id","name"`
 
@@ -249,7 +249,7 @@ out.close();
 #### 连接池
 1. `DriverManager.getConnection`流程
 客户端利用密码种子和自己保存的数据库密码按加密算法得到`加密密码`
-![JDBC_conn](/images/JDBC_conn.jpg)
+{% qnimg JDBC_conn.jpg %}
 2. 每个线程使用数据库连接后不销毁，每个请求从连接池中【租借】连接
 3. 数据库服务器端处理请求时要分配资源，请求结束后被释放。服务器设置最大并发连接数。抛toomanyConnection异常。应在客户端中实现业务线程排队获取数据库连接。
 
@@ -307,10 +307,10 @@ Connection.rollback(sp);
 
 #### 事务的隔离级别
 - **脏读**：一个事务读取了一个事务未提交的更新
-![zangdu](/images/zangdu.jpg)
+{% qnimg zangdu.jpg %}
 - 不可重复读：同一个事务，两次读取值不一样。
 - 幻读：同一个事务，两次读取行记录数目不一样。插入了新记录
-![geli](/images/geli.jpg)
+{% qnimg geli.jpg %}
 
 | 隔离级别 | 脏读 | 可重复读 | 幻读 |
 | ------ | ------ | ------ |------ |

@@ -178,7 +178,7 @@ Dep.prototype.notify= function () {
 ---
 
 ### 实现v-model 双向数据绑定
-![nodemap](/images/nodemap.jpg)
+{% qnimg nodemap.jpg %}
 ```html
 <div id="app"><p>{{a.a.a}}</p><p>{{b}}</p><input type = "text" v-model="b"></div>
 ```

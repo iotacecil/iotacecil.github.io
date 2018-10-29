@@ -98,7 +98,7 @@ i=len(a);j=len(b);
 CART -> MARCH
 1. c->m t->c +H
 - [] a
-![dynamicedit](/images/editdis.jpg)
+{% qnimg editdis.jpg %}
 只需要d[i]一行
 
 

@@ -289,7 +289,7 @@ native void arraycopy(Object src, //原数组
     int destPos, //起始
     int length); //长度
 ```
-![doubleC](/images/doubleC.jpg)
+{% qnimg doubleC.jpg %}
 ```java
 int p = head;
 int n = elements.length;

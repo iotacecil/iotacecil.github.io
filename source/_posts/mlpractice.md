@@ -6,7 +6,7 @@ categories: [机器学习和数据处理python备忘]
 ---
 ### 动量梯度下降
 vt 是之前梯度的均值，是梯度的积累值
-![SGDmomentum.jpg](/images/SGDmomentum.jpg)
+{% qnimg SGDmomentum.jpg %}
 
 之前积累的梯度方向是momentum step,当前梯度是gradient step,这次的更新梯度是actual step
 1 模型刚开始 两个夹角小，则actual step 是2倍 可以加快训练
@@ -236,7 +236,7 @@ https://blog.csdn.net/github_36922345/article/details/53455401
 1.`userpd.columns=userpd.columns.droplevel([0,1])`
 2.`df.set_index('date', inplace=True)`列 ->索引
 3.`df['index'] = df.index`,`df.reset_index(level=0, inplace=True)`
-![pandasttt.jpg](/images/pandasttt.jpg)
+{% qnimg pandasttt.jpg %}
 4.`user_ca_ph.unstack(level=1)`
 5.去掉不用的复合索引
 `user_ca_ph_cnt.columns=user_ca_ph_cnt.columns.droplevel([0,1])`
@@ -437,9 +437,9 @@ k-近邻算法	线性回归　
 1. 时间序列关键点：极大值，极小值or拐点 用关键点代替原始时间序列。
 2. 合并关键点序列时间下标 得到等长序列
 3. Lance距离 无量纲。欧式距离缺点L:有量纲，变差大的变量在距离中贡献大。
-![lance](/images/lance.jpg)
+{% qnimg lance.jpg %}
 4. FCM算法 每条时间序列属于各个类的程度。
-![fcm](/images/FCM.jpg)
+{% qnimg FCM.jpg %}
 
 ARIMA自回归综合移动平均
 Auto-Regressive Integrated Moving Averages. 

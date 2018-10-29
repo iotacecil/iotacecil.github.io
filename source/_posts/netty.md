@@ -36,7 +36,7 @@ http://www.html5plus.org/doc/zh_cn/webview.html
 
 ### 同步和异步 数据访问的机制 数据处理完毕后会通知线程
 
-![IOs.jpg](/images/IOs.jpg)
+{% qnimg IOs.jpg %}
 
 ### 同步阻塞BIO
 一个线程一个连接，用线程池 伪异步io
@@ -57,7 +57,7 @@ Reactor线程模型
 2. 多线程模型，一组NIO县城处理IO操作，reactor线程池
 3. 主从线程模型，两个线程池，一组用于接收请求，一组用于处理IO
 
-![handler.jpg](/images/handler.jpg)
+{% qnimg handler.jpg %}
 
 ### HTTP服务器
 主从模型
@@ -176,7 +176,7 @@ io流->缓冲区->java堆
 netty NIO直接开辟新的堆内存 从io流直接到堆
 
 ### 实现一个简单的协议
-![protocolUtil.jpg](/images/protocolUtil.jpg)
+{% qnimg protocolUtil.jpg %}
 1.客户端request请求协议
 ```java
 public class Request {
@@ -415,7 +415,7 @@ Person zhangsan = (Person)xStream.fromXML(personXML);
 ```
 
 ### 基于tcp的服务调用
-![tcprpc.jpg](/images/tcprpc.jpg)
+{% qnimg tcprpc.jpg %}
 
 服务接口
 ```java
@@ -490,7 +490,7 @@ public class SayHelloServiceImpl implements SayHelloService {
 报错初始化堆空间不够`-Xmx3550m`
 
 ### 基于HTTP的RPC
-![httprpc.jpg](/images/httprpc.jpg)
+{% qnimg httprpc.jpg %}
 servlet-api.jar
 jackson-all-1.7.6.jar
 httpcore4.2.4.jar
@@ -533,10 +533,10 @@ public class ServiceConsumer extends HttpServlet{
 延迟一般非常短，但再短也还是存在。最后，如果分组到达的速度超过了路由器的
 处理能力，那么分组就要在入站缓冲区排队。数据在缓冲区排队等待的时间，当然
 就是排队延迟。
-![bufferbloat.jpg](/images/bufferbloat.jpg)
+{% qnimg bufferbloat.jpg %}
 
 ### 光纤RTT 应用必须在几百  ms 之内响应。
-![RTT](/images/RTT.jpg)
+{% qnimg RTT.jpg %}
 > 在软件交互中，哪怕 100~ 200 ms 左右的延迟，我们中的大多数人就会感觉到“拖拉”；如果超过了 300  ms 的
 门槛，那就会说“反应迟钝”；而要是延迟达到 1000  ms（1s）这个界限，很多用户
 就会在等待响应的时候分神，有人会想入非非，有人恨不得忙点别的什么事儿。
@@ -548,9 +548,9 @@ public class ServiceConsumer extends HttpServlet{
 量可达 171  Gbit/s，而一条光纤的总带宽能够达到 70  Tbit/s 
 
 ### TCP fast open TFO
-![TFO.jpg](/images/TFO.jpg)
+{% qnimg TFO.jpg %}
 每个 ACK 分组都会携带相应的最新 接收窗口大小rwnd 值，以便两端动态调整数据流速，使之适应发送端和接收端的容量及处理能力。
-![scalling.jpg](/images/scalling.jpg)
+{% qnimg scalling.jpg %}
 
 ### RARP
 无盘工作站，没有存储，无法记录自己的IP地址，用物理地址向服务器查询自身IP地址。
@@ -561,10 +561,10 @@ public class ServiceConsumer extends HttpServlet{
 ### 子网掩码
 https://blog.csdn.net/yinshitaoyuan/article/details/51782330
 
-![zwym](/images/zwym.jpg)
-![zwhf](/images/zwhf.jpg)
+{% qnimg zwym.jpg %}
+{% qnimg zwhf.jpg %}
 得到子网的网络地址
-![wldz](/images/wldz.jpg)
+{% qnimg wldz.jpg %}
 
 每个子网络能容纳500台主机，它的子网掩码是多少？
 500->111110100 一共9位
@@ -685,7 +685,7 @@ netty支持单线程、多线程、主从reactor模型。
 ### 创建2个线程组
 多个线程 线程内串行化 避免线程竞争 无锁
 
-![tcp](/images/backlog.jpg)
+{% qnimg backlog.jpg %}
 
 1. 操作系统维护TCP 的SYN队列 将网络请求插入队列，返回SYN/ACK 两次握手 半链接（SYN_RCVD) （主reactor）
 2. 第三次握手，收到ACK请求，操作系统将SYN队列中的请求转移到ACCEPT队列（阻塞队列）全链接(ESTABLISHED) （子reacotr）

@@ -4,6 +4,8 @@ date: 2018-03-03 10:08:24
 tags: markdown
 ategory: [博客相关操作]
 ---
+将 markdown 的图片标签全部换成七牛云的大括号
+正则`!\[.*\]\(\/images\/(.*)\)` 替换成`{% qnimg $1 %}`
 [网页字体颜色](http://www.w3school.com.cn/tags/html_ref_colornames.asp)
 浅红色文字：<font color="#FF98AA">浅红色文字：</font><br /> 
 {% cq %} blah blah blah {% endcq %}

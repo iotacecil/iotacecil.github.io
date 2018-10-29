@@ -50,7 +50,7 @@ I/O thread 9 state: wait Windows aio (write thread)
 文件系统最小单位 块 4k
 InnoDB最小单元 页 16k
 指针大小在6字节
-![innodb16k.jpg](/images/innodb16k.jpg)
+{% qnimg innodb16k.jpg %}
 都是16的整数倍
 ```sql
 mysql> show variables like 'innodb_page_size';

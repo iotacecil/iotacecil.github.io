@@ -45,14 +45,14 @@ n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。
 
 
 ### 分配问题及应用
-![fenpei.jpg](/images/fenpei.jpg)
+{% qnimg fenpei.jpg %}
 
 
 ### 硬币相关问题
 http://www.raychase.net/3144
 正正反 甲赢 正反反 乙赢 Penney's game
 
-![penneygame.jpg](/images/penneygame.jpg)
+{% qnimg penneygame.jpg %}
 > 使用长度为3字节的序列，玩家B相对玩家A有优势。这是因为这个游戏是一个非传递博弈，所以无论如何选定第一个序列，总会有一个序列有更大的获胜概率。
 
 
@@ -107,12 +107,12 @@ B 赢概率是`1/2*1/2 = 1/4`
 ```
 
 理解二项式定理(a+b)^n
-![abbinary.jpg](/images/abbinary.jpg)
+{% qnimg abbinary.jpg %}
 通项是a^k b^(n-k) 前面的系数表示 n个数的可重排列，a有k个，b有n-k个
 
 不仅是二项式 
 通项是a1^(r1) a2^(r2) at^(rt)
-![nbinary.jpg](/images/nbinary.jpg)
+{% qnimg nbinary.jpg %}
 (x1+x2+…+xm)^n 展开式的项数等于C(n+m-1,n).
 
 > 有6个洞 编号1-9个球，求球入洞的方案数

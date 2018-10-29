@@ -8,15 +8,15 @@ categories: [算法备忘]
 每个节点对应区间排好序的结果 O(nlogn)建立树
 
 ### 连通分量
-![connect.jpg](/images/connect.jpg)
+{% qnimg connect.jpg %}
 无向图的连通分量可以用并查集（集合）来做
 并查集：[12,3,4,5]->[6,2,3,4,5]位置存放的是根节点
-![unionfind.jpg](/images/unionfind.jpg)
+{% qnimg unionfind.jpg %}
 有向图的连通分量Kosaraju 算法4p380
-![kosaraju.jpg](/images/kosaraju.jpg)
+{% qnimg kosaraju.jpg %}
 1.将图的边反向,dfs得到逆后序
 2.按逆后序列dfs原图 cnt++
-![kosaraju2.jpg](/images/kosaraju2.jpg)
+{% qnimg kosaraju2.jpg %}
 
 [tarjan](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm)
 
@@ -56,7 +56,7 @@ private void dfs(char[][] grid,int x,int y){
 {% endfold %}
 并查集模板
 find O(1)判断是否在同一个集合中（同一个parent)
-![unionfind2.jpg](/images/unionfind2.jpg)
+{% qnimg unionfind2.jpg %}
 1.找到一个‘1’
 2.用并查集把相邻的‘1’都union起来，本来8个‘1’，每次合并两个不同分量的就cnt--
 22% 8ms
@@ -178,7 +178,7 @@ public int[] findRedundantConnectionUF(int[][] edges) {
 
 ### 208 Trie树 前缀树
 实现String`insert` `search` `startsWith`
-![trieTree.jpg](/images/trieTree.jpg)
+{% qnimg trieTree.jpg %}
 插入和查找的time都是O(len(s))
 ```java
 class TrieNode{
@@ -251,7 +251,7 @@ https://www.jianshu.com/p/bb2e6b355b31
 定义：
 1.叶节点是输入
 2.每个内部节点是为不同问题设计的，叶节点的组合（和/最大值/最小值）
-![segmentTree.jpg](/images/segmentTree.jpg)
+{% qnimg segmentTree.jpg %}
 查找范围内的最小值/和 只需要Log(n)
 
 数组实现
@@ -287,7 +287,7 @@ class NumArray {
 1的父节点=001+001=010
 2的父节点=010+010=100==4
 4的父节点=100+100 = 1000==8
-![BITFT.jpg](/images/BITFT.jpg)
+{% qnimg BITFT.jpg %}
 ***
 最低位：lowbit(5) = 101&((010+1)==011)=001
 5的父节点=101+001=110==6
@@ -302,8 +302,8 @@ void update(int i,int val){
     }
 }
 ```
-![BITFT2.jpg](/images/BITFT2.jpg)
-![BIT](/images/BIT.jpg)
+{% qnimg BITFT2.jpg %}
+{% qnimg BIT.jpg %}
 2.sum树 前7个元素的和=7+11+10
 ```java
 int query(int i){
@@ -334,7 +334,7 @@ int rangeSum(int i,int j){
 
 ###  区间和查询305+修改307
 **n个元素线段树的初始化时间复杂度和空间复杂度都是O(n)**
-![sparsetable.jpg](/images/sparsetable.jpg)
+{% qnimg sparsetable.jpg %}
 *Spare Table 预处理时空复杂度都是O(nlogn) 但是二分查询i只需要O(loglogn)*
 因为节点数是n+n/2+n/4+...=2n
 1.线段树用模板 59% 80ms
@@ -413,7 +413,7 @@ public int sumRange(int i, int j) {
 https://leetcode.com/problems/range-sum-query-mutable/solution/
 
 #### sqrt(n)复杂度拆分成sqrt份和 8% 308ms
-![sqrtrm.jpg](/images/sqrtrm.jpg)
+{% qnimg sqrtrm.jpg %}
 ```java
 private int[] b;
 private int len;
@@ -591,13 +591,13 @@ query(root, 2, 3), return 3
 query(root, 0, 2), return 4
 
 求和线段树
-![segmentquery.jpg](/images/segmentquery.jpg)
+{% qnimg segmentquery.jpg %}
 1.区间完全匹配的，return value
 2.区间完全不匹配的，return 0
 3.部分匹配超出查询区间的 递归查询左右子树
 查`[3:4]` 遇到`[3:5]`,继续查`[3:4]`,`[5,5]`完全超出
 
-![segmentminquery.jpg](/images/segmentminquery.jpg)
+{% qnimg segmentminquery.jpg %}
 90%
 ```java
 public int query(lt439.SegmentTreeNode root, int start, int end) {

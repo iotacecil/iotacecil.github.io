@@ -5,9 +5,9 @@ tags:
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 # 集合框架
-![java_collections](/images/java_collections.jpg)
-![collection](/images/collection.jpg)
-![collection2](/images/collection2.jpg)
+{% qnimg java_collections.jpg %}
+{% qnimg collection.jpg %}
+{% qnimg collection2.jpg %}
 1. 三大接口：`Iterator`,`Collection`,`Map`
 2. 工具类：`Collections` `Arrays`
 
@@ -205,7 +205,7 @@ class StudentAndCourse{
         if (list instanceof `RandomAccess` ||`list.size()` < ROTATE_THRESHOLD)
         [leetcode的算法3](https://leetcode.com/problems/rotate-array/solution/)
     {% fold %}
-    ![rotate](/images/rotate.jpg)
+    {% qnimg rotate.jpg %}
     直接放在正确的位置上
     理解：把0位放到正确位置（distance)后，将这个位置继续当作0位，继续移动distance步，直到i回到0位
     ```java

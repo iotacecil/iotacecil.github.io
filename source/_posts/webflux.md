@@ -159,7 +159,7 @@ Function<Integer,Dog> dog2 = Dog::new;
 ```
 
 ### 四大核心函数式接口
-![lambdainterface](/images/lambdainterface.jpg)
+{% qnimg lambdainterface.jpg %}
 1. `Consumer` 消费者 接收一个值消费掉`list.forEach` 接收T返回void
 ```java
 Consumer<String> consumer = s-> System.out.println(s);

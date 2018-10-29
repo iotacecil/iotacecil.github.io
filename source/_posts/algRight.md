@@ -58,7 +58,7 @@ public static double mintime(int n,int m,int[][] graph,int a,int b,int[] hourse)
 ### LCS 最长公共子序列 长度
 > "abcd" "becd" ->3("bcd")
 
-![dplcs.jpg](/images/dplcs.jpg)
+{% qnimg dplcs.jpg %}
 ```java
 public int lcs(String s,String t){
     int n = s.length();
@@ -108,7 +108,7 @@ for i in range(2,n)
 > 同01背包：
 >  n = 4; A = {2,1,3,2}; V = {3,2,4,2}; W = 5;
 
-![dpbag01value.jpg](/images/dpbag01value.jpg)
+{% qnimg dpbag01value.jpg %}
 `dp[i+1][j]`表示取前i个物品，获得value j的最小W
 ```java
 int maxV = 100;
@@ -181,7 +181,7 @@ private int zoknap(int W,int[] val,int[] wt,int n){
 ```
 dp 复杂度和记忆化递归一样
 逆向
-![dpbag.jpg](/images/dpbag.jpg)
+{% qnimg dpbag.jpg %}
 n-1->0
 ```java
 public int bagdp(int n,int W,int[][]wv){
@@ -198,7 +198,7 @@ public int bagdp(int n,int W,int[][]wv){
 }
 ```
 正向dp
-![bagdfront.jpg](/images/bagdfront.jpg)
+{% qnimg bagdfront.jpg %}
 
 ```java
 public int frontDp(int n,int W,int[][] wv){
@@ -216,7 +216,7 @@ public int frontDp(int n,int W,int[][] wv){
 ```
 
 从前i个物品中选不超过j的状态->前i+1中选不超过j，前i+1不超过`j+w[i]`
-![dpbag3.jpg](/images/dpbag3.jpg)
+{% qnimg dpbag3.jpg %}
 ```java
 public int maxbag(int n,int w,int[][]wv){
     int[][] dp = new int[n+1][w+1];
@@ -429,7 +429,7 @@ public boolean canPartition(int[] nums){
 > n = 3; `[3,4],[4,5],[2,3]`; W = 7;
 > out 10 (0选1个，2选2个)
 
-![dpcompbag.jpg](/images/dpcompbag.jpg)
+{% qnimg dpcompbag.jpg %}
 `dp[i+1][j]`计算k的循环和`dp[i+1][j-w[i]]`计算k-1的循环是重复的
 
 记忆化递归：终止条件，当n==0的时候还要继续削减w
@@ -553,7 +553,7 @@ public boolean canSum(int[] A, int[] V,int K){
     return dp[n][K];
 }
 ```
-![dpmultibag.jpg](/images/dpmultibag.jpg)
+{% qnimg dpmultibag.jpg %}
 ```java
 public boolean canSumOnk(int[] A,int[] V,int K){
     //dp[i+1][j] 用前i种数求和j 第i种数最多剩多少个 不能得到j 为-1
@@ -663,12 +663,12 @@ public int coinDp2(int amount, int[] coins){
 
 
 ### 装配线调度问题Assembly Line
-![assemblyline1.jpg](/images/assemblyline1.jpg)
+{% qnimg assemblyline1.jpg %}
 两条装配线分别有相同的n个station
 每个任务必须依次通过这n种station
 在j号station从装配线1/2换到装配线2/1有额外cost T1(j),T2(j)
 每条线用时要加上开始用时10/12和结束用时18/7
-![assem.jpg](/images/assem.jpg)
+{% qnimg assem.jpg %}
 ```java
 public class assembleLine {
     public int assembly(int[][]line,int[][]t,int[]e,int[]x){
@@ -770,8 +770,8 @@ public int superEggDrop(int K, int N) {
 
 ---
 drop(9,3)9层楼3个鸡蛋，在6层落下碎了继续[0~5]层drop(5,2),没碎继续[6~9]层drop(3,3)
-![eggdrop.jpg](/images/eggdrop.jpg)
-![eggdrop2.jpg](/images/eggdrop2.jpg)
+{% qnimg eggdrop.jpg %}
+{% qnimg eggdrop2.jpg %}
 超时原因 复杂度O(K\*N^2)
 {% fold %}
 超时递归
@@ -790,7 +790,7 @@ int eggDrop(int k,int n){
 }
 ```
 超时dp
-![eggdropdp.jpg](/images/eggdropdp.jpg)
+{% qnimg eggdropdp.jpg %}
 初始化第一行（鸡蛋）和前两列（楼）
 ```java
 public int superEggDrop(int K, int N) {
@@ -825,7 +825,7 @@ public int superEggDrop(int K, int N) {
 #### 加速优化1
 [leetcode上的优化和数学方法](https://leetcode.com/articles/super-egg-drop/)
 分析递推方程，dp(k-1,x-1)随着x增加递增。dp(k,N-x)随着x增加递减。
-![eggdp.jpg](/images/eggdp.jpg)
+{% qnimg eggdp.jpg %}
 二分查找到t1=t2的位置是max(t1,t2)最小的位置
 复杂度降到复杂度O(K\*NLogN)
 
@@ -863,10 +863,10 @@ public int superEggDrop(int K,int N){
 方法1：找全是0的行，O(n^2)
 方法2： 如果A认识B，则A肯定不是名人 O(N)；A不认识B，则A可能是名人，B肯定不是名人
 A,B不认识，重新入栈A
-![celebrity.jpg](/images/celebrity.jpg)
+{% qnimg celebrity.jpg %}
 A,C认识，入栈C
-![celebrity2.jpg](/images/celebrity2.jpg)
-![celebrity3.jpg](/images/celebrity3.jpg)
+{% qnimg celebrity2.jpg %}
+{% qnimg celebrity3.jpg %}
 方法3：双指针
 ```java
 int findCele(int[][]Matrix){
