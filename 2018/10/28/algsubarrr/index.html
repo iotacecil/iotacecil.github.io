@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="930 01数组中有多少个和=target的子数组 输入：A = [1,0,1,0,1], S = 2输出：4   输入：A = [0,0,0,0,0], S = 0输出：15  5+4+3+2+1  思路： 计算前缀和[1,1,2,2,3]并放入map计数,{1:2,2:2,3:1}步骤[0,0,0,0,0] 初始化map{0:1},扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新">
+<meta name="description" content="!594 最长max min相差1的子序列(不是连续的数组)数组 hashmap 计数模板12 !!!152 最大子数组乘积 保留当前值之前的最大积和最小积 输入: [-2,0,-1]输出: 0解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。  负数的最小积有潜力变成最大积当前max是 nums[i]*max,nums[i]*min,nums[i] 三者的最大者当前min是 nums[">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前缀和 滑动窗口 子数组问题">
-<meta property="og:url" content="http://iotaa.xyz/2018/10/28/algsubarrr/index.html">
+<meta property="og:title" content="前缀和 滑动窗口 子数组、序列问题">
+<meta property="og:url" content="http://blog.iotaa.xyz/2018/10/28/algsubarrr/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="930 01数组中有多少个和=target的子数组 输入：A = [1,0,1,0,1], S = 2输出：4   输入：A = [0,0,0,0,0], S = 0输出：15  5+4+3+2+1  思路： 计算前缀和[1,1,2,2,3]并放入map计数,{1:2,2:2,3:1}步骤[0,0,0,0,0] 初始化map{0:1},扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新">
+<meta property="og:description" content="!594 最长max min相差1的子序列(不是连续的数组)数组 hashmap 计数模板12 !!!152 最大子数组乘积 保留当前值之前的最大积和最小积 输入: [-2,0,-1]输出: 0解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。  负数的最小积有潜力变成最大积当前max是 nums[i]*max,nums[i]*min,nums[i] 三者的最大者当前min是 nums[">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-28T15:28:42.701Z">
+<meta property="og:updated_time" content="2018-10-29T14:26:01.198Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="前缀和 滑动窗口 子数组问题">
-<meta name="twitter:description" content="930 01数组中有多少个和=target的子数组 输入：A = [1,0,1,0,1], S = 2输出：4   输入：A = [0,0,0,0,0], S = 0输出：15  5+4+3+2+1  思路： 计算前缀和[1,1,2,2,3]并放入map计数,{1:2,2:2,3:1}步骤[0,0,0,0,0] 初始化map{0:1},扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新">
+<meta name="twitter:title" content="前缀和 滑动窗口 子数组、序列问题">
+<meta name="twitter:description" content="!594 最长max min相差1的子序列(不是连续的数组)数组 hashmap 计数模板12 !!!152 最大子数组乘积 保留当前值之前的最大积和最小积 输入: [-2,0,-1]输出: 0解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。  负数的最小积有潜力变成最大积当前max是 nums[i]*max,nums[i]*min,nums[i] 三者的最大者当前min是 nums[">
 
 
 
@@ -121,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://iotaa.xyz/2018/10/28/algsubarrr/"/>
+  <link rel="canonical" href="http://blog.iotaa.xyz/2018/10/28/algsubarrr/"/>
 
 
 
 
 
-  <title>前缀和 滑动窗口 子数组问题 | Learn & practice</title>
+  <title>前缀和 滑动窗口 子数组、序列问题 | Learn & practice</title>
   
 
 
@@ -291,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://iotaa.xyz/2018/10/28/algsubarrr/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/10/28/algsubarrr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">前缀和 滑动窗口 子数组问题</h1>
+          <h1 class="post-title" itemprop="name headline">前缀和 滑动窗口 子数组、序列问题</h1>
         
 
         <div class="post-meta">
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-28T23:28:42+08:00">
-                2018-10-28
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T22:26:01+08:00">
+                2018-10-29
               </time>
             
           </span>
@@ -393,7 +393,12 @@
       
 
       
-        <h3 id="930-01数组中有多少个和-target的子数组"><a href="#930-01数组中有多少个和-target的子数组" class="headerlink" title="930 01数组中有多少个和=target的子数组"></a>930 01数组中有多少个和=target的子数组</h3><blockquote>
+        <h3 id="594-最长max-min相差1的子序列-不是连续的数组"><a href="#594-最长max-min相差1的子序列-不是连续的数组" class="headerlink" title="!594 最长max min相差1的子序列(不是连续的数组)"></a>!594 最长max min相差1的子序列(不是连续的数组)</h3><p>数组 hashmap 计数模板<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h3 id="152-最大子数组乘积-保留当前值之前的最大积和最小积"><a href="#152-最大子数组乘积-保留当前值之前的最大积和最小积" class="headerlink" title="!!!152 最大子数组乘积 保留当前值之前的最大积和最小积"></a>!!!152 最大子数组乘积 保留当前值之前的最大积和最小积</h3><blockquote>
+<p>输入: [-2,0,-1]<br>输出: 0<br>解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。</p>
+</blockquote>
+<p>负数的最小积有潜力变成最大积<br>当前max是 <code>nums[i]*max</code>,<code>nums[i]*min</code>,<code>nums[i]</code> 三者的最大者<br>当前min是 <code>nums[i]*max</code>,<code>nums[i]*min</code>,<code>nums[i]</code> 三者最小值<br>更新全局max<br>4ms 11.99%<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = nums[<span class="number">0</span>],min = nums[<span class="number">0</span>],max = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> nextmax = nums[i]*max;</span><br><span class="line">        <span class="keyword">int</span> nextmin = nums[i]*min;</span><br><span class="line">        max = Math.max(Math.max(nextmax,nextmin),nums[i]);</span><br><span class="line">        min = Math.min(Math.min(nextmax,nextmin),nums[i]);</span><br><span class="line">        sum = Math.max(max,sum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="930-01数组中有多少个和-target的子数组"><a href="#930-01数组中有多少个和-target的子数组" class="headerlink" title="930 01数组中有多少个和=target的子数组"></a>930 01数组中有多少个和=target的子数组</h3><blockquote>
 <p>输入：A = [1,0,1,0,1], S = 2<br>输出：4</p>
 </blockquote>
 <blockquote>
@@ -412,10 +417,6 @@
 <p>s = 0,e = 2 窗口[1,2,3]<br>p = 6 子数组个数3: <code>[[1],[2][1,2],  [3],[2,3],[1,2,3]]</code> (+3)</p>
 <p>每次子数组的增长个数就是窗口大小<br>如果 p &gt;k 则s向右<br>s = 1,e = 3 窗口[2,3,4]<br>p = 24<br>s = 2,e = 3窗口[3,4]<br>p = 12 子数组个数<code>[[3],  [4][3,4]]]</code> (+2)</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSubarrayProductLessThanK</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> p = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> cnt =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> s = <span class="number">0</span>, e = <span class="number">0</span>; e &lt; nums.length;e++)&#123;</span><br><span class="line">        p *= nums[e];</span><br><span class="line">        <span class="keyword">while</span>(p&gt;=k &amp;&amp; s&lt;e)&#123;</span><br><span class="line">            p /= nums[s++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p &lt; k)&#123;</span><br><span class="line">            cnt += (e - s + <span class="number">1</span>);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="152-最大子数组乘积-保留当前值之前的最大积和最小积"><a href="#152-最大子数组乘积-保留当前值之前的最大积和最小积" class="headerlink" title="152 最大子数组乘积 保留当前值之前的最大积和最小积"></a>152 最大子数组乘积 保留当前值之前的最大积和最小积</h3><blockquote>
-<p>输入: [-2,0,-1]<br>输出: 0<br>解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。</p>
-</blockquote>
-<p>负数的最小积有潜力变成最大积<br>4ms 11.99%<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum = nums[<span class="number">0</span>],min = nums[<span class="number">0</span>],max = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> nextmax = nums[i]*max;</span><br><span class="line">        <span class="keyword">int</span> nextmin = nums[i]*min;</span><br><span class="line">        max = Math.max(Math.max(nextmax,nextmin),nums[i]);</span><br><span class="line">        min = Math.min(Math.min(nextmax,nextmin),nums[i]);</span><br><span class="line">        sum = Math.max(max,sum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>### </p>
 
       
@@ -587,7 +588,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#930-01数组中有多少个和-target的子数组"><span class="nav-number">1.</span> <span class="nav-text">930 01数组中有多少个和=target的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#560-数组中有多少个和为k的子数组"><span class="nav-number">2.</span> <span class="nav-text">560 数组中有多少个和为k的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#713-乘积-lt-k的子数组的个数"><span class="nav-number">3.</span> <span class="nav-text">713 乘积&lt;k的子数组的个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#152-最大子数组乘积-保留当前值之前的最大积和最小积"><span class="nav-number">4.</span> <span class="nav-text">152 最大子数组乘积 保留当前值之前的最大积和最小积</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#594-最长max-min相差1的子序列-不是连续的数组"><span class="nav-number">1.</span> <span class="nav-text">!594 最长max min相差1的子序列(不是连续的数组)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#152-最大子数组乘积-保留当前值之前的最大积和最小积"><span class="nav-number">2.</span> <span class="nav-text">!!!152 最大子数组乘积 保留当前值之前的最大积和最小积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#930-01数组中有多少个和-target的子数组"><span class="nav-number">3.</span> <span class="nav-text">930 01数组中有多少个和=target的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#560-数组中有多少个和为k的子数组"><span class="nav-number">4.</span> <span class="nav-text">560 数组中有多少个和为k的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#713-乘积-lt-k的子数组的个数"><span class="nav-number">5.</span> <span class="nav-text">713 乘积&lt;k的子数组的个数</span></a></li></ol></div>
             
 
           </div>
