@@ -4,6 +4,114 @@ date: 2018-09-09 15:22:54
 tags:
 categories: [算法备忘]
 ---
+### word search
+用全局mark数组58%，改用char修改board98%
+{% fold %}
+```java
+//    boolean[][] marked;
+public boolean exist(char[][] board, String word) {
+    int n  = board.length;
+    int m = board[0].length;
+//        marked = new boolean[n][m];
+    for (int i = 0; i <n ; i++) {
+        for (int j = 0; j <m ; j++) {
+            if(word.charAt(0)!=board[i][j])continue;
+            if(dfs(board,0,i,j,word))return true;
+
+        }
+
+    }
+    return false;
+}
+
+private boolean dfs(char[][] board,int idx,int i,int j,String word){
+    if(i>board.length-1||i<0||j>board[0].length-1||j<0||word.charAt(idx)!=board[i][j])return false;
+
+    if(idx==word.length()-1)return true;
+    char tmp = board[i][j];
+//        marked[i][j] = true;
+board[i][j]='0';
+
+    boolean ans = dfs(board,idx+1,i+1,j,word)||
+            dfs(board,idx+1,i,j+1,word)||dfs(board,idx+1,i-1,j,word)
+            ||dfs(board,idx+1,i,j-1,word);
+//        marked[i][j]=false;
+    board[i][j]=tmp;
+    return ans;
+}
+```
+{% endfold %}
+
+#### Boggle
+{% qnimg boggle.jpg %}
+> ```
+> board =
+> [
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+> Given word = "ABCCED", return true.
+> Given word = "SEE", return true.
+> Given word = "ABCB", return false.
+> ```
+
+
+### 494 在数字中间放正负号使之==target
+递归的2种写法另一种void用全局变量累加
+？？为什么递归中不能写`dfs(idx++)`
+O(2^n)
+```java
+private int dfs(int[] nums,int S,int idx){
+    if(idx == nums.length){
+        if(S==0)return 1;
+        else return 0;
+    }
+    int cnt =dfs(nums, S+nums[pos], pos+1)+dfs(nums, S-nums[pos], pos+1);
+    return cnt;
+}
+```
+53% 
+优化记忆化：用当前的idx和当前的S当key 注意如果用`String key=idx+""+S`有一个case会报错，应该是数字大的时候混淆了。
+sum不会超过1000所以`Integer key = idx*10000+S`就可以通过。
+
+dp??：
+所有可能的target最大值是全部正号sum(a),或者全部负号）dp[2\*sum(a)+1]
+题目sum最大2k，则dp[4001]
+
+### 17 九宫格输入法数字对应的字符串
+```java
+private String[] letters = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+private void help(List<String> rst,int idx,String digits,String cur){
+    if(cur.length()==digits.length()){
+        rst.add(cur);
+        return;
+    }
+    if(digits.charAt(idx)>='2'&&digits.charAt(idx)<='9'){
+        String num2letter = letters[digits.charAt(idx)-'0'];
+        for(int i =0;i<num2letter.length();i++){
+            help(rst,idx+1,digits,cur+num2letter.charAt(i));
+        }   
+    }
+}
+```
+
+### 93 分解Ip地址
+dfs
+```java
+private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
+    if(cnt>4)return;
+    if(cnt==4&&idx==s.length()){
+        rst.add(cur);
+    }
+    for(int i =1;i<4;i++){
+        if(idx+i>s.length())break;
+        String tmp = s.substring(idx,idx+i);
+        if((tmp.startsWith("0")&&tmp.length()>1)||(i==3&&Integer.parseInt(tmp)>=256))continue;
+        dfs(rst,s,idx+i,cur+tmp+(cnt==3?"":"."),cnt+1);
+    }
+}
+```
 ### 784 大小写字母的permutation
 `'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快
 小写和数字都加上这一位继续dfs，大写要

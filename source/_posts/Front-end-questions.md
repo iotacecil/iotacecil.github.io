@@ -4,6 +4,9 @@ date: 2018-03-07 02:20:53
 tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
+！当你在浏览器中输入 google.com 并且按下回车之后发生了什么
+https://github.com/skyline75489/what-happens-when-zh_CN/blob/master/README.rst
+
 ## html元素
 `<base href="/">` 基础路径
 `a[href,target]` 默认target是当前页面（在新窗口打开）

@@ -4,6 +4,21 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+[字符串 长度 缓冲区溢出](http://redisbook.com/preview/sds/different_between_sds_and_c_string.html)
+
+### 字符串 长度O（N）
+> C 字符串并不记录自身的长度信息， 所以为了获取一个 C 字符串的长度， 程序必须遍历整个字符串， 对遇到的每个字符进行计数， 直到遇到代表字符串结尾的空字符为止， 这个操作的复杂度为 O(N) 。
+
+### 字符串缓冲区溢出
+`char *strcat(char *dest, const char *src);`
+> C 字符串不记录自身的长度， 所以 strcat 假定用户在执行这个函数时， 已经为 dest 分配了足够多的内存， 可以容纳 src 字符串中的所有内容， 而一旦这个假定不成立时， 就会产生缓冲区溢出。
+
+假设程序里有两个在**内存**中紧邻着的 C 字符串 s1 和 s2 ， 其中 s1 保存了字符串 "Redis" ， 而 s2 则保存了字符串 "MongoDB"
+
+执行`strcat(s1, " Cluster");` 会把s2覆盖掉
+{% qnimg stringoverflow.jpg %}
+
+
 ### `emplace_back()`和`push_back()`
 emplace_back()更节省空间
 边集`<u,v,cost>`->邻接表

@@ -4,6 +4,22 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### 推荐系统
+1. 全局流行度
+2. 分类模型
+3. 协同过滤
+
+1）同现矩阵：每个格表示同时买了x物品和y物品的次数（是对称矩阵） 找一行里的最大几个做推荐
+2）同现矩阵正规化，去除流行商品的影响 
+Jaccard相似度： 同时买i和j的人数/买i或j的人数
+3）算上历史数据的加权平均 如果用户买过x和y商品，推荐z商品的分数是
+1/2（matrix[x][z]+matrix[y][z]) 可以让最近购买的权重变大。对所有z商品排序，推荐最高的几个。
+4）矩阵分解：从当前稀疏矩阵求L和R向量（回归问题） 填补缺失值
+R描述物品 的所属 category 相关度向量
+L用户对category的score向量
+R x L 将所有R与一个用户L相乘取其中最大的几个推荐
+
+https://software.intel.com/zh-cn/ai-academy/students/kits
 ### 动量梯度下降
 vt 是之前梯度的均值，是梯度的积累值
 {% qnimg SGDmomentum.jpg %}

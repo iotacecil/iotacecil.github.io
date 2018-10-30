@@ -174,6 +174,213 @@ Npublic ListNode reverseList(ListNode head) {
 转成栈浪费空间并且代码复杂
 
 ### 二叉树
+---
+### 236 最低的二叉树公共祖先LCA
+方法1：找出两条从root开始的路径，返回路径不开始不相同的前一个点
+27%空间两个array
+{% fold %}
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    List<TreeNode> pathp = new ArrayList<>();
+    List<TreeNode> pathq = new ArrayList<>();
+   // if(!findPath(root,p,pathp)||!findPath(root,p,pathp))return 
+    findPath(root,p,pathp);
+    findPath(root,q,pathq);
+    int i;
+    for(i = 0;i<Math.min(pathp.size(),pathq.size());i++){
+        if(pathp.get(i).val!=pathq.get(i).val)
+            break;
+    }
+    return pathp.get(i-1);
+}
+private boolean findPath(TreeNode root,TreeNode node,List<TreeNode> path){
+    if(root == null)return false;
+    path.add(root);
+    if(root.val == node.val)return true;
+    if(root.left!=null&&findPath(root.left,node,path))return true;
+    if(root.right!=null&&findPath(root.right,node,path))return true;
+    path.remove(path.size()-1);
+    return false;
+}
+```
+{% endfold %}
+方法二：只遍历一次树，这种方法如果其中一个q不在树中，会返会p,应该返回null
+13%
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if(root==null)return null;
+    if(root.val==p.val||root.val==q.val)return root;
+    TreeNode left = lowestCommonAncestor(root.left,p,q);
+    TreeNode right = lowestCommonAncestor(root.right,p,q);
+    if(left!=null&&right!=null)return root;
+    return left!=null?left:right;
+}
+```
+这道题两个点都保证存在，可以absent的
+
+终止条件`root==null|root==q||root=p`
+1. 在左/右子树找p|q，两边都能找到一个值（因为值不重复） 则返回当前root
+2. 如果左边没找到p|q，右边找到了p|q，最低的祖先就是找到的p|q，(因为保证p|q一定在树中)
+
+
+### 235 BST的LCA
+8.9%
+```java
+TreeNode lcaBST(TreeNode root,TreeNode p,TreeNode q){
+    if(root== null)return null;
+    if(root.val>p.val&&root.val>q.val)return lcaBST(root.left,p ,q );
+    if(root.val<p.val&&root.val<q.val)return lcaBST(root.right,p ,q );
+    return root;
+}
+```
+优化1： 13% 9ms
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if(root.val > p.val && root.val > q.val){
+        return lowestCommonAncestor(root.left, p, q);
+    }else if(root.val < p.val && root.val < q.val){
+        return lowestCommonAncestor(root.right, p, q);
+    }else{
+        return root;
+    }
+}
+```
+
+
+### 222 完全二叉树的节点数
+[83%](https://blog.csdn.net/jmspan/article/details/51056085)
+
+
+### 110 判断树平衡 在计算高度时同时判断平衡只需要O(n)
+```java
+private boolean balance =true;
+public boolean isbalance(TreeNode root){
+    height(root);
+    return balance;
+}
+private int height(TreeNode root){
+    if(root==null) return 0;
+    int left = height(root.left);
+    int right = height(root.right);
+    if(Math.abs(left-right)>1)balance = false;
+    return Math.max(left,right)+1;
+}
+```
+###  lc538 O(1)空间 线索二叉树 Morris Inorder(中序) Tree Traversal
+#### Morris Inorder(中序) Tree Traversal
+**先把每个中缀的前缀（左子树最右）指向中缀，遍历完后把这些链接都删除还原为 null**
+1. 找root的前趋：root 的中序前趋是左子树(第一个左结点)cur的最右标记为pre， pre.right = root
+```java
+//找前趋
+Node cur = root;
+if(cur.left!=null){
+    Node pre = current.left;
+    while(pre.right!=null&&pre.right!=cur){
+        pre=pre.right;
+    }
+}
+```
+```java
+//创建链接：第一次到达这个最右的结点，cur的左边其实还有结点
+if(pre.right==null){
+  pre.right = cur;
+  cur=cur.left;
+}
+```
+2. 找root.left的前趋：cur向左（相当于新的root（1）的状态），找到cur的最右，标识成pre.right = cur
+3. 当cur向左是null则找到中序遍历的第一个输出，cur向右
+```java
+if(cur.left==null){
+    sout(current.val);
+    current=current.right;}
+```
+4. 当cur的left==null并且右链接已经建立到上一层。cur移动到上一层，找到前趋pre就是右链接的cur.left。 把这个右链接(pre.right)删除，输出（中），然后继续向右（上）并删除这种从前趋right过来的线。
+```java
+//pre.right=cur
+else if(pre.right!=null){
+  pre.right = null;
+  sout(cur.val);
+  cur=cur.right;
+}
+```
+
+### 671 ？？根的值<=子树的值的二叉树中的第二小元素
+```
+      2
+  2       5
+4   3(out)
+```
+1.dfs在set中加入所有节点，遍历set
+```java
+int min = root.val;
+int ans = Long.MAX_VALUE;
+for(int v:set){
+    if(min<v&&v<ans)ans = v;
+}
+return ans<Long.MAX_VALUE?(int) ans:-1;
+```
+2.在dfs的时候只有node.val == root.val的时候表示这个分支需要继续遍历
+```java
+min = root.val;
+int ans = Long.MAX_VALUE;
+private dfs(TreeNode rote){
+    if(root!=null){
+        if(min<root.val&&root.val<ans)
+            ans = root.val;
+    }else if(min == root.val){
+        dfs(root.left);
+        dfs(root.right);
+    }
+}
+```
+
+### 145 后序遍历二叉树 
+1.函数式编程 不用help函数（可变数组），复制数组
+
+{% fold %}
+```java
+public List<Integer> post(TreeNode root){
+    List<Integer> list = new ArrayList<>();
+    if(root==null)return list;
+    List<Integer> left = post(root.left);
+    List<Integer> right = post(root.right);
+    list.addAll(left);
+    list.addAll(right);
+    list.add(root.val);
+    return list;
+}
+```
+{% endfold %}
+
+原理：
+```python
+rev_post(root):
+    # 全部反过来刚好是后序遍历
+    print(root->val);
+    rev_post(root->right)
+    rev_post(root->left)
+reverse(rev_post(root));
+```
+
+方法1：
+```java
+public List<Integer> postorderTraversal(TreeNode root) {
+    LinkedList<Integer> list = new LinkedList<>();
+     if(root==null)return list;
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    stack.push(root);
+    while(!stack.isEmpty()){
+        root = stack.pop();
+        list.addFirst(root.val);
+        if(root.left!=null)stack.push(root.left);
+        //下一次poll出的是右子树
+        if(root.right!=null)stack.push(root.right);
+    }
+    // 如果使用ArrayList 1%
+    //Collections.reverse(list);
+    return list;
+}
+```
 
 ### lt66二叉树前序遍历 分治方法
 分治方法，返回值 适合多线程

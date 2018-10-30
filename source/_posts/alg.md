@@ -4,8 +4,6 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
 ---
-
-{% qnimg test.jpg %}
 刷题顺序
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html
@@ -26,6 +24,8 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
+
+### 698 将数组分成sum相等的k份
 
 ### lc 325 lt 919
 
@@ -814,6 +814,11 @@ public int maxSubArray(int[] nums){
 greedy:
 
 
+### 198 不能偷相邻房屋 最大利润
+>输入: [1,2,3,1]
+输出: 4
+解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 
 
 
 ### 122 可以买卖多次 买股票的利润
@@ -1171,6 +1176,28 @@ public String largestNumber(int[] nums) {
 }
 ```
 
+---
+### 402 去掉数字串中k个数字留下最小的数字
+Input: num = "1432219", k = 3
+Output: "1219"
+找最小数字：从高位，越高位越小的数。
+算法：从高位开始，如果去掉这个数用后面一位换上来，143->13变小了，则换掉
+用栈，下一个位置比栈顶小，则把栈顶换掉。
+注意点：如果下一个数字比栈顶小，k>0表示可以替换多少个，向前(栈里)找最多k个应该应该去掉的数，把top放在下一个覆盖的位置。
+```java
+num="1234567890";
+k=9;
+for(int i =0;i<len;i++){
+    // len=10,k=9  但是0比所有前9个都小，则
+while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
+    top--;
+    k--;   
+    }
+    //0覆盖掉1 之后截取stack中len-k=1长度并且去掉0
+    stack[top++]=num.charAt(i);
+}
+```
+
 
 ### 500 判断字符串是不是在键盘的同一行
 流： 正则很慢 流也很慢
@@ -1354,6 +1381,22 @@ private int minReversal(String s){
     return (mn/2+n%2);
 }
 ```
+
+### 22 ??卡特兰数括号
+left括号数量小于n，right括号数量必须小于left不然(()))肯定不合理
+```java
+if(left>right)return;
+if(left==0&&right==0){rst.add(s);return;}
+if(left>0)help(rst,s+"(",left-1,right);
+if(right<0)help(rst,s+")",left,right+1);
+```
+
+### 32 ?括号字符串中合法的括号对
+方法1. stack:栈底放-1，当栈空&&读到是`)`将`)`的index当栈底。每次读到`)`弹栈，并更新`i-peek()`，因为peek为没消掉的`(`的前一个位置
+方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
+  从右向左扫描，同理更新max，当左括号>右括号重置0.
+
+---
 
 
 ### 28字符串indexOf匹配暴力 Substring Search
@@ -1766,39 +1809,7 @@ time window on vertex OP
 0~3的tspdp解法
 {% qnimg tspdp.jpg %}
 
-### 17 九宫格输入法数字对应的字符串
-```java
-private String[] letters = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
-private void help(List<String> rst,int idx,String digits,String cur){
-    if(cur.length()==digits.length()){
-        rst.add(cur);
-        return;
-    }
-    if(digits.charAt(idx)>='2'&&digits.charAt(idx)<='9'){
-        String num2letter = letters[digits.charAt(idx)-'0'];
-        for(int i =0;i<num2letter.length();i++){
-            help(rst,idx+1,digits,cur+num2letter.charAt(i));
-        }   
-    }
-}
-```
 
-### 93 分解Ip地址
-dfs
-```java
-private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
-    if(cnt>4)return;
-    if(cnt==4&&idx==s.length()){
-        rst.add(cur);
-    }
-    for(int i =1;i<4;i++){
-        if(idx+i>s.length())break;
-        String tmp = s.substring(idx,idx+i);
-        if((tmp.startsWith("0")&&tmp.length()>1)||(i==3&&Integer.parseInt(tmp)>=256))continue;
-        dfs(rst,s,idx+i,cur+tmp+(cnt==3?"":"."),cnt+1);
-    }
-}
-```
 
 ### ip2cidr
 找末尾1的位置`x & -x`
@@ -1814,34 +1825,6 @@ private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
 
 
 
-
-
-### 435 去掉最少区间使区间不重叠
-```java
-Arrays.sort(intervals,(a,b)->{a.end!=b.end?(a.end-b.end):(a.start-b.start)});
-```
-性能很慢44ms
-换 提升到2ms 打败了100%
-```java
-Arrays.sort(intervals,new Comparator<Inteval>(){
-    public int compare(Interval a,Interval b){
-        if(a.start==b.start)return a.end-b.end;
-        return a.start-b.start;
-    }
-})
-```
-
-`算法：按start排序，如果重叠了，end更新成min(end1,end2)`
-
-
-
-### 697 保留数组中最高频出现数字频数的最短数组长度
-> Input: [1,2,2,3,1,4,2]
-> 最小连续子数组，使得子数组的度与原数组的度相同。返回子数组的长度
-> Output: 6 最高频是2->【2,2,3,1,4,2】
-用3个hashmap扫一遍记录每个数字出现的cnt,left,right
-最后cnt最大的right-left+1
-合并成一个hashmap<Integer,int[3]>
 
 
 ### 819 找出句子中出现频率最高没被ban掉的词
@@ -2235,55 +2218,9 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 
 
 
-#### 前序ABCDEFGH->中序不可能是
 
-### 145 后序遍历二叉树 
-1.函数式编程 不用help函数（可变数组），复制数组
 
-{% fold %}
-```java
-public List<Integer> post(TreeNode root){
-    List<Integer> list = new ArrayList<>();
-    if(root==null)return list;
-    List<Integer> left = post(root.left);
-    List<Integer> right = post(root.right);
-    list.addAll(left);
-    list.addAll(right);
-    list.add(root.val);
-    return list;
-}
-```
-{% endfold %}
 
-原理：
-```python
-rev_post(root):
-    # 全部反过来刚好是后序遍历
-    print(root->val);
-    rev_post(root->right)
-    rev_post(root->left)
-reverse(rev_post(root));
-```
-
-方法1：
-```java
-public List<Integer> postorderTraversal(TreeNode root) {
-    LinkedList<Integer> list = new LinkedList<>();
-     if(root==null)return list;
-    Deque<TreeNode> stack = new ArrayDeque<>();
-    stack.push(root);
-    while(!stack.isEmpty()){
-        root = stack.pop();
-        list.addFirst(root.val);
-        if(root.left!=null)stack.push(root.left);
-        //下一次poll出的是右子树
-        if(root.right!=null)stack.push(root.right);
-    }
-    // 如果使用ArrayList 1%
-    //Collections.reverse(list);
-    return list;
-}
-```
 
 ### 753 输出能包含所有密码可能性的最短串
 > Input: n = 2, k = 2
@@ -2384,9 +2321,6 @@ int main(){
 
 
 
-### 279完美平方数？？？
-
-### 198
 
 ### 164 桶排序找区间最大值
 
@@ -2499,27 +2433,7 @@ private boolean dfs2d(int[][] graph,int[] group,int idx,int g){
 
 
 
-### 494 在数字中间放正负号使之==target
-递归的2种写法另一种void用全局变量累加
-？？为什么递归中不能写`dfs(idx++)`
-O(2^n)
-```java
-private int dfs(int[] nums,int S,int idx){
-    if(idx == nums.length){
-        if(S==0)return 1;
-        else return 0;
-    }
-    int cnt =dfs(nums, S+nums[pos], pos+1)+dfs(nums, S-nums[pos], pos+1);
-    return cnt;
-}
-```
-53% 
-优化记忆化：用当前的idx和当前的S当key 注意如果用`String key=idx+""+S`有一个case会报错，应该是数字大的时候混淆了。
-sum不会超过1000所以`Integer key = idx*10000+S`就可以通过。
 
-dp??：
-所有可能的target最大值是全部正号sum(a),或者全部负号）dp[2\*sum(a)+1]
-题目sum最大2k，则dp[4001]
 
 
 ### 图的度
@@ -2760,37 +2674,6 @@ dp[i][j]=Math.max(1,Math.min(dp[i+1][j],dp[i][j+1])-dungeon[i][j]);
 
 
 
-### 671 根的值<=子树的值的二叉树中的第二小元素
-```
-      2
-  2       5
-4   3(out)
-```
-1.dfs在set中加入所有节点，遍历set
-```java
-int min = root.val;
-int ans = Long.MAX_VALUE;
-for(int v:set){
-    if(min<v&&v<ans)ans = v;
-}
-return ans<Long.MAX_VALUE?(int) ans:-1;
-```
-2.在dfs的时候只有node.val == root.val的时候表示这个分支需要继续遍历
-```java
-min = root.val;
-int ans = Long.MAX_VALUE;
-private dfs(TreeNode rote){
-    if(root!=null){
-        if(min<root.val&&root.val<ans)
-            ans = root.val;
-    }else if(min == root.val){
-        dfs(root.left);
-        dfs(root.right);
-    }
-}
-```
-
-
 
 
 ### 伪多项式时间
@@ -2894,455 +2777,13 @@ if(obs[i][j]==1)continue;//dp[i][j]=0//res[j]=0;
 grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
 
 ---
-### 32 ?括号字符串中合法的括号对
-方法1. stack:栈底放-1，当栈空&&读到是`)`将`)`的index当栈底。每次读到`)`弹栈，并更新`i-peek()`，因为peek为没消掉的`(`的前一个位置
-方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
-  从右向左扫描，同理更新max，当左括号>右括号重置0.
-
----
-<<<<<<< HEAD
 
 
----
-
-### 背包9讲:
-#### 01背包
-N个物品，背包容量V
-F[i,v]前i件物品放入容量v的背包可获得的最大价值。
-如果放第i件，转化为前i-i件放入容量为v-Ci的背包中，最大价值是F[i-1,v-Ci]+Wi
-$F[i,v]=max{F[i-1,v],F[i-1,v-C_i]+W_i}$
-递归
-```java
-private int zoknap(int W,int[] val,int[] wt,int n){
-    if(n == 0||W == 0){
-        return 0;
-    }
-    //这个物品超重了 跳过
-    if(wt[n-1]>W)return zoknap(W, val, wt,n-1 );
-    else return Math.max(val[n-1]+zoknap(W-wt[n-1],val ,wt ,n-1 ),zoknap(W,val ,wt ,n-1) );
-}
-```
-dp
-
-```java
-private int zoknapdp(int W,int[] wt,int[] val,int n){
-int[][] dp = new int[n+1][W+1];
-for (int i = 0; i <=n ; i++) {
-    for (int w = 0; w <=W ; w++) {
-        if(i ==0||w==0)dp[i][w] = 0;
-        else if(wt[i-1]<=w)
-            dp[i][w]=Math.max(val[i-1]+dp[i-1][w-wt[i-1]],dp[i-1][w]);
-        else
-            dp[i][w] = dp[i-1][w];
-    }
-}
-return dp[n][W];
-}
-```
-
-#### 输出路径
-```java
-w = W;
-for (i = n;  i>0&&res>0 ; i--) {
-    if(res ==dp[i-1][w])continue;
-    else{
-        System.out.println(wt[i-1]+" ");
-        res-= val[i-1];
-        w-= wt[i-1];
-    }
-}
-```
-
-```c
-for i<- 1 to N
-  for v<- Ci to V
-    F[i,v]<-max{F[i-1,v],F[i-1,v-Ci]+Wi}
-```
-时间/空间复杂度O（VN)
-1.简化空间->O(V) 递减顺序计算F[v]，保证计算F[v]时F[v-Ci] 保存的是F[i-1,v-Ci] 
-```c
-for i<- 1 to N
-  for v <- V to Ci
-    F[v] <- max(F[v],F[v-Ci]+Wi)
-```
-第二个for可以优化
-for v<- V to max(V-$\sum_{i}^{N}W_i$,Ci)
-```java
-private int zoknapdp1d(int W,int[] wt,int[] val,int n){
-    int[] dp = new int [W+1];
-    for (int i = 0; i <n ; i++) {
-        for (int j = W; j >=wt[i] ; j--) {
-            dp[j] = Math.max(dp[j],dp[j-wt[i]]+val[i]);
-        }
-    }
-    return dp[W];
-}
-```
-
-#### ?taotao要吃鸡
-> h为0代表没有装备背包
-> n个物品，容量=m+h
-> 接下来n行，第i个物品的物品的重量Wi和威力值Vi。0<=Wi,Vi<=100. 
-> 当装备背包之后，如果可携带重量没有满，就可以拿一个任意重的东西。
-> 3 3 3 
-> 2 3 
-> 3 2 
-> 2 3 
-> 0 
-> 输出 
-> 8 拿了1，2物品val=5,weight=5<6，可以拿3
-
-1.方法1
-m+h容量背包，在m+h没装满时可以任意取一个超过重量的
-最外层遍历：最后一个超额的物品i.
-  计算m+h-1背包容量的最大val
-```cpp
-int ans = -1;
-for(int i =0;i<n;i++){
-    ans = max(ans,v[i]+slove(m+h-1),i);
-}
-int slove(int W,int index){
-    for(int i =0;i<n;i++){
-        if(i==index)continue;
-        for(int j = W;j>=w[i];j--){
-            dp[j] = max(dp[j],dp[j-w[i]]+v[i]);
-        }
-    }
-}
-```
-2.方法2直接dp
-    1.按重量排序
-```java
-for(int i =0;i<n;i++){
-    for(int j = m+h;j>=goods[i].w;j--){
-        dp[j] = Math.max(dp[j],dp[j-goods[i].w]+goods[i].v);
-    }
-    if(h>0){
-        //强行装的位置,不能填dp[0]，0表示装满了
-        for(int j = Math.min(m+h,goods[i].w-1)j>0;j--){
-            dp[j] = Math.max(dp[j],goods[i].v);
-        }
-    }
-    out.println(dp[m+h]);
-}
-```
 
 
-### 01背包 bb解法
-{% fold %}
-```java
-class Item{
-    double weight;
-    int value;}
-class Node{
-    // level  --> Level of node in decision tree (or index
-    //             in arr[]
-    // profit --> Profit of nodes on path from root to this
-    //            node (including this node)
-    // bound ---> Upper bound of maximum profit in subtree
-    //            of this node/
-    int level,profit,bound;
-    double weight;}
-public class BBpack {
-    //用分数背包问题的贪心法求接下去可能的最大值
-    public static  int bound(Node u,int n,int W,List<Item> arr){
-        if(u.weight>=W)return 0;
-        int profit_bound = u.profit;
-        int j = u.level+1;
-        int totweight = (int)u.weight;
-        while(j<n&&(totweight+arr.get(j).weight<=W)){
-            totweight += arr.get(j).weight;
-            profit_bound += arr.get(j).value;
-            j++;
-        }
-        if(j<n){
-            profit_bound+=(W-totweight)*arr.get(j).value/arr.get(j).weight;
-        }
-        return profit_bound;
-    }
-    public static int knapsack(int W,List<Item>arr,int n){
-        //1. 排序
-//        Comparator<Item> comparing = Comparator.comparing(item -> item.value / item.weight);
-//        arr.sort(comparing.reversed());
-        arr.sort(Comparator.comparing((Item item )-> item.value / item.weight).reversed());
-        //2.队列
-        System.out.println(arr);
-        Deque<Node> que = new ArrayDeque<>();
-        // dummy node
-        Node u = new Node(-1,0,0);
-        Node v = new Node(-1,0,0);
-        que.add(u);
-        int MaxProfit = 0;
-        while(!que.isEmpty()){
-            u = que.poll();
 
-            if(u.level == -1){
-                v.level =0;
-            }
-            if(u.level == n-1)continue;
-            v.level = u.level+1;
-            //装
-            v.weight = u.weight+arr.get(v.level).weight;
-            v.profit = u.profit+arr.get(v.level).value;
-            //如果不超重 更新当前最大收益
-            if(v.weight<=W&&v.profit>MaxProfit)
-                MaxProfit = v.profit;
-            v.bound = bound(v,n ,W ,arr );
-
-            //不装
-            if(v.bound>MaxProfit)
-                que.add(new Node(v));
-            v.weight = u.weight;
-            v.profit = u.profit;
-            v.bound = bound(v,n,W ,arr);
-            //不装也有可能
-            if(v.bound>MaxProfit){
-                que.add(new Node(v));
-            }
-        }
-        return MaxProfit;
-      }
-public static void main(String[] args) {
-        List<Item> arr= new ArrayList<Item>(5);
-        arr.add(new Item(2,40));
-        arr.add(new Item(3.14,50));
-        arr.add(new Item(1.98,100));
-        arr.add(new Item(5,95));
-        arr.add(new Item(3,30));
-        int W = 10;
-        System.out.println(knapsack(W, arr, arr.size()));
-    }
-}
-```
-{% endfold %}
-
----
-#### ！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。
-```java
-public boolean canPartition(int[] nums){
-    int sum = 0;
-    for(int n : nums){
-        sum+=n;
-    }
-    if(sum%2!=0)return false;
-    int[] dp = new int[sum+1];
-    dp[0] = 1;
-    for(int n : nums){
-        for(int v = sum;v>=0;v--){
-            if(dp[v]==1)dp[v+n]=1;
-        }
-        if(dp[sum/2]==1)return true;
-    }
-    return false;
-}
-```
-
-2.初始化F
-- 恰好装满背包，F[0]=0 其余-∞
-  没有装任务物品时，只有容量为0的背包表示装满，其它容量为非法解。
-
-- 不用装满，F全部为0
-  任何容量的背包，什么都不装，价值F都为0也是合法解。
----
-
-#### 完全背包 每个物品可用无限次
-简化1.如果Ci<=Cj,Wi>=Wj 则j可以不考虑。
-简化2.重量大于V的去掉。用计数排序算出v相同的物品中价值最高的那个O(V+N)
-转化成01背包：将第i种物品拆成重量$C_i2^k$价值为$W_i2^k$ 件数可写成若干个$2^k$件的组合
-用递增的循环O(VN)：
- 01背包V<-V to Ci 因为保证选i件物品时F[i-1,v-Ci]是绝对没有选第i件物品的情况
- 而完全背包的子结果F[i,v-Ci]是**加选一件第i种物品**
-```c
-for i<- 1 to N
-  for v<- Ci to V
-    F[v]<- max(F[v],F[v-Ci]+Wi)
-```
-- 两个状态转移方程
-$F[i,v] = max {F[i-1,v-kC_i]+kW_i|0<=kC_i<=v} $
-$F[i,v] = max(F[i-1,v],F[i,v-C_i]+W_i)$
-
-#### exactly装满背包需要的最少/最大物品数量
-> Input : W = 100
-       val[]  = {1, 30}
-       wt[] = {1, 50}
-Output : 100 放100个{1，1}是物品数最多的方案
-
-```java
-private int multicnt(int W,int n,int[] val,int[] wt){
-    int dp[] = new int[W+1];
-    for (int i = 0; i <=W ; i++) {
-        for (int j = 0; j < n ; j++) {
-            if(wt[j]<=i){
-                dp[i] = Math.max(dp[i],dp[i-wt[j]]+val[j] );
-            }
-        }
-    }
-    return dp[W];
-}
-```
-
-
----
-#### 多重背包 第i种物品最多Mi件可用
-$F[i,v] = max{F[i-1,v-kC_i]+kW_i|0<=k<=Mi}$
-
-=======
->>>>>>> refs/remotes/origin/hexo-edit
 ### 本福特定律
 以1为首位的数字的概率为30%
-
-
-
-<<<<<<< HEAD
-### 719
-
-### 正确二分查找的写法 lc35
-1.查找范围是 [0,len-1]
-[0]：l=0,r=1-1，while(l==r)的时候应该继续
-```java
-int l = 0,r=n-1;
-while(l<=r){
-    int mid = l+(r-l)/2;
-    if(arr[mid]==target){
-        return mid;
-    }
-    else if(arr[mid]<target){
-        l=mid+1;//
-    }
-    else{
-        r=mid-1;
-    }
-}
-//如果l>r
-return -1;
-```
-2.[0,len) 保持len取不到 
-[0]:l=0,r=1,l++,while(l==r)的时候应该结束
-好处：len就是长度[a,a+len)，[a,b)+[b,c)=[a,c),[a,a)是空的
-```java
-int l = 0,r = n;
-while(l<r){
-    int mid = l+(r-l)/2;
-    if(arr[mid]==target)return mid;
-    if(arr[mid]>target){
-        //在左边，边界为取不到的数
-        r=mid;//[l,mid)
-    }else{
-        //左闭又开
-        l = mid+1;//[mid+1,r)
-    }
-}
-//如果l==r [1,1)表示空的
-return -1;
-```
-
-3.(-1,len] from jpbook
-```java
-public int searchInsert(int[] a, int k) {
-    int l = -1,h = a.length;
-    while (h-l>1){
-        int mid = (l+h)/2;
-        if(a[mid]>=k){
-            h = mid;
-        }else{
-            l = mid;
-        }
-    }
-    //l+1=h
-    return h;
-}
-```
-
-#### poj1064 n条线段切割成等长k段 的最大长度
-> in: 4 11 8.02 7.43 4.57 5.39
-> out:2.00 (4+3+2+2=11)
-
-{% fold %}
-```java
-/**
- * 长度为L的绳子 最多可以切 floor(L/x)段
- * @param x
- * @return
- */
-public static boolean C(double x){
-    int num = 0;
-    for (int i = 0; i <n ; i++) {
-        num+=(int)(lines[i]/x);
-    }
-    return num>=k;
-}
-public static double howlong(double[] lines,int k){
-    //All cables are at least 1 meter and at most 100 kilometers in length.
-    double l = 0,h = 100001;
-    // while ((h-l)>1e-6){
-     //可以达到10^-30的精度
-    for (int i = 0; i <100 ; i++) {
-        double mid = (l+h)/2;
-        if(C(mid))l = mid;
-        else h = mid;
-    }
-    return Math.floor(h*100)/100;
-}
-```
-{% endfold %}
-
-#### poj2456 最大化最小值 最大化最近两头牛的距离
-> in:5 3 [1,2,8,4,9]
-> out: 3 在1，4，9 分别放入这三头牛
-
-```java
-private static boolean C(int d){
-    int last = 0;
-    for (int i = 1; i <m ; i++) {
-        int crt = last + 1;
-        //找到间隔>d的房间
-        while (crt < n && room[crt] - room[last] < d) {
-            crt++;
-        }
-        if (crt == n) return false;
-        last = crt;
-    }
-    return true;
-}
-public static int maxmin(int[] room,int m){
-    Arrays.sort(room);
-    // positions x1,...,xN (0 <= xi <= 1,000,000,000).
-    int l = 0,h = 1000000+1;
-  while (h-l>1){
-      int mid = (h+l)/2;
-      if(C(mid))l = mid;
-      else h = mid;
-  }
-  //为什么这里是low
-  return l;
-}
-```
-
-### 153 Roataed Sorted Array的最小值 二分logN
-```java
-public int findMin(int[] nums) {
-      if(nums.length==1)return nums[0];
-    return findMin(nums,0,nums.length-1);
-}
-private int findMin(int[] nums,int low,int hi){
-    //只有1个或者2个
-    if(low+1>=hi)return Math.min(nums[low],nums[hi]);
-    if(nums[low]<nums[hi])return nums[low];
-    int mid = low+(hi-low)/2;
-    //无缝
-    return Math.min(findMin(nums,low,mid-1),findMin(nums,mid ,hi));
-}
-```
-#### 154 有重复元素Roataed Sorted Array 
-> Input: [2,2,2,0,1]
-> Output: 0
-
-去掉第二个递归条件。
-
-
----
-=======
->>>>>>> refs/remotes/origin/hexo-edit
 
 
 
@@ -3450,158 +2891,12 @@ $=>x=12$
 树的前/中/后序遍历本质都是DFS
 
 
----
-### 402 去掉数字串中k个数字留下最小的数字
-Input: num = "1432219", k = 3
-Output: "1219"
-找最小数字：从高位，越高位越小的数。
-算法：从高位开始，如果去掉这个数用后面一位换上来，143->13变小了，则换掉
-用栈，下一个位置比栈顶小，则把栈顶换掉。
-注意点：如果下一个数字比栈顶小，k>0表示可以替换多少个，向前(栈里)找最多k个应该应该去掉的数，把top放在下一个覆盖的位置。
-```java
-num="1234567890";
-k=9;
-for(int i =0;i<len;i++){
-    // len=10,k=9  但是0比所有前9个都小，则
-while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
-    top--;
-    k--;   
-    }
-    //0覆盖掉1 之后截取stack中len-k=1长度并且去掉0
-    stack[top++]=num.charAt(i);
-}
-```
-
----
-### 236 最低的二叉树公共祖先LCA
-方法1：找出两条从root开始的路径，返回路径不开始不相同的前一个点
-27%空间两个array
-{% fold %}
-```java
-public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    List<TreeNode> pathp = new ArrayList<>();
-    List<TreeNode> pathq = new ArrayList<>();
-   // if(!findPath(root,p,pathp)||!findPath(root,p,pathp))return 
-    findPath(root,p,pathp);
-    findPath(root,q,pathq);
-    int i;
-    for(i = 0;i<Math.min(pathp.size(),pathq.size());i++){
-        if(pathp.get(i).val!=pathq.get(i).val)
-            break;
-    }
-    return pathp.get(i-1);
-}
-private boolean findPath(TreeNode root,TreeNode node,List<TreeNode> path){
-    if(root == null)return false;
-    path.add(root);
-    if(root.val == node.val)return true;
-    if(root.left!=null&&findPath(root.left,node,path))return true;
-    if(root.right!=null&&findPath(root.right,node,path))return true;
-    path.remove(path.size()-1);
-    return false;
-}
-```
-{% endfold %}
-方法二：只遍历一次树，这种方法如果其中一个q不在树中，会返会p,应该返回null
-13%
-```java
-public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    if(root==null)return null;
-    if(root.val==p.val||root.val==q.val)return root;
-    TreeNode left = lowestCommonAncestor(root.left,p,q);
-    TreeNode right = lowestCommonAncestor(root.right,p,q);
-    if(left!=null&&right!=null)return root;
-    return left!=null?left:right;
-}
-```
-这道题两个点都保证存在，可以absent的
-
-终止条件`root==null|root==q||root=p`
-1. 在左/右子树找p|q，两边都能找到一个值（因为值不重复） 则返回当前root
-2. 如果左边没找到p|q，右边找到了p|q，最低的祖先就是找到的p|q，(因为保证p|q一定在树中)
 
 
-### 235 BST的LCA
-8.9%
-```java
-TreeNode lcaBST(TreeNode root,TreeNode p,TreeNode q){
-    if(root== null)return null;
-    if(root.val>p.val&&root.val>q.val)return lcaBST(root.left,p ,q );
-    if(root.val<p.val&&root.val<q.val)return lcaBST(root.right,p ,q );
-    return root;
-}
-```
-优化1： 13% 9ms
-```java
-public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    if(root.val > p.val && root.val > q.val){
-        return lowestCommonAncestor(root.left, p, q);
-    }else if(root.val < p.val && root.val < q.val){
-        return lowestCommonAncestor(root.right, p, q);
-    }else{
-        return root;
-    }
-}
-```
-
-
-### 222 完全二叉树的节点数
-[83%](https://blog.csdn.net/jmspan/article/details/51056085)
 
 
 ### DLS可以达到BFS一样空间的DFS
 
-### word search
-用全局mark数组58%，改用char修改board98%
-{% fold %}
-```java
-//    boolean[][] marked;
-public boolean exist(char[][] board, String word) {
-    int n  = board.length;
-    int m = board[0].length;
-//        marked = new boolean[n][m];
-    for (int i = 0; i <n ; i++) {
-        for (int j = 0; j <m ; j++) {
-            if(word.charAt(0)!=board[i][j])continue;
-            if(dfs(board,0,i,j,word))return true;
-
-        }
-
-    }
-    return false;
-}
-
-private boolean dfs(char[][] board,int idx,int i,int j,String word){
-    if(i>board.length-1||i<0||j>board[0].length-1||j<0||word.charAt(idx)!=board[i][j])return false;
-
-    if(idx==word.length()-1)return true;
-    char tmp = board[i][j];
-//        marked[i][j] = true;
-board[i][j]='0';
-
-    boolean ans = dfs(board,idx+1,i+1,j,word)||
-            dfs(board,idx+1,i,j+1,word)||dfs(board,idx+1,i-1,j,word)
-            ||dfs(board,idx+1,i,j-1,word);
-//        marked[i][j]=false;
-    board[i][j]=tmp;
-    return ans;
-}
-```
-{% endfold %}
-
-#### Boggle
-{% qnimg boggle.jpg %}
-> ```
-> board =
-> [
-  ['A','B','C','E'],
-  ['S','F','C','S'],
-  ['A','D','E','E']
-]
-> Given word = "ABCCED", return true.
-> Given word = "SEE", return true.
-> Given word = "ABCB", return false.
-> ```
 
 
 
@@ -3860,14 +3155,7 @@ public List<Integer> topKFrequent(int[] nums, int k) {
 
 ### 242 Anagram 相同字母的单词
 
-### 22 卡特兰数括号
-left括号数量小于n，right括号数量必须小于left不然(()))肯定不合理
-```java
-if(left>right)return;
-if(left==0&&right==0){rst.add(s);return;}
-if(left>0)help(rst,s+"(",left-1,right);
-if(right<0)help(rst,s+")",left,right+1);
-```
+
 
 ### 344 reverse String 
 转成char数组/位运算做法77%比stringbuilder好
@@ -3960,60 +3248,7 @@ public static int highestOneBit(int i) {
 
 
 
-###  lc538 O(1)空间 线索二叉树 Morris Inorder(中序) Tree Traversal
-#### Morris Inorder(中序) Tree Traversal
-**先把每个中缀的前缀（左子树最右）指向中缀，遍历完后把这些链接都删除还原为 null**
-1. 找root的前趋：root 的中序前趋是左子树(第一个左结点)cur的最右标记为pre， pre.right = root
-```java
-//找前趋
-Node cur = root;
-if(cur.left!=null){
-    Node pre = current.left;
-    while(pre.right!=null&&pre.right!=cur){
-        pre=pre.right;
-    }
-}
-```
-```java
-//创建链接：第一次到达这个最右的结点，cur的左边其实还有结点
-if(pre.right==null){
-  pre.right = cur;
-  cur=cur.left;
-}
-```
-2. 找root.left的前趋：cur向左（相当于新的root（1）的状态），找到cur的最右，标识成pre.right = cur
-3. 当cur向左是null则找到中序遍历的第一个输出，cur向右
-```java
-if(cur.left==null){
-    sout(current.val);
-    current=current.right;}
-```
-4. 当cur的left==null并且右链接已经建立到上一层。cur移动到上一层，找到前趋pre就是右链接的cur.left。 把这个右链接(pre.right)删除，输出（中），然后继续向右（上）并删除这种从前趋right过来的线。
-```java
-//pre.right=cur
-else if(pre.right!=null){
-  pre.right = null;
-  sout(cur.val);
-  cur=cur.right;
-}
-```
 
-
-### 110 判断树平衡 在计算高度时同时判断平衡只需要O(n)
-```java
-private boolean balance =true;
-public boolean isbalance(TreeNode root){
-    height(root);
-    return balance;
-}
-private int height(TreeNode root){
-    if(root==null) return 0;
-    int left = height(root.left);
-    int right = height(root.right);
-    if(Math.abs(left-right)>1)balance = false;
-    return Math.max(left,right)+1;
-}
-```
 
 ### 2-3树 
 10亿结点的2-3树高度在19-30之间。：math.log(1000000000,3)~math.log(1000000000,2)
@@ -4026,23 +3261,7 @@ private int height(TreeNode root){
 
 插入：总是用红链接将新结点和父节点链接（如果变成了右红链接需要旋转）
 
-### 581 需要排序的最小子串，整个串都被排序了 递增
-{% qnimg lc581.jpg %}
-40大于35，只排序到右边遍历过来第一个`n<n-1`是不够的
-要找到[30~31]中的min和max
-```java
-public static int fid(int[]A){
-    //1,3,2,2,2
-    int n = A.length, beg = -1, end = -2, min = A[n-1], max = A[0];
-    for (int i=1;i<n;i++) {
-        max = Math.max(max, A[i]);//从前往后，找到最大值max=3
-        min = Math.min(min, A[n-1-i]);//从后往前找到最小值min=2
-        if (A[i] < max) end = i; //a=2<3 end = 2->3->4 直到找到a[i]>max
-        if (A[n-1-i] > min) beg = n-1-i;//begin =1 直到找到a[i]<min
-    }
-    return end - beg + 1;
-    }
-```
+
 
 ### 136 Single Number
 异或 0^12=12,12^12=0
@@ -4076,7 +3295,7 @@ class Solution{
 
 
 
-## 160 链表相交于哪一点
+### 160 链表相交于哪一点
 ```
 A:          a1 → a2
                    ↘

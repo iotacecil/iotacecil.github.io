@@ -6,7 +6,7 @@ categories: [算法备忘]
 ---
 有权图的最短路径要用DijKstra
 
-### bfs dfs的并行
+### 279完美平方数
 
 ### 127 word Ladder bfs最短单词转换路径
 //todo双向bfs

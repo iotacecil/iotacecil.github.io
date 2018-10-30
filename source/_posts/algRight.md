@@ -1,12 +1,12 @@
 ---
-title: 经典问题 巧妙的算法和DP方程
+title: 背包、鸡蛋、找钱、名人、车票
 date: 2018-09-04 11:12:53
 tags:
 categories: [算法备忘]
 ---
 
 ### poj2686 车票约束的最短路径
-![traveldp.jpg](images/traveldp.jpg)
+{% qnimg traveldp.jpg %}
 ```java
 /**
  *
@@ -396,25 +396,7 @@ public static void main(String[] args) {
 
 
 ---
-#### ！！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。
-```java
-public boolean canPartition(int[] nums){
-    int sum = 0;
-    for(int n : nums){
-        sum+=n;
-    }
-    if(sum%2!=0)return false;
-    int[] dp = new int[sum+1];
-    dp[0] = 1;
-    for(int n : nums){
-        for(int v = sum;v>=0;v--){
-            if(dp[v]==1)dp[v+n]=1;
-        }
-        if(dp[sum/2]==1)return true;
-    }
-    return false;
-}
-```
+
 
 2.初始化F
 - 恰好装满背包，F[0]=0 其余-∞

@@ -3,6 +3,24 @@ title: algInterval
 date: 2018-10-11 13:37:14
 tags:
 ---
+
+### 435 去掉最少区间使区间不重叠
+```java
+Arrays.sort(intervals,(a,b)->{a.end!=b.end?(a.end-b.end):(a.start-b.start)});
+```
+性能很慢44ms
+换 提升到2ms 打败了100%
+```java
+Arrays.sort(intervals,new Comparator<Inteval>(){
+    public int compare(Interval a,Interval b){
+        if(a.start==b.start)return a.end-b.end;
+        return a.start-b.start;
+    }
+})
+```
+`算法：按start排序，如果重叠了，end更新成min(end1,end2)`
+
+
 ### 539 时间diff
 >Input: ["23:59","00:00"]
 Output: 1
