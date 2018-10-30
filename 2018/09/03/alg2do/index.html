@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/lc545.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/anagram.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/anagram2.jpg">
-<meta property="og:updated_time" content="2018-10-28T16:30:41.768Z">
+<meta property="og:updated_time" content="2018-10-30T01:53:29.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ToDoAgain">
 <meta name="twitter:description" content="138https://leetcode.com/problems/copy-list-with-random-pointer/solution/ poj3617构造最小字典序12345678910111213141516171819202122232425262728293031/** * 不断取Min(S头/尾)放到T末尾 * 相等：判断下一个字符希望先用到小的字符 * 可以的操作： * 从S">
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-30T09:53:29+08:00">
+                2018-10-30
               </time>
             
           </span>
@@ -500,7 +500,10 @@
 <p>慢指针会在环与head指针相遇<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findDuplicate</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line"><span class="comment">// use only constant, O(1) extra space</span></span><br><span class="line">    <span class="keyword">int</span> slow = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> fast = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        slow = nums[slow];</span><br><span class="line">        fast =  nums[nums[fast]];</span><br><span class="line">    &#125;<span class="keyword">while</span>(slow != fast);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> head = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">while</span>(head!=slow)&#123;</span><br><span class="line">        head= nums[head];</span><br><span class="line">        slow = nums[slow];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="142-环起始于哪个node"><a href="#142-环起始于哪个node" class="headerlink" title="142 环起始于哪个node"></a>142 环起始于哪个node</h3><img src="http://phb9yml10.bkt.clouddn.com/static/images/loops.jpg">
 <p>1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6-&gt;7-&gt;3 meet:6<br>a: 从head到环<br>b：快指针走了两次的环内距离(慢指针到环起点的距离)<br>c: 慢指针没走完的环内距离<br>已知快指针走的距离是slow的两倍<br>慢=a+b  快=a+2b+c<br>则a=c<br>从len(head - 环起点) == 慢指针没走完的环距离<br><strong>head与慢指针能在环起点相遇。</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(slow==fast)&#123;</span><br><span class="line">    <span class="keyword">while</span>(head!=slow)&#123;</span><br><span class="line">        head=head.next;</span><br><span class="line">        slow=slow.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="719"><a href="#719" class="headerlink" title="719"></a>719</h3><h3 id="410-分割数组使Max-Sum-subarr-最小"><a href="#410-分割数组使Max-Sum-subarr-最小" class="headerlink" title="410 分割数组使Max(Sum(subarr))最小"></a>410 分割数组使Max(Sum(subarr))最小</h3><blockquote>
+<h3 id="719"><a href="#719" class="headerlink" title="719"></a>719</h3><blockquote>
+<p>输入：<br>nums = [1,3,1]<br>k = 1<br>输出：0<br>解释：<br>所有数对如下：<br>(1,3) -&gt; 2<br>(1,1) -&gt; 0<br>(3,1) -&gt; 2<br>因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。</p>
+</blockquote>
+<h3 id="410-分割数组使Max-Sum-subarr-最小"><a href="#410-分割数组使Max-Sum-subarr-最小" class="headerlink" title="410 分割数组使Max(Sum(subarr))最小"></a>410 分割数组使Max(Sum(subarr))最小</h3><blockquote>
 <p>Input:<br>nums = [7,2,5,10,8]<br>m = 2<br>Output:<br>18  [7,2,5] and [10,8],</p>
 </blockquote>
 <p>复杂度： mn^2 有mn个子问题 每个子问题找最佳k</p>
@@ -581,8 +584,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/04/algRight/" rel="prev" title="经典问题 巧妙的算法和DP方程">
-                经典问题 巧妙的算法和DP方程 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/04/algRight/" rel="prev" title="背包、鸡蛋、找钱、名人、车票">
+                背包、鸡蛋、找钱、名人、车票 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

@@ -80,17 +80,17 @@
 
 
 
-<meta name="description" content="539 时间diff Input: [“23:59”,”00:00”]Output: 1  最快的方法：9ms 1.排序 变成一个循环链表 interval max overLaphttps://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/1234567891011121314151617 arr[]">
+<meta name="description" content="435 去掉最少区间使区间不重叠1Arrays.sort(intervals,(a,b)-&amp;gt;&amp;#123;a.end!=b.end?(a.end-b.end):(a.start-b.start)&amp;#125;); 性能很慢44ms换 提升到2ms 打败了100%123456Arrays.sort(intervals,new Comparator&amp;lt;Inteval&amp;gt;()&amp;#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="algInterval">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/10/11/algInterval/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="539 时间diff Input: [“23:59”,”00:00”]Output: 1  最快的方法：9ms 1.排序 变成一个循环链表 interval max overLaphttps://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/1234567891011121314151617 arr[]">
+<meta property="og:description" content="435 去掉最少区间使区间不重叠1Arrays.sort(intervals,(a,b)-&amp;gt;&amp;#123;a.end!=b.end?(a.end-b.end):(a.start-b.start)&amp;#125;); 性能很慢44ms换 提升到2ms 打败了100%123456Arrays.sort(intervals,new Comparator&amp;lt;Inteval&amp;gt;()&amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-15T01:41:01.794Z">
+<meta property="og:updated_time" content="2018-10-30T01:32:12.637Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="algInterval">
-<meta name="twitter:description" content="539 时间diff Input: [“23:59”,”00:00”]Output: 1  最快的方法：9ms 1.排序 变成一个循环链表 interval max overLaphttps://www.geeksforgeeks.org/find-the-point-where-maximum-intervals-overlap/1234567891011121314151617 arr[]">
+<meta name="twitter:description" content="435 去掉最少区间使区间不重叠1Arrays.sort(intervals,(a,b)-&amp;gt;&amp;#123;a.end!=b.end?(a.end-b.end):(a.start-b.start)&amp;#125;); 性能很慢44ms换 提升到2ms 打败了100%123456Arrays.sort(intervals,new Comparator&amp;lt;Inteval&amp;gt;()&amp;#123;">
 
 
 
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-15T09:41:01+08:00">
-                2018-10-15
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-30T09:32:12+08:00">
+                2018-10-30
               </time>
             
           </span>
@@ -370,7 +370,10 @@
       
 
       
-        <h3 id="539-时间diff"><a href="#539-时间diff" class="headerlink" title="539 时间diff"></a>539 时间diff</h3><blockquote>
+        <h3 id="435-去掉最少区间使区间不重叠"><a href="#435-去掉最少区间使区间不重叠" class="headerlink" title="435 去掉最少区间使区间不重叠"></a>435 去掉最少区间使区间不重叠</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays.sort(intervals,(a,b)-&gt;&#123;a.end!=b.end?(a.end-b.end):(a.start-b.start)&#125;);</span><br></pre></td></tr></table></figure>
+<p>性能很慢44ms<br>换 提升到2ms 打败了100%<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Arrays.sort(intervals,<span class="keyword">new</span> Comparator&lt;Inteval&gt;()&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Interval a,Interval b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a.start==b.start)<span class="keyword">return</span> a.end-b.end;</span><br><span class="line">        <span class="keyword">return</span> a.start-b.start;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><code>算法：按start排序，如果重叠了，end更新成min(end1,end2)</code></p>
+<h3 id="539-时间diff"><a href="#539-时间diff" class="headerlink" title="539 时间diff"></a>539 时间diff</h3><blockquote>
 <p>Input: [“23:59”,”00:00”]<br>Output: 1</p>
 </blockquote>
 <p>最快的方法：9ms</p>
@@ -581,7 +584,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#539-时间diff"><span class="nav-number">1.</span> <span class="nav-text">539 时间diff</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interval-max-overLap"><span class="nav-number">2.</span> <span class="nav-text">interval max overLap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt391-数飞机，interval最多同时多少个飞机"><span class="nav-number">3.</span> <span class="nav-text">lt391 数飞机，interval最多同时多少个飞机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt920-meeting-room"><span class="nav-number">4.</span> <span class="nav-text">lt920 meeting room</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个人最多可以参加几个会议"><span class="nav-number">5.</span> <span class="nav-text">一个人最多可以参加几个会议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt919-需要几个会议室"><span class="nav-number">6.</span> <span class="nav-text">lt919 !!!需要几个会议室</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#452-重叠线段？？-射破全部气球需要的最少次数"><span class="nav-number">7.</span> <span class="nav-text">452 重叠线段？？ 射破全部气球需要的最少次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt821时间交集-区间交集-扫描线"><span class="nav-number">8.</span> <span class="nav-text">lt821时间交集 区间交集 扫描线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#56-合并区间-扫描线"><span class="nav-number">9.</span> <span class="nav-text">56 合并区间 扫描线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lt156合并区间"><span class="nav-number">9.1.</span> <span class="nav-text">lt156合并区间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#57-插入一个区间并合并"><span class="nav-number">10.</span> <span class="nav-text">57 插入一个区间并合并</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#435-去掉最少区间使区间不重叠"><span class="nav-number">1.</span> <span class="nav-text">435 去掉最少区间使区间不重叠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#539-时间diff"><span class="nav-number">2.</span> <span class="nav-text">539 时间diff</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interval-max-overLap"><span class="nav-number">3.</span> <span class="nav-text">interval max overLap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt391-数飞机，interval最多同时多少个飞机"><span class="nav-number">4.</span> <span class="nav-text">lt391 数飞机，interval最多同时多少个飞机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt920-meeting-room"><span class="nav-number">5.</span> <span class="nav-text">lt920 meeting room</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个人最多可以参加几个会议"><span class="nav-number">6.</span> <span class="nav-text">一个人最多可以参加几个会议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt919-需要几个会议室"><span class="nav-number">7.</span> <span class="nav-text">lt919 !!!需要几个会议室</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#452-重叠线段？？-射破全部气球需要的最少次数"><span class="nav-number">8.</span> <span class="nav-text">452 重叠线段？？ 射破全部气球需要的最少次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt821时间交集-区间交集-扫描线"><span class="nav-number">9.</span> <span class="nav-text">lt821时间交集 区间交集 扫描线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#56-合并区间-扫描线"><span class="nav-number">10.</span> <span class="nav-text">56 合并区间 扫描线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lt156合并区间"><span class="nav-number">10.1.</span> <span class="nav-text">lt156合并区间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#57-插入一个区间并合并"><span class="nav-number">11.</span> <span class="nav-text">57 插入一个区间并合并</span></a></li></ol></div>
             
 
           </div>
