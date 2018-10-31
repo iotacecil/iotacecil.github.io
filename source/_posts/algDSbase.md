@@ -174,7 +174,7 @@ Npublic ListNode reverseList(ListNode head) {
 转成栈浪费空间并且代码复杂
 
 ### 二叉树
----
+
 ### 236 最低的二叉树公共祖先LCA
 方法1：找出两条从root开始的路径，返回路径不开始不相同的前一个点
 27%空间两个array
@@ -382,7 +382,7 @@ public List<Integer> postorderTraversal(TreeNode root) {
 }
 ```
 
-### lt66二叉树前序遍历 分治方法
+### lt66 lc 144 二叉树前序遍历 分治方法
 分治方法，返回值 适合多线程
 ```java
 public List<Integer> preorderTraversal(TreeNode root) {
@@ -397,6 +397,29 @@ public List<Integer> preorderTraversal(TreeNode root) {
     rst.add(root.val);
     rst.addAll(left);
     rst.addAll(right);
+    return rst;
+}
+```
+
+迭代： 效率和先入栈right再入栈左是一样的，只是为了扩展
+{% qnimg preorder.jpg %}
+```java
+public List<Integer> preorderTraversal(TreeNode root) {
+    List<Integer> rst = new ArrayList<>();
+    if(root == null){
+        return rst;
+    }
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    while (true) {
+        while (root != null) {
+            rst.add(root.val);
+            if(root.right != null)
+            stack.push(root.right);
+            root = root.left;
+        }
+        if(stack.isEmpty())break;
+        root = stack.pop();
+    }
     return rst;
 }
 ```
@@ -419,6 +442,29 @@ private void helper(TreeNode root,List<Integer> rst){
 }
 ```
 {% endfold %}
+
+### lc 94 中序
+```java
+public List<Integer> inorderTraversal(TreeNode root) {
+    List<Integer> rst = new ArrayList<>();
+    if(root == null){
+        return rst;
+    }
+    Deque<TreeNode> stack = new ArrayDeque<>();
+    while(true){
+        while(root != null){
+            stack.push(root);
+            root = root.left;
+        }
+        if(stack.isEmpty())
+            break;
+        root = stack.pop();
+        rst.add(root.val);
+        root = root.right;     
+    }
+    return rst;
+}
+```
 
 ### !!!114原地将二叉树变成链表
 1.入栈迭代40%

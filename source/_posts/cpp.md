@@ -276,7 +276,7 @@ void trapRE_v2(BinNodePosi(T) x,VST& visit){
     Stack <BinNodePosi(T)> S;
     while(true){
         visitAlongLeftBranch(x,visit,S);
-        if(s.empty())break;
+        if(S.empty())break;
         //进入了以x为根节点的子树
         //2. x是叶子节点右指针null
         x = s.pop();
