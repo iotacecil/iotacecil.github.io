@@ -167,7 +167,17 @@ public int numSubarrayProductLessThanK(int[] nums, int k) {
 
 
 
-### 
+### 209最小连续子数组 和>=K 的长度
+>Input: s = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: the subarray [4,3] 
+
+1 二分搜索
+暴力法搜索前缀数组`sum[j]-sum[i]+nums[i]>=k`的最短ij
+二分发寻找`sum[j] >= sum[i]-nums[i]+k` j的最小值
+```java
+```
+
 
 
 

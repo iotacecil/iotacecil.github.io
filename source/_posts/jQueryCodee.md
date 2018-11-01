@@ -4,6 +4,28 @@ date: 2018-03-15 11:13:05
 tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
+## MPV设计模式
+{% qnimg mvp.jpg %}
+jquery btn绑定事件 添加列表 
+```javascript
+function Page(){}
+$.extend(Page.prototype,{
+    init: function(){
+        this.bindEvents()
+    },
+    bindEvents: function(){
+        var btn = $('#btn');
+        btn.on('click',$.proxy(this.handleBtnClick,this))
+    },
+    handleBtnClick:function(){
+        var inputVal = $("#input").val()
+        var ulElem = $("#ul");
+        ulElem.append('<li>' + inputVal + '</li>')
+    }
+})
+var page = new Page();
+page.init();
+```
 
 ## browser sync
 [自动刷新](http://www.browsersync.cn/)

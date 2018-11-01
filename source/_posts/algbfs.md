@@ -9,12 +9,109 @@ categories: [算法备忘]
 ### 279完美平方数
 
 ### !!126 word Ladder 返回所有可能的路径 记录宽搜搜索路径！
-队列中的结构`<顶点，前驱，步数`
+77% 117ms
+1.先bfs，在bfs的过程中，构建有向图邻接表map。完成一个最长路径为k的图。
+2.在构建完的图中dfs，回溯找完到end的路径tmp添加到rst中。
+```java
+public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> words = new HashSet<>(wordList);
+        words.add(beginWord);
+        List<List<String>> rst = new ArrayList<>();
+        HashMap<String,List<String>> graph = new HashMap<>();
+        // pair <node,step>
+        HashMap<String,Integer> pairs = new HashMap<>();
+        ArrayList<String> tmp = new ArrayList<>();
+        bfs(beginWord,endWord,words,graph,pairs);
+        dfs(beginWord,endWord,words,graph,pairs,tmp,rst);
+        return rst;
+    }
+
+    // 从set 中筛选出 步长差1的String
+    private List<String> getNeib(String top,Set<String> words){
+        List<String> rst = new ArrayList<>();
+        char[] chs = top.toCharArray();
+        // 这两个循环如果反一下 慢30ms （数量小的循环要写外面？）
+            for(char ch = 'a'; ch <= 'z' ; ch++ ){
+                for (int i = 0; i <chs.length ; i++) {
+                if(chs[i] == ch)continue;
+                char old = chs[i];
+                chs[i] = ch;
+                if(words.contains(String.valueOf(chs))){
+                    rst.add(String.valueOf(chs));
+                }
+                chs[i] = old;
+            }
+        }
+        return rst;
+    }
+
+    // bfs可以找到所有 k步可达的顶点，并建立起链接， k是到达end的最少步数
+    private void bfs(String start,String end,Set<String> words,HashMap<String,List<String>> graph,HashMap<String,Integer> pairs){
+        for(String word : words){
+            graph.put(word, new ArrayList<>());
+        }
+        // 队列只放node 或者结构体把step也带着
+        Deque<String> que = new ArrayDeque<>();
+        que.add(start);
+        pairs.put(start, 0);
+        while (!que.isEmpty()){
+            // 这一层
+            int count = que.size();
+            boolean found = false;
+            for (int i = 0; i < count ; i++) {
+                String top = que.poll();
+                int step = pairs.get(top);
+                List<String> neib = getNeib(top, words);
+
+                for(String next : neib){
+                    // 构建有向图
+                    graph.get(top).add(next);
+                    // 记录访问过了并且当前访问的步长 不用了visit set
+                    if(!pairs.containsKey(next)){
+                        // 注意找到了也需要先把pair放进去
+                        pairs.put(next, step+1);
+                        // 如果找到了
+                        if(end.equals(next)){
+                            found = true;
+                        }else{
+                            que.add(next);
+                        }
+                    }
+                }
+
+                if(found)break;
+
+
+            }
+
+        }
+
+    }
+
+    private void dfs(String start,String end,Set<String> words,Map<String,List<String>> graph,Map<String,Integer> pairs,List<String> tmp,List<List<String>> res){
+        tmp.add(start);
+        if(end.equals(start))
+        {
+            res.add(new ArrayList<>(tmp));
+        }else {
+            // 从start dfs找这个最长只有k步的图， dfs的条件是1 是邻边表示差1步，2是pair中记录这个邻边是下一个step
+            for(String next : graph.get(start)){
+                if(pairs.get(next) == pairs.get(start) + 1){
+                    dfs(next,end,words,graph,pairs,tmp,res);
+                }
+            }
+        }
+        //如果这条路走不通或者走完了，一段一段删回来
+        tmp.remove(tmp.size()-1);
+    }
+
+```
+
+
+队列中的结构`<顶点，前驱，步数>`
 
 ### !!127 word Ladder bfs最短单词转换路径
-构建图，用map 邻接表，两层for遍历wordList(包括start) ,如果两个字符串只差一个字符，则加到双方邻接表(map)中。
-将start放进队列`<顶点,步数>`，宽搜,搜到返回步数。
-需要markedSet，因为一个点的父节点有多个，将一个点的邻接点放进队列，有的点早被别的父节点就放进队列过了。
+todo 为什么复杂度差那么多
 
 //todo双向bfs
 
@@ -55,6 +152,78 @@ public int ladderLength(String beginWord, String endWord, List<String> wordList)
                 if(!marked.contains(difword)){
                 que.add(difword);
                 marked.add(difword);}}}}}
+    return 0;
+}
+```
+{% endfold %}
+
+
+构建图，用map 邻接表，两层for遍历wordList(包括start) ,如果两个字符串只差一个字符，则加到双方邻接表(map)中。
+将start放进队列`<顶点,步数>`，宽搜,搜到返回步数。
+需要markedSet，因为一个点的父节点有多个，将一个点的邻接点放进队列，有的点早被别的父节点就放进队列过了。 AC 17.88% 570ms
+{% fold %}
+```java
+class Pair{
+    String word;
+    int step;
+
+    public Pair(String word, int step) {
+        this.word = word;
+        this.step = step;
+    }
+}
+ private boolean dif(String difword,String cur){
+    int cnt=0;
+    for(int i =0;i<difword.length();i++){
+        if(difword.charAt(i)!=cur.charAt(i)){
+            cnt++;
+            if(cnt>1)return false;
+        }
+    }
+    return true;
+}
+public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+    Map<String,List<String>> map = new HashMap<>();
+    List<String> words = new ArrayList<>(new HashSet<>(wordList));
+    words.add(beginWord);
+    if(!words.contains(endWord)){
+        return 0;
+    }
+    // graph build
+    for(int i = 0;i<words.size();i++){
+        String word1 = words.get(i);
+        List<String> word1List = map.getOrDefault(word1, new ArrayList<>());
+        for (int j = i+1; j <words.size() ; j++) {
+            String word2 = words.get(j);
+            if(dif(word1,word2 )){
+                List<String> word2List = map.getOrDefault(word2, new ArrayList<>());
+                word2List.add(word1);
+                map.put(word2,word2List);
+                word1List.add(word2);
+            }
+            map.put(word1,word1List );
+        }
+    }
+    // bfs
+    Deque<Pair> que = new ArrayDeque<>();
+    Set<String> visited = new HashSet<>();
+    que.add(new Pair(beginWord,1));
+    visited.add(beginWord);
+
+    while (!que.isEmpty()){
+        Pair top = que.poll();
+        int step = top.step;
+        List<String> neib = map.get(top.word);
+        for(String next : neib){
+            if(!visited.contains(next)){
+                if(next.equals(endWord)){
+                    return step + 1;
+                }
+                que.add(new Pair(next,step+1));
+                visited.add(next);
+            }
+        }
+    }
     return 0;
 }
 ```
