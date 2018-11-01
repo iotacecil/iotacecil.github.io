@@ -89,7 +89,7 @@
 <meta property="og:description" content="581 需要排序的最小子串，整个串都被排序了 递增 40大于35，只排序到右边遍历过来第一个n&amp;lt;n-1是不够的要找到[30~31]中的min和max1234567891011public static int fid(int[]A)&amp;#123;    //1,3,2,2,2    int n = A.length, beg = -1, end = -2, min = A[n-1], max">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/lc581.jpg">
-<meta property="og:updated_time" content="2018-10-30T01:58:32.988Z">
+<meta property="og:updated_time" content="2018-11-01T13:56:21.507Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前缀和 滑动窗口 子数组、序列问题">
 <meta name="twitter:description" content="581 需要排序的最小子串，整个串都被排序了 递增 40大于35，只排序到右边遍历过来第一个n&amp;lt;n-1是不够的要找到[30~31]中的min和max1234567891011public static int fid(int[]A)&amp;#123;    //1,3,2,2,2    int n = A.length, beg = -1, end = -2, min = A[n-1], max">
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-30T09:58:32+08:00">
-                2018-10-30
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-01T21:56:21+08:00">
+                2018-11-01
               </time>
             
           </span>
@@ -426,7 +426,12 @@
 <p>s = 0,e = 2 窗口[1,2,3]<br>p = 6 子数组个数3: <code>[[1],[2][1,2],  [3],[2,3],[1,2,3]]</code> (+3)</p>
 <p>每次子数组的增长个数就是窗口大小<br>如果 p &gt;k 则s向右<br>s = 1,e = 3 窗口[2,3,4]<br>p = 24<br>s = 2,e = 3窗口[3,4]<br>p = 12 子数组个数<code>[[3],  [4][3,4]]]</code> (+2)</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numSubarrayProductLessThanK</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> p = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> cnt =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> s = <span class="number">0</span>, e = <span class="number">0</span>; e &lt; nums.length;e++)&#123;</span><br><span class="line">        p *= nums[e];</span><br><span class="line">        <span class="keyword">while</span>(p&gt;=k &amp;&amp; s&lt;e)&#123;</span><br><span class="line">            p /= nums[s++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p &lt; k)&#123;</span><br><span class="line">            cnt += (e - s + <span class="number">1</span>);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cnt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>### </p>
+<h3 id="209最小连续子数组-和-gt-K-的长度"><a href="#209最小连续子数组-和-gt-K-的长度" class="headerlink" title="209最小连续子数组 和&gt;=K 的长度"></a>209最小连续子数组 和&gt;=K 的长度</h3><blockquote>
+<p>Input: s = 7, nums = [2,3,1,2,4,3]<br>Output: 2<br>Explanation: the subarray [4,3] </p>
+</blockquote>
+<p>1 二分搜索<br>暴力法搜索前缀数组<code>sum[j]-sum[i]+nums[i]&gt;=k</code>的最短ij<br>二分发寻找<code>sum[j] &gt;= sum[i]-nums[i]+k</code> j的最小值</p>
+<pre><code class="java">
+</code></pre>
 
       
     </div>
@@ -597,7 +602,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#581-需要排序的最小子串，整个串都被排序了-递增"><span class="nav-number">1.</span> <span class="nav-text">581 需要排序的最小子串，整个串都被排序了 递增</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#697-？？保留数组中最高频出现数字频数的最短数组长度"><span class="nav-number">2.</span> <span class="nav-text">697 ？？保留数组中最高频出现数字频数的最短数组长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#！！416-数组分成两部分（不连续-sum相等。list的总sum为奇数则不可能。"><span class="nav-number">3.</span> <span class="nav-text">！！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#594-最长max-min相差1的子序列-不是连续的数组"><span class="nav-number">4.</span> <span class="nav-text">!594 最长max min相差1的子序列(不是连续的数组)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#152-最大子数组乘积-保留当前值之前的最大积和最小积"><span class="nav-number">5.</span> <span class="nav-text">!!!152 最大子数组乘积 保留当前值之前的最大积和最小积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#930-01数组中有多少个和-target的子数组"><span class="nav-number">6.</span> <span class="nav-text">930 01数组中有多少个和=target的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#560-数组中有多少个和为k的子数组"><span class="nav-number">7.</span> <span class="nav-text">560 数组中有多少个和为k的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#713-乘积-lt-k的子数组的个数"><span class="nav-number">8.</span> <span class="nav-text">713 乘积&lt;k的子数组的个数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#581-需要排序的最小子串，整个串都被排序了-递增"><span class="nav-number">1.</span> <span class="nav-text">581 需要排序的最小子串，整个串都被排序了 递增</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#697-？？保留数组中最高频出现数字频数的最短数组长度"><span class="nav-number">2.</span> <span class="nav-text">697 ？？保留数组中最高频出现数字频数的最短数组长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#！！416-数组分成两部分（不连续-sum相等。list的总sum为奇数则不可能。"><span class="nav-number">3.</span> <span class="nav-text">！！416 数组分成两部分（不连续) sum相等。list的总sum为奇数则不可能。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#594-最长max-min相差1的子序列-不是连续的数组"><span class="nav-number">4.</span> <span class="nav-text">!594 最长max min相差1的子序列(不是连续的数组)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#152-最大子数组乘积-保留当前值之前的最大积和最小积"><span class="nav-number">5.</span> <span class="nav-text">!!!152 最大子数组乘积 保留当前值之前的最大积和最小积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#930-01数组中有多少个和-target的子数组"><span class="nav-number">6.</span> <span class="nav-text">930 01数组中有多少个和=target的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#560-数组中有多少个和为k的子数组"><span class="nav-number">7.</span> <span class="nav-text">560 数组中有多少个和为k的子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#713-乘积-lt-k的子数组的个数"><span class="nav-number">8.</span> <span class="nav-text">713 乘积&lt;k的子数组的个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#209最小连续子数组-和-gt-K-的长度"><span class="nav-number">9.</span> <span class="nav-text">209最小连续子数组 和&gt;=K 的长度</span></a></li></ol></div>
             
 
           </div>
