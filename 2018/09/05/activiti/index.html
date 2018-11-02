@@ -80,17 +80,17 @@
 
 
 
-<meta name="description" content="查看tomcat启动jps -mlv复制3个war包到tomcat webapphttp://localhost:8080/activiti-app/admin testhttp://localhost:8080/activiti-adminadmin admin git checkout -b bpmnLearn activiti-6.0.0mvn clean test-compile acti">
+<meta name="description" content="查看tomcat启动jps -mlv复制3个war包到tomcat webapphttp://localhost:8080/activiti-app/admin testhttp://localhost:8080/activiti-adminadmin admin git checkout -b bpmnLearn activiti-6.0.0mvn clean test-compile mode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="activiti和项目整理">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/09/05/activiti/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="查看tomcat启动jps -mlv复制3个war包到tomcat webapphttp://localhost:8080/activiti-app/admin testhttp://localhost:8080/activiti-adminadmin admin git checkout -b bpmnLearn activiti-6.0.0mvn clean test-compile acti">
+<meta property="og:description" content="查看tomcat启动jps -mlv复制3个war包到tomcat webapphttp://localhost:8080/activiti-app/admin testhttp://localhost:8080/activiti-adminadmin admin git checkout -b bpmnLearn activiti-6.0.0mvn clean test-compile mode">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-23T05:28:14.486Z">
+<meta property="og:updated_time" content="2018-11-02T08:19:58.578Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="activiti和项目整理">
-<meta name="twitter:description" content="查看tomcat启动jps -mlv复制3个war包到tomcat webapphttp://localhost:8080/activiti-app/admin testhttp://localhost:8080/activiti-adminadmin admin git checkout -b bpmnLearn activiti-6.0.0mvn clean test-compile acti">
+<meta name="twitter:description" content="查看tomcat启动jps -mlv复制3个war包到tomcat webapphttp://localhost:8080/activiti-app/admin testhttp://localhost:8080/activiti-adminadmin admin git checkout -b bpmnLearn activiti-6.0.0mvn clean test-compile mode">
 
 
 
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-23T13:28:14+08:00">
-                2018-10-23
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-02T16:19:58+08:00">
+                2018-11-02
               </time>
             
           </span>
@@ -372,12 +372,12 @@
       
         <p>查看tomcat启动<br><code>jps -mlv</code><br>复制3个war包到tomcat webapp<br><code>http://localhost:8080/activiti-app/</code><br>admin test<br><code>http://localhost:8080/activiti-admin</code><br>admin admin</p>
 <p><code>git checkout -b bpmnLearn activiti-6.0.0</code><br><code>mvn clean test-compile</code></p>
-<h3 id="activiti-engine-包结构"><a href="#activiti-engine-包结构" class="headerlink" title="activiti-engine 包结构"></a>activiti-engine 包结构</h3><p>cfg : 配置<br>compatibility : 兼容性<br>debug : 使用debug下的功能 看内部运行机制 可以看到更多log<br>delegate ： 实现节点的类<br>event ： 节点的事件监听机制<br>form : 工作流的表单 节点的通用表单<br>history : 工作流跑完每个节点的记录 为保证运行时的速度 流程执行完的数据放到history<br>identity : 节点的权限认证<br>impl ： 实现 其他都是 概念定义 和 接口配置<br>logging : 打印上下文变量（？的日志 可以看到这条日志是在执行哪个流程的时候打印的<br>management : 管理相关的接口和api<br>parse : 解析流程文件的xml<br>query ： 查询接口 依赖mybatis<br>repository : 流程部署到数据库<br>runtime ： 执行过程中的api 执行完放到history<br>task ： 人工处理的节点<br>test : 单元测试 集成测试<br>其他异常类xxxException<br>其他xxxService</p>
+<h3 id="models-activiti-engine-包结构"><a href="#models-activiti-engine-包结构" class="headerlink" title="models-activiti-engine 包结构"></a>models-activiti-engine 包结构</h3><p>cfg : 配置<br>compatibility : 兼容性<br>debug : 使用debug下的功能 看内部运行机制 可以看到更多log<br>delegate ： 实现节点的类<br>event ： 节点的事件监听机制<br>form : 工作流的表单 节点的通用表单<br>history : 工作流跑完每个节点的记录 为保证运行时的速度 流程执行完的数据放到history<br>identity : 节点的权限认证<br>impl ： 实现 其他都是 概念定义 和 接口配置<br>logging : 打印上下文变量（？的日志 可以看到这条日志是在执行哪个流程的时候打印的<br>management : 管理相关的接口和api<br>parse : 解析流程文件的xml<br>query ： 查询接口 依赖mybatis<br>repository : 流程部署到数据库<br>runtime ： 执行过程中的api 执行完放到history<br>task ： 人工处理的节点<br>test : 单元测试 集成测试<br>其他异常类xxxException<br>其他xxxService</p>
 <p><code>resources</code> 目录 配置文件<br>META-INF.services里的文件 指定<code>ScriptEnginFactory</code><br>org.activiti 里<br>    db：各种数据库脚本sql文件，对应mybatis的配置文件xml，数据库的properties文件(数据库方言)，db升级<br>    engine.impl 流程的logo misc 国际化文件</p>
 <p><code>test</code> 目录<br>单元测试<br>resource log4j的配置文件等</p>
 <h3 id="Activiti-6-0-模块"><a href="#Activiti-6-0-模块" class="headerlink" title="Activiti 6.0 模块"></a>Activiti 6.0 模块</h3><h4 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h4><p>activiti-engine 核心引擎<br>activiti-spring Spring 集成模块<br>activiti-spring-boot SpringBoot 集成模块 提供了stater和autoconfigure<br>activiti-rest 对外无状态 rest api 模块 方便为其他第三方提供服务<br>activiti-form-engine 表单引擎模块 方便自定义表单模型<br>activiti-Idap 集成Idap用户模块</p>
 <h3 id="依赖的模块"><a href="#依赖的模块" class="headerlink" title="依赖的模块"></a>依赖的模块</h3><p>bpmn-converter 模型转换模块<br>process-validation 模型流程校验模块<br>image-generator xml绘制图形模块<br>dmn-api 决策标准<br>form-api<br>form-model</p>
-<h3 id="启动activiti-app"><a href="#启动activiti-app" class="headerlink" title="启动activiti-app"></a>启动activiti-app</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> D:\Activiti\modules\activiti-ui</span><br><span class="line">mvn clen tomcat7:run</span><br></pre></td></tr></table></figure>
+<h3 id="启动models-activiti-app"><a href="#启动models-activiti-app" class="headerlink" title="启动models-activiti-app"></a>启动models-activiti-app</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> D:\Activiti\modules\activiti-ui</span><br><span class="line">mvn clen tomcat7:run</span><br></pre></td></tr></table></figure>
 <p>访问：<a href="http://localhost:9999/activiti-app/" target="_blank" rel="noopener">http://localhost:9999/activiti-app/</a></p>
 <h3 id="activiti-ui模块"><a href="#activiti-ui模块" class="headerlink" title="activiti-ui模块"></a>activiti-ui模块</h3><p>activiti-app ： activiti集成发布的war工程 没有java代码 只有前端和依赖的jar包<br>以下都是jar包作为-app的依赖<br>activiti-app-conf ： 业务外的配置 数据源 集成的内容<br>activiti-app-logic ： ui实现的业务逻辑<br>activiti-app-rest ： 提供rest api接口</p>
 
@@ -548,7 +548,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#activiti-engine-包结构"><span class="nav-number">1.</span> <span class="nav-text">activiti-engine 包结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activiti-6-0-模块"><span class="nav-number">2.</span> <span class="nav-text">Activiti 6.0 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#核心模块"><span class="nav-number">2.1.</span> <span class="nav-text">核心模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖的模块"><span class="nav-number">3.</span> <span class="nav-text">依赖的模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动activiti-app"><span class="nav-number">4.</span> <span class="nav-text">启动activiti-app</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#activiti-ui模块"><span class="nav-number">5.</span> <span class="nav-text">activiti-ui模块</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#models-activiti-engine-包结构"><span class="nav-number">1.</span> <span class="nav-text">models-activiti-engine 包结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activiti-6-0-模块"><span class="nav-number">2.</span> <span class="nav-text">Activiti 6.0 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#核心模块"><span class="nav-number">2.1.</span> <span class="nav-text">核心模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖的模块"><span class="nav-number">3.</span> <span class="nav-text">依赖的模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动models-activiti-app"><span class="nav-number">4.</span> <span class="nav-text">启动models-activiti-app</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#activiti-ui模块"><span class="nav-number">5.</span> <span class="nav-text">activiti-ui模块</span></a></li></ol></div>
             
 
           </div>
