@@ -4,6 +4,28 @@ date: 2018-04-08 18:48:55
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### QPS TPS
+mysql当前一个sql语句只能用到一个cpu
+qps：每秒查询量
+并发量会使cpu连接数占满
+1000Mb/8 = 100MB 的网卡 减少从服务器 减少主从同步
+但表超过千万行 or 表数据文件超过10G
+
+mysql<5.5 建立索引会锁表。>=5.5不锁表但是会主从延迟
+
+DDL操作：create、alert、drop、index、syn、cluster  修改表结构的操作
+mysql主从复制是单线程。大表修改在从服务器上没有完成。其他操作都不能执行。
+
+大事务：
+windows xp 默认tcp并发数只有10
+
+QPS是每秒处理的sql数量，而40个cpu同时并发处理40个sql是指纳秒级的
+web应用核心数量比主频更重要。
+
+MyISAM 索引在内存中，数据通过操作系统缓存。
+InnoDB 同时在内存中缓存数据和索引。
+缓存可以把浏览量计数器很多次先写到缓存，再一批存到磁盘。 
+
 ### 开启mysql查询日志
 https://blog.csdn.net/leshami/article/details/39779225
 ```sql

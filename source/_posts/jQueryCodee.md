@@ -18,9 +18,11 @@ $.extend(Page.prototype,{
         btn.on('click',$.proxy(this.handleBtnClick,this))
     },
     handleBtnClick:function(){
-        var inputVal = $("#input").val()
+        var inputElem = $("#input");
+        var inputVal = inputElem.val()
         var ulElem = $("#ul");
         ulElem.append('<li>' + inputVal + '</li>')
+        inputElem.val('');
     }
 })
 var page = new Page();

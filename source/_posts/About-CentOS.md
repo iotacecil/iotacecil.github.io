@@ -4,6 +4,8 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### fusion IO
+
 ### source
 source: source 文件名 [参数]
     在当前 shell 中执行一个文件中的命令。

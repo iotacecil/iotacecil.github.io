@@ -4,6 +4,134 @@ date: 2018-07-05 13:20:56
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### docker image
+linux 内核空间bootfs是共享的
+用户空间是各种Linux发行版
+base image是root filesystem (文件和meta data )
+各种image是分层共享layer的
+{% qnimg dockerimg.jpg %}
+
+制作docker
+当前目录下有可执行文件 hello(编译过的c程序) 写成dockerfile
+`docker build -t tag/imagename . ` 
+`docker history imageid` 可以看到有几层
+`docker run tag/imagename` 可以执行
+```sh
+# docker history 4ab4c602aa5e
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+4ab4c602aa5e        7 weeks ago         /bin/sh -c #(nop)  CMD ["/hello"]               0 B                 
+<missing>           7 weeks ago         /bin/sh -c #(nop) COPY file:9824c33ef192ac...   1.84 kB  
+```
+
+### docker container
+image负责app的存储和分发，container负责运行app
+image是只读的，在image层上加一层可读可写的container层
+{% qnimg dockercontainer.jpg %}
+`docker container ls -a`
+docker 交互式启动`docker run --help`
+```sh
+-i, --interactive       Keep STDIN open even if not attached
+-t, --tty               Allocate a pseudo-TTY
+```
+`docker run -it centos`
+```sh
+# docker run -it centos
+[root@34907a1273a5 /]# ll
+[root@34907a1273a5 /]# ls
+anaconda-post.log  dev  home  lib64  mnt  proc  run   srv  tmp  var
+bin                etc  lib   media  opt  root  sbin  sys  usr
+```
+可读可写可以yum
+
+删除所有推出的容器
+`docker container ls -f "status=exited"`
+
+```sh
+# docker container ls -f "status=exited" -q
+34907a1273a5
+f3376a912f8d
+9759ac9c6bc0
+995ed8e570c3
+3bec7207f63c
+bce594d32cee
+d7b03af091d8
+202c2c3b05f2
+ac00bb899d07
+# docker rm $(docker container ls -f "status=exited" -q)
+```
+
+```sh
+# docker container ls --help
+
+Usage:  docker container ls [OPTIONS]
+
+List containers
+
+Aliases:
+  ls, ps, list
+
+Options:
+  -a, --all             Show all containers (default shows just running)
+  -f, --filter filter   Filter output based on conditions provided
+      --format string   Pretty-print containers using a Go template
+      --help            Print usage
+  -n, --last int        Show n last created containers (includes all states) (default -1)
+  -l, --latest          Show the latest created container (includes all states)
+      --no-trunc        Don't truncate output
+  -q, --quiet           Only display numeric IDs
+  -s, --size            Display total file sizes
+
+```
+
+### docker container commit
+在container修改过的image 保存成image
+```sh
+# docker commit --help
+
+Usage:  docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+
+Create a new image from a container's changes
+
+Options:
+  -a, --author string    Author (e.g., "John Hannibal Smith <hannibal@a-team.com>")
+  -c, --change list      Apply Dockerfile instruction to the created image (default [])
+      --help             Print usage
+  -m, --message string   Commit message
+  -p, --pause            Pause container during commit (default true)
+```
+
+新创建的是da62538702f3 就多加了一层加了5B
+```sh
+docker history da62538702f3
+IMAGE               CREATED              CREATED BY                                      SIZE                COMMENT
+da62538702f3        About a minute ago   /bin/bash                                       5 B                 
+75835a67d134        3 weeks ago          /bin/sh -c #(nop)  CMD ["/bin/bash"]            0 B                 
+<missing>           3 weeks ago          /bin/sh -c #(nop)  LABEL org.label-schema....   0 B                 
+<missing>           3 weeks ago          /bin/sh -c #(nop) ADD file:fbe9badfd2790f0...   200 MB              
+[root@localhost ~]# docker history 75835a67d134
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+75835a67d134        3 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/bash"]            0 B                 
+<missing>           3 weeks ago         /bin/sh -c #(nop)  LABEL org.label-schema....   0 B                 
+<missing>           3 weeks ago         /bin/sh -c #(nop) ADD file:fbe9badfd2790f0...   200 MB 
+```
+
+### dockerFile 语法
+参考https://github.com/docker-library/mysql
+`FROM` 选择官方image作为base image
+`LABEL` 作者，版本，描述 
+`RUN` 每写一条RUN都会添加新的一层，所以多条命令用反斜杠换行
+`WORKDIR` 自动创建目录 不要使用RUN cd 使用绝对路径
+`ADD COPY` 将本地文件添加到镜像中，add 一个压缩文件还直接解压
+`RUN curl wget` 添加远程文件
+`ENV` 设置常量
+
+#### RUN CMD ENTRYPOINT
+CMD 容器启动后默认执行的命令和参数
+ENTRYPOINT 容器启动时的命令 不会被忽略一定会执行
+最佳实践，写一个sh
+`ENTRYPOINT ["docker-entrypoint.sh"]`
+让容器以应用程序或服务的形式运行
+
 ### CentOS7 安装mysql
 1.下载mysql源
 ```sh

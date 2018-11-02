@@ -14,7 +14,7 @@ admin admin
 `git checkout -b bpmnLearn activiti-6.0.0`
 `mvn clean test-compile`
 
-### activiti-engine 包结构
+### models-activiti-engine 包结构
 cfg : 配置
 compatibility : 兼容性
 debug : 使用debug下的功能 看内部运行机制 可以看到更多log 
@@ -65,7 +65,7 @@ form-api
 form-model
 
 
-### 启动activiti-app
+### 启动models-activiti-app
 ```sh
 cd D:\Activiti\modules\activiti-ui
 mvn clen tomcat7:run
