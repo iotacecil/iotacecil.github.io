@@ -25,6 +25,9 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+
+
+
 ### 698 将数组分成sum相等的k份
 
 ### lc 325 lt 919
@@ -422,6 +425,38 @@ public int[] countBits(int num){
     0 - 0 - 1 - 0 - 0
 点(1,2)是建造房屋理想的空地，因为3+3+1=7的总行程距离最小。所以返回7。
 ```
+
+
+### 87 判断两个字符串是不是拆分成两半二叉树交换子树构成的
+```java
+public boolean isScramble(String s1, String s2) {
+    if(s1.length()!=s2.length())return false;
+    if(s1.equals(s2))return true;
+    // 不剪枝这一步会TL
+    int[] cnt = new int[26];
+    for (int i = 0; i <s1.length() ; i++) {
+        cnt[s1.charAt(i)-'a']++;
+        cnt[s2.charAt(i)-'a']--;
+    }
+    for (int i = 0; i <26 ; i++) {
+        if (cnt[i]!=0) {
+            return false;
+        }
+    }
+   
+    for (int i = 1; i <s1.length() ; i++) {
+        if((isScramble(s1.substring(0,i), s2.substring(0,i))&&
+                isScramble(s1.substring(i), s2.substring(i)))||
+                (isScramble(s1.substring(0,i), s2.substring(s1.length()-i))&&
+                isScramble(s1.substring(i), s2.substring(0,s1.length()-i)))){
+            return true;
+        }
+
+    }
+    return false;
+}
+```
+
 
 ### lt640 字符串 S 和 T, 判断他们是否只差一步编辑 lc161
 ```java

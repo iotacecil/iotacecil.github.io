@@ -123,6 +123,7 @@ IMAGE               CREATED             CREATED BY                              
 `WORKDIR` 自动创建目录 不要使用RUN cd 使用绝对路径
 `ADD COPY` 将本地文件添加到镜像中，add 一个压缩文件还直接解压
 `RUN curl wget` 添加远程文件
+`EXPOSE` 将容器内服务运行的5000端口暴露出去，不然127.0.0.1外部访问不到
 `ENV` 设置常量
 
 #### RUN CMD ENTRYPOINT
@@ -131,6 +132,19 @@ ENTRYPOINT 容器启动时的命令 不会被忽略一定会执行
 最佳实践，写一个sh
 `ENTRYPOINT ["docker-entrypoint.sh"]`
 让容器以应用程序或服务的形式运行
+
+### 搭建私库
+```sh
+docker run -d -p 5000:5000 --restart always --name registry registry:2
+docker container ls -a
+```
+重新build image  tag 变成仓库ip+端口
+```sh
+ls /etc/docker
+vi /lib/systemd/system/docker.service
+```
+
+### docker 网络
 
 ### CentOS7 安装mysql
 1.下载mysql源
