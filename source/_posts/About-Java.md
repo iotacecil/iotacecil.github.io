@@ -4,6 +4,11 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 数据库设计原则
+1 实体聚合原则
+2 不用外键
+3 减少中间表设计
+
 ### currying 函数 两个变量的函数变成两个分次传入
 ```scala
 def sum2(a:Int)(b:Int) = a+b

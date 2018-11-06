@@ -949,6 +949,9 @@ public int findCheapestPriceDp(int n, int[][] flights, int src, int dst, int k) 
 
 
 ### ？96 不同的BST数量 catalan数
+> Input: 3
+Output: 5
+
 {% qnimg numbst.jpg %}
 (为什么是乘)
 ```

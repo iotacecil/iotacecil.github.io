@@ -175,7 +175,7 @@ Npublic ListNode reverseList(ListNode head) {
 
 ### 二叉树
 
-### 100 相同的二叉树
+### 872 叶子相似的树
 
 
 ### 236 最低的二叉树公共祖先LCA

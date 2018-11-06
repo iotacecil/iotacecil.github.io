@@ -4,6 +4,180 @@ date: 2018-10-28 11:17:19
 tags: [alg]
 categories: [算法备忘]
 ---
+### lt 45 最大子数组差
+>给出数组[1, 2, -3, 1]，返回 6
+找出两个不重叠的子数组A和B，使两个子数组和的差的绝对值|SUM(A) - SUM(B)|最大
+
+```java
+```
+
+### 763 划分尽可能多字母区间  返回各区间的长度 双指针
+>输入: S = "ababcbacadefegdehijhklij"
+输出: [9,7,8]
+解释:
+划分结果为 "ababcbaca", "defegde", "hijhklij"。
+每个字母最多出现在一个片段中。
+像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
+ababcba 从第一个a到最后一个a是必须包含的长度
+
+思路：字母last index数组，遍历string，维护一个当前字符出现的最晚index，直到当前字符index就是这个最晚index，可以划分，记录当前长度并且重置start计数。
+注意：不能直接i跳到curmaxend，因为abab如果a直接跳到下一个a会漏更新b的last index
+
+```java
+//45%
+public List<Integer> partitionLabels(String S) {
+    List<Integer> rst = new ArrayList<>();
+    //每个字母最后出现的index
+    int[] last = new int[26];
+
+    for(int i=0;i<S.length();i++){
+      last[S.charAt(i)-'a'] = i;
+    }
+    int start=0,end=0;
+    for(int i = 0;i<S.length();i++){
+        //更新当前字母的区间
+        end = Math.max(end,last[S.charAt(i)-'a']);
+        //关键
+        if(i==end){
+            rst.add(end-start+1);
+            start = end+1;
+        }
+    }
+    return rst;
+}
+```
+
+### 769 !!!!!最多能排序的块 0-n的排列切割，块排序后连接是排序的原数组 
+>输入: arr = [1,0,2,3,4]
+输出: 4
+解释:
+我们可以把它分成两块，例如 [1, 0], [2, 3, 4]。
+然而，分成 [1, 0], [2], [3], [4] 可以得到最多的块数。
+
+注意条件：arr that is a permutation of `[0, 1, ..., arr.length - 1]`
+思路1:当前的index==当前的最大值，左边一共有index-1个数字，比index小的都在左边了，可以切分。
+```
+idx:0 1 2 3 4
+arr:1 0 2 3 4
+max:0 1 2 3 4
+当前index<当前max 表示可以划分成一组，==max表示要换下一组
+```
+
+```java
+public int maxChunksToSorted(int[] arr) {
+    int res = 0;
+    for(int i =0,max = 0;i<arr.length;i++){
+        if(i==(max=Math.max(max,arr[i])))
+            res++;
+    }
+    return res;
+}
+```
+
+思路2：维护一个leftmax和minright数组，当leftmax<=rightmin则可以划分
+
+### 915 Max(left)<=Min(right)
+画折线图，当前`A[i]<left` 则把切分线抬到`globalMax`
+{% qnimg lc915.jpg %}
+7ms 60%
+```java
+public int partitionDisjoint(int[] A) {
+    int n = A.length;
+    int leftMax = A[0];
+    int global = leftMax;
+    int parti = 0;
+    for(int i = 1;i<n;i++){
+        if(leftMax>A[i]){
+            leftMax = global;
+            parti = i;
+        }else global = Math.max(global,A[i]);
+    }
+    return parti+1;
+}
+```
+
+### 768 最多能排序的块 重复元素
+> 输入: arr = [2,1,3,4,4]
+输出: 4
+解释:
+我们可以把它分成两块，例如 [2, 1], [3, 4, 4]。
+然而，分成 [2, 1], [3], [4], [4] 可以得到最多的块数。 
+arr的长度在[1, 2000]之间。
+arr[i]的大小在[0, 10**8]之间。
+
+最快的100%： 只构造后缀min数组,线性扫描更新max,保证`leftMax<Rmin`的划分
+
+```java
+public int maxChunksToSorted100(int[] arr) {
+    int n = arr.length;
+    int[] minOfRight = new int[n];
+    minOfRight[n - 1] = arr[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+        minOfRight[i] = Math.min(minOfRight[i + 1], arr[i]);
+    }
+    int res = 0;
+    int max = Integer.MIN_VALUE;
+    for (int i = 0; i < n - 1; i++) {
+        max = Math.max(max,arr[i]);
+        // 等于 重复元素 去掉=就是第一题 68%
+        if (max <= minOfRight[i + 1]) res++;
+    }
+    return res + 1;
+}
+```
+
+
+56%：前缀max数组 后缀min数组
+left`[2,1]` right`[3,4,4]`
+`leftMax<rightMin`的时候
+```
+arr     [2, 1, 3, 4, 4]
+
+比较切分位置0~n-1：[0:i][i+1:n-1]
+leftMax    [2, !2, !3, !4, 4] 
+rightMin[1, 1, !3, !4, !4]
+```
+
+```java
+public int maxChunksToSorted(int[] arr) {
+    int n = arr.length;
+    int[] maxLeft = new int[n];
+    int[] minRight = new int[n];
+    maxLeft[0] = arr[0];
+    for (int i = 1; i < n; i++) {
+        maxLeft[i] = Math.max(maxLeft[i-1],arr[i]);
+    }
+    minRight[n-1] = arr[n-1];
+    for (int i = n-2; i >= 0 ; i--) {
+        minRight[i] = Math.min(minRight[i+1],arr[i]);
+    }
+
+    int res = 0;
+    for (int i = 0; i < n-1; i++) {
+        if(maxLeft[i] <= minRight[i+1]){
+            res++;
+        }
+    }
+    return res+1;
+}
+```
+
+44%拷贝一个数组排序，做累加,相等则可以划分
+`[2,1 |,3 |,4 |,4]`
+`[1,2 |,3 |,4 |,4]`
+```java
+public int maxChunksToSorted(int[] arr) {
+    int sum1 =0,sum2 =0,res = 0;
+    int[] copy = arr.clone();
+    for(int i =0;i<arr.length;i++){
+        sum1 += copy[i];
+        sum2 += arr[i];
+        if(sum1 == sum2)ans++;
+    }
+    return ans;
+}
+```
+
 ### 581 需要排序的最小子串，整个串都被排序了 递增
 {% qnimg lc581.jpg %}
 40大于35，只排序到右边遍历过来第一个`n<n-1`是不够的
