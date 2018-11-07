@@ -4,6 +4,69 @@ date: 2018-10-28 11:17:19
 tags: [alg]
 categories: [算法备忘]
 ---
+### !!!152 最大子数组乘积 保留当前值之前的最大积和最小积
+>输入: [-2,0,-1]
+输出: 0
+解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
+
+维护前缀乘积的min/max，每次当前数组元素必须参与运算。
+注意：更新min/max的时候考虑放弃前缀，只考虑本身，所以变成子数组。
+
+负数的最小积有潜力变成最大积
+当前max是 `nums[i]*max`,`nums[i]*min`,`nums[i]` 三者的最大者
+当前min是 `nums[i]*max`,`nums[i]*min`,`nums[i]` 三者最小值
+更新全局max
+4ms 11.99%
+```java
+public int maxProduct(int[] nums) {
+    int sum = nums[0],min = nums[0],max = nums[0];
+    for(int i=1;i<nums.length;i++){
+        int nextmax = nums[i]*max;
+        int nextmin = nums[i]*min;
+        max = Math.max(Math.max(nextmax,nextmin),nums[i]);
+        min = Math.min(Math.min(nextmax,nextmin),nums[i]);
+        sum = Math.max(max,sum);
+    }
+    return sum;
+}
+```
+
+### 合唱团 背包(只能向前找k个物品)+数组最大子序列???乘积
+> 从这 n 个学生中按照顺序选取 k 名学生，要求相邻两个学生的位置编号的差不超过 d，使得这 k 个学生的能力值的乘积最大
+> 输入3
+7 4 7
+2 50
+> 输出49
+
+更新当前结尾最大子数组和 需要试min/max取前d个数之内(可以跳过前d-1个)的全部结果
+
+```java
+public static long maxability(int n,long[]arr,int k,int d){
+    long[][] fmax = new long[k+1][n];
+    long[][] fmin = new long[k+1][n];
+    long res = Integer.MIN_VALUE;
+    fmax[1] = arr.clone();
+    fmin[1] = arr.clone();
+      //选2-k个人
+        for (int j = 2; j <=k ; j++) {
+            for (int i = 0; i <n ; i++) {
+            // 遍历上次层结果的[i-d,i)
+            for (int l = i-1; l>=0&&l>=i-d ; l--) {
+                // 前面以l结尾的最大和最小
+                fmax[j][i] = Math.max(fmax[j][i],Math.max(fmax[j-1][l]*arr[i],fmin[j-1][l]*arr[i]) );
+                fmin[j][i] = Math.min(fmin[j][i],Math.min(fmax[j-1][l]*arr[i],fmin[j-1][l]*arr[i]) );
+            }
+        }
+    }
+    for (int i = 0; i <n ; i++) {
+        res = Math.max(res, fmax[k][i]);
+    }
+    return res;
+    }
+```
+
+---
+
 ### lt 45 最大子数组差
 >给出数组[1, 2, -3, 1]，返回 6
 找出两个不重叠的子数组A和B，使两个子数组和的差的绝对值|SUM(A) - SUM(B)|最大
@@ -232,29 +295,7 @@ public boolean canPartition(int[] nums){
 
 ```
 
-### !!!152 最大子数组乘积 保留当前值之前的最大积和最小积
->输入: [-2,0,-1]
-输出: 0
-解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
 
-负数的最小积有潜力变成最大积
-当前max是 `nums[i]*max`,`nums[i]*min`,`nums[i]` 三者的最大者
-当前min是 `nums[i]*max`,`nums[i]*min`,`nums[i]` 三者最小值
-更新全局max
-4ms 11.99%
-```java
-public int maxProduct(int[] nums) {
-    int sum = nums[0],min = nums[0],max = nums[0];
-    for(int i=1;i<nums.length;i++){
-        int nextmax = nums[i]*max;
-        int nextmin = nums[i]*min;
-        max = Math.max(Math.max(nextmax,nextmin),nums[i]);
-        min = Math.min(Math.min(nextmax,nextmin),nums[i]);
-        sum = Math.max(max,sum);
-    }
-    return sum;
-}
-```
 
 ### 930 01数组中有多少个和=target的子数组
 > 输入：A = [1,0,1,0,1], S = 2
