@@ -308,7 +308,7 @@ There was an unexpected error (type=Internal Server Error, status=500).
 
 
 
-### 5.集成Redis
+### 4.集成Redis
 https://github.com/xetorthio/jedis
 ```xml
 <dependency>
@@ -348,6 +348,7 @@ public class RedisConfig {
     private int poolMaxWait;//秒
 }
 ```
+
 #### Service
 通过service提供Redis的get/set
 ```java
@@ -490,6 +491,7 @@ if (dataSource != null) {
 }
 }
 ```
+
 ##### set方法BeanToStrnig
 用fastjson将bean对象变成string
 ```java
@@ -583,6 +585,7 @@ public class RedisService{
     }
 }
 ```
+
 #### controller get测试:
 127.0.0.1:6379> auth 123456
 OK
@@ -630,6 +633,7 @@ public class RedisPoolFactory {
     return jp;
 }
 ```
+
 #### controller set测试:
 ```java
 @RequestMapping("/redis/set")
@@ -826,7 +830,7 @@ public <T> Long decr(KeyPrefix prefix, String key) {
 }
 ```
 
-### 6.实现登陆 数据库设计 2次MD5 JSR303参数校验 全局异常 分布式session
+### 5.实现登陆 数据库设计 2次MD5 JSR303参数校验 全局异常 分布式session
 数据库设计
 ```sql
 create table `miaosha_user`(
@@ -901,7 +905,7 @@ public class LoginController {
 }
 ```
 
-##### 登陆页面 用bootstrap的css，jq的表单验证，layer的弹窗，md5加密
+#### 登陆页面 用bootstrap的css，jq的表单验证，layer的弹窗，md5加密
 
 登陆html页面引入：
 ```html
@@ -1174,7 +1178,7 @@ public Result<String> doLogin(LoginVo loginVo) {
     else return Result.error(code);
 ```
 
-### 7.JSR303参数校验+全局异常
+### 6.JSR303参数校验+全局异常
 不是每个controller的方法里都要写参数校验，而是把参数校验放到vo类上，在controller只要打注解
 
 ```xml
@@ -1416,7 +1420,7 @@ userService.login(loginVo);
 return Result.success("登录成功");
 ```
 
-### 8.分布式Session
+### 7.分布式Session
 1.容器session同步 比较复杂
 2.登陆成功后生成token(sessionID)写到cookie传递给客户端，客户端每次访问上传cookie
 
@@ -1603,7 +1607,7 @@ public String toLogin(Model model,
 }
 ```
 
-### session内登陆时延长有效期
+#### session内登陆时延长有效期
 每次response里都有set-cookie
 
 把生成cookie的代码独立成一个方法：
@@ -1635,7 +1639,7 @@ public MiaoshaUser getByToken(HttpServletResponse response, String token) {
 
 在controller加response
 
-### 判断登陆session的代码独立出来，Controller只传入一个User
+#### 判断登陆session的代码独立出来，Controller只传入一个User
 新建包config 
 `WebConfig.java`
 controller中的参数通过框架回调`WebMvcConfigurerAdapter`的`addArgumentResolvers` 赋值
@@ -1715,7 +1719,7 @@ public String toLogin(Model model,MiaoshaUser user) {
 
 ---
 
-### 9.商品列表详情页 秒杀功能
+### 8.商品列表详情页 秒杀功能
 秒杀商品表、秒杀订单表 要独立，因为变化大
 新建数据库
 ```sql
@@ -2298,7 +2302,7 @@ public interface OrderDao {
 http://localhost:8080/miaosha/do_miaosha 完成秒杀
 
 
-### JMeter测试QPS压测 打成war包放到tomcat服务器上
+### 10.JMeter测试QPS压测 打成war包放到tomcat服务器上
 https://jmeter.apache.org/
 1 压测商品列表页 
 QPS说法：并发在1000的时候网站的QPS是1000或者500

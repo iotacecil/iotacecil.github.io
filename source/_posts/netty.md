@@ -23,6 +23,7 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 3. 内核拷贝fd的消息到用户空间
 
 ### epoll
+https://segmentfault.com/a/1190000003063859
 https://www.cnblogs.com/xiehongfeng100/p/4636118.html
 最大打开的文件数量（并发量）
 `cat /proc/sys/fs/file-max`

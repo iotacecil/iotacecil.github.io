@@ -8,6 +8,11 @@ https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.html
 https://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B
 https://www.educative.io/collection/page/5668639101419520/5649050225344512/5668600916475904
 
+### 设计电梯
+https://medium.com/system-designing-interviews/design-a-elevator-system-fc5832ca0b8b
+
+### 多电梯调度 car allocation
+
 ### 341 多层List迭代器
 
 ### 729 Calendar1 时间区间有无重叠

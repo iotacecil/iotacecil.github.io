@@ -4,6 +4,66 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 设计模式
+
+#### 里氏替换 长方形和正方形
+当把父类替换成子类，程序运行的和期望不一样。
+如果正方形继承长方形，当对长方形的resize方法里有一个判断长宽是否相等的条件，正方形会死循环。
+正确方法：长方形正方形都实现这个接口。注意没有set方法，所以长方形和正方形的resize是不通用的。写resize方法只能传入长方形类。防止继承泛滥。
+```java
+public interface Quadrangle{
+    long getWidth();
+    long getLength();
+}
+```
+
+子类重载父类方法，入参要比父类的入参更宽松！
+```java
+public class Child extends Base{
+    // 重写
+    @Override
+    public void method(HashMap map){
+        super.method(map);
+    }
+    // 重载 比父类的入参更宽松 
+    // 当使用Child.method(hashmap);的时候不会被调用
+    public void method(Map map){
+
+    }
+}
+```
+
+后置条件：子类实现父类的抽象方法返回值要比父类更严格
+
+
+
+#### 组合/聚合复用原则 db的Connect类
+```java
+public abstract class DBConnection{
+    public abstract String getConnection();
+}
+```
+```java
+public class MysqlConnection extends DBConnection{
+    @Override
+    public String getConnection(){
+        return "mysql数据库连接";
+    }
+}
+```
+```java
+public class Dao{
+    // 可以通过set/构造方法注入
+    private DBConnection dbConnection;
+    public void addProduct(){
+        String conn = dbConnection.getConnection();
+    }
+}
+```
+
+
+
+
 ### 数据库设计原则
 1 实体聚合原则
 2 不用外键

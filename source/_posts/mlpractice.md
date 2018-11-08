@@ -4,6 +4,41 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### 训练数据处理：
+打乱样本
+```python
+def _shuffle_data(self):
+    # [0,1,2,3,4,5] -> [5,3,2,4,0,1]
+    p = np.random.permutation(self._num_examples)
+    self._data = self._data[p]
+    self._labels = self._labels[p]
+```
+
+### z-score标准化变成正太分布
+原始值和平均值之间的距离，以标准差为单位计算。
+
+
+### 相关性分析 
+散点矩阵 看是不是线性相关
+```python
+data = pd.DataFrame(np.random.randn(200,4)*100,columns = ['A','B','C','D'])
+pd.scatter_matrix(testUser,figsize = (8,5),c = 'k',marker='.',diagonal="hist",alpha=0.8,range_padding=.1)
+```
+https://blog.csdn.net/v_JULY_v/article/details/78121924
+
+皮尔逊相关系数：服从正态分布的连续变量
+`df.corr()` 如果cosine相似度是0.97 pearson可能是1，与加减乘除无关，只看趋势。
+使用之前先要检验是否正太分布p?0.05
+
+Sperman相关系数：不正太分布的 等级相关系数，按rank计算
+
+
+https://baike.baidu.com/item/%E7%9A%AE%E5%B0%94%E6%A3%AE%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0
+
+
+### kaggle 方案索引
+https://mp.weixin.qq.com/s?__biz=MzIzMzgzOTUxNA==&mid=2247483678&idx=1&sn=5f044dabfaa726e292686287a1dd5ca4&chksm=e8fecfebdf8946fdabf71fd5c4c0e019144f105da993c12fa257c64f281ecfb3a7557f16b79e&scene=21#wechat_redirect
+
 ### ARIMA网站流量预测
 >AR是autoregressive的缩写，表示自回归模型，含义是当前时间点的值等于过去若干个时间点的值的回归
 I(d)将不平稳序列差分得到平稳序列，略过不表。假设我们现在的时间序列已经是平稳的了。

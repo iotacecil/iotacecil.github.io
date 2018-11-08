@@ -11,6 +11,7 @@ categories: [算法备忘]
 
 维护前缀乘积的min/max，每次当前数组元素必须参与运算。
 注意：更新min/max的时候考虑放弃前缀，只考虑本身，所以变成子数组。
+注意：子数组所以min/max是前一个index的结果
 
 负数的最小积有潜力变成最大积
 当前max是 `nums[i]*max`,`nums[i]*min`,`nums[i]` 三者的最大者
@@ -31,7 +32,7 @@ public int maxProduct(int[] nums) {
 }
 ```
 
-### 合唱团 背包(只能向前找k个物品)+数组最大子序列???乘积
+### 合唱团 背包(只能向前找k个物品)+数组最大子数组(差d的子数组)???乘积
 > 从这 n 个学生中按照顺序选取 k 名学生，要求相邻两个学生的位置编号的差不超过 d，使得这 k 个学生的能力值的乘积最大
 > 输入3
 7 4 7
@@ -73,6 +74,8 @@ public static long maxability(int n,long[]arr,int k,int d){
 
 ```java
 ```
+
+---
 
 ### 763 划分尽可能多字母区间  返回各区间的长度 双指针
 >输入: S = "ababcbacadefegdehijhklij"
