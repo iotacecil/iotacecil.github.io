@@ -4,6 +4,13 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### ajax复杂对象传递给spring boot
+ajax里必须要`contentType:"application/json;charset=utf-8"`因为默认是`application/x-www-form-urlencoded`
+
+### Gson类中有泛型类的反射原理
+
+### JavaEE规范
+
 ### 设计模式
 
 #### 里氏替换 长方形和正方形

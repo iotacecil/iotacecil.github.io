@@ -4,6 +4,12 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### 张量分解代码
+http://tensorly.org/stable/user_guide/quickstart.html#tensor-decomposition 
+
+### NMF的评价
+basline用平均?
+
 ### 训练数据处理：
 打乱样本
 ```python

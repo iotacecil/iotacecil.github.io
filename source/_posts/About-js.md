@@ -4,6 +4,28 @@ date: 2018-04-17 17:06:31
 tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
+### 控制台导入jq发送ajax
+https://zju.date/ajax-request-in-chrome-console/
+不使用contentType: “application/json”则data可以是对象
+
+使用contentType: “application/json”则data只能是json字符串
+```javascript
+var jq = document.createElement('script');  
+jq.src = 'http://7xsy2w.com1.z0.glb.clouddn.com/jquery-3.1.1.min.js'; //也可以放本地服务器上
+document.getElementsByTagName('head')[0].appendChild(jq);
+j=jQuery
+j.noConflict();
+j.ajax({
+    url: 'http://localhost:8080/test/',
+    type: "POST",
+    data: usr,
+contentType:"application/json;charset=utf-8",
+    dataType: "json",
+    success:function() {console.log('发送成功！'); },
+    error:function() { console.log('发送失败！'); }
+});
+```
+
 ### 手机端查看页面
 `npm install http-server -g`
 `http-server`
