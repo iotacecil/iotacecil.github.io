@@ -8,6 +8,18 @@ category: [js前端常用svgcanvasVue框架jquery源码]
 https://zju.date/ajax-request-in-chrome-console/
 不使用contentType: “application/json”则data可以是对象
 
+fetch
+```javascript
+fetch("http://localhost:3000",{ // post请求
+  method:"POST",
+  headers: {
+        "Content-Type": "application/json"
+   }, 
+   body:'{"welcome":"你好"}'
+}).then(res => console.log(res.json()))
+  .catch(e=>console.log("something went wrong: " + e))
+```
+
 使用contentType: “application/json”则data只能是json字符串
 ```javascript
 var jq = document.createElement('script');  
@@ -19,7 +31,7 @@ j.ajax({
     url: 'http://localhost:8080/test/',
     type: "POST",
     data: usr,
-contentType:"application/json;charset=utf-8",
+    contentType:"application/json;charset=utf-8",
     dataType: "json",
     success:function() {console.log('发送成功！'); },
     error:function() { console.log('发送失败！'); }
@@ -172,13 +184,6 @@ Etag响应/if-Node-Match请求
 
 
 
-
-
-
-
-
-
-
 ### 浏览器缓存
 https://segmentfault.com/a/1190000009638800
 
@@ -324,9 +329,10 @@ function shuff2d(mines,n,m){
 
 ### window.getSelections()
 https://developer.mozilla.org/zh-CN/docs/Web/API/Window/getSelection
+
 ### css 伪类选择器的not
 css权重计算？
-{% qnimg cssnot.png %}
+
 ```html
 <head>
  <style>
@@ -446,14 +452,15 @@ Prerender可以优化SEO
 
 
 gulp不用io流式处理 比grunt晚出现
-## chrome 技巧
+
+### chrome 技巧
 截图：ctrl+shift+P Captrue full size screenshot
 
-## Web Component 用法
+### Web Component 用法
 
-## Webview loadUrl
+### Webview loadUrl
 
-## 浏览器由7部分组成
+### 浏览器由7部分组成
 用户界面
 网络：请求静态资源发起请求
 js引擎
@@ -462,12 +469,12 @@ UI后端：选择框、按钮、输入框
 js解释器
 持久化数据存储
 
-## 查看渲染计算后的CSS规则
+### 查看渲染计算后的CSS规则
 `document.defaultView.getComputedStype(document.getElementById("id",null))`
 css计算权重：!important>内联样式>id选择器>类选择器>元素选择器
 
 
-## HTTP
+### HTTP
 http/1.1 字符串传输
 持久链接：一个tcp链接里可以发送很多http请求。减少三次握手次数。
 pipeline:

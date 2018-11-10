@@ -2516,6 +2516,7 @@ chmod 777  jmeter
 生成测试用户：
 用`HttpURLConnection` 发送post
 ```java
+URL url = new URL(urlString);
 HttpURLConnection co = (HttpURLConnection)url.openConnection();
 co.setRequestMethod("POST");
 co.setDoOutput(true);
