@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/celebrity.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/celebrity2.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/celebrity3.jpg">
-<meta property="og:updated_time" content="2018-10-30T02:10:22.830Z">
+<meta property="og:updated_time" content="2018-11-10T02:54:17.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="背包、鸡蛋、找钱、名人、车票">
 <meta name="twitter:description" content="poj2686 车票约束的最短路径 123456789101112131415161718192021222324252627282930313233343536373839404142434445/** * * 3 4 3路径数量 1 4 3 1 2 1 2 10 2 3 30 3 4 20 time = graph[v][w]/hourse[i] * @param n ticket numbe">
@@ -354,8 +354,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-30T10:10:22+08:00">
-                2018-10-30
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-10T10:54:17+08:00">
+                2018-11-10
               </time>
             
           </span>
@@ -425,7 +425,8 @@
 <li>如果ak比已得最长子序列的最后ai大，则长度+1<br><code>maxLen(k)=max(maxLen(i):i in range(1,k)且ai&lt;ak且k!=1)+1</code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,n)</span><br><span class="line">    maxlen[i]=<span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>,n)</span><br><span class="line">    <span class="comment">##求以ai 为终点的最长</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,i)<span class="comment"># ai左边所有的数</span></span><br><span class="line">        <span class="keyword">if</span> a[i]&gt;a[j]: <span class="comment"># ai为终点的更长</span></span><br><span class="line">        <span class="comment">#？？ maxlen[i]也更新了，可能比manlen[j]+1大</span></span><br><span class="line">            maxlen[i]=max(maxlen[j]+<span class="number">1</span>,maxlen[i])</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="背包9讲"><a href="#背包9讲" class="headerlink" title="背包9讲:"></a>背包9讲:</h3><blockquote>
+<h3 id="背包9讲"><a href="#背包9讲" class="headerlink" title="背包9讲:"></a>背包9讲:</h3><p>01背包：每个物品只能放1次</p>
+<blockquote>
 <p>dp求解背包问题的复杂度是O(nW)</p>
 </blockquote>
 <h4 id="超大背包v和w都很大，n很小"><a href="#超大背包v和w都很大，n很小" class="headerlink" title="超大背包v和w都很大，n很小"></a>超大背包v和w都很大，n很小</h4><p>//364</p>
@@ -624,7 +625,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

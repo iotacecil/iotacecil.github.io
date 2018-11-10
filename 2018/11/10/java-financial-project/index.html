@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="主要的业务流程 查询和购买 用到的技术： 1.模块化开发 高内聚，低耦合模块划分业务模块 公共模块 - 项目模块 - 管理端/销售端  按业务层次划分，将dao层和service层单独划分成模块（Entity、Api） 功能划分：管理和销售模块（可以独立部署的，算一个应用） 重复使用的模块：Util，Quartz，Swagger  构建工具 Gradle模块：jar/war可以独立部署创建grad">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理财项目-用到RPC和加密">
+<meta property="og:url" content="http://blog.iotaa.xyz/2018/11/10/java-financial-project/index.html">
+<meta property="og:site_name" content="Learn &amp; practice">
+<meta property="og:description" content="主要的业务流程 查询和购买 用到的技术： 1.模块化开发 高内聚，低耦合模块划分业务模块 公共模块 - 项目模块 - 管理端/销售端  按业务层次划分，将dao层和service层单独划分成模块（Entity、Api） 功能划分：管理和销售模块（可以独立部署的，算一个应用） 重复使用的模块：Util，Quartz，Swagger  构建工具 Gradle模块：jar/war可以独立部署创建grad">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp1.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp2.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp3.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp4.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp5.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp6.jpg">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp7.jpg">
+<meta property="og:updated_time" content="2018-11-10T08:34:50.020Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理财项目-用到RPC和加密">
+<meta name="twitter:description" content="主要的业务流程 查询和购买 用到的技术： 1.模块化开发 高内聚，低耦合模块划分业务模块 公共模块 - 项目模块 - 管理端/销售端  按业务层次划分，将dao层和service层单独划分成模块（Entity、Api） 功能划分：管理和销售模块（可以独立部署的，算一个应用） 重复使用的模块：Util，Quartz，Swagger  构建工具 Gradle模块：jar/war可以独立部署创建grad">
+<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/finacialp1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.iotaa.xyz/2018/11/10/java-financial-project/"/>
+
+
+
+
+
+  <title>理财项目-用到RPC和加密 | Learn & practice</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn & practice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/11/10/java-financial-project/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">理财项目-用到RPC和加密</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-10T13:25:11+08:00">
+                2018-11-10
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-10T16:34:50+08:00">
+                2018-11-10
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>主要的业务流程 查询和购买<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/finacialp1.jpg"></p>
+<p>用到的技术：</p>
+<h3 id="1-模块化开发-高内聚，低耦合"><a href="#1-模块化开发-高内聚，低耦合" class="headerlink" title="1.模块化开发 高内聚，低耦合"></a>1.模块化开发 高内聚，低耦合</h3><h4 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a>模块划分</h4><p>业务模块 公共模块 - 项目模块 - 管理端/销售端<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/finacialp2.jpg"></p>
+<ol>
+<li>按业务层次划分，将dao层和service层单独划分成模块（Entity、Api）</li>
+<li>功能划分：管理和销售模块（可以独立部署的，算一个应用）</li>
+<li>重复使用的模块：Util，Quartz，Swagger</li>
+</ol>
+<h4 id="构建工具-Gradle"><a href="#构建工具-Gradle" class="headerlink" title="构建工具 Gradle"></a>构建工具 Gradle</h4><p>模块：jar/war可以独立部署<br>创建gradle java项目 使用本地gradle<br>修改 构建脚本 添加单独文件专门用来依赖管理<br><code>dependencies.gradle</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">ext &#123;</span><br><span class="line">    versions = [</span><br><span class="line">            springBootVersion: '2.0.0.RELEASE'</span><br><span class="line">    ]</span><br><span class="line">    libs = [</span><br><span class="line">            common : [</span><br><span class="line">                    "org.springframework.boot:spring-boot-starter-web:$&#123;versions.springBootVersion&#125;",</span><br><span class="line">                    "org.springframework.boot:spring-boot-starter-data-jpa:$&#123;versions.springBootVersion&#125;",</span><br><span class="line">                    <span class="string">"org.apache.commons:commons-lang3:3.5"</span></span><br><span class="line">                    , "com.h2database:h2:1.4.195"</span><br><span class="line">            ],</span><br><span class="line">            findbugs: [</span><br><span class="line">                    <span class="string">"com.google.code.findbugs:jsr305:1.3.9"</span></span><br><span class="line">            ],</span><br><span class="line">            mysql  : [</span><br><span class="line">                    <span class="string">"mysql:mysql-connector-java:5.1.29"</span></span><br><span class="line">            ],</span><br><span class="line">            jsonrpc:[</span><br><span class="line">                    <span class="string">"com.github.briandilley.jsonrpc4j:jsonrpc4j:1.5.1"</span></span><br><span class="line">            ],</span><br><span class="line">            swagger: [</span><br><span class="line">                    "io.springfox:springfox-swagger2:2.7.0",</span><br><span class="line">                    <span class="string">"io.springfox:springfox-swagger-ui:2.7.0"</span></span><br><span class="line">            ],</span><br><span class="line">            hazelcast:[</span><br><span class="line">                    'com.hazelcast:hazelcast:3.8.6',</span><br><span class="line">                    'com.hazelcast:hazelcast-spring:3.8.6',</span><br><span class="line">            ],</span><br><span class="line">            activemq:[</span><br><span class="line">                    "org.springframework.boot:spring-boot-starter-activemq:$&#123;versions.springBootVersion&#125;",</span><br><span class="line">            ],</span><br><span class="line">            rsa:[</span><br><span class="line">                    'commons-codec:commons-codec:1.8'</span><br><span class="line">            ],</span><br><span class="line">            test   : [</span><br><span class="line">                    <span class="string">"org.springframework.boot:spring-boot-starter-test:$&#123;versions.springBootVersion&#125;"</span></span><br><span class="line"></span><br><span class="line">            ]</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改build.gradle 引入依赖文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">group 'finalLearn'</span><br><span class="line">version '1.0-SNAPSHOT'</span><br><span class="line">apply from: "$rootDir/dependencies.gradle"</span><br><span class="line"></span><br><span class="line">subprojects &#123;</span><br><span class="line"></span><br><span class="line">    apply plugin: 'java'</span><br><span class="line">    apply plugin: 'war'</span><br><span class="line"></span><br><span class="line">    sourceCompatibility = 1.8</span><br><span class="line">    targetCompatibility = 1.8</span><br><span class="line"></span><br><span class="line">    repositories &#123;</span><br><span class="line">        mavenLocal()</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dependencies &#123;</span><br><span class="line">        compile libs.common</span><br><span class="line">        testCompile libs.test</span><br><span class="line">    &#125;</span><br><span class="line">    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="新建模块"><a href="#新建模块" class="headerlink" title="新建模块"></a>新建模块</h4><p>1.在工程上新建Module util，<br>2.将util的<code>build.gradle</code>清空<br>因为根项目的<code>build.gradle</code> 的 <code>subprojects</code>定义过了所有模块。<br>3.新建其他api,entity,manager,quartz,swagger,saller模块。<br>4.删除根目录下的src</p>
+<hr>
+<h3 id="2数据库设计"><a href="#2数据库设计" class="headerlink" title="2数据库设计"></a>2数据库设计</h3><p>创建 manager 数据库 和 saller数据库</p>
+<h4 id="管理端：产品表"><a href="#管理端：产品表" class="headerlink" title="管理端：产品表"></a>管理端：产品表</h4><img src="http://phb9yml10.bkt.clouddn.com/static/images/finacialp3.jpg">
+<img src="http://phb9yml10.bkt.clouddn.com/static/images/finacialp4.jpg">
+<blockquote>
+<p>datetime 保存的时间更广，timestamp有时区信息（读取的时候会根据客户端时区转换成对应时区）</p>
+</blockquote>
+<p>编号varchar50、名称varchar50、收益率decimal5,3、锁定期smallint、状态varchar20、起投金额decimal 15,3、投资步长decimal 15,3、备注<br>创建时间datetime、创建者varchar20、更新时间datetime、更新者varchar20<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> manager</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`product`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`product`</span> (</span><br><span class="line">  <span class="string">`Id`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'产品编号'</span>,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'产品名称'</span>,</span><br><span class="line">  <span class="string">`threshold_amount`</span> <span class="built_in">decimal</span>(<span class="number">15</span>,<span class="number">3</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0.000'</span> <span class="keyword">COMMENT</span> <span class="string">'起投金额'</span>,</span><br><span class="line">  <span class="string">`step_amount`</span> <span class="built_in">decimal</span>(<span class="number">15</span>,<span class="number">3</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0.000'</span> <span class="keyword">COMMENT</span> <span class="string">'投资补偿'</span>,</span><br><span class="line">  <span class="string">`lock_term`</span> <span class="built_in">smallint</span>(<span class="number">6</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> <span class="keyword">COMMENT</span> <span class="string">'锁定期'</span>,</span><br><span class="line">  <span class="string">`reward_rate`</span> <span class="built_in">decimal</span>(<span class="number">5</span>,<span class="number">3</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0.000'</span> <span class="keyword">COMMENT</span> <span class="string">'收益率'</span>,</span><br><span class="line">  <span class="string">`status`</span> <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> latin1 <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'audining审核中'</span>,</span><br><span class="line">  <span class="string">`memo`</span> <span class="built_in">varchar</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`create_at`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,</span><br><span class="line">  <span class="string">`create_user`</span> <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`update_at`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`update_user`</span> <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`Id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br></pre></td></tr></table></figure></p>
+<h4 id="销售端："><a href="#销售端：" class="headerlink" title="销售端："></a>销售端：</h4><img src="http://phb9yml10.bkt.clouddn.com/static/images/finacialp5.jpg">
+<img src="http://phb9yml10.bkt.clouddn.com/static/images/finacialp6.jpg">
+<p>订单表order_t  (order是关键字)<br>订单编号varchar50 渠道编号varchar50 产品编号varchar50 用户编号varchar50 外部订单编号varchar50  类型varchar50 状态varchar50  金额decimal15,3 备注varchar200 创建时间datetime 更新时间datetime<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> seller;</span><br><span class="line"><span class="keyword">use</span> seller;</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> <span class="string">`oreder_t`</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`oreder_t`</span> (</span><br><span class="line">  <span class="string">`order_id`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`ch_id`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'渠道编号'</span>,</span><br><span class="line">  <span class="string">`product_id`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'产品编号'</span>,</span><br><span class="line">  <span class="string">`chan_user_id`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span>,</span><br><span class="line">  <span class="string">`order_type`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'状态购买赎回'</span>,</span><br><span class="line">  <span class="string">`order_status`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'状态初始化处理中成功失败'</span>,</span><br><span class="line">  <span class="string">`outer_order_id`</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">''</span> <span class="keyword">COMMENT</span> <span class="string">'外部订单编号'</span>,</span><br><span class="line">  <span class="string">`amount`</span> <span class="built_in">decimal</span>(<span class="number">15</span>,<span class="number">3</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0.000'</span> <span class="keyword">COMMENT</span> <span class="string">'金额'</span>,</span><br><span class="line">  <span class="string">`memo`</span> <span class="built_in">varchar</span>(<span class="number">200</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'备注'</span>,</span><br><span class="line">  <span class="string">`create_at`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'创建时间'</span>,</span><br><span class="line">  <span class="string">`update_at`</span> datetime <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> <span class="keyword">COMMENT</span> <span class="string">'更新时间'</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`order_id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8;</span><br></pre></td></tr></table></figure></p>
+<h4 id="entity"><a href="#entity" class="headerlink" title="entity"></a>entity</h4><h5 id="产品类-Product"><a href="#产品类-Product" class="headerlink" title="产品类 Product"></a>产品类 Product</h5><p>entity的java里新建包<code>entity</code>新建<code>Product</code>和<code>Order</code>类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String status;</span><br><span class="line">    <span class="keyword">private</span> BigDecimal thresholdAmount;</span><br><span class="line">    <span class="keyword">private</span> BigDecimal stepAmount;</span><br><span class="line">    <span class="keyword">private</span> Integer lockTerm;</span><br><span class="line">    <span class="keyword">private</span> BigDecimal rewardRate;</span><br><span class="line">    <span class="keyword">private</span> String memo;</span><br><span class="line">    <span class="keyword">private</span> Date createAt;</span><br><span class="line">    <span class="keyword">private</span> Date updateAt;</span><br><span class="line">    <span class="keyword">private</span> String createUser;</span><br><span class="line">    <span class="keyword">private</span> String updateUser;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以用工具类重写toString（apache.commons）<br>用反射(?)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ReflectionToStringBuilder.toString(<span class="keyword">this</span>, ToStringStyle.SIMPLE_STYLE);</span><br></pre></td></tr></table></figure></p>
+<p>产品status的枚举类 新建enums包<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ProductStatus &#123;</span><br><span class="line">    AUDITING(<span class="string">"审核中"</span>),</span><br><span class="line">    IN_SELL(<span class="string">"销售中"</span>),</span><br><span class="line">    LOCKED(<span class="string">"暂停销售"</span>),</span><br><span class="line">    FINISHED(<span class="string">"已结束"</span>);</span><br><span class="line">    ProductStatus(String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> String desc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在Product类中添加说明<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@see</span> entity.enums.ProductStatus</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">private</span> String status;</span><br></pre></td></tr></table></figure></p>
+<h5 id="订单对象-Order类"><a href="#订单对象-Order类" class="headerlink" title="订单对象 Order类"></a>订单对象 Order类</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span>(name = <span class="string">"order_t"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> String orderId;</span><br><span class="line">    <span class="keyword">private</span> String chanId;</span><br><span class="line">    <span class="keyword">private</span> String chanUserId;</span><br><span class="line">    <span class="keyword">private</span> String orderType;</span><br><span class="line">    <span class="keyword">private</span> String orderStatus;</span><br><span class="line">    <span class="keyword">private</span> String outerOrderId;</span><br><span class="line">    <span class="keyword">private</span> BigDecimal amount;</span><br><span class="line">    <span class="keyword">private</span> String memo;</span><br><span class="line">    <span class="keyword">private</span> Date createAt;</span><br><span class="line">    <span class="keyword">private</span> Date updateAt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>订单状态和订单种类的枚举类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> OrderType &#123;</span><br><span class="line">    APPLY(<span class="string">"申购"</span>),</span><br><span class="line">    REDEEM(<span class="string">"赎回"</span>);</span><br><span class="line">    <span class="keyword">private</span> String desc;</span><br><span class="line">    OrderType(String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>添加doc<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> entity.enums.OrderType</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> String orderType;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@see</span> entity.enums.OrderStatus</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> String orderStatus;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> OrderStatus &#123;</span><br><span class="line">    INIT(<span class="string">"初始化"</span>),</span><br><span class="line">    PROCESS(<span class="string">"处理中"</span>),</span><br><span class="line">    SUCCESS(<span class="string">"成功"</span>),</span><br><span class="line">    FAIL(<span class="string">"失败"</span>);</span><br><span class="line">    <span class="keyword">private</span> String desc;</span><br><span class="line"></span><br><span class="line">    OrderStatus(String desc) &#123;</span><br><span class="line">        <span class="keyword">this</span>.desc = desc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> desc;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-管理端"><a href="#3-管理端" class="headerlink" title="3.管理端"></a>3.管理端</h3><p>Spring Data 用JPA 操作数据库<br>接口设计 添加产品、查询单个产品、条件查询产品<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/finacialp7.jpg"></p>
+<p>1.新建启动类<br>在<code>manager</code>模块 新建<code>mannager</code>-<code>ManagerApp.java</code> 启动类<br>entity不在manager里要手动添加扫描路径<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EntityScan</span>(basePackages = &#123;<span class="string">"entity"</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ManagerApp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ManagerApp.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.配置数据库连接地址：<br>在resources添加jpa配置文件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    url: jdbc:mysql:<span class="comment">//192.168.3.109:3306/manager?user=root&amp;password=root&amp;useUnicode=true&amp;characterEncoding=utf-8</span></span><br><span class="line">  jpa:</span><br><span class="line">    show-sql: <span class="keyword">true</span></span><br><span class="line">server:</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /manager</span><br><span class="line">  port: <span class="number">8081</span></span><br></pre></td></tr></table></figure></p>
+<p>3.新建controller，repository,service包</p>
+<p>4.创建接口dao层<code>repository</code> - <code>ProductRepository</code><br>继承 简单查询和复杂查询<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ProductRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">Product</span>,<span class="title">String</span>&gt;,<span class="title">JpaSpecificationExecutor</span>&lt;<span class="title">Product</span>&gt;</span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在当前模块的<code>build.gradle</code> 添加entity依赖<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dependencies&#123;</span><br><span class="line">    <span class="function">compile <span class="title">project</span><span class="params">(<span class="string">":entity"</span>)</span></span></span><br><span class="line"><span class="function">    compile <span class="title">project</span><span class="params">(<span class="string">":util"</span>)</span></span></span><br><span class="line"><span class="function">    compile <span class="title">project</span><span class="params">(<span class="string">":api"</span>)</span></span></span><br><span class="line"><span class="function">    compile libs.mysql</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="添加产品"><a href="#添加产品" class="headerlink" title="添加产品"></a>添加产品</h4><p>5.service<br>添加产品 参数校验+设置默认值<br>不应该在实体类有默认值<br>int会有默认值 Integer不会有默认值<br><strong>判断整数的方法</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger LOG = LoggerFactory.getLogger(ProductService.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ProductRepository repository;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">addProduct</span><span class="params">(Product product)</span></span>&#123;</span><br><span class="line">        LOG.debug(<span class="string">"创建产品，参数：&#123;&#125;"</span>,product);</span><br><span class="line">        <span class="comment">//数据校验</span></span><br><span class="line">        checkProduct(product);</span><br><span class="line">        setDefault(product);</span><br><span class="line">        Product rst = repository.save(product);</span><br><span class="line">        LOG.debug(<span class="string">"创建产品，结果:&#123;&#125;"</span>,rst);</span><br><span class="line">        <span class="keyword">return</span> rst;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 产品：编号不可空 步长整数 收益率0-30 校验</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> product</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkProduct</span><span class="params">(Product product)</span> </span>&#123;</span><br><span class="line">        Assert.notNull(product.getId(), <span class="string">"编号不可为空"</span>);</span><br><span class="line">        Assert.isTrue(BigDecimal.ZERO.compareTo(product.getRewardRate())&lt;<span class="number">0</span>&amp;&amp;BigDecimal.valueOf(<span class="number">30</span>).compareTo(product.getRewardRate())&gt;=<span class="number">0</span>,<span class="string">"收益率范围错误"</span> );</span><br><span class="line">        Assert.isTrue(BigDecimal.valueOf(product.getStepAmount().longValue()).compareTo(product.getStepAmount())==<span class="number">0</span>, <span class="string">"投资步长需为整数"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 产品默认值：创建更新时间，步长，状态，锁定期</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> product</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDefault</span><span class="params">(Product product)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(product.getCreateAt()==<span class="keyword">null</span>)&#123;</span><br><span class="line">            product.setCreateAt(<span class="keyword">new</span> Date());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(product.getUpdateAt()==<span class="keyword">null</span>)&#123;</span><br><span class="line">            product.setUpdateAt(<span class="keyword">new</span> Date());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(product.getStepAmount()==<span class="keyword">null</span>)&#123;</span><br><span class="line">            product.setStepAmount(BigDecimal.ZERO);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(product.getLockTerm()== <span class="keyword">null</span>)&#123;</span><br><span class="line">            product.setLockTerm(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(product.getStatus()==<span class="keyword">null</span>)&#123;</span><br><span class="line">            product.setStatus(ProductStatus.AUDITING.name());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>6.controller info级别的log<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/products"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductController</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger LOG = LoggerFactory.getLogger(ProductController.class);</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ProductService service;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">""</span>,method= RequestMethod.POST)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Product <span class="title">addProduct</span><span class="params">(@RequestBody Product product)</span></span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"创建产品，参数:&#123;&#125;"</span>,product);</span><br><span class="line">        Product rst = service.addProduct(product);</span><br><span class="line">        LOG.info(<span class="string">"创建产品，参数:&#123;&#125;"</span>,product);</span><br><span class="line">        <span class="keyword">return</span> rst;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="查询产品单个产品"><a href="#查询产品单个产品" class="headerlink" title="查询产品单个产品"></a>查询产品单个产品</h4><p>7.service<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Product <span class="title">findOne</span><span class="params">(String id)</span></span>&#123;</span><br><span class="line">    Assert.notNull(id,<span class="string">"需要产编号参数"</span>);</span><br><span class="line">    LOG.debug(<span class="string">"查询单个产品,id=&#123;&#125;"</span>,id);</span><br><span class="line">    Product product = repository.findById(id).orElse(<span class="keyword">null</span>);</span><br><span class="line">    LOG.debug(<span class="string">"查询单个产品,结果=&#123;&#125;"</span>,product);</span><br><span class="line">    <span class="keyword">return</span> product;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>8.controller从URL里获得产品id<code>@PathVariable</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/&#123;id&#125;"</span>,method = RequestMethod.GET)</span><br><span class="line"><span class="function"><span class="keyword">public</span> Product <span class="title">findOne</span><span class="params">(@PathVariable String id)</span></span>&#123;</span><br><span class="line">    LOG.info(<span class="string">"查询单个产品，id:&#123;&#125;"</span>,id);</span><br><span class="line">    Product product = service.findOne(id);</span><br><span class="line">    LOG.info(<span class="string">"查询单个产品，结果:&#123;&#125;"</span>,product);</span><br><span class="line">    <span class="keyword">return</span> product;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="复杂查询-分页查询"><a href="#复杂查询-分页查询" class="headerlink" title="复杂查询 分页查询"></a>复杂查询 分页查询</h4><p>9.service<br>1).多个编号查询<code>List&lt;String&gt; idList</code><br>2).收益率范围查询<code>BigDecimal minRewardRate, BigDecimal maxRewardRate</code><br>3).多个状态查询<code>List&lt;String&gt; statusList</code><br>4).分页查询<code>Pageable pageable</code> 分页参数</p>
+<p>定义<code>Specification</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Page&lt;Product&gt; <span class="title">query</span><span class="params">(List&lt;String&gt; idList,</span></span></span><br><span class="line"><span class="function"><span class="params">                               BigDecimal minRewardRate, BigDecimal maxRewardRate,</span></span></span><br><span class="line"><span class="function"><span class="params">                               List&lt;String&gt; statusList,</span></span></span><br><span class="line"><span class="function"><span class="params">                               Pageable pageable)</span></span>&#123;</span><br><span class="line">    LOG.debug(<span class="string">"查询产品,idList=&#123;&#125;,min=&#123;&#125;,max:&#123;&#125;,status=&#123;&#125;,pageable=&#123;&#125;"</span>,idList,minRewardRate,maxRewardRate,statusList,pageable);</span><br><span class="line">    Specification&lt;Product&gt; specification = <span class="keyword">new</span> Specification&lt;Product&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Predicate <span class="title">toPredicate</span><span class="params">(Root&lt;Product&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder cb)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//获得编号、收益率、状态列</span></span><br><span class="line">            Expression&lt;String&gt; idCol = root.get(<span class="string">"id"</span>);</span><br><span class="line">            Expression&lt;BigDecimal&gt; rewardRateCol = root.get(<span class="string">"rewardRate"</span>);</span><br><span class="line">            Expression&lt;String&gt; statusCol = root.get(<span class="string">"status"</span>);</span><br><span class="line">            <span class="comment">//断言列表</span></span><br><span class="line">            List&lt;Predicate&gt; predicates = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">if</span>(idList!=<span class="keyword">null</span> &amp;&amp;idList.size()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                predicates.add(idCol.in(idList));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(minRewardRate!=<span class="keyword">null</span>&amp;&amp;BigDecimal.ZERO.compareTo(minRewardRate)&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                predicates.add(cb.ge(rewardRateCol,minRewardRate));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(maxRewardRate!=<span class="keyword">null</span>&amp;&amp;BigDecimal.ZERO.compareTo(maxRewardRate)&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                predicates.add(cb.le(rewardRateCol,maxRewardRate));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(statusList!=<span class="keyword">null</span>&amp;&amp;statusList.size()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                predicates.add(statusCol.in(statusList));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 查询 列表-&gt;数组?</span></span><br><span class="line">            query.where(predicates.toArray(<span class="keyword">new</span> Predicate[<span class="number">0</span>]));</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    Page&lt;Product&gt; page = repository.findAll(specification, pageable);</span><br><span class="line"></span><br><span class="line">    LOG.debug(<span class="string">"查询产品，结果=&#123;&#125;"</span>,page);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> page;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>10.controller<br>pageNum 哪页 pageSize 每页多少<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">""</span>,method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Page&lt;Product&gt; <span class="title">query</span><span class="params">(String ids, BigDecimal minRewardRate,BigDecimal maxRewardRate,String status,@RequestParam(defaultValue = <span class="string">"0"</span>)</span> <span class="keyword">int</span> pageNum,@<span class="title">RequestParam</span><span class="params">(defaultValue = <span class="string">"10"</span>)</span><span class="keyword">int</span> pageSize)</span>&#123;</span><br><span class="line">        LOG.info(<span class="string">"查询产品,ids=&#123;&#125;,min=&#123;&#125;,max=&#123;&#125;,status=&#123;&#125;,pagenum =&#123;&#125;,pagesize=&#123;&#125;"</span>, ids,minRewardRate,maxRewardRate,status,pageNum,pageSize);</span><br><span class="line">        List&lt;String&gt; idList = <span class="keyword">null</span>,statusList = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(!StringUtils.isEmpty(ids))&#123;</span><br><span class="line">            idList = Arrays.asList(ids.split(<span class="string">","</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!StringUtils.isEmpty(status))&#123;</span><br><span class="line">            statusList = Arrays.asList(status.split(<span class="string">","</span>));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        Pageable pageable = <span class="keyword">new</span> PageRequest(pageNum,pageSize);</span><br><span class="line">        Page&lt;Product&gt; page = service.query(idList, minRewardRate, maxRewardRate, statusList, pageable);</span><br><span class="line">        LOG.info(<span class="string">"=&#123;&#125;"</span>,page );</span><br><span class="line">        <span class="keyword">return</span> page;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="API测试"><a href="#API测试" class="headerlink" title="API测试"></a>API测试</h4><p>启动MangerAPP<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data = &#123;</span><br><span class="line">    <span class="string">"id"</span>:<span class="string">"001"</span>,</span><br><span class="line">    <span class="string">"name"</span>:<span class="string">"金融1号"</span>,</span><br><span class="line">    <span class="string">"thresholdAmount"</span>:<span class="number">10</span>,</span><br><span class="line">    <span class="string">"stepAmount"</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">"lockTerm"</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">"rewardRate"</span>:<span class="number">3.86</span>,</span><br><span class="line">    <span class="string">"status"</span>:<span class="string">"AUDITING"</span></span><br><span class="line">&#125;</span><br><span class="line">fetch(<span class="string">"http://localhost:8081/manager/products"</span>,&#123; <span class="comment">// post请求</span></span><br><span class="line">  method:<span class="string">"POST"</span>,</span><br><span class="line">  headers: &#123;</span><br><span class="line">        <span class="string">"Content-Type"</span>: <span class="string">"application/json"</span></span><br><span class="line">   &#125;, </span><br><span class="line">   body:<span class="built_in">JSON</span>.stringify(data)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res.json()))</span><br><span class="line">  .catch(<span class="function"><span class="params">e</span>=&gt;</span><span class="built_in">console</span>.log(<span class="string">"something went wrong: "</span> + e))</span><br></pre></td></tr></table></figure></p>
+<p>查看数据库 OK</p>
+<p>查询<br>get：<a href="http://localhost:8081/manager/products/001" target="_blank" rel="noopener">http://localhost:8081/manager/products/001</a></p>
+<p>搜索功能：<br>get:<a href="http://localhost:8081/manager/products?minRewardRate=3&amp;maxRewardRate=5&amp;status=AUDITING&amp;pageNum=0&amp;pageSize=10" target="_blank" rel="noopener">http://localhost:8081/manager/products?minRewardRate=3&amp;maxRewardRate=5&amp;status=AUDITING&amp;pageNum=0&amp;pageSize=10</a></p>
+<p>jackson时间格式化 好像并不用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  jackson:</span><br><span class="line">    date-format: yyyy-MM-dd HH:mm:ss</span><br><span class="line">    time-zone: GMT+<span class="number">8</span></span><br></pre></td></tr></table></figure></p>
+<p>post：<a href="http://localhost:8081/manager/products/" target="_blank" rel="noopener">http://localhost:8081/manager/products/</a><br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>:<span class="string">"金融1号"</span>,</span><br><span class="line">    <span class="attr">"thresholdAmount"</span>:<span class="number">10</span>,</span><br><span class="line">    <span class="attr">"stepAmount"</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="attr">"lockTerm"</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="attr">"rewardRate"</span>:<span class="number">3.86</span>,</span><br><span class="line">    <span class="attr">"status"</span>:<span class="string">"AUDITING"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>返回<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"timestamp"</span>: <span class="string">"2018-08-29 19:38:21"</span>,</span><br><span class="line">    <span class="attr">"status"</span>: <span class="number">500</span>,</span><br><span class="line">    <span class="attr">"error"</span>: <span class="string">"Internal Server Error"</span>,</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"编号不可为空"</span>,</span><br><span class="line">    <span class="attr">"path"</span>: <span class="string">"/manager/products/"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="统一错误处理"><a href="#统一错误处理" class="headerlink" title="统一错误处理"></a>统一错误处理</h4><p><a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-error-handling" target="_blank" rel="noopener">https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-error-handling</a><br>spring boot提供了默认的<code>/error</code>全局错误处理<br>对于machine clients(程序，jar包，http client ,ajax发起的), it produces a JSON response 包括HTTP status, the exception message.<br>对于浏览器（browser clients会自动添加accept: text/html到报文头）发起的请求renders the same data in HTML format  如果用postman加上<code>Accept:text/html</code>就返回html<br>通过实现<code>ErrorController</code>接口注册到容器中或者添加一个<code>ErrorAttributes</code>bean<br>还可以用<code>@ControllerAdvice</code>拦截controller的错误</p>
+<h4 id="源码：变成html的实现方法BasicErrorController"><a href="#源码：变成html的实现方法BasicErrorController" class="headerlink" title="源码：变成html的实现方法BasicErrorController"></a>源码：变成html的实现方法<code>BasicErrorController</code></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"$&#123;server.error.path:$&#123;error.path:/error&#125;&#125;"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BasicErrorController</span> <span class="keyword">extends</span> <span class="title">AbstractErrorController</span></span></span><br></pre></td></tr></table></figure>
+<p>错误页面的拦截<br>所以可以通过修改server.error.path修改默认配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(produces = <span class="string">"text/html"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> ModelAndView <span class="title">errorHtml</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">        HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">    HttpStatus status = getStatus(request);</span><br><span class="line">    Map&lt;String, Object&gt; model = Collections.unmodifiableMap(getErrorAttributes(</span><br><span class="line">            request, isIncludeStackTrace(request, MediaType.TEXT_HTML)));</span><br><span class="line">    response.setStatus(status.value());</span><br><span class="line">    <span class="comment">// 自定义的error视图</span></span><br><span class="line">    ModelAndView modelAndView = resolveErrorView(request, response, status, model);</span><br><span class="line">    <span class="comment">//如果没有视图，用error视图</span></span><br><span class="line">    <span class="keyword">return</span> (modelAndView == <span class="keyword">null</span> ? <span class="keyword">new</span> ModelAndView(<span class="string">"error"</span>, model) : modelAndView);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>普通机器客户端的拦截<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="keyword">public</span> ResponseEntity&lt;Map&lt;String, Object&gt;&gt; error(HttpServletRequest request) &#123;</span><br><span class="line">    Map&lt;String, Object&gt; body = getErrorAttributes(request,</span><br><span class="line">            isIncludeStackTrace(request, MediaType.ALL));</span><br><span class="line">    HttpStatus status = getStatus(request);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(body, status);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>都是用<code>getErrorAttributes</code>获取响应数据，用<code>getStatus</code> 获取状态码</p>
+<p><code>BasicErrorController</code>的注册过程 右键Find Usages<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="comment">//条件表达式，如果没有则新建</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean</span>(value = ErrorController.class, search = SearchStrategy.CURRENT)</span><br><span class="line"><span class="function"><span class="keyword">public</span> BasicErrorController <span class="title">basicErrorController</span><span class="params">(ErrorAttributes errorAttributes)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> BasicErrorController(errorAttributes, <span class="keyword">this</span>.serverProperties.getError(),</span><br><span class="line">            <span class="keyword">this</span>.errorViewResolvers);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>html错误形式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnProperty</span>(prefix = <span class="string">"server.error.whitelabel"</span>, name = <span class="string">"enabled"</span>, matchIfMissing = <span class="keyword">true</span>)</span><br><span class="line"><span class="meta">@Conditional</span>(ErrorTemplateMissingCondition.class)</span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">WhitelabelErrorViewConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> SpelView defaultErrorView = <span class="keyword">new</span> SpelView(</span><br><span class="line">            <span class="string">"&lt;html&gt;&lt;body&gt;&lt;h1&gt;Whitelabel Error Page&lt;/h1&gt;"</span></span><br><span class="line">                    + <span class="string">"&lt;p&gt;This application has no explicit mapping for /error, so you are seeing this as a fallback.&lt;/p&gt;"</span></span><br><span class="line">                    + <span class="string">"&lt;div id='created'&gt;$&#123;timestamp&#125;&lt;/div&gt;"</span></span><br><span class="line">                    + <span class="string">"&lt;div&gt;There was an unexpected error (type=$&#123;error&#125;, status=$&#123;status&#125;).&lt;/div&gt;"</span></span><br><span class="line">                    + <span class="string">"&lt;div&gt;$&#123;message&#125;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"</span>);</span><br><span class="line">    <span class="comment">//注册了一个View名字叫error</span></span><br><span class="line">    <span class="meta">@Bean</span>(name = <span class="string">"error"</span>)</span><br><span class="line">    <span class="meta">@ConditionalOnMissingBean</span>(name = <span class="string">"error"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">defaultErrorView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.defaultErrorView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// If the user adds @EnableWebMvc then the bean name view resolver from</span></span><br><span class="line">    <span class="comment">// WebMvcAutoConfiguration disappears, so add it back in to avoid disappointment.</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConditionalOnMissingBean</span>(BeanNameViewResolver.class)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> BeanNameViewResolver <span class="title">beanNameViewResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        BeanNameViewResolver resolver = <span class="keyword">new</span> BeanNameViewResolver();</span><br><span class="line">        resolver.setOrder(Ordered.LOWEST_PRECEDENCE - <span class="number">10</span>);</span><br><span class="line">        <span class="keyword">return</span> resolver;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="自定义错误处理"><a href="#自定义错误处理" class="headerlink" title="自定义错误处理"></a>自定义错误处理</h4><p>新建错误页面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">src/</span><br><span class="line"> +- main/</span><br><span class="line">     +- java/</span><br><span class="line">     |   + &lt;source code&gt;</span><br><span class="line">     +- resources/</span><br><span class="line">         +- public/</span><br><span class="line">             +- error/</span><br><span class="line">             |   +- 404.html</span><br><span class="line">             +- &lt;other public assets&gt;</span><br></pre></td></tr></table></figure></p>
+<p>方法1 拦截5xx错误 新建resources-static.error-5xx.html</p>
+<p>方法2新建error包 新建类<br>1.继承<code>BasicErrorController</code>重写返回错误的方法，去掉不要的信息<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyErrorController</span> <span class="keyword">extends</span> <span class="title">BasicErrorController</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyErrorController</span><span class="params">(ErrorAttributes errorAttributes, ErrorProperties errorProperties, List&lt;ErrorViewResolver&gt; errorViewResolvers)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(errorAttributes, errorProperties, errorViewResolvers);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Map&lt;String, Object&gt; <span class="title">getErrorAttributes</span><span class="params">(HttpServletRequest request, <span class="keyword">boolean</span> includeStackTrace)</span> </span>&#123;</span><br><span class="line">        Map&lt;String, Object&gt; errorAttributes = <span class="keyword">super</span>.getErrorAttributes(request, includeStackTrace);</span><br><span class="line">        errorAttributes.remove(<span class="string">"timestamp"</span>);</span><br><span class="line">        errorAttributes.remove(<span class="string">"error"</span>);</span><br><span class="line">        errorAttributes.remove(<span class="string">"path"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> errorAttributes;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.添加配置类注册bean 参考BasicError的注册类ErrorMvcAutoConfiguration 将Controller注册到容器中<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ErrorConfiguration</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MyErrorController <span class="title">basicErrorController</span><span class="params">(ErrorAttributes errorAttributes,</span></span></span><br><span class="line"><span class="function"><span class="params">        ServerProperties serverProperties,</span></span></span><br><span class="line"><span class="function"><span class="params">        ObjectProvider&lt;List&lt;ErrorViewResolver&gt;&gt; errorViewResolversProvider)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MyErrorController(errorAttributes, serverProperties.getError(),errorViewResolversProvider.getIfAvailable());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>效果：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"编号不可空"</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.添加错误枚举类(注意 枚举类中的类方法)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ErrorEnum &#123;</span><br><span class="line">    ID_NOT_NULL(<span class="string">"F001"</span>,<span class="string">"编号不可空"</span>,<span class="keyword">false</span>),</span><br><span class="line">    UNKNOWN(<span class="string">"999"</span>,<span class="string">"未知异常"</span>,<span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> canRetry;</span><br><span class="line"></span><br><span class="line">    ErrorEnum(String code, String message, <span class="keyword">boolean</span> canRetry) &#123;</span><br><span class="line">        <span class="keyword">this</span>.code = code;</span><br><span class="line">        <span class="keyword">this</span>.message = message;</span><br><span class="line">        <span class="keyword">this</span>.canRetry = canRetry;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ErrorEnum <span class="title">getByCode</span><span class="params">(String code)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(ErrorEnum errorEnum:ErrorEnum.values())&#123;</span><br><span class="line">            <span class="keyword">if</span>(errorEnum.code.equals(code))&#123;</span><br><span class="line">                <span class="keyword">return</span> errorEnum;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> UNKNOWN;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改ProductService中的check抛出的不是message而是自己定义的错误code<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkProduct</span><span class="params">(Product product)</span> </span>&#123;</span><br><span class="line">Assert.notNull(product.getId(), ErrorEnum.ID_NOT_NULL.getCode());&#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改MyErrorController,添加errorcode和retry<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Map&lt;String, Object&gt; <span class="title">getErrorAttributes</span><span class="params">(HttpServletRequest request, <span class="keyword">boolean</span> includeStackTrace)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; errorAttributes = <span class="keyword">super</span>.getErrorAttributes(request, includeStackTrace);</span><br><span class="line">    errorAttributes.remove(<span class="string">"timestamp"</span>);</span><br><span class="line">    errorAttributes.remove(<span class="string">"error"</span>);</span><br><span class="line">    errorAttributes.remove(<span class="string">"path"</span>);</span><br><span class="line">    String message = (String)errorAttributes.get(<span class="string">"message"</span>);</span><br><span class="line">    errorAttributes.remove(<span class="string">"message"</span>);</span><br><span class="line">    <span class="comment">// 获取错误种类</span></span><br><span class="line">    ErrorEnum errorEnum = ErrorEnum.getByCode(message);</span><br><span class="line">    errorAttributes.put(<span class="string">"message"</span>,errorEnum.getMessage() );</span><br><span class="line">    errorAttributes.put(<span class="string">"code"</span>,errorEnum.getCode() );</span><br><span class="line">    errorAttributes.put(<span class="string">"canRetry"</span>,errorEnum.isCanRetry() );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> errorAttributes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"编号不可空"</span>,</span><br><span class="line">    <span class="attr">"code"</span>: <span class="string">"F001"</span>,</span><br><span class="line">    <span class="attr">"canRetry"</span>: <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法3：<code>@ControllerAdvice</code><br>优先级比方法2高，controller异常后直接这个然后返回response<br>扫描制定的package<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ControllerAdvice</span>(basePackages = &#123;<span class="string">"manager.controller"</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ErrorControllerAdvice</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ExceptionHandler</span>(Exception.class)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity <span class="title">handleException</span><span class="params">(Exception e)</span></span>&#123;</span><br><span class="line">        Map&lt;String, Object&gt; errorAttributes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        String errorcode = e.getMessage();</span><br><span class="line"></span><br><span class="line">        ErrorEnum errorEnum = ErrorEnum.getByCode(errorcode);</span><br><span class="line">        errorAttributes.put(<span class="string">"message"</span>,errorEnum.getMessage() );</span><br><span class="line">        errorAttributes.put(<span class="string">"code"</span>,errorEnum.getCode() );</span><br><span class="line">        errorAttributes.put(<span class="string">"canRetry"</span>,errorEnum.isCanRetry() );</span><br><span class="line">        <span class="comment">//这里再抛一个异常就到basicerror里了</span></span><br><span class="line">        Assert.isNull(errorAttributes,<span class="string">"advice"</span> );</span><br><span class="line">        errorAttributes.put(<span class="string">"type"</span>,<span class="string">"advice"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity(errorAttributes, HttpStatus.INTERNAL_SERVER_ERROR);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"编号不可空"</span>,</span><br><span class="line">    <span class="attr">"code"</span>: <span class="string">"F001"</span>,</span><br><span class="line">    <span class="attr">"canRetry"</span>: <span class="literal">false</span>,</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/28/algsubarrr/" rel="next" title="前缀和 滑动窗口 子数组、序列问题">
+                <i class="fa fa-chevron-left"></i> 前缀和 滑动窗口 子数组、序列问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">学习一个技术不要轻易过去，要有技术深度做一个demo</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-模块化开发-高内聚，低耦合"><span class="nav-number">1.</span> <span class="nav-text">1.模块化开发 高内聚，低耦合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模块划分"><span class="nav-number">1.1.</span> <span class="nav-text">模块划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构建工具-Gradle"><span class="nav-number">1.2.</span> <span class="nav-text">构建工具 Gradle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新建模块"><span class="nav-number">1.3.</span> <span class="nav-text">新建模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2数据库设计"><span class="nav-number">2.</span> <span class="nav-text">2数据库设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#管理端：产品表"><span class="nav-number">2.1.</span> <span class="nav-text">管理端：产品表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#销售端："><span class="nav-number">2.2.</span> <span class="nav-text">销售端：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#entity"><span class="nav-number">2.3.</span> <span class="nav-text">entity</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#产品类-Product"><span class="nav-number">2.3.1.</span> <span class="nav-text">产品类 Product</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#订单对象-Order类"><span class="nav-number">2.3.2.</span> <span class="nav-text">订单对象 Order类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-管理端"><span class="nav-number">3.</span> <span class="nav-text">3.管理端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加产品"><span class="nav-number">3.1.</span> <span class="nav-text">添加产品</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询产品单个产品"><span class="nav-number">3.2.</span> <span class="nav-text">查询产品单个产品</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复杂查询-分页查询"><span class="nav-number">3.3.</span> <span class="nav-text">复杂查询 分页查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#API测试"><span class="nav-number">3.4.</span> <span class="nav-text">API测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#统一错误处理"><span class="nav-number">3.5.</span> <span class="nav-text">统一错误处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码：变成html的实现方法BasicErrorController"><span class="nav-number">3.6.</span> <span class="nav-text">源码：变成html的实现方法BasicErrorController</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义错误处理"><span class="nav-number">3.7.</span> <span class="nav-text">自定义错误处理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
