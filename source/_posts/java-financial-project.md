@@ -61,7 +61,6 @@ ext {
             ],
             test   : [
                     "org.springframework.boot:spring-boot-starter-test:${versions.springBootVersion}"
-
             ]
     ]
 }
@@ -550,7 +549,7 @@ post：http://localhost:8081/manager/products/
 }
 ```
 
-#### 统一错误处理
+### 4.统一错误处理
 https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-error-handling
 spring boot提供了默认的`/error`全局错误处理
 对于machine clients(程序，jar包，http client ,ajax发起的), it produces a JSON response 包括HTTP status, the exception message.
@@ -778,11 +777,134 @@ public class ErrorControllerAdvice {
     }
 ```
 
+比方法二更优先拦截，在`ErrorControllerAdvice`里的错误会到`BasicErrorController`
+
 ```json
 {
     "message": "编号不可空",
     "code": "F001",
     "canRetry": false,
-    
+    "type": advice
 }
 ```
+
+### 5.自动化测试 不是写细到方法的单元测试 而是直接功能测试http请求
+1.添加依赖 会自动导入JUnit包
+```java
+test   : [
+                "org.springframework.boot:spring-boot-starter-test:${versions.springBootVersion}"
+        ]
+```
+
+新建测试类test-manager.controller-ProductControllerTest
+测试创建产品
+
+#### POST请求工具类
+为方便发送POST请求的工具类 放在util模块，
+并把util模块添加到manager
+```java
+compile project(":util")
+```
+1.`JsonUtil`:Object->Json 用于log输出
+```java
+public class JsonUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(JsonUtil.class);
+    private final static ObjectMapper mapper = new ObjectMapper();
+    public static String toJson(Object obj) {
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (IOException e) {
+            LOG.error("to json exception.", e);
+            throw new JSONException("把对象转换为JSON时出错了", e);
+        }
+    }
+}
+final class JSONException extends RuntimeException {
+    public JSONException(final String message) {super(message);}
+    public JSONException(final String message, final Throwable cause) {super(message, cause);}
+}
+```
+
+2.`RestUtil`用`RestTemplate`发送Http请求用的是`ClientHttpRequest`
+```java
+public class RestUtil {
+    static Logger log = LoggerFactory.getLogger(RestUtil.class);
+
+    public static HttpEntity<String> makePostJSONEntiry(Object param) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<String> formEntity = new HttpEntity<String>(
+                JsonUtil.toJson(param), headers);
+        log.info("rest-post-json-请求参数:{}", formEntity.toString());
+        return formEntity;
+    }
+    public static <T> T postJSON(RestTemplate restTemplate, String url, Object param, Class<T> responseType) {
+        HttpEntity<String> formEntity = makePostJSONEntiry(param);
+        T result = restTemplate.postForObject(url, formEntity, responseType);
+        log.info("rest-post-json 响应信息:{}", JsonUtil.toJson(result));
+        return result;
+    }
+}
+```
+
+正常数据的测试
+```java
+@RunWith(SpringRunner.class)
+//随机端口
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class ProductControllerTest {
+    private static RestTemplate rest  =new RestTemplate();
+
+    @Value("http://localhost:${local.server.port}/manager")
+    private String baseUrl;
+
+    //正常的测试用例
+    private static List<Product> normals = new ArrayList<>();
+    //异常测试用例
+    private static List<Product> exceptions = new ArrayList<>();
+
+    // 只执行一次
+    @BeforeClass
+    public static void init(){
+        Product p1 = new Product("T011", "灵活宝1号", ProductStatus.AUDITING.name(),
+                BigDecimal.valueOf(10), BigDecimal.valueOf(1), BigDecimal.valueOf(3.42));
+        Product p2 = new Product("T012", "活期盈-金色人生", ProductStatus.AUDITING.name(),
+                BigDecimal.valueOf(10), BigDecimal.valueOf(0), BigDecimal.valueOf(3.28));
+        Product p3 = new Product("T013", "朝朝盈-聚财", ProductStatus.AUDITING.name(),
+                BigDecimal.valueOf(100), BigDecimal.valueOf(10), BigDecimal.valueOf(3.86));
+        normals.add(p1);
+        normals.add(p2);
+        normals.add(p3);
+    
+    // 如果有插入时间则插入成功
+    @Test
+    public void create(){
+        normals.forEach(product -> {
+            Product rst = RestUtil.postJSON(rest, baseUrl + "/products", product, Product.class);
+            Assert.notNull(rst.getCreateAt(),"插入失败" );
+        });
+    }
+}
+```
+异常数据的测试
+```java
+Product e1 = new Product(null, "编号空", ProductStatus.AUDITING.name(),
+        BigDecimal.valueOf(10), BigDecimal.valueOf(1), BigDecimal.valueOf(3.42));
+Product e2 = new Product("E002", "收益>30", ProductStatus.AUDITING.name(),
+        BigDecimal.valueOf(10), BigDecimal.valueOf(0), BigDecimal.valueOf(31));
+Product e3 = new Product("E003", "投资步长是小数", ProductStatus.AUDITING.name(),
+        BigDecimal.valueOf(100), BigDecimal.valueOf(1.01), BigDecimal.valueOf(3.86));
+exceptions.add(e1);
+exceptions.add(e2);
+exceptions.add(e3);
+@Test
+public void createError(){
+
+    exceptions.forEach(product -> {
+        Product rst = RestUtil.postJSON(rest, baseUrl + "/products", product, Product.class);
+        Assert.notNull(rst.getCreateAt(),"插入失败" );
+    });
+}
+```
+对错误的测试用例添加异常捕获

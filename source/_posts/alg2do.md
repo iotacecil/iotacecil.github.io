@@ -926,25 +926,7 @@ public void decreaseCount(HashMap<String, Integer> curDict, String key) {
 ```
 {% endfold %}
 
----
-### 139 word break
-1.状态：boolean[n+1]长度为i的前缀能否由字典组成
-2.初始值：[0]=true 空字符串
-3.转移方程if(dp[i]==true&&dic.contains(sub(i,i+j))) dp[i+j]=true
-4.结果
 
-```java
-f[0]=true;
-for(int i =1;i<s.length();i++){
-    for(int j=0;j<i;j++){
-        if(f[j]&&dic.contains(s.substring(j,i))){
-            f[i]=true;
-            break;
-        }
-    }
-}
-return f[s.length()];
-```
 
 ---
 ### 55 ?jump game

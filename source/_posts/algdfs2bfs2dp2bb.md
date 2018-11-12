@@ -4,6 +4,125 @@ date: 2018-09-09 15:22:54
 tags:
 categories: [算法备忘]
 ---
+### lt168 吹气球 lc312
+每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
+>in [4, 1, 5, 10]
+out 返回 270
+```
+nums = [4, 1, 5, 10] burst 1, 得分 4 * 1 * 5 = 20
+nums = [4, 5, 10]    burst 5, 得分 4 * 5 * 10 = 200 
+nums = [4, 10]       burst 4, 得分 1 * 4 * 10 = 40
+nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
+总共的分数为 20 + 200 + 40 + 10 = 270
+```
+
+### 139 word break 用字典中的此能否拆分字符串
+>输入: s = "applepenapple", wordDict = ["apple", "pen"]
+输出: true
+解释: 返回 true 因为 "applepenapple" 可以被拆分成 "apple pen apple"。
+     注意你可以重复使用字典中的单词。
+
+**memory方法1：用set记录不能划分的位置**
+**memory方法2：用set记录划分过的单词**
+
+9ms 77%
+
+```java
+public boolean wordBreak(String s, List<String> wordDict) {
+    Set<String> set = new HashSet<>();
+    HashSet<String> wd = new HashSet<>(wordDict);
+    return canBreak(s,wd,set);
+}
+private boolean canBreak(String s,Set<String> wordDict,Set<String> set){
+   if(s.isEmpty()){
+       return true;
+   }
+    if(set.contains(s)){
+        return false;
+    }
+    set.add(s);
+   for(String word : wordDict){
+       if(s.startsWith(word) && canBreak(s.substring(word.length()), wordDict, set)){
+           return true;
+       }
+   }
+    return false;
+}
+```
+
+
+1.状态：boolean[n+1]长度为i的前缀能否由字典组成
+2.初始值：[0]=true 空字符串
+3.转移方程if(dp[i]==true&&dic.contains(sub(i,i+j))) dp[i+j]=true
+4.结果
+
+6ms 88%
+```java
+public boolean wordBreak(String s, List<String> wordDict) {
+    int n = s.length();
+    boolean[] cb = new boolean[n+1];
+    cb[0] = true;
+    for(int k = 1;k < n + 1;k++){
+        for(int st = 0;st < k;st++){
+        if(cb[st] && wordDict.contains(s.substring(st,k))){
+            cb[k] = true;
+            break;
+        }
+        }
+    }
+    return cb[n];
+}
+```
+
+### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
+226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
+1递归：8%
+```java
+Map<String,Integer> map = new HashMap<>();
+public int numDecodings(String s){
+    if(s.length()<1)return 1;
+    if(map.containsKey(s))return map.get(s);
+    if(s.charAt(0)=='0')return 0;
+    if(s.length()==1)return 1;
+    w = numDecodings(s.substring(1));
+    int pre2 = Integer.parseInt(s.substring(0,2));
+    if(pre2<=26){
+        w+=numDecodings(s.substring(2));
+    }
+    map.put(s,w);
+    return w;
+}
+```
+2递归改成index 63%
+```java
+public int numDecodings(String s){
+    return help(s,0,s.length()-1);
+    }
+private int help(String s,int l,int r){
+    if(l>s.length()-1)return 1;
+    if(s.charAt(0)=='0')return 0;
+    if(l>=r)return 1;
+    w = help(s,l+1,r);
+    int pre2 = (s.charAt(l)-'0')*10+s.charAt(l+1)-'0';
+    if(pre2<=26){
+        w+=help(s,l+2,r);
+    }
+    map2.put(l,w);
+    return w;
+}
+```
+3.dp[i]表示s[0..i]的解码方式？？？
+dp[0]=1
+226->s['2']->dp[1]=dp[0]=1
+   ->s['2']->s['22']->dp[2]=dp[1]+dp[0]=2
+   ->s['6']->s['26']->dp[3]=dp[2]+dp[1]=3
+
+102
+当s[i]合法,dp[i]=dp[i-1], dp[1]=dp[0]
+当s[i][i-1]合法dp[i]=dp[i-2] ,dp[2]=dp[0]
+当s[i-1]s[i]合法，dp[i]=dp[i-1]+dp[i-2]
+
+
 ### word search
 用全局mark数组58%，改用char修改board98%
 {% fold %}
@@ -209,67 +328,6 @@ void help(vector<int> &num,int begin,vector<vector<int> > &ans){
 
 ---
 
-### !!!698 将数组分成sum相等的k份
->Input: nums = [4, 3, 2, 3, 5, 2, 1], k = 4
-Output: True
-Explanation: It's possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
-
-1.计算出数组的sum看能不能整除k，同时得到了每组的subsum
-2.如果数组中有一个元素>subsum则不可能。最大的几个==subsum，自己分成一组。
-3.对前面都比subsum小的元素回溯将数字放入group数组。变成 Combination tum target
-```java
-public boolean canPartitionKSubsets(int[] nums, int k) {
-    // 1. 求每组应该的平均值
-    int sum = 0;
-    for(int num : nums){
-        sum += num;
-    }
-    if(sum % k != 0){
-        return false;
-    }
-    int subsum = sum/k;
-    // 2. 等于平均值的单独分成一组
-    Arrays.sort(nums);
-    int n = nums.length;
-    int idx = n-1;
-    if(nums[n-1] > subsum)return false;
-    for(int i = n-1;i >= 0;i--){
-        if(nums[i] < subsum)break;
-        if(nums[i] == subsum){
-            k--;
-            idx--;
-        }
-    }
-    // 3. 回溯分组
-    int[] group = new int[k];
-    return back(group,idx,subsum,nums);
-}
-private boolean back(int[] group,int idx,int target,int[] nums){
-    // 全部都分组好了
-    if(idx < 0){
-        return true;
-    }
-         // 试着放到每一组
-    for(int i = 0;i < group.length;i++){
-        if(group[i] + nums[idx] > target){
-            continue;
-        }
-        group[i] += nums[idx];
-        if(back(group,idx-1,target,nums)){
-            return true;
-        }
-        group[i] -= nums[idx];
-        // 重要剪枝30%->100% 
-        // 如果这个桶已经装过了，减到0了，用其他数字装这个桶的结果其实已经在别的桶实现过了
-        // 一个桶肯定有一个数字，减到没有数字其他桶也没可能了，直接退出
-        if (group[i] == 0) break;
-
-    }
-    return false;
-}
-```
-
----
 
 
 ### 39 Combination tum target 不重复元素组合求目标
@@ -795,53 +853,7 @@ private void dfs(int amount,int idx,int[] coins,int count){
 ```
 
 
-### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
-226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
-1递归：8%
-```java
-Map<String,Integer> map = new HashMap<>();
-public int numDecodings(String s){
-    if(s.length()<1)return 1;
-    if(map.containsKey(s))return map.get(s);
-    if(s.charAt(0)=='0')return 0;
-    if(s.length()==1)return 1;
-    w = numDecodings(s.substring(1));
-    int pre2 = Integer.parseInt(s.substring(0,2));
-    if(pre2<=26){
-        w+=numDecodings(s.substring(2));
-    }
-    map.put(s,w);
-    return w;
-}
-```
-2递归改成index 63%
-```java
-public int numDecodings(String s){
-    return help(s,0,s.length()-1);
-    }
-private int help(String s,int l,int r){
-    if(l>s.length()-1)return 1;
-    if(s.charAt(0)=='0')return 0;
-    if(l>=r)return 1;
-    w = help(s,l+1,r);
-    int pre2 = (s.charAt(l)-'0')*10+s.charAt(l+1)-'0';
-    if(pre2<=26){
-        w+=help(s,l+2,r);
-    }
-    map2.put(l,w);
-    return w;
-}
-```
-3.dp[i]表示s[0..i]的解码方式？？？
-dp[0]=1
-226->s['2']->dp[1]=dp[0]=1
-   ->s['2']->s['22']->dp[2]=dp[1]+dp[0]=2
-   ->s['6']->s['26']->dp[3]=dp[2]+dp[1]=3
 
-102
-当s[i]合法,dp[i]=dp[i-1], dp[1]=dp[0]
-当s[i][i-1]合法dp[i]=dp[i-2] ,dp[2]=dp[0]
-当s[i-1]s[i]合法，dp[i]=dp[i-1]+dp[i-2]
 
 ### 343 整数拆分 并使乘机最大
 >Input: 2

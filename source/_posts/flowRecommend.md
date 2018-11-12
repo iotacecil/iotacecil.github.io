@@ -4,7 +4,8 @@ date: 2018-03-15 12:17:32
 tags: [grap]
 categories: [机器学习和数据处理python备忘]
 ---
-
+服务计算
+http://act.buaa.edu.cn/hsun/SOC2016/index.html
 
 
 ### 偏态系数 和 峰态系数
@@ -34,16 +35,19 @@ categories: [机器学习和数据处理python备忘]
 
 ### Preference 偏好
 - Goal model
-![goalmodel](\images\goalmodel.jpg)
+{% qnimg goalmodel.jpg %}
+
 系统：自然语言偏好表达->用目标模型解释的正式的偏好说明。
 组成： 正则、统计语义相似性，基于语料库的偏好强度分级。
 目标：基于优先级的软件个性化定制接口。
 
 流程推荐
+
 ### 流程结构相似度
 1. 相似度-> 目的：检索、合并、重组
 计算流程相似度 计算优化
 分解策略 聚合策略 mapreduce 
+
 #### 建模【流程模型】： 用图 邻接矩阵、
 ##### 流程模型： 
 1. PTN:probabilistic time Petri net
