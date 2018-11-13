@@ -1,9 +1,32 @@
 ---
-title: 回溯 & speedup
+title: dfs-dp-回溯 & speedup
 date: 2018-09-09 15:22:54
 tags:
 categories: [算法备忘]
 ---
+### 49 异位词(相同字符)分组
+//todonext
+直接拿CharArray的sort重建String当key 49%
+```java
+public List<List<String>> groupAnagrams(String[] strs) {
+    HashMap<String, List<String>> map = new HashMap<>();
+    List<List<String>> rst = new ArrayList<>();
+
+    for(String str:strs){
+        char[] chars = str.toCharArray();
+        Arrays.sort(chars);
+        String key = new String(chars);
+        List<String> keylist = map.getOrDefault(key, new ArrayList<>());
+        if(keylist.size()==0){
+            rst.add(keylist);
+        }
+        keylist.add(str);
+        map.put(key,keylist );
+    }
+    return rst;
+}
+```
+
 ### lt168 吹气球 lc312
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
 >in [4, 1, 5, 10]

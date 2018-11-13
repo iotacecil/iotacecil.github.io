@@ -4,6 +4,20 @@ date: 2018-10-09 19:16:41
 tags: [alg]
 categories: [算法备忘]
 ---
+### lc26有序数组去重 双指针
+```java
+public int removeDuplicates(int[] nums) {
+    if(nums.length == 0)return 0;
+    int cnt = 1;
+    for(int i = 1;i<nums.length;i++){
+        if(nums[i] != nums[cnt-1]){
+            nums[cnt++] = nums[i];
+        }
+    }
+    return cnt;
+}
+```
+
 ### 判断小括号匹配
 ```java
 public boolean isValid(String s){

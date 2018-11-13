@@ -4,7 +4,17 @@ date: 2018-10-11 21:26:30
 tags:
 categories: [算法备忘]
 ---
-### 4 两个排序数组的中位数
+
+三步翻转法：
+
+### 151 反转英语句子的单词顺序，不翻转单词
+
+
+### lt 30 恢复 rotated array
+
+### 189 rotate array
+
+### !!!4 两个排序数组的中位数
 >nums1 = [1, 2]
 nums2 = [3, 4]
 中位数是 (2 + 3)/2 = 2.5
@@ -14,23 +24,113 @@ nums2 = [3, 4]
 2.比较两个数组的k/2
 如果`A[k/2]<B[k/2]`则`A[0..k/2]<B[k/2]` 
 
-### 33 rotate Sort Array 中查找！！
+### 88合并排序数组
 
-### 81
+### !!!33 rotate Sort Array 中查找！！ 没重复元素
+方法1 分成4种情况 左半上升 的左右 右半上升的左右 15%
+方法2 先找到最小值再在左or右二分
+如果有重复只能O(n)
 
-### lc26有序数组去重 双指针
+### 81 有重复的rotated sorted array
+
+
+### !!! lc162 find peak `nums[i] ≠ nums[i+1]`
+如果相邻元素可能相同则不能用二分 只能for循环一下
+如果mid比左边大，则比mid大的peak肯定在右边
 ```java
-public int removeDuplicates(int[] nums) {
-    if(nums.length == 0)return 0;
-    int cnt = 1;
-    for(int i = 1;i<nums.length;i++){
-        if(nums[i] != nums[cnt-1]){
-            nums[cnt++] = nums[i];
-        }
+public int findPeakElement(int[] nums) {
+    int l = 0, r = nums.length - 1;
+    while (l < r) {
+        int mid = (l + r) / 2;
+        if (nums[mid] > nums[mid + 1])
+            r = mid;
+        else
+            l = mid + 1;
     }
-    return cnt;
+    return l;
 }
 ```
+
+用`s+1<e` 就退出[0,1] s=0,e=1 数组中只有2个时候也退出最后要加一步两个数是哪个
+好处是：有些二分的题目s和e不能为mid +1或者 -1
+
+```java
+public int findPeakElement(int[] nums) {
+    int s = -1,e = nums.length-1;
+    while(s+1<e){
+        int mid = (s+e)/2;
+        int left = nums[mid]-nums[mid+1];
+        if(left>0){
+            e = mid;
+        }else s = mid;
+    }
+    return e;
+}
+```
+
+
+
+### 153 Roataed Sorted Array的最小值 二分logN
+右边的肯定比左边的大，最右肯定比左半小，e不断向左移
+```java
+public int findMin(int[] nums) {
+     int s = 0,e = nums.length-1;
+    while(s + 1 < e){
+        int mid = (e+s)/2;
+        if(nums[mid] >= nums[e]){
+            s = mid;
+        }else{
+            e = mid;
+        }
+    }
+    //只剩下2个数之后 取个小的
+    if(nums[s]<nums[e])return nums[s];
+    else return nums[e];
+}
+```
+
+```java
+public int findMin(int[] nums) {
+      if(nums.length==1)return nums[0];
+    return findMin(nums,0,nums.length-1);
+}
+private int findMin(int[] nums,int low,int hi){
+    //只有1个或者2个
+    if(low+1>=hi)return Math.min(nums[low],nums[hi]);
+    if(nums[low]<nums[hi])return nums[low];
+    int mid = low+(hi-low)/2;
+    //无缝
+    return Math.min(findMin(nums,low,mid-1),findMin(nums,mid ,hi));
+}
+```
+
+### 154 有重复元素Roataed Sorted Array 
+> Input: [2,2,2,0,1]
+> Output: 0
+
+不能用二分了 不能Ologn 要O(N)
+//比遍历都慢
+```java
+public int findMin(int[] nums) {
+    int s = 0, e = nums.length-1;
+    while (s+1<e){
+        int mid = (s+e)/2;
+        if(nums[mid]>nums[e]){
+          s = mid;
+        }else if(nums[mid]<nums[e]){
+            e = mid;
+            //关键
+        }else e--;
+       
+    }
+    return Math.min(nums[s],nums[e] );
+}
+```
+
+去掉第二个递归条件。 跟遍历一个速度
+
+
+
 
 ### 80 数组每个元素只保留<=2次
 cnt表示插入位置，i用于遍历 
@@ -47,23 +147,27 @@ public int removeDuplicates(int[] nums) {
 }
 ```
 
+### 278 第一个错误的版本
+> n 个版本 [1, 2, ..., n]，你想找出导致之后所有版本出错的第一个错误的版本。
+> 可以调用 bool isBadVersion(version) 接口来判断版本号 version 是否在单元测试中出错
 
-### 88合并排序数组
-
-### lc162 find peak//todo
 ```java
-public int findPeakElement(int[] nums) {
-    int s = -1,e = nums.length-1;
-    while(s+1<e){
-        int mid = (s+e)/2;
-        int left = nums[mid]-nums[mid+1];
-        if(left>0){
-            e = mid;
-        }else s = mid;
+public int firstBadVersion(int n) {
+    int l = 1,h = n;
+    while(l < h){
+        int mid = l+(h-l)/2;
+        if(isBadVersion(mid)){
+            h = mid;
+        }else{
+            l = mid +1;
+        }
     }
-    return e;
+    return h;
 }
 ```
+
+
+
 
 ### lc240 行列排序的2d矩阵二分查找 O(m+n)
 从左下角或者右上角开始找
@@ -213,60 +317,4 @@ public static int maxmin(int[] room,int m){
 
 
 
-### 153 Roataed Sorted Array的最小值 二分logN
-```java
-public int findMin(int[] nums) {
-     int s = 0,e = nums.length-1;
-    while(s + 1 < e){
-        int mid = (e+s)/2;
-        if(nums[mid] >= nums[e]){
-            s = mid;
-        }else{
-            e = mid;
-        }
-    }
-    //只剩下2个数之后 取个小的
-    if(nums[s]<nums[e])return nums[s];
-    else return nums[e];
-}
-```
-
-```java
-public int findMin(int[] nums) {
-      if(nums.length==1)return nums[0];
-    return findMin(nums,0,nums.length-1);
-}
-private int findMin(int[] nums,int low,int hi){
-    //只有1个或者2个
-    if(low+1>=hi)return Math.min(nums[low],nums[hi]);
-    if(nums[low]<nums[hi])return nums[low];
-    int mid = low+(hi-low)/2;
-    //无缝
-    return Math.min(findMin(nums,low,mid-1),findMin(nums,mid ,hi));
-}
-```
-### 154 有重复元素Roataed Sorted Array 
-> Input: [2,2,2,0,1]
-> Output: 0
-
-不能用二分了 不能Ologn 要O(N)
-//比遍历都慢
-```java
-public int findMin(int[] nums) {
-    int s = 0, e = nums.length-1;
-    while (s+1<e){
-        int mid = (s+e)/2;
-        if(nums[mid]>nums[e]){
-          s = mid;
-        }else if(nums[mid]<nums[e]){
-            e = mid;
-            //关键
-        }else e--;
-       
-    }
-    return Math.min(nums[s],nums[e] );
-}
-```
-
-去掉第二个递归条件。 跟遍历一个速度
 
