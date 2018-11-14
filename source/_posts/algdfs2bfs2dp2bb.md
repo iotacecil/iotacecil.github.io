@@ -4,6 +4,9 @@ date: 2018-09-09 15:22:54
 tags:
 categories: [算法备忘]
 ---
+
+
+
 ### 49 异位词(相同字符)分组
 //todonext
 直接拿CharArray的sort重建String当key 49%
@@ -38,6 +41,69 @@ nums = [4, 10]       burst 4, 得分 1 * 4 * 10 = 40
 nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 总共的分数为 20 + 200 + 40 + 10 = 270
 ```
+
+{% qnimg lc312.jpg %}
+
+超时的回溯法，n!，删掉这个继续删或者换一个继续删
+```java
+public int maxCoins(int[] nums) {
+  List<Integer> list = new ArrayList<>();
+    for(int i =0;i<nums.length;i++){
+        list.add(nums[i]);
+    }
+    return findMax(list);
+}
+
+public int findMax(List<Integer> nums) {
+    if(nums.size() == 1)return nums.get(0);
+    if(nums.size() == 0)return 0;
+    int max = 0;
+    for(int i =0;i<nums.size();i++){
+        int c = nums.get(i);
+        int l = i - 1<0?1:nums.get(i-1);
+        int r = i + 1>=nums.size()?1:nums.get(i+1);
+        int cur = nums.get(i)*l*r;
+        nums.remove(i);
+        max = Math.max(max,cur+findMax(nums) );
+        // 回溯
+        nums.add(i,c);
+    }
+    return max;
+}
+```
+
+考虑最后一个删除的数作为分割，左边和右边都是子问题。
+注意：原问题加padding，子问题也加padding。
+注意递归终止条件：
+当`1 3 1 5 8 1` 用8 拆分成`1 3 1 5 8`和`8 1` + `5*8*1`
+当只有2个数字的子问题时，已经上一层计算过了 返回0(?是不是这样理解？)
+记忆化left和right的子问题
+```java
+public int maxCoins(int[] iNums) {
+    int[] nums = new int[iNums.length + 2];
+    int n = 1;
+    for (int x : iNums) if (x > 0) nums[n++] = x;
+    nums[0] = nums[n++] = 1;
+
+
+    int[][] memo = new int[n][n];
+    return burst(memo, nums, 0, n - 1);
+}
+
+public int burst(int[][] memo, int[] nums, int left, int right) {
+    if (left + 1 == right) return 0;
+    if (memo[left][right] > 0) return memo[left][right];
+    int ans = 0;
+    for (int i = left + 1; i < right; ++i)
+        ans = Math.max(ans, nums[left] * nums[i] * nums[right] 
+        + burst(memo, nums, left, i) + burst(memo, nums, i, right));
+    memo[left][right] = ans;
+    return ans;
+}
+```
+
+DP todo
+
 
 ### lc140
 
