@@ -39,6 +39,8 @@ nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 总共的分数为 20 + 200 + 40 + 10 = 270
 ```
 
+### lc140
+
 ### 139 word break 用字典中的此能否拆分字符串
 >输入: s = "applepenapple", wordDict = ["apple", "pen"]
 输出: true

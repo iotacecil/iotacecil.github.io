@@ -848,6 +848,7 @@ public class RestUtil {
 }
 ```
 
+#### 添加产品测试
 正常数据的测试
 ```java
 @RunWith(SpringRunner.class)
@@ -887,7 +888,7 @@ public class ProductControllerTest {
     }
 }
 ```
-异常数据的测试
+异常数据的测试 返回500 是RestUtil报错返回500
 ```java
 Product e1 = new Product(null, "编号空", ProductStatus.AUDITING.name(),
         BigDecimal.valueOf(10), BigDecimal.valueOf(1), BigDecimal.valueOf(3.42));
@@ -907,4 +908,35 @@ public void createError(){
     });
 }
 ```
+init
 对错误的测试用例添加异常捕获
+```java
+ResponseErrorHandler errorHandler = new ResponseErrorHandler() {
+    @Override
+    public boolean hasError(ClientHttpResponse response) throws IOException {
+        return false;
+    }
+
+    @Override
+    public void handleError(ClientHttpResponse response) throws IOException {
+    }
+};
+rest.setErrorHandler(errorHandler);
+```
+
+```java
+@Test
+    public void createError(){
+
+        exceptions.forEach(product -> {
+            Map rst = RestUtil.postJSON(rest, baseUrl + "/products", product, HashMap.class);
+            System.out.println(rst);
+        });
+    }
+```
+out：
+`{canRetry=false, code=F001, message=编号不可空, type=advice}`
+
+
+### 查询产品测试
+

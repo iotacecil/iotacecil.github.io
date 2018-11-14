@@ -131,9 +131,7 @@ return head;
 ```
 
 #### 链表DELETE_IF
-```java
 
-```
 
 ### 92反转从m到n的链表 一趟扫描
 
@@ -269,6 +267,7 @@ private int height(TreeNode root){
     return Math.max(left,right)+1;
 }
 ```
+
 ###  lc538 O(1)空间 线索二叉树 Morris Inorder(中序) Tree Traversal
 #### Morris Inorder(中序) Tree Traversal
 **先把每个中缀的前缀（左子树最右）指向中缀，遍历完后把这些链接都删除还原为 null**
@@ -306,6 +305,8 @@ else if(pre.right!=null){
   cur=cur.right;
 }
 ```
+
+### 124 二叉树中最大路径和
 
 ### 671 ？？根的值<=子树的值的二叉树中的第二小元素
 ```
