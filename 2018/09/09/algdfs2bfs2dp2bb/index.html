@@ -87,6 +87,7 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="49 异位词(相同字符)分组//todonext直接拿CharArray的sort重建String当key 49%1234567891011121314151617public List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; groupAnagrams(String[] strs) &amp;#123;    HashMap&amp;lt;String, List&amp;lt;String&amp;gt;&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/lc312.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/boggle.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/coinchange.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/coin.jpg">
@@ -95,11 +96,11 @@
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/numbst3.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/catalannum.jpg">
 <meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/catalanformu.jpg">
-<meta property="og:updated_time" content="2018-11-13T14:34:22.286Z">
+<meta property="og:updated_time" content="2018-11-14T13:58:25.638Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dfs-dp-回溯 &amp; speedup">
 <meta name="twitter:description" content="49 异位词(相同字符)分组//todonext直接拿CharArray的sort重建String当key 49%1234567891011121314151617public List&amp;lt;List&amp;lt;String&amp;gt;&amp;gt; groupAnagrams(String[] strs) &amp;#123;    HashMap&amp;lt;String, List&amp;lt;String&amp;gt;&amp;gt;">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/boggle.jpg">
+<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/lc312.jpg">
 
 
 
@@ -345,8 +346,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-13T22:34:22+08:00">
-                2018-11-13
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-14T21:58:25+08:00">
+                2018-11-14
               </time>
             
           </span>
@@ -406,6 +407,10 @@
 <blockquote>
 <p>in [4, 1, 5, 10]<br>out 返回 270<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nums = [4, 1, 5, 10] burst 1, 得分 4 * 1 * 5 = 20</span><br><span class="line">nums = [4, 5, 10]    burst 5, 得分 4 * 5 * 10 = 200 </span><br><span class="line">nums = [4, 10]       burst 4, 得分 1 * 4 * 10 = 40</span><br><span class="line">nums = [10]          burst 10, 得分 1 * 10 * 1 = 10</span><br><span class="line">总共的分数为 20 + 200 + 40 + 10 = 270</span><br></pre></td></tr></table></figure></p>
 </blockquote>
+<img src="http://phb9yml10.bkt.clouddn.com/static/images/lc312.jpg">
+<p>超时的回溯法，n!，删掉这个继续删或者换一个继续删<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxCoins</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">  List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">        list.add(nums[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> findMax(list);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findMax</span><span class="params">(List&lt;Integer&gt; nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(nums.size() == <span class="number">1</span>)<span class="keyword">return</span> nums.get(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(nums.size() == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;nums.size();i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> c = nums.get(i);</span><br><span class="line">        <span class="keyword">int</span> l = i - <span class="number">1</span>&lt;<span class="number">0</span>?<span class="number">1</span>:nums.get(i-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> r = i + <span class="number">1</span>&gt;=nums.size()?<span class="number">1</span>:nums.get(i+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> cur = nums.get(i)*l*r;</span><br><span class="line">        nums.remove(i);</span><br><span class="line">        max = Math.max(max,cur+findMax(nums) );</span><br><span class="line">        <span class="comment">// 回溯</span></span><br><span class="line">        nums.add(i,c);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>考虑最后一个删除的数作为分割，左边和右边都是子问题。<br>注意：原问题加padding，子问题也加padding。<br>注意递归终止条件：<br>当<code>1 3 1 5 8 1</code> 用8 拆分成<code>1 3 1 5 8</code>和<code>8 1</code> + <code>5*8*1</code><br>当只有2个数字的子问题时，已经上一层计算过了 返回0(?是不是这样理解？)<br>记忆化left和right的子问题<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxCoins</span><span class="params">(<span class="keyword">int</span>[] iNums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] nums = <span class="keyword">new</span> <span class="keyword">int</span>[iNums.length + <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> x : iNums) <span class="keyword">if</span> (x &gt; <span class="number">0</span>) nums[n++] = x;</span><br><span class="line">    nums[<span class="number">0</span>] = nums[n++] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span>[][] memo = <span class="keyword">new</span> <span class="keyword">int</span>[n][n];</span><br><span class="line">    <span class="keyword">return</span> burst(memo, nums, <span class="number">0</span>, n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">burst</span><span class="params">(<span class="keyword">int</span>[][] memo, <span class="keyword">int</span>[] nums, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (left + <span class="number">1</span> == right) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (memo[left][right] &gt; <span class="number">0</span>) <span class="keyword">return</span> memo[left][right];</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = left + <span class="number">1</span>; i &lt; right; ++i)</span><br><span class="line">        ans = Math.max(ans, nums[left] * nums[i] * nums[right] </span><br><span class="line">        + burst(memo, nums, left, i) + burst(memo, nums, i, right));</span><br><span class="line">    memo[left][right] = ans;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>DP todo</p>
 <h3 id="lc140"><a href="#lc140" class="headerlink" title="lc140"></a>lc140</h3><h3 id="139-word-break-用字典中的此能否拆分字符串"><a href="#139-word-break-用字典中的此能否拆分字符串" class="headerlink" title="139 word break 用字典中的此能否拆分字符串"></a>139 word break 用字典中的此能否拆分字符串</h3><blockquote>
 <p>输入: s = “applepenapple”, wordDict = [“apple”, “pen”]<br>输出: true<br>解释: 返回 true 因为 “applepenapple” 可以被拆分成 “apple pen apple”。<br>     注意你可以重复使用字典中的单词。</p>
 </blockquote>
@@ -656,7 +661,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -678,7 +683,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
