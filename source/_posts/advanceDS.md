@@ -224,6 +224,18 @@ public int[] findRedundantConnectionUF(int[][] edges) {
 
 
 ### 208 Trie树 前缀树
+n个item查询，和item数量无关，只和查询的item长度有关
+如果不止26个字符，可以直接用一个map保存叶子节点
+```java
+class Node{
+    // 节点可以不存 因为边有了
+    char c;
+    // 边
+    Map<char,Node> next;
+    boolean isWord;
+}
+```
+
 实现String`insert` `search` `startsWith`
 {% qnimg trieTree.jpg %}
 插入和查找的time都是O(len(s))
