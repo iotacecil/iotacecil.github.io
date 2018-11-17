@@ -9,7 +9,7 @@ https://blog.csdn.net/javazejian/article/details/72828483
 #### ThreadLocal<T> 
 可以看成是 Map<Thread,T> 特定于该线程的值
 
-#### Cache伪共享：多线程读同一cache line的不同变量，变量无关却要线程同步。
+#### Cache伪共享（False Sharing）：多线程读同一cache line的不同变量，变量无关却要线程同步。
 X86 cpu的cache line长64字节如果有一对象有成员变量long a,b,c(共24字节）
 则可能加载在一个cache line中。
 当 CPU1：线程1和cpu2：线程2 都从内存中读取这个对象放入自己的cache line1和2。
@@ -26,6 +26,151 @@ https://www.jianshu.com/p/7f89650367b8
 ### Disruptor
 https://tech.meituan.com/disruptor.html
 http://ifeve.com/locks-are-bad/
+
+### qucik start
+1.工厂Event类，用于创建Event类实例对象
+```java
+//走IO 要序列化接口
+public class OrderEvent {
+    private long value;
+}
+public class OrederEventFactory implements EventFactory<OrderEvent> {
+
+    @Override
+    public OrderEvent newInstance() {
+        // 返回空的数据对象
+        return new OrderEvent();
+    }
+}
+```
+2.监听事件类，处理数据(Event类)
+```java
+// 处理数据 就是消费者
+public class OrderEventHandler implements EventHandler<OrderEvent> {
+
+    @Override
+    public void onEvent(OrderEvent event, long sequence, boolean endOfBatch) throws Exception {
+        System.out.println("消费者"+event.getValue());
+    }
+}
+```
+3.实例化Disruptor，配置，编写核心组件
+```java
+public class Main {
+public static void main(String[] args) {
+    OrederEventFactory factory = new OrederEventFactory();
+    int ringBufferSize = 1024 * 1024;
+    // 处理器核数
+    int p = Runtime.getRuntime().availableProcessors();
+
+    // 线程池 固定大小的，超过线程数量会放到LinkedBlockingQueue<Runnable>()等待
+    ExecutorService execotr = Executors.newFixedThreadPool(p);
+    /**1 实例化Distruptor对象
+     * Event工厂，容器长度，线程池（一般自己实现 实现RejectedExecutionHandler） ，单生产者，等待策略
+     */
+    Disruptor<OrderEvent> disruptor = new Disruptor<OrderEvent>(
+        factory, ringBufferSize,execotr, ProducerType.SINGLE, new BlockingWaitStrategy()
+    );
+    // 2.添加消费者类的监听
+    disruptor.handleEventsWith(new OrderEventHandler());
+
+    // 3启动
+    disruptor.start();
+
+    //4.实际存储数据的容器
+    RingBuffer<OrderEvent> ringBuffer = disruptor.getRingBuffer();
+
+    OrderEventProducer producer = new OrderEventProducer(ringBuffer);
+
+    ByteBuffer bb = ByteBuffer.allocate(8);
+    for (long i = 0; i <100 ; i++) {
+        bb.putLong(0, i);
+        producer.sendData(bb);
+    }
+
+
+    disruptor.shutdown();
+    execotr.shutdown();
+}
+}
+
+```
+4.生产者，向Disruptor容器投递数据
+```java
+public class OrderEventProducer {
+    RingBuffer<OrderEvent> ringBuffer;
+
+    public OrderEventProducer(RingBuffer<OrderEvent> ringBuffer) {
+        this.ringBuffer = ringBuffer;
+    }
+
+    public void sendData(ByteBuffer data){
+        // 获取下一个可用的序号
+        long sequence = ringBuffer.next();
+
+        try {
+            // 空对象
+            OrderEvent event = ringBuffer.get(sequence);
+            event.setValue(data.getLong(0));
+        }finally {
+            // 发布出去 消费者会监听到
+            ringBuffer.publish(sequence);
+        }
+    }
+
+}
+```
+运行：输出 消费者消费了100条消息
+
+### RingBuffer
+1首尾相接的环，
+2有序号 指向数组中下一个可用元素，加数据递增
+
+数组长度有限，生产者可能会追上消费者.
+
+基于数组，有sequencer（序号）和策略（WaitStrategy）
+
+### Disruptor
+有RingBuffer，消费者线程池、消费者集合`ConsumerRepository`等引用。
+
+### Sequence
+可以看成是一个`AtomicLong` 用于标识进度。可以消除CPU伪共享。
+事件处理过程是沿着序号逐个递增处理，所以原子性 可以多线程并发访问。
+协调`RingBuffer/Producer/Consumer`的处理进度。
+
+### Sequencer 接口
+Distruptor的核心
+有两个实现类`SingleProducerSequencer`,`MultiProducerSequencer`
+实现生产者消费者之间传递数据的并发算法。
+
+### Sequence Barrier 
+用于保持对`RingBuffer`的`Main Published Sequence`(生产者)和消费者之间的平衡。
+判断消费者的处理类。
+
+### WaitStrategy 接口 消费者如何等待的策略
+{% qnimg waitstrategy1.jpg %}
+{% qnimg waitstrategy2.jpg %}
+
+主要策略
+`BlockingWaitStrategy` 阻塞
+`SleepingWaitStrategy` 休眠 异步日志
+`YieldingWaitStrategy` 线程切换
+
+### EventProcessor 主要事件循环
+最重要的实现类`BatchEventProcessor` 回调`EventHandler`接口的实现对象
+
+### EventHandler 由用户实现
+
+### WorkProcessor 多消费者 
+保证一个sequence只能被一个消费者消费
+
+### 多生产多消费者的Disruptor图解
+生产者共用一个Sequence 
+每个消费者有sequence
+每个消费者通过`Barrier`和生产者的`Sequence`协调
+{% qnimg distruptor.jpg %}
+
+---
 
 ### PV和QPS估计
 每天300w PV 80%会在24小时的20%的时间里

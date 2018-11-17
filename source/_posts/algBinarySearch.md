@@ -5,6 +5,75 @@ tags:
 categories: [算法备忘]
 ---
 
+### 分田地 把田地分为16分，怎样分使16份中最小的一块田地最大
+https://www.nowcoder.com/questionTerminal/fe30a13b5fb84b339cb6cb3f70dca699
+>4 4
+3332
+3233
+3332
+2323
+out: 2
+
+暴力判断能不能切4刀 n^4 找最大的k，使切成16块>=k
+
+
+### 410 分割数组使Max(Sum(subarr))最小
+>Input:
+nums = [7,2,5,10,8]
+m = 2
+Output:
+18  [7,2,5] and [10,8],
+
+复杂度： mn^2 有mn个子问题 每个子问题找最佳k
+
+`dp[i][j]` 长度为j的数组划分成i组的最大值
+1.`dp[1][j]= sum(0,j)`
+2.找分割点k，k左边划成i-1组的解和右边划分为1组 取max，在所有分割点k中取最小值 
+`dp[i][j] = min(max(dp[i-1][k],sum(k+1,j))`
+递归：76ms 6%
+
+
+
+二分：复杂度(log(sum(nums))*n) 空间O(1) ok //todo next
+lower bound 数组中的最大元素max(nums)
+up bound 分成1组 sum(nums)
+```java
+public int splitArray(int[] nums, int m) {
+    int max = 0;long sum = 0;
+    for(int num:nums){
+        max = Math.max(num,max );
+        sum+=num;
+    }
+    if(m==1)return (int)sum;
+    long l = max,r = sum;
+    while (l<=r){
+        long mid = (l+r)/2;
+        //用这个最小值能不能划分成m组 可以更小一点
+        if(valid(mid,nums ,m )){
+            r = mid-1;
+        }
+        else{
+            l = mid+1;
+        }
+    }
+return (int)l;
+}
+private boolean valid(long target,int[] nums,int m){
+    int cnt =1;
+    long total = 0;
+    for(int num:nums){
+        total += num;
+        if(total>target){
+            total = num;
+            //需要一个新的分组
+            cnt++;
+            if(cnt> m)return false;
+        }
+    }
+    return true;
+}
+```
+
 三步翻转法：
 
 ### 151 反转英语句子的单词顺序，不翻转单词

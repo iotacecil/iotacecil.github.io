@@ -505,62 +505,7 @@ k = 1
 (3,1) -> 2
 因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
 
-### 410 分割数组使Max(Sum(subarr))最小
->Input:
-nums = [7,2,5,10,8]
-m = 2
-Output:
-18  [7,2,5] and [10,8],
 
-复杂度： mn^2 有mn个子问题 每个子问题找最佳k
-
-`dp[i][j]` 长度为j的数组划分成i组的最大值
-1.`dp[1][j]= sum(0,j)`
-2.找分割点k，k左边划成i-1组的解和右边划分为1组 取max，在所有分割点k中取最小值 
-`dp[i][j] = min(max(dp[i-1][k],sum(k+1,j))`
-递归：76ms 6%
-
-
-
-二分：复杂度(log(sum(nums))*n) 空间O(1) ok //todo next
-lower bound 数组中的最大元素max(nums)
-up bound 分成1组 sum(nums)
-```java
-public int splitArray(int[] nums, int m) {
-    int max = 0;long sum = 0;
-    for(int num:nums){
-        max = Math.max(num,max );
-        sum+=num;
-    }
-    if(m==1)return (int)sum;
-    long l = max,r = sum;
-    while (l<=r){
-        long mid = (l+r)/2;
-        //用这个最小值能不能划分成m组 可以更小一点
-        if(valid(mid,nums ,m )){
-            r = mid-1;
-        }
-        else{
-            l = mid+1;
-        }
-    }
-return (int)l;
-}
-private boolean valid(long target,int[] nums,int m){
-    int cnt =1;
-    long total = 0;
-    for(int num:nums){
-        total += num;
-        if(total>target){
-            total = num;
-            //需要一个新的分组
-            cnt++;
-            if(cnt> m)return false;
-        }
-    }
-    return true;
-}
-```
 
 
 
