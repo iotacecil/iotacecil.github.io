@@ -25,6 +25,50 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 随机数发生器
+在 C 语言标准库中，Brian W. Kernighan 和 Dennis M. Ritchie 设计的随机数収生器如下： 
+```cpp
+unsigned long int next = 1; 
+ 
+/* rand:  return pseudo-random integer on 0..32767 */ 
+int rand(void) 
+{ 
+    next = next * 1103515245 + 12345; 
+    return (unsigned int)(next/65536) % 32768; 
+} 
+ 
+/* srand:  set seed for rand() */ 
+void srand(unsigned int seed) 
+{ 
+    next = seed; 
+} 
+```
+维护一个32位的无符号长整数next，随着next的“随意”变化，不断输出伪随机数。
+通过srand(seed)，可以设置next的初始值（随机种子）。
+
+{% qnimg randomgen.jpg %}
+
+1. 在next当前值的基础上乘以1103515245 = 3 5   5  7  129749，并加上12345。
+2. 通过整除运算在该长整数的二进制展开中截取高16位，进而通过模余运算抹除最高比特位。
+经如此的“混沌化”处理之后，即可作为“随机数”返回。 
+
+### 231 2的整数次
+
+### 191二进制中1的个数
+难点：如果把1一直右移 负数会死循环。如果拿1一直左移要32次。
+做法：从右去掉1能去掉多少次
+整数-1会把最右边的1变成0，如果右边有0全变成1.
+原数和这个数 与 就把最右边1以及右边都变成0
+```java
+public int hammingWeight(int n) {
+    int count = 0;
+    while(n != 0){
+        ++count;
+        n = (n-1)&n;
+    }
+    return count;
+}
+```
 
 ### lc 325 lt 919
 

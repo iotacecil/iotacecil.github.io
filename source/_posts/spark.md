@@ -70,7 +70,20 @@ scala> data.take(10)
 res31: Array[org.apache.spark.mllib.linalg.Vector] = Array([0.4806], [0.4839], [0.318], [0.4107], [0.4835], [0.4445], [0.3704], [0.3389], [0.3711], [0.2669])
 ```
 统计
+```scala
+scala> import org.apache.spark.mllib.{stat,linalg}
+import org.apache.spark.mllib.{stat, linalg}
+scala> stat.Statistics.colStats(data)
+res39: org.apache.spark.mllib.stat.MultivariateStatisticalSummary = org.apache.spark.mllib.stat.MultivariateOnlineSummarizer@75d753ac
 
+scala> res39.
+count   max   mean   min   normL1   normL2   numNonzeros   variance
+
+scala> res39.max
+res40: org.apache.spark.mllib.linalg.Vector = [1.406]
+```
+
+相关系数 年份和降水量的关系
 
 
 ### 矩阵和向量
