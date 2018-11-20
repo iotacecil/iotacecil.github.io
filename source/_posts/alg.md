@@ -25,6 +25,8 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 栈混洗 火车调度
+
 ### 随机数发生器
 在 C 语言标准库中，Brian W. Kernighan 和 Dennis M. Ritchie 设计的随机数収生器如下： 
 ```cpp
