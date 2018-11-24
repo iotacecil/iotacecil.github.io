@@ -1,8 +1,14 @@
 ---
-title: ICSOC
+title: ICSOC NASAC 会议记录
 date: 2018-11-14 15:31:21
 tags: [会议记录]
 ---
+需求、设计与演化质量
+特约报告 移动Web软件系统体验质量解析与优化
+
+
+---
+
 数据集
 http://www.ntu.edu.sg/home/gaocong/datacode.htm
 
