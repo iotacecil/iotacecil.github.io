@@ -148,8 +148,8 @@ Distruptor的核心
 判断消费者的处理类。
 
 ### WaitStrategy 接口 消费者如何等待的策略
-{% qnimg waitstrategy1.jpg %}
-{% qnimg waitstrategy2.jpg %}
+![waitstrategy1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy1.jpg)
+![waitstrategy2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy2.jpg)
 
 主要策略
 `BlockingWaitStrategy` 阻塞
@@ -168,9 +168,11 @@ Distruptor的核心
 生产者共用一个Sequence 
 每个消费者有sequence
 每个消费者通过`Barrier`和生产者的`Sequence`协调
-{% qnimg distruptor.jpg %}
+![distruptor.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/distruptor.jpg)
 
 ---
+
+### 核心链路
 
 ### PV和QPS估计
 每天300w PV 80%会在24小时的20%的时间里
@@ -303,7 +305,7 @@ ExecutorService executor = Executors.newCachedThreadPool();
 
 ### 多个CPU缓存一致性 MESI缓存一致性！！！
 
-{% qnimg mesi.jpg %}
+![mesi.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mesi.jpg)
 
 4种数据状态，4种状态转换的cpu操作。
 M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存
@@ -360,8 +362,8 @@ Transfer rate:          199.02 [Kbytes/sec] received
     4. Option 打开Logviewer
 {% fold %}
 Throughput吞吐量
-{% qnimg jmeter.jpg %}
-{% qnimg viewtree.jpg %}
+![jmeter.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmeter.jpg)
+![viewtree.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/viewtree.jpg)
 {% endfold %}
 
 ### 用代码并发模拟
@@ -407,7 +409,7 @@ A,B,C三个线程，A执行完后C才能开始执行。
 阻塞线程，直到满足某种条件线程再继续执行,计数值（count）实际上就是闭锁需要等待的线程数量
 
 * 适合保证线程执行完再做其它处理
-{% qnimg countdown.jpg %}
+![countdown.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/countdown.jpg)
 * 调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
 
 ```java
@@ -441,7 +443,7 @@ CountDownLatch 类中主要的方法?
 进程-详细-设置相关性：分配到指定cpu执行，开的线程只在指定的执行
 java会把线程直接映射到操作系统
 
-{% qnimg threadstate.jpg %}
+![threadstate.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threadstate.jpg)
 
 `javac xxx.java`->.class
 `javap -c -v xxx` 查看虚拟机字节码
@@ -575,7 +577,7 @@ public class learnThread {
 }
 
 ```
-{% qnimg suspend.jpg %}
+![suspend.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suspend.jpg)
 {% endfold %}
 
 

@@ -36,14 +36,14 @@ category: [JVMlinux常用备注nginxredis配置]
 ## HSTS（HTTP Strict-Transport-Security）
 * 是Web安全策略机制（web security policy mechanism）
 [HSTS：](https://www.jianshu.com/p/caa80c7ad45c)
-{% qnimg https.jpg %}
+![https.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https.jpg)
 > 1. **建立起HTTPS连接之前存在一次明文的HTTP请求和重定向**（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据，篡改请求和响应，跳转到钓鱼网站等。
 - 
-{% qnimg jack_https.jpg %}
+![jack_https.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jack_https.jpg)
 > 攻击者直接劫持了HTTP请求，并返回了内容给浏览器，根本不给浏览器同真实网站建立HTTPS连接的机会
 
 - 当用户让浏览器发起HTTP请求时，浏览器将其转换为HTTPS请求，直接略过上述的HTTP请求和重定向，从而使得中间人攻击失效，规避风险。
-{% qnimg htps.jpg %}
+![htps.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/htps.jpg)
 1. HSTS 响应 Header：让浏览器得知，在接下来的一段时间内，当前域名只能通过HTTPS进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。
 `Strict-Transport-Security: <max-age=>[; includeSubDomains][; preload]`
 > - max-age是必选参数，是一个以秒为单位的数值，它代表着HSTS Header的过期时间，通常设置为1年，即31536000秒。

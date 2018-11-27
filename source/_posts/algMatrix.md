@@ -33,7 +33,7 @@ public int kthSmallest(int[][] matrix, int k) {
 
 
 ### 54旋转矩阵
-{% qnimg rotate2d.jpg %}
+![rotate2d.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate2d.jpg)
 top=0,bot=3,left=0,right = 3
 n是矩阵大小n>1的时候继续，每一圈，矩阵大小-=2
 将2赋值给8：
@@ -59,7 +59,7 @@ The five different ways are listed below, different letters indicates different 
 XYZ XXZ XYY XXY XYY
 XYZ YYZ XZZ XYY XXY
 
-{% qnimg lc790.jpg %}
+![lc790.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc790.jpg)
 1.如果只XX骨牌
 dp[i] 表示N = i的时候有多少种解
 其实是费fib数列
@@ -128,7 +128,7 @@ public class Main {
 有向图 从A点走K步到达B(边可重复)的方案数
 `G[u][v]`表示u到v 长度为k的路径数量
 k=1 1条边可达的点 G1是图的邻接矩阵
-{% qnimg kpath.jpg %}
+![kpath.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kpath.jpg)
 
 ### 快速幂logN完成幂运算
 carmichael number
@@ -138,7 +138,7 @@ public BigInteger modPow(BigInteger exponent, BigInteger m)
 ```
 
 ### 递推公式
-{% qnimg ditui.jpg %}
+![ditui.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ditui.jpg)
 实际上求m项地推公式的第n项 可以用初项线性表示，通过快速幂O(m^2logn)
 
 ### fibo递推公式
@@ -151,7 +151,7 @@ public BigInteger modPow(BigInteger exponent, BigInteger m)
 
 2.矩阵解法
 二阶递推式存在2x2矩阵A
-{% qnimg fibo.jpg %}
+![fibo.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fibo.jpg)
 
 矩阵乘法：
 ```java
@@ -168,7 +168,7 @@ public int[][] mul(int[][] A,int[][] B){
     return rst;
 }
 ```
-{% qnimg quickmi.jpg %}
+![quickmi.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/quickmi.jpg)
 快速幂，将n用二进制表示，5->101表示A^5 = A^4+A^1,
 A每次翻倍，n一直右移，n最右为1的时候加上当前A翻倍的结果。
 矩阵的幂

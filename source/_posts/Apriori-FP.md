@@ -18,9 +18,9 @@ categories: [机器学习和数据处理python备忘]
 1. 假设想找到支持度大于0.8的所有项集；4种物品的集合要遍历数据15次
 > ***对于包含N种物品的数据集共有2N-1种项集组合。***
 2. 连线表明两个或者更多集合可以组合成一个更大集合
-![Apriori](\images\Apriori.jpg)
+![Apriori](\images\Apriori.jpg))
 - 某个项集是频繁的，那么它的所有子集也是频繁的
-![Apriori](\images\Apriori2.jpg)
+![Apriori](\images\Apriori2.jpg))
 
 ### 算法
 1. 发现频繁项集：输入：最小支持度，数据集
@@ -42,7 +42,7 @@ a[:k-2]==b[:k-2]
 	> P ➞ H的可信度定义为support(P | H)/support(P)。
 	
 	1. 生成一个可能的规则列表，然后测试每条规则的可信度。如果可信度不满足最小要求，则去掉该规则。
-![Apriori](\images\Apriori3.jpg)
+![Apriori](\images\Apriori3.jpg))
 	2. 从一个频繁项集开始，接着创建一个规则列表，其中规则右部只包含一个元素，然后对这些规则进行测试。接下来合并所有剩余规则来创建一个新的规则列表，其中规则右部包含两个元素。这种方法也被称作分级法。
 
 ## FP-growth FP树-频繁集-自动补全

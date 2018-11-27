@@ -51,7 +51,7 @@ jclasslib bytecode viewer
 
 
 
-{% qnimg suanfaGC.jpg %}
+![suanfaGC.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg)
 
 ### jstat 查看类加载/GC/JIT编译信息
 [jstat官网](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html)

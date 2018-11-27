@@ -166,7 +166,7 @@ Fn.prototype={
 };
 Fn.prototype.sum()//undefined+400=NaN
 ```
-{% qnimg proto.jpg %}
+![proto.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/proto.jpg)
 ---
 ```js
 var name = 'window'

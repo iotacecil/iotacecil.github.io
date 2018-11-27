@@ -50,7 +50,7 @@ I/O thread 9 state: wait Windows aio (write thread)
 文件系统最小单位 块 4k
 InnoDB最小单元 页 16k
 指针大小在6字节
-{% qnimg innodb16k.jpg %}
+![innodb16k.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/innodb16k.jpg)
 都是16的整数倍
 ```sql
 mysql> show variables like 'innodb_page_size';
@@ -125,7 +125,7 @@ mysql 中 myisam innodb
 
 #### 3. 一致性哈希：和弦（chord）系统中提出。
 - 哈希长度为5，哈希空间为32，节点映射到环的位置随机
-![hash](\images\hash.jpg)
+![hash](\images\hash.jpg))
 - 每个机器节点负责存储一段哈希空间的数据，N14存储6-14的数据；N5存储0-5，
 
 ##### 查询

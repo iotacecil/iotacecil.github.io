@@ -80,7 +80,7 @@ Secure 请求只能是https
 #### indexedDB 按域名分配独立空间，一个域名多个数据库
 
 #### H5离线缓存 manifest
-{% qnimg appcache.jpg %}
+![appcache.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/appcache.jpg)
 `navigator.onLine`检测是否在线
 ```html
 <html lang = "en" manifest = 'manifestFile'>
@@ -126,7 +126,7 @@ localStroage在chrome限制为2.6M 同域名一般共享
 所有可以序列化的都能存到localStorage
 
 存图片
-{% qnimg localstorage.jpg %}
+![localstorage.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/localstorage.jpg)
 `set('key')`+`get('key')`
 {% fold %}
 ```js
@@ -218,8 +218,8 @@ require('net').createServer(function(sock) {
 ### webworkers
 《高性能网站建设进阶指南》
 https://www.html5rocks.com/en/tutorials/workers/basics/
-{% qnimg webworkers.jpg %}
-{% qnimg XHR.jpg %}
+![webworkers.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/webworkers.jpg)
+![XHR.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/XHR.jpg)
 ```js
  var worker = new Worker("./worker.js")
     console.log("主线程主线程主线程主线程1")//1
@@ -481,31 +481,31 @@ pipeline:
 添加了host：
 
 《Web性能权威指南》
-{% qnimg http2.jpg %}
+![http2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg)
 >是通过支持请求与响应的多路复用来减少延迟，通过压缩 HTTP
 首部字段将协议开销降至最低，同时增加对请求优先级和服务器端推送的支持。
 
 > 它改变了客户端与服务器之间交换数据的方式。
 > 为实现宏伟的性能改进目标，HTTP  2.0 增加了新的二进制分帧数据层
 
-{% qnimg http2connect.jpg %}
+![http2connect.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2connect.jpg)
 
 > HTTP  2.0 通信都在一个连接上完成，这个连接可以承载任意数量的双向数据流。
 > 每个数据流以消息的形式发送，而消息由一或多个帧组成，这些帧可以乱序发送，然后再根据每个帧首部的流标识符重新组装。
 
-{% qnimg http22.jpg %}
+![http22.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http22.jpg)
 
-{% qnimg sendrecv.jpg %}
+![sendrecv.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sendrecv.jpg)
 > HTTP 消息分解为独立的帧，交错发送，然后在另一端重新组装是 HTTP  2.0 最
 重要的一项增强。
 
-{% qnimg http2better.jpg %}
+![http2better.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2better.jpg)
 
 > http2:：浏览器可以在发现资源时立即分派请求，指定每个流的优先级，让服务器决定最优的响应次序。这样请求就不必排队了，既节省了时间，也最大限度地利用了每个连接。 
 
 > 每个来源一个链接:，所有HTTP 2.0 连接都是持久化的，而且客户端与服务器之间也只需要一个连接即可。
 
-{% qnimg http2tcp.jpg %}
+![http2tcp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2tcp.jpg)
 
 http2：分帧传输二进制传输（不用连续）
 信道复用 同一个链接多个请求
@@ -638,14 +638,14 @@ response.end(html)
 ### 长链接Network-Connection ID（TCP链接的id）
 http1.1发送请求有先后顺序。不能并发请求
 chrome允许并发限制创建6个
-{% qnimg 6tcp.jpg %}
+![6tcp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/6tcp.jpg)
 保持长链接`Connect:Keep-Alive` 默认都是keep-alive
 本地开发 把网速调慢：online->Fast 3G
 可以设置`'Connection':'close'`
-{% qnimg closetcp.jpg %}
+![closetcp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/closetcp.jpg)
 
 google 使用h2 都是一个connectID
-{% qnimg googletcp.jpg %}
+![googletcp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/googletcp.jpg)
 
 ### 数据协商
 Accept
@@ -760,7 +760,7 @@ postcss.config.js
 ### typeof一共有五种返回值
 按存储方式只有值类型和引用类型（共用内存块）
 只能区分值类型。无法区分引用类型：数组、对象、方法
-{% qnimg typeof.jpg %}
+![typeof.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/typeof.jpg)
 
 ### 强制类型转换
 #### ==
@@ -865,9 +865,9 @@ let result = arr3.find(function (item,index) {
 3. `.some`找到true后停止返回true
 4. `.every`找到false后停止返回false
 5. `.reduce`
-{% qnimg reduce.jpg %}
+![reduce.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/reduce.jpg)
 变成undefined是因为没有写返回值
-{% qnimg returnreduce.jpg %}
+![returnreduce.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/returnreduce.jpg)
 - 对象求和：
 ```javascript
 //不报错，返回NaN 因为pre从对象变成了数 
@@ -923,7 +923,7 @@ function fn(num,callBack){
 ```
 
 ### 闭包
-{% qnimg bibao.jpg %}
+![bibao.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bibao.jpg)
 里边的作用域被赋值给外面的变量占用了，不能释放。
 ```js
 var a = 9;
@@ -1056,7 +1056,7 @@ in 私有共有都返回true
   ```
 2. prototype对象，带`constructor`属性存的值就是函数本身（类）
 3. 每个对象都带`__proto__`属性，值是当前对象所属类的原型(prototype)
-{% qnimg prototype.jpg %}
+![prototype.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/prototype.jpg)
 ```js
 function fun(num){
     this.num = num}
@@ -1083,7 +1083,7 @@ jQuery.fn = jQuery.prototype={constructor:jQuery,init:function(,){}}
 
 
 ### BOM
-{% qnimg BOM.jpg %}
+![BOM.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/BOM.jpg)
 1. 
 `document.querySelector("body").setAttribute("style","background-color:black");`
 `document.querySelector("body").style.cssText="background-color:black";`

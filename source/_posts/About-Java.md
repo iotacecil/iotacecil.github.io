@@ -253,7 +253,7 @@ https://blog.csdn.net/zhxdick/article/details/52003123
 object overhead 16+int 4 padded到4的倍数(`-XX:-UseCompressedOops:`)
 如果用压缩则`-XX:+UseCompressedOops: mark/4 + metedata/8 + 4 = 16 `
 默认是启动压缩的
-{% qnimg javaobj.jpg %}
+![javaobj.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaobj.jpg)
 > Objects. To determine the memory usage of an object, we add the amount of memory used by each instance variable to the overhead associated with each object, typically 16 bytes. Moreover, the memory usage is typically padded to be a multiple of 8 bytes (on a 64-bit machine).
 
 #### padding
@@ -272,18 +272,18 @@ uintx CompressedClassSpaceSize     = 1073741824     {product}
 bool UseCompressedClassPointers    := true          {lp64_product}
 bool UseCompressedOops             := true          {lp64_product}
 ```
-{% qnimg javarefer.jpg %}
+![javarefer.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javarefer.jpg)
 > References. A reference to an object typically is a memory address and thus uses 8 bytes of memory (on a 64-bit machine).
 
 #### arrays
-{% qnimg javaarr.jpg %}
+![javaarr.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaarr.jpg)
 > Arrays. Arrays in Java are implemented as objects, typically with extra overhead for the length. An array of primitive-type values typically requires 24 bytes of header information (16 bytes of object overhead, 4 bytes for the length, and 4 bytes of padding) plus the memory needed to store the values.
 
 基本类型 16的obj head+4(len)+4padding = 24 +存的类型\*长度
 
 #### string
 char[] ref(8)+int(4)+head(16)+padding->32+char[](arrayschar(24))=56+2N
-{% qnimg javastr.jpg %}
+![javastr.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javastr.jpg)
 
 
 ### 打印整数的二进制表示
@@ -441,7 +441,7 @@ guaga:String->list
 
 - 全文搜索引擎[Lucene](https://www.chedong.com/tech/lucene.html)
 
-{% qnimg access.jpg %}
+![access.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/access.jpg)
 
 ### Charactor.isLetterOrDigit()
 
@@ -597,10 +597,10 @@ jdk1.8开始不需要final 编译器自动final，所以不能改变
 4. 优先选择静态内部类(防止内存泄漏)
 
 原因：因为java里传参是传值
-{% qnimg finalnoname.jpg %}
+![finalnoname.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finalnoname.jpg)
 在里面引用外面的参数，外面的参数不应该被修改。不然里面变量和外面变量就会有二义性。
 如果是传引用
-{% qnimg refnoname.jpg %}
+![refnoname.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/refnoname.jpg)
 两个会同时修改不会有二义性
 
 ### 适配器

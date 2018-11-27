@@ -9,7 +9,7 @@ linux 内核空间bootfs是共享的
 用户空间是各种Linux发行版
 base image是root filesystem (文件和meta data )
 各种image是分层共享layer的
-{% qnimg dockerimg.jpg %}
+![dockerimg.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockerimg.jpg)
 
 制作docker
 当前目录下有可执行文件 hello(编译过的c程序) 写成dockerfile
@@ -26,7 +26,7 @@ IMAGE               CREATED             CREATED BY                              
 ### docker container
 image负责app的存储和分发，container负责运行app
 image是只读的，在image层上加一层可读可写的container层
-{% qnimg dockercontainer.jpg %}
+![dockercontainer.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockercontainer.jpg)
 `docker container ls -a`
 docker 交互式启动`docker run --help`
 ```sh
@@ -261,7 +261,7 @@ docker run -d -p 3310:3306 -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC 
 ### 负载均衡 Haproxy请求转发器
 nginx 支持http协议负载均衡，最近才支持TCP/IP
 [haproxy配置](https://zhangge.net/5125.html)
-{% qnimg junheng.jpg %}
+![junheng.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/junheng.jpg)
 1. `docker pull haproxy`
 2. 在宿主机创建配置文件 
    `mkdir /home/soft/haproxy/`
@@ -356,7 +356,7 @@ listen  proxy-mysql
 ### haproxy双机热备 
 1. 虚拟ip linux一个网卡可以定义多个ip地址，可以把ip地址分配给对应的程序
    在两个haproxy容器中部署keepalived抢占一个虚拟ip172.18.0.15,抢到的叫主服务器，没抢到的叫备服务器，有心跳检测，检测到主服务器挂了就抢占ip
-![doubleha](\images\doubleha.jpg)
+![doubleha](\images\doubleha.jpg))
    1.1. 进入容器 
    `docker exec -it h1 bash`
    harpoxy是用Ubuntu创建的 所以要用apt-get

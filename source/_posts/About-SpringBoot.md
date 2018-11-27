@@ -47,11 +47,11 @@ private CDplayer cdplayer;
 
 
 ### 配置文件详解
-{% qnimg bean.jpg %}
+![bean.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bean.jpg)
 [公共配置](http://www.ymq.io/2017/11/01/spring-boot-common-application-properties-example/)
 
 ### DispatcherServlet
-{% qnimg webcontext.jpg %}
+![webcontext.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/webcontext.jpg)
 1. 需要定义一个[servlet-name]-servlet.xml配置文件
 	HandlerMapping
 	Controllers
@@ -129,7 +129,7 @@ public String login(@RequestParam("name") String name,@RequestParam("password")S
 	1. singleton 默认`<bean scope="singleton">`
 	2. prototype 每次引用创建一个实例
 	web里仅有
-{% qnimg scope.jpg %}
+![scope.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/scope.jpg)
 5. Bean生命周期回调
 	1. 创建`<bean init-method="init>`
 	2. 销毁`<bean destory-method="cleanup">`
@@ -227,14 +227,14 @@ public String login(@RequestParam("name") String name,@RequestParam("password")S
 	4. @After throwing 抛出异常之后
 	5. @After finally 函数返回之后
 4. pointcut：匹配AOP目标函数的表达式+名称。哪些业务方法需要AOP
-{% qnimg pointcut.jpg %}
+![pointcut.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcut.jpg)
 execution 匹配函数
 within 某个包某个类下面的函数
 `*`匹配所有 `save*`表示save开头的所有函数
 - 所有public函数
 `execution(public**(..))`
 - 组合两个表达式`execution(表达式1()&&表达式2()`
-{% qnimg pointcut2.jpg %}
+![pointcut2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcut2.jpg)
 
 #### Aspectj使用
 1. 添加依赖 aspectjweaver.jar
@@ -343,10 +343,10 @@ new RowMapper<User>() {
 #### 异常处理
 SQLException是checked异常：需要捕获
 Spring的DataAccessException是unchecked异常
-{% qnimg dsexcept.jpg %}
+![dsexcept.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dsexcept.jpg)
 
 #### 事务管理
-{% qnimg transaction.jpg %}
+![transaction.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/transaction.jpg)
 
 ### MyBatis
 
@@ -412,7 +412,7 @@ interface{
 
 
 ## SpringMVC
-{% qnimg mvc_front.jpg %}
+![mvc_front.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mvc_front.jpg)
 前端调度器把请求分发给业务控制器，把生成的数据分发给视图模板。
 - js deguggger
 1. watch

@@ -4,7 +4,7 @@ date: 2018-11-10 13:25:11
 tags:
 ---
 主要的业务流程 查询和购买
-{% qnimg finacialp1.jpg %}
+![finacialp1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finacialp1.jpg)
 
 
 用到的技术：
@@ -13,7 +13,7 @@ tags:
 
 #### 模块划分
 业务模块 公共模块 - 项目模块 - 管理端/销售端
-{% qnimg finacialp2.jpg %}
+![finacialp2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finacialp2.jpg)
 
 1. 按业务层次划分，将dao层和service层单独划分成模块（Entity、Api）
 2. 功能划分：管理和销售模块（可以独立部署的，算一个应用）
@@ -106,8 +106,8 @@ subprojects {
 
 
 #### 管理端：产品表
-{% qnimg finacialp3.jpg %}
-{% qnimg finacialp4.jpg %}
+![finacialp3.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finacialp3.jpg)
+![finacialp4.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finacialp4.jpg)
 > datetime 保存的时间更广，timestamp有时区信息（读取的时候会根据客户端时区转换成对应时区）
 
 编号varchar50、名称varchar50、收益率decimal5,3、锁定期smallint、状态varchar20、起投金额decimal 15,3、投资步长decimal 15,3、备注
@@ -133,8 +133,8 @@ CREATE TABLE `product` (
 ```
 
 #### 销售端：
-{% qnimg finacialp5.jpg %}
-{% qnimg finacialp6.jpg %}
+![finacialp5.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finacialp5.jpg)
+![finacialp6.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finacialp6.jpg)
 
 订单表order_t  (order是关键字)
 订单编号varchar50 渠道编号varchar50 产品编号varchar50 用户编号varchar50 外部订单编号varchar50  类型varchar50 状态varchar50  金额decimal15,3 备注varchar200 创建时间datetime 更新时间datetime
@@ -274,7 +274,7 @@ public enum OrderStatus {
 ### 3.管理端
 Spring Data 用JPA 操作数据库
 接口设计 添加产品、查询单个产品、条件查询产品
-{% qnimg finacialp7.jpg %}
+![finacialp7.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finacialp7.jpg)
 
 1.新建启动类
 在`manager`模块 新建`mannager`-`ManagerApp.java` 启动类

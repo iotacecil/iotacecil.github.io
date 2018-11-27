@@ -35,7 +35,7 @@ http://act.buaa.edu.cn/hsun/SOC2016/index.html
 
 ### Preference 偏好
 - Goal model
-{% qnimg goalmodel.jpg %}
+![goalmodel.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/goalmodel.jpg)
 
 系统：自然语言偏好表达->用目标模型解释的正式的偏好说明。
 组成： 正则、统计语义相似性，基于语料库的偏好强度分级。
@@ -104,7 +104,7 @@ i=len(a);j=len(b);
 CART -> MARCH
 1. c->m t->c +H
 - [] a
-{% qnimg editdis.jpg %}
+![editdis.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/editdis.jpg)
 只需要d[i]一行
 
 

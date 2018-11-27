@@ -16,7 +16,7 @@ category: [cpp学习操作系统]
 假设程序里有两个在**内存**中紧邻着的 C 字符串 s1 和 s2 ， 其中 s1 保存了字符串 "Redis" ， 而 s2 则保存了字符串 "MongoDB"
 
 执行`strcat(s1, " Cluster");` 会把s2覆盖掉
-{% qnimg stringoverflow.jpg %}
+![stringoverflow.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringoverflow.jpg)
 
 
 ### `emplace_back()`和`push_back()`
@@ -119,7 +119,7 @@ https://blog.csdn.net/u011514451/article/details/50675222
 强制类型转换
 
 ### 拓扑排序
-{% qnimg topu.jpg %}
+![topu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/topu.jpg)
 
 ### 树结构review
 树结构是为了对vector(数组)和list(链表)的静态操作(search)和动态操作(insert,remove)效率的平衡。
@@ -253,7 +253,7 @@ while(!s.empty()){
 
 ##### 迭代版本2：
 1. 沿着左孩子下行，到左侧空了之后向上遍历刚才没访问的右子树
-{% qnimg prestack.jpg %}
+![prestack.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/prestack.jpg)
 ```cpp
 template <typename T,typename VST>
 static void visitAlongLeftBranch(
@@ -288,7 +288,7 @@ void trapRE_v2(BinNodePosi(T) x,VST& visit){
 1.不是尾递归
 2.一直向左，到左边没有了visit，再访问右子树，回到原来左链上的上个节点访问并继续右子树
 左侧链上的每个节点是一个阶段，都是相同的，上一个节点访问的时候可以当下一个节点不存在
-{% qnimg midtrav.jpg %}
+![midtrav.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/midtrav.jpg)
 将所有左节点入栈，最后弹出访问并访问右子树
 ```cpp
 template <typename T>
@@ -311,7 +311,7 @@ void traIn_v2(BinNodePosi(T) x,V& visit){
     }
 }
 ```
-{% qnimg intravstack.jpg %}
+![intravstack.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/intravstack.jpg)
 
 #### 层次遍历
 ```cpp
@@ -342,7 +342,7 @@ void BinNode<T>::travLevel(VST & visit){
      [R][r] 左空
 
 每个节点的度是0或2的真二叉树可以由先序，后序还原。左右子树同时为空/非空
-{% qnimg preback.jpg %}
+![preback.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/preback.jpg)
 
 ### 图 
 1. 简单路径：不含重复顶点

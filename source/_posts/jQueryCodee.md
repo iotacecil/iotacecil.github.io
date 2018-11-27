@@ -5,7 +5,7 @@ tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
 ## MPV设计模式
-{% qnimg mvp.jpg %}
+![mvp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mvp.jpg)
 jquery btn绑定事件 添加列表 
 ```javascript
 function Page(){}

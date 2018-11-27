@@ -34,7 +34,7 @@ categories: [算法备忘]
 https://baike.baidu.com/item/%E4%BA%8C%E9%A1%B9%E5%88%86%E5%B8%83
 在n重伯努利试验中，事件A恰好发生k次的概率为
 在伯努利试验序列中，事件A在第 k 次试验中才首次发生的概率为 
-{% qnimg bip.jpg %}
+![bip.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bip.jpg)
  
 
 #### 泊松分布 期望λ
@@ -44,7 +44,7 @@ rv = poisson(mu=5)
 ```
 https://baike.baidu.com/item/%E6%B3%8A%E6%9D%BE%E5%88%86%E5%B8%83
 当二项分布的n很大而p很小时，泊松分布可作为二项分布的近似，其中λ为np。
-{% qnimg posoe.jpg %}
+![posoe.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/posoe.jpg)
 每天中午12点 等待地铁的人数
 
 ---
@@ -85,7 +85,7 @@ print(rv.stats(moments='mvsk'))
 ```
 
 方差公式：
-{% qnimg fangcha.jpg %}
+![fangcha.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fangcha.jpg)
 
 
 ### 参数估计
@@ -133,7 +133,7 @@ n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。
 
 
 ### 分配问题及应用
-{% qnimg fenpei.jpg %}
+![fenpei.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fenpei.jpg)
 
 ### 排列
 村长带着 4 对父子参加爸爸去哪儿第三季第二站某村庄的拍摄。村里为了保护小孩不被拐走有个前年的规矩，那就是吃饭的时候小孩左右只能是其他小孩或者自己的父母。那么 4 对父子在圆桌上共有___种坐法。 （旋转一下，每个人面对的方向变更后算是一种新的坐法）
@@ -149,13 +149,13 @@ n. x^n的系数是a1,a2,….an的n个组合的全体（只有1个）。
 ### 硬币相关问题
 #### p112 3.39 连续仍硬币，A正反胜，B反反胜，A赢的概率?
 3/4
-{% qnimg coinflip.jpg %}
+![coinflip.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/coinflip.jpg)
 
 
 http://www.raychase.net/3144
 正正反 甲赢 正反反 乙赢 Penney's game
 
-{% qnimg penneygame.jpg %}
+![penneygame.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/penneygame.jpg)
 > 使用长度为3字节的序列，玩家B相对玩家A有优势。这是因为这个游戏是一个非传递博弈，所以无论如何选定第一个序列，总会有一个序列有更大的获胜概率。
 
 
@@ -210,12 +210,12 @@ B 赢概率是`1/2*1/2 = 1/4`
 ```
 
 理解二项式定理(a+b)^n
-{% qnimg abbinary.jpg %}
+![abbinary.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/abbinary.jpg)
 通项是a^k b^(n-k) 前面的系数表示 n个数的可重排列，a有k个，b有n-k个
 
 不仅是二项式 
 通项是a1^(r1) a2^(r2) at^(rt)
-{% qnimg nbinary.jpg %}
+![nbinary.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nbinary.jpg)
 (x1+x2+…+xm)^n 展开式的项数等于C(n+m-1,n).
 
 > 有6个洞 编号1-9个球，求球入洞的方案数

@@ -17,12 +17,12 @@ rsync增量传输算法原理
 https://www.nowcoder.com/ta/nine-chapter?query=&asc=true&order=&page=3
 ### 软中断 和 硬中断
 中断和异常是随机发生、自动处理、可恢复的。
-{% qnimg inter.jpg %}
+![inter.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/inter.jpg)
 - 中断： 操作系统 是中断（事件）驱动的
 中断引入是为了支持CPU和外部设备并行操作：cpu启动输入输出设备后，设备独立工作，cpu处理其他任务。当输入/输出完成，向CPU发送中断。
 - 异常： cpu执行指令时自身出现的问题。（算术溢出、地址越界、陷入指令）
 异常分3类：陷入，故障，终止
-{% qnimg inter.jpg %}
+![inter.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/inter.jpg)
 事件的发生改变了处理器的控制流：
 - cpu暂停正在执行的程序，
 - 保留现场，
@@ -37,14 +37,14 @@ https://www.nowcoder.com/ta/nine-chapter?query=&asc=true&order=&page=3
 
 CPU在每条指令执行周期的最后，会扫描 中断寄存器。
 中断硬件会将触发内容规定变法送入PSW程序状态字相应位，称 中断编码。硬件会去查中断向量表，调出中断处理程序。
-{% qnimg interrupt.jpg %}
+![interrupt.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/interrupt.jpg)
 
 中断向量表：操作系统设计好的
 一条中断向量是一个内存单元。存放：中断处理程序入口地址和程序运行时所需的处理机状态字。
 Linux中断向量表0~255个中断向量c
-{% qnimg linuxvector.jpg %}
+![linuxvector.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/linuxvector.jpg)
 
-{% qnimg interreact.jpg %}
+![interreact.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/interreact.jpg)
 
 中断处理程序： 软件提前设置好，硬件执行
 1. 保存相关寄存器信息
@@ -56,14 +56,14 @@ I/O中断处理程序分两类处理：
 正常结束，唤醒等待的程序，或者继续IO
 出现错误：重新执行失败IO，直到判断为硬件故障
 
-{% qnimg intererror1.jpg %}
+![intererror1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/intererror1.jpg)
 （硬件）CPU 切换到内核态 在系统栈保留上下文 PC,PSW。
-{% qnimg intererror2.jpg %}
+![intererror2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/intererror2.jpg)
 
 X86处理器
 中断：硬件信号。
 异常：指令执行引发。 系统调用：用户态到内核态的唯一入口。
-{% qnimg x86inter.jpg %}
+![x86inter.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/x86inter.jpg)
 
 中断控制器:硬件中断信号->中断向量 引发CPU中断
 
@@ -76,14 +76,14 @@ X86处理器
 引入描述符来描述各种数据段，所有的描述符均为8个字节（0-7)，由第5个字节说明描述符的类型，类型不同，描述符的结构也有所不同。描述符表是一张地址转换函数表。
 
 描述符数据结构表示中断向量。
-{% qnimg x86inter2.jpg %}
-{% qnimg x86inter3.jpg %}
+![x86inter2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/x86inter2.jpg)
+![x86inter3.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/x86inter3.jpg)
 中断描述符表(IDT)通过IDTR寄存器获得IDT的地址
 段选择符是索引，显示是GDT表还是LDT表，还有特权级，用索引查全局描述符表（GDT），得到段描述符，得到段基地址+偏移量 = 中断服务程序入口地址
 
 要做特权级检查，要切换堆栈，用户态进内核态，堆栈指针到内核态
 硬件压栈，保存上下文，如果异常产生了硬件出错码 保存在栈中。
-{% qnimg x86inter4.jpg %}
+![x86inter4.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/x86inter4.jpg)
 
 #### 系统调用：操作系统功能调用 //todo
 每个操作系统都提供几百种系统调用（进程控制、进程通信、文件使用、目录操作、设备管理、信息维护）
@@ -97,22 +97,22 @@ X86处理器
 https://www.polarxiong.com/archives/%E8%AF%BB-%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB-%E7%9A%84%E6%80%BB%E7%BB%93.html
 ### 伙伴系统：Linux内存分配方案，空闲块链表
 伙伴：如果需要的空间s需要`2^(n-1)<s<2^n`则空间/2，两个叫伙伴。
-{% qnimg huoban.jpg %}
+![huoban.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/huoban.jpg)
 
 伙伴分割与合并（每次分割小的空闲块，系统中始终保持大的空闲快）
-{% qnimg huoban2.jpg %}
+![huoban2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/huoban2.jpg)
 
 ### 内存管理方案
 装载单位： 进程
 1.单一连续区域:只有一个进程在内存
-{% qnimg memoryalloc.jpg %}
+![memoryalloc.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/memoryalloc.jpg)
 
 2.固定分区：内存分区，每个分区只装1个进程，进程在各个分区排队
-{% qnimg memoryalloc2.jpg %}
+![memoryalloc2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/memoryalloc2.jpg)
 
 3.可变分区：内存按需分配给进程
 外碎片：进程和进程之间的空隙
-{% qnimg memoryalloc3.jpg %}
+![memoryalloc3.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/memoryalloc3.jpg)
 memory compaction:在内存移动程序，合并空闲区域
 进程IO时不能移动。
 
@@ -120,9 +120,9 @@ memory compaction:在内存移动程序，合并空闲区域
 //todo
 https://www.coursera.org/lecture/os-pku/ji-ben-nei-cun-guan-li-fang-an-2-p4N0u
 1.页式
-{% qnimg pagememory.jpg %}
+![pagememory.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pagememory.jpg)
 如果是32位的计算机,如果页面大小4k,0~11 12位为偏移
-{% qnimg pagememory2.jpg %}
+![pagememory2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pagememory2.jpg)
  页表项记录了逻辑页号 到页框号的一个映射关系
  每个进程都有一张页表，页表放在内存，一个进程上CPU之后 这个进程的页表的起始地址要推送到某一个寄存器
  页表的起始地址在哪个数据结构？
@@ -153,7 +153,7 @@ https://my.oschina.net/manmao/blog/746492
 
 总线倒用技术DMA 扇区和内存
 
-{% qnimg dictuse.jpg %}
+![dictuse.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dictuse.jpg)
 
 算出柱面磁头扇区和读写的缓冲区直接out
 
@@ -333,7 +333,7 @@ int main()
 
 https://www.shiyanlou.com/courses/115
 ### 进程调度
-{% qnimg diaodushiji.jpg %}
+![diaodushiji.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/diaodushiji.jpg)
 就绪队列改变->重新调度
 进程调度的时机4个：
 1.进程正常/错误终止
@@ -343,9 +343,9 @@ https://www.shiyanlou.com/courses/115
 重新调度的时机：内核对 【中断/陷入（异常）/系统调用】等处理之后【返回用户态】需要重新调度。
 
 调度程序从就绪队列里选择进程可以是刚刚被暂停的，也可以是新的进程，新的就发生进程切换。
-{% qnimg processchange.jpg %}
+![processchange.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/processchange.jpg)
 新的进程上cpu要用自己的地址空间
-{% qnimg contentstep.jpg %}
+![contentstep.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/contentstep.jpg)
 
 
 高速缓存：刚才执行进程的指令和数据
@@ -354,7 +354,7 @@ TLB存放了进程的页表表项
 新的进程的指令、数据、表项也要放入高速缓存和TLB
 
 ### 调度算法
-{% qnimg diaodumetric.jpg %}
+![diaodumetric.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/diaodumetric.jpg)
 
 
 ### FC: Fibre Channel
@@ -415,7 +415,7 @@ https://segmentfault.com/a/1190000003063859
 段： cs代码寄存器，ds数据寄存器 ss栈寄存器 es扩展段寄存器
 PCB需要记录每个段的基地址和长度
 假设cs是0段
-{% qnimg pcbduan.jpg %}
+![pcbduan.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pcbduan.jpg)
 
 GDT表 根据cs查GDT表
 jmpi0,8
@@ -438,16 +438,16 @@ a进入管程，wait并释放，b进入，唤醒a，则同时两个进程。
 三种解决方案：
 1.并发pascal：规定唤醒作为管程中最后一个可执行操作->唤醒完了这个进程就出管程
 2.Hoare：a（被唤醒的）先执行，b等待
-{% qnimg hoare.jpg %}
+![hoare.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/hoare.jpg)
 - 入口等待队列：在管程外等待的
 - 如果进入管程的发现资源不够不能操作（生产者想insert，但是缓冲区(资源)满了)则进程wait进入不同的条件变量队列。释放，并让入口等待队列的进入管程。
 - 后进入的进程p发现资源够了会signal条件变量队列中的进程q。
 - p唤醒q，p进入紧急等待队列(比入口等待队列优先级高)，q进程从条件变量队列中出来继续执行
-{% qnimg hoarecondition.jpg %}
+![hoarecondition.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/hoarecondition.jpg)
 - 条件变量 c链：条件变量队列
 可以用信号量和pv操作构造管程。
 用管程解决生产者消费者问题：
-{% qnimg pcp.jpg %}
+![pcp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pcp.jpg)
 
  hoare的缺点：2次额外的进程切换
 
@@ -456,20 +456,20 @@ a进入管程，wait并释放，b进入，唤醒a，则同时两个进程。
 - notify(x) x是条件变量，x条件变量队列上的进程得到通知，发信号的继续执行。
 问题：不能保证将来x条件还成立 所以notify的进程上cpu执行还要重新检查条件
 - 用while取代if
-{% qnimg mesa.jpg %}
+![mesa.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mesa.jpg)
 改进：给条件队列等待+计时器，自动变成就绪态(因为被调度的时候还是会检查条件)
 改进：broadcast 释放所有等待条件变量的进程
 
 ### Pthread互斥(lock操作互斥量)同步(wait/signal条件变量)
 pthread线程库实现条件变量的signal 是mesa管程的语义
-{% qnimg pthread.jpg %}
-{% qnimg condition_wait.jpg %}
+![pthread.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pthread.jpg)
+![condition_wait.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/condition_wait.jpg)
 
 ### 进程通信
 信号量和管程不能多处理器，也不能传大量信息（大数组）
 1. 消息传递
 发送进程准备好消息，但是发送进程只能在自己的地址空间，不能去接收进程的地址空间操作，必须靠操作系统的消息缓冲区。
-{% qnimg messagesend.jpg %}
+![messagesend.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/messagesend.jpg)
 1)发送进程准备好消息，调用send
 2)内核，操作系统复制消息,将消息放到接受进程pcb消息队列队尾
 3)接收进程上cpu执行到receive
@@ -478,21 +478,21 @@ pthread线程库实现条件变量的signal 是mesa管程的语义
 用p,v操作实现send原语
 
 ### 共享内存
-{% qnimg sharememory.jpg %}
+![sharememory.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sharememory.jpg)
 1.物理地址空间映射到2个进程内地址空间
 2.通过读者写问题的方法解决互斥问题
 
 ### 管道通信PIPE
-{% qnimg PIPE.jpg %}
+![PIPE.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/PIPE.jpg)
 
 ### linux，windows常用通信机制
-{% qnimg osipc.jpg %}
+![osipc.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/osipc.jpg)
 
 ### 屏障barrier
 一组线程完成任务到达汇合点再继续
 
 ### CPU型进程和IO型进程的调度
-{% qnimg virtualRR.jpg %}
+![virtualRR.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/virtualRR.jpg)
 IO型进程让出CPU进入等待队列，从等待->就绪不是进入原来的就绪队列，而是进入辅助队列。调度算法首先从辅助队列里选择进程，直到辅助队列为空，去就绪队列选进程。
 
 ### 磁盘IO的代价主要是查找时间（磁头找到柱面）
@@ -528,7 +528,7 @@ R树，多维B树，解决经纬度查询。Minimal Bounding Rectangle算法。�
 TLS：Thread local strategy 线程的独立内存
 
 ### 虚拟内存
-{% qnimg virtualmemory.jpg %}
+![virtualmemory.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/virtualmemory.jpg)
 
 ### 缺页中断
 MMU访问虚拟内存时，这页虚拟内存还没有分配物理内存。向cpu发出缺页中断。cpu初始化物理页的内容分配，在进程页表添加映射。
@@ -539,7 +539,7 @@ MMU访问虚拟内存时，这页虚拟内存还没有分配物理内存。向cp
 2. EPT两次页表查找 不用同步。
 
 ### 可执行文件格式
-{% qnimg eltfile.jpg %}
+![eltfile.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/eltfile.jpg)
 通过`file` 查看文件类型
 
 ### 进程的虚地址空间
@@ -556,7 +556,7 @@ int main(){
 进程访问了非法地址windows"进程因非法操作需要关闭"，linux "Segmentation fault"
 
 ### Linux内存布局
-{% qnimg linuxmem.jpg %}
+![linuxmem.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/linuxmem.jpg)
 windows默认将高2G分配给内核.Linux默认1G
 栈：函数调用上下文
 可执行文件映像 装载器
@@ -565,7 +565,7 @@ windows默认将高2G分配给内核.Linux默认1G
 ### 栈
 `ulimit –s` 8M
 esp栈顶 esb活动记录（帧指针(frame pointer))不随函数执行变化，用于定位数据，函数返回时恢复
-{% qnimg foo1.jpg %}
+![foo1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/foo1.jpg)
 1. 设置好ebp esp栈指针后 
 2. 开辟栈空间，保存ebx（基地址(base)寄存器） esi, edi（源/目标索引寄存器"(source/destination index)）三个寄存器
 3. 将开辟出的空间初始化为0xCC
@@ -616,7 +616,7 @@ windows的堆不是向上增长
     int32个字节，2个字节表示一个块的状态，假设1M堆，一块128字节=>1M/128=8K个块
     8K/(32/2)=512个int的数组存储
     Head表示已分配区的头
-{% qnimg heep.jpg %}
+![heep.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/heep.jpg)
 3. 对象池
 
 
@@ -672,7 +672,7 @@ int main(){
 2. 编译：链接生成汇编 `gcc -S hello.i -o hello.s`
 3. 汇编`gcc -c hello.s -o hello.o`
 4. 链接`ld`....
-{% qnimg registers.jpg %} 
+![registers.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/registers.jpg) 
 [64位汇编寄存器](http://abcdxyzk.github.io/blog/2012/11/23/assembly-args/)
 
 ### 虚拟内存
@@ -693,7 +693,7 @@ inode：文件系统的数据结构，文件元信息
 基于UNIX的可移植 操作系统标准
 - 内核提供的每个系统调用在C库中都具有相应的封装函数。
 > 比如malloc函数和free函数都是通过brk系统调用来扩大或缩小进程的堆栈，execl、execlp、execle、 execv、execvp和execve函数都是通过execve系统调用来执行一个可执行文件。
-![cposix](\images\cposix.jpg)
+![cposix](\images\cposix.jpg))
 -系统命令位于C库的更上层，是利用C库实现的可执行程序，比如最为常用的ls、cd等命令。
 `$trace pwd` pwd调用了那些系统调用
 ---

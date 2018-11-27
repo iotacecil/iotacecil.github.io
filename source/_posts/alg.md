@@ -4,6 +4,7 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
 ---
+![addfadfa](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/6tcp.jpg)
 刷题顺序
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html
@@ -48,7 +49,7 @@ void srand(unsigned int seed)
 维护一个32位的无符号长整数next，随着next的“随意”变化，不断输出伪随机数。
 通过srand(seed)，可以设置next的初始值（随机种子）。
 
-{% qnimg randomgen.jpg %}
+![randomgen.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/randomgen.jpg)
 
 1. 在next当前值的基础上乘以1103515245 = 3 5   5  7  129749，并加上12345。
 2. 通过整除运算在该长整数的二进制展开中截取高16位，进而通过模余运算抹除最高比特位。
@@ -462,7 +463,7 @@ public static void main(String[] args) {
 
 
 ### lc84直方图中的最大矩形poj2559
-{% qnimg histo1.jpg %}
+![histo1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/histo1.jpg)
 ```java
 //todo next
 ```
@@ -808,7 +809,7 @@ permutation的字典序
  1 3 2 扫描到1降了，1和2交换 2 3 1  31不是最小后缀 变成2 1 3 
 
 算法：
-{% qnimg lexpermu.jpg %}
+![lexpermu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lexpermu.jpg)
  1.从右想左 找到第一次下降位置
  2.用后缀中比当前位置大的最小数字交换
  3.保证后缀最小（翻转？）
@@ -947,7 +948,7 @@ public List<List<Integer>> combineMath(int n,int k){
 
 
 ### NqueenBB
-{% qnimg nqueenbb.jpg %}
+![nqueenbb.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nqueenbb.jpg)
 N – 1’ in the backslash code is there to ensure that the codes are never negative because we will be using the codes as indices in an array.
 ```
 slash /
@@ -1186,7 +1187,7 @@ static int secondMax(int[] arr){
 3. 6+9>14,6+8==14,start==end 结束
 
 ### 给定一个数字范围，找到其中有几个首尾相同的数字
-{% qnimg digits.jpg %}
+![digits.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/digits.jpg)
 
 ### 百万数字中找最大20个
 用开始20个数字构造20个node的最小堆，接下来的数字比root大则replace，insert
@@ -1257,7 +1258,7 @@ https://leetcode.com/problems/maximum-length-of-repeated-subarray/solution/
 
 将匹配的括号都去掉，`{`的个数是m=3，`}`的个数是n=3
 m/3+n/2 = 2+1=3
-{% qnimg minbracket.jpg %}
+![minbracket.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/minbracket.jpg)
 ```java
 private int minReversal(String s){
     int len = s.length();
@@ -1303,11 +1304,11 @@ if(right<0)help(rst,s+")",left,right+1);
 ### 28字符串indexOf匹配暴力 Substring Search
 各种字符串匹配算法
 http://www-igm.univ-mlv.fr/~lecroq/string/
-{% qnimg strstrbest.jpg %}
+![strstrbest.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/strstrbest.jpg)
 https://algs4.cs.princeton.edu/53substring/
-{% qnimg backup.jpg %}
+![backup.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backup.jpg)
 方法1是维持一个pattern长度的buffer
-{% qnimg substring.jpg %}
+![substring.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/substring.jpg)
 流的情况下 没有backup
 ```
 ADA B RAC
@@ -1318,14 +1319,14 @@ ADA[C]R i-=j
 #### !!!Boyer-Moore 74% 5ms 亚线性
 alg4
 1.构建right表示target中字符的最右位置是NEEDLE
-{% qnimg boyerright.jpg %}
+![boyerright.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/boyerright.jpg)
 2.source从左到右扫描，target从右向左
 如果出现不匹配T是target里没有的，i到j+1
 如果出现不匹配N是target里的，则用right，将target里N的位置和它对齐
-{% qnimg boyerright2.jpg %}
+![boyerright2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/boyerright2.jpg)
 当前j=3,right['N'] = 0,skip=3
 第三种情况，至少保证i不能回退
-{% qnimg boyer3.jpg %}
+![boyer3.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/boyer3.jpg)
 
 ```java
  public int strStr(String source, String target) {
@@ -1356,10 +1357,10 @@ alg4
 
 #### RabinKarp 31% 8ms 线性
 {% qnimg rabin-karp.jpg %}
-{% qnimg ranbinmod.jpg %}
+![ranbinmod.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ranbinmod.jpg)
 
 正确性：
-{% qnimg kbright.jpg %}
+![kbright.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kbright.jpg)
 线性求mod
 ```java
 //    private long longRandomPrime(){
@@ -1530,7 +1531,7 @@ public int strStr(String source, String target) {
  
 ### KMP-Knuth-Morris-Pratt 适合查找自我重复的字符串 线性的M倍
 基于DFA
-{% qnimg DFA.jpg %}
+![DFA.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/DFA.jpg)
 用一个dfa[][]记录j回退多远
 1对target构建dfa
 构造DFA的时间是O（MR）的，可以对每个状态设置一个匹配/非匹配去掉R
@@ -1571,8 +1572,8 @@ public static int serachByKMP(String source,String target){
     return -1;
 }
 ```
-{% qnimg dfaconstruction.jpg %}
-{% qnimg KMPDFA.jpg %}
+![dfaconstruction.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dfaconstruction.jpg)
+![KMPDFA.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/KMPDFA.jpg)
 2.对source遍历一遍dfa
 12.44% 39ms
 ```java
@@ -1643,11 +1644,11 @@ G 名成员 第i种犯罪会产生`profit[i]` 利润，需要`group[i]`名成员
 
 ### fraction 背包问题
 Items can be broen down 贪心按value/weight排序
-{% qnimg knapsack.jpg %}
+![knapsack.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/knapsack.jpg)
 
 ### 顶点覆盖
-{% qnimg pointcover.jpg %}
-{% qnimg vetexcover.jpg %}
+![pointcover.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcover.jpg)
+![vetexcover.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/vetexcover.jpg)
 
 ### 最大团：在一个无向图中找出一个点数最多的完全图
 
@@ -1658,7 +1659,7 @@ Items can be broen down 贪心按value/weight排序
 
 ### tsp 
 最小生成树解TSP
-{% qnimg MSTTSP.jpg %}
+![MSTTSP.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/MSTTSP.jpg)
 这样求得的最优解不超过真正最优解的2倍
 证明：2-近似算法
 任何一个哈密顿回路OPT删去一条边就是一个生成树。
@@ -1668,7 +1669,7 @@ Items can be broen down 贪心按value/weight排序
 因为抄近路不会增加长度所以MST生成的结果不会超过2OPT
 
 最小权匹配算法MM
-{% qnimg MMTSP.jpg %}
+![MMTSP.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/MMTSP.jpg)
 1.奇数度的顶点一定是偶数个，将偶数个奇数度定点两两配对
 2.将每个匹配加入最小生成树，每个顶点都变成偶数度，得到欧拉图
 3.沿着欧拉回路跳过走过的点抄近路 得到哈密顿回路
@@ -1679,12 +1680,12 @@ Items can be broen down 贪心按value/weight排序
 父节点不小于子节点（最大化问题）
 
 界：到达叶节点得到的最优值
-{% qnimg pagbb.jpg %}
-{% qnimg bbtsp.jpg %}
+![pagbb.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pagbb.jpg)
+![bbtsp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bbtsp.jpg)
 
 
 optaPlanner
-{% qnimg optaplanner.jpg %}
+![optaplanner.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/optaplanner.jpg)
 1. 数学公式定义
 2. 随机算法模板
 2.1 迭代局部搜索
@@ -1708,7 +1709,7 @@ time window on vertex OP
  VRP
 
 0~3的tspdp解法
-{% qnimg tspdp.jpg %}
+![tspdp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/tspdp.jpg)
 
 
 
@@ -1766,7 +1767,7 @@ public String mostCommonWord(String paragraph, String[] banned) {
 [scale-free network](https://zh.wikipedia.org/wiki/%E6%97%A0%E5%B0%BA%E5%BA%A6%E7%BD%91%E7%BB%9C)S：
 大部分节点只和很少节点连接，而有极少的节点与非常多的节点连接。
 网络中随机抽取一个节点，它的度是多少呢？这个概率分布就称为节点的度分布
-{% qnimg scalenetwork.jpg %}
+![scalenetwork.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/scalenetwork.jpg)
 顶点的度满足幂律分布（也称为帕累托分布）,所以不能均匀采样计算每个人的平均度数。
 
 亚线性空间
@@ -1781,7 +1782,7 @@ public String mostCommonWord(String paragraph, String[] banned) {
 3.收到第i个元素t。以k/i的概率替换A中的元素。这样保证收到第i个数字的时候，i在k中的概率是k/i。
 实现：生成`[1..k..i]`中随机数j，如果j<=k（k/i的概率),A[j]=t
 证明：第i个数接收时有k/i的概率在k数组中，当第i+1个数接收时,i+1有k/(i+1)概率在数组k中，并且刚好替换掉的是第i个数的概率是k中选i：1/k，所以第i+1个数来之后i还在k中的概率是（1-k/(i+1)\*1/k)=（1-1/(1+i)）
-{% qnimg shuku.jpg %}
+![shuku.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/shuku.jpg)
 ```java
 private void select(int[] stream,int n,int k){
     int[] reserve = new int[k];
@@ -1851,7 +1852,7 @@ class Solution {
 
 ### 堆排序不稳定
 
-{% qnimg stringsort.jpg %}
+![stringsort.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringsort.jpg)
 测试：6 5 12 至少都比内置的快
 {% fold %}
 ```java
@@ -1889,7 +1890,7 @@ class Solution {
 {% endfold %}
 
 ### 三向快速排序 不稳定
-{% qnimg threepart.jpg %}
+![threepart.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threepart.jpg)
 取第一位，将所有字符串分成3份
 {% fold %}
 ```java
@@ -1931,11 +1932,11 @@ public class threewaypart {
 
 ### MSD most-significant-digit-first 不用长度相同从左开始
 一般也是NW复杂度，对于N很大的情况可以达到$Nlog_RN$
-{% qnimg MSD.jpg %}
+![MSD.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/MSD.jpg)
 ASCII的R是256，需要count[258]
 Unicode需要65536，可能要几小时
 按第0位分组，对每组递归按第1位分组...n
-{% qnimg MSD2.jpg %}
+![MSD2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/MSD2.jpg)
 当前前d位都相同的组，组内字符串个数小于15，用插入排序
 {% fold %}
 ```java
@@ -2004,7 +2005,7 @@ public static void main(String[] args) {
 
 
 ### LSD 基数排序radix sort 定长字符串 复杂度WN  低位优先
-{% qnimg LSD.jpg %}
+![LSD.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/LSD.jpg)
 长度相同的字符串，从最后一位开始排序
 （如何应用到变长字符串？）
 ```java
@@ -2035,7 +2036,7 @@ public static void sort(String[] a,int w){
 ```
 
 ### key-index count sort键索引计数法 稳定的
-{% qnimg indexsort.jpg %}
+![indexsort.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/indexsort.jpg)
 count:[0, 2, 3, 1, 2, 1, 3]
 累加cnt[0, 2, 5, 6, 8, 9, 12] 起始索引
 结果[a, a, b, b, b, c, d, d, e, f, f, f]
@@ -2071,7 +2072,7 @@ String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 
 ### 611数组中符合三角形边长的对数 
 线性扫描 复杂度n^2
-{% qnimg lc611.jpg %}
+![lc611.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc611.jpg)
 
 ### 数组组成三角形的最大周长nlogn
 贪心，排序，如果 $a[i]<a[i-1]+a[i-2]$ 则没有其他两条边可以两边之和`>`第三边了，换下一条当最长边。
@@ -2093,7 +2094,7 @@ public int maxC(int[] A){
 ### MST和聚类：
 连通图
 将图的点分成2个集合，边两端连的是不同集合，最小的边集是MST
-{% qnimg mst.jpg %}
+![mst.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mst.jpg)
 假设分为6和其它点2个集合，在6-2 3-6 6-0 6-4四条连接两个集合的边中取最小边，标记成黑色。
 再随机分两个集合，不要让黑色边跨集合
 
@@ -2105,12 +2106,12 @@ kruskal遍历所有边(优先队列)，判断边的两点是否在一个集合�
 #### prim
 prim复杂度$ElogV$ 空间V
 prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和distTo[]
-{% qnimg prim.jpg %}
+![prim.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/prim.jpg)
 每个没在MST中的顶点只保留(更新)离mst中点最短的边。
 
 ### 聚类：single link
-{% qnimg singlelink.jpg %}
-{% qnimg singleclu.jpg %}
+![singlelink.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/singlelink.jpg)
+![singleclu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/singleclu.jpg)
 
 
 
@@ -2125,11 +2126,11 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 [官方解](https://leetcode.com/problems/cracking-the-safe/solution/)
 [de Bruijn Card Trick](https://www.youtube.com/watch?v=EWG6e-yBL94)
 1. 方法1
-{% qnimg lc753.jpg %}
+![lc753.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc753.jpg)
 每个点1次
 写出n个数的组合(11,12,22,21) 并找出哈密尔顿路径
 2. 方法2 
-{% qnimg lc7532.jpg %}
+![lc7532.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc7532.jpg)
 每条边1次
 写出(n-1)个数的组合(1,2) 的完全图，找出欧拉环路(circuit)。de Bruijn 序列的数量为欧拉环的数量。
 用k个数字，长度有n的组合有$k^n$种，但是因为可以首尾相连，总共de Bruijn的数量是
@@ -2156,10 +2157,10 @@ $\frac{k! k^{n-1}}{k^n}$
 > 总是可以回到以前的点，从另一条路走，把其它所有的边全部遍历掉。
 
 **不是拓扑排序，拓扑排序每个点仅1次**
-{% qnimg Hierholzer1.jpg %}
+![Hierholzer1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Hierholzer1.jpg)
 path里加入{0},{2}头插法{2,0}//保证远的在后面
 dfs回到1，继续找封闭回路
-{% qnimg Hierholzer2.jpg %}
+![Hierholzer2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Hierholzer2.jpg)
 
 > Input: tickets = `[["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]`
 > Output: `["JFK", "MUC", "LHR", "SFO", "SJC"]`
@@ -2223,9 +2224,9 @@ int main(){
 ### 求数组的最大gap
 
 ### 二分图 让每条边的两个顶点属于不同的集合
-{% qnimg bipartite.jpg %}
+![bipartite.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bipartite.jpg)
 max match：没有两点共享1点，最多的边数
-{% qnimg matching.jpg %}
+![matching.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/matching.jpg)
 maximal:再加一条边就有两条边有共同顶点了
 maximum：有两种matching的画法，3条边的为max
 
@@ -2333,7 +2334,7 @@ private boolean dfs2d(int[][] graph,int[] group,int idx,int g){
 
 
 ### 图的度
-{% qnimg graphmostuse.jpg %}
+![graphmostuse.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/graphmostuse.jpg)
 1.顶点v的度
 ```java
 public static int degree(Map<Integer,List<Integer>> graph,int v){
@@ -2358,7 +2359,7 @@ public static int maxDegree(Map<Integer,List<Integer>> graph){
 
 
 ### 图的遍历顺序
-{% qnimg graphtra.jpg %}
+![graphtra.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/graphtra.jpg)
 {% fold %}
 ```java
 public class DepthFirstOrder {
@@ -2413,11 +2414,11 @@ public class DepthFirstOrder {
 ### 调度问题：给定一组任务，安排执行时间->拓扑排序
 **DAG的拓扑排序是dfs逆后排序**
 将一张图拉成边全部向下的图
-{% qnimg tuopu.jpg %}
+![tuopu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/tuopu.jpg)
 
 #### 拓扑排序：有向环
 > {0, 3}, {1, 3}, {3, 2}, {2, 1} 0-> 3->2->1->3
-{% qnimg graphcy.jpg %}
+![graphcy.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/graphcy.jpg)
 
 {% fold %}
 ```java
@@ -2552,7 +2553,7 @@ boolean hasCircle(int idx,int[] visited){
 用onStack和post 11%
 
 ### kolakoski序列找规律
-{% qnimg kolakoski.jpg %}
+![kolakoski.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kolakoski.jpg)
 
 #### lc481 返回kolakoski前N中有几个1
 
@@ -2866,7 +2867,7 @@ A进入1/2需要赢没比过的另外4个队
 A变成冠军需要赢没比过的另外8个队
 分组问题：如果1/4赛 1234 5678是一组4个是一组
 如果1/2赛  8个是一组
-{% qnimg shijiebei.jpg %}
+![shijiebei.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/shijiebei.jpg)
 
 
 ```java
@@ -2962,10 +2963,10 @@ bfs，起点入队，遍历起点可以到达的所有公交(4可以达公交2)�
 
 注意deque的add是addLast，push是addFirst,poll是pollFirst，pop是poolFirst 队列应该是add+poll,
 bfs如果用栈，则会在这一层还没找完先找下一层cnt=1{4}->
-{% qnimg bus1.jpg %}
+![bus1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bus1.jpg)
 `cnt=2{33:[2, 3]}->`
 将{1,10,11,19,27,33}入队
-{% qnimg bus2.jpg %}
+![bus2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bus2.jpg)
 所以回到下一次size--的时候取到了下一层的点33,两个bus都标记过了
 然后就全乱了
 `{27:[3]}->{19:[3]}->{11:[3,4]}->bus4`的最后`{28:[2,4]}->25:[4]->cnt=3{23:[0,4,5]}->bus5`找到21
@@ -3256,7 +3257,7 @@ return sb.toString();
 ### 1. 爬山：局部贪心，快速找到可行解，局部最优
 - 8数码:启发函数：当前状态和目标状态的距离：错位方块个数。
     1. 深度优先
-{% qnimg mounting.jpg %}
+![mounting.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mounting.jpg)
     2. 每次将当前节点S的子节点按启发式函数由大到小压入栈
 
 8数码BFS优先队列
@@ -3323,7 +3324,7 @@ void slove(int[][] from,int x,int y,int[][] end){
 - 多阶段图搜索：最短路径
     - 爬山与BF算法得到最优解都需要遍历整个空间
     1. 用爬山生成界限(可行解or最优解的上限)
-{% qnimg fenzhi.jpg %}
+![fenzhi.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fenzhi.jpg)
 
 
 

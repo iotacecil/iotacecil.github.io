@@ -221,7 +221,7 @@ public int maxChunksToSorted(int[] arr) {
 
 ### 915 Max(left)<=Min(right)
 画折线图，当前`A[i]<left` 则把切分线抬到`globalMax`
-{% qnimg lc915.jpg %}
+![lc915.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc915.jpg)
 7ms 60%
 ```java
 public int partitionDisjoint(int[] A) {
@@ -322,7 +322,7 @@ public int maxChunksToSorted(int[] arr) {
 ```
 
 ### 581 需要排序的最小子串，整个串都被排序了 递增
-{% qnimg lc581.jpg %}
+![lc581.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc581.jpg)
 40大于35，只排序到右边遍历过来第一个`n<n-1`是不够的
 要找到[30~31]中的min和max
 ```java

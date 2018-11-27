@@ -72,7 +72,7 @@ Application 查看Cookie
 prompt(,)提示弹窗
 ---
 - WEB服务架构
-![javaee](\images\javaee.jpg)
+![javaee](\images\javaee.jpg))
 ---
 - SQL
 1. union 连接两个select 不显示重复的；union all

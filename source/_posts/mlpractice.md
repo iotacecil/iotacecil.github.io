@@ -84,7 +84,7 @@ R x L 将所有R与一个用户L相乘取其中最大的几个推荐
 https://software.intel.com/zh-cn/ai-academy/students/kits
 ### 动量梯度下降
 vt 是之前梯度的均值，是梯度的积累值
-{% qnimg SGDmomentum.jpg %}
+![SGDmomentum.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/SGDmomentum.jpg)
 
 之前积累的梯度方向是momentum step,当前梯度是gradient step,这次的更新梯度是actual step
 1 模型刚开始 两个夹角小，则actual step 是2倍 可以加快训练
@@ -314,7 +314,7 @@ https://blog.csdn.net/github_36922345/article/details/53455401
 1.`userpd.columns=userpd.columns.droplevel([0,1])`
 2.`df.set_index('date', inplace=True)`列 ->索引
 3.`df['index'] = df.index`,`df.reset_index(level=0, inplace=True)`
-{% qnimg pandasttt.jpg %}
+![pandasttt.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pandasttt.jpg)
 4.`user_ca_ph.unstack(level=1)`
 5.去掉不用的复合索引
 `user_ca_ph_cnt.columns=user_ca_ph_cnt.columns.droplevel([0,1])`
@@ -414,7 +414,7 @@ cost：每个样本的乘积的最大似然估计 *1/m
     $b=b-\alpha\frac{dJ(w,b)}{db}$
 - 反向传播
     计算loss对每个变量的梯度，通过链式法则
-![logi](\images\logi.jpg)
+![logi](\images\logi.jpg))
 a=sigmoid($\hat{y}$)
 正向传播:1.计算wx+b 2.经过sigmoid求出$\hat{y}$ 3.计算loss
 反向传播:
@@ -506,7 +506,7 @@ k-近邻算法	线性回归　
 #### 15 MapReduce:数值型和标称型数据。
 - 过去100年国内最高气温：
 每个mapper将产生一个温度，形如<"max"><temp>，也就是所有的mapper都会产生相同的key："max"字符串
-![mapreduce](\images\mapreduce.jpg)
+![mapreduce](\images\mapreduce.jpg))
 集成算法 
 生成多个分类器再集成 全选分类器 求平均
 
@@ -515,9 +515,9 @@ k-近邻算法	线性回归　
 1. 时间序列关键点：极大值，极小值or拐点 用关键点代替原始时间序列。
 2. 合并关键点序列时间下标 得到等长序列
 3. Lance距离 无量纲。欧式距离缺点L:有量纲，变差大的变量在距离中贡献大。
-{% qnimg lance.jpg %}
+![lance.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lance.jpg)
 4. FCM算法 每条时间序列属于各个类的程度。
-{% qnimg FCM.jpg %}
+![FCM.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/FCM.jpg)
 
 ARIMA自回归综合移动平均
 Auto-Regressive Integrated Moving Averages. 
@@ -614,7 +614,7 @@ matrix([[2, 0, 1]])
 > 给向量赋予一个正标量值 到原点的距离
 1. L1：Manhattan distance。z=[3,4] $||z||_1=3+4=7$各元素绝对值之和
 2. 任意阶范数公式 
-![distance](\images\distance.jpg)
+![distance](\images\distance.jpg))
 2. 二阶linalg.norm([8,1,6])
 2. 欧式距离 `sqrt((v1-v2)*(v1-v2.T))`
 3. 曼哈顿距离 `sum(abs(v1-v2))`

@@ -1,7 +1,7 @@
 call D:
 call cd D:\iotacecil.github.io
 
-call hexo qiniu sync
+call coscmd upload -rs D:\iotacecil.github.io\static\images /image
 call hexo g -d
 call git fetch
 call git merge

@@ -5,6 +5,18 @@ tags:
 categories: [算法备忘]
 ---
 
+### 二分C
+```java
+while(lo < hi){
+    int mid = (lo + hi) >> 1;
+    (e < A[mid]) ? hi = mid :lo = mid + 1;
+}
+return --lo;
+```
+好处:虽然不能命中及时返回，但是最坏情况变好。每一步迭代之需要比较1次
+有效区间宽度缩小到0才终止。
+正确性：A[0,lo)中元素<=e,A[hi,n)中元素都>e
+
 ### 分田地 把田地分为16分，怎样分使16份中最小的一块田地最大
 https://www.nowcoder.com/questionTerminal/fe30a13b5fb84b339cb6cb3f70dca699
 >4 4

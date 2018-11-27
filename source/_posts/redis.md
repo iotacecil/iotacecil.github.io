@@ -79,10 +79,10 @@ firewall-cmd --list-ports
 
 所有key都是字符串
 
-{% qnimg redisobject.jpg %}
+![redisobject.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisobject.jpg)
 redis 单线程 所以命令会等待
 redis 使用epoll模型多路复用 redis自身实现的事件处理 将epoll的读写、连接、关闭转换成自身的事件。不在IO上浪费时间
-{% qnimg redisIO.jpg %}
+![redisIO.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisIO.jpg)
 fysnc file 是独立线程
 
 
@@ -92,10 +92,10 @@ fysnc file 是独立线程
 结构： key：value
 因为单线程 所以无竞争 线程安全
 mget和n次get mget省了很多网络开销 从n网络n命令->1网络n命令
-![redisnget.jpg](redisnget.jpg)
+![redisnget.jpg](redisnget.jpg))
 
 ##### 场景1： 缓存视频基本信息redis<->mysql
-{% qnimg redisvideo.jpg %}
+![redisvideo.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisvideo.jpg)
 
 ##### 场景2： 分布式ID生成器
 `incr id`
@@ -106,7 +106,7 @@ mget和n次get mget省了很多网络开销 从n网络n命令->1网络n命令
 但是比较难控制过期时间，只能对一个key设置过期时间 不能对一个属性
 field 不能相同
 结构 key->field,value
-{% qnimg redishash.jpg %}
+![redishash.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishash.jpg)
 
 id看成是一行，field是列
 
@@ -114,7 +114,7 @@ id看成是一行，field是列
 `hincrby user:1:info pageview count`
 
 ##### 场景2：缓存视频基本信息redis<->mysql
-{% qnimg redishashvideo.jpg %}
+![redishashvideo.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishashvideo.jpg)
 
 #### list 列表
 key：element 是有序（插入顺序）队列 双端队列 可以获得range

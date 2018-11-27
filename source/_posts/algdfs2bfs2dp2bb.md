@@ -42,7 +42,7 @@ nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 总共的分数为 20 + 200 + 40 + 10 = 270
 ```
 
-{% qnimg lc312.jpg %}
+![lc312.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc312.jpg)
 
 超时的回溯法，n!，删掉这个继续删或者换一个继续删
 ```java
@@ -253,7 +253,7 @@ board[i][j]='0';
 {% endfold %}
 
 #### Boggle
-{% qnimg boggle.jpg %}
+![boggle.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/boggle.jpg)
 > ```
 > board =
 > [
@@ -866,7 +866,7 @@ public int networkDelayTimeF(int[][] times, int N, int K) {
 
 1. 递归mincoins(coins,11)=mincoins(coins,11-1)+1=(mincoins,10-1)+1+1..=(mincoins,0)+n
 
-{% qnimg coinchange.jpg %}
+![coinchange.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/coinchange.jpg)
 递归 记忆子问题 剩下3，用2的硬币变成剩下1的子问题和 剩下2，用1的硬币 剩下1的子问题是相同的。递归给count赋值是从下往上的。
 ```java
 public int coinChange3(int[] coins, int amount) {
@@ -889,7 +889,7 @@ private int coinC(int[] coins,int left,int[] count){
 }
 ```
 
-{% qnimg coin.jpg %}
+![coin.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/coin.jpg)
 
 2. dp:
     注意点：初值如果设为Int的max，两个都是max的话+1变成负数，所以设amount+1
@@ -1118,7 +1118,7 @@ public int findCheapestPriceDp(int n, int[][] flights, int src, int dst, int k) 
 > Input: 3
 Output: 5
 
-{% qnimg numbst.jpg %}
+![numbst.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/numbst.jpg)
 (为什么是乘)
 ```
 1个节点只有1种，2个节点1    2 一共两种
@@ -1129,8 +1129,8 @@ Output: 5
    （0）(2) (1)(1) (2)(0)
       1x2  + 1x1  + 2x1
 ```
-{% qnimg numbst2.jpg %}
-{% qnimg numbst3.jpg %}
+![numbst2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/numbst2.jpg)
+![numbst3.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/numbst3.jpg)
 当n=5 $T[4]+T[1][3]+T[2][2]+T[3][1]+T[4]$
 
 左子树有j个节点，右子树有n-j-1个节点
@@ -1166,7 +1166,7 @@ public int dfs(int n,int[] memroy){
 }
 ```
 
-{% qnimg catalannum.jpg %}
+![catalannum.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/catalannum.jpg)
 ```java
 int ans[] = {1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190};
 return ans[n];
@@ -1181,7 +1181,7 @@ for (int i = 0; i < n; i++) {
 ```
 
 二项式系数
-{% qnimg catalanformu.jpg %}
+![catalanformu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/catalanformu.jpg)
 ```java
 private int C(int a,int b){
     long res = 1;

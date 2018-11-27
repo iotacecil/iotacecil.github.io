@@ -1284,7 +1284,7 @@ public Result<String> doLogin(@Valid  LoginVo loginVo) {
 }
 ```
 可以得到完整错误信息 绑定异常
-{% qnimg errormsg.jpg %}
+![errormsg.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/errormsg.jpg)
 
 
 #### 异常处理
@@ -2323,12 +2323,12 @@ Ramp-Up Period ： 10 用10秒把10个线程都启动起来
 对线程组右键-add-Listener-Aggregate Report
 也可以添加 Graph Results
 
-{% qnimg jmetermiaosha.jpg %}
+![jmetermiaosha.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmetermiaosha.jpg)
 Average 平均花费时间 10ms
 Throughput 可以当作qps 表示一秒能处理11.5个请求
 添加监听器 View Results in Table
 先把监听器都右键清空
-{% qnimg Jmetertable.jpg %}
+![Jmetertable.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Jmetertable.jpg)
 报错空指针 修改位置：
 `UserArgumentResolver.java`
 ```java
@@ -2347,7 +2347,7 @@ private String getCookieValue(HttpServletRequest request, String cookiName) {
     }
 ```
 线程数1000的情况下 只有 35每秒qps
-{% qnimg onekjmeter.jpg %}
+![onekjmeter.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/onekjmeter.jpg)
 打开数据库服务器的top
 10000个线程 大概因为虚拟机所以压榨主机需要的更多 照理说应该load average会超过1
 多核cpu负载超过表示很多进程在等待
@@ -2371,7 +2371,7 @@ public class UserController {
 
 }
 ```
-{% qnimg userinfoqps.jpg %}
+![userinfoqps.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/userinfoqps.jpg)
 报错消息：`JedisException: Could not get a resource from the pool`
 redis获取不到连接
 修改配置
@@ -2389,7 +2389,7 @@ spring.datasource.maxWait=60000
 spring.datasource.minIdle=500
 ```
 不报错了
-{% qnimg userinfomax.jpg %}
+![userinfomax.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/userinfomax.jpg)
 
 比商品列表的qps高很多，因为redis在内存
 

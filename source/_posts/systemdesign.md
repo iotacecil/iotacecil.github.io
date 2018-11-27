@@ -19,7 +19,7 @@ https://medium.com/system-designing-interviews/design-a-elevator-system-fc5832ca
 1.`List<int[]>`
 两个区间是否重叠`s1<e2&&e1>s2`
 另一种思考
-{% qnimg 729overlap.jpg %}
+![729overlap.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/729overlap.jpg)
 {% fold %}
 ```java
 class MyCalendar {
@@ -280,7 +280,7 @@ private static void setBoundingBox(GeoHash hash, double[] latitudeRange, double[
 二分法分割空间成01是Peano空间填充曲线。
 > Peano曲线就是一种四叉树线性编码方式
 
-{% qnimg geohash.jpg %}
+![geohash.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/geohash.jpg)
 
 但是Peano曲线有突变性，0111和1000并不邻近。
 解决方法是查询时用周围点一起查询。
@@ -309,7 +309,7 @@ alter table lbs add index latindex(lat);
 20 23 24 27 36 39 40 43 
 21 22 25 26 37 38 41 42 
 ```
-{% qnimg hilbert.jpg %}
+![hilbert.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/hilbert.jpg)
 
 索引线、折线或者多边形R-tree
 
@@ -321,7 +321,7 @@ alter table lbs add index latindex(lat);
 
 拉模式：客户端轮询服务端
 推模式：长连接 立即推送（时效性）
-{% qnimg websocket.jpg %}
+![websocket.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/websocket.jpg)
 websocket 将message->frame
 
 go语言携程模型 自带websocket库

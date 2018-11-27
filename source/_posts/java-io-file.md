@@ -10,7 +10,7 @@ JNI java native interface 本地接口
 ### NIO
 原来IO流一个字节一个字节处理。NIO块。
 每一种java数据类型都有缓冲区
-{% qnimg niobytebuffer.jpg %}
+![niobytebuffer.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/niobytebuffer.jpg)
 1.`ByteBuffer bf = ByteBuffer.allocate(8);`
 2.添加 `bf.put((byte)10);` 获取`.get(index)`
 3.偏移量：`bf.position()`

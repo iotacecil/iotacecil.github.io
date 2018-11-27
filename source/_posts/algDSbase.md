@@ -406,7 +406,7 @@ public List<Integer> preorderTraversal(TreeNode root) {
 ```
 
 迭代： 效率和先入栈right再入栈左是一样的，只是为了扩展
-{% qnimg preorder.jpg %}
+![preorder.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/preorder.jpg)
 ```java
 public List<Integer> preorderTraversal(TreeNode root) {
     List<Integer> rst = new ArrayList<>();

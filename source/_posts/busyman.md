@@ -16,7 +16,7 @@ long sum = IntStream.of(a).parallel().sum();
 ## Stream
 1. 统计一本书中的长单词
     \PL
-    {% qnimg pl.jpg %}
+    ![pl.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg)
     拆分单词
     ```java
     String contents = new String(Files.readAllBytes(Paths.get(""),StandardCharsets.UTF_8));
@@ -154,7 +154,7 @@ List<String> strings = Collections.checkedList(new ArrayList<>(),String.class);
 
 
 ## 异常
-{% qnimg throwable.jpg %}
+![throwable.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/throwable.jpg)
 1. 已检查错误：可提前预知 IOException。
 `Integer.parseInt(str)`检查str是否是整数是可能的
     - 覆盖方法时，不能抛出比父类方法中声明更多的已检查异常
