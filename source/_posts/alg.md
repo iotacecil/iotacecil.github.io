@@ -1356,7 +1356,7 @@ alg4
 ```
 
 #### RabinKarp 31% 8ms 线性
-{% qnimg rabin-karp.jpg %}
+![{% qnimg rabin-karp.jpg %}](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/{% qnimg rabin-karp.jpg %})
 ![ranbinmod.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ranbinmod.jpg)
 
 正确性：
