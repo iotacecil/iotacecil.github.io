@@ -851,6 +851,7 @@ A,B不认识，重新入栈A
 A,C认识，入栈C
 ![celebrity2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/celebrity2.jpg)
 ![celebrity3.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/celebrity3.jpg)
+
 方法3：双指针
 ```java
 int findCele(int[][]Matrix){
