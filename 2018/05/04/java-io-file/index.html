@@ -80,20 +80,22 @@
 
 
 
-<meta name="description" content="http://blog.jmecn.net/java-iostream/JNI java native interface 本地接口 NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类型都有缓冲区1.ByteBuffer bf = ByteBuffer.allocate(8);2.添加 bf.put((byte)10); 获取.get(index)3.偏移量：bf.positio">
+<meta name="description" content="http://blog.jmecn.net/java-iostream/JNI java native interface 本地接口 NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类型都有缓冲区;2.添加bf.put((byte)10);获取.get(index)3.偏移量：bf.position()4.缓冲区反转：bf.flip()`取值的数据变成position-limit">
 <meta name="keywords" content="java,io">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java-io-file">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/05/04/java-io-file/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="http://blog.jmecn.net/java-iostream/JNI java native interface 本地接口 NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类型都有缓冲区1.ByteBuffer bf = ByteBuffer.allocate(8);2.添加 bf.put((byte)10); 获取.get(index)3.偏移量：bf.positio">
+<meta property="og:description" content="http://blog.jmecn.net/java-iostream/JNI java native interface 本地接口 NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类型都有缓冲区;2.添加bf.put((byte)10);获取.get(index)3.偏移量：bf.position()4.缓冲区反转：bf.flip()`取值的数据变成position-limit">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/niobytebuffer.jpg">
-<meta property="og:updated_time" content="2018-10-28T16:30:41.501Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/niobytebuffer.jpg
+1.`ByteBuffer bf = ByteBuffer.allocate(8">
+<meta property="og:updated_time" content="2018-11-27T10:09:50.336Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java-io-file">
-<meta name="twitter:description" content="http://blog.jmecn.net/java-iostream/JNI java native interface 本地接口 NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类型都有缓冲区1.ByteBuffer bf = ByteBuffer.allocate(8);2.添加 bf.put((byte)10); 获取.get(index)3.偏移量：bf.positio">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/niobytebuffer.jpg">
+<meta name="twitter:description" content="http://blog.jmecn.net/java-iostream/JNI java native interface 本地接口 NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类型都有缓冲区;2.添加bf.put((byte)10);获取.get(index)3.偏移量：bf.position()4.缓冲区反转：bf.flip()`取值的数据变成position-limit">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/niobytebuffer.jpg
+1.`ByteBuffer bf = ByteBuffer.allocate(8">
 
 
 
@@ -339,8 +341,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -396,7 +398,8 @@
 
       
         <p><a href="http://blog.jmecn.net/java-iostream/" target="_blank" rel="noopener">http://blog.jmecn.net/java-iostream/</a><br>JNI java native interface 本地接口</p>
-<h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><p>原来IO流一个字节一个字节处理。NIO块。<br>每一种java数据类型都有缓冲区<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/niobytebuffer.jpg"><br>1.<code>ByteBuffer bf = ByteBuffer.allocate(8);</code><br>2.添加 <code>bf.put((byte)10);</code> 获取<code>.get(index)</code><br>3.偏移量：<code>bf.position()</code><br>4.缓冲区反转：<code>bf.flip()</code>取值的数据变成position-limit</p>
+<h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><p>原来IO流一个字节一个字节处理。NIO块。<br>每一种java数据类型都有缓冲区<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/niobytebuffer.jpg
+1.`ByteBuffer bf = ByteBuffer.allocate(8" alt="niobytebuffer.jpg">;<code>2.添加</code>bf.put((byte)10);<code>获取</code>.get(index)<code>3.偏移量：</code>bf.position()<code>4.缓冲区反转：</code>bf.flip()`取值的数据变成position-limit</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    limit = position;</span><br><span class="line">    position = <span class="number">0</span>;</span><br><span class="line">    mark = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>5.<code>bf.hasRemaining()</code>positon和limit之间有值,<br>  <code>bf.remaining()</code>有多少个：<code>return limit - position;</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">bf.flip()</span><br><span class="line"><span class="keyword">if</span>(bf.hasRemaining())&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;bf.remaining();i++)&#123;</span><br><span class="line">      <span class="keyword">byte</span> b= bf.get(i);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>6.<code>campact</code>丢弃position及以前的数据，将position到limit的数据复制到之前，并将pisiton移到复制完的数据之后，用于写入新数据覆盖没被覆盖掉但是已经移到前面去的值，limit放到capacity上。</p>

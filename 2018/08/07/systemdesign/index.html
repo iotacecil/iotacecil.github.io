@@ -87,15 +87,10 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.htmlhttps://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/729overlap.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/geohash.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/hilbert.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/websocket.jpg">
-<meta property="og:updated_time" content="2018-11-08T01:49:28.046Z">
+<meta property="og:updated_time" content="2018-11-27T10:09:50.565Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="systemdesign">
 <meta name="twitter:description" content="https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.htmlhttps://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/729overlap.jpg">
 
 
 
@@ -341,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-08T09:49:28+08:00">
-                2018-11-08
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -399,7 +394,7 @@
       
         <p><a href="https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.html" target="_blank" rel="noopener">https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.html</a><br><a href="https://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B" target="_blank" rel="noopener">https://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B</a><br><a href="https://www.educative.io/collection/page/5668639101419520/5649050225344512/5668600916475904" target="_blank" rel="noopener">https://www.educative.io/collection/page/5668639101419520/5649050225344512/5668600916475904</a></p>
 <h3 id="设计电梯"><a href="#设计电梯" class="headerlink" title="设计电梯"></a>设计电梯</h3><p><a href="https://medium.com/system-designing-interviews/design-a-elevator-system-fc5832ca0b8b" target="_blank" rel="noopener">https://medium.com/system-designing-interviews/design-a-elevator-system-fc5832ca0b8b</a></p>
-<h3 id="多电梯调度-car-allocation"><a href="#多电梯调度-car-allocation" class="headerlink" title="多电梯调度 car allocation"></a>多电梯调度 car allocation</h3><h3 id="341-多层List迭代器"><a href="#341-多层List迭代器" class="headerlink" title="341 多层List迭代器"></a>341 多层List迭代器</h3><h3 id="729-Calendar1-时间区间有无重叠"><a href="#729-Calendar1-时间区间有无重叠" class="headerlink" title="729 Calendar1 时间区间有无重叠"></a>729 Calendar1 时间区间有无重叠</h3><p>1.<code>List&lt;int[]&gt;</code><br>两个区间是否重叠<code>s1&lt;e2&amp;&amp;e1&gt;s2</code><br>另一种思考<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/729overlap.jpg"><br><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
+<h3 id="多电梯调度-car-allocation"><a href="#多电梯调度-car-allocation" class="headerlink" title="多电梯调度 car allocation"></a>多电梯调度 car allocation</h3><h3 id="341-多层List迭代器"><a href="#341-多层List迭代器" class="headerlink" title="341 多层List迭代器"></a>341 多层List迭代器</h3><h3 id="729-Calendar1-时间区间有无重叠"><a href="#729-Calendar1-时间区间有无重叠" class="headerlink" title="729 Calendar1 时间区间有无重叠"></a>729 Calendar1 时间区间有无重叠</h3><p>1.<code>List&lt;int[]&gt;</code><br>两个区间是否重叠<code>s1&lt;e2&amp;&amp;e1&gt;s2</code><br>另一种思考<br>![729overlap.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/729overlap.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/729overlap.jpg</a><br><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCalendar</span> </span>&#123;</span><br><span class="line">List&lt;<span class="keyword">int</span>[]&gt; calendar;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MyCalendar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    calendar = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">book</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span>[] it:calendar)&#123;</span><br><span class="line">        <span class="keyword">if</span>(it[<span class="number">0</span>]&lt;end&amp;&amp;start&lt;it[<span class="number">1</span>])<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    calendar.add(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;start,end&#125;);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </div></div></p>
@@ -433,7 +428,7 @@
 <blockquote>
 <p>Peano曲线就是一种四叉树线性编码方式</p>
 </blockquote>
-<img src="http://phb9yml10.bkt.clouddn.com/static/images/geohash.jpg">
+<p>![geohash.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/geohash.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/geohash.jpg</a></p>
 <p>但是Peano曲线有突变性，0111和1000并不邻近。<br>解决方法是查询时用周围点一起查询。<br>数据库只需要存经纬度，查询字符串之后计算距离。</p>
 <p>为什么需要空间索引：<br><a href="http://www.cnblogs.com/LBSer/p/3392491.html" target="_blank" rel="noopener">http://www.cnblogs.com/LBSer/p/3392491.html</a><br>矩形过滤 遍历复杂度高<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">id</span>,<span class="keyword">name</span> <span class="keyword">from</span> poi <span class="keyword">where</span> lng <span class="keyword">between</span> <span class="number">116.3284</span> <span class="keyword">and</span> <span class="number">116.3296</span> <span class="keyword">and</span> lat <span class="keyword">between</span> <span class="number">39.9682</span> <span class="keyword">and</span> <span class="number">39.9694</span>;</span><br></pre></td></tr></table></figure></p>
 <p>对维度建立索引 遍历复杂度变成Log(N)<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> lbs <span class="keyword">add</span> <span class="keyword">index</span> latindex(lat);</span><br></pre></td></tr></table></figure></p>
@@ -441,10 +436,10 @@
 <p>B树其实可以对多个字段进行索引，但这时需要指定优先级，形成一个组合字段，而空间数据在各个维度方向上不存在优先级，我们不能说纬度比经度更重要，也不能说纬度比高程更重要。</p>
 </blockquote>
 <p>其他的空间填充曲线Hilbert最好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> 0  3  4  5 58 59 60 63 </span><br><span class="line"> 1  2  7  6 57 56 61 62 </span><br><span class="line">14 13  8  9 54 55 50 49 </span><br><span class="line">15 12 11 10 53 52 51 48 </span><br><span class="line">16 17 30 31 32 33 46 47 </span><br><span class="line">19 18 29 28 35 34 45 44 </span><br><span class="line">20 23 24 27 36 39 40 43 </span><br><span class="line">21 22 25 26 37 38 41 42</span><br></pre></td></tr></table></figure></p>
-<img src="http://phb9yml10.bkt.clouddn.com/static/images/hilbert.jpg">
+<p>![hilbert.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/hilbert.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/hilbert.jpg</a></p>
 <p>索引线、折线或者多边形R-tree</p>
 <h3 id="弹幕系统"><a href="#弹幕系统" class="headerlink" title="弹幕系统"></a>弹幕系统</h3><p>一个直播间：<br>在线人数100万<br>1000条弹幕/秒<br>推送频率：100万*1000条/秒 = 10亿/秒</p>
-<p>拉模式：客户端轮询服务端<br>推模式：长连接 立即推送（时效性）<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/websocket.jpg"><br>websocket 将message-&gt;frame</p>
+<p>拉模式：客户端轮询服务端<br>推模式：长连接 立即推送（时效性）<br>![websocket.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/websocket.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/websocket.jpg</a><br>websocket 将message-&gt;frame</p>
 <p>go语言携程模型 自带websocket库</p>
 <h3 id="146-LRU-cache-HashMap-lt-Integer-DoubleLinkedList-gt"><a href="#146-LRU-cache-HashMap-lt-Integer-DoubleLinkedList-gt" class="headerlink" title="146 LRU cache HashMap&lt;Integer,DoubleLinkedList&gt;"></a>146 LRU cache HashMap&lt;Integer,DoubleLinkedList&gt;</h3><p><a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU" target="_blank" rel="noopener">Cache replacement policies</a><br>least recently used cache最近最少使用缓存<br>java:LinkedHashMap:<br><a href="https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html#removeEldestEntry-java.util.Map.Entry-" target="_blank" rel="noopener">https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html#removeEldestEntry-java.util.Map.Entry-</a></p>
 <p>双向链表+hashmap<br><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">

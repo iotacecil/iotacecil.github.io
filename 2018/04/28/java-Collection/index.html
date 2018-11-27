@@ -80,22 +80,23 @@
 
 
 
-<meta name="description" content="集合框架    三大接口：Iterator,Collection,Map 工具类：Collections Arrays  Arrays.asListString可以12String[] ss = &amp;#123;&quot;da&quot;,&quot;da&quot;&amp;#125;;List&amp;lt;String&amp;gt; strings = Arrays.asList(ss); 基本数据类型不行12int[] ss = &amp;#123;1,2&amp;#">
+<meta name="description" content="集合框架![java_collections.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/java_collections.jpg![collection.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection.jpg![">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java-Collection">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/04/28/java-Collection/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="集合框架    三大接口：Iterator,Collection,Map 工具类：Collections Arrays  Arrays.asListString可以12String[] ss = &amp;#123;&quot;da&quot;,&quot;da&quot;&amp;#125;;List&amp;lt;String&amp;gt; strings = Arrays.asList(ss); 基本数据类型不行12int[] ss = &amp;#123;1,2&amp;#">
+<meta property="og:description" content="集合框架![java_collections.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/java_collections.jpg![collection.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection.jpg![">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/java_collections.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/collection.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/collection2.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/rotate.jpg">
-<meta property="og:updated_time" content="2018-10-28T16:30:41.979Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate.jpg
+直接放在正确的位置上
+理解：把0位放到正确位置（distance">
+<meta property="og:updated_time" content="2018-11-27T10:09:51.322Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java-Collection">
-<meta name="twitter:description" content="集合框架    三大接口：Iterator,Collection,Map 工具类：Collections Arrays  Arrays.asListString可以12String[] ss = &amp;#123;&quot;da&quot;,&quot;da&quot;&amp;#125;;List&amp;lt;String&amp;gt; strings = Arrays.asList(ss); 基本数据类型不行12int[] ss = &amp;#123;1,2&amp;#">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/java_collections.jpg">
+<meta name="twitter:description" content="集合框架![java_collections.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/java_collections.jpg![collection.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection.jpg![">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate.jpg
+直接放在正确的位置上
+理解：把0位放到正确位置（distance">
 
 
 
@@ -341,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:51+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -397,9 +398,7 @@
       
 
       
-        <h1 id="集合框架"><a href="#集合框架" class="headerlink" title="集合框架"></a>集合框架</h1><img src="http://phb9yml10.bkt.clouddn.com/static/images/java_collections.jpg">
-<img src="http://phb9yml10.bkt.clouddn.com/static/images/collection.jpg">
-<img src="http://phb9yml10.bkt.clouddn.com/static/images/collection2.jpg">
+        <h1 id="集合框架"><a href="#集合框架" class="headerlink" title="集合框架"></a>集合框架</h1><p>![java_collections.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/java_collections.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/java_collections.jpg</a><br>![collection.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection.jpg</a><br>![collection2.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection2.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection2.jpg</a></p>
 <ol>
 <li>三大接口：<code>Iterator</code>,<code>Collection</code>,<code>Map</code></li>
 <li>工具类：<code>Collections</code> <code>Arrays</code></li>
@@ -489,7 +488,9 @@
 <li><p><code>rotate(list,int)</code>i移动到(i+d)%size</p>
 <ol>
 <li><code>rotate1(list, distance);</code> : 数组实现，并且长度小于100<br> if (list instanceof <code>RandomAccess</code> ||<code>list.size()</code> &lt; ROTATE_THRESHOLD)<br> <a href="https://leetcode.com/problems/rotate-array/solution/" target="_blank" rel="noopener">leetcode的算法3</a><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
-<p><img src="http://phb9yml10.bkt.clouddn.com/static/images/rotate.jpg"><br>直接放在正确的位置上<br>理解：把0位放到正确位置（distance)后，将这个位置继续当作0位，继续移动distance步，直到i回到0位<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">rotate1</span><span class="params">(List&lt;T&gt; list, <span class="keyword">int</span> distance)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> size = list.size();</span><br><span class="line">       <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       distance = distance % size;</span><br><span class="line">       <span class="keyword">if</span> (distance &lt; <span class="number">0</span>)</span><br><span class="line">           distance += size;</span><br><span class="line">       <span class="keyword">if</span> (distance == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       <span class="comment">/****以上得的了正确的distance size和distance有一个为零就不动***/</span></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> cycleStart = <span class="number">0</span>, nMoved = <span class="number">0</span>; nMoved != size; cycleStart++) &#123;</span><br><span class="line">           <span class="comment">//size = 5</span></span><br><span class="line">           T displaced = list.get(cycleStart);<span class="comment">//1.得到[0]</span></span><br><span class="line">           <span class="keyword">int</span> i = cycleStart;</span><br><span class="line">           <span class="keyword">do</span> &#123;</span><br><span class="line">               i += distance; <span class="comment">//向前走3步</span></span><br><span class="line">               <span class="keyword">if</span> (i &gt;= size)</span><br><span class="line">                   i -= size;<span class="comment">//对长度取模</span></span><br><span class="line">               displaced = list.set(i, displaced);<span class="comment">//2.赋值给[3],得到[3]的值</span></span><br><span class="line">               nMoved ++;<span class="comment">//3.每位放一次一共执行size次同时退出for循环</span></span><br><span class="line">           &#125; <span class="keyword">while</span> (i != cycleStart);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate.jpg
+直接放在正确的位置上
+理解：把0位放到正确位置（distance" alt="rotate.jpg">后，将这个位置继续当作0位，继续移动distance步，直到i回到0位<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">rotate1</span><span class="params">(List&lt;T&gt; list, <span class="keyword">int</span> distance)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> size = list.size();</span><br><span class="line">       <span class="keyword">if</span> (size == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       distance = distance % size;</span><br><span class="line">       <span class="keyword">if</span> (distance &lt; <span class="number">0</span>)</span><br><span class="line">           distance += size;</span><br><span class="line">       <span class="keyword">if</span> (distance == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       <span class="comment">/****以上得的了正确的distance size和distance有一个为零就不动***/</span></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> cycleStart = <span class="number">0</span>, nMoved = <span class="number">0</span>; nMoved != size; cycleStart++) &#123;</span><br><span class="line">           <span class="comment">//size = 5</span></span><br><span class="line">           T displaced = list.get(cycleStart);<span class="comment">//1.得到[0]</span></span><br><span class="line">           <span class="keyword">int</span> i = cycleStart;</span><br><span class="line">           <span class="keyword">do</span> &#123;</span><br><span class="line">               i += distance; <span class="comment">//向前走3步</span></span><br><span class="line">               <span class="keyword">if</span> (i &gt;= size)</span><br><span class="line">                   i -= size;<span class="comment">//对长度取模</span></span><br><span class="line">               displaced = list.set(i, displaced);<span class="comment">//2.赋值给[3],得到[3]的值</span></span><br><span class="line">               nMoved ++;<span class="comment">//3.每位放一次一共执行size次同时退出for循环</span></span><br><span class="line">           &#125; <span class="keyword">while</span> (i != cycleStart);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
 
 </div></div></li>
 <li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reverse(list.subList(<span class="number">0</span>, mid));</span><br><span class="line">reverse(list.subList(mid, size));</span><br><span class="line">reverse(list);</span><br></pre></td></tr></table></figure>

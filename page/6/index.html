@@ -290,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/08/30/webflux/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/10/11/algInterval/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -309,7 +309,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/30/webflux/" itemprop="url">webflux</a></h1>
+                <a class="post-title-link" href="/2018/10/11/algInterval/" itemprop="url">algInterval</a></h1>
         
 
         <div class="post-meta">
@@ -322,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T16:41:13+08:00">
-                2018-08-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-11T13:37:14+08:00">
+                2018-10-11
               </time>
             
 
@@ -338,34 +338,12 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:26:16+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-30T09:32:12+08:00">
+                2018-10-30
               </time>
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
-                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -396,13 +374,12 @@
       
         
           
-          函数式编程 lambda+Stream外部迭代 内部迭代外部：for循环内部迭代求和1int sum = IntStream.of(nums).sum();
-惰性求值
-求int数组最小值1IntStream.of(new int[]&#123;1,2,3,4,5&#125;).min().getAs
+          435 去掉最少区间使区间不重叠1Arrays.sort(intervals,(a,b)-&gt;&#123;a.end!=b.end?(a.end-b.end):(a.start-b.start)&#125;);
+性能很慢44ms换 提升到2ms 打败了100%123456Arrays.sort(
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/08/30/webflux/#more" rel="contents">
+            <a class="btn" href="/2018/10/11/algInterval/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -453,7 +430,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/03/03/markdown-Syntax/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/04/12/performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -472,7 +449,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/03/markdown-Syntax/" itemprop="url">markdown Syntax</a></h1>
+                <a class="post-title-link" href="/2018/04/12/performance/" itemprop="url">前端性能优化</a></h1>
         
 
         <div class="post-meta">
@@ -485,8 +462,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-03T10:08:24+08:00">
-                2018-03-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-12T21:29:48+08:00">
+                2018-04-12
               </time>
             
 
@@ -501,12 +478,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:15:32+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:27:54+08:00">
                 2018-10-29
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js前端常用svgcanvasVue框架jquery源码/" itemprop="url" rel="index">
+                    <span itemprop="name">js前端常用svgcanvasVue框架jquery源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -537,13 +536,18 @@
       
         
           
-          将 markdown 的图片标签全部换成七牛云的大括号正则!\[.*\]\(\/images\/(.*)\) 替换成网页字体颜色浅红色文字：浅红色文字：blah blah blah 
-Content (md partial supported) 
-
           
+谷歌 PageSpeed团队的测试表明，30~50 KB（压缩后）是每个 JavaScript 文件大小的合适范围：既大到了能够减少小文件带来的网络延迟，还能确保递增及分层式的执行。
+
+浏览器解析
+
+Firefox 规则树
+
+CSS图像精灵 减少http请求次数服务端对静态文件gzip压缩使用cs
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/03/markdown-Syntax/#more" rel="contents">
+            <a class="btn" href="/2018/04/12/performance/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

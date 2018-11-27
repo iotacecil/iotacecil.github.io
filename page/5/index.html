@@ -290,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/03/16/DDB/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/04/08/mysql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -309,7 +309,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/16/DDB/" itemprop="url">数据库锁</a></h1>
+                <a class="post-title-link" href="/2018/04/08/mysql/" itemprop="url">mySQL</a></h1>
         
 
         <div class="post-meta">
@@ -322,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T15:31:34+08:00">
-                2018-03-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-08T18:48:55+08:00">
+                2018-04-08
               </time>
             
 
@@ -338,8 +338,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -396,502 +396,13 @@
       
         
           
-          关系型数据库和对象表和类关联行和对象关联字段和属性关联
-B+树数据库中，B+树的高度一般在2到3层。也就是说查找某一键值的记录，最多只需要2到3次IO开销。按磁盘每秒100次IO来计算，查询时间只需0.0.2到0.03秒
-不确定：100w个Integer B+树需要多少层
-inodb后台AIO 线程
+          QPS TPSmysql当前一个sql语句只能用到一个cpuqps：每秒查询量并发量会使cpu连接数占满1000Mb/8 = 100MB 的网卡 减少从服务器 减少主从同步但表超过千万行 or 表数据文件超过10G
+mysql&lt;5.5 建立索引会锁表。&gt;=5.5不锁表但是会主从延迟
+DD
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/16/DDB/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/05/07/avo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Learn & practice">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/07/avo/" itemprop="url">原子性 可见性 有序性</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-07T20:40:21+08:00">
-                2018-05-07
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
-                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          原子性： 互斥 同一时间只有一个线程操作atomic竞争激烈能维持常态，性能比Lock还好，但每次只能同步一个值
-AtomicInteger123public final int incrementAndGet() &#123;    return unsafe.getAndAddInt(this,
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/07/avo/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/03/06/About-SpringBoot/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Learn & practice">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/06/About-SpringBoot/" itemprop="url">About SpringBoot</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-06T07:51:17+08:00">
-                2018-03-06
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
-                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          测试网络https://httpbin.org/#/
-打车app APIhttps://www.easyapi.com/api/?documentId=8067
-spring自动装配context.getBean(.class)获取对象
-AnnotationConfigApplicationCont
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/06/About-SpringBoot/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/05/04/java-io-file/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Learn & practice">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/04/java-io-file/" itemprop="url">java-io-file</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-04T20:34:13+08:00">
-                2018-05-04
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
-                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          http://blog.jmecn.net/java-iostream/JNI java native interface 本地接口
-NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类型都有缓冲区1.ByteBuffer bf = ByteBuffer.allocate(8);2.
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/04/java-io-file/#more" rel="contents">
+            <a class="btn" href="/2018/04/08/mysql/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -990,8 +501,8 @@ NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类�
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -1105,6 +616,169 @@ NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类�
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/03/09/mlpractice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/09/mlpractice/" itemprop="url">mlpractice</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T23:45:20+08:00">
+                2018-03-09
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习和数据处理python备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习和数据处理python备忘</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          张量分解代码http://tensorly.org/stable/user_guide/quickstart.html#tensor-decomposition 
+NMF的评价basline用平均?
+训练数据处理：打乱样本12345def _shuffle_data(self):    # [0,1
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/09/mlpractice/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/05/08/spring-cloud/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1153,8 +827,8 @@ NIO原来IO流一个字节一个字节处理。NIO块。每一种java数据类�
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -1269,7 +943,7 @@ dockerk8s 容器编排工具ZooKeeper1.安装jdk到/usr/
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/04/12/performance/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/11/14/conference/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -1288,7 +962,7 @@ dockerk8s 容器编排工具ZooKeeper1.安装jdk到/usr/
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/04/12/performance/" itemprop="url">前端性能优化</a></h1>
+                <a class="post-title-link" href="/2018/11/14/conference/" itemprop="url">ICSOC NASAC 会议记录</a></h1>
         
 
         <div class="post-meta">
@@ -1301,8 +975,8 @@ dockerk8s 容器编排工具ZooKeeper1.安装jdk到/usr/
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-12T21:29:48+08:00">
-                2018-04-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-14T15:31:21+08:00">
+                2018-11-14
               </time>
             
 
@@ -1317,34 +991,12 @@ dockerk8s 容器编排工具ZooKeeper1.安装jdk到/usr/
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:27:54+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-24T22:22:20+08:00">
+                2018-11-24
               </time>
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/js前端常用svgcanvasVue框架jquery源码/" itemprop="url" rel="index">
-                    <span itemprop="name">js前端常用svgcanvasVue框架jquery源码</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -1375,18 +1027,14 @@ dockerk8s 容器编排工具ZooKeeper1.安装jdk到/usr/
       
         
           
-          
-谷歌 PageSpeed团队的测试表明，30~50 KB（压缩后）是每个 JavaScript 文件大小的合适范围：既大到了能够减少小文件带来的网络延迟，还能确保递增及分层式的执行。
+          需求、设计与演化质量特约报告 移动Web软件系统体验质量解析与优化
 
-浏览器解析
-
-Firefox 规则树
-
-CSS图像精灵 减少http请求次数服务端对静态文件gzip压缩使用cs
+数据集http://www.ntu.edu.sg/home/gaocong/datacode.htm
+《eTOUR: A Two-Layer Framework for Tour Recommendation with Super
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/04/12/performance/#more" rel="contents">
+            <a class="btn" href="/2018/11/14/conference/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1437,7 +1085,7 @@ CSS图像精灵 减少http请求次数服务端对静态文件gzip压缩使用cs
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/07/22/nodejs/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/11/17/spark/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -1456,7 +1104,7 @@ CSS图像精灵 减少http请求次数服务端对静态文件gzip压缩使用cs
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/22/nodejs/" itemprop="url">nodejs</a></h1>
+                <a class="post-title-link" href="/2018/11/17/spark/" itemprop="url">spark</a></h1>
         
 
         <div class="post-meta">
@@ -1469,8 +1117,8 @@ CSS图像精灵 减少http请求次数服务端对静态文件gzip压缩使用cs
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-22T12:58:32+08:00">
-                2018-07-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T09:07:12+08:00">
+                2018-11-17
               </time>
             
 
@@ -1485,34 +1133,12 @@ CSS图像精灵 减少http请求次数服务端对静态文件gzip压缩使用cs
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:27:14+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-19T09:12:02+08:00">
+                2018-11-19
               </time>
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nodejs/" itemprop="url" rel="index">
-                    <span itemprop="name">nodejs</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -1543,12 +1169,11 @@ CSS图像精灵 减少http请求次数服务端对静态文件gzip压缩使用cs
       
         
           
-          CommonJS nodejs的模块规范https://morning.work/page/nodejs/ready-to-async-await.htmlglobal对象和process对象一个文件是一个模块使用requirejs需要自己写包裹函数，nodejs省了这一步
-node --inspe
+          Mlib数据格式1.本地向量Vector.dense(1.0,2.0,3.0) 还有位置的稀疏向量2.监督学习xy对LabeledPoint(1.0,Vector.dense(1.0,2.0,3.0))3.本地矩阵 是按列存储的 Matrices.dense(3,3,Array(1,0,0,1,0,
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/22/nodejs/#more" rel="contents">
+            <a class="btn" href="/2018/11/17/spark/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1599,7 +1224,7 @@ node --inspe
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/04/02/nginx/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/10/09/algTool/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -1618,7 +1243,7 @@ node --inspe
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/04/02/nginx/" itemprop="url">nginx</a></h1>
+                <a class="post-title-link" href="/2018/10/09/algTool/" itemprop="url">algTool 正则</a></h1>
         
 
         <div class="post-meta">
@@ -1631,8 +1256,8 @@ node --inspe
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-02T13:18:31+08:00">
-                2018-04-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-09T19:16:41+08:00">
+                2018-10-09
               </time>
             
 
@@ -1647,8 +1272,309 @@ node --inspe
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:27:08+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-13T19:29:30+08:00">
+                2018-11-13
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">算法备忘</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          lc26有序数组去重 双指针12345678910public int removeDuplicates(int[] nums) &#123;    if(nums.length == 0)return 0;    int cnt = 1;    for(int i = 1;i&lt;nums.le
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/09/algTool/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/09/05/activiti/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/05/activiti/" itemprop="url">activiti和项目整理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T20:51:32+08:00">
+                2018-09-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-02T16:19:58+08:00">
+                2018-11-02
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          查看tomcat启动jps -mlv复制3个war包到tomcat webapphttp://localhost:8080/activiti-app/admin testhttp://localhost:8080/activiti-adminadmin admin
+git checkout -b b
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/09/05/activiti/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/03/08/About-CentOS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/08/About-CentOS/" itemprop="url">About CentOS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-08T13:49:14+08:00">
+                2018-03-08
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-02T12:45:34+08:00">
+                2018-11-02
               </time>
             
           </span>
@@ -1705,15 +1631,13 @@ node --inspe
       
         
           
-          Nginx1. 环境
-基本库yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake
-工具yum -y install wget httpd-tools vim
-确认yum源可用yum list|grep gcc
-关闭ipta
+          fusion IOsourcesource: source 文件名 [参数]    在当前 shell 中执行一个文件中的命令。
+网络模拟器？NS-3https://cloud.tencent.com/info/876b157473953159b1d582b9acec8d88.html
+localh
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/04/02/nginx/#more" rel="contents">
+            <a class="btn" href="/2018/03/08/About-CentOS/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1764,7 +1688,7 @@ node --inspe
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/09/05/redis/">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2018/10/21/algbfs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -1783,7 +1707,7 @@ node --inspe
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/05/redis/" itemprop="url">redis</a></h1>
+                <a class="post-title-link" href="/2018/10/21/algbfs/" itemprop="url">广度优先用于无权图的最短路径</a></h1>
         
 
         <div class="post-meta">
@@ -1796,8 +1720,8 @@ node --inspe
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-05T13:59:20+08:00">
-                2018-09-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-21T18:19:30+08:00">
+                2018-10-21
               </time>
             
 
@@ -1812,12 +1736,34 @@ node --inspe
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:26:54+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-01T21:56:29+08:00">
+                2018-11-01
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">算法备忘</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -1848,11 +1794,12 @@ node --inspe
       
         
           
-          ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf
+          有权图的最短路径要用DijKstra
+279完美平方数!!126 word Ladder 返回所有可能的路径 记录宽搜搜索路径！77% 117ms1.先bfs，在bfs的过程中，构建有向图邻接表map。完成一个最长路径为k的图。2.在构建完的图中dfs，回溯找完到end的路径tmp添加到rst中。1
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/09/05/redis/#more" rel="contents">
+            <a class="btn" href="/2018/10/21/algbfs/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

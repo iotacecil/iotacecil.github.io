@@ -80,22 +80,18 @@
 
 
 
-<meta name="description" content="4.1 backprop反向传播 链式法则的递归调用 反向传播可以得到损失函数L因为$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial x}$利用上游传回的梯度 反向计算每个节点的本地梯度 最后一个节点的梯度总是1？ 加法门是gradient distributor加法节点">
+<meta name="description" content="4.1 backprop反向传播 链式法则的递归调用![backprop.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backprop.jpg反向传播可以得到损失函数L因为$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\par">
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CS231">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/03/09/CS231/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="4.1 backprop反向传播 链式法则的递归调用 反向传播可以得到损失函数L因为$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial x}$利用上游传回的梯度 反向计算每个节点的本地梯度 最后一个节点的梯度总是1？ 加法门是gradient distributor加法节点">
+<meta property="og:description" content="4.1 backprop反向传播 链式法则的递归调用![backprop.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backprop.jpg反向传播可以得到损失函数L因为$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\par">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/backprop.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/backpropexample.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/sigmoid.jpg">
-<meta property="og:updated_time" content="2018-10-28T16:30:41.945Z">
+<meta property="og:updated_time" content="2018-11-27T10:09:51.298Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS231">
-<meta name="twitter:description" content="4.1 backprop反向传播 链式法则的递归调用 反向传播可以得到损失函数L因为$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial x}$利用上游传回的梯度 反向计算每个节点的本地梯度 最后一个节点的梯度总是1？ 加法门是gradient distributor加法节点">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/backprop.jpg">
+<meta name="twitter:description" content="4.1 backprop反向传播 链式法则的递归调用![backprop.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backprop.jpg反向传播可以得到损失函数L因为$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\par">
 
 
 
@@ -341,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:51+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -398,12 +394,10 @@
 
       
         <h5 id="4-1"><a href="#4-1" class="headerlink" title="4.1"></a>4.1</h5><ul>
-<li>backprop反向传播 链式法则的递归调用<img src="http://phb9yml10.bkt.clouddn.com/static/images/backprop.jpg">
-反向传播可以得到损失函数L因为<br>$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial x}$<br>利用上游传回的梯度 反向计算每个节点的本地梯度 最后一个节点的梯度总是1？<img src="http://phb9yml10.bkt.clouddn.com/static/images/backpropexample.jpg"></li>
+<li>backprop反向传播 链式法则的递归调用<br>![backprop.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backprop.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backprop.jpg</a><br>反向传播可以得到损失函数L因为<br>$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial x}$<br>利用上游传回的梯度 反向计算每个节点的本地梯度 最后一个节点的梯度总是1？<br>![backpropexample.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backpropexample.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backpropexample.jpg</a></li>
 <li>加法门是gradient distributor加法节点之前的本地梯度是1,分支与上游又相同梯度</li>
 <li>max门通过后本地梯度分别是0，1 （max只有一个值可以影响上游）</li>
-<li>mul乘法门 对上游值缩放<img src="http://phb9yml10.bkt.clouddn.com/static/images/sigmoid.jpg">
-</li>
+<li>mul乘法门 对上游值缩放<br>![sigmoid.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sigmoid.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sigmoid.jpg</a></li>
 </ul>
 
       

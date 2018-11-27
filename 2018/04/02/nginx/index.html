@@ -87,14 +87,10 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="Nginx1. 环境 基本库yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake 工具yum -y install wget httpd-tools vim 确认yum源可用yum list|grep gcc 关闭iptables规则iptables -L iptables -F 停用selinuxgetenforce">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/https.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/jack_https.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/htps.jpg">
-<meta property="og:updated_time" content="2018-10-28T16:27:08.709Z">
+<meta property="og:updated_time" content="2018-11-27T10:09:50.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nginx">
 <meta name="twitter:description" content="Nginx1. 环境 基本库yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake 工具yum -y install wget httpd-tools vim 确认yum源可用yum list|grep gcc 关闭iptables规则iptables -L iptables -F 停用selinuxgetenforce">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/https.jpg">
 
 
 
@@ -340,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:27:08+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -415,8 +411,7 @@
 <p>每一个文件描述符会与一个打开文件相对应，不同的文件描述符也会指向同一个文件。</p>
 <p><code>rpm -ql nginx</code> rpm包有哪些配置文件<br>/usr/share/nginx/html</p>
 <h2 id="HSTS（HTTP-Strict-Transport-Security）"><a href="#HSTS（HTTP-Strict-Transport-Security）" class="headerlink" title="HSTS（HTTP Strict-Transport-Security）"></a>HSTS（HTTP Strict-Transport-Security）</h2><ul>
-<li>是Web安全策略机制（web security policy mechanism）<br><a href="https://www.jianshu.com/p/caa80c7ad45c" target="_blank" rel="noopener">HSTS：</a><img src="http://phb9yml10.bkt.clouddn.com/static/images/https.jpg">
-<blockquote>
+<li>是Web安全策略机制（web security policy mechanism）<br><a href="https://www.jianshu.com/p/caa80c7ad45c" target="_blank" rel="noopener">HSTS：</a><br>![https.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https.jpg</a><blockquote>
 <ol>
 <li><strong>建立起HTTPS连接之前存在一次明文的HTTP请求和重定向</strong>（上图中的第1、2步），使得攻击者可以以中间人的方式劫持这次请求，从而进行后续的攻击，例如窃听数据，篡改请求和响应，跳转到钓鱼网站等。</li>
 </ol>
@@ -424,13 +419,13 @@
 </li>
 </ul>
 <ul>
-<li><img src="http://phb9yml10.bkt.clouddn.com/static/images/jack_https.jpg">
+<li><p>![jack_https.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jack_https.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jack_https.jpg</a></p>
 <blockquote>
 <p>攻击者直接劫持了HTTP请求，并返回了内容给浏览器，根本不给浏览器同真实网站建立HTTPS连接的机会</p>
 </blockquote>
 </li>
-<li><p>当用户让浏览器发起HTTP请求时，浏览器将其转换为HTTPS请求，直接略过上述的HTTP请求和重定向，从而使得中间人攻击失效，规避风险。</p>
-<img src="http://phb9yml10.bkt.clouddn.com/static/images/htps.jpg"></li>
+<li><p>当用户让浏览器发起HTTP请求时，浏览器将其转换为HTTPS请求，直接略过上述的HTTP请求和重定向，从而使得中间人攻击失效，规避风险。<br>![htps.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/htps.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/htps.jpg</a></p>
+</li>
 </ul>
 <ol>
 <li>HSTS 响应 Header：让浏览器得知，在接下来的一段时间内，当前域名只能通过HTTPS进行访问，并且在浏览器发现当前连接不安全的情况下，强制拒绝用户的后续访问要求。<br><code>Strict-Transport-Security: &lt;max-age=&gt;[; includeSubDomains][; preload]</code><blockquote>

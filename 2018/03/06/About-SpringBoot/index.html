@@ -88,19 +88,14 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="测试网络https://httpbin.org/#/ 打车app APIhttps://www.easyapi.com/api/?documentId=8067 spring自动装配context.getBean(.class)获取对象 AnnotationConfigApplicationContext(App.class)注解形式上下文，用component标识bean,scan扫描自动执行c">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/bean.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/webcontext.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/scope.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/pointcut.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/pointcut2.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/dsexcept.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/transaction.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/mvc_front.jpg">
-<meta property="og:updated_time" content="2018-10-28T16:30:41.524Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bean.jpg
+[公共配置](http://www.ymq.io/2017/11/01/spring-boot-common-application-properties-example/">
+<meta property="og:updated_time" content="2018-11-27T10:09:50.366Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About SpringBoot">
 <meta name="twitter:description" content="测试网络https://httpbin.org/#/ 打车app APIhttps://www.easyapi.com/api/?documentId=8067 spring自动装配context.getBean(.class)获取对象 AnnotationConfigApplicationContext(App.class)注解形式上下文，用component标识bean,scan扫描自动执行c">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/bean.jpg">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bean.jpg
+[公共配置](http://www.ymq.io/2017/11/01/spring-boot-common-application-properties-example/">
 
 
 
@@ -346,8 +341,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-29T00:30:41+08:00">
-                2018-10-29
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -417,9 +412,9 @@
 <li>setCD(CD cd)等setter方法上</li>
 </ol>
 <h4 id="Autowired-required-false"><a href="#Autowired-required-false" class="headerlink" title="@Autowired(required=false)"></a>@Autowired(required=false)</h4><p>用接口注入成员对象时有两个实现类时，使用<code>@Primary</code>或者使用限定符<code>Qualifier(&quot;&quot;)</code>相互对应，或者把限定符写在<code>@Component(&quot;&quot;)</code>里。默认的限定符是类名小写<br>使用<code>Resource(name=&quot;&quot;)</code> = @Autowired+@Qualifier 是jdk自带的标准</p>
-<h3 id="配置文件详解"><a href="#配置文件详解" class="headerlink" title="配置文件详解"></a>配置文件详解</h3><img src="http://phb9yml10.bkt.clouddn.com/static/images/bean.jpg">
-<p><a href="http://www.ymq.io/2017/11/01/spring-boot-common-application-properties-example/" target="_blank" rel="noopener">公共配置</a></p>
-<h3 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a>DispatcherServlet</h3><img src="http://phb9yml10.bkt.clouddn.com/static/images/webcontext.jpg">
+<h3 id="配置文件详解"><a href="#配置文件详解" class="headerlink" title="配置文件详解"></a>配置文件详解</h3><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bean.jpg
+[公共配置](http://www.ymq.io/2017/11/01/spring-boot-common-application-properties-example/" alt="bean.jpg"></p>
+<h3 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a>DispatcherServlet</h3><p>![webcontext.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/webcontext.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/webcontext.jpg</a></p>
 <ol>
 <li><p>需要定义一个[servlet-name]-servlet.xml配置文件<br> HandlerMapping<br> Controllers<br> view解析相关的</p>
 </li>
@@ -459,7 +454,7 @@
 <li>获取对象 类名 a = <code>context.getBean(&quot;bean类名&quot;,类.class）</code></li>
 <li>Bean作用域：<ol>
 <li>singleton 默认<code>&lt;bean scope=&quot;singleton&quot;&gt;</code></li>
-<li>prototype 每次引用创建一个实例<br>web里仅有<img src="http://phb9yml10.bkt.clouddn.com/static/images/scope.jpg"></li>
+<li>prototype 每次引用创建一个实例<br>web里仅有<br>![scope.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/scope.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/scope.jpg</a></li>
 </ol>
 </li>
 <li>Bean生命周期回调<ol>
@@ -541,13 +536,11 @@
 <li>@After finally 函数返回之后</li>
 </ol>
 </li>
-<li>pointcut：匹配AOP目标函数的表达式+名称。哪些业务方法需要AOP<img src="http://phb9yml10.bkt.clouddn.com/static/images/pointcut.jpg">
-execution 匹配函数<br>within 某个包某个类下面的函数<br><code>*</code>匹配所有 <code>save*</code>表示save开头的所有函数</li>
+<li>pointcut：匹配AOP目标函数的表达式+名称。哪些业务方法需要AOP<br>![pointcut.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcut.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcut.jpg</a><br>execution 匹配函数<br>within 某个包某个类下面的函数<br><code>*</code>匹配所有 <code>save*</code>表示save开头的所有函数</li>
 </ol>
 <ul>
 <li>所有public函数<br><code>execution(public**(..))</code></li>
-<li>组合两个表达式<code>execution(表达式1()&amp;&amp;表达式2()</code><img src="http://phb9yml10.bkt.clouddn.com/static/images/pointcut2.jpg">
-</li>
+<li>组合两个表达式<code>execution(表达式1()&amp;&amp;表达式2()</code><br>![pointcut2.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcut2.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcut2.jpg</a></li>
 </ul>
 <h4 id="Aspectj使用"><a href="#Aspectj使用" class="headerlink" title="Aspectj使用"></a>Aspectj使用</h4><ol>
 <li>添加依赖 aspectjweaver.jar<br> spring容器<artifactid>spring-context</artifactid></li>
@@ -599,8 +592,8 @@ execution 匹配函数<br>within 某个包某个类下面的函数<br><code>*</c
 <ul>
 <li>SqlParameterSource在spring中用MapSqlParameterSource/BeanPropertySqlParameterSource(java对象（bean))</li>
 </ul>
-<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><p>SQLException是checked异常：需要捕获<br>Spring的DataAccessException是unchecked异常<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/dsexcept.jpg"></p>
-<h4 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h4><img src="http://phb9yml10.bkt.clouddn.com/static/images/transaction.jpg">
+<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><p>SQLException是checked异常：需要捕获<br>Spring的DataAccessException是unchecked异常<br>![dsexcept.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dsexcept.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dsexcept.jpg</a></p>
+<h4 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h4><p>![transaction.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/transaction.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/transaction.jpg</a></p>
 <h3 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h3><h4 id="AOP-一组类共享相同行为（继承-Aspect"><a href="#AOP-一组类共享相同行为（继承-Aspect" class="headerlink" title="AOP 一组类共享相同行为（继承 @Aspect"></a>AOP 一组类共享相同行为（继承 @Aspect</h4><p>AspectJ注解式切面</p>
 <ul>
 <li>@Transcational 事务处理 @Cacheable 数据缓存</li>
@@ -632,8 +625,7 @@ execution 匹配函数<br>within 某个包某个类下面的函数<br><code>*</c
 </li>
 </ul>
 <p>从容器中返回bean实例</p>
-<h2 id="SpringMVC"><a href="#SpringMVC" class="headerlink" title="SpringMVC"></a>SpringMVC</h2><img src="http://phb9yml10.bkt.clouddn.com/static/images/mvc_front.jpg">
-<p>前端调度器把请求分发给业务控制器，把生成的数据分发给视图模板。</p>
+<h2 id="SpringMVC"><a href="#SpringMVC" class="headerlink" title="SpringMVC"></a>SpringMVC</h2><p>![mvc_front.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mvc_front.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mvc_front.jpg</a><br>前端调度器把请求分发给业务控制器，把生成的数据分发给视图模板。</p>
 <ul>
 <li>js deguggger</li>
 </ul>

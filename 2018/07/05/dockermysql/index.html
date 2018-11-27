@@ -80,22 +80,19 @@
 
 
 
-<meta name="description" content="docker imagelinux 内核空间bootfs是共享的用户空间是各种Linux发行版base image是root filesystem (文件和meta data )各种image是分层共享layer的 制作docker当前目录下有可执行文件 hello(编译过的c程序) 写成dockerfiledocker build -t tag/imagename .docker history">
+<meta name="description" content="docker imagelinux 内核空间bootfs是共享的用户空间是各种Linux发行版base image是root filesystem (文件和meta data )各种image是分层共享layer的![dockerimg.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockerimg.jpg 制作d">
 <meta property="og:type" content="article">
 <meta property="og:title" content="dockermysql">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/07/05/dockermysql/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="docker imagelinux 内核空间bootfs是共享的用户空间是各种Linux发行版base image是root filesystem (文件和meta data )各种image是分层共享layer的 制作docker当前目录下有可执行文件 hello(编译过的c程序) 写成dockerfiledocker build -t tag/imagename .docker history">
+<meta property="og:description" content="docker imagelinux 内核空间bootfs是共享的用户空间是各种Linux发行版base image是root filesystem (文件和meta data )各种image是分层共享layer的![dockerimg.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockerimg.jpg 制作d">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/dockerimg.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/dockercontainer.jpg">
-<meta property="og:image" content="http://phb9yml10.bkt.clouddn.com/static/images/junheng.jpg">
 <meta property="og:image" content="http://blog.iotaa.xyz/images/doubleha.jpg">
-<meta property="og:updated_time" content="2018-11-05T13:04:41.541Z">
+<meta property="og:updated_time" content="2018-11-27T10:09:50.507Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dockermysql">
-<meta name="twitter:description" content="docker imagelinux 内核空间bootfs是共享的用户空间是各种Linux发行版base image是root filesystem (文件和meta data )各种image是分层共享layer的 制作docker当前目录下有可执行文件 hello(编译过的c程序) 写成dockerfiledocker build -t tag/imagename .docker history">
-<meta name="twitter:image" content="http://phb9yml10.bkt.clouddn.com/static/images/dockerimg.jpg">
+<meta name="twitter:description" content="docker imagelinux 内核空间bootfs是共享的用户空间是各种Linux发行版base image是root filesystem (文件和meta data )各种image是分层共享layer的![dockerimg.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockerimg.jpg 制作d">
+<meta name="twitter:image" content="http://blog.iotaa.xyz/images/doubleha.jpg">
 
 
 
@@ -341,8 +338,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-05T21:04:41+08:00">
-                2018-11-05
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+                2018-11-27
               </time>
             
           </span>
@@ -397,9 +394,9 @@
       
 
       
-        <h3 id="docker-image"><a href="#docker-image" class="headerlink" title="docker image"></a>docker image</h3><p>linux 内核空间bootfs是共享的<br>用户空间是各种Linux发行版<br>base image是root filesystem (文件和meta data )<br>各种image是分层共享layer的<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/dockerimg.jpg"></p>
+        <h3 id="docker-image"><a href="#docker-image" class="headerlink" title="docker image"></a>docker image</h3><p>linux 内核空间bootfs是共享的<br>用户空间是各种Linux发行版<br>base image是root filesystem (文件和meta data )<br>各种image是分层共享layer的<br>![dockerimg.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockerimg.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockerimg.jpg</a></p>
 <p>制作docker<br>当前目录下有可执行文件 hello(编译过的c程序) 写成dockerfile<br><code>docker build -t tag/imagename .</code><br><code>docker history imageid</code> 可以看到有几层<br><code>docker run tag/imagename</code> 可以执行<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker history 4ab4c602aa5e</span></span><br><span class="line">IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</span><br><span class="line">4ab4c602aa5e        7 weeks ago         /bin/sh -c <span class="comment">#(nop)  CMD ["/hello"]               0 B                 </span></span><br><span class="line">&lt;missing&gt;           7 weeks ago         /bin/sh -c <span class="comment">#(nop) COPY file:9824c33ef192ac...   1.84 kB</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="docker-container"><a href="#docker-container" class="headerlink" title="docker container"></a>docker container</h3><p>image负责app的存储和分发，container负责运行app<br>image是只读的，在image层上加一层可读可写的container层<br><img src="http://phb9yml10.bkt.clouddn.com/static/images/dockercontainer.jpg"><br><code>docker container ls -a</code><br>docker 交互式启动<code>docker run --help</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-i, --interactive       Keep STDIN open even <span class="keyword">if</span> not attached</span><br><span class="line">-t, --tty               Allocate a pseudo-TTY</span><br></pre></td></tr></table></figure></p>
+<h3 id="docker-container"><a href="#docker-container" class="headerlink" title="docker container"></a>docker container</h3><p>image负责app的存储和分发，container负责运行app<br>image是只读的，在image层上加一层可读可写的container层<br>![dockercontainer.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockercontainer.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dockercontainer.jpg</a><br><code>docker container ls -a</code><br>docker 交互式启动<code>docker run --help</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-i, --interactive       Keep STDIN open even <span class="keyword">if</span> not attached</span><br><span class="line">-t, --tty               Allocate a pseudo-TTY</span><br></pre></td></tr></table></figure></p>
 <p><code>docker run -it centos</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker run -it centos</span></span><br><span class="line">[root@34907a1273a5 /]<span class="comment"># ll</span></span><br><span class="line">[root@34907a1273a5 /]<span class="comment"># ls</span></span><br><span class="line">anaconda-post.log  dev  home  lib64  mnt  proc  run   srv  tmp  var</span><br><span class="line">bin                etc  lib   media  opt  root  sbin  sys  usr</span><br></pre></td></tr></table></figure></p>
 <p>可读可写可以yum</p>
 <p>删除所有推出的容器<br><code>docker container ls -f &quot;status=exited&quot;</code></p>
@@ -441,7 +438,7 @@
 </ol>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p <span class="number">3306</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -v v1:/var/lib/mysql --privileged --name=node1 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">2</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3307</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v2:/var/lib/mysql --privileged --name=node2 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">3</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3308</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v3:/var/lib/mysql --privileged --name=node3 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">4</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3309</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v4:/var/lib/mysql --privileged --name=node4 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">5</span> pxc</span><br><span class="line"></span><br><span class="line">docker run -d -p <span class="number">3310</span>:<span class="number">3306</span> -e MYSQL_ROOT_PASSWORD=abc123456 -e CLUSTER_NAME=PXC -e XTRABACKUP_PASSWORD=abc123456 -e CLUSTER_JOIN=node1  -v v5:/var/lib/mysql --privileged --name=node5 --<span class="built_in">net</span>=net1 --ip <span class="number">172</span>.<span class="number">18</span>.<span class="number">0</span>.<span class="number">6</span> pxc</span><br></pre></td></tr></table></figure>
 <p>6.用navicat连接5个数据库在db1<code>create schema test1;</code> 刷新，其他节点也更新了。</p>
-<h3 id="负载均衡-Haproxy请求转发器"><a href="#负载均衡-Haproxy请求转发器" class="headerlink" title="负载均衡 Haproxy请求转发器"></a>负载均衡 Haproxy请求转发器</h3><p>nginx 支持http协议负载均衡，最近才支持TCP/IP<br><a href="https://zhangge.net/5125.html" target="_blank" rel="noopener">haproxy配置</a><br><img src="http://phb9yml10.bkt.clouddn.com/static/images/junheng.jpg"></p>
+<h3 id="负载均衡-Haproxy请求转发器"><a href="#负载均衡-Haproxy请求转发器" class="headerlink" title="负载均衡 Haproxy请求转发器"></a>负载均衡 Haproxy请求转发器</h3><p>nginx 支持http协议负载均衡，最近才支持TCP/IP<br><a href="https://zhangge.net/5125.html" target="_blank" rel="noopener">haproxy配置</a><br>![junheng.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/junheng.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/junheng.jpg</a></p>
 <ol>
 <li><code>docker pull haproxy</code></li>
 <li><p>在宿主机创建配置文件<br><code>mkdir /home/soft/haproxy/</code><br><code>touch /home/soft/haproxy/haproxy.cfg</code></p>
