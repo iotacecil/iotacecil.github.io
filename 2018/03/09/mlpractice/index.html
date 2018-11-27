@@ -88,17 +88,18 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="张量分解代码http://tensorly.org/stable/user_guide/quickstart.html#tensor-decomposition  NMF的评价basline用平均? 训练数据处理：打乱样本12345def _shuffle_data(self):    # [0,1,2,3,4,5] -&amp;gt; [5,3,2,4,0,1]    p = np.random.per">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pandasttt.jpg
-4.`user_ca_ph.unstack(level=1">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/SGDmomentum.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pandasttt.jpg">
 <meta property="og:image" content="http://blog.iotaa.xyz/images/logi.jpg">
 <meta property="og:image" content="http://blog.iotaa.xyz/images/mapreduce.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lance.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/FCM.jpg">
 <meta property="og:image" content="http://blog.iotaa.xyz/images/distance.jpg">
-<meta property="og:updated_time" content="2018-11-27T10:09:50.244Z">
+<meta property="og:updated_time" content="2018-11-27T10:19:58.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mlpractice">
 <meta name="twitter:description" content="张量分解代码http://tensorly.org/stable/user_guide/quickstart.html#tensor-decomposition  NMF的评价basline用平均? 训练数据处理：打乱样本12345def _shuffle_data(self):    # [0,1,2,3,4,5] -&amp;gt; [5,3,2,4,0,1]    p = np.random.per">
-<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pandasttt.jpg
-4.`user_ca_ph.unstack(level=1">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/SGDmomentum.jpg">
 
 
 
@@ -344,7 +345,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:58+08:00">
                 2018-11-27
               </time>
             
@@ -422,7 +423,7 @@
 </ol>
 <p>1）同现矩阵：每个格表示同时买了x物品和y物品的次数（是对称矩阵） 找一行里的最大几个做推荐<br>2）同现矩阵正规化，去除流行商品的影响<br>Jaccard相似度： 同时买i和j的人数/买i或j的人数<br>3）算上历史数据的加权平均 如果用户买过x和y商品，推荐z商品的分数是<br>1/2（matrix[x][z]+matrix[y][z]) 可以让最近购买的权重变大。对所有z商品排序，推荐最高的几个。<br>4）矩阵分解：从当前稀疏矩阵求L和R向量（回归问题） 填补缺失值<br>R描述物品 的所属 category 相关度向量<br>L用户对category的score向量<br>R x L 将所有R与一个用户L相乘取其中最大的几个推荐</p>
 <p><a href="https://software.intel.com/zh-cn/ai-academy/students/kits" target="_blank" rel="noopener">https://software.intel.com/zh-cn/ai-academy/students/kits</a></p>
-<h3 id="动量梯度下降"><a href="#动量梯度下降" class="headerlink" title="动量梯度下降"></a>动量梯度下降</h3><p>vt 是之前梯度的均值，是梯度的积累值<br>![SGDmomentum.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/SGDmomentum.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/SGDmomentum.jpg</a></p>
+<h3 id="动量梯度下降"><a href="#动量梯度下降" class="headerlink" title="动量梯度下降"></a>动量梯度下降</h3><p>vt 是之前梯度的均值，是梯度的积累值<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/SGDmomentum.jpg" alt="SGDmomentum.jpg"></p>
 <p>之前积累的梯度方向是momentum step,当前梯度是gradient step,这次的更新梯度是actual step<br>1 模型刚开始 两个夹角小，则actual step 是2倍 可以加快训练<br>2 当梯度为0的时候 有动量<br>3 梯度改变方向 动量可以缓解动荡</p>
 <h3 id="卷积计算是对应位置相乘"><a href="#卷积计算是对应位置相乘" class="headerlink" title="卷积计算是对应位置相乘"></a>卷积计算是对应位置相乘</h3><p>每次卷积的输出size = 输入size - 卷积核size + 1<br>多个卷积层图像size变成1或者非整数 所以加padding。使输入和输出size一样。<br>每个通道独立做卷积，最后3个通道相加<br>P = 边距(padding)<br>S = 步长(stride)<br>输出尺寸：(n-p)/s + 1</p>
 <p>参数数目 = kw x kh x ci x co<br>kw,kh 卷积核长宽<br>ci 输入通道数<br>co 输出通道数</p>
@@ -457,8 +458,7 @@
 <h3 id="pandas操作："><a href="#pandas操作：" class="headerlink" title="pandas操作："></a>pandas操作：</h3><ol>
 <li>读csv多了一列unname <code>pd.read_csv(&quot;Osaka_user_localtime.csv&quot;,index_col=0)</code></li>
 </ol>
-<p>1.<code>userpd.columns=userpd.columns.droplevel([0,1])</code><br>2.<code>df.set_index(&#39;date&#39;, inplace=True)</code>列 -&gt;索引<br>3.<code>df[&#39;index&#39;] = df.index</code>,<code>df.reset_index(level=0, inplace=True)</code><br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pandasttt.jpg
-4.`user_ca_ph.unstack(level=1" alt="pandasttt.jpg"><code>5.去掉不用的复合索引</code>user_ca_ph_cnt.columns=user_ca_ph_cnt.columns.droplevel([0,1])<code>6.填空</code>user_ca_ph_cnt=user_ca_ph_cnt.fillna(0.)<code>7.</code> train_data[[“Age_int”, “Survived”]].groupby([‘Age_int’],as_index=False).mean()<code>8.找null</code>age_df_isnull = age_df.loc[(train_data[‘Age’].isnull())]`<br>9.用dict替换掉一列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user_weight =[i/sum([<span class="number">30</span>,<span class="number">53</span>,<span class="number">334</span>,<span class="number">16</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">30</span>,<span class="number">53</span>,<span class="number">334</span>,<span class="number">16</span>]]</span><br><span class="line">dict(zip([<span class="string">"Amusement"</span>,<span class="string">"Entertainment"</span>,<span class="string">"Historical"</span>,<span class="string">"Park"</span>],user_weight))</span><br><span class="line">Osaka_cost[<span class="string">"userweight"</span>]=Osaka_cost[<span class="string">"category"</span>].map(usr_weight)</span><br></pre></td></tr></table></figure></p>
+<p>1.<code>userpd.columns=userpd.columns.droplevel([0,1])</code><br>2.<code>df.set_index(&#39;date&#39;, inplace=True)</code>列 -&gt;索引<br>3.<code>df[&#39;index&#39;] = df.index</code>,<code>df.reset_index(level=0, inplace=True)</code><br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pandasttt.jpg" alt="pandasttt.jpg"><br>4.<code>user_ca_ph.unstack(level=1)</code><br>5.去掉不用的复合索引<br><code>user_ca_ph_cnt.columns=user_ca_ph_cnt.columns.droplevel([0,1])</code><br>6.填空<code>user_ca_ph_cnt=user_ca_ph_cnt.fillna(0.)</code><br>7.<code>train_data[[&quot;Age_int&quot;, &quot;Survived&quot;]].groupby([&#39;Age_int&#39;],as_index=False).mean()</code><br>8.找null<code>age_df_isnull = age_df.loc[(train_data[&#39;Age&#39;].isnull())]</code><br>9.用dict替换掉一列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user_weight =[i/sum([<span class="number">30</span>,<span class="number">53</span>,<span class="number">334</span>,<span class="number">16</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">30</span>,<span class="number">53</span>,<span class="number">334</span>,<span class="number">16</span>]]</span><br><span class="line">dict(zip([<span class="string">"Amusement"</span>,<span class="string">"Entertainment"</span>,<span class="string">"Historical"</span>,<span class="string">"Park"</span>],user_weight))</span><br><span class="line">Osaka_cost[<span class="string">"userweight"</span>]=Osaka_cost[<span class="string">"category"</span>].map(usr_weight)</span><br></pre></td></tr></table></figure></p>
 <p>10.全部onehot<code>pd.get_dummies(df)</code><br>11.离散化，分桶,再向量化/onehot<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">train_data[<span class="string">'Fare_bin'</span>] = pd.qcut(train_data[<span class="string">'Fare'</span>], <span class="number">5</span>)</span><br><span class="line"><span class="number">0</span>      (<span class="number">-0.001</span>, <span class="number">7.854</span>]</span><br><span class="line"><span class="number">1</span>    (<span class="number">39.688</span>, <span class="number">512.329</span>]</span><br><span class="line"><span class="number">2</span>        (<span class="number">7.854</span>, <span class="number">10.5</span>]</span><br><span class="line"><span class="number">3</span>    (<span class="number">39.688</span>, <span class="number">512.329</span>]</span><br><span class="line"><span class="number">4</span>        (<span class="number">7.854</span>, <span class="number">10.5</span>]</span><br><span class="line">    <span class="comment"># factorize</span></span><br><span class="line">train_data[<span class="string">'Fare_bin_id'</span>] = pd.factorize(train_data[<span class="string">'Fare_bin'</span>])[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># dummies</span></span><br><span class="line">fare_bin_dummies_df = pd.get_dummies(train_data[<span class="string">'Fare_bin'</span>]).rename(columns=<span class="keyword">lambda</span> x: <span class="string">'Fare_'</span> + str(x))</span><br><span class="line">train_data = pd.concat([train_data, fare_bin_dummies_df], axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
 <h3 id="pip镜像"><a href="#pip镜像" class="headerlink" title="pip镜像"></a>pip镜像</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyclustering</span><br></pre></td></tr></table></figure>
 <h3 id="UTC-时间戳转localtime"><a href="#UTC-时间戳转localtime" class="headerlink" title="UTC 时间戳转localtime"></a>UTC 时间戳转localtime</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1346844688 -&gt; 2012-09-05 11:31:28</span></span><br><span class="line">Tor_user[<span class="string">"UTCtime"</span>] = pd.to_datetime(Tor_user[<span class="string">'dateTaken'</span>],unit=<span class="string">'s'</span>)</span><br><span class="line"><span class="comment"># 2012-09-05 11:31:28  -&gt; 2012-09-05 07:31:28-04:00</span></span><br><span class="line">Tor_user[<span class="string">"Localtime"</span>]=Tor_user.UTCtime.dt.tz_localize(<span class="string">'UTC'</span>).dt.tz_convert(<span class="string">'America/Toronto'</span>)</span><br><span class="line"><span class="comment"># 2012-09-05 07:31:28-04:00  -&gt; 2012-09-05 07:31:28</span></span><br><span class="line">Tor_user[<span class="string">"Localtime"</span>]=Tor_user[<span class="string">"Localtime"</span>].apply(<span class="keyword">lambda</span> x:x.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>))</span><br></pre></td></tr></table></figure>
@@ -496,7 +496,7 @@
 </ul>
 <ul>
 <li>梯度下降<br>  $w=w-\alpha\frac{dJ(w,b)}{dw}$<br>  $b=b-\alpha\frac{dJ(w,b)}{db}$</li>
-<li>反向传播<br>  计算loss对每个变量的梯度，通过链式法则<br><img src="\images\logi.jpg" alt="logi"><br>a=sigmoid($\hat{y}$)<br>正向传播:1.计算wx+b 2.经过sigmoid求出$\hat{y}$ 3.计算loss<br>反向传播:<ol>
+<li>反向传播<br>  计算loss对每个变量的梯度，通过链式法则<br><img src="\images\logi.jpg" alt="logi">)<br>a=sigmoid($\hat{y}$)<br>正向传播:1.计算wx+b 2.经过sigmoid求出$\hat{y}$ 3.计算loss<br>反向传播:<ol>
 <li>da=loss对$\hat{y}$求导</li>
 <li>dz = da*sigmoid求导 </li>
 <li>dw1 =dz*z对w1求导</li>
@@ -562,13 +562,13 @@ dcost = 1/m*np.sum(dz)<br>-<blockquote>
 <li>NumPy提供一个线性代数的库linalg，其中包含很多有用的函数。可以直接调用linalg.det()来计算行列式<br>第9章 用分类算法来处理回归问题</li>
 </ul>
 <h4 id="15-MapReduce-数值型和标称型数据。"><a href="#15-MapReduce-数值型和标称型数据。" class="headerlink" title="15 MapReduce:数值型和标称型数据。"></a>15 MapReduce:数值型和标称型数据。</h4><ul>
-<li>过去100年国内最高气温：<br>每个mapper将产生一个温度，形如&lt;”max”&gt;<temp>，也就是所有的mapper都会产生相同的key：”max”字符串<br><img src="\images\mapreduce.jpg" alt="mapreduce"><br>集成算法<br>生成多个分类器再集成 全选分类器 求平均</temp></li>
+<li>过去100年国内最高气温：<br>每个mapper将产生一个温度，形如&lt;”max”&gt;<temp>，也就是所有的mapper都会产生相同的key：”max”字符串<br><img src="\images\mapreduce.jpg" alt="mapreduce">)<br>集成算法<br>生成多个分类器再集成 全选分类器 求平均</temp></li>
 </ul>
 <h4 id="pandas"><a href="#pandas" class="headerlink" title="pandas"></a>pandas</h4><ol>
 <li>时间序列关键点：极大值，极小值or拐点 用关键点代替原始时间序列。</li>
 <li>合并关键点序列时间下标 得到等长序列</li>
-<li>Lance距离 无量纲。欧式距离缺点L:有量纲，变差大的变量在距离中贡献大。<br>![lance.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lance.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lance.jpg</a></li>
-<li>FCM算法 每条时间序列属于各个类的程度。<br>![FCM.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/FCM.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/FCM.jpg</a></li>
+<li>Lance距离 无量纲。欧式距离缺点L:有量纲，变差大的变量在距离中贡献大。<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lance.jpg" alt="lance.jpg"></li>
+<li>FCM算法 每条时间序列属于各个类的程度。<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/FCM.jpg" alt="FCM.jpg"></li>
 </ol>
 <p>ARIMA自回归综合移动平均<br>Auto-Regressive Integrated Moving Averages. </p>
 <ul>
@@ -645,7 +645,7 @@ dcost = 1/m*np.sum(dz)<br>-<blockquote>
 <p>给向量赋予一个正标量值 到原点的距离</p>
 <ol>
 <li>L1：Manhattan distance。z=[3,4] $||z||_1=3+4=7$各元素绝对值之和</li>
-<li>任意阶范数公式<br><img src="\images\distance.jpg" alt="distance"></li>
+<li>任意阶范数公式<br><img src="\images\distance.jpg" alt="distance">)</li>
 <li>二阶linalg.norm([8,1,6])</li>
 <li>欧式距离 <code>sqrt((v1-v2)*(v1-v2.T))</code></li>
 <li>曼哈顿距离 <code>sum(abs(v1-v2))</code></li>

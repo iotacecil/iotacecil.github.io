@@ -88,10 +88,20 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="https://blog.csdn.net/javazejian/article/details/72828483 ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享（False Sharing）：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-27T10:09:51.443Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy1.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy2.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/distruptor.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mesi.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmeter.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/viewtree.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/countdown.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threadstate.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suspend.jpg">
+<meta property="og:updated_time" content="2018-11-27T10:19:59.765Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="concurrent并发多线程">
 <meta name="twitter:description" content="https://blog.csdn.net/javazejian/article/details/72828483 ThreadLocal可以看成是 Map&amp;lt;Thread,T&amp;gt; 特定于该线程的值 Cache伪共享（False Sharing）：多线程读同一cache line的不同变量，变量无关却要线程同步。X86 cpu的cache line长64字节如果有一对象有成员变量long">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy1.jpg">
 
 
 
@@ -337,7 +347,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:51+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:59+08:00">
                 2018-11-27
               </time>
             
@@ -413,11 +423,11 @@
 <h3 id="Sequence"><a href="#Sequence" class="headerlink" title="Sequence"></a>Sequence</h3><p>可以看成是一个<code>AtomicLong</code> 用于标识进度。可以消除CPU伪共享。<br>事件处理过程是沿着序号逐个递增处理，所以原子性 可以多线程并发访问。<br>协调<code>RingBuffer/Producer/Consumer</code>的处理进度。</p>
 <h3 id="Sequencer-接口"><a href="#Sequencer-接口" class="headerlink" title="Sequencer 接口"></a>Sequencer 接口</h3><p>Distruptor的核心<br>有两个实现类<code>SingleProducerSequencer</code>,<code>MultiProducerSequencer</code><br>实现生产者消费者之间传递数据的并发算法。</p>
 <h3 id="Sequence-Barrier"><a href="#Sequence-Barrier" class="headerlink" title="Sequence Barrier"></a>Sequence Barrier</h3><p>用于保持对<code>RingBuffer</code>的<code>Main Published Sequence</code>(生产者)和消费者之间的平衡。<br>判断消费者的处理类。</p>
-<h3 id="WaitStrategy-接口-消费者如何等待的策略"><a href="#WaitStrategy-接口-消费者如何等待的策略" class="headerlink" title="WaitStrategy 接口 消费者如何等待的策略"></a>WaitStrategy 接口 消费者如何等待的策略</h3><p>![waitstrategy1.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy1.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy1.jpg</a><br>![waitstrategy2.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy2.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy2.jpg</a></p>
+<h3 id="WaitStrategy-接口-消费者如何等待的策略"><a href="#WaitStrategy-接口-消费者如何等待的策略" class="headerlink" title="WaitStrategy 接口 消费者如何等待的策略"></a>WaitStrategy 接口 消费者如何等待的策略</h3><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy1.jpg" alt="waitstrategy1.jpg"><br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/waitstrategy2.jpg" alt="waitstrategy2.jpg"></p>
 <p>主要策略<br><code>BlockingWaitStrategy</code> 阻塞<br><code>SleepingWaitStrategy</code> 休眠 异步日志<br><code>YieldingWaitStrategy</code> 线程切换</p>
 <h3 id="EventProcessor-主要事件循环"><a href="#EventProcessor-主要事件循环" class="headerlink" title="EventProcessor 主要事件循环"></a>EventProcessor 主要事件循环</h3><p>最重要的实现类<code>BatchEventProcessor</code> 回调<code>EventHandler</code>接口的实现对象</p>
 <h3 id="EventHandler-由用户实现"><a href="#EventHandler-由用户实现" class="headerlink" title="EventHandler 由用户实现"></a>EventHandler 由用户实现</h3><h3 id="WorkProcessor-多消费者"><a href="#WorkProcessor-多消费者" class="headerlink" title="WorkProcessor 多消费者"></a>WorkProcessor 多消费者</h3><p>保证一个sequence只能被一个消费者消费</p>
-<h3 id="多生产多消费者的Disruptor图解"><a href="#多生产多消费者的Disruptor图解" class="headerlink" title="多生产多消费者的Disruptor图解"></a>多生产多消费者的Disruptor图解</h3><p>生产者共用一个Sequence<br>每个消费者有sequence<br>每个消费者通过<code>Barrier</code>和生产者的<code>Sequence</code>协调<br>![distruptor.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/distruptor.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/distruptor.jpg</a></p>
+<h3 id="多生产多消费者的Disruptor图解"><a href="#多生产多消费者的Disruptor图解" class="headerlink" title="多生产多消费者的Disruptor图解"></a>多生产多消费者的Disruptor图解</h3><p>生产者共用一个Sequence<br>每个消费者有sequence<br>每个消费者通过<code>Barrier</code>和生产者的<code>Sequence</code>协调<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/distruptor.jpg" alt="distruptor.jpg"></p>
 <hr>
 <h3 id="核心链路"><a href="#核心链路" class="headerlink" title="核心链路"></a>核心链路</h3><h3 id="PV和QPS估计"><a href="#PV和QPS估计" class="headerlink" title="PV和QPS估计"></a>PV和QPS估计</h3><p>每天300w PV 80%会在24小时的20%的时间里<br>$3000 000*0.8)/(86400*0.2*)=139(QPS)$<br>如果一台机器QPS是58，则需要139/58=3台机器</p>
 <h3 id="并发模型"><a href="#并发模型" class="headerlink" title="并发模型"></a>并发模型</h3><p>1.进程&amp;线程Apache C10K问题<br>2.异步非阻塞 Nginx Libevent Nodejs 回调复杂度高<br>3.协程Golang Erlang Lua</p>
@@ -435,7 +445,7 @@
 <h3 id="Stream在背后引入Fork-join框架"><a href="#Stream在背后引入Fork-join框架" class="headerlink" title="Stream在背后引入Fork/join框架"></a>Stream在背后引入Fork/join框架</h3><h3 id="Future接口"><a href="#Future接口" class="headerlink" title="Future接口"></a>Future接口</h3><p>目标：实现并发，充分利用cpu的核，最大化程序吞吐量，避免因为等待远程服务返回/数据库查询。阻塞线程。<br>对计算结果的建模，返回一个运算结果的引用给调用方。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executor = Executors.newCachedThreadPool();</span><br><span class="line">        Future&lt;Double&gt; future = executor.submit(<span class="keyword">new</span> Callable&lt;Double&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Double <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="comment">//异步操作</span></span><br><span class="line">                <span class="keyword">return</span> doSomeLongComputation();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//异步操作运行同时也能执行</span></span><br><span class="line">        doSomeThingElse();</span><br></pre></td></tr></table></figure></p>
 <h3 id="Fork-Join"><a href="#Fork-Join" class="headerlink" title="Fork/Join"></a>Fork/Join</h3><p>工作窃取算法</p>
 <p>发布对象：可以得到成员变量引用<br>对象溢出：内部类</p>
-<h3 id="AQS-两个node的队列"><a href="#AQS-两个node的队列" class="headerlink" title="AQS 两个node的队列"></a>AQS 两个node的队列</h3><h3 id="多个CPU缓存一致性-MESI缓存一致性！！！"><a href="#多个CPU缓存一致性-MESI缓存一致性！！！" class="headerlink" title="多个CPU缓存一致性 MESI缓存一致性！！！"></a>多个CPU缓存一致性 MESI缓存一致性！！！</h3><p>![mesi.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mesi.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mesi.jpg</a></p>
+<h3 id="AQS-两个node的队列"><a href="#AQS-两个node的队列" class="headerlink" title="AQS 两个node的队列"></a>AQS 两个node的队列</h3><h3 id="多个CPU缓存一致性-MESI缓存一致性！！！"><a href="#多个CPU缓存一致性-MESI缓存一致性！！！" class="headerlink" title="多个CPU缓存一致性 MESI缓存一致性！！！"></a>多个CPU缓存一致性 MESI缓存一致性！！！</h3><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mesi.jpg" alt="mesi.jpg"></p>
 <p>4种数据状态，4种状态转换的cpu操作。<br>M（Modified)被修改：只缓存在该CPU的缓存中，被修改，与主存不一致。写回主存<br>Exlusive独享：缓存行只在该CPU的缓存中，未被修改，与主存一致。其它CPU读取内存时变成S状态。被修改则变成M。<br>Share共享：该缓存行被多个CPU缓存，且与主存相同。当一个CPU修改时其它CPU的变成I。<br>Invaild无效。</p>
 <p><code>local read</code>读本地缓存中数据<code>local write</code>写本地缓存<br><code>remote read</code>读取内存数据 <code>remote write</code>写回主存</p>
 <hr>
@@ -452,7 +462,7 @@
 <li>添加实例请求 add Sanper HttpRequest</li>
 <li>添加监听器 图形结果、查看结果树</li>
 <li>Option 打开Logviewer<div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
-<p>Throughput吞吐量<br>![jmeter.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmeter.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmeter.jpg</a><br>![viewtree.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/viewtree.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/viewtree.jpg</a></p>
+<p>Throughput吞吐量<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmeter.jpg" alt="jmeter.jpg"><br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/viewtree.jpg" alt="viewtree.jpg"></p>
 
 </div></div>
 </li>
@@ -475,7 +485,7 @@
 <p>CountDownLatch()计数栓:必须发生指定数量的事件后才可以继续使用<br>阻塞线程，直到满足某种条件线程再继续执行,计数值（count）实际上就是闭锁需要等待的线程数量</p>
 </blockquote>
 <ul>
-<li>适合保证线程执行完再做其它处理<br>![countdown.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/countdown.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/countdown.jpg</a></li>
+<li>适合保证线程执行完再做其它处理<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/countdown.jpg" alt="countdown.jpg"></li>
 <li>调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"><span class="comment">//主线程必须在启动其他线程后立即调用CountDownLatch.await()方法</span></span><br><span class="line">CountDownLatch.await();&#125;<span class="comment">//等待锁存器</span></span><br></pre></td></tr></table></figure>
@@ -487,7 +497,7 @@
 <hr>
 <hr>
 <p>汇编 jne有条件跳转 jmp无条件跳转<br>进程-详细-设置相关性：分配到指定cpu执行，开的线程只在指定的执行<br>java会把线程直接映射到操作系统</p>
-<p>![threadstate.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threadstate.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threadstate.jpg</a></p>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threadstate.jpg" alt="threadstate.jpg"></p>
 <p><code>javac xxx.java</code>-&gt;.class<br><code>javap -c -v xxx</code> 查看虚拟机字节码</p>
 <h3 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Condition sufficientFunds;</span><br><span class="line"><span class="keyword">if</span> (accounts[from] &lt; amount)</span><br><span class="line">    <span class="comment">//将该线程放到等待集</span></span><br><span class="line">    sufficientFunds.await();</span><br><span class="line"><span class="keyword">try</span>&#123;<span class="comment">////最后。账户发生变化，重新检查余额</span></span><br><span class="line">     sufficientFunds.signalAll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p>java每个对象有内部锁。并且该锁有一个内部条件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (accounts[from] &lt; amount)wait();</span><br><span class="line">notifyAll();</span><br></pre></td></tr></table></figure></p>
@@ -519,7 +529,7 @@
 </blockquote>
 <p>线程2resume线程1发生在线程1suspend之前，当线程1suspend之后没办法resume，导致线程1资源冻结。<br><div><div class="fold_hider"><div class="close hider_title">测试代码点击显/隐内容</div></div><div class="fold">
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> learnThr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">learnThread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Object u = <span class="keyword">new</span> Object();</span><br><span class="line">    <span class="keyword">static</span> ChangeObjectThread t1 = <span class="keyword">new</span> ChangeObjectThread(<span class="string">"t1"</span>);</span><br><span class="line">    <span class="keyword">static</span> ChangeObjectThread t2 = <span class="keyword">new</span> ChangeObjectThread(<span class="string">"t2"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ChangeObjectThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ChangeObjectThread</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.setName(name);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="comment">//加锁</span></span><br><span class="line">            <span class="keyword">synchronized</span> (u)&#123;</span><br><span class="line">                Thread.currentThread().suspend();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> InterruptedException</span>&#123;</span><br><span class="line">        t1.start();</span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.resume();</span><br><span class="line">        t2.resume();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>![suspend.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suspend.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suspend.jpg</a></p>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suspend.jpg" alt="suspend.jpg"></p>
 
 </div></div></p>
 <h3 id="yield-amp-join"><a href="#yield-amp-join" class="headerlink" title="yield &amp; join"></a>yield &amp; join</h3><p><code>A.join(0)</code>等待A结束后执行 用wait实现<br>join实现</p>

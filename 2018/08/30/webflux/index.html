@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="函数式编程 lambda+Stream外部迭代 内部迭代外部：for循环内部迭代求和1int sum = IntStream.of(nums).sum(); 惰性求值 求int数组最小值1IntStream.of(new int[]&amp;#123;1,2,3,4,5&amp;#125;).min().getAsInt(); 改成并行：新建线程池，拆分数组，归并1IntStream.of(test).paral">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-27T10:09:50.616Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lambdainterface.jpg">
+<meta property="og:updated_time" content="2018-11-27T10:19:58.671Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webflux">
 <meta name="twitter:description" content="函数式编程 lambda+Stream外部迭代 内部迭代外部：for循环内部迭代求和1int sum = IntStream.of(nums).sum(); 惰性求值 求int数组最小值1IntStream.of(new int[]&amp;#123;1,2,3,4,5&amp;#125;).min().getAsInt(); 改成并行：新建线程池，拆分数组，归并1IntStream.of(test).paral">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lambdainterface.jpg">
 
 
 
@@ -336,7 +338,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:58+08:00">
                 2018-11-27
               </time>
             
@@ -420,7 +422,7 @@
 </li>
 </ol>
 <p>方法：带参构造函数，输入是int,输出是实例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;Integer,Dog&gt; dog2 = Dog::<span class="keyword">new</span>;</span><br></pre></td></tr></table></figure></p>
-<h3 id="四大核心函数式接口"><a href="#四大核心函数式接口" class="headerlink" title="四大核心函数式接口"></a>四大核心函数式接口</h3><p>![lambdainterface.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lambdainterface.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lambdainterface.jpg</a></p>
+<h3 id="四大核心函数式接口"><a href="#四大核心函数式接口" class="headerlink" title="四大核心函数式接口"></a>四大核心函数式接口</h3><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lambdainterface.jpg" alt="lambdainterface.jpg"></p>
 <ol>
 <li><p><code>Consumer</code> 消费者 接收一个值消费掉<code>list.forEach</code> 接收T返回void</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; consumer = s-&gt; System.out.println(s);</span><br><span class="line">consumer.accept(<span class="string">"等待输出"</span>);</span><br></pre></td></tr></table></figure>

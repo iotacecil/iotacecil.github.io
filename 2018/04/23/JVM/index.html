@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="jmx链接 远程tomecat配置Catalina.sh加上java_opt里的jmx端口本机virtlalVM直接输入远程ip:端口就能监控了 27个点 内存占20G堆内存-Xmx12mhttps://www.jianshu.com/p/1b1c998c4448 jstack 发现死锁 jstack pid &amp;gt; out.txthttps://toutiao.io/posts/1ogbep/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-27T10:09:51.222Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg">
+<meta property="og:updated_time" content="2018-11-27T10:19:59.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
 <meta name="twitter:description" content="jmx链接 远程tomecat配置Catalina.sh加上java_opt里的jmx端口本机virtlalVM直接输入远程ip:端口就能监控了 27个点 内存占20G堆内存-Xmx12mhttps://www.jianshu.com/p/1b1c998c4448 jstack 发现死锁 jstack pid &amp;gt; out.txthttps://toutiao.io/posts/1ogbep/">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg">
 
 
 
@@ -336,7 +338,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:51+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:59+08:00">
                 2018-11-27
               </time>
             
@@ -399,7 +401,7 @@
 <p>JVM是基于栈的架构：指令短，指令数多<br>一般x86是基于寄存器的架构：指令长，指令集小</p>
 <p>bytecode-viewerjava -XX:MaxHeapSize=734003200 -jar .\Bytecode-Viewer-2.9.11.jar </p>
 <p>jclasslib bytecode viewer</p>
-<p>![suanfaGC.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg</a></p>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg" alt="suanfaGC.jpg"></p>
 <h3 id="jstat-查看类加载-GC-JIT编译信息"><a href="#jstat-查看类加载-GC-JIT编译信息" class="headerlink" title="jstat 查看类加载/GC/JIT编译信息"></a>jstat 查看类加载/GC/JIT编译信息</h3><p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html" target="_blank" rel="noopener">jstat官网</a></p>
 <h3 id="jinfo-查看运行中的jvm参数"><a href="#jinfo-查看运行中的jvm参数" class="headerlink" title="jinfo 查看运行中的jvm参数"></a>jinfo 查看运行中的jvm参数</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">jinfo -flag MaxHeapSize 1972</span></span><br><span class="line">-XX:MaxHeapSize=734003200</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">jinfo -flag ThreadStackSize &lt;进程号&gt;</span></span><br></pre></td></tr></table></figure>
 <p>打印进程Non-default参数（被赋值过的）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">jinfo -flags 1972</span></span><br></pre></td></tr></table></figure></p>

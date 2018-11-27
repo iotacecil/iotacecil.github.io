@@ -87,12 +87,17 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisobject.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisIO.jpg">
 <meta property="og:image" content="http://blog.iotaa.xyz/2018/09/05/redis/redisnget.jpg">
-<meta property="og:updated_time" content="2018-11-27T10:09:50.752Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisvideo.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishash.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishashvideo.jpg">
+<meta property="og:updated_time" content="2018-11-27T10:19:58.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis">
 <meta name="twitter:description" content="ConcurrentSkipListMap4.搭建redis服务器12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152cd /usr/localtar -zvxf yum -y install gcc gcc-c++ libstdc++-develmake MA">
-<meta name="twitter:image" content="http://blog.iotaa.xyz/2018/09/05/redis/redisnget.jpg">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisobject.jpg">
 
 
 
@@ -338,7 +343,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:58+08:00">
                 2018-11-27
               </time>
             
@@ -378,15 +383,15 @@
 <p><code>ttl</code> 命令可以查看键hello的剩余过期时间，单位：秒（&gt;0剩余过期时间；-1没设置过期时间；-2键不存在）<br><code>expire key seconds</code> 当超过过期时间，会自动删除，key在seconds秒后过期<br><code>persist key</code> 去掉过期时间</p>
 <p><code>type key</code> 如果键hello是字符串类型，则返回string；如果键不存在，则返回none</p>
 <p>所有key都是字符串</p>
-<p>![redisobject.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisobject.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisobject.jpg</a><br>redis 单线程 所以命令会等待<br>redis 使用epoll模型多路复用 redis自身实现的事件处理 将epoll的读写、连接、关闭转换成自身的事件。不在IO上浪费时间<br>![redisIO.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisIO.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisIO.jpg</a><br>fysnc file 是独立线程</p>
-<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><h4 id="字符串-应用场景：-缓存、计数器、分布式锁"><a href="#字符串-应用场景：-缓存、计数器、分布式锁" class="headerlink" title="字符串 应用场景： 缓存、计数器、分布式锁"></a>字符串 应用场景： 缓存、计数器、分布式锁</h4><p>结构： key：value<br>因为单线程 所以无竞争 线程安全<br>mget和n次get mget省了很多网络开销 从n网络n命令-&gt;1网络n命令<br><img src="redisnget.jpg" alt="redisnget.jpg"></p>
-<h5 id="场景1：-缓存视频基本信息redismysql"><a href="#场景1：-缓存视频基本信息redismysql" class="headerlink" title="场景1： 缓存视频基本信息redismysql"></a>场景1： 缓存视频基本信息redis<->mysql</-></h5><p>![redisvideo.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisvideo.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisvideo.jpg</a></p>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisobject.jpg" alt="redisobject.jpg"><br>redis 单线程 所以命令会等待<br>redis 使用epoll模型多路复用 redis自身实现的事件处理 将epoll的读写、连接、关闭转换成自身的事件。不在IO上浪费时间<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisIO.jpg" alt="redisIO.jpg"><br>fysnc file 是独立线程</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><h4 id="字符串-应用场景：-缓存、计数器、分布式锁"><a href="#字符串-应用场景：-缓存、计数器、分布式锁" class="headerlink" title="字符串 应用场景： 缓存、计数器、分布式锁"></a>字符串 应用场景： 缓存、计数器、分布式锁</h4><p>结构： key：value<br>因为单线程 所以无竞争 线程安全<br>mget和n次get mget省了很多网络开销 从n网络n命令-&gt;1网络n命令<br><img src="redisnget.jpg" alt="redisnget.jpg">)</p>
+<h5 id="场景1：-缓存视频基本信息redismysql"><a href="#场景1：-缓存视频基本信息redismysql" class="headerlink" title="场景1： 缓存视频基本信息redismysql"></a>场景1： 缓存视频基本信息redis<->mysql</-></h5><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redisvideo.jpg" alt="redisvideo.jpg"></p>
 <h5 id="场景2：-分布式ID生成器"><a href="#场景2：-分布式ID生成器" class="headerlink" title="场景2： 分布式ID生成器"></a>场景2： 分布式ID生成器</h5><p><code>incr id</code></p>
 <hr>
-<h4 id="hash-可以更新属性"><a href="#hash-可以更新属性" class="headerlink" title="hash 可以更新属性"></a>hash 可以更新属性</h4><p>用户信息用hash 可以部分更新属性<br>但是比较难控制过期时间，只能对一个key设置过期时间 不能对一个属性<br>field 不能相同<br>结构 key-&gt;field,value<br>![redishash.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishash.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishash.jpg</a></p>
+<h4 id="hash-可以更新属性"><a href="#hash-可以更新属性" class="headerlink" title="hash 可以更新属性"></a>hash 可以更新属性</h4><p>用户信息用hash 可以部分更新属性<br>但是比较难控制过期时间，只能对一个key设置过期时间 不能对一个属性<br>field 不能相同<br>结构 key-&gt;field,value<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishash.jpg" alt="redishash.jpg"></p>
 <p>id看成是一行，field是列</p>
 <h5 id="场景1：记录网站每个用户个人主页的访问量"><a href="#场景1：记录网站每个用户个人主页的访问量" class="headerlink" title="场景1：记录网站每个用户个人主页的访问量"></a>场景1：记录网站每个用户个人主页的访问量</h5><p><code>hincrby user:1:info pageview count</code></p>
-<h5 id="场景2：缓存视频基本信息redismysql"><a href="#场景2：缓存视频基本信息redismysql" class="headerlink" title="场景2：缓存视频基本信息redismysql"></a>场景2：缓存视频基本信息redis<->mysql</-></h5><p>![redishashvideo.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishashvideo.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishashvideo.jpg</a></p>
+<h5 id="场景2：缓存视频基本信息redismysql"><a href="#场景2：缓存视频基本信息redismysql" class="headerlink" title="场景2：缓存视频基本信息redismysql"></a>场景2：缓存视频基本信息redis<->mysql</-></h5><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/redishashvideo.jpg" alt="redishashvideo.jpg"></p>
 <h4 id="list-列表"><a href="#list-列表" class="headerlink" title="list 列表"></a>list 列表</h4><p>key：element 是有序（插入顺序）队列 双端队列 可以获得range<br>阻塞插入，对空的队列进行pop，不是立刻返回 而是等一段时间拿到最新的弹出<br>用户生产者消费者模型 消息队列</p>
 <p>实现<br>1.capped collection <code>LPUSH+LTRIM</code> 有固定数量的列表而不是无限放大<br>2.消息队列 <code>LPUSH + BRPOP</code><br>3.stack <code>LPUSH + LPOP</code><br>4.queue <code>LPUSH + RPOP</code></p>
 <h5 id="场景1：微博TimeLine-将所有我关注的用户的最新微博按新旧排、分页"><a href="#场景1：微博TimeLine-将所有我关注的用户的最新微博按新旧排、分页" class="headerlink" title="场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页"></a>场景1：微博TimeLine 将所有我关注的用户的最新微博按新旧排、分页</h5><p>每条微博作为一个对象，自己的微博id作为外联key</p>

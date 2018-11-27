@@ -80,18 +80,21 @@
 
 
 
-<meta name="description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL ![pl.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg 拆分单词  12Strin">
+<meta name="description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL  拆分单词  12String contents = new String(Files.readAllBytes(Paths.get(&quot;&quot;),StandardCharsets.U">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="busyman Notes">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/03/21/busyman/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL ![pl.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg 拆分单词  12Strin">
+<meta property="og:description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL  拆分单词  12String contents = new String(Files.readAllBytes(Paths.get(&quot;&quot;),StandardCharsets.U">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-27T10:09:51.352Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/throwable.jpg">
+<meta property="og:updated_time" content="2018-11-27T10:19:59.590Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="busyman Notes">
-<meta name="twitter:description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL ![pl.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg 拆分单词  12Strin">
+<meta name="twitter:description" content="signature???方法签名就由方法名+形参列表构成 并行 计算很长数组的总和1long sum = IntStream.of(a).parallel().sum();   Stream 统计一本书中的长单词 \PL  拆分单词  12String contents = new String(Files.readAllBytes(Paths.get(&quot;&quot;),StandardCharsets.U">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg">
 
 
 
@@ -337,7 +340,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:51+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:59+08:00">
                 2018-11-27
               </time>
             
@@ -399,7 +402,7 @@
 </li>
 </ol>
 <h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><ol>
-<li><p>统计一本书中的长单词<br> \PL<br> ![pl.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg</a><br> 拆分单词</p>
+<li><p>统计一本书中的长单词<br> \PL<br> <img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pl.jpg" alt="pl.jpg"><br> 拆分单词</p>
  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String contents = <span class="keyword">new</span> String(Files.readAllBytes(Paths.get(<span class="string">""</span>),StandardCharsets.UTF_8));</span><br><span class="line">List&lt;String&gt; words = Arrays.asList(contents.split(<span class="string">"\PL+"</span>));</span><br></pre></td></tr></table></figure>
 <p> stream代替迭代 </p>
  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> count = aaa.stream().filter(w-&gt;w.length()&gt;<span class="number">12</span>).count();</span><br><span class="line">System.out.println(count);</span><br></pre></td></tr></table></figure>
@@ -475,7 +478,7 @@
 <li><code>coll.removeIf(e-&gt;e fulfill the condition</code></li>
 <li><code>iter.remove()</code>移除最后一个访问的元素，不是指向元素，不能两次连用remove</li>
 </ul>
-<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>![throwable.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/throwable.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/throwable.jpg</a></p>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/throwable.jpg" alt="throwable.jpg"></p>
 <ol>
 <li><p>已检查错误：可提前预知 IOException。<br><code>Integer.parseInt(str)</code>检查str是否是整数是可能的</p>
 <ul>

@@ -87,14 +87,18 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="QPS TPSmysql当前一个sql语句只能用到一个cpuqps：每秒查询量并发量会使cpu连接数占满1000Mb/8 = 100MB 的网卡 减少从服务器 减少主从同步但表超过千万行 or 表数据文件超过10G mysql&amp;lt;5.5 建立索引会锁表。&amp;gt;=5.5不锁表但是会主从延迟 DDL操作：create、alert、drop、index、syn、cluster  修改表结构的操作m">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_join.jpg
-用左外连接查询只存在A中不存在B中的where B.Key is NULL (优化not in不会使用索引">
-<meta property="og:updated_time" content="2018-11-27T10:09:50.304Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/weeken.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_join.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_only_join.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/full_join.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/JDBC_conn.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zangdu.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/geli.jpg">
+<meta property="og:updated_time" content="2018-11-27T10:19:58.378Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mySQL">
 <meta name="twitter:description" content="QPS TPSmysql当前一个sql语句只能用到一个cpuqps：每秒查询量并发量会使cpu连接数占满1000Mb/8 = 100MB 的网卡 减少从服务器 减少主从同步但表超过千万行 or 表数据文件超过10G mysql&amp;lt;5.5 建立索引会锁表。&amp;gt;=5.5不锁表但是会主从延迟 DDL操作：create、alert、drop、index、syn、cluster  修改表结构的操作m">
-<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_join.jpg
-用左外连接查询只存在A中不存在B中的where B.Key is NULL (优化not in不会使用索引">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/weeken.jpg">
 
 
 
@@ -340,7 +344,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:09:50+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:58+08:00">
                 2018-11-27
               </time>
             
@@ -417,7 +421,7 @@
 </ol>
 <p><code>PageHelper.orderBy(&quot;price desc&quot;)</code>按价格降序（sql中的order by 之后的格式）</p>
 <h3 id="mysql-like通配符"><a href="#mysql-like通配符" class="headerlink" title="mysql like通配符"></a>mysql like通配符</h3><p><code>%</code> 任意多个字符</p>
-<h3 id="ER图"><a href="#ER图" class="headerlink" title="ER图"></a>ER图</h3><p>矩形：实体<br>特化：自顶向下继承设计<br>概化：底向上<br>菱形：联系集：把多对多变成1对多 用虚线连接联系集的属性<br>    双线：全参与：表示在联系集中的参与度<code>&lt;advisor&gt;</code>=student表示每个学生都要有导师，<br>双边菱形：表示弱实体集和它依附的实体集。当弱实体集里放入依赖的实体集的id，则不需要联系集<br>![weeken.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/weeken.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/weeken.jpg</a></p>
+<h3 id="ER图"><a href="#ER图" class="headerlink" title="ER图"></a>ER图</h3><p>矩形：实体<br>特化：自顶向下继承设计<br>概化：底向上<br>菱形：联系集：把多对多变成1对多 用虚线连接联系集的属性<br>    双线：全参与：表示在联系集中的参与度<code>&lt;advisor&gt;</code>=student表示每个学生都要有导师，<br>双边菱形：表示弱实体集和它依附的实体集。当弱实体集里放入依赖的实体集的id，则不需要联系集<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/weeken.jpg" alt="weeken.jpg"></p>
 <p>椭圆：属性<br>角色：&lt;先修课联系集&gt;和[课程]的联系通过course_id和prereq_id角色标识区分<br>派生属性：可以通过其它属性计算得到<br>复合型属性应该拆分成2个属性<br>多值型（一个老师对应多个电话）应该用另一个(id,phone)(1,phone1)(1,phone2)每个属性映射到单行<br>映射基数：1：1，1：n,n:1,n:n<br>基数约束：<code>导师&lt;-&lt;advisor&gt;-学生</code><br>    一对一：箭头从关系指向实体：导师&lt;-<code>&lt;advisor&gt;</code> 一名学生只有一名导师<br>     一对多：没有箭头表示多端，有箭头表示“一”端 <code>&lt;advisor&gt;</code>-学生 一名老师可以有多名学生。<br><code>导师 0..* &lt;advisor&gt; 1..1 学生</code> 参与的上限..下限，0表示老师参与的下线是0，不是全参与，是半参与。</p>
 <p>天然的三元关系 导师 项目 学生 通过一个联系集不能拆分成2个二元关系。</p>
 <ol>
@@ -478,10 +482,9 @@
 <p><code>desc</code> 查看表结构</p>
 <h4 id="mysql-join"><a href="#mysql-join" class="headerlink" title="mysql join"></a>mysql join</h4><ol>
 <li><code>inner join</code>内连接，两张表的公共部分 数据库会先在每个表里先查条件再生成笛卡儿积<br><code>select a.name from a A inner join b B on A.name =B.name;</code></li>
-<li><code>left outer join</code>左外连接，以左表为基础 内链接当左表中查询条件是null的时候被忽略，外连接则有<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_join.jpg
-用左外连接查询只存在A中不存在B中的where B.Key is NULL (优化not in不会使用索引" alt="left_join.jpg"><br>![left_only_join.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_only_join.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_only_join.jpg</a><br><code>select * from b left outer join a on a.name =b.name where a.Id is null;</code></li>
+<li><code>left outer join</code>左外连接，以左表为基础 内链接当左表中查询条件是null的时候被忽略，外连接则有<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_join.jpg" alt="left_join.jpg"><br>用左外连接查询只存在A中不存在B中的where B.Key is NULL (优化not in不会使用索引)<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/left_only_join.jpg" alt="left_only_join.jpg"><br><code>select * from b left outer join a on a.name =b.name where a.Id is null;</code></li>
 <li><code>right outer join</code><br><code>select * from a right outer join b on a.name =b.name where a.Id is null;</code></li>
-<li><code>full join</code><br>![full_join.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/full_join.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/full_join.jpg</a></li>
+<li><code>full join</code><br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/full_join.jpg" alt="full_join.jpg"></li>
 </ol>
 <h3 id="count-min-p-39-price-39-group-by-p-quot-id-quot-quot-name-quot"><a href="#count-min-p-39-price-39-group-by-p-quot-id-quot-quot-name-quot" class="headerlink" title="count(*),min(p.&#39;price&#39;) group by p.&quot;id&quot;,&quot;name&quot;"></a><code>count(*),min(p.&#39;price&#39;) group by p.&quot;id&quot;,&quot;name&quot;</code></h3><h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>Myisam表锁 -&gt; Innodb 行锁 从大锁到小锁提升并行度<br>MyISAM引擎不持支事务，优点是读写快,列存储5.5之前的默认<br>Innodb支持事务ACID 行级锁，高并发场景好</p>
 <ol>
@@ -508,7 +511,7 @@
 </li>
 </ol>
 <h4 id="连接池"><a href="#连接池" class="headerlink" title="连接池"></a>连接池</h4><ol>
-<li><code>DriverManager.getConnection</code>流程<br>客户端利用密码种子和自己保存的数据库密码按加密算法得到<code>加密密码</code><br>![JDBC_conn.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/JDBC_conn.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/JDBC_conn.jpg</a></li>
+<li><code>DriverManager.getConnection</code>流程<br>客户端利用密码种子和自己保存的数据库密码按加密算法得到<code>加密密码</code><br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/JDBC_conn.jpg" alt="JDBC_conn.jpg"></li>
 <li>每个线程使用数据库连接后不销毁，每个请求从连接池中【租借】连接</li>
 <li>数据库服务器端处理请求时要分配资源，请求结束后被释放。服务器设置最大并发连接数。抛toomanyConnection异常。应在客户端中实现业务线程排队获取数据库连接。</li>
 </ol>
@@ -547,9 +550,9 @@
 <h3 id="事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID-原子、一致、隔离、持久-，并发控制的基本单位。"><a href="#事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID-原子、一致、隔离、持久-，并发控制的基本单位。" class="headerlink" title="事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID(原子、一致、隔离、持久) ，并发控制的基本单位。"></a>事务：单个逻辑工作单元执行的一系列操作，逻辑工作单元满足ACID(原子、一致、隔离、持久) ，并发控制的基本单位。</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">Connection.setAutoCommit(<span class="keyword">false</span>)<span class="comment">//开启事务</span></span><br><span class="line">Connection.commit()<span class="comment">//提交事务</span></span><br><span class="line">Connection.rollback()<span class="comment">//事务回滚</span></span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">    <span class="keyword">if</span>(Connection!=<span class="keyword">null</span>)Connection.rollback()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Savepoint sp = Connection.setSavepoint();</span><br><span class="line">Connection.rollback(sp);</span><br></pre></td></tr></table></figure>
 <h4 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h4><ul>
-<li><strong>脏读</strong>：一个事务读取了一个事务未提交的更新<br>![zangdu.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zangdu.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zangdu.jpg</a></li>
+<li><strong>脏读</strong>：一个事务读取了一个事务未提交的更新<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zangdu.jpg" alt="zangdu.jpg"></li>
 <li>不可重复读：同一个事务，两次读取值不一样。</li>
-<li>幻读：同一个事务，两次读取行记录数目不一样。插入了新记录<br>![geli.jpg](<a href="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/geli.jpg" target="_blank" rel="noopener">https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/geli.jpg</a></li>
+<li>幻读：同一个事务，两次读取行记录数目不一样。插入了新记录<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/geli.jpg" alt="geli.jpg"></li>
 </ul>
 <table>
 <thead>
