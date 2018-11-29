@@ -4,7 +4,6 @@ date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
 ---
-![addfadfa](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/6tcp.jpg)
 刷题顺序
 https://vjudge.net/article/6
 https://www.cnblogs.com/JuneWang/p/3773880.html

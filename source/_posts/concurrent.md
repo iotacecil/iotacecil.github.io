@@ -6,6 +6,23 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 https://blog.csdn.net/javazejian/article/details/72828483
 
+### 多线程活跃性问题：死锁 饥饿 活锁 
+活锁：主动释放资源，资源不断在线程中跳动，没有一个线程可以拿到资源正常执行。
+
+### 并发级别：阻塞、无饥饿、无锁、无等待
+阻塞：`synchronized` 和重入锁
+无障碍Obstruction-Free：都可以修改临界区，如果数据竞争就回滚。通过“一致性标记”实现。
+无饥饿：公平优先级。
+无锁：有**一个线程**限步内完成操作，离开临界区。线程无穷循环尝试修改共享变量。总有一个线程可以胜出。
+无等待：所有线程有限步，不会饥饿。RCU(read-copy-update)。读线程无等待。写副本，合适时机写回。
+
+### Gustafon 如果可被并行的代码足够多，那么加速比就能随CPU数量线性增长
+F是只能串行的比例
+Gustafon = n-F(n-1)
+
+### 32系统的long(64位)读写线程有干扰
+![happen-before.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/happen-before.jpg)
+
 #### ThreadLocal<T> 
 可以看成是 Map<Thread,T> 特定于该线程的值
 
