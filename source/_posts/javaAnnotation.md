@@ -5,6 +5,12 @@ tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 
+## Spring代理
+1. Bean有实现接口：用JDK动态代理
+2. 没有实现接口用CGlib
+强制使用CGlib
+https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-api
+`<aop:aspectj-autoproxy proxy-target-class="true"/>`
 
 ## 注解
 ```java
@@ -179,6 +185,7 @@ proxy.live();
 #### `JavaCompiler`编译器
 
 ## cglib动态代理（类）
+底层使用SM字节码生成
 
 ### 类加载器
 [类加载器](http://www.cnblogs.com/aspirant/p/7200523.html)

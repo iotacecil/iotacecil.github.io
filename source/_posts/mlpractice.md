@@ -4,6 +4,39 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### foursquare category js提取
+`https://api.foursquare.com/v2/venues/categories?v=20170211&oauth_token=QEJ4AQPTMMNB413HGNZ5YDMJSHTOHZHMLZCAQCCLXIX41OMP&includeSupportedCC=true`
+```js
+​​​​​​​​​​​​​​​​​​​​for (supercate of cates){
+var cnt =0
+var s =  supercate.name +" =[ ";
+for (subcate of supercate.categories){
+    s+=("\""+subcate.id+"\",") 
+    cnt ++;
+    if(subcate.categories.length > 0){
+        for(subsubcate of subcate.categories){
+            s+=("\""+subsubcate.id+"\",")     
+            cnt++;
+            if(subsubcate.categories.length > 0){
+                for(c of subsubcate.categories){
+                    s+=("\""+c.id+"\",")
+                    cnt++;
+                    if(c.categories.length>0){
+                    for(cc of c.categories){
+                    s+=("\""+cc.id+"\",")
+                    cnt++
+                    if(cc.categories.length>0){
+                        console.log("特么还有")
+                }
+}
+}}}}}}
+console.log(s)
+console.log(cnt)
+
+}
+s
+```
+
 ### 张量分解代码
 http://tensorly.org/stable/user_guide/quickstart.html#tensor-decomposition 
 
@@ -82,6 +115,7 @@ L用户对category的score向量
 R x L 将所有R与一个用户L相乘取其中最大的几个推荐
 
 https://software.intel.com/zh-cn/ai-academy/students/kits
+
 ### 动量梯度下降
 vt 是之前梯度的均值，是梯度的积累值
 ![SGDmomentum.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/SGDmomentum.jpg)

@@ -492,6 +492,8 @@ if(slow==fast){
 ```
 
 
+### lt848 加油站之间的最小距离
+
 
 ### 719
 >输入：
@@ -505,7 +507,31 @@ k = 1
 (3,1) -> 2
 因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
 
+方法2：二分查找，找到最小的距离m，至少有k个pair距离<=m。
 
+
+方法1：350ms排序后找到max，建立max+1个桶对diff计数，最后遍历桶到k<=0
+```java
+public int smallestDistancePair(int[] nums, int k) {
+    int n = nums.length;
+        Arrays.sort(nums);
+        int max = nums[nums.length - 1];
+        int[] bucket = new int[max+1];
+        for(int i =0;i<n-1;i++){
+            for(int j = i+1;j<n;j++){
+                int idx = nums[j]-nums[i];
+                bucket[idx]++;
+            }
+        }
+        for(int i =0;i<bucket.length;i++){
+            k -=bucket[i];
+            if(k<=0){
+                return i;
+            }
+        }
+        return -1;
+    }
+```
 
 
 

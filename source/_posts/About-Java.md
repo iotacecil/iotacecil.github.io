@@ -4,7 +4,45 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### Maven 目录隔离
 
+### Lombok：通过注解精简代码
+https://projectlombok.org/
+Lombok会把javac编译的AST放到Lombok Processor交给不同的Handler处理，输出修改AST，javac继续解析生成字节码文件。
+关键注解 of是白名单 exclude黑名单
+`@Data(包括get/set/toString/EqualsAndHashCode) @Getter @Setter`
+
+```java
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class Category {
+    private Integer id;
+
+    private Integer parentId;
+
+    private String name;
+
+    private Boolean status;
+
+    private Integer sortOrder;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+}
+```
+
+`@NoArgsConstructor`无参构造器
+`@AllArgsConstructor`无参构造器
+`@ToString(exclude = "column")`
+`@EqualsAndHashCode(exclude = "column")`
+`@Sl4j @Log4j`
+
+### java 反编译
+http://jd.benow.ca/
 
 RESTful API 设计参考文献列表
 https://github.com/aisuhua/restful-api-design-references
@@ -609,7 +647,10 @@ jdk1.8开始不需要final 编译器自动final，所以不能改变
 ### 代理模式与AOP
 与模板方法不同：代理是控制对象 模板是延迟到子类定义操作，定义骨架
 
-### 工厂模式 依赖注入
+### 工厂方法模式：
+定义一个 **创建对象的接口**
+让类的实例化推迟到实现这个接口的子类中进行。
+依赖注入
 
 ### 策略模式和依赖倒置原则（面向接口编程）
 
