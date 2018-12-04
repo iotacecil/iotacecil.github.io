@@ -5,8 +5,19 @@ tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
 ### foursquare category js提取
-`https://api.foursquare.com/v2/venues/categories?v=20170211&oauth_token=QEJ4AQPTMMNB413HGNZ5YDMJSHTOHZHMLZCAQCCLXIX41OMP&includeSupportedCC=true`
+
 ```js
+fetch('https://api.foursquare.com/v2/venues/categories?v=20170211&oauth_token=QEJ4AQPTMMNB413HGNZ5YDMJSHTOHZHMLZCAQCCLXIX41OMP&includeSupportedCC=true')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+    f = myJson;
+  });
+
+
+
 ​​​​​​​​​​​​​​​​​​​​for (supercate of cates){
 var cnt =0
 var s =  supercate.name +" =[ ";

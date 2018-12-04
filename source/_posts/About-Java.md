@@ -4,6 +4,8 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 生成闭区间`[0,1]`浮点数?
+
 ### Maven 目录隔离
 
 ### Lombok：通过注解精简代码

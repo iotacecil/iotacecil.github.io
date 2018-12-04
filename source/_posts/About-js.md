@@ -38,6 +38,8 @@ j.ajax({
 });
 ```
 
+
+
 ### 手机端查看页面
 `npm install http-server -g`
 `http-server`
