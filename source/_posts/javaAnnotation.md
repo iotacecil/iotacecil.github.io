@@ -112,7 +112,7 @@ public class staticproxy {
 	```
 
 ## 动态代理
-可以代理多个接口
+可以代理多个接口 
 {% fold %}
 ```java
 import java.lang.reflect.InvocationHandler;
@@ -185,7 +185,8 @@ proxy.live();
 #### `JavaCompiler`编译器
 
 ## cglib动态代理（类）
-底层使用SM字节码生成
+底层使用SM字节码生成比java反射效率高，但是要注意final
+通过继承和重写
 
 ### 类加载器
 [类加载器](http://www.cnblogs.com/aspirant/p/7200523.html)

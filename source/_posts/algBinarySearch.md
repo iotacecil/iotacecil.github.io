@@ -17,6 +17,70 @@ return --lo;
 有效区间宽度缩小到0才终止。
 正确性：A[0,lo)中元素<=e,A[hi,n)中元素都>e
 
+### 658 K个最接近的元素
+从数组中找到最靠近 x（两数之差最小）的 k 个数
+结果按升序.
+如果有两个数与 x 的差值一样，优先选择数值较小的那个数。
+
+>输入: [1,2,3,4,5], k=4, x=-1
+输出: [1,2,3,4]
+
+
+
+### 378 矩阵从左到右从上到下有序，找第k小的元素
+
+2.二分：
+
+1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
+```java
+public int kthSmallest(int[][] matrix, int k) {
+  PriorityQueue<Integer> que = new PriorityQueue(k);
+     for(int[] row:matrix){
+         for(int x :row){
+             que.add(x);
+         }
+     }
+     for(int i = 0;i<k-1;i++){
+         que.poll();
+     }
+     return que.peek();
+}
+```
+
+
+### lt 848 数组插数 加油站之间的最小距离
+加油站位置中间插入k个之后最小的最大间距是多少。
+> stations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], K = 9
+返回: 0.500000
+
+如果每次都对最大的间隔二分，切三到会导致10->5,2.5,2.5，不如10/3
+
+思路：找到间距mid，在k步之内可以让所有间距<=mid
+
+```java
+public double minmaxGasDist(int[] stations, int k) {
+    double left = 0,right = 1e8;
+    while (right - left > 1e-6){
+        double mid = left + (right - left)/2;
+        if(helper(stations, k, mid)){
+            right = mid;
+        }else{
+            left = mid;
+        }
+    }
+    return right;
+}
+
+private boolean helper(int[] stations, int k,double mid){
+    int cnt = 0, n = stations.length;
+    for (int i = 0; i < n-1; i++) {
+        // 关键 如果这个是最小间距 ，这个间距需要切几刀
+        cnt += (stations[i + 1] - stations[i]) / mid;
+    }
+    return cnt <= k;
+}
+```
+
 ### 分田地 把田地分为16分，怎样分使16份中最小的一块田地最大
 https://www.nowcoder.com/questionTerminal/fe30a13b5fb84b339cb6cb3f70dca699
 >4 4

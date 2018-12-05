@@ -9,27 +9,10 @@ categories: [算法备忘]
 ### 最大子矩阵和
 https://www.youtube.com/watch?v=yCQN096CwWM
 time O(col x col x row)
-```java
-```
 
 
-### 378 矩阵从左到右从上到下有序，找第k小的元素
-1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
-```java
-public int kthSmallest(int[][] matrix, int k) {
-  PriorityQueue<Integer> que = new PriorityQueue(k);
-     for(int[] row:matrix){
-         for(int x :row){
-             que.add(x);
-         }
-     }
-     for(int i = 0;i<k-1;i++){
-         que.poll();
-     }
-     return que.peek();
-}
-```
-2.
+
+
 
 
 ### 54旋转矩阵

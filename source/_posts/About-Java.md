@@ -4,6 +4,93 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 实现immutable类
+1. class 声明为final
+2. 成员变量 private final且没有setter
+3. 构造对象时，成员变量使用深度拷贝来初始化。
+4. getter方法，使用 copy-on-write原则，创建私有的 copy。
+
+### final、finally、 finalize
+
+#### final
+final 修饰的 class 代表不可以继承扩展.避免 API 使用者更改基础功能
+final 的变量是不可以修改的.，利用final 可能有助于 JVM 将方法进行内联(现代高性能 JVM（如 HotSpot）判断内联未必依赖final 的提示)，可以改善编译器进行条件编译的能力.
+final 的方法也是不可以重写的（override）
+
+##### final 并不等同于 immutable
+```java
+ final List<String> strList = new ArrayList<>(); 
+ strList.add("Hello"); 
+ strList.add("world");   
+ //List.of 方法创建的本身就是不可变 List，会抛运行异常
+ List<String> unmodifiableStrList = List.of("hello", "world"); 
+ unmodifiableStrList.add("again"); 
+```
+
+#### `finalize`
+finalize 是基础类 java.lang.Object 的一个方法.保证对象在被垃圾收集前完成
+特定资源的回收. JDK 9 开始被标记为deprecated.
+
+无法保证 finalize 什么时候执行，执行的是否符合预期。使用不当会影响
+性能，导致程序死锁、挂起等。
+
+#### finally不会被执行的特例
+```java
+try { 
+  // do something 
+  System.exit(1); 
+} finally{ 
+  System.out.println(“Print from finally”); 
+} 
+```
+
+### `Exception` `Error` 运行时异常 
+![Exceptions.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Exceptions.jpg)
+
+尽量不要捕获类似 `Exception` 这样的通用异常,`Thread.sleep()` 应该抛出` InterruptedException`
+
+`Exception` 和 `Error` 都 继承`Throwable`
+
+#### Throwable 
+Throwable类型的实例才可以被抛出（throw）或者捕获（catch），它是异常处理机制的基本组成类型。
+Only objects that are instances of this（`Throwable`) class (or one of its subclasses) are thrown by the **Java Virtual Machine
+** or can be thrown by the Java throw statement.
+
+only this class or one of its subclasses can be the argument type in a **catch** clause. 
+
+#### 已检查的异常
+Throwable and any subclass of Throwable that is not also a subclass of either RuntimeException or Error are regarded as **checked exceptions**.
+checked exceptions 可检查异常应该捕获
+不检查异常（运行时异常）：` NullPointerException` `ArrayIndexOutOfBoundsException`
+
+Java 语言的 Checked Exception 也许是个设计错误:
+1. Checked Exception 的假设是我们捕获了异常，然后恢复程序。但是，其实我们大多数情况
+下，根本就不可能恢复。Checked Exception 的使用，已经大大偏离了最初的设计目的。
+2. Checked Exception 不兼容 functional 编程，如果你写过 Lambda/Stream 代码，相信深
+有体会。
+
+
+#### 异常 Exception 和 Error
+Java 每实例化一个 Exception，都会对当时的栈进行快照，这是一个相对比较重的操作
+A throwable contains a snapshot of the execution stack of its thread at the time it was created.
+```java
+public class Throwable
+/**
+ * Native code saves some indication of the stack backtrace in this slot.
+ */
+private transient Object backtrace;
+```
+Error 不需要捕获`OutOfMemoryError`
+
+#### chained exception facility wrapped exception
+让下层抛出的抛出物向外传播是不好的设计，因为它通常与上层提供的抽象无关。
+
+#### 反应式编程（Reactive Stream）
+因为其本身是异步、基于事件机制的，所以出现异常情况，决不能简单抛出去；另外，由于代码
+堆栈不再是同步调用那种垂直的结构，这里的异常处理和日志需要更加小心，我们看到的往往是
+特定 executor 的堆栈，而不是业务方法调用关系。
+
+
 ### 生成闭区间`[0,1]`浮点数?
 
 ### Maven 目录隔离
