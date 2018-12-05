@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="矩阵链乘法O(n^3)的dp最大子矩阵和https://www.youtube.com/watch?v=yCQN096CwWMtime O(col x col x row)123456789101112131415161718```### 378 矩阵从左到右从上到下有序，找第k小的元素1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%```jav">
+<meta name="description" content="矩阵链乘法O(n^3)的dp最大子矩阵和https://www.youtube.com/watch?v=yCQN096CwWMtime O(col x col x row) 54旋转矩阵top=0,bot=3,left=0,right = 3n是矩阵大小n&amp;gt;1的时候继续，每一圈，矩阵大小-=2将2赋值给8：[top+i][right]=[top][left+i]i=3:3赋值给12每个i要赋">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="矩阵基本操作和相关题">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/10/21/algMatrix/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="矩阵链乘法O(n^3)的dp最大子矩阵和https://www.youtube.com/watch?v=yCQN096CwWMtime O(col x col x row)123456789101112131415161718```### 378 矩阵从左到右从上到下有序，找第k小的元素1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%```jav">
+<meta property="og:description" content="矩阵链乘法O(n^3)的dp最大子矩阵和https://www.youtube.com/watch?v=yCQN096CwWMtime O(col x col x row) 54旋转矩阵top=0,bot=3,left=0,right = 3n是矩阵大小n&amp;gt;1的时候继续，每一圈，矩阵大小-=2将2赋值给8：[top+i][right]=[top][left+i]i=3:3赋值给12每个i要赋">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate2d.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc790.jpg">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ditui.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fibo.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/quickmi.jpg">
-<meta property="og:updated_time" content="2018-11-27T10:19:59.055Z">
+<meta property="og:updated_time" content="2018-12-05T12:07:16.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="矩阵基本操作和相关题">
-<meta name="twitter:description" content="矩阵链乘法O(n^3)的dp最大子矩阵和https://www.youtube.com/watch?v=yCQN096CwWMtime O(col x col x row)123456789101112131415161718```### 378 矩阵从左到右从上到下有序，找第k小的元素1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%```jav">
+<meta name="twitter:description" content="矩阵链乘法O(n^3)的dp最大子矩阵和https://www.youtube.com/watch?v=yCQN096CwWMtime O(col x col x row) 54旋转矩阵top=0,bot=3,left=0,right = 3n是矩阵大小n&amp;gt;1的时候继续，每一圈，矩阵大小-=2将2赋值给8：[top+i][right]=[top][left+i]i=3:3赋值给12每个i要赋">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate2d.jpg">
 
 
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:59+08:00">
-                2018-11-27
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-05T20:07:16+08:00">
+                2018-12-05
               </time>
             
           </span>
@@ -400,8 +400,7 @@
       
 
       
-        <h3 id="矩阵链乘法O-n-3-的dp"><a href="#矩阵链乘法O-n-3-的dp" class="headerlink" title="矩阵链乘法O(n^3)的dp"></a>矩阵链乘法O(n^3)的dp</h3><h3 id="最大子矩阵和"><a href="#最大子矩阵和" class="headerlink" title="最大子矩阵和"></a>最大子矩阵和</h3><p><a href="https://www.youtube.com/watch?v=yCQN096CwWM" target="_blank" rel="noopener">https://www.youtube.com/watch?v=yCQN096CwWM</a><br>time O(col x col x row)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 378 矩阵从左到右从上到下有序，找第k小的元素</span><br><span class="line"><span class="number">1</span>.全部放进k大的PriorityQueue,最后poll掉k-<span class="number">1</span>个，<span class="keyword">return</span> peek <span class="number">28</span>%</span><br><span class="line">```java</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">kthSmallest</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">  PriorityQueue&lt;Integer&gt; que = <span class="keyword">new</span> PriorityQueue(k);</span><br><span class="line">     <span class="keyword">for</span>(<span class="keyword">int</span>[] row:matrix)&#123;</span><br><span class="line">         <span class="keyword">for</span>(<span class="keyword">int</span> x :row)&#123;</span><br><span class="line">             que.add(x);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;k-<span class="number">1</span>;i++)&#123;</span><br><span class="line">         que.poll();</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> que.peek();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>2.</p>
+        <h3 id="矩阵链乘法O-n-3-的dp"><a href="#矩阵链乘法O-n-3-的dp" class="headerlink" title="矩阵链乘法O(n^3)的dp"></a>矩阵链乘法O(n^3)的dp</h3><h3 id="最大子矩阵和"><a href="#最大子矩阵和" class="headerlink" title="最大子矩阵和"></a>最大子矩阵和</h3><p><a href="https://www.youtube.com/watch?v=yCQN096CwWM" target="_blank" rel="noopener">https://www.youtube.com/watch?v=yCQN096CwWM</a><br>time O(col x col x row)</p>
 <h3 id="54旋转矩阵"><a href="#54旋转矩阵" class="headerlink" title="54旋转矩阵"></a>54旋转矩阵</h3><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate2d.jpg" alt="rotate2d.jpg"><br>top=0,bot=3,left=0,right = 3<br>n是矩阵大小n&gt;1的时候继续，每一圈，矩阵大小-=2<br>将2赋值给8：<br>[top+i][right]=[top][left+i]<br>i=3:3赋值给12<br>每个i要赋值4遍，上下左右<br>外层完了之后子问题是top++,left++,right–,bot–,n-=2</p>
 <p>方法2：翻转？</p>
 <h3 id="59-生成nxn的旋转矩阵"><a href="#59-生成nxn的旋转矩阵" class="headerlink" title="59 生成nxn的旋转矩阵"></a>59 生成nxn的旋转矩阵</h3><p>矩阵乘法相关题目：<br><a href="http://www.matrix67.com/blog/archives/276" target="_blank" rel="noopener">http://www.matrix67.com/blog/archives/276</a></p>
