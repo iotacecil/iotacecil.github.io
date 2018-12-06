@@ -11,6 +11,14 @@ https://www.educative.io/collection/page/5668639101419520/5649050225344512/56686
 ### 设计电梯
 https://medium.com/system-designing-interviews/design-a-elevator-system-fc5832ca0b8b
 
+### 1G单词，内存1M，每个词16B以下，返回频率最高的100个。
+1.$1M=2^20B / 2^4 = 2^16$ 1M内存只能处理1<<16个单词 
+2.$1G = 2^30B$ 1G有1<<26个单词
+3.所以要把分成至少$2^10$份
+4.为了把相同的单词划分到一个小文件 （？）
+5.每个文件取top100个
+6.归并出top100
+
 ### 多电梯调度 car allocation
 
 ### 341 多层List迭代器

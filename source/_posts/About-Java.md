@@ -4,6 +4,43 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 强引用、软引用、弱引用、幻象引用
+
+![references.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/references.jpg)
+
+```java
+public abstract class Reference<T> {
+    /**
+     * Returns this reference object's referent.  If this reference object has
+     * been cleared, either by the program or by the garbage collector, then
+     * this method returns <code>null</code>.
+     *
+     * @return   The object to which this reference refers, or
+     *           <code>null</code> if this reference object has been cleared
+     */
+    public T get() {
+        return this.referent;
+    }
+}
+```
+幻象引用（因为 get 永远返回 null），如果对象还没有被销毁，都可以通过 get 方法获取
+原有对象。这意味着，利用软引用和弱引用，我们可以将访问到的对象，重新指向强引用，也就
+是人为的改变了对象的可达性状态
+
+#### SoftReference
+让对象豁免一些垃圾收集，只有当 JVM 认为内存不足时，才会去试图回收软引用指向的对象。
+are cleared at the discretion（斟酌） of the garbage collector in response to memory demand.  
+软引用通常用来实现内存敏感的缓存，如果还有空闲内存，就可以暂时保留缓存，当内存不足时清理掉，这样就保证了使用缓存的同时，不会耗尽内存。
+Soft references are most often used to implement memory-sensitive caches.
+
+#### WeakReference
+维护一种非强制性的映射关系，如果试图获取时对象还在，就使用它，否则重现实例化。它同样是很多缓存实现的选择。
+Weak references are most often used to implement canonicalizing mappings
+
+#### 幻象引用
+幻象引用，有时候也翻译成虚引用，你不能通过它访问对象。幻象引用仅仅是提供了一种确
+保对象被 finalize 以后，做某些事情的机制
+
 ### 实现immutable类
 1. class 声明为final
 2. 成员变量 private final且没有setter
@@ -33,6 +70,50 @@ finalize 是基础类 java.lang.Object 的一个方法.保证对象在被垃圾�
 
 无法保证 finalize 什么时候执行，执行的是否符合预期。使用不当会影响
 性能，导致程序死锁、挂起等。
+
+
+#### post-mortem
+Java 平台目前在逐步使用 java.lang.ref.Cleaner 来替换掉原有的 finalize 实现。
+Cleaner 的实现利用了幻象引用（Phantom Reference），这是一种常见的所谓 post-mortem 清理机制。
+
+每个 Cleaner 的操作都是独立的，它有自己的运行线程，所以可以避免意外死锁等问题。
+
+为自己的模块构建一个 Cleaner，然后实现相应的清理逻辑
+
+#### 幻象引用定制资源收集
+MySQL JDBC driver 之一的 ysql-connector-j，就利用了幻象引用机制。
+幻象引用也可以进行类似链条式依赖关系的动作，比如，进行总量控制的场景，保证只有连接被关闭，相应资源被回收，连接池才能创建新的连接。
+
+代码如果稍有不慎添加了对资源的强引用关系，就会导致循环引用关系，前面提到的
+MySQL JDBC 就在特定模式下有这种问题，导致内存泄漏。
+
+```java
+public class CleaningExample implements AutoCloseable { 
+    // A cleaner, preferably one shared within a library 
+    private static final Cleaner cleaner = <cleaner>; 
+    static class State implements Runnable {  
+        State(...) { 
+            // initialize State needed for cleaning action 
+     } 
+        public void run() { 
+            // cleanup action accessing State, executed at most once 
+        } 
+    } 
+    private final State; 
+    private final Cleaner.Cleanable cleanable 
+    public CleaningExample() { 
+        this.state = new State(...); 
+        this.cleanable = cleaner.register(this, state); 
+    } 
+    public void close() { 
+        cleanable.clean(); 
+    } 
+}         
+```
+
+上面的示例代码中，将 State 定义
+为 static，就是为了避免普通的内部类隐含着对外部对象的强引用，因为那样会使外部对象无法
+进入幻象可达的状态。
 
 #### finally不会被执行的特例
 ```java
@@ -90,6 +171,7 @@ Error 不需要捕获`OutOfMemoryError`
 堆栈不再是同步调用那种垂直的结构，这里的异常处理和日志需要更加小心，我们看到的往往是
 特定 executor 的堆栈，而不是业务方法调用关系。
 
+---
 
 ### 生成闭区间`[0,1]`浮点数?
 

@@ -26,6 +26,50 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 https://www.nowcoder.com/test/4575457/summary
 
 
+### lc70爬楼梯
+```java
+public int climbStairs(int n) {
+    int[] dp = new int[n+1];
+    dp[0] =1;
+    dp[1] =1;
+   for(int i =2;i<n+1;i++){
+       dp[i] = dp[i-1]+dp[i-2];
+   }
+    return dp[n];
+}
+```
+
+> 有一段楼梯台阶有15级台阶，以小明的脚力一步最多只能跨3级，请问小明登上这段楼梯有多少种不同的走法?()
+
+$f(n)=f(n-1)+f(n-2)+f(n-3)$      (对于n>=4) 
+$f(n-1)=f(n-2)+f(n-3)+f(n-4)$    (对于n>=5) 
+前面两式相减可以得到：  $f(n)=2*f(n-1)-f(n-4)$  (对于n>=5)
+而对于n<=5的情况有： 
+f(1)=1 
+f(2)=2 
+f(3)=4 
+f(4)=7 
+一直算到15.
+
+```java
+public int f(int n){
+    if(n <=2)return n;
+    if(n == 3)return 4;
+    return f(n-1) + f(n-2) + f(n-3);
+}
+public int f2(int n){
+    int[] dp = new int[n+1];
+    dp[0] =1;
+    dp[1] =1;
+    dp[2] =2;
+    dp[3] =4;
+    for (int i = 4; i <n+1 ; i++) {
+        dp[i] = dp[i-1]+dp[i-2]+dp[i-3];
+    }
+    return dp[n];
+}
+```
+
 
 ### 栈混洗 火车调度
 
