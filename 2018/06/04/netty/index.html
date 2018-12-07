@@ -80,12 +80,12 @@
 
 
 
-<meta name="description" content="自治：无主从关系边缘部分：端系统核心部分：路由器 链路带宽： 主机发送数据的速率传播速率: 2 x 10^8  200m / us吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）时延：发送（传输）/传播/排队/处理时延带宽积bit:某段链路现在有多少bit 传播时延(s) x 带宽利用率：有数据通过的时间 select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大">
+<meta name="description" content="同一网段的主机ip 与10.110.12.29 mask 255.255.255.224属于同一网段的主机IP地址是?主机号全1的是广播地址。  224 -&amp;gt;1110000029  -&amp;gt;00011101范围为10.110.12.1~ 10.110.12.31A错10.110.12.0B正确10.110.12.30C广播地址10.110.12.31D错10.110.12.32 自治：无主">
 <meta property="og:type" content="article">
-<meta property="og:title" content="netty">
+<meta property="og:title" content="netty和网络">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/06/04/netty/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="自治：无主从关系边缘部分：端系统核心部分：路由器 链路带宽： 主机发送数据的速率传播速率: 2 x 10^8  200m / us吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）时延：发送（传输）/传播/排队/处理时延带宽积bit:某段链路现在有多少bit 传播时延(s) x 带宽利用率：有数据通过的时间 select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大">
+<meta property="og:description" content="同一网段的主机ip 与10.110.12.29 mask 255.255.255.224属于同一网段的主机IP地址是?主机号全1的是广播地址。  224 -&amp;gt;1110000029  -&amp;gt;00011101范围为10.110.12.1~ 10.110.12.31A错10.110.12.0B正确10.110.12.30C广播地址10.110.12.31D错10.110.12.32 自治：无主">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/IOs.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/handler.jpg">
@@ -100,10 +100,10 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zwhf.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/wldz.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backlog.jpg">
-<meta property="og:updated_time" content="2018-11-27T10:19:58.695Z">
+<meta property="og:updated_time" content="2018-12-07T11:51:01.824Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="netty">
-<meta name="twitter:description" content="自治：无主从关系边缘部分：端系统核心部分：路由器 链路带宽： 主机发送数据的速率传播速率: 2 x 10^8  200m / us吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）时延：发送（传输）/传播/排队/处理时延带宽积bit:某段链路现在有多少bit 传播时延(s) x 带宽利用率：有数据通过的时间 select模型 一个进程打开fd（文件描述符）有限1024/2048？ （最大">
+<meta name="twitter:title" content="netty和网络">
+<meta name="twitter:description" content="同一网段的主机ip 与10.110.12.29 mask 255.255.255.224属于同一网段的主机IP地址是?主机号全1的是广播地址。  224 -&amp;gt;1110000029  -&amp;gt;00011101范围为10.110.12.1~ 10.110.12.31A错10.110.12.0B正确10.110.12.30C广播地址10.110.12.31D错10.110.12.32 自治：无主">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/IOs.jpg">
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>netty | Learn & practice</title>
+  <title>netty和网络 | Learn & practice</title>
   
 
 
@@ -321,7 +321,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">netty</h1>
+          <h1 class="post-title" itemprop="name headline">netty和网络</h1>
         
 
         <div class="post-meta">
@@ -350,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:58+08:00">
-                2018-11-27
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-07T19:51:01+08:00">
+                2018-12-07
               </time>
             
           </span>
@@ -369,8 +369,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java源码8-netMVCspring-ioNetty-数据库-并发/" itemprop="url" rel="index">
-                    <span itemprop="name">java源码8+netMVCspring+ioNetty+数据库+并发</span>
+                  <a href="/categories/网络/" itemprop="url" rel="index">
+                    <span itemprop="name">网络</span>
                   </a>
                 </span>
 
@@ -406,7 +406,11 @@
       
 
       
-        <p>自治：无主从关系<br>边缘部分：端系统<br>核心部分：路由器</p>
+        <h3 id="同一网段的主机ip"><a href="#同一网段的主机ip" class="headerlink" title="同一网段的主机ip"></a>同一网段的主机ip</h3><blockquote>
+<p>与10.110.12.29 mask 255.255.255.224属于同一网段的主机IP地址是?<br>主机号全1的是广播地址。</p>
+</blockquote>
+<p>224 -&gt;11100000<br>29  -&gt;00011101<br>范围为10.110.12.1~ 10.110.12.31<br>A错10.110.12.0<br>B正确10.110.12.30<br>C广播地址10.110.12.31<br>D错10.110.12.32</p>
+<p>自治：无主从关系<br>边缘部分：端系统<br>核心部分：路由器</p>
 <p>链路带宽： 主机发送数据的速率<br>传播速率: 2 x 10^8  200m / us<br>吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）<br>时延：发送（传输）/传播/排队/处理<br>时延带宽积bit:某段链路现在有多少bit 传播时延(s) x 带宽<br>利用率：有数据通过的时间</p>
 <h3 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h3><ol>
 <li>一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）<br><code>FD_SETSIZE</code> 在哪</li>
@@ -661,7 +665,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -705,7 +709,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#select模型"><span class="nav-number">1.</span> <span class="nav-text">select模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll"><span class="nav-number">2.</span> <span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mui文档"><span class="nav-number">3.</span> <span class="nav-text">mui文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞与非阻塞是线程访问资源是否就绪的一种处理方式"><span class="nav-number">4.</span> <span class="nav-text">阻塞与非阻塞是线程访问资源是否就绪的一种处理方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步和异步-数据访问的机制-数据处理完毕后会通知线程"><span class="nav-number">5.</span> <span class="nav-text">同步和异步 数据访问的机制 数据处理完毕后会通知线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步阻塞BIO"><span class="nav-number">6.</span> <span class="nav-text">同步阻塞BIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO-同步非阻塞IO"><span class="nav-number">7.</span> <span class="nav-text">NIO 同步非阻塞IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIO-异步非阻塞IO-NIO2-0"><span class="nav-number">8.</span> <span class="nav-text">AIO 异步非阻塞IO NIO2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Netty三种线程模型"><span class="nav-number">9.</span> <span class="nav-text">Netty三种线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP服务器"><span class="nav-number">10.</span> <span class="nav-text">HTTP服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实时通信"><span class="nav-number">11.</span> <span class="nav-text">实时通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#零拷贝"><span class="nav-number">12.</span> <span class="nav-text">零拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现一个简单的协议"><span class="nav-number">13.</span> <span class="nav-text">实现一个简单的协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化比较"><span class="nav-number">14.</span> <span class="nav-text">序列化比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hessian"><span class="nav-number">14.1.</span> <span class="nav-text">Hessian</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java自带的序列化"><span class="nav-number">14.2.</span> <span class="nav-text">Java自带的序列化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jackson序列化-字符串流"><span class="nav-number">14.3.</span> <span class="nav-text">jackson序列化 字符串流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#xml-xstream-1-4-4-jar"><span class="nav-number">14.4.</span> <span class="nav-text">xml xstream-1.4.4.jar</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于tcp的服务调用"><span class="nav-number">15.</span> <span class="nav-text">基于tcp的服务调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于HTTP的RPC"><span class="nav-number">16.</span> <span class="nav-text">基于HTTP的RPC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排队延迟"><span class="nav-number">17.</span> <span class="nav-text">排队延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#光纤RTT-应用必须在几百-ms-之内响应。"><span class="nav-number">18.</span> <span class="nav-text">光纤RTT 应用必须在几百  ms 之内响应。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-fast-open-TFO"><span class="nav-number">19.</span> <span class="nav-text">TCP fast open TFO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RARP"><span class="nav-number">20.</span> <span class="nav-text">RARP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子网掩码"><span class="nav-number">21.</span> <span class="nav-text">子网掩码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO-Reactor模式"><span class="nav-number">22.</span> <span class="nav-text">NIO:Reactor模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIO-Proactor模式"><span class="nav-number">23.</span> <span class="nav-text">AIO:Proactor模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络计时Timekeeping"><span class="nav-number">24.</span> <span class="nav-text">网络计时Timekeeping</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监测数据nc-l-50001-pv-W-gt-dev-null-pv的单位是二进制，dd用的十进制"><span class="nav-number"></span> <span class="nav-text">监测数据nc -l 50001 |pv -W &gt; /dev/null pv的单位是二进制，dd用的十进制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP自连接"><span class="nav-number">1.</span> <span class="nav-text">TCP自连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pipelining数，连发n个收一个ack"><span class="nav-number">2.</span> <span class="nav-text">pipelining数，连发n个收一个ack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TTCP-tcp实现的检测性能"><span class="nav-number">3.</span> <span class="nav-text">TTCP tcp实现的检测性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Epoll-可扩展I-O时间通知特性"><span class="nav-number">4.</span> <span class="nav-text">Epoll 可扩展I/O时间通知特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回调方法：指向已经被提供给另一个方法的-方法的引用"><span class="nav-number"></span> <span class="nav-text">回调方法：指向已经被提供给另一个方法的 方法的引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChannelHandler的三个子类：编码器，解码器-SimpleC-Inbound"><span class="nav-number"></span> <span class="nav-text">ChannelHandler的三个子类：编码器，解码器 SimpleC..Inbound..</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#netty"><span class="nav-number">1.</span> <span class="nav-text">netty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建2个线程组"><span class="nav-number">2.</span> <span class="nav-text">创建2个线程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引导-构建netty的配置"><span class="nav-number">3.</span> <span class="nav-text">引导 构建netty的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Netty阻塞io服务端"><span class="nav-number">4.</span> <span class="nav-text">Netty阻塞io服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞服务端"><span class="nav-number">5.</span> <span class="nav-text">非阻塞服务端</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#同一网段的主机ip"><span class="nav-number">1.</span> <span class="nav-text">同一网段的主机ip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select模型"><span class="nav-number">2.</span> <span class="nav-text">select模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#epoll"><span class="nav-number">3.</span> <span class="nav-text">epoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mui文档"><span class="nav-number">4.</span> <span class="nav-text">mui文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞与非阻塞是线程访问资源是否就绪的一种处理方式"><span class="nav-number">5.</span> <span class="nav-text">阻塞与非阻塞是线程访问资源是否就绪的一种处理方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步和异步-数据访问的机制-数据处理完毕后会通知线程"><span class="nav-number">6.</span> <span class="nav-text">同步和异步 数据访问的机制 数据处理完毕后会通知线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步阻塞BIO"><span class="nav-number">7.</span> <span class="nav-text">同步阻塞BIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO-同步非阻塞IO"><span class="nav-number">8.</span> <span class="nav-text">NIO 同步非阻塞IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIO-异步非阻塞IO-NIO2-0"><span class="nav-number">9.</span> <span class="nav-text">AIO 异步非阻塞IO NIO2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Netty三种线程模型"><span class="nav-number">10.</span> <span class="nav-text">Netty三种线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP服务器"><span class="nav-number">11.</span> <span class="nav-text">HTTP服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实时通信"><span class="nav-number">12.</span> <span class="nav-text">实时通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#零拷贝"><span class="nav-number">13.</span> <span class="nav-text">零拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现一个简单的协议"><span class="nav-number">14.</span> <span class="nav-text">实现一个简单的协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化比较"><span class="nav-number">15.</span> <span class="nav-text">序列化比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hessian"><span class="nav-number">15.1.</span> <span class="nav-text">Hessian</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java自带的序列化"><span class="nav-number">15.2.</span> <span class="nav-text">Java自带的序列化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jackson序列化-字符串流"><span class="nav-number">15.3.</span> <span class="nav-text">jackson序列化 字符串流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#xml-xstream-1-4-4-jar"><span class="nav-number">15.4.</span> <span class="nav-text">xml xstream-1.4.4.jar</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于tcp的服务调用"><span class="nav-number">16.</span> <span class="nav-text">基于tcp的服务调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于HTTP的RPC"><span class="nav-number">17.</span> <span class="nav-text">基于HTTP的RPC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排队延迟"><span class="nav-number">18.</span> <span class="nav-text">排队延迟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#光纤RTT-应用必须在几百-ms-之内响应。"><span class="nav-number">19.</span> <span class="nav-text">光纤RTT 应用必须在几百  ms 之内响应。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-fast-open-TFO"><span class="nav-number">20.</span> <span class="nav-text">TCP fast open TFO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RARP"><span class="nav-number">21.</span> <span class="nav-text">RARP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子网掩码"><span class="nav-number">22.</span> <span class="nav-text">子网掩码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO-Reactor模式"><span class="nav-number">23.</span> <span class="nav-text">NIO:Reactor模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AIO-Proactor模式"><span class="nav-number">24.</span> <span class="nav-text">AIO:Proactor模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络计时Timekeeping"><span class="nav-number">25.</span> <span class="nav-text">网络计时Timekeeping</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监测数据nc-l-50001-pv-W-gt-dev-null-pv的单位是二进制，dd用的十进制"><span class="nav-number"></span> <span class="nav-text">监测数据nc -l 50001 |pv -W &gt; /dev/null pv的单位是二进制，dd用的十进制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP自连接"><span class="nav-number">1.</span> <span class="nav-text">TCP自连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pipelining数，连发n个收一个ack"><span class="nav-number">2.</span> <span class="nav-text">pipelining数，连发n个收一个ack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TTCP-tcp实现的检测性能"><span class="nav-number">3.</span> <span class="nav-text">TTCP tcp实现的检测性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Epoll-可扩展I-O时间通知特性"><span class="nav-number">4.</span> <span class="nav-text">Epoll 可扩展I/O时间通知特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回调方法：指向已经被提供给另一个方法的-方法的引用"><span class="nav-number"></span> <span class="nav-text">回调方法：指向已经被提供给另一个方法的 方法的引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChannelHandler的三个子类：编码器，解码器-SimpleC-Inbound"><span class="nav-number"></span> <span class="nav-text">ChannelHandler的三个子类：编码器，解码器 SimpleC..Inbound..</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#netty"><span class="nav-number">1.</span> <span class="nav-text">netty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建2个线程组"><span class="nav-number">2.</span> <span class="nav-text">创建2个线程组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引导-构建netty的配置"><span class="nav-number">3.</span> <span class="nav-text">引导 构建netty的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Netty阻塞io服务端"><span class="nav-number">4.</span> <span class="nav-text">Netty阻塞io服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞服务端"><span class="nav-number">5.</span> <span class="nav-text">非阻塞服务端</span></a></li></ol></div>
             
 
           </div>
