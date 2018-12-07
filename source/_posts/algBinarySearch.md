@@ -27,11 +27,11 @@ return --lo;
 
 
 
-### 378 矩阵从左到右从上到下有序，找第k小的元素
+### 378 矩阵从左到右从上到下有序，找第k小的元素(唯品B 考到)
 
 2.二分：
 
-1.全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
+1.26%全部放进k大的PriorityQueue,最后poll掉k-1个，return peek 28%
 ```java
 public int kthSmallest(int[][] matrix, int k) {
   PriorityQueue<Integer> que = new PriorityQueue(k);
@@ -44,6 +44,22 @@ public int kthSmallest(int[][] matrix, int k) {
          que.poll();
      }
      return que.peek();
+}
+```
+
+3.sort59% 14ms
+```java
+public int kthSmallest(int[][] matrix, int k) {
+    int n = matrix.length;
+    int[] a = new int[n*n];
+    int i = 0;
+    for(int[] row :matrix){
+        for(int x:row){
+            a[i++] = x;
+        }
+    }
+    Arrays.sort(a);
+    return a[k-1];
 }
 ```
 

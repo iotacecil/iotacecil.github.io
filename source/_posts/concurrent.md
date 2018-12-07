@@ -4,6 +4,10 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 需要多少资源
+为了解决进程间的同步和互斥问题，通常采用一种称为信号量机制的方法。若系统中有7个进程共享若干个资源R，每个进程都需要6个资源R，那么使系统不发生死锁的资源R的最少数目是()
+36
+
 https://blog.csdn.net/javazejian/article/details/72828483
 
 ### 多线程活跃性问题：死锁 饥饿 活锁 

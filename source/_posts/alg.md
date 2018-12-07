@@ -25,6 +25,127 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### sw44 判断扑克牌是否顺子
+1.排序，
+2.数0（大王小王可以当作任意数字）的个数，
+3.统计数组相邻数字之间的空缺数
+
+```java
+public boolean isContinuous(int[] cards){
+    if(cards == null || cards.length <1)return false;
+    Arrays.sort(cards);
+    int zerocnt = 0;
+    for(int card :cards){
+        if(card == 0)zerocnt ++;
+    }
+    int interval = 0;
+    for (int i = 1; i <cards.length ; i++) {
+        if(cards[i-1] == 0 ||cards[i-1] ==0)continue;
+        if(cards[i] == cards[i-1])return false;
+        interval += cards[i] - cards[i-1] - 1;
+
+        if(interval > zerocnt)return false;
+    }
+    return true;
+}
+```
+
+### 263 Ugly Number 判断是否是丑数
+包含因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含因子7。 
+```java
+public boolean isUgly(int num) {
+    if(num <=0)return false;
+     while( num % 2 ==0){
+        num /= 2;
+    }
+    while(num % 3 ==0){
+        num /= 3;
+    }
+    while( num % 5 ==0){
+        num /= 5;
+    }
+    return num ==1;
+}
+```
+
+#### 264 输出第n个丑数
+正确做法：3ms //todo
+```java
+public int nthUglyNumber(int n) {
+    int[] nums = new int[n];
+    nums[0] = 1;
+    int t2 = 0, t3 = 0, t5 = 0;
+    for (int i = 1; i < n; i++) {
+        int m2 = nums[t2] * 2, m3 = nums[t3] * 3, m5 = nums[t5] * 5;
+        int mm = Math.min(m2, Math.min(m3, m5));
+        if (mm == m2) t2++;
+        if (mm == m3) t3++;
+        if (mm == m5) t5++;
+        nums[i] = mm;
+    }
+    return nums[n - 1];
+}
+```
+
+8% 105ms
+```java
+public int nthUglyNumber(int n) {
+    if(n == 1)return 1;
+    PriorityQueue<Long> que =new PriorityQueue<>(n);
+    que.add(1l);
+    for (int i = 1; i <n ; i++) {
+        long tmp = que.poll();
+        // 重复元素
+        while (!que.isEmpty() && que.peek() == tmp)tmp = que.poll();
+
+        que.add(tmp * 2);
+        que.add(tmp * 3);
+        que.add(tmp * 5);
+    }
+    return que.poll().intValue();
+}
+```
+
+### 859 如果交换A字符串中两个字母可以得到B就true
+> Input: A = "", B = "aa"
+Output: false
+
+1.如果长度不一样，false
+
+> Input: A = "ab", B = "ab"
+Output: false
+Input: A = "aa", B = "aa"
+Output: true
+
+2.如果一样的字符串，一定要有重复的字符
+
+> Input: A = "ab", B = "ba"
+Output: true
+
+3.不一样的字符只有2个，记录位置并交换比较。
+```java
+public boolean buddyStrings(String A, String B) {
+    if(A.length() != B.length())return false;
+    boolean same = false;
+    int[] acnt = new int[26];
+    int dif = 0;
+    int idx1 = -1,idx2=-1;
+    for(int i = 0;i<A.length();i++){
+        acnt[A.charAt(i) -'a']++;
+        if(acnt[A.charAt(i) -'a'] >=2)same = true;
+        if(dif == 0 && i == A.length()-1)return same;
+        if(A.charAt(i) != B.charAt(i)){
+            dif++;
+            if(dif>2)return false;
+            if(idx1 < 0 )idx1 = i;
+            else idx2 = i;
+        }
+    }
+//        System.out.println(idx1+" "+idx2);
+    if(idx1!=idx2)return A.charAt(idx1) == B.charAt(idx2) && A.charAt(idx2) ==B.charAt(idx1);
+    return false;
+}
+```
 
 ### lc70爬楼梯
 ```java

@@ -4,6 +4,12 @@ date: 2018-03-09 08:39:10
 tags: [git,hexo]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### 跳转到文件
+sublime快捷键 Ctrl + P：跳转到指定文件，输入文件名后可以：
+idea：Crtl+N：定位到Java类，默认为定位项目中的java文件，如果你设置了开发包的Source，也可以定位到项目外的Java文件，如Jdk的原文件。
+Crtl+Shift+N：定位到文件，也包含项目的Java文件，所有项目中的其他文件，如xml，jsp，poperty文件均可以使用改方法定位。
+
+
 ### windows bat定时自动提交
 ```sh
 schtasks  /create  /tn  autoPush /tr  "cmd /c

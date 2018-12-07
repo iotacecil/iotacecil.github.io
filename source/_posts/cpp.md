@@ -4,6 +4,37 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+循环语句whlie(int i=0 )i--;的循环次数是0
+
+### 构造函数
+？构造函数的工作是在**创建/声明对象**时自动执行的。
+
+错误：
+构造函数可以对静态数据成员进行初始化
+
+### 默认参数
+C++语言中，对函数参数默认值描述正确的是：
+在设定了参数的默认值后，该参数后面定义的所有参数都必须设定默认值
+
+错误：
+函数参数的默认值只能设定一个
+函数参数必须设定默认值
+
+### 拷贝构造函数
+通过使用另一个同类型的对象来初始化新创建的对象。
+```cpp
+Widget f(Widget u)
+{  
+   Widget v(u);
+   Widget w=v;
+   return w;
+}
+main(){
+    Widget x;
+    Widget y=f(f(x));
+}
+```
+
 [字符串 长度 缓冲区溢出](http://redisbook.com/preview/sds/different_between_sds_and_c_string.html)
 
 ### 字符串 长度O（N）

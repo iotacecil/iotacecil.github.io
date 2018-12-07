@@ -4,6 +4,13 @@ date: 2018-04-17 17:06:31
 tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
+### js 数组数字排序。（数组sort默认是字符串排序）
+```js
+a = Array.of(32,286,125,192,28,41,297,413,29,64,80,4).sort((a,b)=>a-b)
+> (12) [4, 28, 29, 32, 41, 64, 80, 125, 192, 286, 297, 413]
+```
+
+
 ### 控制台导入jq发送ajax
 https://zju.date/ajax-request-in-chrome-console/
 不使用contentType: “application/json”则data可以是对象
