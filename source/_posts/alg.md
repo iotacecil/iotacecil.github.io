@@ -25,6 +25,19 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 899 操作字符串前k个字符放到最后 输出字典序最小的
+> Input: S = "cba", K = 1
+> Output: "acb"
+> 
+> Input: S = "baaca", K = 3
+> Output: "aaabc"
+> Explanation: 
+> In the first move, we move the 1st character ("b") to the end, obtaining the string "aacab".
+> In the second move, we move the 3rd character ("c") to the end, obtaining the final result "aaabc".
+
+当k=1 字符串只能旋转
+当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
+
 ### sw44 判断扑克牌是否顺子
 1.排序，
 2.数0（大王小王可以当作任意数字）的个数，
@@ -1059,18 +1072,7 @@ public int findPoisonedDuration(int[] timeSeries, int duration) {
 }
 ```
 
-### 899 操作字符串前k个字符放到最后 输出字典序最小的
-> Input: S = "cba", K = 1
-> Output: "acb"
-> 
-> Input: S = "baaca", K = 3
-> Output: "aaabc"
-> Explanation: 
-> In the first move, we move the 1st character ("b") to the end, obtaining the string "aacab".
-> In the second move, we move the 3rd character ("c") to the end, obtaining the final result "aaabc".
 
-当k=1 字符串只能旋转
-当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
 
 
 ### 77combinations  C(n,k)=C(n-1,k-1)+C(n-1,k)

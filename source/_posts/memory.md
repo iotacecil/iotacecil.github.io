@@ -4,6 +4,215 @@ date: 2018-03-05 20:43:15
 tags: [os,memory]
 category: [cpp学习操作系统]
 ---
+
+假设某一虚拟存储系统采用先进先出（FIFO）页面淘汰算法，有一个进程在内存中占3页（开始时内存为空），当访问如下页面序列号后1,2,3,1,2,4,2,3,5,3,4,5,6会产生()次缺页
+6
+注意：缺页定义为所有内存块最初都是空的，所以第一次用到的页面都产生一次缺页。
+
+
+### 多道程序：多道宏观上并行微观上串行
+充分利用CPU。减少CPU等待时间。
+
+- 分时操作系统：可以人机交互 以时间片为单位轮流为各个用户/作业服务。
+
+### 链接 文件共享
+
+下列关于链接描述，错误的是
+正确答案: B   你的答案: A (错误)
+A硬链接就是让链接文件的i节点号指向被链接文件的i节点
+B**硬链接和符号连接都是产生一个新的i节点**
+C链接分为硬链接和符号链接
+D硬连接不能链接目录文件
+
+https://www.ibm.com/developerworks/cn/linux/l-cn-hardandsymb-links/index.html#fig2
+
+![softlink.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/softlink.jpg)
+链接为 Linux 系统解决了文件的共享使用，还带来了隐藏文件路径、增加权限安全及节省存储等好处。
+```sh
+# 查找 软链接
+[root@localhost ~]# find -lname wordcount.sh
+./wdc.link
+
+# 查找硬链接
+[root@localhost ~]# find -samefile wordcount.sh
+./wordcount.sh
+./wdc
+```
+
+#### VFS Linux的文件系统
+![vfs.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/vfs.jpg)
+
+1.网络文件系统，如 nfs、cifs 等；
+2.磁盘文件系统，如 ext4、ext3 等；
+3.特殊文件系统，如 proc、sysfs、ramfs、tmpfs 等。
+
+实现以上这些文件系统并在 Linux 下共存的基础就是 Linux VFS（Virtual File System 又称 Virtual Filesystem Switch），即虚拟文件系统。
+VFS 作为一个通用的文件系统，抽象了文件系统的四个基本概念：
+**文件、目录项 (dentry)、索引节点 (inode) 及 挂载点**
+其在内核中为用户空间层的文件系统提供了相关的接口。
+
+VFS 实现了 open()、read() 等系统调并使得 cp 等用户空间程序可跨文件系统。VFS 真正实现了上述内容中：在 Linux 中除进程之外一切皆是文件。
+
+Linux VFS 存在四个基本对象：
+超级块对象 (superblock object)、索引节点对象 (inode object)、目录项对象 (dentry object) 及文件对象 (file object)。
+
+> 超级块对象代表一个已安装的文件系统；
+> 索引节点对象代表一个文件；
+> 目录项对象代表一个目录项，如设备文件 event5 在路径 /dev/input/event5 中，其存在四个目录项对象：/ 、dev/ 、input/ 及 event5。
+> 文件对象代表由进程打开的文件。
+
+1超级块2索引节点3目录项4文件对象 与 进程 及 磁盘文件 间的关系:
+![d_inode.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/d_inode.jpg)
+
+其中 d_inode 即为硬链接。为文件路径的快速解析，Linux VFS 设计了目录项缓存（Directory Entry Cache，即 dcache）。
+
+#### innode
+**移动或重命名文件 不影响inode**
+
+![filename.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/filename.jpg)
+
+文件都有文件名与数据，这在 Linux 上被分成两个部分：用户数据 (user data) 与元数据 (metadata)。
+- 用户数据，即文件数据块 (data block)，数据块是记录文件真实内容的地方；
+- 元数据则是文件的附加属性，如文件大小、创建时间、所有者等信息。在 Linux 中，元数据中的 inode 号（inode 是文件元数据的一部分但其并不包含文件名，inode 号即索引节点号）才是文件的唯一标识而非文件名。
+```shell
+[root@localhost ~]# ls -i workcount.sh 
+8705899 workcount.sh
+[root@localhost ~]# stat workcount.sh
+  文件："workcount.sh"
+  大小：117        块：8          IO 块：4096   普通文件
+设备：fd00h/64768d Inode：8705899     硬链接：1
+权限：(0777/-rwxrwxrwx)  Uid：(    0/    root)   Gid：(    0/    root)
+环境：unconfined_u:object_r:admin_home_t:s0
+最近访问：2018-08-09 20:39:34.052284568 +0800
+最近更改：2018-08-09 20:35:25.159457149 +0800
+最近改动：2018-08-09 20:39:28.363357082 +0800
+创建时间：-
+```
+
+#### 索引节点 VFS/ext4 innode 
+索引节点结构存在于系统内存及磁盘，其可区分成 VFS inode 与实际文件系统的 inode。
+
+
+#### VFS 中的 inode 与 inode_operations 结构体
+
+VFS inode 作为实际文件系统中 inode 的抽象，定义了结构体 inode 与其相关的操作 inode_operations（见内核源码 include/linux/fs.h）。
+
+i_count i_nlink
+每个文件存在两个计数器：i_count 与 i_nlink，即引用计数(i_count 用于跟踪文件被访问的数量)与硬链接计数。
+i_count 用于跟踪文件被访问的数量
+
+```c
+struct inode { 
+   ... 
+   const struct inode_operations   *i_op; // 索引节点操作
+   unsigned long           i_ino;      // 索引节点号
+   atomic_t                i_count;    // 引用计数器
+   unsigned int            i_nlink;    // 硬链接数目
+   ... 
+} 
+ 
+struct inode_operations { 
+   ... 
+   int (*create) (struct inode *,struct dentry *,int, struct nameidata *); 
+   int (*link) (struct dentry *,struct inode *,struct dentry *); 
+   int (*unlink) (struct inode *,struct dentry *); 
+   int (*symlink) (struct inode *,struct dentry *,const char *); 
+   int (*mkdir) (struct inode *,struct dentry *,int); 
+   int (*rmdir) (struct inode *,struct dentry *); 
+   ... 
+}
+```
+
+#### ext4 inode
+i_links_count 不仅用于文件的硬链接计数，也用于目录的子目录数跟踪（目录并不显示硬链接数
+```sh
+struct ext4_inode { 
+   ... 
+   __le32  i_atime;        // 文件内容最后一次访问时间
+   __le32  i_ctime;        // inode 修改时间
+   __le32  i_mtime;        // 文件内容最后一次修改时间
+   __le16  i_links_count;  // 硬链接计数
+   __le32  i_blocks_lo;    // Block 计数
+   __le32  i_block[EXT4_N_BLOCKS];  // 指向具体的 block 
+   ... 
+};
+```
+
+
+#### 硬链接 ： 一个 inode 号对应多个文件名，则称这些文件为硬链接。
+硬链接就是同一个文件使用了多个别名,有共同的inode
+硬链接可由命令 link 或 ln 创建
+```sh
+[root@localhost ~]# stat wdc
+  文件："wdc"
+  大小：117        块：8          IO 块：4096   普通文件
+设备：fd00h/64768d Inode：8705899     硬链接：2
+权限：(0777/-rwxrwxrwx)  Uid：(    0/    root)   Gid：(    0/    root)
+环境：unconfined_u:object_r:admin_home_t:s0
+最近访问：2018-08-09 20:39:34.052284568 +0800
+最近更改：2018-08-09 20:35:25.159457149 +0800
+最近改动：2018-12-10 09:37:11.206523214 +0800
+```
+硬链接是有着相同 inode 号仅文件名不同的文件
+
+>- 文件有相同的 inode 及 data block；
+> - 只能对已存在的文件进行创建；
+> - 不能交叉文件系统进行硬链接的创建；
+> - 不能对目录进行创建，只可对文件创建；
+> - 删除一个硬链接文件并不影响其他有相同 inode 号的文件。
+
+#### 跨文件系统不能创建
+inode 号仅在各文件系统下是唯一的，当 Linux 挂载多个文件系统后将出现 inode 号重复的现象.
+```sh
+[root@localhost /]# df -i --print-type
+文件系统                类型        Inode 已用(I)  可用(I) 已用(I)% 挂载点
+/dev/mapper/centos-root xfs      15828992  188789 15640203       2% /
+devtmpfs                devtmpfs   123919     370   123549       1% /dev
+tmpfs                   tmpfs      126938       1   126937       1% /dev/shm
+tmpfs                   tmpfs      126938     548   126390       1% /run
+tmpfs                   tmpfs      126938      16   126922       1% /sys/fs/cgroup
+/dev/sda1               xfs        524288     326   523962       1% /boot
+/dev/sdb1               ext3      1048576      77  1048499       1% /data
+```
+
+#### 目录不能硬链接
+硬链接不能对目录创建是受限于文件系统的设计
+Linux 文件系统中的目录均隐藏了两个个特殊的目录：当前目录（.）与父目录（..）。查看这两个特殊目录的 inode 号可知其实这两目录就是两个硬链接。
+若系统允许对目录创建硬链接，则会产生目录环。
+```sh
+[root@localhost /]# ls -aliF /mnt
+总用量 0
+4213723 drwxr-xr-x.  2 root root   6 4月  11 2018 ./
+     64 dr-xr-xr-x. 19 root root 274 9月  15 15:12 ../
+```
+
+#### inode用完 但磁盘还有剩余
+Linux 系统存在 inode 号被用完但磁盘空间还有剩余的情况。 
+
+---
+
+#### 软连接： 文件用户数据块中存放的内容是另一文件的路径名的指向
+```sh
+[root@localhost ~]# ln -s wordcount.sh wdc.link
+[root@localhost ~]# ls -li
+
+9063386 lrwxrwxrwx. 1 root root        12 12月 10 09:56 wdc.link -> wordcount.sh
+8705899 -rwxrwxrwx. 2 root root       117 8月   9 20:35 wordcount.sh
+
+```
+
+软链接就是一个普通文件，只是数据块内容有点特殊。软链接有着自己的 inode 号以及用户数据块。因此软链接的创建与使用没有类似硬链接的诸多限制：
+
+> - 软链接有自己的文件属性及权限等；
+> -可对不存在的文件或目录创建软链接；
+> -软链接可交叉文件系统；
+> -软链接可对文件或目录创建；
+> -创建软链接时，链接计数 i_nlink 不会增加；
+> -删除软链接并不影响被指向的文件，但若被指向的原文件被删除，则相关软连接被称为死链接（即 dangling link，若被指向路径文件被重新创建，死链接可恢复为正常的软链接）
+
+
+
+
 ### tasklet 软中断
 软中断必须设计为可重入的函数（允许多个CPU同时操作），因此也需要使用自旋锁来保其数据结构。
 

@@ -1,11 +1,106 @@
 ---
-title: 'nginx'
+title: 'Nginx/Http/HSTS'
 date: 2018-04-02 13:18:31
-tags:
-category: [JVMlinux常用备注nginxredis配置]
+tags: [网络]
+category: [网络]
 ---
 
-# Nginx
+
+
+https://imququ.com/post/my-nginx-conf-for-wpo.html
+
+## nginx.conf
+下列有关Nginx配置文件nginx.conf的叙述正确的是
+正确答案: A D   你的答案: A B C D (错误)
+Anginx进程数设置为CPU总核心数最佳
+B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)
+C.sendfile on;表示为开启高效文件传输模式，对于执行下载操作等相关应用时，应设置为on
+D设置工作模式与连接数上限时，应考虑单个进程最大连接数(最大连接数=连接数*进程数）
+
+#### sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用
+sendfile 是一个系统调用，直接在内核空间完成文件发送，不需要先 read 再 write，没有上下文切换开销。不过需要注意的是，sendfile 是将 in_fd 的内容发送到 out_fd 。而 in_fd 不能是 socket ， 也就是只能文件句柄。 
+
+当 Nginx 是一个静态文件服务器的时候，开启 SENDFILE 配置项能大大提高 Nginx 的性能。
+
+当 Nginx 是作为一个反向代理来使用的时候，SENDFILE 则没什么用了，因为 Nginx 是反向代理的时候。 in_fd 就不是文件句柄而是 socket，此时就不符合 sendfile 函数的参数要求了。
+
+http://xiaorui.cc/2015/06/24/%E6%89%AF%E6%B7%A1nginx%E7%9A%84sendfile%E9%9B%B6%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%A6%82%E5%BF%B5/
+1.系统调用sendfile()通过 DMA把硬盘数据拷贝到 kernel buffer，然后数据被 kernel直接拷贝到另外一个与 socket相关的 kernel buffer。这里没有 user mode和 kernel mode之间的切换，在 kernel中直接完成了从一个 buffer到另一个 buffer的拷贝。
+2、DMA 把数据从 kernelbuffer 直接拷贝给协议栈，没有切换，也不需要数据从 user mode 拷贝到 kernel mode，因为数据就在 kernel 里。
+
+### HTTP
+以下有关Http协议的描述中，正确的有
+正确答案: A B C   你的答案: B C D (错误)
+A.post请求一般用于修改服务器上的资源，对发送的消息数据量没有限制，通过表单方式提交
+B.可以通过206返回码实现断点续传
+C.HTTP1.1实现了持久连接和管线化操作以及主动通知功能，相比http1.0有大福性能提升
+D.HTTP返回码302表示永久重定向，需要重新URI
+
+http/1.1 字符串传输
+持久链接：一个tcp链接里可以发送很多http请求。减少三次握手次数。
+pipeline:
+添加了host：
+
+《Web性能权威指南》
+![http2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg)
+>是通过支持请求与响应的多路复用来减少延迟，通过压缩 HTTP
+首部字段将协议开销降至最低，同时增加对请求优先级和服务器端推送的支持。
+
+> 它改变了客户端与服务器之间交换数据的方式。
+> 为实现宏伟的性能改进目标，HTTP  2.0 增加了新的二进制分帧数据层
+
+![http2connect.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2connect.jpg)
+
+> HTTP  2.0 通信都在一个连接上完成，这个连接可以承载任意数量的双向数据流。
+> 每个数据流以消息的形式发送，而消息由一或多个帧组成，这些帧可以乱序发送，然后再根据每个帧首部的流标识符重新组装。
+
+![http22.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http22.jpg)
+
+![sendrecv.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sendrecv.jpg)
+> HTTP 消息分解为独立的帧，交错发送，然后在另一端重新组装是 HTTP  2.0 最
+重要的一项增强。
+
+![http2better.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2better.jpg)
+
+> http2:：浏览器可以在发现资源时立即分派请求，指定每个流的优先级，让服务器决定最优的响应次序。这样请求就不必排队了，既节省了时间，也最大限度地利用了每个连接。 
+
+> 每个来源一个链接:，所有HTTP 2.0 连接都是持久化的，而且客户端与服务器之间也只需要一个连接即可。
+
+![http2tcp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2tcp.jpg)
+
+http2：分帧传输二进制传输（不用连续）
+信道复用 同一个链接多个请求
+一个tcp链接并发http请求，不用等前一个请求接收到之后再发送。
+server push推送。以前要先解析html再发送请求css/js。现在请求html就获取。
+
+nginx开启http2 开启https才能http2
+ALPN转称http1.1传给服务器
+```json
+server{
+  listen 443 http2;
+  server_name test.com;
+  http2_push_preload on;
+}
+```
+nodejs
+```javascript
+if(request.url === '/'){
+  response.writeHead(200,{
+    'Content-Type':'text/html',
+    'Connection':'close',
+    //http2的push
+    'Link':'</test.jpg>;as=image;rel=preload'
+  })
+}
+```
+协议变成h2
+`chrome://net-internals/#http2` 看pushed和 claimed 使用1个push到30个push的区别
+https的握手过程
+
+
+[http2性能测试](http2.akamai.com/demo/http2-lab.html)
+
+
 ## 1. 环境
 1. 基本库
 `yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake`

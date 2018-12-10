@@ -4,6 +4,11 @@ date: 2018-04-17 17:06:31
 tags:
 category: [js前端常用svgcanvasVue框架jquery源码]
 ---
+
+
+### rxjs
+https://cn.rx.js.org/manual/tutorial.html
+
 ### js 数组数字排序。（数组sort默认是字符串排序）
 ```js
 a = Array.of(32,286,125,192,28,41,297,413,29,64,80,4).sort((a,b)=>a-b)
@@ -483,70 +488,7 @@ js解释器
 css计算权重：!important>内联样式>id选择器>类选择器>元素选择器
 
 
-### HTTP
-http/1.1 字符串传输
-持久链接：一个tcp链接里可以发送很多http请求。减少三次握手次数。
-pipeline:
-添加了host：
 
-《Web性能权威指南》
-![http2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg)
->是通过支持请求与响应的多路复用来减少延迟，通过压缩 HTTP
-首部字段将协议开销降至最低，同时增加对请求优先级和服务器端推送的支持。
-
-> 它改变了客户端与服务器之间交换数据的方式。
-> 为实现宏伟的性能改进目标，HTTP  2.0 增加了新的二进制分帧数据层
-
-![http2connect.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2connect.jpg)
-
-> HTTP  2.0 通信都在一个连接上完成，这个连接可以承载任意数量的双向数据流。
-> 每个数据流以消息的形式发送，而消息由一或多个帧组成，这些帧可以乱序发送，然后再根据每个帧首部的流标识符重新组装。
-
-![http22.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http22.jpg)
-
-![sendrecv.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sendrecv.jpg)
-> HTTP 消息分解为独立的帧，交错发送，然后在另一端重新组装是 HTTP  2.0 最
-重要的一项增强。
-
-![http2better.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2better.jpg)
-
-> http2:：浏览器可以在发现资源时立即分派请求，指定每个流的优先级，让服务器决定最优的响应次序。这样请求就不必排队了，既节省了时间，也最大限度地利用了每个连接。 
-
-> 每个来源一个链接:，所有HTTP 2.0 连接都是持久化的，而且客户端与服务器之间也只需要一个连接即可。
-
-![http2tcp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2tcp.jpg)
-
-http2：分帧传输二进制传输（不用连续）
-信道复用 同一个链接多个请求
-一个tcp链接并发http请求，不用等前一个请求接收到之后再发送。
-server push推送。以前要先解析html再发送请求css/js。现在请求html就获取。
-
-nginx开启http2 开启https才能http2
-ALPN转称http1.1传给服务器
-```json
-server{
-  listen 443 http2;
-  server_name test.com;
-  http2_push_preload on;
-}
-```
-nodejs
-```javascript
-if(request.url === '/'){
-  response.writeHead(200,{
-    'Content-Type':'text/html',
-    'Connection':'close',
-    //http2的push
-    'Link':'</test.jpg>;as=image;rel=preload'
-  })
-}
-```
-协议变成h2
-`chrome://net-internals/#http2` 看pushed和 claimed 使用1个push到30个push的区别
-https的握手过程
-
-
-[http2性能测试](http2.akamai.com/demo/http2-lab.html)
 
 ### nodejs跨域测试
 1. 被请求的添加

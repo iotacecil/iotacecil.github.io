@@ -4,6 +4,46 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+
+### 反编译
+`javap -v xx.class`
+
+---
+
+以下说法中正确的有
+正确答案: A D   你的答案: A B D (错误)
+A.StringBuilder是线程不安全的
+B.HashMap中，使用 get(key)==null可以判断这个HashMap是否包含这个key(key存在，值是null)
+C.Java类可以同时用abstract和final声明
+D.volatile关键字不保证对变量操作的原子性
+
+---
+
+Java 中堆和栈有什么区别?
+正确答案: A B   你的答案: A B D (错误)
+A.堆是整个JVM共享的
+B.栈是每个线程独有的
+C.栈是整个JVM共享的
+D.对象可以分配在堆上也可以分配在栈上
+
+### PermGen Space
+`-XX:PermSize`，表示程序启动时，JVM 方法区的初始化最小尺寸参数；
+`-XX:MaxPermSize`，表示程序启动时，JVM 方法区的初始化最大尺寸参数。
+
+Java 8中，永久代被彻底移除，取而代之的是另一块与堆不相连的本地内存——元空间（Metaspace）,‑XX:MaxPermSize 参数失去了意义，取而代之的是-XX:MaxMetaspaceSize。
+
+方法区（method area）只是JVM规范中定义的一个概念，用于存储类信息、常量池、静态变量、JIT编译后的代码等数据，具体放在哪里，不同的实现可以放在不同的地方。而永久代是Hotspot虚拟机特有的概念，是方法区的一种实现，别的JVM都没有这个东西。
+
+
+
+内存溢出错误。更具体的说，是指方法区（永久代）内存溢出！
+java.lang.OutOfMemoryError: PermGen Space表示
+正确答案: C   你的答案: A (错误)
+Java heap内存已经用完
+Java 堆外内存已经用完
+Java 类对象(class)存储区域已经用完
+Java 栈空间已经用完
+
 ### 强引用、软引用、弱引用、幻象引用
 
 ![references.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/references.jpg)
@@ -40,6 +80,13 @@ are cleared at the discretion（斟酌） of the garbage collector in response t
 Soft references are most often used to implement memory-sensitive caches.
 
 #### WeakReference
+下面关于Java中weak reference的说法，哪个是正确的?
+正确答案: B   你的答案: B (正确)
+Weak reference指向的对象不会被GC回收。
+Weak reference指向的对象可以被GC回收。
+Weak reference 指向的对象肯定会被GC回收
+Weak reference 指向的对象如果被回收，那么weak reference会收到通知
+
 维护一种非强制性的映射关系，如果试图获取时对象还在，就使用它，否则重现实例化。它同样是很多缓存实现的选择。
 Weak references are most often used to implement canonicalizing mappings
 
@@ -54,6 +101,7 @@ Weak references are most often used to implement canonicalizing mappings
 
 ### 实现immutable类
 1. class 声明为final
+`public final class String`
 2. 成员变量 private final且没有setter
 3. 构造对象时，成员变量使用深度拷贝来初始化。
 4. getter方法，使用 copy-on-write原则，创建私有的 copy。
@@ -465,6 +513,7 @@ this.mat = new int[matrix.length][];
 
 
 ### java内存
+
 https://algs4.cs.princeton.edu/14analysis/
 http://yueyemaitian.iteye.com/blog/2034305
 https://blog.csdn.net/zhxdick/article/details/52003123

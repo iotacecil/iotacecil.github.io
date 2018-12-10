@@ -4,6 +4,14 @@ date: 2018-05-04 20:34:13
 tags: [java,io]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+新建一个流对象，下面哪个选项的代码是错误的？
+正确答案: B   你的答案: A (错误)
+A.new BufferedWriter(new FileWriter("a.txt"));
+B.new BufferedReader(new FileInputStream("a.dat"));
+C.new GZIPOutputStream(new FileOutputStream("a.zip"));
+D.new ObjectInputStream(new FileInputStream("a.dat"));
+`public BufferedReader(Reader in, int sz)`
+
 http://blog.jmecn.net/java-iostream/
 JNI java native interface 本地接口
 

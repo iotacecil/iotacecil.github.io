@@ -4,6 +4,30 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 线程停止
+下面能让线程停止执行的有
+正确答案: A B D   你的答案: B C D (错误)
+A.sleep();
+B.stop();
+C.notify();
+D.yield();
+
+### 线程终止
+下面那些情况可以终止当前线程的运行？B
+A.当一个优先级高的线程进入就绪状态时
+B.抛出一个异常时
+C.当该线程调用sleep()方法时
+D.当创建一个新线程时
+
+
+### Atomic和synchronized
+下面关于Atomic(比方说AtomicLong)和synchronized关键字的说法哪些是对的?
+正确答案: A B   你的答案: A B (正确)
+A.两者都可以用于线程同步
+B.synchronized关键字用于同步一段代码，而atomic用于同步某个状态
+C.两者都可以用于同步一段代码
+D.多个Atomic在代码中嵌套使用时可能会产生死锁
+
 ### 需要多少资源
 为了解决进程间的同步和互斥问题，通常采用一种称为信号量机制的方法。若系统中有7个进程共享若干个资源R，每个进程都需要6个资源R，那么使系统不发生死锁的资源R的最少数目是()
 36
@@ -446,16 +470,12 @@ main{
     new CountDownLatch(3);
     CountDownLatch.countDown();//触发事件
 }
-    ```
+```
 **面试题**
 解释一下CountDownLatch概念?
 CountDownLatch 和CyclicBarrier的不同之处?
 给出一些CountDownLatch使用的例子?
 CountDownLatch 类中主要的方法?
-
----
-
-
 
 
 ---
@@ -515,6 +535,10 @@ private static long byteOffset(int i) {
 `casPair`使用cas的方式更新
 
 ### 1. `.start`开启新线程调用run  `.run`不开启新线程
+
+Java中Thread类中的start()方法和run()方法有什么区别?
+A.start()方法创建一个线程，并内部调用run()
+
 两种创建方法1.传入一个runnable对象 2.覆盖run
 Thread:
 ```java

@@ -6,6 +6,19 @@ category: [cpp学习操作系统]
 ---
 循环语句whlie(int i=0 )i--;的循环次数是0
 
+### 静态方法？
+```cpp
+有如下类的定义：
+class Constants
+{  
+public: static double GetPI(void){return 3.14159;}
+};  
+Constants constants;
+下列各组语句中，能输出3.14159的是：
+cout<<Constants::GetPI();和
+cout<<constants.GetPI();
+```
+
 ### 构造函数
 ？构造函数的工作是在**创建/声明对象**时自动执行的。
 
@@ -22,6 +35,15 @@ C++语言中，对函数参数默认值描述正确的是：
 
 ### 拷贝构造函数
 通过使用另一个同类型的对象来初始化新创建的对象。
+对拷贝构造函数的描述正确的是：
+正确答案: B D
+A该函数名同类名，也是一种构造函数，该函数返回自身引用
+B**该函数只有一个参数，必须是对某个对象的引用**
+C每个类都必须有一个拷贝初始化构造函数，如果类中没有说明拷贝构造函数，则编译器系统会自动D**成一个缺省拷贝构造函数，作为该类的保护成员
+拷贝初始化构造函数的作用是将一个已知对象的数据成员值拷贝给正在创建的另一个同类的对象**
+
+
+以下代码共调用多少次拷贝构造函数：
 ```cpp
 Widget f(Widget u)
 {  
@@ -34,6 +56,7 @@ main(){
     Widget y=f(f(x));
 }
 ```
+正确答案: 7
 
 [字符串 长度 缓冲区溢出](http://redisbook.com/preview/sds/different_between_sds_and_c_string.html)
 

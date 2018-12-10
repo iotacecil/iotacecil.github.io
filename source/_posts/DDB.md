@@ -4,6 +4,28 @@ date: 2018-03-16 15:31:34
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### where 子句中不能出现聚合函数（列函数）
+以下哪个函数不能直接出现在SQL的WHERE子句中
+正确答案: A B   你的答案: C (错误)
+A.SUM
+B.COUNT
+C.ORDER BY
+D.LIMIT
+聚集函数也叫列函数，它们都是基于整列数据进行计算的，而where子句则是对数据行进行过滤的。
+sql语句的执行顺序为
+
+from子句
+
+where 子句
+
+group by 子句
+
+having 子句
+
+order by 子句
+
+select 子句
+
 ### 关系型数据库和对象
 表和类关联
 行和对象关联

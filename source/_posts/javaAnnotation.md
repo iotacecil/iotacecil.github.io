@@ -4,6 +4,55 @@ date: 2018-03-06 00:02:50
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+## 反射 java.lang.reflect.*
+![reflect.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/reflect.jpg)
+
+- 在运行中分析类能力；
+运行中查看对象；Method对象
+- Class 是java基础类。虚拟机创建Class的实例。
+1. 三种方法获取class：`对象.getClass`。`类.class`。`Class.forName`（抛异常）
+2. 实例化对象：
+    1. `Class cls = Class.forName(className)` （静态方法）获得类名的Class对象
+    2. `cls.newInstance()`调用className的默认无参构造方法，返回className类型)
+    3. 获取所有构造方法
+    ```java
+    Constructor<?>[] cs = acla.getDeclaredConstructors();
+    ```
+    `getModifiers()`获得修饰符
+    4. 获得指定参数的构造方法 会抛异常
+    ```java
+    Constructor<Bank> c = b.getConstructor(Integer.class,Integer.class);
+    ```
+    5. 通过构造器得到实例 抛异常
+    ```java
+    c.newInstance(1,3);
+    ```
+3. 获取类的所有成员变量，`get/set`设置获取属性
+    ```java
+    //获取public
+    Field[] fi = bb.getFields();
+    //获取所有属性包括私有属性
+    Field[] dd = bb.getDeclaredFields();
+    ```
+    获取修饰符
+    ```java
+    int modifiers = f.getModifiers();
+    System.out.println(Modifier.toString(modifiers));
+    ```
+4. 获取所在的包`Package getPackage()`
+5. 获取公共方法（包括继承Object的
+    ```java
+    Method[] methods = bb.getMethods();
+    //调用方法
+    methods[0].invoke(对象,参数);
+    ```
+    `getDeclaredFields()`不包含父类方法，包括私有方法。
+    但是私有方法不能`invoke`
+    调用私有方法:去除修饰符检查
+    ```java
+     methods[3].setAccessible(true);
+     methods[3].invoke(b);
+    ```
 
 ## Spring代理
 1. Bean有实现接口：用JDK动态代理
@@ -21,8 +70,11 @@ public @interface ThreadSafe {
 }
 ```
 
+代理模式：为其他对象 提供一种代理以控制对这个对象的访问。
+代理类负责为委托类进行预处理 （安全检查、权限检查）或执行完转发给其它代理。
 
 ## 静态代理：为对象提供一种代理，控制这个对象的访问
+
 1. 对一个方法添加计算时间的业务
 2. 静态代理在于在运行期之前就有已经写好的`actionProxy implements Action`代理类
 {% fold %}
@@ -63,55 +115,82 @@ public class staticproxy {
 ```
 {% endfold %}
 
-## 反射 java.lang.reflect.*
-- 在运行中分析类能力；
-运行中查看对象；Method对象
-- Class 是java基础类。虚拟机创建Class的实例。
-1. 三种方法获取class：`对象.getClass`。`类.class`。`Class.forName`（抛异常）
-2. 实例化对象：
-	1. `Class cls = Class.forName(className)` （静态方法）获得类名的Class对象
-	2. `cls.newInstance()`调用className的默认无参构造方法，返回className类型)
-	3. 获取所有构造方法
-	```java
-	Constructor<?>[] cs = acla.getDeclaredConstructors();
-	```
-	`getModifiers()`获得修饰符
-	4. 获得指定参数的构造方法 会抛异常
-	```java
-	Constructor<Bank> c = b.getConstructor(Integer.class,Integer.class);
-	```
-	5. 通过构造器得到实例 抛异常
-	```java
-	c.newInstance(1,3);
-	```
-3. 获取类的所有成员变量，`get/set`设置获取属性
-	```java
-	//获取public
-	Field[] fi = bb.getFields();
-	//获取所有属性包括私有属性
-	Field[] dd = bb.getDeclaredFields();
-	```
-	获取修饰符
-	```java
-	int modifiers = f.getModifiers();
-    System.out.println(Modifier.toString(modifiers));
-	```
-4. 获取所在的包`Package getPackage()`
-5. 获取公共方法（包括继承Object的
-	```java
-	Method[] methods = bb.getMethods();
-	//调用方法
-	methods[0].invoke(对象,参数);
-	```
-	`getDeclaredFields()`不包含父类方法，包括私有方法。
-	但是私有方法不能`invoke`
-	调用私有方法:去除修饰符检查
-	```java
-	 methods[3].setAccessible(true);
-	 methods[3].invoke(b);
-	```
+
 
 ## 动态代理
+简单指定一组接口及委托类对象，动态获得代理类。
+
+### .reflect.Proxy 静态方法，动态生成代理类及其对象
+![Proxy.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Proxy.jpg)
+
+### .reflect.InvocationHandler
+//代理类实例、被调用的方法对象、调用参数。进行预处理或分配到委托类实例上执行。
+`public Object invoke(Object proxy, Method method, Object[] args)`
+
+### 动态代理创建对象的4步
+1.实现`InvocationHandler` 创建调用处理器
+2.指定`ClassLoader`对象和一组`interface`创建动态代理类。
+`Class clazz = Proxy.getProxyClass(classLoader,new Class[]{});`
+3.通过反射获得动态代理类的构造函数，参数类型是调用处理器接口
+`Constructor constructor = clazz.getConstructor(new Class[]{InvocationHandler.class});`
+4.通过构造函数创建动态代理类实例，将调用处理器作为参数
+`Interface Proxy = (Interface)construct.newInstance(new Object[]{handle});`
+
+`Proxy`中的`newInstance`封装了2-4直接返回了4
+```java
+@CallerSensitive
+public static Object newProxyInstance(ClassLoader loader,
+                                      Class<?>[] interfaces,
+                                      InvocationHandler h)
+    throws IllegalArgumentException
+{
+    Objects.requireNonNull(h);
+
+    final Class<?>[] intfs = interfaces.clone();
+    final SecurityManager sm = System.getSecurityManager();
+    if (sm != null) {
+        checkProxyAccess(Reflection.getCallerClass(), loader, intfs);
+    }
+
+    /*
+     * Look up or generate the designated proxy class.
+     */
+    Class<?> cl = getProxyClass0(loader, intfs);
+
+    /*
+     * Invoke its constructor with the designated invocation handler.
+     */
+    try {
+        if (sm != null) {
+            checkNewProxyPermission(Reflection.getCallerClass(), cl);
+        }
+
+        final Constructor<?> cons = cl.getConstructor(constructorParams);
+        final InvocationHandler ih = h;
+        if (!Modifier.isPublic(cl.getModifiers())) {
+            AccessController.doPrivileged(new PrivilegedAction<Void>() {
+                public Void run() {
+                    cons.setAccessible(true);
+                    return null;
+                }
+            });
+        }
+        return cons.newInstance(new Object[]{h});
+    } catch (IllegalAccessException|InstantiationException e) {
+        throw new InternalError(e.toString(), e);
+    } catch (InvocationTargetException e) {
+        Throwable t = e.getCause();
+        if (t instanceof RuntimeException) {
+            throw (RuntimeException) t;
+        } else {
+            throw new InternalError(t.toString(), t);
+        }
+    } catch (NoSuchMethodException e) {
+        throw new InternalError(e.toString(), e);
+    }
+}
+```
+
 可以代理多个接口 
 {% fold %}
 ```java

@@ -4,6 +4,35 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### 权限 7种文件类型（-文件 d目录 l软链接）
+`-rw-r--r--`10位权限 （r4 w2 x1 读写执行权限 -没有权限 rwx7r-x5r-x5）设计成2的幂次因为不会歧义
+`rw-`u所有者权限
+`r--`g所属组
+`r--`其他人
+
+---
+Linux文件权限一共10位长度(例如drwxrwxrwx)，分成四段，第三段表示的内容是:
+正确答案: C   你的答案: B (错误)
+A文件类型
+B文件所有者的权限
+C文件所有者所在组的权限
+D其他用户的权限
+
+---
+
+文件a的访问权限为rw-r--r--，现要增加所有用户的执行权限和同组用户的写权限，下列哪些命令正确的是？
+正确答案: A C   你的答案: D (错误)
+A.chmod a+x g+w aaa
+B.chmod 764 aaa
+C.chmod 775 aaa
+D.chmod o+x g+w aaa
+
+#### chmod [] 模式 文件名 修改权限
+`chmod u+x,g+w xxx.avi`赋予执行
+`chmod u=rwx file`
+所有人`chmod a=rwx file`
+`chomd 777 fild`
+
 ### lsof 
 Linux 系统中列出当前占用8080端口进程的命令()
 `lsof -i:8080`
@@ -55,6 +84,13 @@ $ cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 `glpsol --math orienteering_problem.mod --data a8.dat --output "./out"`
 
 ` kill -s 9 1827`
+
+Linux终止一个前台进程可能用到的命令和操作:
+正确答案: B   你的答案: A (错误)
+A.kill (后台进程)
+B.ctrl+c
+C.stop
+D.halt
 
 ### 查文件
 ```
@@ -211,17 +247,7 @@ tmpfs                    100M     0  100M    0% /run/user/0
 12. `grep 'root' /etc/passwd`在文件中用正则查找关键字的行
 13. `ll -a >list.txt`重定向到文件
 
-### 7种文件类型（-文件 d目录 l软链接）
-`-rw-r--r--`10位权限 （r4 w2 x1 读写执行权限 -没有权限 rwx7r-x5r-x5）设计成2的幂次因为不会歧义
-`rw-`u所有者权限
-`r--`g所属组
-`r--`其他人
 
-#### chmod [] 模式 文件名 修改权限
-`chmod u+x,g+w xxx.avi`赋予执行
-`chmod u=rwx file`
-所有人`chmod a=rwx file`
-`chomd 777 fild`
 
 ### RPM
 [查找文件](www.rpmfind.net)
