@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="网络," />
 
 
 
@@ -80,21 +80,28 @@
 
 
 
-<meta name="description" content="Nginx1. 环境 基本库yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake 工具yum -y install wget httpd-tools vim 确认yum源可用yum list|grep gcc 关闭iptables规则iptables -L iptables -F 停用selinuxgetenforce">
+<meta name="description" content="https://imququ.com/post/my-nginx-conf-for-wpo.html nginx.conf下列有关Nginx配置文件nginx.conf的叙述正确的是正确答案: A D   你的答案: A B C D (错误)Anginx进程数设置为CPU总核心数最佳B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)C.sendfile on;表示为开启高效文件传输模式，对于">
+<meta name="keywords" content="网络">
 <meta property="og:type" content="article">
-<meta property="og:title" content="nginx">
+<meta property="og:title" content="Nginx&#x2F;Http&#x2F;HSTS">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/04/02/nginx/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="Nginx1. 环境 基本库yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake 工具yum -y install wget httpd-tools vim 确认yum源可用yum list|grep gcc 关闭iptables规则iptables -L iptables -F 停用selinuxgetenforce">
+<meta property="og:description" content="https://imququ.com/post/my-nginx-conf-for-wpo.html nginx.conf下列有关Nginx配置文件nginx.conf的叙述正确的是正确答案: A D   你的答案: A B C D (错误)Anginx进程数设置为CPU总核心数最佳B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)C.sendfile on;表示为开启高效文件传输模式，对于">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2connect.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http22.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sendrecv.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2better.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2tcp.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jack_https.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/htps.jpg">
-<meta property="og:updated_time" content="2018-11-27T10:19:58.720Z">
+<meta property="og:updated_time" content="2018-12-10T05:01:09.350Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="nginx">
-<meta name="twitter:description" content="Nginx1. 环境 基本库yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake 工具yum -y install wget httpd-tools vim 确认yum源可用yum list|grep gcc 关闭iptables规则iptables -L iptables -F 停用selinuxgetenforce">
-<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https.jpg">
+<meta name="twitter:title" content="Nginx&#x2F;Http&#x2F;HSTS">
+<meta name="twitter:description" content="https://imququ.com/post/my-nginx-conf-for-wpo.html nginx.conf下列有关Nginx配置文件nginx.conf的叙述正确的是正确答案: A D   你的答案: A B C D (错误)Anginx进程数设置为CPU总核心数最佳B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)C.sendfile on;表示为开启高效文件传输模式，对于">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg">
 
 
 
@@ -130,7 +137,7 @@
 
 
 
-  <title>nginx | Learn & practice</title>
+  <title>Nginx/Http/HSTS | Learn & practice</title>
   
 
 
@@ -311,7 +318,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">nginx</h1>
+          <h1 class="post-title" itemprop="name headline">Nginx/Http/HSTS</h1>
         
 
         <div class="post-meta">
@@ -340,8 +347,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:58+08:00">
-                2018-11-27
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-10T13:01:09+08:00">
+                2018-12-10
               </time>
             
           </span>
@@ -359,8 +366,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVMlinux常用备注nginxredis配置/" itemprop="url" rel="index">
-                    <span itemprop="name">JVMlinux常用备注nginxredis配置</span>
+                  <a href="/categories/网络/" itemprop="url" rel="index">
+                    <span itemprop="name">网络</span>
                   </a>
                 </span>
 
@@ -396,7 +403,44 @@
       
 
       
-        <h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><h2 id="1-环境"><a href="#1-环境" class="headerlink" title="1. 环境"></a>1. 环境</h2><ol>
+        <p><a href="https://imququ.com/post/my-nginx-conf-for-wpo.html" target="_blank" rel="noopener">https://imququ.com/post/my-nginx-conf-for-wpo.html</a></p>
+<h2 id="nginx-conf"><a href="#nginx-conf" class="headerlink" title="nginx.conf"></a>nginx.conf</h2><p>下列有关Nginx配置文件nginx.conf的叙述正确的是<br>正确答案: A D   你的答案: A B C D (错误)<br>Anginx进程数设置为CPU总核心数最佳<br>B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)<br>C.sendfile on;表示为开启高效文件传输模式，对于执行下载操作等相关应用时，应设置为on<br>D设置工作模式与连接数上限时，应考虑单个进程最大连接数(最大连接数=连接数*进程数）</p>
+<h4 id="sendfile-零拷贝-实际上是-Linux2-0-以后的推出的一个系统调用"><a href="#sendfile-零拷贝-实际上是-Linux2-0-以后的推出的一个系统调用" class="headerlink" title="sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用"></a>sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用</h4><p>sendfile 是一个系统调用，直接在内核空间完成文件发送，不需要先 read 再 write，没有上下文切换开销。不过需要注意的是，sendfile 是将 in_fd 的内容发送到 out_fd 。而 in_fd 不能是 socket ， 也就是只能文件句柄。 </p>
+<p>当 Nginx 是一个静态文件服务器的时候，开启 SENDFILE 配置项能大大提高 Nginx 的性能。</p>
+<p>当 Nginx 是作为一个反向代理来使用的时候，SENDFILE 则没什么用了，因为 Nginx 是反向代理的时候。 in_fd 就不是文件句柄而是 socket，此时就不符合 sendfile 函数的参数要求了。</p>
+<p><a href="http://xiaorui.cc/2015/06/24/%E6%89%AF%E6%B7%A1nginx%E7%9A%84sendfile%E9%9B%B6%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%A6%82%E5%BF%B5/" target="_blank" rel="noopener">http://xiaorui.cc/2015/06/24/%E6%89%AF%E6%B7%A1nginx%E7%9A%84sendfile%E9%9B%B6%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%A6%82%E5%BF%B5/</a><br>1.系统调用sendfile()通过 DMA把硬盘数据拷贝到 kernel buffer，然后数据被 kernel直接拷贝到另外一个与 socket相关的 kernel buffer。这里没有 user mode和 kernel mode之间的切换，在 kernel中直接完成了从一个 buffer到另一个 buffer的拷贝。<br>2、DMA 把数据从 kernelbuffer 直接拷贝给协议栈，没有切换，也不需要数据从 user mode 拷贝到 kernel mode，因为数据就在 kernel 里。</p>
+<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>以下有关Http协议的描述中，正确的有<br>正确答案: A B C   你的答案: B C D (错误)<br>A.post请求一般用于修改服务器上的资源，对发送的消息数据量没有限制，通过表单方式提交<br>B.可以通过206返回码实现断点续传<br>C.HTTP1.1实现了持久连接和管线化操作以及主动通知功能，相比http1.0有大福性能提升<br>D.HTTP返回码302表示永久重定向，需要重新URI</p>
+<p>http/1.1 字符串传输<br>持久链接：一个tcp链接里可以发送很多http请求。减少三次握手次数。<br>pipeline:<br>添加了host：</p>
+<p>《Web性能权威指南》<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg" alt="http2.jpg"></p>
+<blockquote>
+<p>是通过支持请求与响应的多路复用来减少延迟，通过压缩 HTTP<br>首部字段将协议开销降至最低，同时增加对请求优先级和服务器端推送的支持。</p>
+</blockquote>
+<blockquote>
+<p>它改变了客户端与服务器之间交换数据的方式。<br>为实现宏伟的性能改进目标，HTTP  2.0 增加了新的二进制分帧数据层</p>
+</blockquote>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2connect.jpg" alt="http2connect.jpg"></p>
+<blockquote>
+<p>HTTP  2.0 通信都在一个连接上完成，这个连接可以承载任意数量的双向数据流。<br>每个数据流以消息的形式发送，而消息由一或多个帧组成，这些帧可以乱序发送，然后再根据每个帧首部的流标识符重新组装。</p>
+</blockquote>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http22.jpg" alt="http22.jpg"></p>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sendrecv.jpg" alt="sendrecv.jpg"></p>
+<blockquote>
+<p>HTTP 消息分解为独立的帧，交错发送，然后在另一端重新组装是 HTTP  2.0 最<br>重要的一项增强。</p>
+</blockquote>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2better.jpg" alt="http2better.jpg"></p>
+<blockquote>
+<p>http2:：浏览器可以在发现资源时立即分派请求，指定每个流的优先级，让服务器决定最优的响应次序。这样请求就不必排队了，既节省了时间，也最大限度地利用了每个连接。 </p>
+</blockquote>
+<blockquote>
+<p>每个来源一个链接:，所有HTTP 2.0 连接都是持久化的，而且客户端与服务器之间也只需要一个连接即可。</p>
+</blockquote>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2tcp.jpg" alt="http2tcp.jpg"></p>
+<p>http2：分帧传输二进制传输（不用连续）<br>信道复用 同一个链接多个请求<br>一个tcp链接并发http请求，不用等前一个请求接收到之后再发送。<br>server push推送。以前要先解析html再发送请求css/js。现在请求html就获取。</p>
+<p>nginx开启http2 开启https才能http2<br>ALPN转称http1.1传给服务器<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">  listen 443 http2;</span><br><span class="line">  server_name test.com;</span><br><span class="line">  http2_push_preload on;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>nodejs<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(request.url === <span class="string">'/'</span>)&#123;</span><br><span class="line">  response.writeHead(<span class="number">200</span>,&#123;</span><br><span class="line">    <span class="string">'Content-Type'</span>:<span class="string">'text/html'</span>,</span><br><span class="line">    <span class="string">'Connection'</span>:<span class="string">'close'</span>,</span><br><span class="line">    <span class="comment">//http2的push</span></span><br><span class="line">    <span class="string">'Link'</span>:<span class="string">'&lt;/test.jpg&gt;;as=image;rel=preload'</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>协议变成h2<br><code>chrome://net-internals/#http2</code> 看pushed和 claimed 使用1个push到30个push的区别<br>https的握手过程</p>
+<p><a href="http2.akamai.com/demo/http2-lab.html">http2性能测试</a></p>
+<h2 id="1-环境"><a href="#1-环境" class="headerlink" title="1. 环境"></a>1. 环境</h2><ol>
 <li>基本库<br><code>yum -y install gcc gcc-c++ autoconf pcr^Cpcre-devel make automake</code></li>
 <li>工具<br><code>yum -y install wget httpd-tools vim</code></li>
 <li>确认yum源可用<br><code>yum list|grep gcc</code></li>
@@ -468,6 +512,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络/" rel="tag"># 网络</a>
+          
+        </div>
       
 
       
@@ -589,7 +639,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -622,7 +672,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nginx"><span class="nav-number">1.</span> <span class="nav-text">Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-环境"><span class="nav-number">1.1.</span> <span class="nav-text">1. 环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO多路复用-使用epoll模型"><span class="nav-number">1.2.</span> <span class="nav-text">IO多路复用  使用epoll模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HSTS（HTTP-Strict-Transport-Security）"><span class="nav-number">1.3.</span> <span class="nav-text">HSTS（HTTP Strict-Transport-Security）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-hsts"><span class="nav-number">1.3.1.</span> <span class="nav-text">nginx: hsts</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx-conf"><span class="nav-number">1.</span> <span class="nav-text">nginx.conf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sendfile-零拷贝-实际上是-Linux2-0-以后的推出的一个系统调用"><span class="nav-number">1.0.1.</span> <span class="nav-text">sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-环境"><span class="nav-number">2.</span> <span class="nav-text">1. 环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO多路复用-使用epoll模型"><span class="nav-number">3.</span> <span class="nav-text">IO多路复用  使用epoll模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HSTS（HTTP-Strict-Transport-Security）"><span class="nav-number">4.</span> <span class="nav-text">HSTS（HTTP Strict-Transport-Security）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-hsts"><span class="nav-number">4.1.</span> <span class="nav-text">nginx: hsts</span></a></li></ol></li></ol></div>
             
 
           </div>
