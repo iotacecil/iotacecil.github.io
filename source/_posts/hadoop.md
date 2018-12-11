@@ -4,11 +4,14 @@ date: 2018-08-09 21:35:43
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+split 是mapreduce中的最小计算单元一般和hdfs的blocksize 是一一对应的/
+
 以下哪个调度器是hadoop的默认调度器
-A.调度器Capacity Scheduler
-B.调度器FIFO
-C.资源调度器 Resource Scheduler
-D.调度器Fair Scheduler
+正确答案: B   你的答案: C (错误)
+A调度器Capacity Scheduler
+B调度器FIFO
+C资源调度器 Resource Scheduler
+D调度器Fair Scheduler
 
 ---
 

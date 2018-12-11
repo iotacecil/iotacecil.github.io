@@ -4,6 +4,47 @@ date: 2018-04-08 18:48:55
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### truncate
+下面关于TRUNCATE 和DELETE 的说法正确的是
+正确答案: C D   你的答案: A C (错误)
+A.TRUNCATE 属于DDL，而DELETE 属于DML
+B.TRUNCATE 与DELETE 均能够删除表中的指定记录
+C.TRUNCATE 不能删除表中指定的记录，而DELETE 能够删除表中的指定记录
+D.在清空表记录的操作时，TRUNCATE 的执行效率比DELETE 高
+
+
+关于delete与truncate 区别:
+
+delete和truncate table的最大区别是delete可以通过WHERE语句选择要删除的记录。但执行得速度不快。而且还可以返回被删除的记录数。而truncate table无法删除指定的记录，而且不能返回被删除的记录。但它执行得非常快。
+
+C:DELETE 语句每次删除一行，并在事务日志中为所删除的每行记录一项。TRUNCATE TABLE 通过释放存储表数据所用的数据页来删除数据，并且只在事务日志中记录页的释放。
+TRUNCATE TABLE 删除表中的所有行，但表结构及其列、约束、索引等保持不变。
+
+D:TRUNCATE TABLE 在功能上与不带 WHERE 子句的 DELETE 语句相同：二者均删除表中的全部行。但 TRUNCATE TABLE 比 DELETE 速度快，且使用的系统和事务日志资源少。 
+
+### 范式
+以下哪一个不是对数据库关系范式的目的？
+正确答案: B   你的答案: B (正确)
+A减少数据冗余
+B加快查询速度
+C解决更新异常问题
+D提高存储空间效率
+
+非主属性非部分依赖于主关键字，这个是哪个范式的定义
+正确答案: B   你的答案: B (正确)
+A1NF
+B2NF
+C3NF
+
+第三范式 不存在 传递函数依赖关系 名字可以决定分类；分类可以决定分类描述 则存在非关键字段 分类描述 对名称的依赖
+
+在关系数据库系统中，为了简化用户的查询操作，而又不增加数据的存储空间，常用的方法是创建
+正确答案: C   你的答案: C (正确)
+A另一个表（TABLE）
+B游标（CURSOR）
+C视图（VIEW）
+D索引（INDEX）
+
 ### QPS TPS
 mysql当前一个sql语句只能用到一个cpu
 qps：每秒查询量
@@ -160,7 +201,7 @@ deallocate prepare stmt1
 
 将`where date(ctime)="20160901"`改成`where ctime>='20160901 and ctime<'20160902`可以使用索引
 
-第三范式 不存在 传递函数依赖关系 名字可以决定分类；分类可以决定分类描述 则存在非关键字段 分类描述 对名称的依赖
+
 
 范围查询会使联合索引失效 要把范围查询的表放到索引右侧
 使用`leftjoin`/`not exists`代替 `not in`（会使索引失效

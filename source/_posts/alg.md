@@ -25,6 +25,33 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 862 
+
+### 861 01矩阵反转能得到的最大01行和
+> Input: [[0,0,1,1],[1,0,1,0],[1,1,0,0]]
+Output: 39
+Explanation:
+Toggled to [[1,1,1,1],[1,0,0,1],[1,1,1,1]].
+0b1111 + 0b1001 + 0b1111 = 15 + 9 + 15 = 39
+
+思路：贪心
+1判断行首是0，直接翻转一行，因为2^3比4+2+1还要大
+同列是一个数量级2^?的，判断列0和1的个数翻转。
+
+```java
+public int matrixScore(int[][] A) {
+    int R = A.length, C = A[0].length;
+    int ans = 0;
+    for (int c = 0; c < C; ++c) {
+        int col = 0;
+        for (int r = 0; r < R; ++r)
+            col += A[r][c] ^ A[r][0];
+        ans += Math.max(col, R - col) * (1 << (C-1-c));
+    }
+    return ans;
+}
+```
+
 ### 899 操作字符串前k个字符放到最后 输出字典序最小的
 > Input: S = "cba", K = 1
 > Output: "acb"
