@@ -80,17 +80,17 @@
 
 
 
-<meta name="description" content="以下哪个调度器是hadoop的默认调度器A.调度器Capacity SchedulerB.调度器FIFOC.资源调度器 Resource SchedulerD.调度器Fair Scheduler  Hadoop HDFS Client端上传文件到HDFS上的时候下列不正确的是正确答案: A C D   你的答案: A B (错误)A.数据经过NameNode传递给DataNodeB.数据副本将以管">
+<meta name="description" content="split 是mapreduce中的最小计算单元一般和hdfs的blocksize 是一一对应的/ 以下哪个调度器是hadoop的默认调度器正确答案: B   你的答案: C (错误)A调度器Capacity SchedulerB调度器FIFOC资源调度器 Resource SchedulerD调度器Fair Scheduler  Hadoop HDFS Client端上传文件到HDFS上的时候下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hadoop">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/08/09/hadoop/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="以下哪个调度器是hadoop的默认调度器A.调度器Capacity SchedulerB.调度器FIFOC.资源调度器 Resource SchedulerD.调度器Fair Scheduler  Hadoop HDFS Client端上传文件到HDFS上的时候下列不正确的是正确答案: A C D   你的答案: A B (错误)A.数据经过NameNode传递给DataNodeB.数据副本将以管">
+<meta property="og:description" content="split 是mapreduce中的最小计算单元一般和hdfs的blocksize 是一一对应的/ 以下哪个调度器是hadoop的默认调度器正确答案: B   你的答案: C (错误)A调度器Capacity SchedulerB调度器FIFOC资源调度器 Resource SchedulerD调度器Fair Scheduler  Hadoop HDFS Client端上传文件到HDFS上的时候下">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-10T06:31:05.974Z">
+<meta property="og:updated_time" content="2018-12-11T13:31:32.390Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hadoop">
-<meta name="twitter:description" content="以下哪个调度器是hadoop的默认调度器A.调度器Capacity SchedulerB.调度器FIFOC.资源调度器 Resource SchedulerD.调度器Fair Scheduler  Hadoop HDFS Client端上传文件到HDFS上的时候下列不正确的是正确答案: A C D   你的答案: A B (错误)A.数据经过NameNode传递给DataNodeB.数据副本将以管">
+<meta name="twitter:description" content="split 是mapreduce中的最小计算单元一般和hdfs的blocksize 是一一对应的/ 以下哪个调度器是hadoop的默认调度器正确答案: B   你的答案: C (错误)A调度器Capacity SchedulerB调度器FIFOC资源调度器 Resource SchedulerD调度器Fair Scheduler  Hadoop HDFS Client端上传文件到HDFS上的时候下">
 
 
 
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-12-10T14:31:05+08:00">
-                2018-12-10
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-11T21:31:32+08:00">
+                2018-12-11
               </time>
             
           </span>
@@ -392,7 +392,8 @@
       
 
       
-        <p>以下哪个调度器是hadoop的默认调度器<br>A.调度器Capacity Scheduler<br>B.调度器FIFO<br>C.资源调度器 Resource Scheduler<br>D.调度器Fair Scheduler</p>
+        <p>split 是mapreduce中的最小计算单元一般和hdfs的blocksize 是一一对应的/</p>
+<p>以下哪个调度器是hadoop的默认调度器<br>正确答案: B   你的答案: C (错误)<br>A调度器Capacity Scheduler<br>B调度器FIFO<br>C资源调度器 Resource Scheduler<br>D调度器Fair Scheduler</p>
 <hr>
 <p>Hadoop HDFS Client端上传文件到HDFS上的时候下列不正确的是<br>正确答案: A C D   你的答案: A B (错误)<br>A.数据经过NameNode传递给DataNode<br>B.数据副本将以管道的方式依次传递<br>C.Client将数据写到一台DataNode上，并由Client负责完成Block复制工作<br>D.当某个DataNode失败，客户端不会继续传给其它的DataNode</p>
 <p>A:Client 向 NameNode 发起文件写入的请求。NameNode 根据文件大小和文件块配置情况，返回给 Client 它所管理部分 DataNode 的信息。Client 将文件划分为多个 Block，根据 DataNode 的地址信息，按顺序写入到每一个DataNode 块中。</p>
