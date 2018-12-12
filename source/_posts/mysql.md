@@ -4,6 +4,55 @@ date: 2018-04-08 18:48:55
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+有哪些清空表的方式？
+正确答案: A B C   你的答案: A C D (错误)
+A.drop表然后重建
+B.truncate表
+C.delete表
+D.update表
+
+常用的分析函数有哪些
+正确答案: A B C   你的答案: B (错误)
+A.row_number()
+B.rank()
+C.dense_rank()
+D.mix_rank()
+
+取前价最高的top100商品，需要用到哪些函数组合？
+正确答案: A B C   你的答案: A C (错误)
+A.order by
+B.group by
+C.limit
+D.max
+
+### 全文检索
+MyISAM和InnoDB，前者支持全文本搜索，而后者不支持。
+
+### cross join 
+以下数据表连接正确的有？
+正确答案: A B C D   你的答案: A B C (错误)
+A.join
+B.left join
+C.right join
+D.cross join
+
+Cross Join.From A cross join B is produces the cartesian product A × B. Each A will be repeated once for every B. If A has 100 rows and B has 100 rows, the result set will consist of 10,000 rows.
+
+### Having
+HAVING非常类似于WHERE。事实上，目前为止所学过的所有类型的WHERE子句都可以用HAVING来替代。唯一的差别是WHERE过滤行，而HAVING过滤分组。
+
+### Uinon & Union all
+在数据库的SQL语言开发中，下述关于Union和Union all的描述哪些是正确的：
+正确答案: A B D   你的答案: B C D (错误)
+A 使用Union或Union all组合查询的数据集，需满足两个条件：
+    列数和列的顺序必须相同；数据类型必须兼容
+B.Union在进行表链接后会筛选掉重复的记录，所以在表链接后会对所产生的结果集进行排序运算，删除重复的记录再返回结果。
+C.Union all返回的结果集就会包含重复的数据了，如果表数据量大的话可能会导致用磁盘进行排序。因此，从效率上说，union要比union all快很多
+D.如果可以确认合并的两个结果集中不包含重复的数据的话，那么就建议使用Union all
+
+#### Union：
+ UNION中的每个查询必须包含相同的列、表达式或聚集函数
+
 ### truncate
 下面关于TRUNCATE 和DELETE 的说法正确的是
 正确答案: C D   你的答案: A C (错误)

@@ -1,10 +1,19 @@
 ---
-title: 前缀和 滑动窗口 子数组、序列问题
+title: 数组划分 前缀和 滑动窗口 子数组、序列问题
 date: 2018-10-28 11:17:19
 tags: [alg]
 categories: [算法备忘]
 ---
+### lt 45 最大子数组差
+>给出数组[1, 2, -3, 1]，返回 6
+找出两个不重叠的子数组A和B，使两个子数组和的差的绝对值|SUM(A) - SUM(B)|最大
 
+
+### 724 最小划分 数字分成2组 和的差最小
+>给出nums = [1, 6, 11, 5]，返回1
+// Subset1 = [1, 5, 6]，和是12
+// Subset2 = [11]，和是11
+// abs(11 - 12) = 1
 
 ### 813 数组A分成K个相邻的非空子数组，子数组平均和和最大多少
 >输入: 
@@ -143,14 +152,8 @@ public static long maxability(int n,long[]arr,int k,int d){
     }
 ```
 
----
 
-### lt 45 最大子数组差
->给出数组[1, 2, -3, 1]，返回 6
-找出两个不重叠的子数组A和B，使两个子数组和的差的绝对值|SUM(A) - SUM(B)|最大
 
-```java
-```
 
 ---
 
@@ -371,9 +374,6 @@ public boolean canPartition(int[] nums){
 
 ### !594 最长max min相差1的子序列(不是连续的数组)
 数组 hashmap 计数模板
-```java
-
-```
 
 
 
@@ -470,8 +470,7 @@ Explanation: the subarray [4,3]
 1 二分搜索
 暴力法搜索前缀数组`sum[j]-sum[i]+nums[i]>=k`的最短ij
 二分发寻找`sum[j] >= sum[i]-nums[i]+k` j的最小值
-```java
-```
+
 
 
 

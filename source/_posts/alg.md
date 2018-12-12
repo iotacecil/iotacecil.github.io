@@ -25,7 +25,157 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
-### 862 
+### lt912 最佳见面地点
+
+
+
+### 542 01矩阵 变成离0距离的矩阵
+```
+0 0 0
+0 1 0
+1 1 1
+
+0 0 0
+0 1 0
+1 2 1
+```
+
+1.把0都放入队列，非零格子最大化
+2.如果bfs到这个格子的距离比格子的值小就更新。
+```java
+int[][] ori = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+public int[][] updateMatrix(int[][] matrix) {
+    int n = matrix.length;
+    int m = matrix[0].length;   
+    Queue<int[]> que = new LinkedList<>();
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix[0].length; j++) {
+            if (matrix[i][j] == 0) {
+              que.add(new int[]{i, j});
+            }else{
+                matrix[i][j] = Integer.MAX_VALUE;
+            }
+        }
+    }
+    while (!que.isEmpty()) {
+        int[] top = que.poll();             
+        int curx = top[0];
+        int cury = top[1];
+        
+        for (int i = 0; i < ori.length; i++) {
+                int newx = curx + ori[i][0];
+                int newy = cury + ori[i][1];
+
+                if (newx < 0 || newx >= n || newy < 0 || newy >= m ||
+                    matrix[newx][newy] <= matrix[curx][cury] +1)
+                    continue;
+                matrix[newx][newy] = matrix[curx][cury] + 1;
+                que.add(new int[]{newx, newy});
+                
+        }
+        
+    }
+    return matrix;
+}
+```
+
+
+### 899 操作字符串前k个字符放到最后 输出字典序最小的
+> Input: S = "cba", K = 1
+> Output: "acb"
+> 
+> Input: S = "baaca", K = 3
+> Output: "aaabc"
+> Explanation: 
+> In the first move, we move the 1st character ("b") to the end, obtaining the string "aacab".
+> In the second move, we move the 3rd character ("c") to the end, obtaining the final result "aaabc".
+
+当k=1 字符串只能旋转
+当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
+
+### 132 pattern
+
+### lt700 怎么划分最赚钱 完全背包
+```
+长度    | 1   2   3   4   5   6   7   8  
+--------------------------------------------
+价格    | 1   5   8   9  10  17  17  20
+```
+给出 price = [1, 5, 8, 9, 10, 17, 17, 20], n = 8 返回 22//切成长度为 2 和 6 的两段
+
+dp:(0,n),(1,n-1),...,(n/2,n/2)
+二维dp（？）
+```java
+public int cutting(int[] prices, int n) {
+  int[][] dp = new int[n+1][n+1];
+    for(int j = 1; j <= n; j++) {
+        for(int i = 1; i <=n; i++) {
+            dp[i][j] = Math.max(dp[i][j], dp[i-1][j]);
+            if(j >= i) {
+                dp[i][j] = Math.max(dp[i][j], dp[i][j - i] + prices[i-1]);
+            }
+        }
+    }
+    return dp[n][n];
+}
+```
+
+记忆递归：
+{% fold %}
+```java
+Map<Integer,Integer> map = new HashMap<>();
+public int cutting(int[] prices, int n) {
+    if(map.containsKey(n))return map.get(n);
+    if(n <=0 )return 0;
+    if(n == 1)return prices[0];
+    int sum = 0;
+    for (int i = 1; i <n+1; i++) {
+        sum = Math.max(sum, cutting(prices, n-i) + prices[i-1]);
+    }
+    map.put(n, sum);
+    return sum;
+}
+```
+{% endfold %}
+
+
+### 862 和至少为K的最短子数组
+> Input: A = [2,-1,2], K = 3
+Output: 3
+
+思路：用前缀和找区间和，关键：递增有序栈，
+用当前值更新队尾，如果当前的presum比队尾presum小，则下一个减这个得到的区间更短而且值更大。
+
+```java
+public int shortestSubarrayWindow(int[] A, int K) {
+    int n = A.length;
+    long[] presum = new long[n+1];
+
+    for (int i = 0; i <n ; i++) {
+        if(A[i] >=K)return 1;
+        presum[i+1] = presum[i] +A[i];
+    }
+    int minlen = n+1;
+
+    Deque<Integer> deque = new ArrayDeque<>();
+
+    for (int i = 0; i <n ; i++) {
+
+        while (deque.size() >0 && presum[i] - presum[deque.getFirst()] >= K){
+
+            minlen = Math.min(minlen, i-deque.pollFirst());
+        }
+        // 关键
+        while (deque.size() > 0 && presum[i] <= presum[deque.getLast()]){
+         deque.pollLast();
+        }
+        deque.addLast(i);
+
+    }
+    return minlen == n+1?-1:minlen;
+
+}
+```
 
 ### 861 01矩阵反转能得到的最大01行和
 > Input: [[0,0,1,1],[1,0,1,0],[1,1,0,0]]
@@ -52,18 +202,7 @@ public int matrixScore(int[][] A) {
 }
 ```
 
-### 899 操作字符串前k个字符放到最后 输出字典序最小的
-> Input: S = "cba", K = 1
-> Output: "acb"
-> 
-> Input: S = "baaca", K = 3
-> Output: "aaabc"
-> Explanation: 
-> In the first move, we move the 1st character ("b") to the end, obtaining the string "aacab".
-> In the second move, we move the 3rd character ("c") to the end, obtaining the final result "aaabc".
 
-当k=1 字符串只能旋转
-当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
 
 ### sw44 判断扑克牌是否顺子
 1.排序，
@@ -2038,7 +2177,7 @@ class Solution {
 ### 频繁元素计算 Misra Gries(MG)算法
 
 
-### 最小生成树
+
 
 ### 笛卡尔树
 

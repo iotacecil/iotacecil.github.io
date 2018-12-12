@@ -3,6 +3,10 @@ title: redis
 date: 2018-09-05 13:59:20
 tags:
 ---
+### MurmurHash算法
+输入键有规律 算法仍能给出一个很好的随机分布。
+
+
 ### `ConcurrentSkipListMap`
 
 ### 4.搭建redis服务器
