@@ -80,17 +80,17 @@
 
 
 
-<meta name="description" content="JDK9 Reactive Stream其它库Guava，Apache Commons Collections ,ambdaj Collector.java接口提供者  the type of input elements to the reduction operation  the mutable accumulation type of the reduction operation (of">
+<meta name="description" content="JDK9 Reactive StreamOptional创建：  of工厂方法Optional.of(&amp;quot;abb&amp;quot;); ofNullable:如果为空返回empty()空的optionalOptional.ofNullable(&amp;quot;abb&amp;quot;); .empty()  isPresent..   其它库Guava，Apache Commons Collections">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java8">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/06/06/java8/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="JDK9 Reactive Stream其它库Guava，Apache Commons Collections ,ambdaj Collector.java接口提供者  the type of input elements to the reduction operation  the mutable accumulation type of the reduction operation (of">
+<meta property="og:description" content="JDK9 Reactive StreamOptional创建：  of工厂方法Optional.of(&amp;quot;abb&amp;quot;); ofNullable:如果为空返回empty()空的optionalOptional.ofNullable(&amp;quot;abb&amp;quot;); .empty()  isPresent..   其它库Guava，Apache Commons Collections">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-17T12:35:40.275Z">
+<meta property="og:updated_time" content="2018-12-13T08:53:14.342Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java8">
-<meta name="twitter:description" content="JDK9 Reactive Stream其它库Guava，Apache Commons Collections ,ambdaj Collector.java接口提供者  the type of input elements to the reduction operation  the mutable accumulation type of the reduction operation (of">
+<meta name="twitter:description" content="JDK9 Reactive StreamOptional创建：  of工厂方法Optional.of(&amp;quot;abb&amp;quot;); ofNullable:如果为空返回empty()空的optionalOptional.ofNullable(&amp;quot;abb&amp;quot;); .empty()  isPresent..   其它库Guava，Apache Commons Collections">
 
 
 
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-17T20:35:40+08:00">
-                2018-09-17
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-13T16:53:14+08:00">
+                2018-12-13
               </time>
             
           </span>
@@ -392,7 +392,16 @@
       
 
       
-        <h3 id="JDK9-Reactive-Stream"><a href="#JDK9-Reactive-Stream" class="headerlink" title="JDK9 Reactive Stream"></a>JDK9 Reactive Stream</h3><p>其它库Guava，Apache Commons Collections ,ambdaj</p>
+        <h3 id="JDK9-Reactive-Stream"><a href="#JDK9-Reactive-Stream" class="headerlink" title="JDK9 Reactive Stream"></a>JDK9 Reactive Stream</h3><h3 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h3><p>创建：</p>
+<ol>
+<li><code>of</code>工厂方法<code>Optional.of(&quot;abb&quot;);</code></li>
+<li><code>ofNullable</code>:如果为空返回empty()空的optional<code>Optional.ofNullable(&quot;abb&quot;);</code></li>
+<li><p><code>.empty()</code></p>
+</li>
+<li><p><code>isPresent</code>..</p>
+</li>
+</ol>
+<p>其它库Guava，Apache Commons Collections ,ambdaj</p>
 <h3 id="Collector-java接口提供者"><a href="#Collector-java接口提供者" class="headerlink" title="Collector.java接口提供者"></a><code>Collector.java</code>接口提供者</h3><blockquote>
 <p><t> the type of input elements to the reduction operation<br> <a> the mutable accumulation type of the reduction operation (often hidden as an implementation detail)<br> <r> the result type of the reduction operation</r></a></t></p>
 </blockquote>
@@ -635,7 +644,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK9-Reactive-Stream"><span class="nav-number">1.</span> <span class="nav-text">JDK9 Reactive Stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collector-java接口提供者"><span class="nav-number">2.</span> <span class="nav-text">Collector.java接口提供者</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#toList"><span class="nav-number">2.1.</span> <span class="nav-text">toList()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stream-collect"><span class="nav-number">2.2.</span> <span class="nav-text">stream().collect()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collectors"><span class="nav-number">3.</span> <span class="nav-text">.Collectors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lambda"><span class="nav-number">4.</span> <span class="nav-text">lambda</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较器链"><span class="nav-number">4.1.</span> <span class="nav-text">比较器链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#谓词复合-negate-and-or"><span class="nav-number">4.2.</span> <span class="nav-text">谓词复合.negate(),.and(),.or()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数符合"><span class="nav-number">4.3.</span> <span class="nav-text">函数符合</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包：函数的实例，可以无限制地访问函数的非本地变量。"><span class="nav-number">5.</span> <span class="nav-text">闭包：函数的实例，可以无限制地访问函数的非本地变量。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream-高级迭代器"><span class="nav-number">6.</span> <span class="nav-text">Stream 高级迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#intermediate-中间方法"><span class="nav-number">6.1.</span> <span class="nav-text">intermediate 中间方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#terminal的"><span class="nav-number">6.2.</span> <span class="nav-text">terminal的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态方法"><span class="nav-number">6.3.</span> <span class="nav-text">静态方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建流"><span class="nav-number">7.</span> <span class="nav-text">创建流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无限流"><span class="nav-number">8.</span> <span class="nav-text">无限流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扁平化"><span class="nav-number">9.</span> <span class="nav-text">扁平化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找匹配"><span class="nav-number">10.</span> <span class="nav-text">查找匹配</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDK9-Reactive-Stream"><span class="nav-number">1.</span> <span class="nav-text">JDK9 Reactive Stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optional"><span class="nav-number">2.</span> <span class="nav-text">Optional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collector-java接口提供者"><span class="nav-number">3.</span> <span class="nav-text">Collector.java接口提供者</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#toList"><span class="nav-number">3.1.</span> <span class="nav-text">toList()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stream-collect"><span class="nav-number">3.2.</span> <span class="nav-text">stream().collect()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collectors"><span class="nav-number">4.</span> <span class="nav-text">.Collectors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lambda"><span class="nav-number">5.</span> <span class="nav-text">lambda</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较器链"><span class="nav-number">5.1.</span> <span class="nav-text">比较器链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#谓词复合-negate-and-or"><span class="nav-number">5.2.</span> <span class="nav-text">谓词复合.negate(),.and(),.or()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数符合"><span class="nav-number">5.3.</span> <span class="nav-text">函数符合</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包：函数的实例，可以无限制地访问函数的非本地变量。"><span class="nav-number">6.</span> <span class="nav-text">闭包：函数的实例，可以无限制地访问函数的非本地变量。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream-高级迭代器"><span class="nav-number">7.</span> <span class="nav-text">Stream 高级迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#intermediate-中间方法"><span class="nav-number">7.1.</span> <span class="nav-text">intermediate 中间方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#terminal的"><span class="nav-number">7.2.</span> <span class="nav-text">terminal的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态方法"><span class="nav-number">7.3.</span> <span class="nav-text">静态方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建流"><span class="nav-number">8.</span> <span class="nav-text">创建流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无限流"><span class="nav-number">9.</span> <span class="nav-text">无限流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扁平化"><span class="nav-number">10.</span> <span class="nav-text">扁平化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找匹配"><span class="nav-number">11.</span> <span class="nav-text">查找匹配</span></a></li></ol></div>
             
 
           </div>
