@@ -7,6 +7,14 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ### JDK9 Reactive Stream
 
 
+### Optional
+创建：
+1. `of`工厂方法`Optional.of("abb");`
+2. `ofNullable`:如果为空返回empty()空的optional`Optional.ofNullable("abb");`
+3. `.empty()`
+
+1. `isPresent`..
+
 其它库Guava，Apache Commons Collections ,ambdaj
 
 ### `Collector.java`接口提供者

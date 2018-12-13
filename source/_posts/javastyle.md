@@ -32,39 +32,7 @@ public LinkedHashMap(int initialCapacity,
                          boolean accessOrder)
 ```
 
-### Collections.sort->list::sort->Arrays.sort->TimSort.sort
-`{1, 2, 3, 4, 5, 9,   7, 8, 10, 6}` 输出 6
-`{9,8,7,6,5,4,  10}`输出6 并且`reverse(0,6)`->`[4, 5, 7, 6, 8, 9, 10]`
-{% fold %}
-```java 
-private static <T> int countRunAndMakeAscending(T[] a, int lo, int hi,
-                                                    Comparator<? super T> c) {
-    assert lo < hi;
-    int runHi = lo + 1;
-    if (runHi == hi)
-        return 1;
-    // Find end of run, and reverse range if descending
-    if (c.compare(a[runHi++], a[lo]) < 0) { // Descending
-        while (runHi < hi && c.compare(a[runHi], a[runHi - 1]) < 0)
-            runHi++;
-        reverseRange(a, lo, runHi);
-    } else {                              // Ascending
-        while (runHi < hi && c.compare(a[runHi], a[runHi - 1]) >= 0)
-            runHi++;
-    }
-    return runHi - lo;
-}
-private  void reverseRange(Object[] a, int lo, int hi) {
-    hi--;
-    while (lo < hi) {
-        System.out.println(Arrays.toString(a));
-        Object t = a[lo];
-        a[lo++] = a[hi];
-        a[hi--] = t;
-    }
-}
-```
-{% endfold %}
+
 
 ### String
 String+" "原来的string还是在的 要等垃圾回收
@@ -139,7 +107,32 @@ public String(String original) {
 百分比`new DecimalFormat("#.##%").format(pi)`
 
 ---
-### StringBuffer
+
+### 字符串存储 紧凑字符串
+Java 中的 char 是两个 bytes 大小.
+Java 9 中，引入了 `Compact Strings` 的设计，对字符串进行了大刀阔斧的改进。将数据
+存储方式从 char 数组，改变为一个 byte 数组加上一个标识编码的所谓 coder，并且将相关字
+符串操作类都进行了修改。所有相关的 Intrinsic 之类也都进行了重写，以保证没有任何
+性能损失。
+
+字符串也出现了一些能力退化，比如最大字符串的大小。
+原来 char 数组的实现，字符串的最大长度就是数组本身的长度限制，但是替换成 byte 数组，
+同样数组长度下，存储能力是退化了一倍的！ 理论中的极限。
+
+#### 编码
+`getBytes()/String (byte[] bytes)` 等都是隐含着使用平台默认编码
+
+### 字符串拼接
+在 JDK 8 中，字符串拼接操作会自动被 javac 转换为 StringBuilder 操作.
+JDK 9 里面则是因为 Java 9 为了更加统一字符串操作优化，提供了 StringConcatFactory，作
+为一个统一的入口。
+
+
+#### StringBuffer
+1. 线程安全
+public `synchronized` StringBuffer append(String str) 
+-  CharSequence字符序列类
+
 ```java
 String c = a+b+1;//常量变量相加会产生5个对象 编译器会优化
 String d = "a"+1+2+"b";//常量相加只有一个对象
@@ -152,7 +145,10 @@ sb.toString();
 ```
 
 ---
-### StringBuilder
+#### StringBuilder
+1. `StingBuilder`线程不安全
+2. 连接大量字符串 .append .toString()
+
 `javap -c `查看编译后的指令
 1.`String a ="a"+1;`会生成builder加入a1
 2.`String b = a+"b";`执行一次append
@@ -162,6 +158,40 @@ for(i in 5){
     c+=i;//会创建5个StringBuilder 应该用append拼接
 }
 ```
+
+
+### 字符串缓存
+String 在 Java 6 以后提供了 intern() 方法，目的是提示 JVM把相应字符串缓存起来，以备重复使用。在我们创建字符串对象并调用 intern() 方法的时候，如果已经有缓存的字符串，就会返回缓存里的实例，否则将其缓存起来。
+
+- 一般使用 Java 6 这种历史版本，并不推荐大量使用intern，为什么呢？
+被缓存的字符串是存在所谓 PermGen 里的，也就是臭名昭著的“永久代”，这个空间是很有限的，也基本不会被 FullGC 之外的垃圾收
+集照顾到。所以，如果使用不当，就会OOM。
+
+- 在后续版本中，这个缓存被放置在堆中，这样就极大避免了永久代占满的问题，甚至永久代在
+JDK 8 中被 MetaSpace（元数据区）替代了。而且，默认缓存大小也在不断地扩大中，从最初
+的 1009，到 7u40 以后被修改为 60013。
+```java
+-XX:+PrintStringTableStatistics
+```
+
+- Intern 是一种显式地排重机制，但是它也有一定的副作用，因为需要开发者写代码时明确调
+用，一是不方便，每一个都显式调用是非常麻烦的；另外就是我们很难保证效率，应用开发阶段
+很难清楚地预计字符串的重复情况，有人认为这是一种污染代码的实践。
+
+-  Oracle JDK 8u20 之后，推出了一个新的特性，也就是 G1 GC 下的字符串排重。它是
+通过将相同数据的字符串指向同一份数据来做到的，是 JVM 底层的改变，并不需要 Java 类库
+做什么修改。
+
+使用下面参数开启，并且记得指定使用 G1 GC：
+`-XX:+UseStringDeduplication`
+
+#### JVM的 Intrinsic
+在运行时，字符串的一些基础操作会直接利用 JVM 内部的 Intrinsic机制，往往运行的就是特殊优化的本地代码，而根本就不是 Java 代码生成的字节码。
+`-XX:+PrintCompilation -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining `
+
+Intrinsic 机制 ： 
+利用 native 方式hard-coded的逻辑，算是一种特别的内联，很多优化还是需要直接使用特定的 CPU 指令.
+
 
 ---
 ### clone 不用创建过程 不用重新计算对象的大小
@@ -191,11 +221,13 @@ if (pivot.compareTo(a[mid]) < 0)
 ```java
 xxxComparator implements Comparator<T>{
     compare(T o1,T o2){}
-}```
+}
+```
 sort传入比较器
 `Arrays.sort(t1,new xxxComparator())`
 
 ---
+
 ### System
 1.时间
 ```java
@@ -218,123 +250,7 @@ jvm最大可用内存`rt.maxMemory()`
 2. 执行命令行命令
 `rt.exec("notepad")`
 
----
-### vector 
-1.ArrayListhe和Vector在用法上完全相同`addElement(Object obj)`和`add(Object obj)`没什么区别
-```java
-  public synchronized void addElement(E obj) {
-    modCount++;
-    ensureCapacityHelper(elementCount + 1);
-    elementData[elementCount++] = obj;
-}
-```
-```java
-  public synchronized boolean add(E e) {
-    modCount++;
-    ensureCapacityHelper(elementCount + 1);
-    elementData[elementCount++] = e;
-    return true;
-}
-```
-> Vector里有一些功能重复的方法,这些方法中方法名更短的是属于后来新增的方法.更长的是原先vector的方法.而后来ArrayList是作为List的主要实现类.
 
-线程同步不应该使用Vector 应该使用
-`java.util.concurrent.CopyOnWriteArrayList`
-
----
-### `class Stack<E> extends Vector<E>`
-> Deque 接口及其实现提供了 LIFO 堆栈操作的更完整和更一致的 set
-
-`Deque<Integer> stack = new ArrayDeque<Integer>();`
-`LinkedList<E> implements List<E>, Deque<E>,`
-
----
-### ArrayDeque循环数组
-https://github.com/CarpenterLee/JCFInternals/blob/master/markdown/4-Stack%20and%20Queue.md
-
-`head`指向首端第一个有效元素，`tail`指向尾端第一个可以插入元素的空位
-
----
-#### void addFirst(E e)
-```java
- elements[head = (head - 1) & (elements.length - 1)] = e;//越界处理
- if (head == tail) doubleCapacity();
-```
-1.head前有空位 2.head是0，加到最后，如果最后是tail则扩容：
-1. **elements.length必需是2的指数倍，elements - 1就是二进制低位全1**
-2. 跟head - 1相与之后就起到了**【取模】**的作用
-3. 当head-1=-1;相当于对其取相对于elements.length的补码(正数就是本身)
-
-```java
-int head = 10;
-int length = 8;
-//8->1000 ;7->0111;10-1=9->1001 ;->1
-head = (head - 1) & (length - 1);
-```
-
----
-#### addLast
-```java
-elements[tail] = e;
-if ( (tail = (tail + 1) & (elements.length - 1)) == head) doubleCapacity();
-```
-
----
-#### void doubleCapacity()
-`System.arraycopy`
-```java
-native void arraycopy(Object src, //原数组 
-    int  srcPos,//原数组起始位置
-    Object dest, //目标数组
-    int destPos, //起始
-    int length); //长度
-```
-![doubleC.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/doubleC.jpg)
-```java
-int p = head;
-int n = elements.length;
-int r = n - p; // head右边元素的个数
-//复制右半部分，对应上图中绿色部分
-System.arraycopy(elements, p, a, 0, r);
-//复制左半部分，对应上图中灰色部分
-System.arraycopy(elements, 0, a, r, p);
-```
-
----
-### pollFirst()删除并返回Deque首端(head)元素
-{% fold %}
-```java
- public E pollFirst() {
-    int h = head;
-    @SuppressWarnings("unchecked")
-    E result = (E) elements[h];
-    // Element is null if deque empty
-    if (result == null)
-        return null;
-    elements[h] = null;     // Must null out slot
-    head = (h + 1) & (elements.length - 1);
-    return result;
-}
-```
-{% endfold %}
-
----
-#### pollLast()
-`int t =(tail-1)&(element.length-1);`
-
----
-#### E peekFirst()&E peekLast 返回但步删除
----
-### LinkedList 双向链表
-`Queue queue = new LinkedList();`
-内部静态类Node
-
----
-### map
-遍历：
-```java
-for(Map.Entry<String,String> entry:map.entrySet()){}
-```
 
 ---
 [java那些事](https://zhuanlan.zhihu.com/p/28016098)
@@ -379,11 +295,48 @@ public static Character valueOf(char c) {
 
 ---
 ### Integer
+
+#### SIZE,BYTES常量 为了统一整数的位数
+Java 语言规范里面，不管是 32 位还是 64 位环境，开发者无需担心数据的位数差异。
+```java
+// Bit twiddling
+
+/**
+ * The number of bits used to represent an {@code int} value in two's
+ * complement binary form.
+ *
+ * @since 1.5
+ */
+@Native public static final int SIZE = 32;
+
+/**
+ * The number of bytes used to represent a {@code int} value in two's
+ * complement binary form.
+ *
+ * @since 1.8
+ */
+public static final int BYTES = SIZE / Byte.SIZE;
+```
+
+#### 缓存
+缓存机制并不是只有 Integer 才有，同样存在于其他的一些包装类
+缓存上限值实际是可以根据需要调整的，JVM 提供了参数设置：
+`-XX:AutoBoxCacheMax=N `
+- Boolean，缓存了 true/false 对应实例，确切说，只会返回两个常量实例
+Boolean.TRUE/FALSE。
+- Short，同样是缓存了 -128 到 127 之间的数值。
+- Byte，数值有限，所以全部都被缓存。
+- Character，缓存范围 '\u0000' 到 '\u007F'。
+
 ```java
 Integer i3 =100;Integer i4= 100;
 i3==i4;//(true)同一个对象
 ```
 > 享元模式：共享对象 将1字节以内的数缓存
+
+- Java 5 中新增了静态工厂方法 valueOf，在调用它的时候会利用一
+个缓存机制，带来了明显的性能改进。
+按照 Javadoc，这个值默认缓存是 -128 到 127 之间。
 
 - IntegerCache缓存数组 为避免重复创建对象
 - private static 内部静态类 只能在该类中访问,static用来做缓存
@@ -400,6 +353,55 @@ i3==i4;//(true)同一个对象
                 cache[k] = new Integer(j++);
 
 ```
+
+{% fold %}
+```java
+/**
+ * Cache to support the object identity semantics of autoboxing for values between
+ * -128 and 127 (inclusive) as required by JLS.
+ *
+ * The cache is initialized on first usage.  The size of the cache
+ * may be controlled by the {@code -XX:AutoBoxCacheMax=<size>} option.
+ * During VM initialization, java.lang.Integer.IntegerCache.high property
+ * may be set and saved in the private system properties in the
+ * sun.misc.VM class.
+ */
+
+private static class IntegerCache {
+    static final int low = -128;
+    static final int high;
+    static final Integer cache[];
+
+    static {
+        // high value may be configured by property
+        int h = 127;
+        String integerCacheHighPropValue =
+            sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
+        if (integerCacheHighPropValue != null) {
+            try {
+                int i = parseInt(integerCacheHighPropValue);
+                i = Math.max(i, 127);
+                // Maximum array size is Integer.MAX_VALUE
+                h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
+            } catch( NumberFormatException nfe) {
+                // If the property cannot be parsed into an int, ignore it.
+            }
+        }
+        high = h;
+
+        cache = new Integer[(high - low) + 1];
+        int j = low;
+        for(int k = 0; k < cache.length; k++)
+            cache[k] = new Integer(j++);
+
+        // range [-128, 127] must be interned (JLS7 5.1.7)
+        assert IntegerCache.high >= 127;
+    }
+
+    private IntegerCache() {}
+}
+```
+{% endfold %}
 
 ---
 ```java
@@ -418,16 +420,20 @@ i3==i4;//(false)new了两个对象
 **结论：Integer要用equals**
 -  char2int: b.charAt(i--)-'0'; 
 
----
-### StringBuilder
-1. `StingBuilder`线程不安全
-2. 连接大量字符串 .append .toString()
+#### 自动装箱 / 自动拆箱是发生在什么阶段
+自动装箱是一种语法糖。保证不同的写法在运行时等价，它们发生在**编译**阶段，也就是生成的字节码是一致的。
 
----
-### StringBuffer
-1. 线程安全
-public `synchronized` StringBuffer append(String str) 
--  CharSequence字符序列类
+javac 替我们自动把装箱转换为 `Integer.valueOf()`，把拆箱替换为
+`Integer.intValue()`
+
+#### 性能优化
+建议避免无意中的装箱、拆箱行为，尤其是在性能敏感的场合，创建 10 万个 Java 对
+象和 10 万个整数的开销不是一个数量级的，不管是内存使用还是处理速度，光是对象头的空
+间占用就已经是数量级的差距了。
+
+- 使用原始数据类型、数组甚至本地代码实现等，在性能极度敏感的场景往往具有比较大的优势
+
+
 
 ---
 ### euqals
@@ -484,58 +490,9 @@ public boolean equals(Object anObject) {
     }
 ```
 
-### ArrayList
-> fianl修饰的变量，JVM也会提前给我们初始化好。???
-
-```java
-//变量
-private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
-transient Object[] elementData;
-
-//构造函数，避免反复创建无用数组 指向同一个缓存Object[]数组
-this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
-if (initialCapacity == 0) {
-    this.elementData = EMPTY_ELEMENTDATA;}
-
-```
----
-- `.add(e)`
-1. 创建Object数组，并拷贝 ->ensureCapacityInternal(size+1) 
-->ensureExplicitCapacity(size+1);
-->grow(size+1)->Arrays.copyOf
-->new Object[newLength]，System.arraycopy
-2. elementData[size++] = e;
-- object的长度为10，size为逻辑长度，不是数组长度，`minCapacity = Math.max(DEFAULT_CAPACITY=10, minCapacity`
-- 第一次扩容：就一个元素，在堆内存中占了10个位置
-- 之后扩容：`int newCapacity = oldCapacity + (oldCapacity >> 1);`//>>=/2
----
-- `.remove(index)`
-
-1.将index+1后的numMoved个元素从index开始复制obj->obj
-```java
-System.arraycopy(elementData, index+1, elementData, index,
-                             numMoved); 
-```
-2.长度-1，最后一个null `elementData[--size] = null;`
 
 ---
-- `.romove(Object o)` 循环查找o==null！=null->fastremove(index)(基本同上)
 
-```java
-//当o！=null,按List规范重写equal!!
-if(o.equal(elementData[index])){
-	fastRemove(index)
-}
-
-```
-
----
-### Arrays
-- `@SuppressWarnings("unchecked")`编译器消除警告
-	- unchecked:执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型。
-- Arrays.
-
----
 
 ### native
 > native是由操作系统实现的，C/C++实现，java去调用。
@@ -547,23 +504,80 @@ if(o.equal(elementData[index])){
 - default方法：接口内部有方法实现；实现两个接口有同名default名字冲突->报错
 
 ---
-### package java.util;里的常用类
-- Vector,Arraylist,LinkedList implements **List**
-- LinkedList implents **Queue**
-- ***List,Queue,Set*** implememts Collection
 
----
-### Arraylist和Vector的区别
-> 1. Vector是线程安全的，ArrayList不是线程安全的。
-> 2. ArrayList在底层数组不够用时在原来的基础上扩展0.5倍，Vector是扩展1倍(可以改增量）。
-
-vector:
-```java
-int newCapacity = oldCapacity + ((capacityIncrement > 0) ?capacityIncrement : oldCapacity);
-```
-> 加锁和释放锁,在单线程的环境中，Vector效率要差很多。
-
-- 和ArrayList和Vector一样，同样的类似关系的类还有HashMap和HashTable，StringBuilder和StringBuffer，后者是前者线程安全版本的实现。
-
----
 ### synchronized JVM实现
+
+### 泛型和原始数据类型
+Java 的对象都是引用类型，
+如果是一个 **原始数据类型数组**，它在内存里是一段连续的内存，
+而**对象数组**则不然，数据存储的是引用，对象往往是分散地存储在堆的不同位置。
+
+导致了数据操作的低效，尤其是无法充分利用现代 CPU 缓存机制。
+
+
+### java对象的内存结构
+对象在内存中存储的布局可以分为3块区域：对象头（Header）、实例数据（Instance Data）和对齐填充（Padding）。
+
+#### 对象头8字节
+1. Mark Word:标记位 4字节：第一部分用于存储对象自身的运行时数据，如哈
+希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳
+等，这部分数据的长度在32位和64位的虚拟机（未开启压缩指针）中分别为32bit和64bit，
+官方称它为"Mark Word"。 
+
+
+
+前4保存对象hash(3)，锁状态(1)
+后4存储对象所属类的引用。
+
+数组还有4字节保存数组大小。
+
+#### Integer 
+1. Mark Word:标记位 4字节，类似轻量级锁标记位，偏向锁标记位等。 
+2. Class对象指针:4字节，指向对象对应class对象的内存地址。 
+3. 对象实际数据:对象所有成员变量。 
+4. 对齐:对齐填充字节，按照8个字节填充。 
+ 
+Integer占用内存大小，4+4+4+4=16字节。
+
+
+#### java内存
+
+https://algs4.cs.princeton.edu/14analysis/
+http://yueyemaitian.iteye.com/blog/2034305
+https://blog.csdn.net/zhxdick/article/details/52003123
+
+#### object
+object overhead 16+int 4 padded到4的倍数(`-XX:-UseCompressedOops:`)
+如果用压缩则`-XX:+UseCompressedOops: mark/4 + metedata/8 + 4 = 16 `
+默认是启动压缩的
+![javaobj.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaobj.jpg)
+> Objects. To determine the memory usage of an object, we add the amount of memory used by each instance variable to the overhead associated with each object, typically 16 bytes. Moreover, the memory usage is typically padded to be a multiple of 8 bytes (on a 64-bit machine).
+
+#### padding
+This can waste some memory but it speeds up memory access and garbage collection.
+
+#### reference
+// todo
+引用类型是内存地址，8字节
+2*ref(8)+enclosing(8)+16head = 40
+非静态有encolsing instance？
+指针的大小在bit模式下或64bit开启指针压缩下默认为4byte
+ UseCompressOops开启和关闭，对对象头大小是有影响的，开启压缩，对象头是4+8=12byte；关闭压缩，对象头是8+8=16bytes。
+`java -Xmx31g -XX:+PrintFlagsFinal |findstr Compress`
+```
+uintx CompressedClassSpaceSize     = 1073741824     {product}
+bool UseCompressedClassPointers    := true          {lp64_product}
+bool UseCompressedOops             := true          {lp64_product}
+```
+![javarefer.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javarefer.jpg)
+> References. A reference to an object typically is a memory address and thus uses 8 bytes of memory (on a 64-bit machine).
+
+#### arrays
+![javaarr.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaarr.jpg)
+> Arrays. Arrays in Java are implemented as objects, typically with extra overhead for the length. An array of primitive-type values typically requires 24 bytes of header information (16 bytes of object overhead, 4 bytes for the length, and 4 bytes of padding) plus the memory needed to store the values.
+
+基本类型 16的obj head+4(len)+4padding = 24 +存的类型\*长度
+
+#### string
+char[] ref(8)+int(4)+head(16)+padding->32+char[](arrayschar(24))=56+2N
+![javastr.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javastr.jpg)

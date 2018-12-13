@@ -5,6 +5,9 @@ tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 
+我们知道 Java 已经支持所谓的可变参数（varargs），但是官方类库还是提供了一系列特定参数长度的方法，看起来似乎非常不优雅，为什么呢？
+这其实是为了最优的性能，JVM在处理变长参数的时候会有明显的额外开销，如果你需要实现性能敏感的 API，也可以进行参考。
+
 ### 反编译
 `javap -v xx.class`
 
@@ -505,54 +508,7 @@ this.mat = new int[matrix.length][];
 ### Timer
 
 
-### 对象头8字节
-前4保存对象hash(3)，锁状态(1)
-后4存储对象所属类的引用。
 
-数组还有4字节保存数组大小。
-
-
-### java内存
-
-https://algs4.cs.princeton.edu/14analysis/
-http://yueyemaitian.iteye.com/blog/2034305
-https://blog.csdn.net/zhxdick/article/details/52003123
-
-#### object
-object overhead 16+int 4 padded到4的倍数(`-XX:-UseCompressedOops:`)
-如果用压缩则`-XX:+UseCompressedOops: mark/4 + metedata/8 + 4 = 16 `
-默认是启动压缩的
-![javaobj.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaobj.jpg)
-> Objects. To determine the memory usage of an object, we add the amount of memory used by each instance variable to the overhead associated with each object, typically 16 bytes. Moreover, the memory usage is typically padded to be a multiple of 8 bytes (on a 64-bit machine).
-
-#### padding
-This can waste some memory but it speeds up memory access and garbage collection.
-
-#### reference
-// todo
-引用类型是内存地址，8字节
-2*ref(8)+enclosing(8)+16head = 40
-非静态有encolsing instance？
-指针的大小在bit模式下或64bit开启指针压缩下默认为4byte
- UseCompressOops开启和关闭，对对象头大小是有影响的，开启压缩，对象头是4+8=12byte；关闭压缩，对象头是8+8=16bytes。
-`java -Xmx31g -XX:+PrintFlagsFinal |findstr Compress`
-```
-uintx CompressedClassSpaceSize     = 1073741824     {product}
-bool UseCompressedClassPointers    := true          {lp64_product}
-bool UseCompressedOops             := true          {lp64_product}
-```
-![javarefer.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javarefer.jpg)
-> References. A reference to an object typically is a memory address and thus uses 8 bytes of memory (on a 64-bit machine).
-
-#### arrays
-![javaarr.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaarr.jpg)
-> Arrays. Arrays in Java are implemented as objects, typically with extra overhead for the length. An array of primitive-type values typically requires 24 bytes of header information (16 bytes of object overhead, 4 bytes for the length, and 4 bytes of padding) plus the memory needed to store the values.
-
-基本类型 16的obj head+4(len)+4padding = 24 +存的类型\*长度
-
-#### string
-char[] ref(8)+int(4)+head(16)+padding->32+char[](arrayschar(24))=56+2N
-![javastr.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javastr.jpg)
 
 
 ### 打印整数的二进制表示

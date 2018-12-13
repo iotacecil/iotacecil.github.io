@@ -7,6 +7,11 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ## 反射 java.lang.reflect.*
 ![reflect.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/reflect.jpg)
 
+> 反射机制是 Java 语言提供的一种基础功能，赋予程序在运行时自省（introspect，官方用语）
+的能力。通过反射我们可以直接操作类或者对象，比如获取某个对象的类定义，获取类声明的属
+性和方法，调用方法或者构造对象，甚至可以运行时修改类定义。
+过运行时操作元数据或对象，Java 可以灵活地操作运行时才能确定的信息。
+
 - 在运行中分析类能力；
 运行中查看对象；Method对象
 - Class 是java基础类。虚拟机创建Class的实例。
@@ -54,12 +59,21 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
      methods[3].invoke(b);
     ```
 
-## Spring代理
-1. Bean有实现接口：用JDK动态代理
-2. 没有实现接口用CGlib
-强制使用CGlib
-https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-api
-`<aop:aspectj-autoproxy proxy-target-class="true"/>`
+#### AccessibleObject
+反射提供的 AccessibleObject.setAccessible (boolean flag)。
+它的子类也大都重写了这个方法，这里的所谓 accessible 可以理解成修饰成员
+的 public、protected、private，这意味着我们可以在运行时修改成员访问限制！
+
+setAccessible 的应用场景非常普遍，遍布我们的日常开发、测试、依赖注入等各种框架中。
+1. 比如，在 O/R Mapping 框架中，我们为一个 Java 实体对象，运行时自动生成 setter、getter 的逻辑，这是加载或者持久化数据非常必要的，框架通常可以利用反射做这个事情，而不需要开发
+者手动写类似的重复代码。
+
+2. 绕过 API 访问控制。我们日常开发时可能被迫要调用内部 API 去做些事情，比如，自定义的高性能NIO框架需要显式地释放DirectBuffer，使用反射绕开限制是一种常见办法。
+
+在 Java 9 以后 引入了 Open 的概念，只有当被反射操作的模块和指定的包对反射调用者模块 Open，才能使用 setAccessible；
+
+
+
 
 ## 注解
 ```java
@@ -118,7 +132,19 @@ public class staticproxy {
 
 
 ## 动态代理
+> 动态代理是一种方便运行时动态构建代理、动态处理代理方法调用的机制，很多场景都是利用类
+似机制做到的，比如用来包装 RPC 调用、面向切面的编程（AOP）。
+
+通过代理可以让调用者与实现者之间解耦。比如进行 RPC 调用，框架内部的寻址、序列化、反
+序列化等，对于调用者往往是没有太大意义的，通过代理，可以提供更加友善的界面。
+
 简单指定一组接口及委托类对象，动态获得代理类。
+
+- 动态代理是基于什么原理？
+
+实现动态代理的方式很多，比如 JDK 自身提供的动态代理，就是主要利用了反射机
+制。还有其他的实现方式，比如利用传说中更高性能的字节码操作机制，类似 ASM、cglib（基
+于 ASM）、Javassist 等。
 
 ### .reflect.Proxy 静态方法，动态生成代理类及其对象
 ![Proxy.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Proxy.jpg)
@@ -135,6 +161,34 @@ public class staticproxy {
 `Constructor constructor = clazz.getConstructor(new Class[]{InvocationHandler.class});`
 4.通过构造函数创建动态代理类实例，将调用处理器作为参数
 `Interface Proxy = (Interface)construct.newInstance(new Object[]{handle});`
+
+#### JDK实现
+这种实现仍然有局限性，因为它是以接口为中心的，相当于添加了一种对于被调用者没有太大意义的限制。
+我们实例化的是Proxy对象，而不是真正的被调用类型，这在实践中还是可能带来各种不便和能力退化。
+
+#### Spring代理
+1. Bean有实现接口：用JDK动态代理
+2. 没有实现接口用CGlib 对接口的依赖被克服了
+
+强制使用CGlib
+https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-api
+`<aop:aspectj-autoproxy proxy-target-class="true"/>`
+
+#### cglib和jdkproxy
+cglib 动态代理采取的是创建目标类的子类的方式，因为是子类化，我们可以达到近似使用被调
+用者本身的效果。
+
+- JDK Proxy 的优势：
+最小化依赖关系，减少依赖意味着简化开发和维护，JDK 本身的支持，可能比 cglib 更加可
+靠。
+平滑进行 JDK 版本升级，而字节码类库通常需要进行更新以保证在新版 Java 上能够使用。
+代码实现简单。
+
+- 基于类似 cglib 框架的优势：
+有的时候调用目标可能不便实现额外接口，从某种角度看，限定调用者实现接口是有些侵入
+性的实践，类似 cglib 动态代理就没有这种限制。
+只操作我们关心的类，而不必为其他相关类增加工作量。
+高性能。
 
 `Proxy`中的`newInstance`封装了2-4直接返回了4
 ```java
@@ -258,6 +312,9 @@ proxy.live();
     target.getClass().getInterfaces(), 
     this);
 ```
+
+
+
 
 ### `.newProxyInstance`实现
 

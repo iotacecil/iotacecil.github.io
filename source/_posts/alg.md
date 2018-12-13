@@ -25,9 +25,65 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+
+
+### lc749 病毒隔离
+每天只能隔离一片1的圈,而且必须是不隔离会感染最多的圈，每天1会向周围扩散
+>Input: 
+```
+grid = 
+[[1,1,1,0,0,0,0,0,0],
+ [1,0,1,0,1,1,1,1,1],
+ [1,1,1,0,0,0,0,0,0]]
+Output: 13
+```
+Explanation: The region on the left only builds two new walls.
+
+先隔离掉右边的1 用上5+1+5，然后左边扩散了，之需要把`[0][3]`和`[0][4]`隔离了。
+还有`[2]`排 所以就只有2个墙了
+
+
 ### lt912 最佳见面地点
+>现在有三人分别居住在(0,0), (0,4), 和 (2,2)
+```
+1 - 0 - 0 - 0 - 1
+|   |   |   |   |
+0 - 0 - 0 - 0 - 0
+|   |   |   |   |
+0 - 0 - 1 - 0 - 0
+```
+点(0, 2)是最佳见面地点，最小的路程总和为2+2+2=6，返回6。
 
+思路：只要见面地点在A,B中间，到A,B的花费都是 AB长度。
 
+```java
+public int minTotalDistance(int[][] grid) {
+    int n = grid.length;
+    int m = grid[0].length;
+    List<Integer> cols = new ArrayList<>();
+    List<Integer> rows = new ArrayList<>();
+    for(int i =0;i<n;i++){
+        for(int j = 0;j<m;j++){
+            if(grid[i][j] == 1){
+                cols.add(j);
+                rows.add(i);
+            }
+        }
+    }
+    cols.sort(Integer::compareTo);
+    rows.sort(Integer::compareTo);
+    int sum = 0;
+    int l = 0;
+
+    for(int i =0;i<cols.size()/2;i++){
+        sum += cols.get(cols.size()-1 - i)-cols.get(i);
+    }
+    for(int i =0;i<rows.size()/2;i++){
+        sum += rows.get(rows.size()-1 - i)-rows.get(i);
+    }
+    return sum;
+}
+```
 
 ### 542 01矩阵 变成离0距离的矩阵
 ```
@@ -39,6 +95,8 @@ https://www.nowcoder.com/test/4575457/summary
 0 1 0
 1 2 1
 ```
+
+还可以dp todo
 
 1.把0都放入队列，非零格子最大化
 2.如果bfs到这个格子的距离比格子的值小就更新。
@@ -70,14 +128,94 @@ public int[][] updateMatrix(int[][] matrix) {
                     matrix[newx][newy] <= matrix[curx][cury] +1)
                     continue;
                 matrix[newx][newy] = matrix[curx][cury] + 1;
-                que.add(new int[]{newx, newy});
-                
-        }
-        
+                que.add(new int[]{newx, newy});    
+        }      
     }
     return matrix;
 }
 ```
+
+### lt 663 墙和门
+您将获得一个使用这三个可能值初始化的 m×n 2D 网格。
+-1 - 墙壁或障碍物。
+0 - 门。
+INF - Infinity是一个空房间。我们使用值 2 ^ 31 - 1 = 2147483647 来表示INF，您可以假设到门的距离小于 2147483647
+
+在代表每个空房间的网格中填入到距离最近门的距离。
+如果不可能到达门口，则应填入 INF。
+
+
+>给定 2D 网格：
+```
+INF  -1  0  INF
+INF INF INF  -1
+INF  -1 INF  -1
+  0  -1 INF INF
+```
+返回结果：
+```
+  3  -1   0   1
+  2   2   1  -1
+  1  -1   2  -1
+  0  -1   3   4
+```
+
+BFS方法同上
+{% fold %}
+```java
+int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+public void wallsAndGates(int[][] rooms) {
+    int n = rooms.length;
+    int m = rooms[0].length;
+    Queue<int[]> que = new ArrayDeque<>();
+
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (rooms[i][j] == 0) {
+                que.add(new int[]{i, j});
+            }
+        }
+    }
+    while (!que.isEmpty()) {
+        int[] cur = que.poll();
+        int curx = cur[0];
+        int cury = cur[1];
+
+        for (int i = 0; i < dirs.length; i++) {
+            int newx = curx + dirs[i][0];
+            int newy = cury + dirs[i][1];
+            if (newx < 0 || newx >= n || newy < 0 || newy >= m
+                    || rooms[newx][newy] == -1 || rooms[newx][newy] < rooms[curx][cury] + 1) {
+                continue;
+            }
+            rooms[newx][newy] = rooms[curx][cury] + 1;
+            que.add(new int[]{newx,newy});
+        }
+    }
+}
+```
+{% endfold %}
+
+
+### lt 803 建筑物之间的最短距离
+```
+盖房子，在最短的距离内到达所有的建筑物。
+给定三个建筑物(0,0),(0,4),(2,2)和障碍物(0,2):
+
+    1 - 0 - 2 - 0 - 1
+    |   |   |   |   |
+    0 - 0 - 0! - 0 - 0
+    |   |   |   |   |
+    0 - 0 - 1 - 0 - 0
+点(1,2)是建造房屋理想的空地，因为3+3+1=7的总行程距离最小。所以返回7。
+```
+
+
+
+
+
 
 
 ### 899 操作字符串前k个字符放到最后 输出字典序最小的
@@ -94,6 +232,29 @@ public int[][] updateMatrix(int[][] matrix) {
 当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
 
 ### 132 pattern
+> Input: [3, 1, 4, 2]
+Output: True
+Explanation: There is a 132 pattern in the sequence: [1, 4, 2].
+
+正确做法：栈
+
+
+方法1：用一个for循环找到当前之前的min
+```java
+public boolean find132pattern(int[] nums) {
+    int n = nums.length;
+    int min_i = Integer.MAX_VALUE;
+        for(int j = 0;j<n-1;j++){
+            min_i = Math.min(min_i,nums[j]);  
+            for(int k =j+1;k<n;k++){
+               if(nums[k] > min_i && nums[j]>nums[k]){
+                   return true;
+               }  
+            }
+        }
+    return false;
+}
+```
 
 ### lt700 怎么划分最赚钱 完全背包
 ```
@@ -674,18 +835,7 @@ public int[] countBits(int num){
 
 
 
-### lt 803 建筑物之间的最短距离
-```
-盖房子，在最短的距离内到达所有的建筑物。
-给定三个建筑物(0,0),(0,4),(2,2)和障碍物(0,2):
 
-    1 - 0 - 2 - 0 - 1
-    |   |   |   |   |
-    0 - 0 - 0! - 0 - 0
-    |   |   |   |   |
-    0 - 0 - 1 - 0 - 0
-点(1,2)是建造房屋理想的空地，因为3+3+1=7的总行程距离最小。所以返回7。
-```
 
 
 ### 87 判断两个字符串是不是拆分成两半二叉树交换子树构成的

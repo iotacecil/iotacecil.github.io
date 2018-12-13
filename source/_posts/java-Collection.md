@@ -4,12 +4,260 @@ date: 2018-04-28 18:55:55
 tags:
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
-# 集合框架
-![java_collections.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/java_collections.jpg)
+## 集合框架
 ![collection.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection.jpg)
 ![collection2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collection2.jpg)
 1. 三大接口：`Iterator`,`Collection`,`Map`
 2. 工具类：`Collections` `Arrays`
+
+## Java提供的默认排序方法
+1.`Arrays.sort()`
+2.`Collections.sort()`（底层是调用 Arrays.sort()）
+
+1.对于原始数据类型，目前使用的是所谓双轴快速排序（Dual-Pivot QuickSort），是一种改
+进的快速排序算法，早期版本是相对传统的快速排序
+`DualPivotQuicksort.java`
+typically  faster than traditional (one-pivot) Quicksort implementations
+
+### DualPivotQuicksort
+
+2.对象数据类型 使用TimSort 归并和二分插入排序（binarySort）结合的优化排序算法
+思路：
+查找数据集中已经排好序的分区（这里叫 run），
+然后合并这些分区来达到排序的目的。
+
+#### Collections.sort->list::sort->Arrays.sort->TimSort.sort
+`{1, 2, 3, 4, 5, 9,   7, 8, 10, 6}` 输出 6
+`{9,8,7,6,5,4,  10}`输出6 并且`reverse(0,6)`->`[4, 5, 7, 6, 8, 9, 10]`
+{% fold %}
+```java 
+private static <T> int countRunAndMakeAscending(T[] a, int lo, int hi,
+                                                    Comparator<? super T> c) {
+    assert lo < hi;
+    int runHi = lo + 1;
+    if (runHi == hi)
+        return 1;
+    // Find end of run, and reverse range if descending
+    if (c.compare(a[runHi++], a[lo]) < 0) { // Descending
+        while (runHi < hi && c.compare(a[runHi], a[runHi - 1]) < 0)
+            runHi++;
+        reverseRange(a, lo, runHi);
+    } else {                              // Ascending
+        while (runHi < hi && c.compare(a[runHi], a[runHi - 1]) >= 0)
+            runHi++;
+    }
+    return runHi - lo;
+}
+private  void reverseRange(Object[] a, int lo, int hi) {
+    hi--;
+    while (lo < hi) {
+        System.out.println(Arrays.toString(a));
+        Object t = a[lo];
+        a[lo++] = a[hi];
+        a[hi--] = t;
+    }
+}
+```
+{% endfold %}
+
+
+3.java8的` parallelSort` ForkJoin框架
+
+---
+## package java.util;里的常用类
+![java_collections.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/java_collections.jpg)
+- Vector,Arraylist,LinkedList implements **List**
+- LinkedList implents **Queue**
+- ***List,Queue,Set*** implememts Collection
+
+### java9 of静态工厂不可变
+Java 9 中，Java 标准类库提供了一系列的静态工厂方法，比如，List.of()、Set.of()，大大简
+化了构建小的容器实例的代码量。不可变的，符合我们对线程安全的需求
+
+## Vector ArryList LinkedList的区别
+![collect.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/collect.jpg)
+
+同：
+1.都实现集合框架中的 List，有序集合。
+2.都可以按照位置进行定位、添加或者删除的操作，都提供迭代器以遍历其内容。
+
+不同：
+1.Vector在扩容时会提高 1 倍，而 ArrayList 则是增加 50%。
+vector:
+```java
+int newCapacity = oldCapacity + ((capacityIncrement > 0) ?capacityIncrement : oldCapacity);
+```
+2.只有Vector是线程安全的。
+
+### ArrayList
+> fianl修饰的变量，JVM也会提前给我们初始化好。???
+
+```java
+//变量
+private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
+transient Object[] elementData;
+
+//构造函数，避免反复创建无用数组 指向同一个缓存Object[]数组
+this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+if (initialCapacity == 0) {
+    this.elementData = EMPTY_ELEMENTDATA;}
+
+```
+---
+- `.add(e)`
+1. 创建Object数组，并拷贝 ->ensureCapacityInternal(size+1) 
+->ensureExplicitCapacity(size+1);
+->grow(size+1)->Arrays.copyOf
+->new Object[newLength]，System.arraycopy
+2. elementData[size++] = e;
+- object的长度为10，size为逻辑长度，不是数组长度，`minCapacity = Math.max(DEFAULT_CAPACITY=10, minCapacity`
+- 第一次扩容：就一个元素，在堆内存中占了10个位置
+- 之后扩容：`int newCapacity = oldCapacity + (oldCapacity >> 1);`//>>=/2
+---
+- `.remove(index)`
+
+1.将index+1后的numMoved个元素从index开始复制obj->obj
+```java
+System.arraycopy(elementData, index+1, elementData, index,
+                             numMoved); 
+```
+2.长度-1，最后一个null `elementData[--size] = null;`
+
+---
+- `.romove(Object o)` 循环查找o==null！=null->fastremove(index)(基本同上)
+
+```java
+//当o！=null,按List规范重写equal!!
+if(o.equal(elementData[index])){
+    fastRemove(index)
+}
+
+```
+
+---
+### Arrays
+- `@SuppressWarnings("unchecked")`编译器消除警告
+    - unchecked:执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型。
+- Arrays.
+
+---
+
+
+
+### vector 
+
+1.ArrayListhe和Vector在用法上完全相同`addElement(Object obj)`和`add(Object obj)`没什么区别
+```java
+  public synchronized void addElement(E obj) {
+    modCount++;
+    ensureCapacityHelper(elementCount + 1);
+    elementData[elementCount++] = obj;
+}
+```
+```java
+  public synchronized boolean add(E e) {
+    modCount++;
+    ensureCapacityHelper(elementCount + 1);
+    elementData[elementCount++] = e;
+    return true;
+}
+```
+> Vector里有一些功能重复的方法,这些方法中方法名更短的是属于后来新增的方法.更长的是原先vector的方法.而后来ArrayList是作为List的主要实现类.
+
+线程同步不应该使用Vector 应该使用
+`java.util.concurrent.CopyOnWriteArrayList`
+
+---
+### `class Stack<E> extends Vector<E>`
+> Deque 接口及其实现提供了 LIFO 堆栈操作的更完整和更一致的 set
+
+`Deque<Integer> stack = new ArrayDeque<Integer>();`
+`LinkedList<E> implements List<E>, Deque<E>,`
+
+---
+### ArrayDeque循环数组
+https://github.com/CarpenterLee/JCFInternals/blob/master/markdown/4-Stack%20and%20Queue.md
+
+`head`指向首端第一个有效元素，`tail`指向尾端第一个可以插入元素的空位
+
+---
+#### void addFirst(E e)
+```java
+ elements[head = (head - 1) & (elements.length - 1)] = e;//越界处理
+ if (head == tail) doubleCapacity();
+```
+1.head前有空位 2.head是0，加到最后，如果最后是tail则扩容：
+1. **elements.length必需是2的指数倍，elements - 1就是二进制低位全1**
+2. 跟head - 1相与之后就起到了**【取模】**的作用
+3. 当head-1=-1;相当于对其取相对于elements.length的补码(正数就是本身)
+
+```java
+int head = 10;
+int length = 8;
+//8->1000 ;7->0111;10-1=9->1001 ;->1
+head = (head - 1) & (length - 1);
+```
+
+---
+#### addLast
+```java
+elements[tail] = e;
+if ( (tail = (tail + 1) & (elements.length - 1)) == head) doubleCapacity();
+```
+
+---
+#### void doubleCapacity()
+`System.arraycopy`
+```java
+native void arraycopy(Object src, //原数组 
+    int  srcPos,//原数组起始位置
+    Object dest, //目标数组
+    int destPos, //起始
+    int length); //长度
+```
+![doubleC.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/doubleC.jpg)
+```java
+int p = head;
+int n = elements.length;
+int r = n - p; // head右边元素的个数
+//复制右半部分，对应上图中绿色部分
+System.arraycopy(elements, p, a, 0, r);
+//复制左半部分，对应上图中灰色部分
+System.arraycopy(elements, 0, a, r, p);
+```
+
+---
+### pollFirst()删除并返回Deque首端(head)元素
+{% fold %}
+```java
+ public E pollFirst() {
+    int h = head;
+    @SuppressWarnings("unchecked")
+    E result = (E) elements[h];
+    // Element is null if deque empty
+    if (result == null)
+        return null;
+    elements[h] = null;     // Must null out slot
+    head = (h + 1) & (elements.length - 1);
+    return result;
+}
+```
+{% endfold %}
+
+---
+#### pollLast()
+`int t =(tail-1)&(element.length-1);`
+
+---
+#### E peekFirst()&E peekLast 返回但步删除
+---
+### LinkedList 双向链表
+`Queue queue = new LinkedList();`
+内部静态类Node
+
+---
+
+
 
 ## Arrays.asList
 String可以
@@ -263,13 +511,7 @@ class StudentAndCourse{
 Collections.sort(list,Collections.reverseOrder());
 ```
 
-## Optional
-创建：
-1. `of`工厂方法`Optional.of("abb");`
-2. `ofNullable`:如果为空返回empty()空的optional`Optional.ofNullable("abb");`
-3. `.empty()`
 
-1. `isPresent`..
 
 
 ## Iterator
@@ -299,10 +541,16 @@ while(es.hasMoreElements()){
 
 ---
 ## Map
+![map.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mapjpg)
+
 1. 键值set`Set<Map.Entry<Integer,String>> enry = map.entrySet();`
 2. 值`Collection<String> cl = map.values();`
 3. `forEach(BiConsumer<? super K, ? super V> action)`
 4. 权限查询`.containsKey()`
+5. 遍历：
+```java
+for(Map.Entry<String,String> entry:map.entrySet()){}
+```
 
 ### Map接口中的新方法
 1. `getOrDefault(Object key, V defaultValue)`不存在返回默认值
@@ -337,7 +585,15 @@ map.merge(1,"222",(oldv,newv)->oldv+newv);
 
 ### TreeMap
 
+### TreeSet
+```java
+// Dummy value to associate with an Object in the backing Map
+    private static final Object PRESENT = new Object();
+```
+
 ### HashMap 数组+链表+（链表长度达到8，会转化成红黑树）
+不是同步的，支持 null 键和值
+
 > Ideally, under random hashCodes, the frequency of nodes in bins follows a **Poisson distribution**with a parameter of about 0.5 on average for the default resizingthreshold of 0.75,
 > 负载因子0.75的清空下，bin满足泊松分布(exp(-0.5) * pow(0.5, k) /factorial(k)). 
 > 落在0的桶的概率有0.6
