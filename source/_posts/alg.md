@@ -25,7 +25,42 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### hiho1892
+>选定S中的一个字符Si，将Si移动到字符串首位。  
+例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
+请你计算最少需要几次移动操作，可以使S变成T。
+in:
+ABCD  
+DBAC
+out:2
 
+思路，一个用于遍历，一个找到对应顺序的字符再前进，统计有几个同顺序的字符。
+```java
+public static int trans3(String s,String t){
+    if(s.length() != t.length())return -1;
+    int n = s.length();
+    int[] scnt  = new int[256];
+    int[] tcnt  = new int[256];
+    for (int i = 0; i <n ; i++) {
+        scnt[s.charAt(i)]++;
+        tcnt[t.charAt(i)]++;
+    }
+    for (int i = 0; i <256 ; i++) {
+        if(scnt[i]!=tcnt[i])return -1;
+    }
+    int tidx = n-1;
+    int ans = 0;
+    for (int i = n-1; i >=0 ; i--) {
+        if(s.charAt(i) == t.charAt(tidx)){
+            ans++;
+            tidx--;
+        }
+    }
+    return n-ans;
+}
+```
+
+### lc714
 
 ### lc749 病毒隔离
 每天只能隔离一片1的圈,而且必须是不隔离会感染最多的圈，每天1会向周围扩散
@@ -85,120 +120,6 @@ public int minTotalDistance(int[][] grid) {
 }
 ```
 
-### 542 01矩阵 变成离0距离的矩阵
-```
-0 0 0
-0 1 0
-1 1 1
-
-0 0 0
-0 1 0
-1 2 1
-```
-
-还可以dp todo
-
-1.把0都放入队列，非零格子最大化
-2.如果bfs到这个格子的距离比格子的值小就更新。
-```java
-int[][] ori = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
-public int[][] updateMatrix(int[][] matrix) {
-    int n = matrix.length;
-    int m = matrix[0].length;   
-    Queue<int[]> que = new LinkedList<>();
-    for (int i = 0; i < matrix.length; i++) {
-        for (int j = 0; j < matrix[0].length; j++) {
-            if (matrix[i][j] == 0) {
-              que.add(new int[]{i, j});
-            }else{
-                matrix[i][j] = Integer.MAX_VALUE;
-            }
-        }
-    }
-    while (!que.isEmpty()) {
-        int[] top = que.poll();             
-        int curx = top[0];
-        int cury = top[1];
-        
-        for (int i = 0; i < ori.length; i++) {
-                int newx = curx + ori[i][0];
-                int newy = cury + ori[i][1];
-
-                if (newx < 0 || newx >= n || newy < 0 || newy >= m ||
-                    matrix[newx][newy] <= matrix[curx][cury] +1)
-                    continue;
-                matrix[newx][newy] = matrix[curx][cury] + 1;
-                que.add(new int[]{newx, newy});    
-        }      
-    }
-    return matrix;
-}
-```
-
-### lt 663 墙和门
-您将获得一个使用这三个可能值初始化的 m×n 2D 网格。
--1 - 墙壁或障碍物。
-0 - 门。
-INF - Infinity是一个空房间。我们使用值 2 ^ 31 - 1 = 2147483647 来表示INF，您可以假设到门的距离小于 2147483647
-
-在代表每个空房间的网格中填入到距离最近门的距离。
-如果不可能到达门口，则应填入 INF。
-
-
->给定 2D 网格：
-```
-INF  -1  0  INF
-INF INF INF  -1
-INF  -1 INF  -1
-  0  -1 INF INF
-```
-返回结果：
-```
-  3  -1   0   1
-  2   2   1  -1
-  1  -1   2  -1
-  0  -1   3   4
-```
-
-BFS方法同上
-{% fold %}
-```java
-int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
-public void wallsAndGates(int[][] rooms) {
-    int n = rooms.length;
-    int m = rooms[0].length;
-    Queue<int[]> que = new ArrayDeque<>();
-
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            if (rooms[i][j] == 0) {
-                que.add(new int[]{i, j});
-            }
-        }
-    }
-    while (!que.isEmpty()) {
-        int[] cur = que.poll();
-        int curx = cur[0];
-        int cury = cur[1];
-
-        for (int i = 0; i < dirs.length; i++) {
-            int newx = curx + dirs[i][0];
-            int newy = cury + dirs[i][1];
-            if (newx < 0 || newx >= n || newy < 0 || newy >= m
-                    || rooms[newx][newy] == -1 || rooms[newx][newy] < rooms[curx][cury] + 1) {
-                continue;
-            }
-            rooms[newx][newy] = rooms[curx][cury] + 1;
-            que.add(new int[]{newx,newy});
-        }
-    }
-}
-```
-{% endfold %}
-
-
 ### lt 803 建筑物之间的最短距离
 ```
 盖房子，在最短的距离内到达所有的建筑物。
@@ -211,6 +132,10 @@ public void wallsAndGates(int[][] rooms) {
     0 - 0 - 1 - 0 - 0
 点(1,2)是建造房屋理想的空地，因为3+3+1=7的总行程距离最小。所以返回7。
 ```
+
+
+### lt573 邮局建立
+
 
 
 

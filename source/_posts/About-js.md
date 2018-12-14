@@ -1115,6 +1115,35 @@ dom.scale = 1.5;
 
 ### ES6
 
+#### 对象拷贝
+`Object.assign({t:1},{k:2})`
+
+#### 默认参数
+```javascript
+function hello(txt){
+  txt = txt || 'hello world'
+}
+```
+es6:
+```js
+function(txt = 'hello world'){}
+```
+
+#### 模板字符串
+```js
+var name = 'moe'
+var txt =  `hello ${name}`
+```
+
+#### 箭头函数
+import
+1. {}块状作用域
+2. .map(function(v){return v+1}) 
+  .map(v=>v+1)
+3. 箭头函数内的this指向是定义时this的指向
+function中this指向是该函数被调用的对象
+
+
 ### 数组
 类方法：
 1. `Array.form(1,2,3,4)`转成数组`.from(3)`生成空位
@@ -1140,12 +1169,12 @@ var obj = {
    obj.cool(); // 酷 
     
    setTimeout( obj.cool, 100 ); // 不酷
-   ```
+```
 - setTimeout中的this指向的是全局对象
 1. var self = this
 2. function(){}.bind(this),1000
 
-- 模板字符串
+
 
 
 
@@ -1184,11 +1213,5 @@ let person = new Proxy(Person,{
   })
 ```
 
-#### 箭头函数
-import
-1. {}块状作用域
-2. .map(function(v){return v+1}) 
-  .map(v=>v+1)
-3. 箭头函数内的this指向是定义时this的指向
-function中this指向是该函数被调用的对象
+
 

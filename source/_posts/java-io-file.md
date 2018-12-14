@@ -4,6 +4,13 @@ date: 2018-05-04 20:34:13
 tags: [java,io]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 管道流 `PipedInputStream`.. 线程之间的数据通信
+`pin.connect(pout);`
+
+Java的管道不同于Unix/Linux系统中的管道。
+在Unix/Linux中，运行在不同地址空间的两个进程可以通过管道通信。在Java中，通信的双方应该是运行在同一进程中的不同线程。
+
+
 新建一个流对象，下面哪个选项的代码是错误的？
 正确答案: B   你的答案: A (错误)
 A.new BufferedWriter(new FileWriter("a.txt"));
@@ -578,8 +585,7 @@ bos.flash();
 if(st.nextToken()==StreamTokenizer.TT_WORD)cnt++;
 ```
 
-### 管道流 `PipedInputStream`.. 线程之间的数据通信
-`pin.connect(pout);`
+
 
 ### `RandomAccessFile`在jdk1.4中nio 被内存映射文件 替代
 复制文件

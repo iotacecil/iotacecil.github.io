@@ -5,7 +5,145 @@ tags:
 categories: [算法备忘]
 ---
 
+### 距离场
+#### 542 01矩阵 变成离0距离的矩阵
+```
+0 0 0
+0 1 0
+1 1 1
 
+0 0 0
+0 1 0
+1 2 1
+```
+
+还可以dp todo
+
+还可以dfs todo
+
+1.把0都放入队列，非零格子最大化
+2.如果bfs到这个格子的距离比格子的值小就更新。
+```java
+int[][] ori = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+public int[][] updateMatrix(int[][] matrix) {
+    int n = matrix.length;
+    int m = matrix[0].length;   
+    Queue<int[]> que = new LinkedList<>();
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix[0].length; j++) {
+            if (matrix[i][j] == 0) {
+              que.add(new int[]{i, j});
+            }else{
+                matrix[i][j] = Integer.MAX_VALUE;
+            }
+        }
+    }
+    while (!que.isEmpty()) {
+        int[] top = que.poll();             
+        int curx = top[0];
+        int cury = top[1];
+        
+        for (int i = 0; i < ori.length; i++) {
+                int newx = curx + ori[i][0];
+                int newy = cury + ori[i][1];
+
+                if (newx < 0 || newx >= n || newy < 0 || newy >= m ||
+                    matrix[newx][newy] <= matrix[curx][cury] +1)
+                    continue;
+                matrix[newx][newy] = matrix[curx][cury] + 1;
+                que.add(new int[]{newx, newy});    
+        }      
+    }
+    return matrix;
+}
+```
+
+#### lt 663 墙和门
+您将获得一个使用这三个可能值初始化的 m×n 2D 网格。
+-1 - 墙壁或障碍物。
+0 - 门。
+INF - Infinity是一个空房间。我们使用值 2 ^ 31 - 1 = 2147483647 来表示INF，您可以假设到门的距离小于 2147483647
+
+在代表每个空房间的网格中填入到距离最近门的距离。
+如果不可能到达门口，则应填入 INF。
+
+
+>给定 2D 网格：
+```
+INF  -1  0  INF
+INF INF INF  -1
+INF  -1 INF  -1
+  0  -1 INF INF
+```
+返回结果：
+```
+  3  -1   0   1
+  2   2   1  -1
+  1  -1   2  -1
+  0  -1   3   4
+```
+
+dfs 1415 ms
+```java
+int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+public void wallsAndGates(int[][] rooms) {
+   int n = rooms.length;
+   int m = rooms[0].length;
+   for(int i = 0;i<n;i++){
+       for(int j = 0;j<m;j++){
+           if(rooms[i][j] == 0)
+            dfs(rooms,i,j,0,m,n);}}}
+
+private void dfs(int[][] rooms,int x,int y,int d,int m,int n){
+     if(rooms[x][y] > d || d == 0){
+         rooms[x][y] = d;
+    
+     for(int i = 0;i< dirs.length ;i++){
+         int newx = x + dirs[i][0];
+         int newy = y + dirs[i][1];
+         if(newx>=n || newy>=m ||newx<0||newy<0 ||rooms[newx][newy] ==-1)continue;
+         dfs(rooms,newx,newy,d+1,m,n);
+     }}
+     return;
+}
+```
+
+
+BFS方法同上
+{% fold %}
+```java
+int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+public void wallsAndGates(int[][] rooms) {
+    int n = rooms.length;
+    int m = rooms[0].length;
+    Queue<int[]> que = new ArrayDeque<>();
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (rooms[i][j] == 0) {
+                que.add(new int[]{i, j});
+            }}}
+    while (!que.isEmpty()) {
+        int[] cur = que.poll();
+        int curx = cur[0];
+        int cury = cur[1];
+
+        for (int i = 0; i < dirs.length; i++) {
+            int newx = curx + dirs[i][0];
+            int newy = cury + dirs[i][1];
+            if (newx < 0 || newx >= n || newy < 0 || newy >= m
+                    || rooms[newx][newy] == -1 || rooms[newx][newy] < rooms[curx][cury] + 1) {
+                continue;
+            }
+            rooms[newx][newy] = rooms[curx][cury] + 1;
+            que.add(new int[]{newx,newy});
+        }}}
+```
+{% endfold %}
+
+---
 
 ### 49 异位词(相同字符)分组
 //todonext
