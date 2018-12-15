@@ -25,6 +25,8 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 443 压缩字符串
+
 ### hiho1892
 >选定S中的一个字符Si，将Si移动到字符串首位。  
 例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
@@ -34,7 +36,8 @@ ABCD
 DBAC
 out:2
 
-思路，一个用于遍历，一个找到对应顺序的字符再前进，统计有几个同顺序的字符。
+思路：T的最后一个字符找到S中的对应位置之后 也就是说 S这个位置之后的，都应该是被提到最前面去了。然后S和T 都向前一格是一样的子问题。
+。
 ```java
 public static int trans3(String s,String t){
     if(s.length() != t.length())return -1;
@@ -526,7 +529,7 @@ https://baike.baidu.com/item/%E7%B4%A0%E6%95%B0%E5%AE%9A%E7%90%86/1972457?fromti
 4.605170185988092
 ```
 
-### 926!!将01串变成前0后1或全0或全1的最少flip次数 前缀！
+### 926 hiho 1326 将01串变成前0后1或全0或全1的最少flip次数 前缀！
 > Input: "010110"
 Output: 2
 Explanation: We flip to get 011111, or alternatively 000111.
