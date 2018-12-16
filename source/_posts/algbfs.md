@@ -8,6 +8,283 @@ categories: [算法备忘]
 
 ### 279完美平方数
 
+
+### 距离场
+距离场的题不适合用dfs，递归全部完成才建立好距离场。
+
+#### lt 803 建筑物之间的最短距离
+```
+盖房子，在最短的距离内到达所有的建筑物。
+给定三个建筑物(0,0),(0,4),(2,2)和障碍物(0,2):
+
+    1 - 0 - 2 - 0 - 1
+    |   |   |   |   |
+    0 - 0 - 0! - 0 - 0
+    |   |   |   |   |
+    0 - 0 - 1 - 0 - 0
+点(1,2)是建造房屋理想的空地，因为3+3+1=7的总行程距离最小。所以返回7。
+```
+
+思路：
+1.BFS可以求每个0到这个建筑物的距离。BFS保证每个可达的格子只访问1次肯定是最短距离。
+2.用一个矩阵累加空地到所有建筑物的距离。并且计数这是累加了几个建筑物的。
+3.遍历累加距离矩阵中累加了和1相等的数量的格子中最小的那个。
+
+`int[n][m][2]` 每个位置(2,1)表示从一个建筑物出发，走两步到达这个格子。
+从另一个建筑物出发，叠加距离变成(4,2)表示第二个建筑物走两步到达这个格子。
+```java
+int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+public int shortestDistance(int[][] grid) {
+    int n = grid.length;
+    int m = grid[0].length;
+    int[][][] res = new int[n][m][2];
+    // 城市的数量
+    int count = 0;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(grid[i][j] == 1) {
+                count++;
+                bfs(grid, i, j, res);
+            }
+//                System.out.println();
+        }
+    }
+    int min = Integer.MAX_VALUE;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < m; j++)
+            if(res[i][j][1] == count)
+                min = Math.min(min, res[i][j][0]);
+    return min;
+}
+
+void bfs(int[][] grid, int i, int j, int[][][] res) {
+    int n = grid.length;
+    int m = grid[0].length;
+    Queue<int[]> q = new LinkedList<>();
+    q.offer(new int[]{i, j});
+    boolean[][] v = new boolean[n][m];
+
+    int step = 1;
+    while(!q.isEmpty()) {
+        int size = q.size();
+       while (size-- > 0){
+            int[] cur = q.poll();
+            for(int[] dir : dirs) {
+                int x = cur[0] + dir[0];
+                int y = cur[1] + dir[1];
+                // 四个方向继续找空地
+                if(x < 0 || x >= n || y < 0 || y >= m || grid[x][y] != 0 || v[x][y]) continue;
+                q.offer(new int[]{x, y});
+                res[x][y][0] += step;
+                res[x][y][1] += 1;
+                v[x][y] = true;
+            }
+        }
+//            System.out.println(Arrays.deepToString(res));
+        step++;
+    }
+}
+```
+
+#### lt573 邮局建立
+同上
+{% fold %}
+```java
+public int shortestDistance(int[][] grid) {
+    int n = grid.length;
+    int m = grid[0].length;
+    int cnt = 0;
+    int[][][] res = new int[n][m][2];
+    for(int i = 0;i<n;i++){
+        for(int j = 0;j<m;j++){
+            if(grid[i][j] == 1){
+              cnt ++;
+              bfs(grid,i,j,res);
+            }
+        }
+    }
+    int min = Integer.MAX_VALUE;
+    for(int i =0;i<n;i++){
+        for(int j = 0;j<m;j++){
+            if(res[i][j][1] == cnt)
+            min = Math.min(min,res[i][j][0]);
+        }
+    }
+    return min == Integer.MAX_VALUE? -1:min;
+}
+
+int[][] dirs = {{0,1},{0,-1},{-1,0},{1,0}};
+private void bfs(int[][] grid,int cx,int cy,int[][][] res){
+     int n = grid.length;
+    int m = grid[0].length;
+    boolean[][] visited = new boolean[n][m];
+    visited[cx][cy] = true;
+    Queue<int[]> que = new ArrayDeque<>();
+    que.add(new int[]{cx,cy});
+    int step = 0;
+    while(!que.isEmpty()){
+        int size = que.size();
+        while(size-- >0){
+        int[] cur = que.poll();
+        int x = cur[0];
+        int y = cur[1];
+        for(int i =0;i<dirs.length;i++){
+            int nx = x + dirs[i][0];
+            int ny = y + dirs[i][1];
+            if(nx >=0 && ny >=0 && ny<m && nx <n && grid[nx][ny] == 0 && !visited[nx][ny]){
+                res[nx][ny][0] += (step+1);
+                res[nx][ny][1] += 1;
+                que.add(new int[]{nx,ny});
+                visited[nx][ny] = true;
+            }
+        }
+        
+    }
+    step ++;
+    }
+}
+```
+{% endfold %}
+
+#### 542 01矩阵 变成离0距离的矩阵
+```
+0 0 0
+0 1 0
+1 1 1
+
+0 0 0
+0 1 0
+1 2 1
+```
+
+还可以dp todo
+
+还可以dfs todo
+
+1.把0都放入队列，非零格子最大化
+2.如果bfs到这个格子的距离比格子的值小就更新。
+```java
+int[][] ori = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+public int[][] updateMatrix(int[][] matrix) {
+    int n = matrix.length;
+    int m = matrix[0].length;   
+    Queue<int[]> que = new LinkedList<>();
+    for (int i = 0; i < matrix.length; i++) {
+        for (int j = 0; j < matrix[0].length; j++) {
+            if (matrix[i][j] == 0) {
+              que.add(new int[]{i, j});
+            }else{
+                matrix[i][j] = Integer.MAX_VALUE;
+            }
+        }
+    }
+    while (!que.isEmpty()) {
+        int[] top = que.poll();             
+        int curx = top[0];
+        int cury = top[1];
+        
+        for (int i = 0; i < ori.length; i++) {
+                int newx = curx + ori[i][0];
+                int newy = cury + ori[i][1];
+
+                if (newx < 0 || newx >= n || newy < 0 || newy >= m ||
+                    matrix[newx][newy] <= matrix[curx][cury] +1)
+                    continue;
+                matrix[newx][newy] = matrix[curx][cury] + 1;
+                que.add(new int[]{newx, newy});    
+        }      
+    }
+    return matrix;
+}
+```
+
+#### lt 663 墙和门
+您将获得一个使用这三个可能值初始化的 m×n 2D 网格。
+-1 - 墙壁或障碍物。
+0 - 门。
+INF - Infinity是一个空房间。我们使用值 2 ^ 31 - 1 = 2147483647 来表示INF，您可以假设到门的距离小于 2147483647
+
+在代表每个空房间的网格中填入到距离最近门的距离。
+如果不可能到达门口，则应填入 INF。
+
+
+>给定 2D 网格：
+```
+INF  -1  0  INF
+INF INF INF  -1
+INF  -1 INF  -1
+  0  -1 INF INF
+```
+返回结果：
+```
+  3  -1   0   1
+  2   2   1  -1
+  1  -1   2  -1
+  0  -1   3   4
+```
+
+dfs 1415 ms
+```java
+int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+public void wallsAndGates(int[][] rooms) {
+   int n = rooms.length;
+   int m = rooms[0].length;
+   for(int i = 0;i<n;i++){
+       for(int j = 0;j<m;j++){
+           if(rooms[i][j] == 0)
+            dfs(rooms,i,j,0,m,n);}}}
+
+private void dfs(int[][] rooms,int x,int y,int d,int m,int n){
+     if(rooms[x][y] > d || d == 0){
+         rooms[x][y] = d;
+    
+     for(int i = 0;i< dirs.length ;i++){
+         int newx = x + dirs[i][0];
+         int newy = y + dirs[i][1];
+         if(newx>=n || newy>=m ||newx<0||newy<0 ||rooms[newx][newy] ==-1)continue;
+         dfs(rooms,newx,newy,d+1,m,n);
+     }}
+     return;
+}
+```
+
+
+BFS方法同上
+{% fold %}
+```java
+int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+public void wallsAndGates(int[][] rooms) {
+    int n = rooms.length;
+    int m = rooms[0].length;
+    Queue<int[]> que = new ArrayDeque<>();
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (rooms[i][j] == 0) {
+                que.add(new int[]{i, j});
+            }}}
+    while (!que.isEmpty()) {
+        int[] cur = que.poll();
+        int curx = cur[0];
+        int cury = cur[1];
+
+        for (int i = 0; i < dirs.length; i++) {
+            int newx = curx + dirs[i][0];
+            int newy = cury + dirs[i][1];
+            if (newx < 0 || newx >= n || newy < 0 || newy >= m
+                    || rooms[newx][newy] == -1 || rooms[newx][newy] < rooms[curx][cury] + 1) {
+                continue;
+            }
+            rooms[newx][newy] = rooms[curx][cury] + 1;
+            que.add(new int[]{newx,newy});
+        }}}
+```
+{% endfold %}
+
+---
+
 ### !!126 word Ladder 返回所有可能的路径 记录宽搜搜索路径！
 77% 117ms
 1.先bfs，在bfs的过程中，构建有向图邻接表map。完成一个最长路径为k的图。

@@ -27,6 +27,87 @@ A 的最优分组是[9], [1, 2, 3], [9]. 得到的分数是 9 + (1 + 2 + 3) / 3 
 
 
 
+### 77combinations  C(n,k)=C(n-1,k-1)+C(n-1,k)
+
+`C(n-1,k-1)`表示选这个数，`C(n-1,k)`表示不选这个数
+88%的写法：
+```java
+public List<List<Integer>> combineFast(int n,int k) {
+    List<List<Integer>> result = new ArrayList<>();
+    if(k>n||k<0)return result;
+    if(k==0){
+        result.add(new ArrayList<>());
+        return result;
+    }
+    result = combine(n-1,k-1 );
+    for(List<Integer> list:result){
+        list.add(n);
+    }
+    result.addAll(combine(n-1,k ));
+    return result;
+}
+```
+
+```java
+//    math 8% C(n,k)=C(n-1,k-1)+C(n-1,k)
+public List<List<Integer>> combineMath(int n,int k){
+    if(k==n||k==0){
+        List<Integer> row = new ArrayList<>();
+        for (int i = 1; i <=k ; i++) {
+            row.add(i);
+        }
+        return new ArrayList<>(Arrays.asList(row));
+    }
+    List<List<Integer>> result = this.combineMath(n-1,k-1 );
+    result.forEach(e->e.add(n));
+    result.addAll(this.combineMath(n-1,k ));
+    return result;
+}
+```
+
+### 896有正负的数列判断单调
+用首尾判断up/down，中间相邻遍历判断up/down和之前不符return false
+20ms
+```java
+public boolean isMonotonic(int[] A) {
+    if (A.length==1) return true;
+    int n=A.length;
+    //关键
+    boolean up= (A[n-1]-A[0])>0;
+    for (int i=0; i<n-1; i++)
+        if (A[i+1]!=A[i] && (A[i+1]-A[i]>0)!=up) 
+            return false;
+    return true;
+}
+```
+
+
+### 753 输出能包含所有密码可能性的最短串
+> Input: n = 2, k = 2
+> Output: "00110" 包含了00,01,10,11
+
+[官方解](https://leetcode.com/problems/cracking-the-safe/solution/)
+[de Bruijn Card Trick](https://www.youtube.com/watch?v=EWG6e-yBL94)
+1. 方法1
+![lc753.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc753.jpg)
+每个点1次
+写出n个数的组合(11,12,22,21) 并找出哈密尔顿路径
+2. 方法2 
+![lc7532.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc7532.jpg)
+每条边1次
+写出(n-1)个数的组合(1,2) 的完全图，找出欧拉环路(circuit)。de Bruijn 序列的数量为欧拉环的数量。
+用k个数字，长度有n的组合有$k^n$种，但是因为可以首尾相连，总共de Bruijn的数量是
+$\frac{k! k^{n-1}}{k^n}$
+3. 方法3 用不重复的最小字典序Lyndon Word
+例子：
+1.列出所有长度为4的组合1111,1112...以及能被4整除的长度(1,2)的组合1,2,11,22.
+2.所有按字典序排序
+3.去除所有旋转之后相同的组合，只保留字典序最小的：01和10只保留01
+> n = 6, k = 2
+> 0 000001 000011 000101 000111 001 001011 001101 001111 01 010111 011 011111 1
+4. 连起来就是最小的de Bruijin sequence
+
+
 ### !!!698 将数组分成sum相等的k份 不用连续
 >Input: nums = [4, 3, 2, 3, 5, 2, 1], k = 4
 Output: True
