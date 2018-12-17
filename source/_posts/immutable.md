@@ -2,8 +2,88 @@
 title: 可变对象和不可变对象
 date: 2018-08-30 09:23:15
 tags:
-category: [java源码8+netMVCspring+ioNetty+数据库+并发]
+category: [并发,java]
 ---
+### 实现immutable类
+1. class 声明为final
+`public final class String`
+2. 成员变量 private final (保证其他线程可见时初始化完成），且没有setter
+3. 构造对象时，成员变量使用深度拷贝来初始化。
+4. 如果有字段是可变对象，必须是private，不能向外暴露。getter方法，使用 copy-on-write原则(防御性复制），创建私有的 copy。
+5. this关键字没有泄露（如匿名内部类在创建的时候修改其状态)
+
+---
+
+final 修饰的 class 代表不可以继承扩展.避免 API 使用者更改基础功能
+final 的变量是不可以修改的.，利用final 可能有助于 JVM 将方法进行内联(现代高性能 JVM（如 HotSpot）判断内联未必依赖final 的提示)，可以改善编译器进行条件编译的能力.
+final 的方法也是不可以重写的（override）
+
+### 不可变对象模式 `创建后，对外可见状态保持不变`
+类图：client通过 Manipulator 类 的  `change`方法生成新的 不可变对象 并set。
+
+#### 不可变对象
+因为一个对象的修改是直接替换的，所以不会存在`Location`多线程只修改了一个字段。
+
+!! **如果对象作为key放入HashMap，对象状态变化导致HashCode变化，会导致同样的对象作为Key，get不到相关联的值。 所以不可变对象适合作为Key。**
+
+最佳实战：
+电信服务商的路由表`<String,Object>`
+
+
+#### 模式应用：CopyOnWriteArrayList
+对集合加锁：不适合插入删除操作比遍历多的集合。
+`CopyOnWriteArrayList` 应用了不可变对象模式。
+不用锁的遍历安全。适用于遍历操作比添加删除频繁的场景。
+源码：加添元素时会复制
+用实例变量静态变量并且`volatile`
+```java
+private transient volatile Object[] array;
+public boolean add(E e) {
+    final ReentrantLock lock = this.lock;
+    lock.lock();
+    try {
+        Object[] elements = getArray();
+        int len = elements.length;
+        Object[] newElements = Arrays.copyOf(elements, len + 1);
+        newElements[len] = e;
+        setArray(newElements);
+        return true;
+    } finally {
+        lock.unlock();
+    }
+}
+```
+
+遍历：直接根据 `array` 生成一个新的实例
+```java
+/**
+ * Returns an iterator over the elements in this list in proper sequence.
+ *
+ * <p>The returned iterator provides a snapshot of the state of the list
+ * when the iterator was constructed. No synchronization is needed while
+ * traversing the iterator. The iterator does <em>NOT</em> support the
+ * {@code remove} method.
+ *
+ * @return an iterator over the elements in this list in proper sequence
+ */
+public Iterator<E> iterator() {
+    return new COWIterator<E>(getArray(), 0);
+}
+
+static final class COWIterator<E> implements ListIterator<E> {
+    /** Snapshot of the array */
+    private final Object[] snapshot;
+    /** Index of element to be returned by subsequent call to next.  */
+    private int cursor;
+
+    private COWIterator(Object[] elements, int initialCursor) {
+        cursor = initialCursor;
+        snapshot = elements;
+    }
+    ...
+}
+```
+
 ### 可变对象
 #### (可变Integer)
 输出objTest{val=888}地址1670782018 objTest{val=888}地址1670782018

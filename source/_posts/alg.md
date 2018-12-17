@@ -25,7 +25,39 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
-### 443 压缩字符串
+### 443 !压缩字符串
+The length after compression must always be smaller than or equal to the original array. aabb可以压缩成a2b2
+>Input:
+["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+Output:
+Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].
+
+```java
+public int compress(char[] chars) {
+  int n = chars.length;
+    int idx = 0;int i = 0;
+    while (idx < n){
+        char cur = chars[idx];
+        int cnt = 0;
+        while (idx < n && chars[idx] == cur)
+        {
+            idx++;
+            cnt++;
+        }
+        chars[i++] = cur;
+        if(cnt != 1){
+            if(cnt < 10){
+               chars[i++] = (char)(cnt +'0'); 
+            }else{
+            for(char c:Integer.toString(cnt).toCharArray()){
+                chars[i++] = c;
+            }
+            }
+        }
+    }
+    return i;
+}
+```
 
 ### hiho1892
 >选定S中的一个字符Si，将Si移动到字符串首位。  
@@ -1017,136 +1049,6 @@ int bulbSwitch(int n) {
 
 
 
-### 最大值为k的不重叠子数组的长度和？??
-https://www.geeksforgeeks.org/maximum-sum-lengths-non-overlapping-subarrays-k-max-element/
->Input : arr[] = {2, 1, 4,   9,   2, 3,   8,   3, 4}  k = 4
-Output : 5
-{2, 1, 4} => Length = 3
-{3, 4} => Length = 2
-So, 3 + 2 = 5 is the answer
-
-```java
-public int lensum(int[] arr,int k){
-    int n = arr.length;
-    int ans = 0;
-
-    for (int i = 0; i < n ; i++) {
-        int cnt=0;
-        int flag = 0;
-        while (i<n&&arr[i]<=k){
-            cnt++;
-            if(arr[i] == k)flag = 1;
-            i++;
-        }
-        //？？？
-        if(flag == 1) ans+=cnt;
-        while (i<n&&arr[i]>k)i++;
-    }
-    return ans;
-}
-```
-
-
-### 689!!!高频题 找到三个长度为k互不重叠的子数组的最大和
-> Input: [1,2,1,2,6,7,5,1], 2
-> 不重叠窗口为2的数组的和  `[1, 2], [2, 6], [7, 5]`
-> 返回 起始索引为 [0, 3, 5]。
-> 也可以取 [2, 1], 但是结果 [1, 3, 5] 在字典序上更大。
-
-https://leetcode.com/articles/maximum-sum-of-3-non-overlapping-intervals/
-https://www.jiuzhang.com/solution/maximum-sum-of-3-non-overlapping-subarrays/
-
-### 121 只能买卖一次 买卖股票的利润
-> 输入: [7,1,5,3,6,4]
-输出: 5
-解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
-
-方法1：两次for，找最大差值 10% 262ms
-方法2：Kadane算法(maximum subarray)先找到最低值，保留并更新最低值，并更新最大差值 2ms 36%
-
-```java
-public int maxProfit(int[] prices){
-    int minP = Integer.MAX_VALUE;
-    int maxP = 0;
-    int n = prices.length;
-    for(int i =0;i<n;i++){
-        if(prices[i]<minP)minP = prices[i];
-        else if(prices[i]-minP>maxP)maxP = prices[i]-minP;
-    }
-    return maxP;
-}
-```
-
-dp 保留前i天的最低值 更新第i天的最大差值 3ms 19%
-```java
- public int maxProfit(int[] prices) {
-    int n = prices.length;
-    if(n<1)return 0;
-    int[] mindp = new int[n];
-    int[] maxdp = new int[n];
-    mindp[0] = prices[0];
-    maxdp[0] =0;
-    for(int i =1;i<n;i++){
-        mindp[i] = Math.min(mindp[i-1],prices[i]);
-       //当天的股价-前i-1天的min价格
-        maxdp[i] = Math.max(maxdp[i-1],prices[i]-mindp[i-1]);
-    }
-    return maxdp[n-1];
-}
-```
-dp2: 4 ms 15%
-转换成53 将price reduce成每天的收益
-`[7,1,5,3,6,4]->[ ,-6,4,-2,3,-2]`
-在[4,-2,3]持有股票，从day2 [1]买进后的累积和最大
-```java
-```
-
-
-
-#### 53!!!最大subarray sum
-Kadane 14ms 19%
-```java
-public int maxSubArray(int[] nums){
-    int sum = nums[0],rst = nums[0];
-    for(int i=1;i<nums.length;i++){
-        sum = Math.max(nums[i],sum+nums[i]);
-        rst = Math.max(rst,sum);
-    }
-    return rst;
-}
-```
-greedy:
-
-
-### 198 不能偷相邻房屋 最大利润
->输入: [1,2,3,1]
-输出: 4
-解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
-     偷窃到的最高金额 = 1 + 3 = 4 
-
-
-### 122 可以买卖多次 买股票的利润
-> 输入: [7,1,5,3,6,4]
-输出: 7
-解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
-随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
-
-### 123 最多买卖2次的 买股票利润 考到
-> 输入: [3,3,5,0,0,3,1,4]
-输出: 6
-解释: 在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
- 随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
-
-### 188 最多k次买卖的 买卖股票利润
-> 输入: [3,2,6,5,0,3], k = 2
-输出: 7
-解释: 在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
-随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
-
-### 重复元素很多的数组排序
-https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
-> AVL or Red-Black to sort in O(n Log m) time where m is number of distinct elements.
-//todo
 
 
 
@@ -1298,43 +1200,7 @@ public int findPoisonedDuration(int[] timeSeries, int duration) {
 
 
 
-### 77combinations  C(n,k)=C(n-1,k-1)+C(n-1,k)
 
-`C(n-1,k-1)`表示选这个数，`C(n-1,k)`表示不选这个数
-88%的写法：
-```java
-public List<List<Integer>> combineFast(int n,int k) {
-    List<List<Integer>> result = new ArrayList<>();
-    if(k>n||k<0)return result;
-    if(k==0){
-        result.add(new ArrayList<>());
-        return result;
-    }
-    result = combine(n-1,k-1 );
-    for(List<Integer> list:result){
-        list.add(n);
-    }
-    result.addAll(combine(n-1,k ));
-    return result;
-}
-```
-
-```java
-//    math 8% C(n,k)=C(n-1,k-1)+C(n-1,k)
-public List<List<Integer>> combineMath(int n,int k){
-    if(k==n||k==0){
-        List<Integer> row = new ArrayList<>();
-        for (int i = 1; i <=k ; i++) {
-            row.add(i);
-        }
-        return new ArrayList<>(Arrays.asList(row));
-    }
-    List<List<Integer>> result = this.combineMath(n-1,k-1 );
-    result.forEach(e->e.add(n));
-    result.addAll(this.combineMath(n-1,k ));
-    return result;
-}
-```
 
 
 
@@ -1593,21 +1459,7 @@ static int secondMax(int[] arr){
 
 ？递归写法
 
-### 896有正负的数列判断单调
-用首尾判断up/down，中间相邻遍历判断up/down和之前不符return false
-20ms
-```java
-public boolean isMonotonic(int[] A) {
-    if (A.length==1) return true;
-    int n=A.length;
-    //关键
-    boolean up= (A[n-1]-A[0])>0;
-    for (int i=0; i<n-1; i++)
-        if (A[i+1]!=A[i] && (A[i+1]-A[i]>0)!=up) 
-            return false;
-    return true;
-}
-```
+
 
 ### 14 最长公共前缀
 ```java
@@ -2509,32 +2361,6 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 
 
 
-
-### 753 输出能包含所有密码可能性的最短串
-> Input: n = 2, k = 2
-> Output: "00110" 包含了00,01,10,11
-
-[官方解](https://leetcode.com/problems/cracking-the-safe/solution/)
-[de Bruijn Card Trick](https://www.youtube.com/watch?v=EWG6e-yBL94)
-1. 方法1
-![lc753.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc753.jpg)
-每个点1次
-写出n个数的组合(11,12,22,21) 并找出哈密尔顿路径
-2. 方法2 
-![lc7532.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc7532.jpg)
-每条边1次
-写出(n-1)个数的组合(1,2) 的完全图，找出欧拉环路(circuit)。de Bruijn 序列的数量为欧拉环的数量。
-用k个数字，长度有n的组合有$k^n$种，但是因为可以首尾相连，总共de Bruijn的数量是
-$\frac{k! k^{n-1}}{k^n}$
-3. 方法3 用不重复的最小字典序Lyndon Word
-例子：
-1.列出所有长度为4的组合1111,1112...以及能被4整除的长度(1,2)的组合1,2,11,22.
-2.所有按字典序排序
-3.去除所有旋转之后相同的组合，只保留字典序最小的：01和10只保留01
-> n = 6, k = 2
-> 0 000001 000011 000101 000111 001 001011 001101 001111 01 010111 011 011111 1
-4. 连起来就是最小的de Bruijin sequence
-
 #### Inverse Burrows-Wheeler Transform (IBWT) 生成 Lyndon words.  
 
 ### 332 欧拉路径 每条边一次
@@ -3315,10 +3141,6 @@ for(int i =1;i<4;i++){
 ```
 {% endfold %}
 
----
-
-
----
 
 
 ---
@@ -3375,16 +3197,7 @@ bfs如果用栈，则会在这一层还没找完先找下一层cnt=1{4}->
 //todonexttime
 ```
 
----
-### fib
-```java
-int fib(int n){
-    num++;//计数
-    if(n==0||n==1)return n;
-    if(memo[n] == -1)memo[n] = fib(n-1)+fib(n-2);
-    return memo[n];
-}
-```
+
 
 ---
 ### 11 数组index当底边，值当杯子两侧，最大面积

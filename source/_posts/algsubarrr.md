@@ -15,6 +15,32 @@ categories: [算法备忘]
 // Subset2 = [11]，和是11
 // abs(11 - 12) = 1
 
+dp：`dp[n+1][sum+1]` 用1~n前n个数字能得到sum
+
+递归思路： 
+两种情况 用这个数字和不用，终止条件:所有数字都选择过了。
+超时
+```java
+Map<String,Integer> difmemo;
+public int findMindfs(int[] arr){
+    int sum = 0;
+    for (int i = 0; i < arr.length ; i++) {
+        sum += arr[i];
+    }
+    difmemo = new HashMap<>();
+    return dfs(arr, 0, 0, sum);
+}
+private int dfs(int[] arr,int idx,int sum,int target){
+    if(idx == arr.length)
+        return Math.abs(target  -  2* sum);
+    if(difmemo.containsKey(idx+" "+sum))return difmemo.get(idx+" "+sum);
+    difmemo.put(idx+" "+sum, Math.min(dfs(arr, idx+1, sum+arr[idx],  target),
+            dfs(arr, idx+1, sum,  target))) ;
+    return difmemo.get(idx+" "+sum);
+}
+```
+
+
 ### 813 数组A分成K个相邻的非空子数组，子数组平均和和最大多少
 >输入: 
 A = [9,1,2,3,9]
@@ -24,6 +50,138 @@ K = 3
 A 的最优分组是[9], [1, 2, 3], [9]. 得到的分数是 9 + (1 + 2 + 3) / 3 + 9 = 20.
 我们也可以把 A 分成[9, 1], [2], [3, 9].
 这样的分组得到的分数为 5 + 2 + 6 = 13, 但不是最大值.
+
+
+
+### 最大值为k的不重叠子数组的长度和？??
+https://www.geeksforgeeks.org/maximum-sum-lengths-non-overlapping-subarrays-k-max-element/
+>Input : arr[] = {2, 1, 4,   9,   2, 3,   8,   3, 4}  k = 4
+Output : 5
+{2, 1, 4} => Length = 3
+{3, 4} => Length = 2
+So, 3 + 2 = 5 is the answer
+
+```java
+public int lensum(int[] arr,int k){
+    int n = arr.length;
+    int ans = 0;
+
+    for (int i = 0; i < n ; i++) {
+        int cnt=0;
+        int flag = 0;
+        while (i<n&&arr[i]<=k){
+            cnt++;
+            if(arr[i] == k)flag = 1;
+            i++;
+        }
+        //？？？
+        if(flag == 1) ans+=cnt;
+        while (i<n&&arr[i]>k)i++;
+    }
+    return ans;
+}
+```
+
+
+### 689!!!高频题 找到三个长度为k互不重叠的子数组的最大和
+> Input: [1,2,1,2,6,7,5,1], 2
+> 不重叠窗口为2的数组的和  `[1, 2], [2, 6], [7, 5]`
+> 返回 起始索引为 [0, 3, 5]。
+> 也可以取 [2, 1], 但是结果 [1, 3, 5] 在字典序上更大。
+
+https://leetcode.com/articles/maximum-sum-of-3-non-overlapping-intervals/
+https://www.jiuzhang.com/solution/maximum-sum-of-3-non-overlapping-subarrays/
+
+### 121 只能买卖一次 买卖股票的利润
+> 输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+
+方法1：两次for，找最大差值 10% 262ms
+方法2：Kadane算法(maximum subarray)先找到最低值，保留并更新最低值，并更新最大差值 2ms 36%
+
+```java
+public int maxProfit(int[] prices){
+    int minP = Integer.MAX_VALUE;
+    int maxP = 0;
+    int n = prices.length;
+    for(int i =0;i<n;i++){
+        if(prices[i]<minP)minP = prices[i];
+        else if(prices[i]-minP>maxP)maxP = prices[i]-minP;
+    }
+    return maxP;
+}
+```
+
+dp 保留前i天的最低值 更新第i天的最大差值 3ms 19%
+```java
+ public int maxProfit(int[] prices) {
+    int n = prices.length;
+    if(n<1)return 0;
+    int[] mindp = new int[n];
+    int[] maxdp = new int[n];
+    mindp[0] = prices[0];
+    maxdp[0] =0;
+    for(int i =1;i<n;i++){
+        mindp[i] = Math.min(mindp[i-1],prices[i]);
+       //当天的股价-前i-1天的min价格
+        maxdp[i] = Math.max(maxdp[i-1],prices[i]-mindp[i-1]);
+    }
+    return maxdp[n-1];
+}
+```
+dp2: 4 ms 15%
+转换成53 将price reduce成每天的收益
+`[7,1,5,3,6,4]->[ ,-6,4,-2,3,-2]`
+在[4,-2,3]持有股票，从day2 [1]买进后的累积和最大
+
+
+
+
+#### 53!!!最大subarray sum
+Kadane 14ms 19%
+```java
+public int maxSubArray(int[] nums){
+    int sum = nums[0],rst = nums[0];
+    for(int i=1;i<nums.length;i++){
+        sum = Math.max(nums[i],sum+nums[i]);
+        rst = Math.max(rst,sum);
+    }
+    return rst;
+}
+```
+greedy:
+
+
+### 198 不能偷相邻房屋 最大利润
+>输入: [1,2,3,1]
+输出: 4
+解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 
+
+
+### 122 可以买卖多次 买股票的利润
+> 输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+### 123 最多买卖2次的 买股票利润 考到
+> 输入: [3,3,5,0,0,3,1,4]
+输出: 6
+解释: 在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
+ 随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
+
+### 188 最多k次买卖的 买卖股票利润
+> 输入: [3,2,6,5,0,3], k = 2
+输出: 7
+解释: 在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
+随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
+
+### 重复元素很多的数组排序
+https://www.geeksforgeeks.org/how-to-sort-a-big-array-with-many-repetitions/
+> AVL or Red-Black to sort in O(n Log m) time where m is number of distinct elements.
+//todo
 
 
 

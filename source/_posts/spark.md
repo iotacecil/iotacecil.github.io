@@ -1,5 +1,5 @@
 ---
-title: spark
+title: spark scala
 date: 2018-11-17 09:07:12
 tags:
 ---
@@ -8,7 +8,7 @@ tags:
 2.监督学习xy对`LabeledPoint(1.0,Vector.dense(1.0,2.0,3.0))`
 3.本地矩阵 是按列存储的 `Matrices.dense(3,3,Array(1,0,0,1,0,0,0,1)`
 稀疏矩阵比较复杂
-4.分布式矩阵RDD 
+4.分布式矩阵RDD 弹性分布式数据集
 
 RDD:弹性分布式数据集 n行1列的表 行是string 没有列的概念 MLib使用
 Dataset:类似csv 有列了 ml 使用

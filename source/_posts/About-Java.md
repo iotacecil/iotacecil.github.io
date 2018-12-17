@@ -102,12 +102,7 @@ Weak references are most often used to implement canonicalizing mappings
 幻象引用，get 方法只返回 null，如果再不指定引用队列，基本就没有意义了。
 
 
-### 实现immutable类
-1. class 声明为final
-`public final class String`
-2. 成员变量 private final且没有setter
-3. 构造对象时，成员变量使用深度拷贝来初始化。
-4. getter方法，使用 copy-on-write原则，创建私有的 copy。
+
 
 ### final、finally、 finalize
 

@@ -4,6 +4,9 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+
+### java 线程状态
+
 ### 线程停止
 下面能让线程停止执行的有
 正确答案: A B D   你的答案: B C D (错误)
@@ -300,21 +303,7 @@ private final BlockingQueue<Runnable> workQueue;
 ### 保护性暂时挂起模式
 
 
-### 不可变对象模式
-#### 不可变对象
-如果对象作为key放入HashMap，对象状态变化导致HashCode变化，会导致同样的对象作为Key，get不到相关联的值。 所以不可变对象适合作为Key。
-电信服务商的路由表
 
-#### 模式应用：CopyOnWriteArrayList
-对集合加锁：不适合插入删除操作比遍历多的集合。
-`CopyOnWriteArrayList` 应用了不可变对象模式。
-不用锁的遍历安全。适用于遍历操作比添加删除频繁的场景。
-源码：加添元素时会复制
-```java
-Object[] newElements = Arrays.copyOf(elements,len+1);
-newElements[len] = e;
-setArray(newElements);
-```
 
 
 > 线程池中线程数量过多，会竞争浪费事件再上下文切换。
@@ -538,6 +527,8 @@ private static long byteOffset(int i) {
 
 Java中Thread类中的start()方法和run()方法有什么区别?
 A.start()方法创建一个线程，并内部调用run()
+
+
 
 两种创建方法1.传入一个runnable对象 2.覆盖run
 Thread:
