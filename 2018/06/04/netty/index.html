@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zwhf.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/wldz.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backlog.jpg">
-<meta property="og:updated_time" content="2018-12-16T08:38:29.723Z">
+<meta property="og:updated_time" content="2018-12-18T10:34:55.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty和网络">
 <meta name="twitter:description" content="TCP 2个序号，3个标志位seq：数据序号。ack：接收端希望接收的下一个数据包的起始序号。ACK :确认位，表示ack序号有用。所以第一次请求没有要确认的数据ACK0SYN :同步位。建立连接的时候没有数据，则SYN=1将ack设为seq+1FIN :终止位。 DDOS SYN Flood 大量请求发出第一次握手之后不发出第三次，让服务器一直重发。 同一网段的主机ip 与10.110.12.2">
@@ -350,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-12-16T16:38:29+08:00">
-                2018-12-16
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-18T18:34:55+08:00">
+                2018-12-18
               </time>
             
           </span>
@@ -413,7 +413,7 @@
 </blockquote>
 <p>224 -&gt;11100000<br>29  -&gt;00011101<br>范围为10.110.12.1~ 10.110.12.31<br>A错10.110.12.0<br>B正确10.110.12.30<br>C广播地址10.110.12.31<br>D错10.110.12.32</p>
 <p>自治：无主从关系<br>边缘部分：端系统<br>核心部分：路由器</p>
-<p>链路带宽： 主机发送数据的速率<br>传播速率: 2 x 10^8  200m / us<br>吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）<br>时延：发送（传输）/传播/排队/处理<br>时延带宽积bit:某段链路现在有多少bit 传播时延(s) x 带宽<br>利用率：有数据通过的时间</p>
+<p>链路带宽： 主机发送数据的速率<br>传播速率: 2 x 10^8  200m / us<br>吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）<br>时延：发送（传输）/传播/排队/处理<br>时延带宽积(BDT) (缓冲区大小）bit:某段链路现在有多少bit 传播时延(s) x 带宽<br>利用率：有数据通过的时间</p>
 <h3 id="select模型"><a href="#select模型" class="headerlink" title="select模型"></a>select模型</h3><ol>
 <li>一个进程打开fd（文件描述符）有限1024/2048？ （最大并发数）<br><code>FD_SETSIZE</code> 在哪</li>
 <li>每次select调用会扫描所有fd</li>
