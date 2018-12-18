@@ -25,6 +25,35 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 621 !!!!!!任务调度
+26 种不同种类的任务  每个任务都可以在 1 个单位时间内执行完
+两个相同种类的任务之间必须有长度为 n 的冷却时间
+> 输入: tasks = ["A","A","A","B","B","B"], n = 2
+输出: 8
+执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
+
+思路：
+
+
+### 453 数组中n-1个数字每次增加1，最少多少次数组中元素相等
+>[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
+
+思路：n-1个数字+1和一个数字-1是等价的。所以看需要多少次能把所有数字减成和最小的一样。
+
+```java
+public int minMoves(int[] nums) {
+    int min = nums[0];
+    for(int i :nums){
+        min = Math.min(min,i);
+    }
+    int cnt =0;
+    for(int i:nums){
+        cnt += i - min;
+    }
+    return cnt; 
+}
+```
+
 ### 443 !压缩字符串
 The length after compression must always be smaller than or equal to the original array. aabb可以压缩成a2b2
 >Input:
@@ -1045,24 +1074,6 @@ int bulbSwitch(int n) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-### 621 todo
-26 种不同种类的任务  每个任务都可以在 1 个单位时间内执行完
-两个相同种类的任务之间必须有长度为 n 的冷却时间
-> 输入: tasks = ["A","A","A","B","B","B"], n = 2
-输出: 8
-
-
-执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
 
 
 
