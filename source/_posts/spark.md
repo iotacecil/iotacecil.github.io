@@ -3,6 +3,9 @@ title: spark scala
 date: 2018-11-17 09:07:12
 tags:
 ---
+### Esri Geojson
+
+
 ### Mlib数据格式
 1.本地向量`Vector.dense(1.0,2.0,3.0)` 还有位置的稀疏向量
 2.监督学习xy对`LabeledPoint(1.0,Vector.dense(1.0,2.0,3.0))`

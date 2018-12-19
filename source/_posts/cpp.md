@@ -4,6 +4,111 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+### inline 
+关于c++的inline关键字,以下说法正确的是()
+正确答案: D   你的答案: B (错误)
+A使用inline关键字的函数会被编译器在调用处展开
+- 编译器有权忽略这个请求，比如：若此函数体太大，则不会把它作为内联函数展开的。
+
+B头文件中可以包含inline函数的声明
+- 头文件中不仅要包含 inline 函数的声明，而且必须包含定义，且在定义时必须加上 inline 
+
+C可以在同一个项目的不同源文件内定义函数名相同但实现不同的inline函数
+- 头文件中不仅要包含 inline 函数的声明，而且必须包含定义，且在定义时必须加上 inline 
+
+D定义在Class声明内的成员函数默认是inline函数
+- 定义在类声明之中的成员函数将自动地成为内联函数
+
+D优先使用Class声明内定义的inline函数
+E优先使用Class实现的内inline函数的实现
+- 不管是 class 声明中定义的 inline 函数，还是 class 实现中定义的 inline 函数，不存在优先不优先的问题，因为 class 的成员函数都是 inline 的，加了关键字 inline 也没什么特殊的。
+
+---
+
+### 代码
+```c
+main()
+{
+    char*a[]={"work","at","alibaba"};
+    char**pa=a;
+    pa++;
+    printf("%s",*pa);
+}
+```
+正确答案: A   你的答案: C (错误)
+at
+atalibaba
+ork
+orkatalibaba
+编译错误
+
+
+---
+
+```c
+struct st
+{
+    int *p;
+    int i;
+    char a;
+};
+int sz=sizeof(struct st);
+```
+如下C程序,在64位处理器上运行后sz的值是什么?
+正确答案: C   你的答案: B (错误)
+24
+20
+16
+14
+13
+12
+1.struct的对齐原则，必须是其内部最大成员的"最宽基本类型成员"的整数倍.不足的要补齐?
+此处指针先占用8字节。int占用4字节，满足要求不用补齐，char占用一个字节，同时总的字节数必须满足8的倍数即16
+
+---
+```cpp
+#include <iostream>       
+#include <vector>
+using namespace std;
+int main(void)
+{
+    vector<int>array;
+    array.push_back(100);
+    array.push_back(300);
+    array.push_back(300);
+    array.push_back(300);
+    array.push_back(300);
+    array.push_back(500);
+    vector<int>::iterator itor;
+    for(itor=array.begin();itor!=array.end();itor++)
+    {
+        if(*itor==300)
+        {
+            itor=array.erase(itor);
+        }
+    }
+    for(itor=array.begin();itor!=array.end();itor++)
+    {
+            cout<<*itor<<"";
+    }
+  return 0;
+}
+```
+下面这个代码输出的是()
+正确答案: C   你的答案: F (错误)
+100 300 300 300  300 500
+100 3OO 300 300 500
+100 300 300 500
+100 300 500
+100 500
+程序错误
+
+`vector::erase()：`从指定容器删除指定位置的元素或某段范围内的元素 
+如果是删除指定位置的元素时： 
+返回值是一个迭代器，指向删除元素下一个元素; 
+
+--- 
+
 循环语句whlie(int i=0 )i--;的循环次数是0
 
 ### 静态方法？

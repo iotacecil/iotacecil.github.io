@@ -557,7 +557,15 @@ public int ladderLength(String beginWord, String endWord, List<String> wordList)
 ```
 {% endfold %}
 
-### 倒水问题 BFS ax + by = m 最大公约数
+### 倒水问题 BFS ax + by = m 最大公约数 
+有无限的水源,一个5L无刻度桶和一个7L无刻度桶,则只利用这两个无刻度桶,将不能获得()L水
+正确答案: F   你的答案: E (错误)
+A2
+B3
+C6
+D8
+E11
+F以上均能获得
 
 #### 365 容量x,y的两个杯子能否量出z
 >Input: x = 3, y = 5, z = 4
