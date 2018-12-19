@@ -32,8 +32,38 @@ https://www.nowcoder.com/test/4575457/summary
 输出: 8
 执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
 
-思路：
+正确方法：找出slot
 
+方法1 排序： 45% 20ms思路：
+1.将任务数量排序，保证数量最大的几个任务都连续在数组尾部
+2.大循环终止条件 ： 最右>0,并且每次都排序。
+3.冷却时间循环n次，总时间和冷却时间计数器都++，从最后一个任务开始消耗,能消耗就消耗
+
+复杂度`O(time)`
+
+```java
+public int leastInterval(char[] tasks, int n) {
+    int[] cnt = new int[26];
+    int m = tasks.length;
+    for(char c :tasks){
+        cnt[c - 'A'] ++;
+    }
+    Arrays.sort(cnt);
+    int time = 0;
+    while(cnt[25]>0){
+        int i = 0;
+        while(i < d){
+            // 大循环的判断
+            if(cnt[25] == 0)break;
+            if(i < 26 && cnt[25 - i] > 0)cnt[25 - i]--;
+            time++;
+            i++;
+        }
+        Arrays.sort(cnt);
+    }
+    return time;
+}
+```
 
 ### 453 数组中n-1个数字每次增加1，最少多少次数组中元素相等
 >[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
@@ -88,7 +118,20 @@ public int compress(char[] chars) {
 }
 ```
 
-### hiho1892
+### 899 操作字符串前k个字符放到最后 输出字典序最小的
+> Input: S = "cba", K = 1
+> Output: "acb"
+> 
+> Input: S = "baaca", K = 3
+> Output: "aaabc"
+> Explanation: 
+> In the first move, we move the 1st character ("b") to the end, obtaining the string "aacab".
+> In the second move, we move the 3rd character ("c") to the end, obtaining the final result "aaabc".
+
+当k=1 字符串只能旋转
+当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
+
+### hiho1892 S中字符可以移动首部，移动最少次数得到T
 >选定S中的一个字符Si，将Si移动到字符串首位。  
 例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
 请你计算最少需要几次移动操作，可以使S变成T。
@@ -124,7 +167,6 @@ public static int trans3(String s,String t){
 }
 ```
 
-### lc714
 
 ### lc749 病毒隔离
 每天只能隔离一片1的圈,而且必须是不隔离会感染最多的圈，每天1会向周围扩散
@@ -186,18 +228,7 @@ public int minTotalDistance(int[][] grid) {
 ```
 
 
-### 899 操作字符串前k个字符放到最后 输出字典序最小的
-> Input: S = "cba", K = 1
-> Output: "acb"
-> 
-> Input: S = "baaca", K = 3
-> Output: "aaabc"
-> Explanation: 
-> In the first move, we move the 1st character ("b") to the end, obtaining the string "aacab".
-> In the second move, we move the 3rd character ("c") to the end, obtaining the final result "aaabc".
 
-当k=1 字符串只能旋转
-当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
 
 ### 132 pattern
 > Input: [3, 1, 4, 2]
