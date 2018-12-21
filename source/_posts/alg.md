@@ -42,6 +42,127 @@ https://www.nowcoder.com/test/4575457/summary
 同理，若a，c是腰时，c也有52个，b，c是腰时也有52个 
 所以n共有9+3×52=165个 
 
+### 3 !!最长不重复子串 做了3遍还是不熟练
+{% fold %}
+Input: "abcabcbb"
+Output: 3 
+Explanation: The answer is "abc", with the length of 3. 
+{% endfold %}
+
+思路：`abca`最长的是两个a之间,start是上一个a。`bbvfg`最长的是重复b之后更新start。
+关键：`tmmzuxt` start应该只增不减。`Math.max(start,map.get(c) + 1)`
+
+```java
+public int lengthOfLongestSubstring(String s) {
+    if(s==null || s.length() <1 )return 0;
+    int n = s.length();
+    int start = 0;
+    int mlen = 0;
+    Map<Character,Integer> map = new HashMap<>();
+    for(int i =0;i < n ;i++){
+        char c = s.charAt(i);
+        if(map.containsKey(c)){
+            start = Math.max(start,map.get(c) + 1);
+
+        }
+        mlen = Math.max(mlen,i - start +1);
+        map.put(c, i);
+    }
+    return mlen;
+}
+```
+
+方法2：用`Set<Character>`
+维持一个窗口[i,j)， 放到set中，如果没重复继续向右扩展，如果重复，窗口向右移动
+```java
+public int lengthOfLongestSubstring(String s){
+    int n = s.length();
+    Set<Character> set = new HashSet<>();
+    int ans = 0,i=0,j=0;
+    //维持一个窗口[i,j)， 放到set中，如果没重复继续向右扩展，如果重复，窗口向右移动
+    while (i<n&&j<n){
+        if(!set.contains(s.charAt(j))){
+            set.add(s.charAt(j++));
+            ans = Math.max(ans,j-i);
+        }else{
+            set.remove(s.charAt(i++));
+        }
+    }
+    return ans;
+}
+```
+
+### 763 划分尽可能多字母区间  返回各区间的长度 双指针
+>输入: S = "ababcbacadefegdehijhklij"
+输出: [9,7,8]
+解释:
+划分结果为 "ababcbaca", "defegde", "hijhklij"。
+每个字母最多出现在一个片段中。
+像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
+ababcba 从第一个a到最后一个a是必须包含的长度
+
+思路：字母last index数组，遍历string，维护一个当前字符出现的最晚index，直到当前字符index就是这个最晚index，可以划分，记录当前长度并且重置start计数。
+注意：不能直接i跳到curmaxend，因为abab如果a直接跳到下一个a会漏更新b的last index
+
+```java
+//45%
+public List<Integer> partitionLabels(String S) {
+    List<Integer> rst = new ArrayList<>();
+    //每个字母最后出现的index
+    int[] last = new int[26];
+
+    for(int i=0;i<S.length();i++){
+      last[S.charAt(i)-'a'] = i;
+    }
+    int start=0,end=0;
+    for(int i = 0;i<S.length();i++){
+        //更新当前字母的区间
+        end = Math.max(end,last[S.charAt(i)-'a']);
+        //关键
+        if(i==end){
+            rst.add(end-start+1);
+            start = end+1;
+        }
+    }
+    return rst;
+}
+```
+
+
+### 575 分糖果 两人数量相等 最大化一组的品种
+{% note %}
+Input: candies = [1,1,2,3]
+Output: 2
+{% endnote %}
+
+思路：
+获得的种类最多是n/2种 每种都不同，>2次的个数<=n/2。
+或者重复的元素很多,可以得到所有种类。
+```java
+public int distributeCandies(int[] candies) {
+   Set<Integer> set = new HashSet();
+    int n = candies.length;
+    for(int i = 0;i < n;i++){     
+        if(!set.contains(candies[i])){
+            set.add(candies[i]);
+        }
+        if(set.size() > n/2)return n/2;
+    }
+    return set.size();
+}
+```
+
+### 888 换1个糖果使两组和相等
+{% note %}
+交换A，B数组中的2个数字(exchange one candy bar)，数组总和相等
+Input: A = [2], B = [1,3]
+Output: [2,3] 
+输出是A和B要交换的数字
+{% endnote %}
+AC 排序二分
+
+---
+
 ### 621 !!!!!!任务调度
 26 种不同种类的任务  每个任务都可以在 1 个单位时间内执行完
 两个相同种类的任务之间必须有长度为 n 的冷却时间
@@ -1518,9 +1639,125 @@ static int secondMax(int[] arr){
 
 ？递归写法
 
+### 567 s1的一种排列是否在s2中
+{% note %}
+Input:s1 = "ab" s2 = "eidbaooo"
+Output:True
+{% endnote %}
+
+正确方法22ms：频率数组在s2中滑动 直到有一个窗口可以把s1全置0
+```java
+public boolean checkInclusion(String s1, String s2) {
+    if(s1.length() > s2.length())return false;
+       int[] cnt = new int[26];
+    for(int i = 0;i<s1.length();i++){
+        char c = s1.charAt(i);
+        char c2 = s2.charAt(i);
+        cnt[c - 'a'] ++;
+        cnt[c2 - 'a'] --;
+    }
+     if(allzero(cnt))return true;
+    for (int i = s1.length(); i <s2.length(); i++) {
+        cnt[ s2.charAt(i) - 'a'] --;
+        cnt[ s2.charAt(i - s1.length()) - 'a']++;
+        if(allzero(cnt))return true;
+    }
+    return false;
+
+}
+private boolean allzero(int[] cnt){
+    for(int t : cnt){
+        if(t !=0) return false;
+    }
+    return true;
+}
+```
 
 
-### 14 最长公共前缀
+129ms
+从s2中取每个s1长度的substring 统计字符频率，和s1的频率相等。
+```java
+public boolean checkInclusion(String s1, String s2) {
+        int[] s1cnt = new int[26];
+        for(char c : s1.toCharArray()){
+            s1cnt[c - 'a'] ++;
+        }
+        for (int i = 0; i <s2.length()-s1.length()+1 ; i++) {
+            String s2tmp = s2.substring(i, i + s1.length());
+            if(cntmatch(s1cnt, s2tmp)){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    boolean cntmatch(int[] s1cnt,String s2){
+        int[] s2cnt = new int[26];
+        for(char c : s2.toCharArray()){
+            int idx = c - 'a';
+            s2cnt[idx] ++;
+            if(s2cnt[idx] > s1cnt[idx])return false;
+        }
+        for (int i = 0; i <26 ; i++) {
+            if(s2cnt[i] != s1cnt[i])return false;
+        }
+        return true;
+    }
+```
+
+1078ms的排序：从s2中取每个s1长度的substring排序，和s1的排序相等。
+{% fold %}
+```java
+public boolean checkInclusion(String s1, String s2) {
+    s1 = sort(s1);
+    for (int i = 0; i <s2.length()-s1.length()+1 ; i++) {
+        if(s1.equals(sort(s2.substring(i,i+s1.length() )))){
+            return true;
+        }
+    }
+    return false;
+}
+String sort(String s1){
+    char[] s11 = s1.toCharArray();
+    Arrays.sort(s11);
+    s1 = new String(s11);
+    return s1;
+}
+```
+{% endfold %}
+
+超时的全排列
+{% fold %}
+```java
+boolean flag = false;
+public boolean checkInclusion(String s1, String s2) {
+    permute(s1, s2, 0);
+    return flag;
+}
+
+void permute(String s1, String s2, int idx) {
+    if (idx == s1.length()) {
+        if (s2.indexOf(s1) >= 0)
+            flag = true;
+    } else {
+        char[] chars = s1.toCharArray();
+        for (int i = idx; i < s1.length(); i++) {
+            char tmp = chars[i];
+            chars[i] = chars[idx];
+            chars[idx] = tmp;
+            String news = new String(chars);
+            permute(news, s2, idx + 1);
+            chars[idx] =chars[i];
+            chars[i] = tmp;
+        }
+    }
+}
+```
+{% endfold %}
+
+
+### !14 最长公共前缀 两个for的熟练
 ```java
 public String longestCommonPrefix(String[] strs) {
    if(strs==null||strs.length<1)return "";
@@ -1924,26 +2161,7 @@ int[]next =  f("abcabcd")={-1,0,0,1，2，3}
 关键加速求解匹配
 
 
-
-
-### 3 最长不重复字串
-18%
-```java
-public int LS(String s){
-    int max = 0;
-    int start = 0;
-    Map<Character,Integer> map = new HashMap<>();
-    for(int i =0;i<s.length();i++){
-        char c = s.charAt(i);
-        if(map.containsKey(c)){
-            start = Math.max(start,map.get(c)+1);
-        }
-        max = Math.max(max,i-start+1);
-        map.put(c,i);
-    }
-    return max;
-}
-```
+---
 
 
 ### 879

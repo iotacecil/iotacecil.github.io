@@ -4,6 +4,265 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 多态
+- Java中除了static方法和final方法（private方法本质上属于final方法，因为不能被子类访问）之外，其它所有的方法都是动态绑定
+- 构造函数并不具有多态性，它们实际上是static方法，只不过该static声明是隐式的。因此，构造函数不能够被override。
+- 在父类构造函数内部调用具有多态行为的函数将导致无法预测的结果，因为此时子类对象还没初始化，此时调用子类方法不会得到我们想要的结果。
+```java
+class Glyph {
+    void draw() {
+        System.out.println("Glyph.draw()");
+    }
+    Glyph() {
+        System.out.println("Glyph() before draw()");
+        draw();
+        System.out.println("Glyph() after draw()");
+    }
+}
+
+class RoundGlyph extends Glyph {
+    private int radius = 1;
+    RoundGlyph(int r) {
+        radius = r;
+        System.out.println("RoundGlyph.RoundGlyph(). radius = " + radius);
+    }
+    void draw() {
+        System.out.println("RoundGlyph.draw(). radius = " + radius);
+    }
+}
+
+public class PolyConstructors {
+    public static void main(String[] args) {
+        new RoundGlyph(5); }
+}
+```
+输出：
+{% note %}
+Glyph() before draw()
+RoundGlyph.draw(). radius = 0
+Glyph() after draw()
+RoundGlyph.RoundGlyph(). radius = 5
+{% endnote %}
+
+
+### 序列化字段
+静态变量不管是否被transient修饰，均不能被序列化
+
+Java中，对象的序列化可以通过实现两种接口来实现，若实现的是Serializable接口，则所有的序列化将会自动进行，若实现的是Externalizable接口，则没有任何东西可以自动序列化，需要在writeExternal方法中进行手工指定所要序列化的变量，这与是否被transient修饰无关。
+
+Shape和Circle两个类的定义。在序列化一个Circle的对象circle到文件时，下面哪个字段会被保存到文件中？ (  )
+```java
+class Shape {
+       public String name;
+}
+
+class Circle extends Shape implements Serializable{
+       private float radius;
+       transient int color;
+       public static String type = "Circle";
+}
+```
+{% note %}
+A name
+B radius
+C color
+D type
+答案：B
+{% endnote %}
+
+
+### 抽象类
+```java
+public abstract class MyClass {
+
+     public int constInt = 5;
+     //add code here
+     public void method() {
+     }
+}
+```
+{% note %}
+A public abstract void method(int a);
+B constInt = constInt + 5;
+- 变量可以初始化或不初始化但不能初始化后在抽象类中重新赋值或操作该变量（只能在子类中改变该变量）。
+
+C public int method();
+- 普通方法一定要实现
+
+D public abstract void anotherMethod() {} 
+- 抽象类中的抽象方法（加了abstract关键字的方法）不能实现。
+
+答案：A
+{% endnote %}
+
+接口中定义的变量默认是public static final 型，且必须给其初值，所以实现类中不能重新定义，也不能改变其值。抽象类中的变量默认是 friendly 型，其值可以在子类中重新定义，也可以在子类中重新赋值。
+
+### 静态块构造块
+```java
+class HelloA {
+
+    public HelloA() {
+        System.out.println("HelloA");
+    }
+    
+    { System.out.println("I'm A class"); }
+    
+    static { System.out.println("static A"); }
+
+}
+
+public class HelloB extends HelloA {
+    public HelloB() {
+        System.out.println("HelloB");
+    }
+    
+    { System.out.println("I'm B class"); }
+    
+    static { System.out.println("static B"); }
+    
+    public static void main(String[] args) { 
+　　　　 new HelloB(); 
+　　 }
+
+}
+```
+
+{% note %}
+static A
+static B
+I'm A class
+HelloA
+I'm B class
+HelloB
+{% endnote %}
+
+对象的初始化顺序：
+（1）类加载之后，按从上到下（从父类到子类）执行被static修饰的语句；
+（2）当static语句执行完之后,再执行main方法；
+（3）如果有语句new了自身的对象，将从上到下执行构造代码块、构造器。
+
+---
+
+### IO用法
+要从文件"file.dat"中读出第10个字节到变量c中,下列哪个方法适合? （）
+A `FileInputStream in=new FileInputStream("file.dat"); in.skip(9); int c=in.read();`
+
+B `FileInputStream in=new FileInputStream("file.dat"); in.skip(10); int c=in.read();`
+
+C `FileInputStream in=new FileInputStream("file.dat"); int c=in.read();`
+
+D `RandomAccessFile in=new RandomAccessFile("file.dat"); in.skip(9); int c=in.readByte();`
+
+D语法错 应该
+```java
+RandomAccessFile in = new RandomAccessFile("file.dat", "r");
+in.skipBytes(9);
+int c = in.readByte();
+```
+---
+
+### case 没有break
+```java
+public static int getValue(int i) {
+        int result = 0;
+        switch (i) {
+        case 1:
+            result = result + i;
+        case 2:
+            result = result + i * 2;
+        case 3:
+            result = result + i * 3;
+        }
+        return result;
+    }
+```
+A0                    B2                    C4                     D10
+
+答案：D
+
+解析：注意这里case后面没有加break，所以从case 2开始一直往下运行。
+
+---
+
+### 初始化
+```java
+import java.io.*;
+import java.util.*;
+
+public class foo{
+    public static void main (String[] args){
+        String s;
+        System.out.println("s=" + s);
+    }
+}
+```
+A 代码得到编译，并输出“s=”
+B 代码得到编译，并输出“s=null”
+C 由于String s没有初始化，代码不能编译通过
+D 代码得到编译，但捕获到 NullPointException异常
+答案：C
+解析：Java中所有定义的基本类型或对象都必须初始化才能输出值。
+
+---
+
+### 引用和值传递
+```java
+public class Example {
+
+    String str = new String("good");
+
+    char[] ch = { 'a', 'b', 'c' };
+
+    public static void main(String args[]) {
+
+        Example ex = new Example();
+
+        ex.change(ex.str, ex.ch);
+
+        System.out.print(ex.str + " and ");
+
+        System.out.print(ex.ch);
+
+    }
+
+    public void change(String str, char ch[]) {
+
+        str = "test ok";
+
+        ch[0] = 'g';
+
+    }
+}
+```
+A、 good and abc
+
+B、 good and gbc
+
+C、 test ok and abc
+
+D、 test ok and gbc 
+答案：B
+
+---
+
+### 创建对象
+15. 不通过构造函数也能创建对象吗（）
+
+A 是     B 否
+
+答案：A
+
+解析：Java创建对象的几种方式（重要）：
+
+(1) 用new语句创建对象，这是最常见的创建对象的方法。
+(2) 运用反射手段,调用java.lang.Class或者java.lang.reflect.Constructor类的newInstance()实例方法。
+(3) 调用对象的clone()方法。
+(4) 运用反序列化手段，调用java.io.ObjectInputStream对象的 readObject()方法。
+
+(1)和(2)都会明确的显式的调用构造函数 ；(3)是在内存上对已有对象的影印，所以不会调用构造函数 ；(4)是从文件中还原类的对象，也不会调用构造函数。
+
+---
+
 
 我们知道 Java 已经支持所谓的可变参数（varargs），但是官方类库还是提供了一系列特定参数长度的方法，看起来似乎非常不优雅，为什么呢？
 这其实是为了最优的性能，JVM在处理变长参数的时候会有明显的额外开销，如果你需要实现性能敏感的 API，也可以进行参考。
