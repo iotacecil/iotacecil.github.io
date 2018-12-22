@@ -396,41 +396,7 @@ public static long maxability(int n,long[]arr,int k,int d){
 
 ---
 
-### 763 划分尽可能多字母区间  返回各区间的长度 双指针
->输入: S = "ababcbacadefegdehijhklij"
-输出: [9,7,8]
-解释:
-划分结果为 "ababcbaca", "defegde", "hijhklij"。
-每个字母最多出现在一个片段中。
-像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
-ababcba 从第一个a到最后一个a是必须包含的长度
 
-思路：字母last index数组，遍历string，维护一个当前字符出现的最晚index，直到当前字符index就是这个最晚index，可以划分，记录当前长度并且重置start计数。
-注意：不能直接i跳到curmaxend，因为abab如果a直接跳到下一个a会漏更新b的last index
-
-```java
-//45%
-public List<Integer> partitionLabels(String S) {
-    List<Integer> rst = new ArrayList<>();
-    //每个字母最后出现的index
-    int[] last = new int[26];
-
-    for(int i=0;i<S.length();i++){
-      last[S.charAt(i)-'a'] = i;
-    }
-    int start=0,end=0;
-    for(int i = 0;i<S.length();i++){
-        //更新当前字母的区间
-        end = Math.max(end,last[S.charAt(i)-'a']);
-        //关键
-        if(i==end){
-            rst.add(end-start+1);
-            start = end+1;
-        }
-    }
-    return rst;
-}
-```
 
 ### 769 !!!!!最多能排序的块 0-n的排列切割，块排序后连接是排序的原数组 
 >输入: arr = [1,0,2,3,4]
