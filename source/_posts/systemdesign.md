@@ -17,6 +17,10 @@ https://www.kancloud.cn/yunhua_lee/oobaodian/110897
 ### 设计电梯
 https://medium.com/system-designing-interviews/design-a-elevator-system-fc5832ca0b8b
 
+###  Log Structured Merge Trees
+Sorted String Tables：
+
+
 ### 1G单词，内存1M，每个词16B以下，返回频率最高的100个。
 1.$1M=2^20B / 2^4 = 2^16$ 1M内存只能处理1<<16个单词 
 2.$1G = 2^30B$ 1G有1<<26个单词

@@ -4,6 +4,33 @@ date: 2018-06-04 09:32:40
 tags:
 category: [网络]
 ---
+### PCI + SDU = PDU
+![pdusdu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdusdu.jpg)
+
+![osi.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/osi.jpg)
+
+表示层：通信协议语法和语义处理。数据格式变换、加密解密、压缩与恢复。
+
+
+会话层：向表示层的进程提供建立连接，并在连接上有序地传输数据。
+会话：建立同步（SYN）
+作用：1.建立、管理、终止会话2.使用校验点通信失效的时候从校验点/同步点恢复通信。适用于传大文件。
+
+传输层：进程通信。传输单位是报文段或用户数据包。
+作用：1可靠/不可靠传输2.差错控制3流量控制 4 复用分用
+复用：多个应用进程使用端口号区分可以同时使用下面层的服务。
+分用：分别交付给上层应用。
+
+网络层：分组交换。
+1.路由选择2流量控制（针对发送方）3充错控制4拥塞控制（全局）
+
+物理层
+信道是有方向的，双工 半双工都需要两条信道
+
+
+### 码元、传输速率（主机内的）、波特（码元/s)、带宽(理想值 主机内的)
+![mayuan.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mayuan.jpg)
+
 ### 大端小端
 
 已知IBM的PowerPC是big-endian字节序列而Intel的X86是little-endian字节序，如果在地址啊存储的整形值时0x04030201，那么地址为a+3的字节内存储的值在PowerPC和Intel X86结构下的值分别是？
@@ -68,12 +95,17 @@ D错10.110.12.32
 边缘部分：端系统
 核心部分：路由器
 
+
+
 链路带宽： 主机发送数据的速率
+![daikuan.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/daikuan.jpg)
 传播速率: 2 x 10^8  200m / us 
 吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）
 时延：发送（传输）/传播/排队/处理
+![yanchi.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/yanchi.jpg)
 时延带宽积(BDT) (缓冲区大小）bit:某段链路现在有多少bit 传播时延(s) x 带宽
 利用率：有数据通过的时间
+![typ.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/typ.jpg)
 
 
 ### select模型

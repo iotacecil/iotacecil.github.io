@@ -1,5 +1,5 @@
 ---
-title: alg
+title: 不要直接看答案 想两天再做两天前的题
 date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
@@ -41,6 +41,850 @@ https://www.nowcoder.com/test/4575457/summary
 由加法原理知n有2+4+6+8+8+8+8+8=52个 
 同理，若a，c是腰时，c也有52个，b，c是腰时也有52个 
 所以n共有9+3×52=165个 
+
+
+### lt516 房屋染色
+
+
+### 955 删掉几列让String数组排序
+{% note %}
+Input: ["ca","bb","ac"]
+Output: 1
+Explanation: 
+After deleting the first column, A = ["a", "b", "c"].
+{% endnote %}
+
+
+
+### poj1273
+求pond到stream的最大流量
+N是边数，M是点数。1是pond，M是stream。
+每一行是从s到e的容量。
+{% note %}
+5 4
+1 2 40
+1 4 20
+2 4 20
+2 3 30
+3 4 10
+{% endnote %}
+算法1：dfs找到一条路，流量是这条路上的最小值。然后把这条路反向，值就是最小值。再dfs。复杂度是 所有边容量C O（C\*(m+n)) 如果有一条边是1，其他便100.可能会执行200次dfs
+
+算法二。用bfs 复杂度是O(nm^2)
+
+
+
+### 649 2种n个参议员，2种操作 无限多轮，直到所有票在同一个阵营
+禁止一名参议员的权利：
+参议员可以让另一位参议员在这一轮和随后的几轮中丧失所有的权利。
+
+宣布胜利：如果参议员发现有权利投票的参议员都是同一个阵营的，他可以宣布胜利并决定在游戏中的有关变化。
+> 输入: "RD"
+输出: "Radiant"
+解释:  第一个参议员来自  Radiant 阵营并且他可以使用第一项权利让第二个参议员失去权力，因此第二个参议员将被跳过因为他没有任何权利。然后在第二轮的时候，第一个参议员可以宣布胜利，因为他是唯一一个有投票权的人
+
+> 输入: "RDD"
+输出: "Dire"
+解释: 
+第一轮中,第一个来自 Radiant 阵营的参议员可以使用第一项权利禁止第二个参议员的权利
+第二个来自 Dire 阵营的参议员会被跳过因为他的权利被禁止
+第三个来自 Dire 阵营的参议员可以使用他的第一项权利禁止第一个参议员的权利
+因此在第二轮只剩下第三个参议员拥有投票的权利,于是他可以宣布胜利
+
+
+
+### 495 给定攻击时间和中毒状态持续时间，问中毒状态总时长
+> Input: [1,2], 2
+Output: 3 (1-2-4)
+
+8ms
+```java
+public int findPoisonedDuration(int[] timeSeries, int duration) {
+    if(timeSeries==null||timeSeries.length<1||duration==0)return 0;
+    int rst = 0;
+    for(int i =0;i<timeSeries.length-1;i++){
+        //每次取间隔或者duration
+      rst += Math.min(duration,timeSeries[i+1]-timeSeries[i]);
+    }
+    rst += duration;
+    return rst;
+}
+```
+//todo again
+按 区间的做法：100% 4ms
+```java
+public int findPoisonedDuration(int[] timeSeries, int duration) {
+    if(timeSeries==null||timeSeries.length<1||duration==0)return 0;
+    int rst = 0;
+    int start = timeSeries[0];
+    int end = timeSeries[0]+duration;
+    for(int i = 1;i<timeSeries.length;i++){
+        //Input: [1,4], 2 
+        if(timeSeries[i]>end){
+            result += (end-start);
+            start = timeSeries[i];
+        }
+        end = timeSeries[i]+duration;
+    }
+        result+=(end-start);
+        return result;
+}
+```
+
+
+### 500 判断字符串是不是在键盘的同一行
+流： 正则很慢 流也很慢
+```java
+public String[] findWords(String[] words){
+    return Stream.of(words).parallel().filter(s->s.toLowerCase().matches("[qwertyuiop]*|[asdfghjkl]*|[zxcvbnm]*")).toArray(String[]::new);
+}
+```
+
+
+
+### 42
+
+
+### 683 - K Empty Slots
+
+### 最长01串
+
+### 799倒香槟第`[i,j]`个杯子的容积
+>输入: poured(倾倒香槟总杯数) = 2, 
+query_glass(杯子的位置数) = 1, query_row(行数) = 1
+输出: 0.5
+解释: 我们在顶层（下标是（0，0）倒了两杯香槟后，有一杯量的香槟将从顶层溢出，位于（1，0）的玻璃杯和（1，1）的玻璃杯平分了这一杯香槟，所以每个玻璃杯有一半的香槟。
+
+第一行流过10杯，则第二行流过9杯，左边分到4.5 右边分到4.5
+```java
+public double champagneTower(int poured, int query_row, int query_glass) {
+    double[][] A= new double[102][102];
+    A[0][0] = (double) poured;
+    for(int r = 0;r<= query_row;++r){
+        for(int c = 0;c<=r;c++){
+            double q = (A[r][c] - 1)/2;
+            if(q > 0){
+                A[r+1][c] += q;
+                A[r+1][c+1] += q;
+            }
+        }
+    }
+    return Math.min(1,A[query_row][query_glass]);
+}
+```
+
+
+
+
+
+### 2^N 大整数
+
+
+
+
+
+### 287 O(1)空间，找到数组中重复的数字
+
+### 查找第二小/大的元素
+```java
+static int secondMin2(int[] arr){
+    int first = Integer.MAX_VALUE,second = Integer.MAX_VALUE;
+    for (int j = 0; j < arr.length; j++) {
+        if(arr[j]<=first){
+            second = first;
+            first = arr[j];
+        }else if(arr[j]<=second&&arr[j]!=first)
+            second = arr[j];
+    }
+    return second;
+}
+static int secondMax(int[] arr){
+    int first = Integer.MIN_VALUE,second = Integer.MIN_VALUE;
+    for (int j = 0; j < arr.length; j++) {
+        if(arr[j]>=first){
+            second = first;
+            first = arr[j];
+        }else if(arr[j]>=second&&arr[j]!=first)
+            second = arr[j];
+    }
+    return second;
+}
+```
+
+### 排序数组中小于target的
+2 4 6 8 9 target=14
+1. 2+9<14 cnt+=4
+2. 4+9<14 cnt+=3
+3. 6+9>14,6+8==14,start==end 结束
+
+### 给定一个数字范围，找到其中有几个首尾相同的数字
+![digits.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/digits.jpg)
+
+### 百万数字中找最大20个
+用开始20个数字构造20个node的最小堆，接下来的数字比root大则replace，insert
+
+### 每秒最大桶数量减半，求t时刻一共消耗了多少
+方法1：按递减排序，减半，再排序，一共排序t次
+方法2：维持最大堆，每次取root减半再插入
+
+### ？445 链表数字相加
+> Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
+> Output: 7 -> 8 -> 0 -> 7
+
+？递归写法
+
+rolling hash
+https://leetcode.com/problems/maximum-length-of-repeated-subarray/solution/
+
+
+### 括号串达到匹配需要最小的逆转次数
+> Input:  exp = "}}}{"
+> Output: 2 
+
+将匹配的括号都去掉，`{`的个数是m=3，`}`的个数是n=3
+m/3+n/2 = 2+1=3
+![minbracket.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/minbracket.jpg)
+```java
+private int minReversal(String s){
+    int len = s.length();
+    if((len&1)!=0)return -1;
+    Deque<Character> que = new ArrayDeque<>();
+    int n=0;
+    for(int i=0;i<s.length();i++){
+        char c = s.charAt(i);
+        if(c=='}'&&!s.isEmpty()){
+            if(que.peek()=='{')que.pop();
+            else {
+                que.push(c);
+            }
+        }
+    }
+    int mn = que.size();
+    while (!que.isEmpty()&&que.peek()=='{'){
+        que.pop();
+        n++;
+    }
+    //当m+n是偶数的时候ceil(n/2)+ceil(m/2)=
+    return (mn/2+n%2);
+}
+```
+
+### 22 ??卡特兰数括号
+left括号数量小于n，right括号数量必须小于left不然(()))肯定不合理
+```java
+if(left>right)return;
+if(left==0&&right==0){rst.add(s);return;}
+if(left>0)help(rst,s+"(",left-1,right);
+if(right<0)help(rst,s+")",left,right+1);
+```
+
+### 32 ?括号字符串中合法的括号对
+方法1. stack:栈底放-1，当栈空&&读到是`)`将`)`的index当栈底。每次读到`)`弹栈，并更新`i-peek()`，因为peek为没消掉的`(`的前一个位置
+方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
+  从右向左扫描，同理更新max，当左括号>右括号重置0.
+
+
+#### 187 rolling-hash DNA序列中出现2次以上长为10的子串
+//todo
+
+
+### 879
+G 名成员 第i种犯罪会产生`profit[i]` 利润，需要`group[i]`名成员参与。计划产生P利润有多少种方案。
+>Input: G = 5, P = 3, group = [2,2], profit = [2,3]
+>output: 2
+
+`dp[k][i][j]` 产生i利润 用j个人 完成前k个任务 的方案数
+
+
+### 576 无向图访问所有点的最短边数
+
+
+### ip2cidr
+找末尾1的位置`x & -x`
+
+
+
+### 131 
+
+
+
+
+
+### 819 找出句子中出现频率最高没被ban掉的词
+正则去掉所有标点
+> "Bob hit a ball, the hit BALL flew far after it was hit."
+
+pP 其中的小写 p 是 property 的意思，表示 Unicode 属性，用于 Unicode 正表达式的前缀。
+
+大写 P 表示 Unicode 字符集七个字符属性之一：标点字符。
+其他六个是
+L：字母；
+M：标记符号（一般不会单独出现）；
+Z：分隔符（比如空格、换行等）；
+S：符号（比如数学符号、货币符号等）；
+N：数字（比如阿拉伯数字、罗马数字等）；
+C：其他字符
+P：各种标点
+
+```java
+//busymannote
+// [Bob, hit, a, ball, the, hit, BALL, flew, far, after, it, was, hit]
+paragraph.split("\\PL+");
+// Bob hit a ball the hit BALL flew far after it was hit
+paragraph.replaceAll("\\pP","");
+paragraph.replaceAll("[^a-zA-Z ]", "")
+```
+
+```java
+public String mostCommonWord(String paragraph, String[] banned) {
+ Set<String> ban = new HashSet<>(Arrays.asList(banned));
+    Map<String,Integer> cnt = new HashMap<>();
+    String[] split = paragraph.toLowerCase().split("\\PL+");
+    for(String s:split)if(!ban.contains(s))cnt.put(s,cnt.getOrDefault(s,0 )+1);
+    return Collections.max(cnt.entrySet(),Map.Entry.comparingByValue()).getKey();
+}
+```
+
+
+
+
+### 亚线性算法o(n)小于输入规模
+亚线性时间：
+[scale-free network](https://zh.wikipedia.org/wiki/%E6%97%A0%E5%B0%BA%E5%BA%A6%E7%BD%91%E7%BB%9C)S：
+大部分节点只和很少节点连接，而有极少的节点与非常多的节点连接。
+网络中随机抽取一个节点，它的度是多少呢？这个概率分布就称为节点的度分布
+![scalenetwork.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/scalenetwork.jpg)
+顶点的度满足幂律分布（也称为帕累托分布）,所以不能均匀采样计算每个人的平均度数。
+
+亚线性空间
+中位数问题，知道所有的输入，有O(n)的分治算法
+
+### 水库抽样Reservpor Sampling 亚线性空间
+> “给出一个数据流，这个数据流的长度很大或者未知。并且对该数据流中数据只能访问一次。请写出一个随机选择算法，使得数据流中所有数据被选中的概率相等。”
+
+当扫描到前n个数字时，保留数组中k个均匀的抽样
+1.k大小的数组
+2.填充k个元素
+3.收到第i个元素t。以k/i的概率替换A中的元素。这样保证收到第i个数字的时候，i在k中的概率是k/i。
+实现：生成`[1..k..i]`中随机数j，如果j<=k（k/i的概率),A[j]=t
+证明：第i个数接收时有k/i的概率在k数组中，当第i+1个数接收时,i+1有k/(i+1)概率在数组k中，并且刚好替换掉的是第i个数的概率是k中选i：1/k，所以第i+1个数来之后i还在k中的概率是（1-k/(i+1)\*1/k)=（1-1/(1+i)）
+![shuku.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/shuku.jpg)
+```java
+private void select(int[] stream,int n,int k){
+    int[] reserve = new int[k];
+    int i;
+    for(i=0;i<k;i++){
+        reserve[i]=stream[i];
+    }
+    Random r = new Random();
+    for(;i<n;i++){
+        int j = r.nextInt(i+1);
+        if(j<k)reserve[j]=stream[i];
+    }//sout
+}
+```
+
+### 398 数组中重复元素随机返回index
+> int[] nums = new int[] {1,2,3,3,3};
+Solution solution = new Solution(nums);
+
+> // pick(3) should return either index 2, 3, or 4 randomly. Each index should have equal probability of returning.
+solution.pick(3);
+
+> // pick(1) should return 0. Since in the array only nums[0] is equal to 1.
+solution.pick(1);
+
+水库抽样：流式处理，空间复杂度O(1),pick O(N)
+如果用hashmap，初始化O(N)时间，O（N）空间，数组太大就不行。
+```java
+class Solution {
+    int[] nums;
+    Random r;
+    public Solution(int[] nums) {
+        this.nums=nums;
+        this.r = new Random();
+    }
+    
+    public int pick(int target) {
+        int cnt =0;
+        int rst =-1;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]!=target)continue;
+            //以1/++cnt的概率抽这个数
+            // int j = r.nextInt(++cnt);
+            // if(j==0)rst=i;
+            else{//不赋值变量从180ms->127ms
+            if(r.nextInt(++cnt)==0)rst=i;
+            }
+        }
+        return rst;
+    }
+}
+```
+
+### ？？382 随机链表 extremely large and its length is unknown
+长度不知，读到第三个node，让它的概率变成1/3，用1/3的概率替换掉之前选择的item
+> 由于计算机产生的随机数都是伪随机数，对于相同的随机数引擎会产生一个相同的随机数序列，因此，如果不使用静态变量（static），会出现每次调用包含随机数引擎的函数时，随机数会重新开始产生随机数，因此会产生相同的一串随机数。比如你第一次调用产生100个随机数，第二次调用仍然会产生这一百个随机数。如果将随机数引擎设置为静态变量，那么第一次调用会产生随机数序列中的前100个随机数，第二次调用则会产生第100到200的随机数。
+
+
+
+### 611数组中符合三角形边长的对数 
+线性扫描 复杂度n^2
+![lc611.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc611.jpg)
+
+### 332 欧拉路径 每条边一次
+(这道题不用判断)
+只有1个点入度比出度少1（起点）&& 只有一个点入度比出度多1（终点）其余点入度==出度
+
+#### Hierholzer：O(e)
+删除边`e(u,v)`，并`dfs(v)`，不断寻找封闭回路，
+
+> 从v点出发一定会回到v。因为入度出度相等。虽然可能不包含所有点和边。
+> 总是可以回到以前的点，从另一条路走，把其它所有的边全部遍历掉。
+
+**不是拓扑排序，拓扑排序每个点仅1次**
+![Hierholzer1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Hierholzer1.jpg)
+path里加入{0},{2}头插法{2,0}//保证远的在后面
+dfs回到1，继续找封闭回路
+![Hierholzer2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Hierholzer2.jpg)
+
+> Input: tickets = `[["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]`
+> Output: `["JFK", "MUC", "LHR", "SFO", "SJC"]`
+
+1. 用hashmap记录每个点的出度的点，建图
+2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
+
+```java
+public List<String> findItinerary(String[][] tickets) {
+    LinkedList<String> rst = new LinkedList<>();
+    
+    Map<String,PriorityQueue<String> > map = new HashMap<>();
+    for(String[] edge:tickets){
+        PriorityQueue<String> nei = map.getOrDefault(edge[0],new PriorityQueue<String>());
+        nei.add(edge[1]);
+        map.put(edge[0],nei);
+    }
+    dfs(rst,map,"JFK");
+    return rst;
+}
+private void dfs(LinkedList<String> rst,Map<String,PriorityQueue<String> > map,String start){
+  PriorityQueue<String> pri = map.get(start);
+    while(pri!=null&&!pri.isEmpty())
+        dfs(rst,map,pri.poll());
+    rst.addFirst(start);  
+}
+```
+后序遍历stack：
+
+
+
+#### ?207 先修课程有环则返回false 拓扑排序
+??和并查集的区别（？
+按算法4上88.45%
+```java
+private boolean[] marked;
+private boolean cycle = true;
+private boolean[] onStack;
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    onStack = new boolean[numCourses];
+    marked =new boolean[numCourses];
+    List<Integer>[] graph=new ArrayList[numCourses];
+    for (int i = 0; i <numCourses ; i++) {
+            graph[i] = new ArrayList<>();
+    }
+    //{2,0},{1,0},{3,1},{3,2},{1,3}}->[[], [0, 3], [0], [1, 2]]
+    for (int[] edge :prerequisites) {
+        graph[edge[0]].add(edge[1]);
+    }
+    for (int i = 0; i < numCourses; i++) {
+            if(!marked[i])dfs(graph,i);
+    }
+    return cycle;
+}
+private void dfs(List<Integer>[] graph,int v){
+    if(graph[v].size()<1)return;
+    //dfs是从起点到v的有向路径，onstack保存了递归中经历的点
+    onStack[v] = true;
+    marked[v] = true;
+    for(int w :graph[v]){
+        if(!marked[w])
+        dfs(graph,w);
+        else if(onStack[w]){
+            cycle = false;
+            return;
+        }
+    }
+    //这个点出发没有环
+    onStack[v] = false;
+}
+```
+
+56% 有可以优化到100%4ms的方法
+1.邻接表存储课程依赖图L
+```java
+List[] graph_;
+public boolean canFinish(int numCourses, int[][] prerequisites) 
+    graph_ = new ArrayList[numCourses];
+    for(int i =0;i<numCourses;i++)
+    {graph_[i] = new ArrayList<Integer>();}
+    for(int[] back:prerequisites){
+        int pre = back[0];
+        int lesson = back[1];
+        graph_[lesson].add(pre);
+    }
+```
+2.定义状态`int[] visit = new int[numCourses];`
+3.dfs每个顶点
+```java
+for(int i =0;i<numCourses;i++){
+    if(hasCircle(i,visit))return false;
+}
+return true;
+```
+4.dfs 检查有没有环
+```java
+boolean hasCircle(int idx,int[] visited){
+    if(visited[idx]==1)return true;
+    if(visited[idx]==2)return false;
+    List<Integer> neib = graph_[idx];
+    for(int i:neib){
+        if(hasCircle(i,visited))return true;
+    }
+    visited[idx]=2;
+    return false;
+}
+```
+
+#### 210 输出修课顺序
+> Input: 4, [[1,0],[2,0],[3,1],[3,2]]
+  Output: [0,1,2,3] or [0,2,1,3]
+
+用onStack和post 11%
+
+### kolakoski序列找规律
+![kolakoski.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kolakoski.jpg)
+
+#### lc481 返回kolakoski前N中有几个1
+
+
+
+### 174 骑士从左上到右下找公主，求初始血量
+dp[i][j]表示到i,j的最少血量，因为右下角一格也要减
+dp[n-1][m],dp[n][m-1]=1表示走完了右下角还剩下1点血
+dp[0~n-2][m]和dp[n][0~m-2]都是非法值，为了取min设置MAX_VALUE
+```java
+dp[i][j]=Math.max(1,Math.min(dp[i+1][j],dp[i][j+1])-dungeon[i][j]);
+```
+
+
+
+
+
+
+
+### 伪多项式时间
+一个整数是否是素数
+```python
+def isPrime(n):
+    for i in range(2,n):
+        if n mod i 
+```
+运行时间与数值n的二进制位数呈指数增长
+整数需要的bit位数x=logn 复杂度$O(2^{x})$
+每加1位，时间翻倍
+857 ：‭‭001101011001‬
+421 ：‭‭000110100101‬
+
+---
+
+
+### !!97 s1和s2是否交错组成s3
+[Solution](https://leetcode.com/problems/interleaving-string/solution/)
+状态dp[len1][len2]表示s1长度len1，s2长度len2出现在s3[len1+len2]中
+任意位置s3[i]一定是由s1[m],s2[n]组成的
+```
+s1="aa  bc   c"
+s2="  db  bca"
+s3="aadbbcbcac"
+```
+dp行表示当前len1的匹配情况下，不断扩展len2与s3的匹配情况
+dp列表示当前len2的匹配情况下，不断扩展len1与s3的匹配情况
+```
+遍历s3的位置：
+  遍历s1的长度，s3+1-s1为s2的长度
+    如果s3当前位置与s2当前匹配&&dp[][s2-1]匹配了
+       ||s3当前与s1当前匹配并且dp[s1-1][s2]:
+         dp[s1][s2] = true
+```
+可以用滚动数组降成1维
+
+？？？按背包问题递减更新 99%
+ct的意义
+动态规划中的ct
+```java
+public boolean isInterleave(String s1, String s2, String s3) {
+    if (s1.length() + s2.length() != s3.length()) return false;
+    boolean[] dp = new boolean[s1.length() + 1];
+    dp[0] = true;
+    for (int i = 0; i < s3.length(); i++) {
+        boolean ct = true;
+        for (int j = Math.min(s1.length(), i + 1); j > 0; j--) {
+            if (dp[j] && (i-j)<s2.length() &&s2.charAt(i - j) == s3.charAt(i)) ct = false;
+            else if (dp[j - 1] && s1.charAt(j- 1) == s3.charAt(i)){
+                dp[j] = true;
+                ct = false;
+            }else dp[j] = false;
+        }
+        if(dp[0]&&i<s2.length()&&s2.charAt(i)==s3.charAt(i))ct = false;
+        if(ct)return false;
+    }
+    return true;
+}
+```
+
+
+
+
+### !!!169 众数 Boyer-Moore Voting Algorithm 
+1.hashmap,直到有计数>n/2 break->return 11%
+2.随机数44% 因为一半以上都是这个数，可能只要循环两边就找到了
+```java
+public int majorityElement(int[] nums){
+    Random random = new Random(System.currentTimeMillis());
+    while(true){
+        int idx = random.nextInt(nums.length);
+        int choose = nums[idx];
+        int cnt = 0;
+        for(int num:nums){
+            if(num==cur&&++cnt>nums.length/2)return num;
+        }
+    }
+}
+```
+3.39% 计算用每个数字的每一位投票，1的个数>n/2则为1 
+```java
+public int majorityElement(int[] nums){
+    int n = nums.length;
+    int rst =0;
+    int mask =0;
+    for(int i=0;i<32;i++){
+        mask = 1<<i;
+        int cnt =0;
+        for(int num:nums){
+            if((num&mask)!=0)cnt++;
+        }
+        if(cnt>n/2)rst|=mask;
+    }
+    return rst;
+}
+```
+
+#### 4.moore voting 在线算法92%
+```java
+public int majorityElement(int[] nums){
+    //假设就是第一个数
+    int maj = nums[0];
+    int cnt=0;
+    for(int num:nums){
+        //第一个数就cnt=1
+        if(num==maj)cnt++;
+        else if(--cnt==0){
+            //等于0 从头开始做
+            cnt=1;
+            maj = num;
+        }
+    }
+    return maj;
+}
+```
+**优化100%**
+每次取两个不同的数删除，最后剩下的返回
+{% fold %}
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        if(nums==null)return -1;
+        int res=0;
+        int count=0;
+        for(int e : nums){
+            if(count==0){
+                res=e;
+            }
+                if(res!=e){
+                    count--;//删除这个数
+                }
+                else count++;
+        }
+        return res;
+    }
+}
+```
+{% endfold %}
+
+5.排序取中间的数
+6.C++专有 部分排序
+```cpp
+int majorityElement(vector<int> & nums){
+    nth_element(nums.begin(),nums.begin()+nums.size()/2,nums.end());
+    return nums[nums.size()/2];
+}
+```
+7.分治???
+
+### A,B两人选k种可乐达到期望最大
+A选m个，B选(n-m)个
+每种可乐对A,B的满意度为a,b 如何使两人满意度期望和最大
+输出 买k种可乐的数量
+期望和：$m/n\*a+(m-n)/n\*b$的最大值 全部买期望最大那种
+输入：n=2 m=1 k=2；a=1 b=2；a=3 b=1
+m/n=.5
+0.5x1+0.5x2=0.5+1=1.5
+0.5x3+0.5x1 = 2  全部买第二种可乐
+输出:0 2
+
+---
+### ??火车换乘
+保证每个车错过能在30分钟以后换车
+输入：城市n 火车数m
+from1 to3 cost800 18:00 21:00
+...
+输出从1到n的最小花费
+
+---
+### 16支队伍两两获胜概率已知求冠军概率1/8->1/4->1/16
+A进入1/8只需要打败B，A进入1/4需要P(A进入1/8)\*(P(C进入1/8)\*P(A赢了C)+P(D进入1/8)\*P(A赢了D))
+A进入1/2需要赢没比过的另外4个队
+A变成冠军需要赢没比过的另外8个队
+分组问题：如果1/4赛 1234 5678是一组4个是一组
+如果1/2赛  8个是一组
+![shijiebei.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/shijiebei.jpg)
+
+
+```java
+for(int i =1;i<4;i++){
+ int inergroup = 1<<i;
+ int group= 1<<i+1;
+  for (int j = 0; j <16 ; j++) {
+   for(int k=0;k<16;k++) {
+    //在同一个大组
+    if(j/group==k/group) {
+    //不在同一个小组
+    if (j / inergroup != k / inergroup) {
+        dp[i][j] += dp[i - 1][j] * dp[i - 1][k] * p[j][k];
+}}}}}
+```
+
+---
+### !815 换公交 BFS
+`routes = [[1, 2, 7], [3, 6, 7]]`
+表示环线`1->5->7->1->5->7->1->`
+求从S->T的最少公交车数量（不是少的站点）
+> Input: routes = [[1, 2, 7], [3, 6, 7]]
+> S = 1
+> T = 6
+> Output: 2乘坐 routes[0]到7，换routes[1]到6
+
+易错点1： bfs的size保留当前层的定点数
+易错点2： deque的add和poll
+
+{% fold %}
+
+```
+{{0,1,6,16,22,23},
+ {14,15,24,32},
+ {4,10,12,20,24,28,33},
+ {1,10,11,19,27,33},
+ {11,23,25,28},
+ {15,20,21,23,29},
+ {29}};
+```
+
+ S=4 T=21
+bfs，起点入队，遍历起点可以到达的所有公交(4可以达公交2)，遍历所有公交2上的可达`stop{4,10,12,20,24,28,33},`
+如果没到T，则4乘的公交换一辆，再遍历有4公交上的其他可达stop。
+**用size保留当前层的定点数** 4的bus全部遍历完后size==0。下一轮重新获取`que.size()`
+如果4的所有公交都不能达到T，则必须换乘cnt+1。当前起点变成`stop{10}`，遍历它的公交和stop，不行就{12}这些都是cnt+1可达的。直到`stop{20}->bus{2,5}`遍历公交5的stop找到T，bfs换乘1层找到的。
+
+注意deque的add是addLast，push是addFirst,poll是pollFirst，pop是poolFirst 队列应该是add+poll,
+bfs如果用栈，则会在这一层还没找完先找下一层cnt=1{4}->
+![bus1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bus1.jpg)
+`cnt=2{33:[2, 3]}->`
+将{1,10,11,19,27,33}入队
+![bus2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bus2.jpg)
+所以回到下一次size--的时候取到了下一层的点33,两个bus都标记过了
+然后就全乱了
+`{27:[3]}->{19:[3]}->{11:[3,4]}->bus4`的最后`{28:[2,4]}->25:[4]->cnt=3{23:[0,4,5]}->bus5`找到21
+本来应该`bus[2]->20->bus[5]`结果`bus[2]->bus[4]->bus[5]`
+{% endfold %}
+
+数据结构：
+1. {站点：list<经过的公交车id>}
+2. list<公交车id> 标记已经乘过的公交
+3. BFS连通分量`while(!que.empty)`，
+    遍历一辆车的连通分量`while(que.size()>0)`
+    遍历当前节点相邻的busid是否乘过`for(int car:list)，`
+    并标记这个车的连通分量已乘过，遍历这个连通分量`for(int t:routes[car])`中有没有T，有则结束，没有则将整个连通分量入队。
+```java
+//todonexttime
+```
+
+### 11 数组index当底边，值当杯子两侧，最大面积
+
+### 242 Anagram 相同字母的单词
+
+
+
+### 344 reverse String 
+转成char数组/位运算做法77%比stringbuilder好
+
+### 551 出现两个以上A或者3个以上L为false
+```java
+return s.indexOf("A")==s.lastIndexOf("A") && s.indexOf("LLL") == -1; 
+```
+
+
+
+### 476 
+前导0
+```java
+//找到左边第一个1，然后后面全置0
+public static int highestOneBit(int i) {
+    // HD, Figure 3-1
+    i |= (i >>  1);//高位为1的右1步，再|则第二高位肯定是1->00011xxxxx
+    i |= (i >>  2);//连续4个1 但是如果位数不够就只有3个1或者更少
+    i |= (i >>  4);
+    i |= (i >>  8);
+    i |= (i >> 16);
+    return i - (i >>> 1);//让全1的无符号右移1格1111-0111得到1000
+}
+```
+
+---
+
+
+
+
+### 292每个人可以拿1-3块石头，拿到最后一块的赢，所有4的倍数的情况先手不能赢 
+
+
+### 636 单核cpu函数调用栈
+日志是具有以下格式的字符串：function_id：start_or_end：timestamp。例如："0:start:0" 表示函数 0 从 0 时刻开始运行。"0:end:0" 表示函数 0 在 0 时刻结束。
+
+函数的独占时间定义是在该方法中花费的时间，调用其他函数花费的时间不算该函数的独占时间。
+> 输入 n = 2
+logs = 
+["0:start:0",
+ "1:start:2",
+ "1:end:5",
+ "0:end:6"]
+输出：[3, 4]
+
+函数 0 在时刻 0 开始，在执行了  2个时间单位结束于时刻 1。
+现在函数 0 调用函数 1，函数 1 在时刻 2 开始，执行 4 个时间单位后结束于时刻 5。
+函数 0 再次在时刻 6 开始执行，并在时刻 6 结束运行，从而执行了 1 个时间单位。
+所以函数 0 总共的执行了 2 +1 =3 个时间单位，函数 1 总共执行了 4 个时间单位。
+
+stack + start[] ac 15%
 
 ### 3 !!最长不重复子串 做了3遍还是不熟练
 {% fold %}
@@ -1196,8 +2040,13 @@ public int gcd(int a, int b) {
 
 
 
-### 916
+### 916 A单词出现B中所有字母
 > b 中的每个字母都出现在 a 中，包括重复出现的字母，那么称单词 b 是单词 a 的子集。 例如，“wrr” 是 “warrior” 的子集，但不是 “world” 
+
+{% note %}
+Input: A = ["amazon","apple","facebook","google","leetcode"], B = ["e","o"]
+Output: ["facebook","google","leetcode"]
+{% endnote %}
 
 ### 7 整数反转 integer越界
 {% fold %}
@@ -1297,85 +2146,6 @@ permutation的字典序
  1.从右想左 找到第一次下降位置
  2.用后缀中比当前位置大的最小数字交换
  3.保证后缀最小（翻转？）
-
-
-### 636 单核cpu函数调用栈
-日志是具有以下格式的字符串：function_id：start_or_end：timestamp。例如："0:start:0" 表示函数 0 从 0 时刻开始运行。"0:end:0" 表示函数 0 在 0 时刻结束。
-
-函数的独占时间定义是在该方法中花费的时间，调用其他函数花费的时间不算该函数的独占时间。
-> 输入 n = 2
-logs = 
-["0:start:0",
- "1:start:2",
- "1:end:5",
- "0:end:6"]
-输出：[3, 4]
-
-函数 0 在时刻 0 开始，在执行了  2个时间单位结束于时刻 1。
-现在函数 0 调用函数 1，函数 1 在时刻 2 开始，执行 4 个时间单位后结束于时刻 5。
-函数 0 再次在时刻 6 开始执行，并在时刻 6 结束运行，从而执行了 1 个时间单位。
-所以函数 0 总共的执行了 2 +1 =3 个时间单位，函数 1 总共执行了 4 个时间单位。
-
-stack + start[] ac 15%
-
-
-
-### 649 2种n个参议员，2种操作 无限多轮，直到所有票在同一个阵营
-禁止一名参议员的权利：
-参议员可以让另一位参议员在这一轮和随后的几轮中丧失所有的权利。
-
-宣布胜利：如果参议员发现有权利投票的参议员都是同一个阵营的，他可以宣布胜利并决定在游戏中的有关变化。
-> 输入: "RD"
-输出: "Radiant"
-解释:  第一个参议员来自  Radiant 阵营并且他可以使用第一项权利让第二个参议员失去权力，因此第二个参议员将被跳过因为他没有任何权利。然后在第二轮的时候，第一个参议员可以宣布胜利，因为他是唯一一个有投票权的人
-
-> 输入: "RDD"
-输出: "Dire"
-解释: 
-第一轮中,第一个来自 Radiant 阵营的参议员可以使用第一项权利禁止第二个参议员的权利
-第二个来自 Dire 阵营的参议员会被跳过因为他的权利被禁止
-第三个来自 Dire 阵营的参议员可以使用他的第一项权利禁止第一个参议员的权利
-因此在第二轮只剩下第三个参议员拥有投票的权利,于是他可以宣布胜利
-
-
-
-### 495 给定攻击时间和中毒状态持续时间，问中毒状态总时长
-> Input: [1,2], 2
-Output: 3 (1-2-4)
-
-8ms
-```java
-public int findPoisonedDuration(int[] timeSeries, int duration) {
-    if(timeSeries==null||timeSeries.length<1||duration==0)return 0;
-    int rst = 0;
-    for(int i =0;i<timeSeries.length-1;i++){
-        //每次取间隔或者duration
-      rst += Math.min(duration,timeSeries[i+1]-timeSeries[i]);
-    }
-    rst += duration;
-    return rst;
-}
-```
-//todo again
-按 区间的做法：100% 4ms
-```java
-public int findPoisonedDuration(int[] timeSeries, int duration) {
-    if(timeSeries==null||timeSeries.length<1||duration==0)return 0;
-    int rst = 0;
-    int start = timeSeries[0];
-    int end = timeSeries[0]+duration;
-    for(int i = 1;i<timeSeries.length;i++){
-        //Input: [1,4], 2 
-        if(timeSeries[i]>end){
-            result += (end-start);
-            start = timeSeries[i];
-        }
-        end = timeSeries[i]+duration;
-    }
-        result+=(end-start);
-        return result;
-}
-```
 
 
 
@@ -1538,106 +2308,7 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 ```
 
 
-### 500 判断字符串是不是在键盘的同一行
-流： 正则很慢 流也很慢
-```java
-public String[] findWords(String[] words){
-    return Stream.of(words).parallel().filter(s->s.toLowerCase().matches("[qwertyuiop]*|[asdfghjkl]*|[zxcvbnm]*")).toArray(String[]::new);
-}
-```
 
-
-
-### 42
-
-
-### 683 - K Empty Slots
-
-### 最长01串
-
-### 799倒香槟第`[i,j]`个杯子的容积
->输入: poured(倾倒香槟总杯数) = 2, 
-query_glass(杯子的位置数) = 1, query_row(行数) = 1
-输出: 0.5
-解释: 我们在顶层（下标是（0，0）倒了两杯香槟后，有一杯量的香槟将从顶层溢出，位于（1，0）的玻璃杯和（1，1）的玻璃杯平分了这一杯香槟，所以每个玻璃杯有一半的香槟。
-
-第一行流过10杯，则第二行流过9杯，左边分到4.5 右边分到4.5
-```java
-public double champagneTower(int poured, int query_row, int query_glass) {
-    double[][] A= new double[102][102];
-    A[0][0] = (double) poured;
-    for(int r = 0;r<= query_row;++r){
-        for(int c = 0;c<=r;c++){
-            double q = (A[r][c] - 1)/2;
-            if(q > 0){
-                A[r+1][c] += q;
-                A[r+1][c+1] += q;
-            }
-        }
-    }
-    return Math.min(1,A[query_row][query_glass]);
-}
-```
-
-
-
-
-
-### 2^N 大整数
-
-
-
-
-
-### 287 O(1)空间，找到数组中重复的数字
-
-### 查找第二小/大的元素
-```java
-static int secondMin2(int[] arr){
-    int first = Integer.MAX_VALUE,second = Integer.MAX_VALUE;
-    for (int j = 0; j < arr.length; j++) {
-        if(arr[j]<=first){
-            second = first;
-            first = arr[j];
-        }else if(arr[j]<=second&&arr[j]!=first)
-            second = arr[j];
-    }
-    return second;
-}
-static int secondMax(int[] arr){
-    int first = Integer.MIN_VALUE,second = Integer.MIN_VALUE;
-    for (int j = 0; j < arr.length; j++) {
-        if(arr[j]>=first){
-            second = first;
-            first = arr[j];
-        }else if(arr[j]>=second&&arr[j]!=first)
-            second = arr[j];
-    }
-    return second;
-}
-```
-
-### 排序数组中小于target的
-2 4 6 8 9 target=14
-1. 2+9<14 cnt+=4
-2. 4+9<14 cnt+=3
-3. 6+9>14,6+8==14,start==end 结束
-
-### 给定一个数字范围，找到其中有几个首尾相同的数字
-![digits.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/digits.jpg)
-
-### 百万数字中找最大20个
-用开始20个数字构造20个node的最小堆，接下来的数字比root大则replace，insert
-
-### 每秒最大桶数量减半，求t时刻一共消耗了多少
-方法1：按递减排序，减半，再排序，一共排序t次
-方法2：维持最大堆，每次取root减半再插入
-
-### ？445 链表数字相加
-> Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
-> Output: 7 -> 8 -> 0 -> 7
-
-？递归写法
 
 ### 567 s1的一种排列是否在s2中
 {% note %}
@@ -1787,57 +2458,7 @@ public int findLength(int[] a,int[] b){
     return max;
 }
 ```
-rolling hash
-https://leetcode.com/problems/maximum-length-of-repeated-subarray/solution/
 
-
-### 括号串达到匹配需要最小的逆转次数
-> Input:  exp = "}}}{"
-> Output: 2 
-
-将匹配的括号都去掉，`{`的个数是m=3，`}`的个数是n=3
-m/3+n/2 = 2+1=3
-![minbracket.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/minbracket.jpg)
-```java
-private int minReversal(String s){
-    int len = s.length();
-    if((len&1)!=0)return -1;
-    Deque<Character> que = new ArrayDeque<>();
-    int n=0;
-    for(int i=0;i<s.length();i++){
-        char c = s.charAt(i);
-        if(c=='}'&&!s.isEmpty()){
-            if(que.peek()=='{')que.pop();
-            else {
-                que.push(c);
-            }
-        }
-    }
-    int mn = que.size();
-    while (!que.isEmpty()&&que.peek()=='{'){
-        que.pop();
-        n++;
-    }
-    //当m+n是偶数的时候ceil(n/2)+ceil(m/2)=
-    return (mn/2+n%2);
-}
-```
-
-### 22 ??卡特兰数括号
-left括号数量小于n，right括号数量必须小于left不然(()))肯定不合理
-```java
-if(left>right)return;
-if(left==0&&right==0){rst.add(s);return;}
-if(left>0)help(rst,s+"(",left-1,right);
-if(right<0)help(rst,s+")",left,right+1);
-```
-
-### 32 ?括号字符串中合法的括号对
-方法1. stack:栈底放-1，当栈空&&读到是`)`将`)`的index当栈底。每次读到`)`弹栈，并更新`i-peek()`，因为peek为没消掉的`(`的前一个位置
-方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
-  从右向左扫描，同理更新max，当左括号>右括号重置0.
-
----
 
 
 ### 28字符串indexOf匹配暴力 Substring Search
@@ -1958,8 +2579,6 @@ public  int searchRabinKarp(String source,String target){
 }
 ```
 
-#### 187 rolling-hash DNA序列中出现2次以上长为10的子串
-//todo
 
 #### 暴力 O（MN）
 双指针
@@ -2164,15 +2783,6 @@ int[]next =  f("abcabcd")={-1,0,0,1，2，3}
 ---
 
 
-### 879
-G 名成员 第i种犯罪会产生`profit[i]` 利润，需要`group[i]`名成员参与。计划产生P利润有多少种方案。
->Input: G = 5, P = 3, group = [2,2], profit = [2,3]
->output: 2
-
-`dp[k][i][j]` 产生i利润 用j个人 完成前k个任务 的方案数
-
-
-### 576 无向图访问所有点的最短边数
 
 ### fraction 背包问题
 Items can be broen down 贪心按value/weight排序
@@ -2245,132 +2855,7 @@ time window on vertex OP
 
 
 
-### ip2cidr
-找末尾1的位置`x & -x`
 
-
-
-### 131 
-
-
-
-
-
-### 819 找出句子中出现频率最高没被ban掉的词
-正则去掉所有标点
-> "Bob hit a ball, the hit BALL flew far after it was hit."
-
-pP 其中的小写 p 是 property 的意思，表示 Unicode 属性，用于 Unicode 正表达式的前缀。
-
-大写 P 表示 Unicode 字符集七个字符属性之一：标点字符。
-其他六个是
-L：字母；
-M：标记符号（一般不会单独出现）；
-Z：分隔符（比如空格、换行等）；
-S：符号（比如数学符号、货币符号等）；
-N：数字（比如阿拉伯数字、罗马数字等）；
-C：其他字符
-P：各种标点
-
-```java
-//busymannote
-// [Bob, hit, a, ball, the, hit, BALL, flew, far, after, it, was, hit]
-paragraph.split("\\PL+");
-// Bob hit a ball the hit BALL flew far after it was hit
-paragraph.replaceAll("\\pP","");
-paragraph.replaceAll("[^a-zA-Z ]", "")
-```
-
-```java
-public String mostCommonWord(String paragraph, String[] banned) {
- Set<String> ban = new HashSet<>(Arrays.asList(banned));
-    Map<String,Integer> cnt = new HashMap<>();
-    String[] split = paragraph.toLowerCase().split("\\PL+");
-    for(String s:split)if(!ban.contains(s))cnt.put(s,cnt.getOrDefault(s,0 )+1);
-    return Collections.max(cnt.entrySet(),Map.Entry.comparingByValue()).getKey();
-}
-```
-
-
-
-
-### 亚线性算法o(n)小于输入规模
-亚线性时间：
-[scale-free network](https://zh.wikipedia.org/wiki/%E6%97%A0%E5%B0%BA%E5%BA%A6%E7%BD%91%E7%BB%9C)S：
-大部分节点只和很少节点连接，而有极少的节点与非常多的节点连接。
-网络中随机抽取一个节点，它的度是多少呢？这个概率分布就称为节点的度分布
-![scalenetwork.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/scalenetwork.jpg)
-顶点的度满足幂律分布（也称为帕累托分布）,所以不能均匀采样计算每个人的平均度数。
-
-亚线性空间
-中位数问题，知道所有的输入，有O(n)的分治算法
-
-### 水库抽样Reservpor Sampling 亚线性空间
-> “给出一个数据流，这个数据流的长度很大或者未知。并且对该数据流中数据只能访问一次。请写出一个随机选择算法，使得数据流中所有数据被选中的概率相等。”
-
-当扫描到前n个数字时，保留数组中k个均匀的抽样
-1.k大小的数组
-2.填充k个元素
-3.收到第i个元素t。以k/i的概率替换A中的元素。这样保证收到第i个数字的时候，i在k中的概率是k/i。
-实现：生成`[1..k..i]`中随机数j，如果j<=k（k/i的概率),A[j]=t
-证明：第i个数接收时有k/i的概率在k数组中，当第i+1个数接收时,i+1有k/(i+1)概率在数组k中，并且刚好替换掉的是第i个数的概率是k中选i：1/k，所以第i+1个数来之后i还在k中的概率是（1-k/(i+1)\*1/k)=（1-1/(1+i)）
-![shuku.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/shuku.jpg)
-```java
-private void select(int[] stream,int n,int k){
-    int[] reserve = new int[k];
-    int i;
-    for(i=0;i<k;i++){
-        reserve[i]=stream[i];
-    }
-    Random r = new Random();
-    for(;i<n;i++){
-        int j = r.nextInt(i+1);
-        if(j<k)reserve[j]=stream[i];
-    }//sout
-}
-```
-
-### 398 数组中重复元素随机返回index
-> int[] nums = new int[] {1,2,3,3,3};
-Solution solution = new Solution(nums);
-
-> // pick(3) should return either index 2, 3, or 4 randomly. Each index should have equal probability of returning.
-solution.pick(3);
-
-> // pick(1) should return 0. Since in the array only nums[0] is equal to 1.
-solution.pick(1);
-
-水库抽样：流式处理，空间复杂度O(1),pick O(N)
-如果用hashmap，初始化O(N)时间，O（N）空间，数组太大就不行。
-```java
-class Solution {
-    int[] nums;
-    Random r;
-    public Solution(int[] nums) {
-        this.nums=nums;
-        this.r = new Random();
-    }
-    
-    public int pick(int target) {
-        int cnt =0;
-        int rst =-1;
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]!=target)continue;
-            //以1/++cnt的概率抽这个数
-            // int j = r.nextInt(++cnt);
-            // if(j==0)rst=i;
-            else{//不赋值变量从180ms->127ms
-            if(r.nextInt(++cnt)==0)rst=i;
-            }
-        }
-        return rst;
-    }
-}
-```
-
-### ？？382 随机链表 extremely large and its length is unknown
-长度不知，读到第三个node，让它的概率变成1/3，用1/3的概率替换掉之前选择的item
-> 由于计算机产生的随机数都是伪随机数，对于相同的随机数引擎会产生一个相同的随机数序列，因此，如果不使用静态变量（static），会出现每次调用包含随机数引擎的函数时，随机数会重新开始产生随机数，因此会产生相同的一串随机数。比如你第一次调用产生100个随机数，第二次调用仍然会产生这一百个随机数。如果将随机数引擎设置为静态变量，那么第一次调用会产生随机数序列中的前100个随机数，第二次调用则会产生第100到200的随机数。
 
 ### 频繁元素计算 Misra Gries(MG)算法
 
@@ -2602,9 +3087,6 @@ System.out.println(Arrays.toString(acu()));
 String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 ```
 
-### 611数组中符合三角形边长的对数 
-线性扫描 复杂度n^2
-![lc611.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc611.jpg)
 
 ### 数组组成三角形的最大周长nlogn
 贪心，排序，如果 $a[i]<a[i-1]+a[i-2]$ 则没有其他两条边可以两边之和`>`第三边了，换下一条当最长边。
@@ -2652,52 +3134,7 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 
 #### Inverse Burrows-Wheeler Transform (IBWT) 生成 Lyndon words.  
 
-### 332 欧拉路径 每条边一次
-(这道题不用判断)
-只有1个点入度比出度少1（起点）&& 只有一个点入度比出度多1（终点）其余点入度==出度
 
-#### Hierholzer：O(e)
-删除边`e(u,v)`，并`dfs(v)`，不断寻找封闭回路，
-
-> 从v点出发一定会回到v。因为入度出度相等。虽然可能不包含所有点和边。
-> 总是可以回到以前的点，从另一条路走，把其它所有的边全部遍历掉。
-
-**不是拓扑排序，拓扑排序每个点仅1次**
-![Hierholzer1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Hierholzer1.jpg)
-path里加入{0},{2}头插法{2,0}//保证远的在后面
-dfs回到1，继续找封闭回路
-![Hierholzer2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Hierholzer2.jpg)
-
-> Input: tickets = `[["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]`
-> Output: `["JFK", "MUC", "LHR", "SFO", "SJC"]`
-
-1. 用hashmap记录每个点的出度的点，建图
-2. 输出字典序靠前的序列，用优先队列，先访问的会后回溯到dfs插到链表头。（后序遍历：全部遍历完了再加入（退栈)）
-
-```java
-public List<String> findItinerary(String[][] tickets) {
-    LinkedList<String> rst = new LinkedList<>();
-    
-    Map<String,PriorityQueue<String> > map = new HashMap<>();
-    for(String[] edge:tickets){
-        PriorityQueue<String> nei = map.getOrDefault(edge[0],new PriorityQueue<String>());
-        nei.add(edge[1]);
-        map.put(edge[0],nei);
-    }
-    dfs(rst,map,"JFK");
-    return rst;
-}
-private void dfs(LinkedList<String> rst,Map<String,PriorityQueue<String> > map,String start){
-  PriorityQueue<String> pri = map.get(start);
-    while(pri!=null&&!pri.isEmpty())
-        dfs(rst,map,pri.poll());
-    rst.addFirst(start);  
-}
-```
-后序遍历stack：
-```java
-
-```
 
 
 
@@ -2975,169 +3412,7 @@ private void dfs(List<Integer>[] graph,int v){
 {% endfold %}
 
 
-#### ?207 先修课程有环则返回false 拓扑排序
-??和并查集的区别（？
-按算法4上88.45%
-```java
-private boolean[] marked;
-private boolean cycle = true;
-private boolean[] onStack;
-public boolean canFinish(int numCourses, int[][] prerequisites) {
-    onStack = new boolean[numCourses];
-    marked =new boolean[numCourses];
-    List<Integer>[] graph=new ArrayList[numCourses];
-    for (int i = 0; i <numCourses ; i++) {
-            graph[i] = new ArrayList<>();
-    }
-    //{2,0},{1,0},{3,1},{3,2},{1,3}}->[[], [0, 3], [0], [1, 2]]
-    for (int[] edge :prerequisites) {
-        graph[edge[0]].add(edge[1]);
-    }
-    for (int i = 0; i < numCourses; i++) {
-            if(!marked[i])dfs(graph,i);
-    }
-    return cycle;
-}
-private void dfs(List<Integer>[] graph,int v){
-    if(graph[v].size()<1)return;
-    //dfs是从起点到v的有向路径，onstack保存了递归中经历的点
-    onStack[v] = true;
-    marked[v] = true;
-    for(int w :graph[v]){
-        if(!marked[w])
-        dfs(graph,w);
-        else if(onStack[w]){
-            cycle = false;
-            return;
-        }
-    }
-    //这个点出发没有环
-    onStack[v] = false;
-}
-```
 
-56% 有可以优化到100%4ms的方法
-1.邻接表存储课程依赖图L
-```java
-List[] graph_;
-public boolean canFinish(int numCourses, int[][] prerequisites) 
-    graph_ = new ArrayList[numCourses];
-    for(int i =0;i<numCourses;i++)
-    {graph_[i] = new ArrayList<Integer>();}
-    for(int[] back:prerequisites){
-        int pre = back[0];
-        int lesson = back[1];
-        graph_[lesson].add(pre);
-    }
-```
-2.定义状态`int[] visit = new int[numCourses];`
-3.dfs每个顶点
-```java
-for(int i =0;i<numCourses;i++){
-    if(hasCircle(i,visit))return false;
-}
-return true;
-```
-4.dfs 检查有没有环
-```java
-boolean hasCircle(int idx,int[] visited){
-    if(visited[idx]==1)return true;
-    if(visited[idx]==2)return false;
-    List<Integer> neib = graph_[idx];
-    for(int i:neib){
-        if(hasCircle(i,visited))return true;
-    }
-    visited[idx]=2;
-    return false;
-}
-```
-
-#### 210 输出修课顺序
-> Input: 4, [[1,0],[2,0],[3,1],[3,2]]
-  Output: [0,1,2,3] or [0,2,1,3]
-
-用onStack和post 11%
-
-### kolakoski序列找规律
-![kolakoski.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kolakoski.jpg)
-
-#### lc481 返回kolakoski前N中有几个1
-
-
-
-### 174 骑士从左上到右下找公主，求初始血量
-dp[i][j]表示到i,j的最少血量，因为右下角一格也要减
-dp[n-1][m],dp[n][m-1]=1表示走完了右下角还剩下1点血
-dp[0~n-2][m]和dp[n][0~m-2]都是非法值，为了取min设置MAX_VALUE
-```java
-dp[i][j]=Math.max(1,Math.min(dp[i+1][j],dp[i][j+1])-dungeon[i][j]);
-```
-
-
-
-
-
-
-
-### 伪多项式时间
-一个整数是否是素数
-```python
-def isPrime(n):
-    for i in range(2,n):
-        if n mod i 
-```
-运行时间与数值n的二进制位数呈指数增长
-整数需要的bit位数x=logn 复杂度$O(2^{x})$
-每加1位，时间翻倍
-857 ：‭‭001101011001‬
-421 ：‭‭000110100101‬
-
----
-
-
-### !!97 s1和s2是否交错组成s3
-[Solution](https://leetcode.com/problems/interleaving-string/solution/)
-状态dp[len1][len2]表示s1长度len1，s2长度len2出现在s3[len1+len2]中
-任意位置s3[i]一定是由s1[m],s2[n]组成的
-```
-s1="aa  bc   c"
-s2="  db  bca"
-s3="aadbbcbcac"
-```
-dp行表示当前len1的匹配情况下，不断扩展len2与s3的匹配情况
-dp列表示当前len2的匹配情况下，不断扩展len1与s3的匹配情况
-```
-遍历s3的位置：
-  遍历s1的长度，s3+1-s1为s2的长度
-    如果s3当前位置与s2当前匹配&&dp[][s2-1]匹配了
-       ||s3当前与s1当前匹配并且dp[s1-1][s2]:
-         dp[s1][s2] = true
-```
-可以用滚动数组降成1维
-
-？？？按背包问题递减更新 99%
-ct的意义
-动态规划中的ct
-```java
-public boolean isInterleave(String s1, String s2, String s3) {
-    if (s1.length() + s2.length() != s3.length()) return false;
-    boolean[] dp = new boolean[s1.length() + 1];
-    dp[0] = true;
-    for (int i = 0; i < s3.length(); i++) {
-        boolean ct = true;
-        for (int j = Math.min(s1.length(), i + 1); j > 0; j--) {
-            if (dp[j] && (i-j)<s2.length() &&s2.charAt(i - j) == s3.charAt(i)) ct = false;
-            else if (dp[j - 1] && s1.charAt(j- 1) == s3.charAt(i)){
-                dp[j] = true;
-                ct = false;
-            }else dp[j] = false;
-        }
-        if(dp[0]&&i<s2.length()&&s2.charAt(i)==s3.charAt(i))ct = false;
-        if(ct)return false;
-    }
-    return true;
-}
-```
 
 ---
 ### 62 从左上角走到右下角总共有多少种不同方式
@@ -3191,94 +3466,6 @@ grid[n][m]+=Math.min(grid[n-1][m],grid[n][m-1]);
 
 
 
-### !!!169 众数 Boyer-Moore Voting Algorithm 
-1.hashmap,直到有计数>n/2 break->return 11%
-2.随机数44% 因为一半以上都是这个数，可能只要循环两边就找到了
-```java
-public int majorityElement(int[] nums){
-    Random random = new Random(System.currentTimeMillis());
-    while(true){
-        int idx = random.nextInt(nums.length);
-        int choose = nums[idx];
-        int cnt = 0;
-        for(int num:nums){
-            if(num==cur&&++cnt>nums.length/2)return num;
-        }
-    }
-}
-```
-3.39% 计算用每个数字的每一位投票，1的个数>n/2则为1 
-```java
-public int majorityElement(int[] nums){
-    int n = nums.length;
-    int rst =0;
-    int mask =0;
-    for(int i=0;i<32;i++){
-        mask = 1<<i;
-        int cnt =0;
-        for(int num:nums){
-            if((num&mask)!=0)cnt++;
-        }
-        if(cnt>n/2)rst|=mask;
-    }
-    return rst;
-}
-```
-
-#### 4.moore voting 在线算法92%
-```java
-public int majorityElement(int[] nums){
-    //假设就是第一个数
-    int maj = nums[0];
-    int cnt=0;
-    for(int num:nums){
-        //第一个数就cnt=1
-        if(num==maj)cnt++;
-        else if(--cnt==0){
-            //等于0 从头开始做
-            cnt=1;
-            maj = num;
-        }
-    }
-    return maj;
-}
-```
-**优化100%**
-每次取两个不同的数删除，最后剩下的返回
-{% fold %}
-```java
-class Solution {
-    public int majorityElement(int[] nums) {
-        if(nums==null)return -1;
-        int res=0;
-        int count=0;
-        for(int e : nums){
-            if(count==0){
-                res=e;
-            }
-                if(res!=e){
-                    count--;//删除这个数
-                }
-                else count++;
-        }
-        return res;
-    }
-}
-```
-{% endfold %}
-
-5.排序取中间的数
-6.C++专有 部分排序
-```cpp
-int majorityElement(vector<int> & nums){
-    nth_element(nums.begin(),nums.begin()+nums.size()/2,nums.end());
-    return nums[nums.size()/2];
-}
-```
-7.分治???
-
----
-
 
 ### 节点是随机变量的有向无环图=贝叶斯网络BN
 求联合概率会用到最小生成树
@@ -3304,7 +3491,7 @@ $=>x=12$
 
 逆邻接表：A->B->C->D：B,C,D指向A
  
-树的前/中/后序遍历本质都是DFS
+
 
 
 
@@ -3359,153 +3546,6 @@ Manber-Myers O(n)但是太复杂
 1添加失败链接
 2缝衣针字符串序号数组
 
----
-### A,B两人选k种可乐达到期望最大
-A选m个，B选(n-m)个
-每种可乐对A,B的满意度为a,b 如何使两人满意度期望和最大
-输出 买k种可乐的数量
-期望和：$m/n\*a+(m-n)/n\*b$的最大值 全部买期望最大那种
-输入：n=2 m=1 k=2；a=1 b=2；a=3 b=1
-m/n=.5
-0.5x1+0.5x2=0.5+1=1.5
-0.5x3+0.5x1 = 2  全部买第二种可乐
-输出:0 2
-
----
-### ??火车换乘
-保证每个车错过能在30分钟以后换车
-输入：城市n 火车数m
-from1 to3 cost800 18:00 21:00
-...
-输出从1到n的最小花费
-
----
-### 16支队伍两两获胜概率已知求冠军概率1/8->1/4->1/16
-A进入1/8只需要打败B，A进入1/4需要P(A进入1/8)\*(P(C进入1/8)\*P(A赢了C)+P(D进入1/8)\*P(A赢了D))
-A进入1/2需要赢没比过的另外4个队
-A变成冠军需要赢没比过的另外8个队
-分组问题：如果1/4赛 1234 5678是一组4个是一组
-如果1/2赛  8个是一组
-![shijiebei.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/shijiebei.jpg)
-
-
-```java
-for(int i =1;i<4;i++){
- int inergroup = 1<<i;
- int group= 1<<i+1;
-  for (int j = 0; j <16 ; j++) {
-   for(int k=0;k<16;k++) {
-    //在同一个大组
-    if(j/group==k/group) {
-    //不在同一个小组
-    if (j / inergroup != k / inergroup) {
-        dp[i][j] += dp[i - 1][j] * dp[i - 1][k] * p[j][k];
-}}}}}
-```
-{% fold %}
-第一轮：1进入1/8赢的概率是[1][2] 1打败2的概率=0.133
-第二轮：1赢了1/8进入1/4赢的概率是
-```
-1在第2轮的获胜概率是0加上1在上一轮胜利的概率0.133 ×3在上一轮获胜的概率0.335×1赢3的概率0.21
-1 2 0.00935655
-1在第2轮的获胜概率是0.00935655加上1在上一轮胜利的概率0.133 ×4在上一轮获胜的概率0.665×1赢4的概率0.292
-1 2 0.0351825
-```
-第三轮：1赢了1/4在1/2半决赛赢的概率是
-```
-1在第3轮的获胜概率是0加上1在上一轮胜利的概率0.0351825 ×5在上一轮获胜的概率0.336947×1赢5的概率0.67
-1 3 0.00794261
-1在第3轮的获胜概率是0.00794261加上1在上一轮胜利的概率0.0351825 ×6在上一轮获胜的概率0.198831×1赢6的概率0.27
-1 3 0.00983136
-1在第3轮的获胜概率是0.00983136加上1在上一轮胜利的概率0.0351825 ×7在上一轮获胜的概率0.0229419×1赢7的概率0.953
-1 3 0.0106006
-1在第3轮的获胜概率是0.0106006加上1在上一轮胜利的概率0.0351825 ×8在上一轮获胜的概率0.44128×1赢8的概率0.353
-1 3 0.016081
-```
-第四轮：1赢了1/2变成冠军的概率
-```
-1在第4轮的获胜概率是0加上1在上一轮胜利的概率0.016081 ×9在上一轮获胜的概率0.0606261×1赢9的概率0.328
-1 4 0.000319777
-1在第4轮的获胜概率是0.000319777加上1在上一轮胜利的概率0.016081 ×10在上一轮获胜的概率0.0113548×1赢10的概率0.128
-1 4 0.000343149
-1在第4轮的获胜概率是0.000343149加上1在上一轮胜利的概率0.016081 ×11在上一轮获胜的概率0.203126×1赢11的概率0.873
-1 4 0.00319478
-1在第4轮的获胜概率是0.00319478加上1在上一轮胜利的概率0.016081 ×12在上一轮获胜的概率0.147508×1赢12的概率0.082
-1 4 0.00338929
-1在第4轮的获胜概率是0.00338929加上1在上一轮胜利的概率0.016081 ×13在上一轮获胜的概率0.160952×1赢13的概率0.771
-1 4 0.00538485
-1在第4轮的获胜概率是0.00538485加上1在上一轮胜利的概率0.016081 ×14在上一轮获胜的概率0.0877648×1赢14的概率0.3
-1 4 0.00580826
-1在第4轮的获胜概率是0.00580826加上1在上一轮胜利的概率0.016081 ×15在上一轮获胜的概率0.240971×1赢15的概率0.405
-1 4 0.00737766
-1在第4轮的获胜概率是0.00737766加上1在上一轮胜利的概率0.016081 ×16在上一轮获胜的概率0.0876971×1赢16的概率0.455
-1 4 0.00801932
-```
-{% endfold %}
-
-
-
----
-### !815 换公交 BFS
-`routes = [[1, 2, 7], [3, 6, 7]]`
-表示环线`1->5->7->1->5->7->1->`
-求从S->T的最少公交车数量（不是少的站点）
-> Input: routes = [[1, 2, 7], [3, 6, 7]]
-> S = 1
-> T = 6
-> Output: 2乘坐 routes[0]到7，换routes[1]到6
-
-易错点1： bfs的size保留当前层的定点数
-易错点2： deque的add和poll
-
-{% fold %}
-
-```
-{{0,1,6,16,22,23},
- {14,15,24,32},
- {4,10,12,20,24,28,33},
- {1,10,11,19,27,33},
- {11,23,25,28},
- {15,20,21,23,29},
- {29}};
-```
-
- S=4 T=21
-bfs，起点入队，遍历起点可以到达的所有公交(4可以达公交2)，遍历所有公交2上的可达`stop{4,10,12,20,24,28,33},`
-如果没到T，则4乘的公交换一辆，再遍历有4公交上的其他可达stop。
-**用size保留当前层的定点数** 4的bus全部遍历完后size==0。下一轮重新获取`que.size()`
-如果4的所有公交都不能达到T，则必须换乘cnt+1。当前起点变成`stop{10}`，遍历它的公交和stop，不行就{12}这些都是cnt+1可达的。直到`stop{20}->bus{2,5}`遍历公交5的stop找到T，bfs换乘1层找到的。
-
-注意deque的add是addLast，push是addFirst,poll是pollFirst，pop是poolFirst 队列应该是add+poll,
-bfs如果用栈，则会在这一层还没找完先找下一层cnt=1{4}->
-![bus1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bus1.jpg)
-`cnt=2{33:[2, 3]}->`
-将{1,10,11,19,27,33}入队
-![bus2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bus2.jpg)
-所以回到下一次size--的时候取到了下一层的点33,两个bus都标记过了
-然后就全乱了
-`{27:[3]}->{19:[3]}->{11:[3,4]}->bus4`的最后`{28:[2,4]}->25:[4]->cnt=3{23:[0,4,5]}->bus5`找到21
-本来应该`bus[2]->20->bus[5]`结果`bus[2]->bus[4]->bus[5]`
-{% endfold %}
-
-数据结构：
-1. {站点：list<经过的公交车id>}
-2. list<公交车id> 标记已经乘过的公交
-3. BFS连通分量`while(!que.empty)`，
-    遍历一辆车的连通分量`while(que.size()>0)`
-    遍历当前节点相邻的busid是否乘过`for(int car:list)，`
-    并标记这个车的连通分量已乘过，遍历这个连通分量`for(int t:routes[car])`中有没有T，有则结束，没有则将整个连通分量入队。
-```java
-//todonexttime
-```
-
-
-
----
-### 11 数组index当底边，值当杯子两侧，最大面积
-
-
-
 
 
 ---
@@ -3536,7 +3576,6 @@ public List<Integer> topKFrequent(int[] nums, int k) {
             }else{
                 bucket[data[i]].add(i+min);
             }
-
         }
     }
     for(int i =nums.length;i>0;i--){
@@ -3556,12 +3595,7 @@ public List<Integer> topKFrequent(int[] nums, int k) {
 优先队列O(nlogk)如果k和n的数量差不多 还能维护一个(n-k)的堆 复杂度变成nlog(n-k)
 
 
-### 242 Anagram 相同字母的单词
 
-
-
-### 344 reverse String 
-转成char数组/位运算做法77%比stringbuilder好
 
 ### 238 [1,2,3,4]->返回1位置是除了1其它数的乘积 不用除法
 left数组：自己左边数的乘积[1,1,2,6]
@@ -3616,40 +3650,7 @@ public int getSum(int a, int b) {
 ```
 
 
-
-
-
-
-### 551 出现两个以上A或者3个以上L为false
-```java
-return s.indexOf("A")==s.lastIndexOf("A") && s.indexOf("LLL") == -1; 
-```
-
-
-
-### 476 
-前导0
-```java
-//找到左边第一个1，然后后面全置0
-public static int highestOneBit(int i) {
-    // HD, Figure 3-1
-    i |= (i >>  1);//高位为1的右1步，再|则第二高位肯定是1->00011xxxxx
-    i |= (i >>  2);//连续4个1 但是如果位数不够就只有3个1或者更少
-    i |= (i >>  4);
-    i |= (i >>  8);
-    i |= (i >> 16);
-    return i - (i >>> 1);//让全1的无符号右移1格1111-0111得到1000
-}
-```
-
 ---
-
-
-
-
-### 292每个人可以拿1-3块石头，拿到最后一块的赢，所有4的倍数的情况先手不能赢 
-
-
 
 
 
