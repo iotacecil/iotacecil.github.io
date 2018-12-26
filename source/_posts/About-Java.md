@@ -4,6 +4,10 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### BinarySearch
+`Arrays.binarySearch()` method returns index of the search key, if it is contained in the array, 
+else it returns (-(insertion point) - 1).
+
 ### 多态
 - Java中除了static方法和final方法（private方法本质上属于final方法，因为不能被子类访问）之外，其它所有的方法都是动态绑定
 - 构造函数并不具有多态性，它们实际上是static方法，只不过该static声明是隐式的。因此，构造函数不能够被override。

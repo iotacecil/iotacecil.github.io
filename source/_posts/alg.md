@@ -45,15 +45,53 @@ https://www.nowcoder.com/test/4575457/summary
 
 ### lt516 房屋染色
 
+### 354 俄罗斯套娃
+{% note %}
+Input: [[5,4],[6,4],[6,7],[2,3]]
+Output: 3 
+Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
+{% endnote %}
+
+思路：[0]升序 之后[1]降序.查找[1]应该在的位置
+`[2, 3], [4, 6], [4, 5]`
+
+### 300 !!!最长上升子序列
+{% note %}
+Input: [10,9,2,5,3,7,101,18]
+Output: 4 
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4. 
+{% endnote %}
+
+思路：单调栈，用更小的数替换掉前面比它大的数，并且长度不变，只有当这个值比栈顶大，长度才增加。
+注意len是只增不减
+```java
+public int lengthOfLIS(int[] nums) {
+   if(nums == null ||nums.length <1)return 0;
+    int len = 0;
+    int n = nums.length;
+    int[] dp = new int[n];
+    for(int num:nums){
+        // 关键 查找范围是[0,len)
+        int i = Arrays.binarySearch(dp,0,len,num);
+        if(i < 0){
+            i = -(i+1);
+        }
+        dp[i] = num;
+        if(i == len)len++;
+    }
+    return len;
+}
+```
 
 ### 955 删掉几列让String数组排序
 {% note %}
-Input: ["ca","bb","ac"]
+Input: ["xga","xfb","yfa"]
 Output: 1
-Explanation: 
-After deleting the first column, A = ["a", "b", "c"].
 {% endnote %}
 
+### poj1408
+边长1的木方框，每条边上有n个钉子。一共4n个钉子。切分一根长绳子，只能连接在对边中。
+有n个钉子就有2n条切分，就能分割出2(n+1)个格子，返回最大格子的面积。
 
 
 ### poj1273
