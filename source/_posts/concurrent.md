@@ -5,6 +5,26 @@ tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 
+### synchronized
+
+#### 两个用法：对象锁、类锁
+
+##### 对象锁：
+方法锁（默认对象为this) 、同步代码块锁（自己指定锁对象）
+
+类锁：修饰静态方法 或 指定锁为Class对象
+
+---
+
+
+java每个对象有内部锁。并且该锁有一个内部条件
+```java
+while (accounts[from] < amount)wait();
+notifyAll();
+```
+- final 匿名内部类中只能使用final？
+
+
 ### java 线程状态
 
 ### 线程停止
@@ -491,13 +511,7 @@ try{////最后。账户发生变化，重新检查余额
 }
 ```
 
-### synchronized
-java每个对象有内部锁。并且该锁有一个内部条件
-```java
-while (accounts[from] < amount)wait();
-notifyAll();
-```
-- final 匿名内部类中只能使用final？
+
 
 
 

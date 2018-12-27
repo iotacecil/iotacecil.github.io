@@ -4,6 +4,162 @@ date: 2018-04-08 18:48:55
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### !!!176 第二大 limit offset
+如果只有一条数据 下面代码不行
+```sql
+select distinct Salary as SecondHighestSalary
+from Employee 
+order by Salary desc limit 1 offset 1;
+```
+
+
+### 196 !!!删除重复的emails
+select and update conflict
+`delete from Person where id not in(select min(id) as id from Person group by email)` 
+错误 You can't specify target table 'Person' for update in FROM clause
+
+正确做法：
+```sql
+delete  from Person where id not in(
+    select t.id from (
+        select min(id) as id from Person  group by email
+        )as t
+);
+```
+
+```sql
+delete p2 from Person p1 ,Person p2
+where p1.id < p2.id and p1.Email = p2.Email;
+```
+
+
+### !!! 197 `TO_DAYS`找到比前一天温度高的天 按日期列排序
+`DATEDIFF`
+```sql
+SELECT w1.Id FROM Weather w1, Weather w2
+WHERE w1.Temperature > w2.Temperature AND DATEDIFF(w1.Date, w2.Date) = 1;
+```
+
+`Subdate`
+```sql
+SELECT w1.Id FROM Weather w1, Weather w2
+WHERE w1.Temperature > w2.Temperature AND SUBDATE(w1.Date, 1) = w2.Date;
+```
+
+`TO_DAYS`
+```sql
+SELECT w1.Id FROM Weather w1, Weather w2
+WHERE w1.Temperature > w2.Temperature AND TO_DAYS(w1.Date) = TO_DAYS(w2.Date) + 1;
+```
+
+### (student,class)表中找学生数>=5的课程
+```sql
+SELECT
+    class
+FROM
+    courses
+GROUP BY
+    class
+HAVING COUNT(DISTINCT student) >= 5;
+```
+
+### 183 NOT IN 在order表(id,customerid)中找到没买过东西的用户
+```sql
+select Name as Customers 
+from customers
+where customers.Id not in
+(
+    select CustomerId from orders
+);
+```
+
+### 175 拼接有1列相同的两张表 using , natural left join
+```sql
+select FirstName,LastName, City, State 
+from Person left join Address 
+on Person.PersonId = Address.PersonId;
+```
+
+```sql
+SELECT FirstName, LastName, City, State
+FROM Person
+LEFT JOIN Address
+USING(PersonId);
+```
+
+```sql
+select FirstName,LastName, City, State 
+from Person natural left join Address;
+```
+
+
+
+
+### 181 根据领导id列找到比领导拿前多的人join on
+？为什么group by那么快
+```sql
+select E1.Name as Employee 
+    from(
+        select * from Employee
+    )E1
+    left join 
+    (
+        select * from Employee
+            group by id
+    )E2
+    on E1.ManagerId = E2.Id
+    where E1.Salary > E2.Salary
+```
+
+
+### 182找出重复的 group by和having
+```sql
+select Email from Person
+group by Email 
+having count(Email) > 1;
+```
+
+去重 `select distinct  Email from Person;`
+
+
+### mod 用法
+```sql
+SELECT *
+ FROM CINEMA
+WHERE id mod 2 = 1
+ AND description != 'boring'
+ORDER BY 4 DESC
+```
+
+### 更新交换字段
+```sql
+update salary set 
+    sex = case sex 
+        when 'm' then 'f'
+        else 'm'
+    end;
+```
+
+### union 比 or 快
+```sql
+SELECT name, population, area
+FROM World
+WHERE area > 3000000 
+
+UNION
+
+SELECT name, population, area
+FROM World
+WHERE population > 25000000
+```
+比2个or快
+
+using UNION ALL is much faster than UNION since we don't need to sort the result. 
+
+Given that MySQL usually uses one one index per table in a given query, so when it uses the 1st index rather than 2nd index, it would still have to do a table-scan to find rows that fit the 2nd index.
+
+--- 
+
 有哪些清空表的方式？
 正确答案: A B C   你的答案: A C D (错误)
 A.drop表然后重建
