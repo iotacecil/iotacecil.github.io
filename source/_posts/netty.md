@@ -4,6 +4,11 @@ date: 2018-06-04 09:32:40
 tags:
 category: [网络]
 ---
+### Time wait状态
+1.FIN-WAIT2 -> A发送完FIN并且受到ACK后等待B关闭维持的状态
+2.CLOSING -> 两边都发了FIN，收到FIN发完ACK
+3.FIN-WAIT1 -> ?
+
 ### PCI + SDU = PDU
 ![pdusdu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdusdu.jpg)
 
@@ -103,7 +108,7 @@ D错10.110.12.32
 吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）
 时延：发送（传输）/传播/排队/处理
 ![yanchi.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/yanchi.jpg)
-时延带宽积(BDT) (缓冲区大小）bit:某段链路现在有多少bit 传播时延(s) x 带宽
+时延带宽积(BDP) (缓冲区大小）bit:某段链路现在有多少bit 传播时延RTT(s) x 带宽
 利用率：有数据通过的时间
 ![typ.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/typ.jpg)
 

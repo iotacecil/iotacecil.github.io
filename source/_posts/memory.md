@@ -4,6 +4,21 @@ date: 2018-03-05 20:43:15
 tags: [os,memory]
 category: [cpp学习操作系统]
 ---
+
+### 程序访问文件的方式
+1.利用操作系统内核缓冲区
+2.直接IO：不经过内核缓冲区，数据库系统。缓存由应用程序实现。
+![directio.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/directio.jpg)
+3.同步4.异步
+5.内存映射。内存与磁盘共享，减少从内核到用户缓存的数据复制。
+
+### 文件描述符
+`FileDescriptor.sync()`可以将操作系统缓冲强制刷新到物理磁盘。
+
+### 从磁盘读取文件的过程
+![filereadprocess.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/filereadprocess.jpg)
+
+
 ### 块特殊文件
 块特殊文件和字符特殊文件的基本差别是什么？
 

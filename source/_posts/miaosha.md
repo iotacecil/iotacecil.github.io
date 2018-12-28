@@ -2674,3 +2674,617 @@ public class UserUtil {
 ### 页面缓存
 页面静态化：前后端分离，通过ajax渲染页面
 浏览器会把html缓存在客户端，页面数据不需要重复下载，只下载动态数据
+
+Redis 页面缓存key
+```java
+public class GoodsKey extends BasePrefix {
+    private GoodsKey(int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+    public static GoodsKey getGoodsList = new GoodsKey(60, "gl");
+    public static GoodsKey getGoodsDetail = new GoodsKey(60, "gd");
+}
+```
+
+```java
+@Autowired
+ThymeleafViewResolver thymeleafViewResolver;
+
+@Autowired
+ApplicationContext applicationContext;
+
+@RequestMapping(value = "/to_list",produces = "txt/html")
+@ResponseBody
+public String toLogin(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user) {
+    model.addAttribute("user",user);
+    // 取页面缓存
+    String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
+    if(!StringUtils.isEmpty(html)) {
+        return html;
+    }
+    // 秒杀商品列表
+    List<GoodVo> goodVos = goodsService.listGoodsVo();
+    model.addAttribute("goodsList",goodVos);
+    SpringWebContext ctx = new SpringWebContext(request,response,
+            request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+    //手动渲染
+    // 模板名称 context
+    html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
+
+    // 缓存起来
+    if(!StringUtils.isEmpty(html)) {
+        redisService.set(GoodsKey.getGoodsList, "", html);
+    }
+    return "goods_list";
+}
+```
+http://localhost:8080/goods/to_list
+连上redis 查看keys GoodsKey:gl
+
+### URL缓存 详情页缓存
+```java
+@RequestMapping(value = "/to_detail/{goodsId}",produces="text/html")
+@ResponseBody
+public String detail(HttpServletRequest request, HttpServletResponse response,
+                     Model model,MiaoshaUser user,
+                     @PathVariable("goodsId")long goodsId) {
+    model.addAttribute("user", user);
+    //取缓存
+    String html = redisService.get(GoodsKey.getGoodsDetail, ""+goodsId, String.class);
+    if(!StringUtils.isEmpty(html)) {
+        return html;
+    }
+
+    GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+    model.addAttribute("goods", goods);
+
+    long startAt = goods.getStartDate().getTime();
+    long endAt = goods.getEndDate().getTime();
+    long now = System.currentTimeMillis();
+    // 0：没开始 2：结束 1：进行中
+    int miaoshaStatus = 0;
+    // 倒计时
+    int remainSeconds = 0;
+    if(now < startAt ) {//秒杀还没开始，倒计时
+        miaoshaStatus = 0;
+        remainSeconds = (int)((startAt - now )/1000);
+    }else  if(now > endAt){//秒杀已经结束
+        miaoshaStatus = 2;
+        remainSeconds = -1;
+    }else {//秒杀进行中
+        miaoshaStatus = 1;
+        remainSeconds = 0;
+    }
+    model.addAttribute("miaoshaStatus", miaoshaStatus);
+    model.addAttribute("remainSeconds", remainSeconds);
+//        return "goods_detail";
+    SpringWebContext ctx = new SpringWebContext(request,response,
+            request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+    html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
+    if(!StringUtils.isEmpty(html)) {
+        redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html);
+    }
+    return html;
+}
+```
+
+### 对象缓存 
+分布式session根据token从redis中拿User对象
+添加redis 用户id key
+```java
+public class MiaoshaUserKey extends BasePrefix{
+
+    public static final int TOKEN_EXPIRE = 3600*24 * 2;
+    private MiaoshaUserKey(int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+    public static MiaoshaUserKey token = new MiaoshaUserKey(TOKEN_EXPIRE, "tk");
+    //永久有效
+    public static MiaoshaUserKey getById = new MiaoshaUserKey(0, "id");
+}
+```
+登陆验证的时候不是从mysql按id取 而是从redis取
+```java
+public MiaoshaUser getById(long id) {
+    //取缓存
+    MiaoshaUser user = redisService.get(MiaoshaUserKey.getById, ""+id, MiaoshaUser.class);
+    if(user != null) {
+        return user;
+    }
+    //取数据库
+    user = miaoshaUserDao.getById(id);
+    if(user != null) {
+        redisService.set(MiaoshaUserKey.getById, ""+id, user);
+    }
+    return user;
+}
+```
+
+修改密码： 更新数据库，修改缓存
+
+Cache Aside Pattern
+![cachepattern.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cachepattern.jpg)
+
+```java
+public boolean updatePassword(String token, long id, String formPass) {
+    //取user
+    MiaoshaUser user = getById(id);
+    if(user == null) {
+        throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+    }
+    //更新数据库
+    MiaoshaUser toBeUpdate = new MiaoshaUser();
+    toBeUpdate.setId(id);
+    toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
+    miaoshaUserDao.update(toBeUpdate);
+    //处理缓存
+    redisService.delete(MiaoshaUserKey.getById, ""+id);
+    user.setPassword(toBeUpdate.getPassword());
+    redisService.set(MiaoshaUserKey.token, token, user);
+    return true;
+}
+```
+
+user对象缓存应该删除。token缓存应该更新。
+
+redisService 添加delete方法
+```java
+public boolean delete(KeyPrefix prefix, String key) {
+    Jedis jedis = null;
+    try {
+        jedis =  jedisPool.getResource();
+        //生成真正的key
+        String realKey  = prefix.getPrefix() + key;
+        long ret =  jedis.del(key);
+        return ret > 0;
+    }finally {
+        returnToPool(jedis);
+    }
+}
+```
+
+在dao层添加update
+```java
+@Mapper
+public interface MiaoshaUserDao {
+    
+    @Select("select * from miaosha_user where id = #{id}")
+    public MiaoshaUser getById(@Param("id") long id);
+
+    @Update("update miaosha_user set password = #{password} where id = #{id}")
+    public void update(MiaoshaUser toBeUpdate);
+}
+```
+
+
+### 页面静态化
+不用`thymeleaf`
+
+
+#### 详情页
+
+将商品详情页包装成vo
+```java
+public class GoodsDetailVo {
+    private int miaoshaStatus = 0;
+    private int remainSeconds = 0;
+    private GoodsVo goods ;
+    private MiaoshaUser user;
+}
+```
+
+静态页面xhr获取后台数据
+`<a th:href="'/goods_detail.htm?goodsId='+${goods.id}">`
+```js
+$(function(){
+    //countDown();
+    getDetail();
+});
+
+function getDetail(){
+    var goodsId = g_getQueryString("goodsId");
+    $.ajax({
+        url:"/goods/detail/"+goodsId,
+        type:"GET",
+        success:function(data){
+            if(data.code == 0){
+                render(data.data);
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        error:function(){
+            layer.msg("客户端请求有误");
+        }
+    });
+}
+```
+
+
+js获取url后面的参数name的值
+```javascript
+// 获取url参数
+function g_getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r != null) return unescape(r[2]);
+    return null;
+};
+```
+
+成功之后的回调函数 渲染页面
+```js
+function render(detail){
+    var miaoshaStatus = detail.miaoshaStatus;
+    var remainSeconds = detail.remainSeconds;
+    var goods = detail.goods;
+    var user = detail.user;
+    if(user){
+        $("#userTip").hide();
+    }
+    $("#goodsName").text(goods.goodsName);
+    $("#goodsImg").attr("src", goods.goodsImg);
+    $("#startTime").text(new Date(goods.startDate).format("yyyy-MM-dd hh:mm:ss"));
+    $("#remainSeconds").val(remainSeconds);
+    $("#goodsId").val(goods.id);
+    $("#goodsPrice").text(goods.goodsPrice);
+    $("#miaoshaPrice").text(goods.miaoshaPrice);
+    $("#stockCount").text(goods.stockCount);
+    countDown();
+}
+```
+
+日期格式化
+```js
+//设定时间格式化函数，使用new Date().format("yyyyMMddhhmmss");  
+Date.prototype.format = function (format) {  
+    var args = {  
+        "M+": this.getMonth() + 1,  
+        "d+": this.getDate(),  
+        "h+": this.getHours(),  
+        "m+": this.getMinutes(),  
+        "s+": this.getSeconds(),  
+    };  
+    if (/(y+)/.test(format))  
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    for (var i in args) {  
+        var n = args[i];  
+        if (new RegExp("(" + i + ")").test(format))  
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? n : ("00" + n).substr(("" + n).length));  
+    }  
+    return format;  
+};  
+```
+
+页面：
+```html
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">秒杀商品详情</div>
+    <div class="panel-body">
+        <span id="userTip"> 您还没有登录，请登陆后再操作<br/></span>
+    </div>
+    <table class="table" id="goodslist">
+        <tr>
+            <td>商品名称</td>
+            <td colspan="3" id="goodsName"></td>
+        </tr>
+        <tr>
+            <td>商品图片</td>
+            <td colspan="3"><img  id="goodsImg" width="200" height="200" /></td>
+        </tr>
+        <tr>
+            <td>秒杀开始时间</td>
+            <td id="startTime"></td>
+            <td >
+                <input type="hidden" id="remainSeconds" />
+                <span id="miaoshaTip"></span>
+            </td>
+            <td>
+                <!--
+                    <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
+                        <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
+                        <input type="hidden" name="goodsId"  id="goodsId" />
+                    </form>-->
+                <button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="doMiaosha()">立即秒杀</button>
+                <input type="hidden" name="goodsId"  id="goodsId" />
+            </td>
+        </tr>
+        <tr>
+            <td>商品原价</td>
+            <td colspan="3" id="goodsPrice"></td>
+        </tr>
+        <tr>
+            <td>秒杀价</td>
+            <td colspan="3"  id="miaoshaPrice"></td>
+        </tr>
+        <tr>
+            <td>库存数量</td>
+            <td colspan="3"  id="stockCount"></td>
+        </tr>
+    </table>
+</div>
+</body>
+```
+
+controller
+```java
+ @RequestMapping(value = "/detail/{goodsId}")
+@ResponseBody
+public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, MiaoshaUser user,
+    @PathVariable("goodsId")long goodsId) {
+
+    GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+
+    long startAt = goods.getStartDate().getTime();
+    long endAt = goods.getEndDate().getTime();
+    long now = System.currentTimeMillis();
+    // 0：没开始 2：结束 1：进行中
+    int miaoshaStatus = 0;
+    // 倒计时
+    int remainSeconds = 0;
+    if(now < startAt ) {//秒杀还没开始，倒计时
+        miaoshaStatus = 0;
+        remainSeconds = (int)((startAt - now )/1000);
+    }else  if(now > endAt){//秒杀已经结束
+        miaoshaStatus = 2;
+        remainSeconds = -1;
+    }else {//秒杀进行中
+        miaoshaStatus = 1;
+        remainSeconds = 0;
+    }
+   GoodsDetailVo vo = new GoodsDetailVo();
+    vo.setGoods(goods);
+    vo.setUser(user);
+    vo.setMiaoshaStatus(miaoshaStatus);
+    vo.setRemainSeconds(remainSeconds);
+    return Result.success(vo);
+}
+```
+
+#### 秒杀按钮
+`<button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="doMiaosha()">立即秒杀</button>`
+
+秒杀返回订单
+对后台数据有影响的要用post，put不能用get。因为搜索引擎遍历，执行`/delete?`等链接
+
+```js
+function doMiaosha(){
+    $.ajax({
+        url:"/miaosha/do_miaosha",
+        type:"POST",
+        data:{
+            goodsId:$("#goodsId").val(),
+        },
+        success:function(data){
+            if(data.code == 0){
+                window.location.href="/order_detail.htm?orderId="+data.data.id;
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        error:function(){
+            layer.msg("客户端请求有误");
+        }
+    });
+
+}
+```
+
+跳转到订单详情页
+```java
+@Controller
+@RequestMapping("/order")
+public class OrderController {
+
+    @Autowired
+    MiaoshaUserService userService;
+    
+    @Autowired
+    RedisService redisService;
+    
+    @Autowired
+    OrderService orderService;
+    
+    @Autowired
+    GoodsService goodsService;
+    
+    @RequestMapping("/detail")
+    @ResponseBody
+    public Result<OrderDetailVo> info(Model model, MiaoshaUser user,
+                                      @RequestParam("orderId") long orderId) {
+        if(user == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        OrderInfo order = orderService.getOrderById(orderId);
+        if(order == null) {
+            return Result.error(CodeMsg.ORDER_NOT_EXIST);
+        }
+        // 用订单的商品id 查商品信息
+        long goodsId = order.getGoodsId();
+        GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+        OrderDetailVo vo = new OrderDetailVo();
+        vo.setOrder(order);
+        vo.setGoods(goods);
+        return Result.success(vo);
+    }
+    
+}
+```
+
+新建订单VO
+```java
+public class OrderDetailVo {
+    private GoodVo goods;
+    private OrderInfo order;
+}
+```
+新建订单页controller
+新的sql 用订单id查订单
+```java
+@Mapper
+public interface OrderDao {
+    @Select("select * from order_info where id = #{orderId}")
+    public OrderInfo getOrderById(@Param("orderId")long orderId);
+}
+```
+
+新的错误对象
+```java
+//订单模块 5004XX
+public static CodeMsg ORDER_NOT_EXIST = new CodeMsg(500400, "订单不存在");
+```
+
+
+```html
+<body>
+<div class="panel panel-default">
+  <div class="panel-heading">秒杀订单详情</div>
+  <table class="table" id="goodslist">
+        <tr>  
+        <td>商品名称</td>  
+        <td colspan="3" id="goodsName"></td> 
+     </tr>  
+     <tr>  
+        <td>商品图片</td>  
+        <td colspan="2"><img  id="goodsImg" width="200" height="200" /></td>  
+     </tr>
+      <tr>  
+        <td>订单价格</td>  
+        <td colspan="2"  id="orderPrice"></td>  
+     </tr>
+     <tr>
+            <td>下单时间</td>  
+            <td id="createDate" colspan="2"></td>  
+     </tr>
+     <tr>
+        <td>订单状态</td>  
+        <td id="orderStatus">
+        </td>  
+        <td>
+            <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+        </td>
+     </tr>
+      <tr>
+            <td>收货人</td>  
+            <td colspan="2">XXX  18812341234</td>  
+     </tr>
+     <tr>
+            <td>收货地址</td>  
+            <td colspan="2">北京市昌平区回龙观龙博一区</td>  
+     </tr>
+  </table>
+</div>
+</body>
+<script>
+function render(detail){
+    var goods = detail.goods;
+    var order = detail.order;
+    $("#goodsName").text(goods.goodsName);
+    $("#goodsImg").attr("src", goods.goodsImg);
+    $("#orderPrice").text(order.goodsPrice);
+    $("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd hh:mm:ss"));
+    var status = "";
+    if(order.status == 0){
+        status = "未支付"
+    }else if(order.status == 1){
+        status = "待发货";
+    }
+    $("#orderStatus").text(status);
+    
+}
+
+$(function(){
+    getOrderDetail();
+})
+
+function getOrderDetail(){
+    var orderId = g_getQueryString("orderId");
+    $.ajax({
+        url:"/order/detail",
+        type:"GET",
+        data:{
+            orderId:orderId
+        },
+        success:function(data){
+            if(data.code == 0){
+                render(data.data);
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        error:function(){
+            layer.msg("客户端请求有误");
+        }
+    });
+}
+</script>
+```
+
+
+#### 静态化配置
+静态化完了浏览器会自动加
+`If-Modified-Since: Fri, 28 Dec 2018 11:48:23 GMT`
+Spring resources handling
+```shell
+#static
+spring.resources.add-mappings=true
+spring.resources.cache-period= 3600
+spring.resources.chain.cache=true 
+spring.resources.chain.enabled=true
+spring.resources.chain.gzipped=true
+spring.resources.chain.html-application-cache=true
+spring.resources.static-locations=classpath:/static/
+```
+response里200 
+`Cache-Control: max-age=3600`
+
+### bug1：秒杀并发库存到0以下
+code review
+1.判断库存2.判断用户订单3.秒杀
+```java
+@RequestMapping(value = "/do_miaosha",method = RequestMethod.POST)
+@ResponseBody
+public Result<OrderInfo> list(MiaoshaUser user,
+                   @RequestParam("goodsId")long goodsId) {
+    // 没登陆
+    if(user == null) {
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+    //判断库存
+    GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+    int stock = goods.getStockCount();
+    if(stock <= 0) {
+        return Result.error(CodeMsg.MIAO_SHA_OVER);
+    }
+//      从用户订单查询是否已经对这个物品下过单了
+    MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+    if(order != null) {
+        return Result.error(CodeMsg.REPEATE_MIAOSHA);
+    }
+    //1.减库存 2.下订单 3.写入秒杀订单 这三步是一个是事务
+    OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
+
+    return Result.success(orderInfo);
+}
+```
+
+减库存的sql
+```java
+@Update("update miaosha_goods set stock_count = stock_count -1 where goods_id = #{gooddsId}")
+public int reduceStock(MiaoshaGoods g);
+```
+如果库存有1，两个线程同时调用这个sql就负数了
+
+修改：只有库存>0才减
+```java
+@Update("update miaosha_goods set stock_count = stock_count -1 where goods_id = #{gooddsId} and stock_count >0")
+    public int reduceStock(MiaoshaGoods g);
+```
+因为数据库会加锁 不会两个线程同时更新
+
+### bug2：用户秒杀了多个商品
+同一个用户多个请求，在没完成第一个订单之前都判断完了有库存，也没秒杀过。
+结果：多个线程都到减库存，下订单，生成新的秒杀订单。
+
+数据库唯一索引

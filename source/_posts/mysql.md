@@ -4,7 +4,168 @@ date: 2018-04-08 18:48:55
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### 626 相邻id的人互换位置
+{% code %}
++---------+---------+
+|    id   | student |
++---------+---------+
+|    1    | Abbot   |
+|    2    | Doris   |
+|    3    | Emerson |
+|    4    | Green   |
+|    5    | Jeames  |
++---------+---------+
+For the sample input, the output is:
++---------+---------+
+|    id   | student |
++---------+---------+
+|    1    | Doris   |
+|    2    | Abbot   |
+|    3    | Green   |
+|    4    | Emerson |
+|    5    | Jeames  |
++---------+---------+
+{% endcode %}
+
+### mysql存储引擎
+![mysqlengin.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mysqlengin.jpg)
+
+![mydqlengin2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mydqlengin2.jpg)
+
+### MyISAM 
+读操作和插入操作为主 很少的更新和删除操作，并且对事务的完整性、并发性要求不是很高
+
+MyISAM 的表又支持 3 种不同的存储格式，分别是： 
+  1静态（固定长度）表； 静态表的数据在存储的时候会按照列的宽度定义补足空格，但
+是在应用访问的时候并不会得到这些空格，如果需要保存的内容后面本来就带有空格，那么在返
+回结果的时候也会被去掉.
+  2动态表； 是频繁地更新删除记录会产生碎片，需要定期执行 OPTIMIZE  TABLE 语句或 myisamchk  -r 命令来改善性能
+  3压缩表。 
+
+### innodb
+自增长列 外键
+InnoDB 存储表和索引有以下两种方式。 
+1  使用共享表空间存储，这种方式创建的表的表结构保存在.frm 文件中，数据和索引
+保存在 innodb_data_home_dir  和 innodb_data_file_path 定义的表空间中，可以是
+多个文件。 
+2  使用多表空间存储，这种方式创建的表的表结构仍然保存在.frm 文件中，但是每个
+表的数据和索引单独保存在.ibd 中。如果是个分区表，则每个分区对应单独的.ibd
+文件，文件名是“表名+分区名”，可以在创建分区的时候指定每个分区的数据文件
+的位置，以此来将表的 IO 均匀分布在多个磁盘上。 
+
+即便在多表空间的存储方式下，共享表空间仍然是必须的，InnoDB 把内部数据词典和未
+作日志放在这个文件中。 
+
+### memory
+MEMORY 存储引擎使用存在内存中的内容来创建表。每个 MEMORY 表只实际对应一个
+磁盘文件，格式是.frm。MEMORY 类型的表访问非常得快，因为它的数据是放在内存中的，
+并且默认使用 HASH 索引，但是一旦服务关闭，表中的数据就会丢失掉。
+可以指定使用 HASH 索引还是 BTREE 索引
+
+### 使用唯一索引
+索引的列的基数越大，索引的效果越好。
+存放出生日期的列具有不同值，很容易区分各行。而用来记录性别的列，只含有“  M”
+和“F”，则对此列进行索引没有多大用处，因为不管搜索哪个值，都会得出大约一半的行。 
+
+### explain key_len 计算方法
+原来数据类型长度+使用变长字段需要额外增加2个字节，使用NULL需要额外增加1个字节
+
+
+### 索引左前缀
+在创建一个 n 列的索引时，实际是创建了 MySQL 可利用的 n 个索引。
+多列索引可起几个索引的作用，因为可利用索引中最左边的列集来匹配行。这样的列集称为
+最左前缀。
+比如：索引index1:(a,b,c)有三个字段
+走index1索引:
+```sql
+select * from table where a = '1'  
+
+select * from table where a = '1' and b = ‘2’  
+
+select * from table where a = '1' and b = ‘2’  and c='3'
+```
+
+特殊情况说明下，`select * from table where a = '1' and b > ‘2’  and c='3' `这种类型的也只会有a与b走索引，c不会走。
+
+像`select * from table where a = '1' and b > ‘2’  and c='3'` 这种类型的sql语句，在a、b走完索引后，c肯定是无序了，所以c就没法走索引，数据库会觉得还不如全表扫描c字段来的快。
+
+
+### Fulltext 索引主要用来替代效率低下的 LIKE '%***%' 操作
+Fulltext 索引主要用来替代效率低下的 LIKE '%***%' 操作
+
+
+### BTREE 索引与 HASH 索引 
+HASH 索引：
+1 只用于使用=或<=>操作符的等式比较。 
+2 优化器不能使用 HASH 索引来加速 ORDER BY 操作。 
+3 MySQL 不能确定在两个值之间大约有多少行。如果将一个 MyISAM 表改为 HASH 索
+引的 MEMORY 表，会影响一些查询的执行效率。 
+4 只能使用整个关键字来搜索一行。 
+
+BTREE 索引，当使用>、<、>=、<=、BETWEEN、!=或者<>，或者 LIKE 'pattern'（其
+中'pattern'不以通配符开始）操作符时，都可以使用相关列上的索引。
+例如
+索引字段进行范围查询的时候，只有 BTREE 索引可以通过索引访问：
+```sql
+SELECT * FROM t1 WHERE key_col > 1 AND key_col < 10; 
+SELECT * FROM t1 WHERE key_col LIKE 'ab%' OR key_col BETWEEN 'lisa' AND 'simon';
+explain SELECT * FROM city WHERE country_id > 1 and country_id < 10 \G 
+*************************** 1. row *************************** 
+           id: 1 
+  select_type: SIMPLE 
+        table: city 
+         type: range 
+possible_keys: idx_fk_country_id 
+          key: idx_fk_country_id 
+      key_len: 2 
+          ref: NULL 
+         rows: 24 
+        Extra: Using where 
+1 row in set (0.00 sec) 
+```
+ HASH 索引实际上是全表扫描的： 
+
+```sql
+mysql> explain SELECT * FROM city_memory WHERE country_id > 1 and country_id < 10 \G 
+*************************** 1. row *************************** 
+           id: 1 
+  select_type: SIMPLE 
+        table: city_memory 
+         type: ALL 
+possible_keys: idx_fk_country_id 
+          key: NULL 
+      key_len: NULL 
+          ref: NULL 
+         rows: 600 
+        Extra: Using where 
+1 row in set (0.00 sec) 
+```
+
+
+### INET_ATON INET_NTOA
+INET_ATON(IP)和 INET_NTOA(num)函数主要的用途是将字符串的 IP 地址转换为数字表示的网
+络字节序，这样可以更方便地进行 IP 或者网段的比较。
+
+“192.168.1.3”和“192.168.1.20”之间一共有多少 IP 地址： 
+
+```sql
+select  *  from  t  
+where  inet_aton(ip)>=inet_aton('192.168.1.3')  
+and    inet_aton(ip)<=inet_aton('192.168.1.20'); 
+```
+
+### 常用字符串函数
+![mysqlstr.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mysqlstr.jpg)
+
+
 ### !!!176 第二大 limit offset
+```sql
+SELECT MAX(Salary) as SecondHighestSalary
+  FROM Employee
+ WHERE Salary <> ( SELECT MAX( Salary) FROM Employee )
+```
+
+
 如果只有一条数据 下面代码不行
 ```sql
 select distinct Salary as SecondHighestSalary
@@ -31,6 +192,9 @@ delete  from Person where id not in(
 delete p2 from Person p1 ,Person p2
 where p1.id < p2.id and p1.Email = p2.Email;
 ```
+
+### 时间日期函数
+![mysqldate.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mysqldate.jpg)
 
 
 ### !!! 197 `TO_DAYS`找到比前一天温度高的天 按日期列排序
@@ -131,6 +295,24 @@ WHERE id mod 2 = 1
 ORDER BY 4 DESC
 ```
 
+### 流程函数
+![mysqlflow.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mysqlflow.jpg)
+
+`ifnull`替换空值
+```sql 
+select ifnull(salary,0) from salary; 
+```
+
+case when
+
+```sql
+select 
+case when salary<=2000 
+then 'low' 
+else 'high' end 
+from salary; 
+```
+
 ### 更新交换字段
 ```sql
 update salary set 
@@ -139,6 +321,8 @@ update salary set
         else 'm'
     end;
 ```
+
+
 
 ### union 比 or 快
 ```sql

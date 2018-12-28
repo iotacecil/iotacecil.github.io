@@ -4,8 +4,41 @@ date: 2018-04-02 13:18:31
 tags: [网络]
 category: [网络]
 ---
+### 浏览器缓存
+### Cache-control（秒）/Pragma 
+Pragma : http1.0用的
+Cache-control 优先级比Expires高
+![httpcachepramgma.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg)
+指定缓存多少秒 和服务端时间无关。
 
+### Expires:日期 带时区的时间
+是服务端时间
+浏览器发出请求之前检查页面这个字段，过期了重新发请求。
 
+### Last-Modified/Etag
+服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modified-Since，如果缓存是最新的 返回304.
+
+Etag：服务器为每个页面分配编号。用编号区分这个页面是否最新。
+
+### dns域名解析10步
+1.浏览器缓存
+2.操作系统hosts
+3.LDNS  SPA
+4.Root Server
+5.主域名服务器(gTLD) 顶级域名服务器 .com/.cn 全球只有13台左右
+6.LDNS向gTLD查询
+7.gTDL 找到域名的 Name Server（注册的）
+8.Name Server 返回ip和TTL给LDNS。
+9.LDNS缓存 并设置TTL
+10.用户拿到ip并设置TTL保存在本地。
+
+一般都到域名的注册服务器去解析，一般都会CNAME到CDN的DNS负载均衡服务器
+
+### JVM在InetAddress类也会缓存DNS结果
+InetAddress解析域名 必须是单例模式
+
+### CDN = 镜像+cahce+整体均衡负载
+目标：可扩展 安全 可靠 响应 执行
 
 https://imququ.com/post/my-nginx-conf-for-wpo.html
 

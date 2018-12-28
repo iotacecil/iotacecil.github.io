@@ -416,6 +416,29 @@ List<Person> people = gson.fromJson(reader,typeToken.getType());
 String pjson = gson.toJson(people,typeToken.getType());
 ```
 
+---
+
+### java.io 80个类分4组 数据格式和传输方式
+![javaio.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaio.jpg)
+
+`InputStreamReader` 是字节 字符转换的桥梁。`StreamDecoder`是字节到字符解码的实现类。
+
+#### FileReader 继承ISR 用SD解码用SE编码
+![FileReader.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/FileReader.jpg)
+```java
+public class FileReader extends InputStreamReader
+
+public class InputStreamReader extends Reader {
+
+    private final StreamDecoder sd;
+}
+```
+
+```java
+public class OutputStreamWriter extends Writer {
+
+    private final StreamEncoder se;
+```
 
 ### IO文件
 ### `File`
