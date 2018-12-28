@@ -80,14 +80,15 @@
 
 
 
-<meta name="description" content="https://imququ.com/post/my-nginx-conf-for-wpo.html nginx.conf下列有关Nginx配置文件nginx.conf的叙述正确的是正确答案: A D   你的答案: A B C D (错误)Anginx进程数设置为CPU总核心数最佳B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)C.sendfile on;表示为开启高效文件传输模式，对于">
+<meta name="description" content="浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先级比Expires高指定缓存多少秒 和服务端时间无关。 Expires:日期 带时区的时间是服务端时间浏览器发出请求之前检查页面这个字段，过期了重新发请求。 Last-Modified/Etag服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modifi">
 <meta name="keywords" content="网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx&#x2F;Http&#x2F;HSTS">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/04/02/nginx/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="https://imququ.com/post/my-nginx-conf-for-wpo.html nginx.conf下列有关Nginx配置文件nginx.conf的叙述正确的是正确答案: A D   你的答案: A B C D (错误)Anginx进程数设置为CPU总核心数最佳B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)C.sendfile on;表示为开启高效文件传输模式，对于">
+<meta property="og:description" content="浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先级比Expires高指定缓存多少秒 和服务端时间无关。 Expires:日期 带时区的时间是服务端时间浏览器发出请求之前检查页面这个字段，过期了重新发请求。 Last-Modified/Etag服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modifi">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2connect.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http22.jpg">
@@ -97,11 +98,11 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jack_https.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/htps.jpg">
-<meta property="og:updated_time" content="2018-12-10T05:01:09.350Z">
+<meta property="og:updated_time" content="2018-12-28T12:32:41.787Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx&#x2F;Http&#x2F;HSTS">
-<meta name="twitter:description" content="https://imququ.com/post/my-nginx-conf-for-wpo.html nginx.conf下列有关Nginx配置文件nginx.conf的叙述正确的是正确答案: A D   你的答案: A B C D (错误)Anginx进程数设置为CPU总核心数最佳B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)C.sendfile on;表示为开启高效文件传输模式，对于">
-<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg">
+<meta name="twitter:description" content="浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先级比Expires高指定缓存多少秒 和服务端时间无关。 Expires:日期 带时区的时间是服务端时间浏览器发出请求之前检查页面这个字段，过期了重新发请求。 Last-Modified/Etag服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modifi">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg">
 
 
 
@@ -347,8 +348,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-12-10T13:01:09+08:00">
-                2018-12-10
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-28T20:32:41+08:00">
+                2018-12-28
               </time>
             
           </span>
@@ -403,7 +404,15 @@
       
 
       
-        <p><a href="https://imququ.com/post/my-nginx-conf-for-wpo.html" target="_blank" rel="noopener">https://imququ.com/post/my-nginx-conf-for-wpo.html</a></p>
+        <h3 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h3><h3 id="Cache-control（秒）-Pragma"><a href="#Cache-control（秒）-Pragma" class="headerlink" title="Cache-control（秒）/Pragma"></a>Cache-control（秒）/Pragma</h3><p>Pragma : http1.0用的<br>Cache-control 优先级比Expires高<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg" alt="httpcachepramgma.jpg"><br>指定缓存多少秒 和服务端时间无关。</p>
+<h3 id="Expires-日期-带时区的时间"><a href="#Expires-日期-带时区的时间" class="headerlink" title="Expires:日期 带时区的时间"></a>Expires:日期 带时区的时间</h3><p>是服务端时间<br>浏览器发出请求之前检查页面这个字段，过期了重新发请求。</p>
+<h3 id="Last-Modified-Etag"><a href="#Last-Modified-Etag" class="headerlink" title="Last-Modified/Etag"></a>Last-Modified/Etag</h3><p>服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modified-Since，如果缓存是最新的 返回304.</p>
+<p>Etag：服务器为每个页面分配编号。用编号区分这个页面是否最新。</p>
+<h3 id="dns域名解析10步"><a href="#dns域名解析10步" class="headerlink" title="dns域名解析10步"></a>dns域名解析10步</h3><p>1.浏览器缓存<br>2.操作系统hosts<br>3.LDNS  SPA<br>4.Root Server<br>5.主域名服务器(gTLD) 顶级域名服务器 .com/.cn 全球只有13台左右<br>6.LDNS向gTLD查询<br>7.gTDL 找到域名的 Name Server（注册的）<br>8.Name Server 返回ip和TTL给LDNS。<br>9.LDNS缓存 并设置TTL<br>10.用户拿到ip并设置TTL保存在本地。</p>
+<p>一般都到域名的注册服务器去解析，一般都会CNAME到CDN的DNS负载均衡服务器</p>
+<h3 id="JVM在InetAddress类也会缓存DNS结果"><a href="#JVM在InetAddress类也会缓存DNS结果" class="headerlink" title="JVM在InetAddress类也会缓存DNS结果"></a>JVM在InetAddress类也会缓存DNS结果</h3><p>InetAddress解析域名 必须是单例模式</p>
+<h3 id="CDN-镜像-cahce-整体均衡负载"><a href="#CDN-镜像-cahce-整体均衡负载" class="headerlink" title="CDN = 镜像+cahce+整体均衡负载"></a>CDN = 镜像+cahce+整体均衡负载</h3><p>目标：可扩展 安全 可靠 响应 执行</p>
+<p><a href="https://imququ.com/post/my-nginx-conf-for-wpo.html" target="_blank" rel="noopener">https://imququ.com/post/my-nginx-conf-for-wpo.html</a></p>
 <h2 id="nginx-conf"><a href="#nginx-conf" class="headerlink" title="nginx.conf"></a>nginx.conf</h2><p>下列有关Nginx配置文件nginx.conf的叙述正确的是<br>正确答案: A D   你的答案: A B C D (错误)<br>Anginx进程数设置为CPU总核心数最佳<br>B虚拟主机配置多个域名时，各域名间应用逗号隔开(空格？)<br>C.sendfile on;表示为开启高效文件传输模式，对于执行下载操作等相关应用时，应设置为on<br>D设置工作模式与连接数上限时，应考虑单个进程最大连接数(最大连接数=连接数*进程数）</p>
 <h4 id="sendfile-零拷贝-实际上是-Linux2-0-以后的推出的一个系统调用"><a href="#sendfile-零拷贝-实际上是-Linux2-0-以后的推出的一个系统调用" class="headerlink" title="sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用"></a>sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用</h4><p>sendfile 是一个系统调用，直接在内核空间完成文件发送，不需要先 read 再 write，没有上下文切换开销。不过需要注意的是，sendfile 是将 in_fd 的内容发送到 out_fd 。而 in_fd 不能是 socket ， 也就是只能文件句柄。 </p>
 <p>当 Nginx 是一个静态文件服务器的时候，开启 SENDFILE 配置项能大大提高 Nginx 的性能。</p>
@@ -672,7 +681,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx-conf"><span class="nav-number">1.</span> <span class="nav-text">nginx.conf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sendfile-零拷贝-实际上是-Linux2-0-以后的推出的一个系统调用"><span class="nav-number">1.0.1.</span> <span class="nav-text">sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-环境"><span class="nav-number">2.</span> <span class="nav-text">1. 环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO多路复用-使用epoll模型"><span class="nav-number">3.</span> <span class="nav-text">IO多路复用  使用epoll模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HSTS（HTTP-Strict-Transport-Security）"><span class="nav-number">4.</span> <span class="nav-text">HSTS（HTTP Strict-Transport-Security）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-hsts"><span class="nav-number">4.1.</span> <span class="nav-text">nginx: hsts</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器缓存"><span class="nav-number">1.</span> <span class="nav-text">浏览器缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-control（秒）-Pragma"><span class="nav-number">2.</span> <span class="nav-text">Cache-control（秒）/Pragma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Expires-日期-带时区的时间"><span class="nav-number">3.</span> <span class="nav-text">Expires:日期 带时区的时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Last-Modified-Etag"><span class="nav-number">4.</span> <span class="nav-text">Last-Modified/Etag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dns域名解析10步"><span class="nav-number">5.</span> <span class="nav-text">dns域名解析10步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM在InetAddress类也会缓存DNS结果"><span class="nav-number">6.</span> <span class="nav-text">JVM在InetAddress类也会缓存DNS结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN-镜像-cahce-整体均衡负载"><span class="nav-number">7.</span> <span class="nav-text">CDN = 镜像+cahce+整体均衡负载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx-conf"><span class="nav-number"></span> <span class="nav-text">nginx.conf</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sendfile-零拷贝-实际上是-Linux2-0-以后的推出的一个系统调用"><span class="nav-number">0.1.</span> <span class="nav-text">sendfile 零拷贝 实际上是 Linux2.0+以后的推出的一个系统调用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP"><span class="nav-number">1.</span> <span class="nav-text">HTTP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-环境"><span class="nav-number"></span> <span class="nav-text">1. 环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO多路复用-使用epoll模型"><span class="nav-number"></span> <span class="nav-text">IO多路复用  使用epoll模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HSTS（HTTP-Strict-Transport-Security）"><span class="nav-number"></span> <span class="nav-text">HSTS（HTTP Strict-Transport-Security）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-hsts"><span class="nav-number">1.</span> <span class="nav-text">nginx: hsts</span></a></li></ol></div>
             
 
           </div>
