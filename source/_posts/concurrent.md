@@ -5,6 +5,61 @@ tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 
+
+
+### Promise
+例子:FTPClientUtil
+客户端尽早调用
+注意异常处理。
+
+`Future<FTPClientUtil> Promise = FTPClientUtil.newInstance("ftpServer","ftpUserName" , "password");`
+
+FTPClientUtil 用静态方法调用私有构造函数，并交给执行线程，返回一个凭证
+```java
+public class FTPClientUtil {
+    // 实现一个线程池
+    private volatile static ThreadPoolExecutor threadPoolExecutor;
+    static{
+        threadPoolExecutor = new ThreadPoolExecutor(1,
+                Runtime.getRuntime().availableProcessors() * 2,
+                60, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<Runnable>(10),
+                new ThreadFactory() {
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        Thread t = new Thread(r);
+                        t.setDaemon(true);
+                        return t;
+                    }
+                },new ThreadPoolExecutor.CallerRunsPolicy());
+    }
+
+
+    private final FtpClient ftp = FtpClient.create();
+   
+    private FTPClientUtil(){}
+    //Promisor.compute
+    public static Future<FTPClientUtil> newInstance(final String ftpServer,final String userName,final String password){
+        Callable<FTPClientUtil> callable = new Callable<FTPClientUtil>() {
+            @Override
+            public FTPClientUtil call() throws Exception {
+                FTPClientUtil self = new FTPClientUtil();
+                self.init(ftpServer,userName,password);
+                return self;
+            }
+        };
+        // task 相等于promise
+        final FutureTask<FTPClientUtil> task = new FutureTask<FTPClientUtil>(callable);
+
+        // executor
+        threadPoolExecutor.execute(task);
+        return task;
+    }
+}
+```
+
+客户端尽晚调用`Promise.get()`
+
 ### synchronized
 
 #### 两个用法：对象锁、类锁

@@ -42,6 +42,37 @@ https://www.nowcoder.com/test/4575457/summary
 同理，若a，c是腰时，c也有52个，b，c是腰时也有52个 
 所以n共有9+3×52=165个 
 
+### ！！！小Q的歌单 01背包求方案数
+https://www.nowcoder.com/questionTerminal/f3ab6fe72af34b71a2fd1d83304cbbb3
+xA+yB = K ,x<=X,y<=Y有多少种取法
+{% note %}
+5
+2 3 3 3
+out:9
+{% endnote %}
+
+组合数 构建 杨辉三角
+```java
+public static long qlist(int k,int a,int x,int b,int y){
+    long mod = 1000000007;
+    int max = 101;
+    long[][] tri = new long[max][max];
+    tri[0][0] = 1;
+   for (int i = 1; i < max; i++) {
+        tri[i][0] = 1;
+       for (int j = 1; j <max ; j++) {
+           tri[i][j] = (tri[i-1][j-1] + tri[i-1][j])%mod;
+       }
+   }
+   long sum = 0;
+   for (int i = 0; i <=k ; i++) {
+       if(i % a == 0 && (k-i) % b ==0 &&  i/a <= 100 && (k - i) / b <= 100)
+           sum += tri[x][i/a]*tri[y][(k-i)/b]%mod;
+   }
+   return sum % mod;
+}
+```
+
 ### lt168 吹气球 lc312
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
 >in [4, 1, 5, 10]
