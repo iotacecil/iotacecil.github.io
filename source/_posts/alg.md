@@ -42,6 +42,9 @@ https://www.nowcoder.com/test/4575457/summary
 同理，若a，c是腰时，c也有52个，b，c是腰时也有52个 
 所以n共有9+3×52=165个 
 
+### ！！！安排机器 有错的题
+
+
 ### ！！！小Q的歌单 01背包求方案数
 https://www.nowcoder.com/questionTerminal/f3ab6fe72af34b71a2fd1d83304cbbb3
 xA+yB = K ,x<=X,y<=Y有多少种取法
@@ -51,7 +54,30 @@ xA+yB = K ,x<=X,y<=Y有多少种取法
 out:9
 {% endnote %}
 
-组合数 构建 杨辉三角
+方法2：01背包问题的方法数
+```java
+long[][] dp =new long[201][1001];
+int[] p = new int[201];
+// 展开成背包物品的输入
+dp[0][0] = 1;
+// 放到[1,x+y]上
+for (int i = 1; i <=x ; i++) {p[i] = a;}
+for (int i = x+1; i <=x+y ; i++) {p[i] = b;}
+// 一共有x+y个物品
+for (int i = 1; i <=x+y ; i++) {
+    for (int j = 0; j <=k ; j++) {
+        if(j >= p[i]){
+            dp[i][j] = (dp[i-1][j] + dp[i-1][j-p[i]]) % mod;
+        }
+        else
+            dp[i][j] = dp[i-1][j]%mod;
+    }
+}
+System.out.println(dp[x+y][k]%mod);
+```
+
+
+方法1：组合数 构建 杨辉三角
 ```java
 public static long qlist(int k,int a,int x,int b,int y){
     long mod = 1000000007;
