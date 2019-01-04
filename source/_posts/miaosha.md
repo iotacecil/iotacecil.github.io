@@ -2805,6 +2805,8 @@ public MiaoshaUser getById(long id) {
 Cache Aside Pattern
 ![cachepattern.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cachepattern.jpg)
 
+更新缓存的的Design Pattern有四种：Cache aside, Read through, Write through, Write behind caching.
+
 ```java
 public boolean updatePassword(String token, long id, String formPass) {
     //取user
@@ -2835,7 +2837,7 @@ public boolean delete(KeyPrefix prefix, String key) {
         jedis =  jedisPool.getResource();
         //生成真正的key
         String realKey  = prefix.getPrefix() + key;
-        long ret =  jedis.del(key);
+        long ret =  jedis.del(realKey);
         return ret > 0;
     }finally {
         returnToPool(jedis);
@@ -3009,7 +3011,7 @@ Date.prototype.format = function (format) {
 
 controller
 ```java
- @RequestMapping(value = "/detail/{goodsId}")
+@RequestMapping(value = "/detail/{goodsId}")
 @ResponseBody
 public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, MiaoshaUser user,
     @PathVariable("goodsId")long goodsId) {
@@ -3223,8 +3225,11 @@ function getOrderDetail(){
 
 
 #### 静态化配置
-静态化完了浏览器会自动加
+304是客户端（浏览器）向服务端自动加
 `If-Modified-Since: Fri, 28 Dec 2018 11:48:23 GMT`
+服务端会检查如果没发生变化就304.还是发生了一次交互。
+
+让页面直接从浏览器取。
 Spring resources handling
 ```shell
 #static
@@ -3236,10 +3241,10 @@ spring.resources.chain.gzipped=true
 spring.resources.chain.html-application-cache=true
 spring.resources.static-locations=classpath:/static/
 ```
-response里200 
+response里200 （但其实是来自缓存）响应头里有，达到从浏览器读。
 `Cache-Control: max-age=3600`
 
-### bug1：秒杀并发库存到0以下
+### bug1：秒杀并发库存到0以下`and stock_count >0`
 code review
 1.判断库存2.判断用户订单3.秒杀
 ```java
@@ -3283,8 +3288,401 @@ public int reduceStock(MiaoshaGoods g);
 ```
 因为数据库会加锁 不会两个线程同时更新
 
-### bug2：用户秒杀了多个商品
+### bug2：用户秒杀了多个商品:数据库唯一索引
 同一个用户多个请求，在没完成第一个订单之前都判断完了有库存，也没秒杀过。
 结果：多个线程都到减库存，下订单，生成新的秒杀订单。
 
-数据库唯一索引
+数据库唯一索引，让一个用户只能有一个秒杀订单
+![uniqueindex.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/uniqueindex.jpg)
+
+
+优化：
+查询用户是否买过这个商品不走数据库
+建key
+```java
+public class OrderKey extends BasePrefix {
+
+    public OrderKey( String prefix) {
+        super( prefix);
+    }
+    public static OrderKey getMiaoshaOrderByUidGid = new OrderKey("moug");
+}
+```
+
+
+```java
+// 根据用户ID和商品ID查找相应订单
+public  MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
+    return redisService.get(OrderKey.getMiaoshaOrderByUidGid,""+userId+"_"+goodsId , MiaoshaOrder.class);
+//      return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+}
+```
+
+生成订单之后要写缓存
+```java
+// 根据用户和商品信息创建订单信息
+@Transactional
+public OrderInfo createOrder(MiaoshaUser user, GoodVo goods) {
+    //...
+    // 数据库 miaoshaOrder表
+    orderDao.insertMiaoshaOrder(miaoshaOrder);
+
+    redisService.set(OrderKey.getMiaoshaOrderByUidGid,""+user.getId()+"_"+goods.getId(),miaoshaOrder);
+    return orderInfo;
+}
+```
+
+### 其他静态资源优化
+1.js/css压缩
+2.多个js/css组合成一个减少连接数
+3.CDN
+
+### 接口优化
+
+redis预减库存减少数据库访问，减库存请求入消息队列，返回排队中。
+服务端：请求出队，生成订单，减库存。
+客户端轮询秒杀是否成功。
+
+### 安装 RabitMQ
+1.安装依赖`yum install ncurses-devel`
+2.安装erlang`yum install erlang` 执行erl表示安装成功
+3.安装rabbitmq 
+解压`xz -d rabbitmq-server-generic-unix-3.7.9.tar.xz`
+解压`tar xf rabbitmq-server-generic-unix-3.7.9.tar`
+安装python
+安装`yum install xmlto -y`
+安装`yum install python-simplejson -y`
+```shell
+cd rabbitmq_server-3.7.9/
+cd sbin
+```
+启动然后报错
+yum remove掉erlang*相关的
+```shell
+tar -xf otp_src_21.0.tar.gz
+./configure --prefix=/usr/local/erlang20 --without-javac
+make -j 8
+make install
+vim /etc/profile
+export PATH=/usr/local/erlang21/bin:$PATH 
+source /etc/profile
+```
+回到sbin启动`./rabbitmq-server`
+可以看log 端口是5672
+```shell
+[root@localhost sbin]# netstat -nap |grep 5672
+tcp        0      0 0.0.0.0:25672           0.0.0.0:*               LISTEN      14205/beam.smp      
+tcp6       0      0 :::5672                 :::*                    LISTEN      14205/beam.smp 
+```
+关闭用`./rabbitmqctl stop`
+```shell
+[root@localhost sbin]# netstat -nap |grep 5672
+tcp        0      0 127.0.0.1:43296         127.0.0.1:25672         TIME_WAIT   -
+```
+
+安装lsof
+```shell
+[root@localhost ebin]# lsof -i:5672
+COMMAND    PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+beam.smp 17480 root   68u  IPv6 176892      0t0  TCP *:amqp (LISTEN)
+beam.smp 17480 root   69u  IPv6 176909      0t0  TCP localhost.localdomain:amqp->10.1.18.15:10893 (ESTABLISHED)
+```
+
+### SpringBoot 集成RabbitMQ
+erlang有原生socket一样的延迟
+AMQP协议模型
+生产者：1.投递到server，2投递到virtual host，3投递到exchange
+exchange 和 message queue 有绑定关系。
+![amqp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/amqp.jpg)
+
+核心概念：
+{% note %}
+- Server：Broker。接受连接。
+- Connection:应用与Broker的网络连接。
+- Channel：网络信道，一个会话任务。一个客户端可以建立多个channel。
+- Message：消息结构由Properties（优先级，延迟）和Body组成。
+- Virtual host：逻辑隔离，消息路由，划分服务。一个host里可以有多个exchange和queue。同一个host不能有同名的exchange和queue。（相当于redis 16个db的逻辑概念）
+- Exchange：交换机，接受消息，根据路由键转发消息到binding的队列。
+- Binding：Exchange和Queue的虚拟连接，可以有routing key。
+- Routing key：路由规则。host确定如何路由一个消息。
+- Queue:保存并转发给消费者。
+
+{% endnote %}
+
+核心配置文件位置：
+`vi /usr/local/rabbitmq_server-3.7.9/ebin/rabbit.app`
+loopback_users也在里面 可以修改成`[guest]`
+
+rabbitMQ插件 可视化管理
+```shell
+rabbitmq-plugins list
+rabbitmq-plugins enable rabbitmq_management
+```
+访问：`http://10.1.18.20:15672/`
+
+1 添加依赖
+```xml
+<dependency>  
+    <groupId>org.springframework.boot</groupId>  
+    <artifactId>spring-boot-starter-amqp</artifactId>  
+</dependency> 
+```
+2 添加配置
+```java
+#rabbitmq
+spring.rabbitmq.host=10.1.18.20
+spring.rabbitmq.port=5672
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guest
+spring.rabbitmq.virtual-host=/
+#消费者数量
+spring.rabbitmq.listener.simple.concurrency= 10
+spring.rabbitmq.listener.simple.max-concurrency= 10
+#从队列里每次取几个
+spring.rabbitmq.listener.simple.prefetch= 1
+#消费者默认自动启动
+spring.rabbitmq.listener.simple.auto-startup=true
+# 消费失败会重新压入队列
+spring.rabbitmq.listener.simple.default-requeue-rejected= true
+#生产者重试
+spring.rabbitmq.template.retry.enabled=true 
+spring.rabbitmq.template.retry.initial-interval=1000 
+spring.rabbitmq.template.retry.max-attempts=3
+spring.rabbitmq.template.retry.max-interval=10000
+spring.rabbitmq.template.retry.multiplier=1.0
+```
+
+新建rabbitmq包，
+
+交换机的4种模式
+
+### Direct 模式
+
+配置类
+```java
+import org.springframework.amqp.core.Queue;
+@Configuration
+public class MQConfig {
+    public static final String QUEUE = "queue";
+
+    @Bean
+    public Queue queue(){
+        return new Queue(QUEUE,true);
+    }
+}
+```
+
+新建发送者
+```java
+@Service
+public class MQSender {
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
+
+    public void send(Object message){
+        String msg = RedisService.beanToString(message);
+        amqpTemplate.convertAndSend(MQConfig.QUEUE,msg);
+    }
+}
+```
+
+重用redis中bean2String的方法
+```java
+public static  <T> String beanToString(T value){
+    //2. 添加空判断
+    if(value == null)return null;
+    //3. 如果是数字，字符串，Long
+    Class<?> clazz = value.getClass();
+    if(clazz == int.class || clazz == Integer.class) {
+        return ""+value;
+    }else if(clazz == String.class) {
+        return (String)value;
+    }else if(clazz == long.class || clazz == Long.class) {
+        return ""+value;
+    }else {
+        return JSON.toJSONString(value);
+    }
+}
+```
+String2Bean
+```java
+public static <T> T stringToBean(String str,Class<T> clazz){
+    //1. 参数校验
+    if(str == null || str.length() <= 0 || clazz == null) {
+        return null;
+    }
+    //2 如果是int，string，Long
+    if(clazz == int.class || clazz == Integer.class) {
+        return (T)Integer.valueOf(str);
+    }else if(clazz == String.class) {
+        return (T)str;
+    }else if(clazz == long.class || clazz == Long.class) {
+        return  (T)Long.valueOf(str);
+    }else {
+        //fastJson 其他List类型要再写
+        return JSON.toJavaObject(JSON.parseObject(str), clazz);
+    }
+}
+```
+
+消费者监听轮询
+```java
+@Service
+public class MQSender {
+    private static Logger log = LoggerFactory.getLogger(MQSender.class);
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
+
+    public void send(Object message){
+        String msg = RedisService.beanToString(message);
+        log.info("send message"+msg);
+        amqpTemplate.convertAndSend(MQConfig.QUEUE,msg);
+    }
+}
+```
+
+随便用一个controller测试一下
+```java
+@RequestMapping("/mq")
+@ResponseBody
+public Result<String> mq(){
+    sender.send("rabbitMQ消息测试");
+    return Result.success("rabbitMQ消息测试");
+}
+```
+
+报错：
+```java
+rabbitmq.client.AuthenticationFailureException: ACCESS_REFUSED - Login was refused using authentication mechanism PLAIN. For details see the broker logfile.
+```
+
+因为guest用户默认不能远程连接 localhost是可以的
+https://www.rabbitmq.com/access-control.html
+it can only connect over a loopback interface (i.e. localhost).
+
+用方法2
+修改rabbitmq.config
+在`/usr/local/rabbitmq_server-3.7.9/etc/rabbitmq`下创建`rabbitmq.config`
+添加
+`[{rabbit, [{loopback_users, []}]}].`
+
+重启
+```shell
+rabbitmqctl stop
+rabbitmq-server 
+```
+
+访问`http://localhost:8080/demo/mq` 可以看到log
+
+### Topic模式 可以发给多个queue
+```java
+@Configuration
+public class MQConfig {
+    public static final String QUEUE = "queue";
+    public static final String TOPIC_QUEUE1 = "topic_queue1";
+    public static final String TOPIC_QUEUE2 = "topic_queue2";
+    public static final String TOPIC_EXCHANGE = "topic_queue2";
+    public static final String ROUTING_KEY1 = "topic.key1";
+    //* 表示一个单词。 #表示0个或者多个单词
+    public static final String ROUTING_KEY2 = "topic.#";
+
+    // 直接模式
+    @Bean
+    public Queue queue(){
+        return new Queue(QUEUE,true);
+    }
+
+    // topic模式
+    @Bean
+    public Queue topicQueue1(){
+        return new Queue(TOPIC_QUEUE1,true);
+    }
+
+    @Bean
+    public Queue topicQueue2(){
+        return new Queue(TOPIC_QUEUE2,true);
+    }
+
+    @Bean
+    public TopicExchange topicExchange(){
+        return new TopicExchange(TOPIC_EXCHANGE);
+    }
+    @Bean
+    public Binding topicBinding1(){
+        return BindingBuilder.bind(topicQueue1()).to(topicExchange()).with(ROUTING_KEY1);
+    }
+
+    @Bean
+    public Binding topicBinding2(){
+        return BindingBuilder.bind(topicQueue2()).to(topicExchange()).with(ROUTING_KEY2);
+    }
+}
+```
+
+发送：
+```java
+@Service
+public class MQSender {
+    private static Logger log = LoggerFactory.getLogger(MQSender.class);
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
+
+    public void send(Object message){
+        String msg = RedisService.beanToString(message);
+        log.info("send message"+msg);
+        amqpTemplate.convertAndSend(MQConfig.QUEUE,msg);
+    }
+
+    public void sendTopic(Object message){
+        String msg = RedisService.beanToString(message);
+        log.info("send topic message"+msg);
+        // queue1和2都能匹配上都能收到
+        amqpTemplate.convertAndSend(MQConfig.TOPIC_EXCHANGE,MQConfig.ROUTING_KEY1,msg+"1");
+        // 只有queue2能匹配上
+        amqpTemplate.convertAndSend(MQConfig.TOPIC_EXCHANGE,MQConfig.ROUTING_KEY2,msg+"2");
+    }
+}
+```
+
+接收：
+```java
+@Service
+public class MQReceiver {
+
+    private static Logger log = LoggerFactory.getLogger(MQSender.class);
+
+    @RabbitListener(queues = MQConfig.QUEUE)
+    public void receive(String message){
+        log.info("receive message:"+message);
+    }
+
+    @RabbitListener(queues = MQConfig.TOPIC_QUEUE1)
+    public void receiveTopic1(String message){
+        log.info("receive q1 message:"+message);
+    }
+
+    @RabbitListener(queues = MQConfig.TOPIC_QUEUE2)
+    public void receiveTopic2(String message){
+        log.info("receive q2 message:"+message);
+    }
+}
+```
+
+```java
+@RequestMapping("/mq/topic")
+@ResponseBody
+public Result<String> topic(){
+    // 发两条消息
+    sender.sendTopic("topic消息测试");
+    return Result.success("topic消息测试");
+}
+```
+
+结果
+![topicmq.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/topicmq.jpg)
+
+
+### Fanout模式 广播模式 不需要绑定key
