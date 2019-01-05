@@ -15,7 +15,41 @@ time O(col x col x row)
 
 
 
-### 54旋转矩阵
+### 54旋转矩阵 顺时针打印矩阵
+1 贪吃蛇法8% 3ms，从这一行到边界，然后掉头，外层访问过的都mark掉
+```java
+public List<Integer> spiralOrder(int[][] mat) {
+    List<Integer> rst = new ArrayList<>();
+    int n = mat.length;
+    if(n == 0)return rst;
+    int m = mat[0].length;
+    // int[] rst = new int[n*m];
+  
+    boolean[][] seen = new boolean[n][m];
+    int[][] dirs = {{0,1},{1,0},{0,-1},{-1,0}};
+
+    int r = 0,c = 0,di = 0;
+    for (int i = 0; i <n*m ; i++) {
+        rst.add(mat[r][c]);
+        seen[r][c] = true;
+        // rst[i] = mat[r][c];
+        int cr = r+dirs[di][0];
+        int cc = c+dirs[di][1];
+        if(0 <= cr && cr < n&&0 <= cc&&cc < m && !seen[cr][cc]){
+            r = cr;
+            c = cc;
+        }else {
+            di = (di+1)%4;
+            r += dirs[di][0];
+            c += dirs[di][1];
+        }
+    }
+    return rst;
+}
+```
+
+
+
 ![rotate2d.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rotate2d.jpg)
 top=0,bot=3,left=0,right = 3
 n是矩阵大小n>1的时候继续，每一圈，矩阵大小-=2
@@ -28,6 +62,10 @@ i=3:3赋值给12
 方法2：翻转？
 
 ### 59 生成nxn的旋转矩阵
+
+
+### 顺时针旋转矩阵
+
 
 矩阵乘法相关题目：
 http://www.matrix67.com/blog/archives/276

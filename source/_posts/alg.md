@@ -3871,7 +3871,13 @@ public int getSum(int a, int b) {
 [single number](https://leetcode.com/articles/single-number/)
 $$2(a+b+c)-(a+a+b+b+c)$$ `2*sum(set(list))-sum(list)`
 
+### 137 所有数字都出现3次，只有一个出现1次
+{% note %}
+Input: [0,1,0,1,0,1,99]
+Output: 99
+{% endnote %}
 
+三进制不进位加法
 
 
 ### 141链表环检测
