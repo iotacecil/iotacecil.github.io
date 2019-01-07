@@ -3686,3 +3686,40 @@ public Result<String> topic(){
 
 
 ### Fanout模式 广播模式 不需要绑定key
+![mqfanout.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mqfanout.jpg)
+
+```java
+// 广播模式 广播交换机
+@Bean
+public FanoutExchange fanoutExchange(){
+    return new FanoutExchange(FANOUT_EXCHANGE);
+}
+@Bean
+public Binding FanoutBinding1(){
+    return BindingBuilder.bind(topicQueue1()).to(fanoutExchange());
+}
+@Bean
+public Binding FanoutBinding2(){
+    return BindingBuilder.bind(topicQueue2()).to(fanoutExchange());
+}
+```
+
+```java
+public void sendFanout(Object message){
+    String msg = RedisService.beanToString(message);
+    log.info("send topic message"+msg);
+    // queue1和2都能都能收到
+    amqpTemplate.convertAndSend(MQConfig.FANOUT_EXCHANGE,"",msg+"1");
+}
+```
+
+```java
+@RequestMapping("/mq/fanout")
+@ResponseBody
+public Result<String> fanout(){
+    sender.sendFanout("广播 消息测试");
+    return Result.success("广播消息测试");
+}
+```
+
+### Header模式
