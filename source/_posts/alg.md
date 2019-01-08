@@ -42,7 +42,66 @@ https://www.nowcoder.com/test/4575457/summary
 同理，若a，c是腰时，c也有52个，b，c是腰时也有52个 
 所以n共有9+3×52=165个 
 
-### 顺时针打印矩阵
+
+### 376 最长摇摆子序列
+{% note %}
+The first difference (if one exists) may be either positive or negative. 
+{% endnote %}
+
+### lc300 !!!最长上升子序列 最长递增子序列
+{% note %}
+Input: [10,9,2,5,3,7,101,18]
+Output: 4 
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4. 
+{% endnote %}
+
+正常解法
+```java
+//todo
+```
+
+nlogn解法
+思路：单调栈，用更小的数替换掉前面比它大的数，并且长度不变，只有当这个值比栈顶大，长度才增加。
+注意len是只增不减
+```java
+public int lengthOfLIS(int[] nums) {
+   if(nums == null ||nums.length <1)return 0;
+    int len = 0;
+    int n = nums.length;
+    int[] dp = new int[n];
+    for(int num:nums){
+        // 关键 查找范围是[0,len)
+        int i = Arrays.binarySearch(dp,0,len,num);
+        if(i < 0){
+            i = -(i+1);
+        }
+        dp[i] = num;
+        if(i == len)len++;
+    }
+    return len;
+}
+```
+
+### lc354 ！！！！俄罗斯套娃
+{% note %}
+Input: [[5,4],[6,4],[6,7],[2,3]]
+Output: 3 
+Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
+{% endnote %}
+
+思路：[0]升序 之后[1]降序.查找[1]应该在的位置。
+[1]从大到小排序 (1,3)在(1,2)之前，同宽度按[1]排序，先判断可不可能装，如果能装再缩小[1]。为了同宽度的能套上去的只计数一次，所以先放大的。
+`[3, 1] [3, 2] [3, 3]` will get 3, but `[3, 3], [3, 2], [3, 1]` will get 1
+
+
+
+### ！798数组rotate，每个位置值比index小计分+1，分最大的旋转位置K
+{% note %}
+we have [2, 4, 1, 3, 0], and we rotate by K = 2, it becomes [1, 3, 0, 2, 4].  This is worth 3 points because 1 > 0 [no points], 3 > 1 [no points], 0 <= 2 [one point], 2 <= 3 [one point], 4 <= 4 [one point].
+{% endnote %}
+很多赞的题
+
+
 
 ### 折纸 折痕
 https://www.nowcoder.com/questionTerminal/430180b66a7547e1963b69b1d0efbd3c
@@ -204,45 +263,8 @@ Output: One possible answer is [1, 4, 1, 5, 1, 6].
 
 
 
-### lc354 ！！！！俄罗斯套娃
-{% note %}
-Input: [[5,4],[6,4],[6,7],[2,3]]
-Output: 3 
-Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
-{% endnote %}
-
-思路：[0]升序 之后[1]降序.查找[1]应该在的位置。
-[1]从大到小排序 (1,3)在(1,2)之前，同宽度按[1]排序，先判断可不可能装，如果能装再缩小[1]。为了同宽度的能套上去的只计数一次，所以先放大的。
-`[3, 1] [3, 2] [3, 3]` will get 3, but `[3, 3], [3, 2], [3, 1]` will get 1
 
 
-### lc300 !!!最长上升子序列
-{% note %}
-Input: [10,9,2,5,3,7,101,18]
-Output: 4 
-Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4. 
-{% endnote %}
-
-思路：单调栈，用更小的数替换掉前面比它大的数，并且长度不变，只有当这个值比栈顶大，长度才增加。
-注意len是只增不减
-```java
-public int lengthOfLIS(int[] nums) {
-   if(nums == null ||nums.length <1)return 0;
-    int len = 0;
-    int n = nums.length;
-    int[] dp = new int[n];
-    for(int num:nums){
-        // 关键 查找范围是[0,len)
-        int i = Arrays.binarySearch(dp,0,len,num);
-        if(i < 0){
-            i = -(i+1);
-        }
-        dp[i] = num;
-        if(i == len)len++;
-    }
-    return len;
-}
-```
 
 ### 955 删掉几列让String数组排序
 {% note %}

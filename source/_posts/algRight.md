@@ -76,25 +76,6 @@ public int lcs(String s,String t){
 }
 ```
 
-### 最长上升子序列 LIS
-> n = 5,a = {4,2,3,1,5}
-> out:3 (2,3,5)
-
-无后效性：可写出递推式。之与子问题函数的状态函数值有关，与到达值的路径无关
-子问题：求以`a_k(k=1,2,3...N)`为终点的最长上升子序列长度
-max(n个子问题)
-- 如果ak比已得最长子序列的最后ai大，则长度+1
-`maxLen(k)=max(maxLen(i):i in range(1,k)且ai<ak且k!=1)+1`
-```python
-for i in range(1,n)
-    maxlen[i]=1
-for i in range(2,n)
-    ##求以ai 为终点的最长
-    for j in range(0,i)# ai左边所有的数
-        if a[i]>a[j]: # ai为终点的更长
-        #？？ maxlen[i]也更新了，可能比manlen[j]+1大
-            maxlen[i]=max(maxlen[j]+1,maxlen[i])
-```
 
 ### 背包9讲:
 01背包：每个物品只能放1次

@@ -2128,6 +2128,7 @@ public class OrderService {
 ```
 
 定义`MiaoshaService` 用于对1.减库存 2.下单 3.加入秒杀订单 包装成事务
+MiaoshaService的miaosha方法减库存update如果失败，后面补应该继续写入订单
 ```java
 @Service
 public class MiaoshaService {
@@ -2137,22 +2138,21 @@ public class MiaoshaService {
     @Autowired
     OrderService orderService;
 
-    /**
-     * 输入用户和商品 返回订单
-     * @param user
-     * @param goods
-     * @return
-     */
     @Transactional
     public OrderInfo miaosha(MiaoshaUser user, GoodVo goods) {
 
         //减库存 下订单 写入秒杀订单
-        goodsService.reduceStock(goods);
-        //order_info maiosha_order
-        return orderService.createOrder(user, goods);
+        boolean success = goodsService.reduceStock(goods);
+        if(success){
+            //order_info maiosha_order
+            return orderService.createOrder(user, goods);
+        }
+       return null;
     }
 }
 ```
+
+
 
 1. 减少库存：查找miaosha商品ID并更新数据库：
 
@@ -2175,17 +2175,17 @@ public class GoodsService {
     // 商品列表
     public List<GoodVo> listGoodsVo(){
         return goodsDao.listGoodsVo();
-
     }
     // 商品详情
     public GoodVo getGoodsVoByGoodsId(long goodsId) {
         return goodsDao.getGoodsVoByGoodsId(goodsId);
     }
     // 减库存
-    public void reduceStock(GoodVo goods) {
+    public boolean reduceStock(GoodVo goods) {
         MiaoshaGoods g = new MiaoshaGoods();
-        g.setId(goods.getId());
-        goodsDao.reduceStock(g);
+        g.setGooddsId(goods.getId());
+        int rst = goodsDao.reduceStock(g);
+        return rst > 0;
     }
 }
 ```
@@ -2218,17 +2218,16 @@ public class OrderService {
         orderInfo.setOrderChannel(1);
         orderInfo.setStatus(0);
         orderInfo.setUserId(user.getId());
-        // 数据库insert order表
-        long orderId = orderDao.insert(orderInfo);
+        // 数据库insert order表 mybatis成功之后会把id加到对象中
+        orderDao.insert(orderInfo);
         MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
         miaoshaOrder.setGoodsId(goods.getId());
-        miaoshaOrder.setOrderId(orderId);
+        miaoshaOrder.setOrderId(orderInfo.getId());
         miaoshaOrder.setUserId(user.getId());
         // 数据库 miaoshaOrder表
         orderDao.insertMiaoshaOrder(miaoshaOrder);
         return orderInfo;
     }
-    
 }
 ```
 Dao 插入两个订单并且有返回值
@@ -3723,3 +3722,396 @@ public Result<String> fanout(){
 ```
 
 ### Header模式
+MQConfig
+```java
+// Header模式
+@Bean
+public HeadersExchange headersExchange(){
+    return new HeadersExchange(HEADER_EXCHANGE);
+}
+
+@Bean
+public Queue headerQueue(){
+    return new Queue(HEADER_QUEUE,true);
+}
+
+@Bean
+public Binding headerBinding(){
+    Map<String,Object> map = new HashMap<String, Object>();
+    map.put("header1","value1" );
+    map.put("header2","value2" );
+    return BindingBuilder.bind(headerQueue()).to(headersExchange()).whereAll(map).match();
+}
+```
+sender
+```java
+public void sendHeader(Object message){
+    String msg = RedisService.beanToString(message);
+    log.info("send header message"+msg);
+    MessageProperties properties = new MessageProperties();
+    properties.setHeader("header1","value1" );
+    properties.setHeader("header2","value2" );
+    Message obj = new Message(msg.getBytes(),properties);
+    amqpTemplate.convertAndSend(MQConfig.HEADER_EXCHANGE,obj);
+}
+```
+
+receiver
+```java
+@RabbitListener(queues = MQConfig.HEADER_QUEUE)
+public void receiveHeader(byte[] message){
+    log.info("receive q2 message:"+ new String(message));
+}
+```
+
+controller测试
+```java
+@RequestMapping("/mq/header")
+@ResponseBody
+public Result<String> header(){
+    sender.sendHeader("header 消息测试");
+    return Result.success("header消息测试");
+}
+```
+
+### 秒杀接口优化 同步下单->异步下单
+秒杀review：
+```java
+@Autowired
+MiaoshaService miaoshaService;
+@RequestMapping(value = "/do_miaosha",method = RequestMethod.POST)
+@ResponseBody
+public Result<OrderInfo> list(MiaoshaUser user,
+                   @RequestParam("goodsId")long goodsId) {
+    // 没登陆
+    if(user == null) {
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+    //判断库存（读数据库）
+    GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+    int stock = goods.getStockCount();
+    if(stock <= 0) {
+        return Result.error(CodeMsg.MIAO_SHA_OVER);
+    }
+//   （redis）   从用户订单查询是否已经对这个物品下过单了
+    MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+    if(order != null) {
+        return Result.error(CodeMsg.REPEATE_MIAOSHA);
+    }
+    //1.减库存 update 2.下订单 insert 3.写入秒杀订单 insert 这三步是一个是事务
+    OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
+
+    return Result.success(orderInfo);
+}
+```
+判断库存要读数据库，下单减库存生成订单要3次数据库。
+思路：减少数据库访问，将系统初始化时，将库存数量加载到redis。
+1.redis预减库存，如果redis里库存没有直接返回，否则放到消息队列，返回排队中。
+2.请求出队，生成订单，减少库存。
+3.客户端轮询是否秒杀成功。
+
+框架会回调，实现的方法。
+```java
+@Controller
+@RequestMapping("/miaosha")
+public class MiaoshaController implements InitializingBean{
+// 系统初始化 读数据库库存，写到redis
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        List<GoodVo> goodslist = goodsService.listGoodsVo();
+        if(goodslist!=null){
+            for(GoodVo goods : goodslist){
+                redisService.set(GoodsKey.getMiaoshaGoodsStock,""+goods.getId() ,goods.getStockCount() );}}}}
+```
+
+设置库存的rediskey
+```java
+public class GoodsKey extends BasePrefix {
+    private GoodsKey(int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+    public static GoodsKey getGoodsList = new GoodsKey(60, "gl");
+    public static GoodsKey getGoodsDetail = new GoodsKey(60, "gd");
+    public static GoodsKey getMiaoshaGoodsStock= new GoodsKey(0, "gs");
+}
+```
+
+队列中的消息格式：（秒杀）用户，商品id
+rabbitmq/MiaoshaMessage.java
+```java
+public class MiaoshaMessage {
+    private MiaoshaUser user;
+    private long goodsId;
+}
+```
+
+新的秒杀controller流程：
+```java
+@Autowired
+RedisService redisService;
+
+@Autowired
+MiaoshaSender sender;
+@Autowired
+MiaoshaService miaoshaService;
+@RequestMapping(value = "/do_miaosha",method = RequestMethod.POST)
+@ResponseBody
+public Result<Integer> list(MiaoshaUser user,
+                   @RequestParam("goodsId")long goodsId) {
+    // 没登陆
+    if(user == null) {
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+    // redis中预减库存
+    Long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
+    if(stock < 0){
+        return Result.error(CodeMsg.MIAO_SHA_OVER);
+    }
+//      从用户订单查询是否已经对这个物品下过单了
+    MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+    if(order != null) {
+        return Result.error(CodeMsg.REPEATE_MIAOSHA);
+    }
+    // 入队
+    MiaoshaMessage msg = new MiaoshaMessage();
+    msg.setUser(user);
+    msg.setGoodsId(goodsId);
+    sender.sendMiaoshaMessage(msg);
+    return Result.success(0);
+}
+```
+
+config
+```java
+@Configuration
+public class MiaoshaMQConfig {
+    public static final String MIAOSHA_QUEUE = "miaosha.queue";
+
+    // 直接模式
+    @Bean
+    public Queue miaoshaQueue(){
+        return new Queue(MIAOSHA_QUEUE,true);
+    }
+}
+```
+
+
+sender：
+```java
+@Service
+public class MiaoshaSender {
+    private static Logger log = LoggerFactory.getLogger(MQSender.class);
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
+
+    public void sendMiaoshaMessage(MiaoshaMessage message) {
+        // direct模式
+        String msg = RedisService.beanToString(message);
+        log.info("send message: "+msg);
+        amqpTemplate.convertAndSend(MiaoshaMQConfig.MIAOSHA_QUEUE,msg);
+    }
+}
+```
+
+reveicer ：减库存 创建订单
+```java
+@Service
+public class MiaoshaReceiver {
+    @Autowired
+    GoodsService goodsService;
+
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    MiaoshaService miaoshaService;
+
+    private static Logger log = LoggerFactory.getLogger(MiaoshaMQConfig.class);
+
+    @RabbitListener(queues = MQConfig.MIAOSHA_QUEUE)
+    public void maishaReceive(String message){
+        log.info("receive message:"+message);
+        MiaoshaMessage msg = RedisService.stringToBean(message, MiaoshaMessage.class);
+        long goodsId = msg.getGoodsId();
+        MiaoshaUser user = msg.getUser();
+        // 判断真的库存
+        GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+        int stock = goods.getStockCount();
+        if(stock <= 0) {
+            return;
+        }
+        // 判断秒杀过没有
+        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+        if(order != null) {
+            return;
+        }
+        //1.减库存 2.下订单 3.写入秒杀订单 这三步是一个是事务
+        OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
+    }
+}
+```
+
+客户端轮询
+goods_detail.htm详情页中的秒杀按钮
+```html
+<button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="doMiaosha()">立即秒杀</button>
+```
+
+添加排队 并用get轮询
+```js
+function doMiaosha(){
+    $.ajax({
+        url:"/miaosha/do_miaosha",
+        type:"POST",
+        data:{
+            goodsId:$("#goodsId").val(),
+        },
+        success:function(data){
+            if(data.code == 0){
+                // 成功 排队中 轮询
+                getMiaoshaResult($("#goodsId").val());
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        error:function(){
+            layer.msg("客户端请求有误");
+        }
+    });
+    }
+function getMiaoshaResult(goodsId) {
+    // 加载中的动画
+    g_showLoading();
+    $.ajax({
+        url: "/miaosha/result",
+        type: "GET",
+        data: {
+            goodsId: $("#goodsId").val(),
+        },
+        success: function (data) {
+            //成功
+            if (data.code == 0) {
+                var result = data.data;
+                // -1失败
+                if (result < 0) {
+                    layer.msg("对不起，秒杀失败");
+                } //0排队继续轮询
+                else if (result == 0) {
+                    setTimeout(function () {
+                        getMiaoshaResult(goodsId);
+                    }, 50);
+                } // 成功返回订单id
+                else {
+                    layer.confirm("恭喜你，秒杀成功！查看订单？", {btn: ["确定", "取消"]},
+                        function () {
+                            window.location.href = "/order_detail.htm?orderId=" + result;
+                        },
+                        function () {
+                            layer.closeAll();
+                        });
+                }
+            } else {
+                layer.msg(data.msg);
+            }
+        },
+        error: function () {layer.msg("客户端请求有误");}
+    });
+}
+```
+
+后台添加轮询接口
+MiaoshaController
+```java
+// 客户端轮询接口 判断是否秒杀到
+/*
+ orderID:成功
+ -1：秒杀失败
+ 0：排队中
+ */
+@RequestMapping(value = "/result",method = RequestMethod.GET)
+@ResponseBody
+public Result<Long> miaoshaResult(Model model,MiaoshaUser user,@RequestParam("goodsId")long goodsId){
+    model.addAttribute("user",user);
+    if(user == null){
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+    long rst = miaoshaService.getMiaoshaResult(user.getId(),goodsId);
+    return Result.success(rst);
+}
+```
+
+用redis添加标记防止一直轮询 区分失败和排队
+```java
+public class MiaoshaKey extends BasePrefix{
+
+    private MiaoshaKey(String prefix) {
+        super(prefix);
+    }
+    public static MiaoshaKey isGoodsOver = new MiaoshaKey("go");
+```
+
+轮询方法：
+```java
+@Service
+public class MiaoshaService {
+    @Autowired
+    GoodsService goodsService;
+
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    RedisService redisService;
+
+    @Transactional
+    public OrderInfo miaosha(MiaoshaUser user, GoodVo goods) {
+
+        //减库存 下订单 写入秒杀订单
+        boolean success = goodsService.reduceStock(goods);
+        if(success){
+            //order_info maiosha_order
+            return orderService.createOrder(user, goods);
+        }else{
+            // 如果失败  说明秒杀失败 做标记 防止一直轮询
+            setGoodsOver(goods.getId());
+            return null;
+        }
+    }
+
+    public long getMiaoshaResult(Long userid, long goodsId) {
+        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(userid, goodsId);
+        if(order != null){
+            return order.getOrderId();
+        }else{
+            // 判断是排队中还是失败了
+            boolean isOver = getGoodsOver(goodsId);
+            if(isOver) {
+                return -1;
+            }else {
+                return 0;
+            }
+        }
+    }
+
+    private void setGoodsOver(Long goodsId) {
+        redisService.set(MiaoshaKey.isGoodsOver, ""+goodsId, true);
+    }
+
+    private boolean getGoodsOver(long goodsId) {
+        return redisService.exists(MiaoshaKey.isGoodsOver, ""+goodsId);
+    }
+}
+```
+
+清理redis
+```shell
+redis-cli
+flushdb
+keys *
+```
+
+测试秒杀ok
+
+### 优化点 减少预减库存
+

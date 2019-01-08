@@ -4,6 +4,71 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### 时间序列分解
+R语言自带的AirPassengers
+标记离群点
+STL 根据稳健回归对时间序列数据进行分解，然后进行离群点识别。
+STL： 基于局部甲醛回归的季节性趋势分解。
+
+```R
+> f<-stl(AirPassengers,"periodic",robust=TRUE)
+> plot(f,set.pars=NULL)
+> AirPassengers
+> (outliers <- which(f$weights<1e-8))
+> 
+> > op<-par(mar=c(0,4,0,3),oma=c(5,0,4,0),mfcol=c(4,1))
+> plot(f,set.pars=NULL)
+> sts<-f$time.series
+> points(time(sts)[outliers],0.8*sts[,"remainder"][outliers],pch="x",col="red")
+> par(op)
+> > (outliers <- which(f$weights<1e-8)
+```
+
+![rstl.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rstl.jpg)
+
+
+时间序列分解为 趋势、季节性、周期性以及不规则。
+
+季节性成分
+```r
+> plot(AirPassengers)
+> apts<-ts(AirPassengers,frequency=12)
+> f <- decompose(apts)
+> f$figure
+ [1] -24.748737 -36.188131  -2.241162  -8.036616  -4.506313  35.402778
+ [7]  63.830808  62.823232  16.520202 -20.642677 -53.593434 -28.619949
+> plot(f$figure,type="b",xaxt="n",xlab="")
+> monthNames<-months(ISOdate(2011,1:12,1))
+> axis(1,at=1:12,labels=monthNames,las=2)
+```
+
+![rseason.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rseason.jpg)
+
+分解 原图  趋势、季节性 不规则
+```r
+plot(f)
+```
+![rdecompose.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rdecompose.jpg)
+
+### 常用时间序列模型ARMA ARIMA
+
+ARMA模型拟合： 许仙表示致信度水平95%下的误差边界
+![rarma.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/rarma.jpg)
+
+
+```r
+> fit<-arima(AirPassengers,order=c(1,0,0),list(order=c(2,1,0),period=12))
+> fore<-predict(fit,n.ahead=24)
+> U<-fore$pred+2*fore$se
+> L<-fore$pred-2*fore$se
+> ts.plot(AirPassengers,fore$pred,U,L,col=c(1,2,4,4),lty=c(1,1,2,2))
+> legend("topleft",c("Actual","Forecast","Error Bounds(95% confidence)"),col=c(1,2,4),lty=c(1,1,2))
+```
+
+### 时间序列聚类 DTW动态时间规整距离
+
+
+
 ### foursquare category js提取
 
 ```js
