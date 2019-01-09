@@ -45,8 +45,12 @@ https://www.nowcoder.com/test/4575457/summary
 
 ### 376 最长摇摆子序列
 {% note %}
+Input: [1,7,4,9,2,5]
+Output: 6
 The first difference (if one exists) may be either positive or negative. 
 {% endnote %}
+
+
 
 ### lc300 !!!最长上升子序列 最长递增子序列
 {% note %}
@@ -57,10 +61,27 @@ Explanation: The longest increasing subsequence is [2,3,7,101], therefore the le
 
 正常解法
 ```java
-//todo
+public int lengthOfLIS(int[] nums) {
+    if(nums == null || nums.length < 1)return 0;
+    int n = nums.length;
+    int[] dp = new int[n];
+    Arrays.fill(dp,1);
+    for(int i = 1;i <n;i++){
+        for(int j = 0;j<i;j++){
+            if(nums[i] > nums[j]){
+                dp[i] = Math.max(dp[i],dp[j]+1);
+            }
+        }
+    }
+    int max = 0;
+    for(int i : dp){
+        max = Math.max(i,max);
+    }
+    return max;
+}
 ```
 
-nlogn解法
+nlogn解法!!!
 思路：单调栈，用更小的数替换掉前面比它大的数，并且长度不变，只有当这个值比栈顶大，长度才增加。
 注意len是只增不减
 ```java

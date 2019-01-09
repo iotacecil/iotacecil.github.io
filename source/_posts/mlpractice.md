@@ -4,6 +4,48 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### Kaggle 1.Home Depot Product Search Relevance 回归问题
+Home Depot Product Search Relevance
+输入数据：[product id,title,search term,description,relevance]
+relevance 1不相关，2有点相关，3相关
+测试输入["product id",title,"search term"] 求relevance 实数
+
+方法
+1.将title，term，description都提取词干
+```python
+def str_stemmer(s):
+    return " ".join([stemmer.stem(word) for word in s.lower().split()])
+df_all['search_term'] = df_all['search_term'].map(lambda x:str_stemmer(x))
+```
+2.提取特征(1)search term的单词数，（2）标题中含关键字个数 （3）描述中含关键字个数
+```python
+df_all["len_of_query"] = df_all["search_term"].map(lambda x:len(x.split())).astype(np.int64)
+df_all["peoduct_info"] = df_all["search_term"]+"\t"+df_all["product_title"]+"\t"+df_all["product_description"]
+## serach term 的每个单词出现在 title里 的个数
+def str_common_word(str1,str2):
+    return sum(int(str2.find(word)>=0) for word in str1.split())
+df_all["wor_in_title"] = df_all['peoduct_info'].map(lambda x: str_common_word(x.split('\t')[0],x.split('\t')[1]))
+```
+3.随机森林和bagging 0.48982
+```python
+## 还原训练和测试
+df_train = df_all.iloc[:num_train]
+df_test = df_all.iloc[num_train:]
+# label
+y_train = df_train['relevance'].values
+# 删掉数据集里的label
+X_train = df_train.drop(["product_uid",'id','relevance'],axis=1).values
+X_test = df_test.drop(["product_uid",'id','relevance'],axis=1).values
+rf = RandomForestRegressor(n_estimators=15, max_depth=6, random_state=0)
+clf = BaggingRegressor(rf, n_estimators=45, max_samples=0.1, random_state=25)
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+id_test = df_test['id']
+pd.DataFrame({"id": id_test, "relevance": y_pred}).to_csv('submission.csv',index=False)
+```
+
+### CountVectorizer 词袋模型
+
 ### 时间序列分解
 R语言自带的AirPassengers
 标记离群点
