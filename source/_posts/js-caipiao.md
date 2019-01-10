@@ -4,6 +4,16 @@ date: 2018-12-14 19:24:16
 tags: [js]
 category: [项目练习]
 ---
+### mongodb react
+```shell
+cnpm install -g create-react-app
+yarn config set sass-binary-site http://npm.taobao.org/mirrors/node-sass
+npm config set sass-binary-site http://npm.taobao.org/mirrors/node-sass
+yarn create react-app reactlearn
+```
+
+
+
 ### 目录结构
 ```
 /app

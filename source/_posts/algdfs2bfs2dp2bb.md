@@ -5,6 +5,36 @@ tags:
 categories: [算法备忘]
 ---
 
+Bellman-Ford复杂度O（VE）还可以用于检查负圈。全部初始化为0而不是INF。如果第n（N个顶点的循环)还更新了 有负圈
+![bellman.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bellman.jpg)
+
+Dijkstra：
+Bellman 用d[i]+edge（i,j)更新d[j]但是d[i]并不是最短，所以浪费。
+思想：找到最短距离已经确定的点d[i]，从它出发更新i的所有邻点。
+堆中存储的是 每个顶点当前最短距离。
+ 
+
+### POJ3255
+有P条路，有N个点，问从1到N的次短路径是多少。
+AC
+
+### POJ 3723 征兵
+有N女，M男，如果N和M之间有关系，则先招了其中一个，招另一个就可以少付d钱。
+最大权森林问题。
+
+### POJ 3169 排列牛
+输入 N头牛 关系好ML的2行，关系不好的MD1行。
+关系好的牛1和牛3最大距离不能超过10.
+关系差的牛2和牛3最小距离不能小于3.
+4 2 1
+1 3 10
+2 4 20
+2 3 3
+
+dp[n]是第n头牛的位置
+按编号顺序排列牛所以d[i+1]>=d[i]
+![pojniu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pojniu.jpg)
+
 
 
 ### 49 异位词(相同字符)分组
