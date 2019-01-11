@@ -51,6 +51,71 @@ A 的最优分组是[9], [1, 2, 3], [9]. 得到的分数是 9 + (1 + 2 + 3) / 3 
 我们也可以把 A 分成[9, 1], [2], [3, 9].
 这样的分组得到的分数为 5 + 2 + 6 = 13, 但不是最大值.
 
+### 805 数组分成2个平均值相等的部分
+
+
+### !!!698 将数组分成sum相等的k份 不用连续
+>Input: nums = [4, 3, 2, 3, 5, 2, 1], k = 4
+Output: True
+Explanation: It's possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
+
+//todo DP
+https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+
+1.计算出数组的sum看能不能整除k，同时得到了每组的subsum
+2.如果数组中有一个元素>subsum则不可能。最大的几个==subsum，自己分成一组。
+3.对前面都比subsum小的元素回溯将数字放入group数组。变成 Combination tum target
+```java
+public boolean canPartitionKSubsets(int[] nums, int k) {
+    // 1. 求每组应该的平均值
+    int sum = 0;
+    for(int num : nums){
+        sum += num;
+    }
+    if(sum % k != 0){
+        return false;
+    }
+    int subsum = sum/k;
+    // 2. 等于平均值的单独分成一组
+    Arrays.sort(nums);
+    int n = nums.length;
+    int idx = n-1;
+    if(nums[n-1] > subsum)return false;
+    for(int i = n-1;i >= 0;i--){
+        if(nums[i] < subsum)break;
+        if(nums[i] == subsum){
+            k--;
+            idx--;
+        }
+    }
+    // 3. 回溯分组
+    int[] group = new int[k];
+    return back(group,idx,subsum,nums);
+}
+private boolean back(int[] group,int idx,int target,int[] nums){
+    // 全部都分组好了
+    if(idx < 0){
+        return true;
+    }
+         // 试着放到每一组
+    for(int i = 0;i < group.length;i++){
+        if(group[i] + nums[idx] > target){
+            continue;
+        }
+        group[i] += nums[idx];
+        if(back(group,idx-1,target,nums)){
+            return true;
+        }
+        group[i] -= nums[idx];
+        // 重要剪枝30%->100% 
+        // 如果这个桶已经装过了，减到0了，用其他数字装这个桶的结果其实已经在别的桶实现过了
+        // 一个桶肯定有一个数字，减到没有数字其他桶也没可能了，直接退出
+        if (group[i] == 0) break;
+
+    }
+    return false;
+}
+```
 
 
 ### 最大值为k的不重叠子数组的长度和？??
@@ -266,68 +331,7 @@ $\frac{k! k^{n-1}}{k^n}$
 4. 连起来就是最小的de Bruijin sequence
 
 
-### !!!698 将数组分成sum相等的k份 不用连续
->Input: nums = [4, 3, 2, 3, 5, 2, 1], k = 4
-Output: True
-Explanation: It's possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
 
-//todo DP
-https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
-
-1.计算出数组的sum看能不能整除k，同时得到了每组的subsum
-2.如果数组中有一个元素>subsum则不可能。最大的几个==subsum，自己分成一组。
-3.对前面都比subsum小的元素回溯将数字放入group数组。变成 Combination tum target
-```java
-public boolean canPartitionKSubsets(int[] nums, int k) {
-    // 1. 求每组应该的平均值
-    int sum = 0;
-    for(int num : nums){
-        sum += num;
-    }
-    if(sum % k != 0){
-        return false;
-    }
-    int subsum = sum/k;
-    // 2. 等于平均值的单独分成一组
-    Arrays.sort(nums);
-    int n = nums.length;
-    int idx = n-1;
-    if(nums[n-1] > subsum)return false;
-    for(int i = n-1;i >= 0;i--){
-        if(nums[i] < subsum)break;
-        if(nums[i] == subsum){
-            k--;
-            idx--;
-        }
-    }
-    // 3. 回溯分组
-    int[] group = new int[k];
-    return back(group,idx,subsum,nums);
-}
-private boolean back(int[] group,int idx,int target,int[] nums){
-    // 全部都分组好了
-    if(idx < 0){
-        return true;
-    }
-         // 试着放到每一组
-    for(int i = 0;i < group.length;i++){
-        if(group[i] + nums[idx] > target){
-            continue;
-        }
-        group[i] += nums[idx];
-        if(back(group,idx-1,target,nums)){
-            return true;
-        }
-        group[i] -= nums[idx];
-        // 重要剪枝30%->100% 
-        // 如果这个桶已经装过了，减到0了，用其他数字装这个桶的结果其实已经在别的桶实现过了
-        // 一个桶肯定有一个数字，减到没有数字其他桶也没可能了，直接退出
-        if (group[i] == 0) break;
-
-    }
-    return false;
-}
-```
 
 ### !!!152 最大子数组乘积 保留当前值之前的最大积和最小积
 >输入: [-2,0,-1]
