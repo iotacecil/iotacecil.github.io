@@ -4,8 +4,89 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 线程安全的单例模式
+
+#### 懒汉模式 延迟加载`double check` 
+
+`volatile`并且防止重排序.当volatile的共享变量发生写操作，会写回系统内存，并使其他cpu的缓存失效重新读。
+```java
+public class LazySingletonDoubleCheck {
+
+    // 用volatile可以禁止2，3重排序 用缓存一致性协议
+    public volatile static LazySingletonDoubleCheck instance = null;
+
+    private LazySingletonDoubleCheck() {
+    }
+
+    public  static LazySingletonDoubleCheck getInstance(){
+        if(instance == null){
+            synchronized (LazySingletonDoubleCheck.class){
+                if(instance == null){
+                    instance = new LazySingletonDoubleCheck();
+                    // new其实包括3步
+                    // 1 分配内存
+                    // 2 初始化对象
+                    // 3 将那块内存空间 赋值给instance
+                    // 对于单线程 2，3互换不会改变执行结果，所以多线程里可以重排序
+                    // 多线程 第一个线程先3 instance有了内存空间不是null 但还没初始化
+                    //       第二个线程访问并返回
+
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+2.静态内部类
+```java
+public class StaticInnerClassSingle {
+    private StaticInnerClassSingle(){
+    }
+    // jvm会加初始化索 同步多个线程对一个class的初始化
+    // 类初始化 哪个线程先拿到innerclass的初始化锁
+    private static class InnerClass{
+        private static StaticInnerClassSingle instance = new StaticInnerClassSingle();
+    }
+    public static StaticInnerClassSingle getInstance(){
+        return InnerClass.instance;
+    }
+}
+```
 
 
+#### 饿汉式
+```java
+public class HungrySingleton {
+    private final static HungrySingleton instance;
+    static{
+        instance = new HungrySingleton();
+    }
+    private HungrySingleton(){}
+    public static HungrySingleton getInstance(){
+        return instance;
+    }
+}
+```
+
+#### 序列化之后的单例 读取后还是原来的对象
+```java
+public class HungrySingleton implements Serializable{
+    private final static HungrySingleton instance;
+    static{
+        instance = new HungrySingleton();
+    }
+    private HungrySingleton(){}
+    public static HungrySingleton getInstance(){
+        return instance;
+    }
+    // 添加这个，ObjectInputStream的readObject会通过反射调用
+    private Object readResolve(){
+        return instance;
+    }
+}
+```
 
 ### Promise
 例子:FTPClientUtil
