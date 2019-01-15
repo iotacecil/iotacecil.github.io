@@ -4,6 +4,12 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### `toArray(new String[0])`
+官方推荐写法
+https://docs.oracle.com/javase/tutorial/collections/interfaces/collection.html
+Otherwise, a new array is allocated with the runtime type of the specified array and the size of this list.
+如果指定的数组能容纳该 collection，则返回包含此 collection 元素的数组。否则，将根据指定数组的运行时类型和此 collection 的大小分配一个新数组。这里给的参数的数组长度是0，因此就会返回包含此 collection 中所有元素的数组，并且返回数组的类型与指定数组的运行时类型相同。
+
 ### BinarySearch
 `Arrays.binarySearch()` method returns index of the search key, if it is contained in the array, 
 else it returns (-(insertion point) - 1).

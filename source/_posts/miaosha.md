@@ -3810,7 +3810,7 @@ public Result<OrderInfo> list(MiaoshaUser user,
 2.请求出队，生成订单，减少库存。
 3.客户端轮询是否秒杀成功。
 
-框架会回调，实现的方法。
+启动时将库存加载到redis：框架会回调，实现的方法。
 ```java
 @Controller
 @RequestMapping("/miaosha")
@@ -4114,4 +4114,126 @@ keys *
 测试秒杀ok
 
 ### 优化点 减少预减库存
+预减库存code review：
+```java
+// redis中预减库存
+Long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
+if(stock < 0){
+    return Result.error(CodeMsg.MIAO_SHA_OVER);
+}
+```
+如果库存本来有10个，有13个请求，库存减少成负的的操作都没必要访问redis。
+
+内存标记，减少redis访问
+```java
+// 结束标记
+private Map<Long,Boolean> localOverMap = new HashMap<Long, Boolean>();
+
+// 系统初始化 读数据库库存，写到redis
+@Override
+public void afterPropertiesSet() throws Exception {
+    List<GoodVo> goodslist = goodsService.listGoodsVo();
+    if(goodslist!=null){
+        for(GoodVo goods : goodslist){
+            redisService.set(GoodsKey.getMiaoshaGoodsStock,""+goods.getId() ,goods.getStockCount() );
+            localOverMap.put(goods.getId(),  false);
+        }
+    }
+}
+
+@Autowired
+MiaoshaService miaoshaService;
+@RequestMapping(value = "/do_miaosha",method = RequestMethod.POST)
+@ResponseBody
+public Result<Integer> list(MiaoshaUser user,
+                   @RequestParam("goodsId")long goodsId) {
+   //...
+    // 判断商品结束标记
+    Boolean over = localOverMap.get(goodsId);
+    if(over){
+        return Result.error(CodeMsg.MIAO_SHA_OVER);
+    }
+
+    // redis中预减库存
+    Long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
+    if(stock < 0){
+        localOverMap.put(goodsId, true);
+        return Result.error(CodeMsg.MIAO_SHA_OVER);
+    }
+    //...
+}
+```
+
+
+重置操作：
+根据前缀删除redis
+```java
+public boolean delete(KeyPrefix prefix) {
+    if(prefix == null) {
+        return false;
+    }
+    List<String> keys = scanKeys(prefix.getPrefix());
+    if(keys==null || keys.size() <= 0) {
+        return true;
+    }
+    Jedis jedis = null;
+    try {
+        jedis = jedisPool.getResource();
+        jedis.del(keys.toArray(new String[0]));
+        return true;
+    } catch (final Exception e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        if(jedis != null) {
+            jedis.close();
+        }
+    }
+}
+public List<String> scanKeys(String key) {
+    Jedis jedis = null;
+    try {
+        jedis = jedisPool.getResource();
+        List<String> keys = new ArrayList<String>();
+        String cursor = "0";
+        ScanParams sp = new ScanParams();
+        sp.match("*"+key+"*");
+        sp.count(100);
+        do{
+            ScanResult<String> ret = jedis.scan(cursor, sp);
+            List<String> result = ret.getResult();
+            if(result!=null && result.size() > 0){
+                keys.addAll(result);
+            }
+            //再处理cursor
+            cursor = ret.getStringCursor();
+        }while(!cursor.equals("0"));
+        return keys;
+    } finally {
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+}
+```
+
+...
+
+压测QPS->2000
+
+nginx 横向扩展（反向代理proxy_pass)配置多台服务器
+负载均衡 weight
+nginx 缓存
+
+LVS负载均衡
+
+### 安全优化
+
+#### 秒杀接口地址隐藏
+请求服务端地址
+
+
+#### 数学公式验证码
+
+#### 接口限流
 
