@@ -3,6 +3,8 @@ title: need2Learn
 date: 2018-09-07 19:02:14
 tags:
 ---
+### 有用的知识整理
+https://mp.weixin.qq.com/s/7mnsUxUhUMynZXKQZ3rh2w
 
 ### todoList
 1. Octotree 分屏翻译chrome插件
