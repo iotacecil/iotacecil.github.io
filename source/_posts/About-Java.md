@@ -4,6 +4,82 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 0.1奇偶性
+用==1 判断会有负数的问题，正确写法
+```java
+boolean isOdd(int i){
+    i % 2 !=0;
+    (i & 1) != 0
+}
+```
+
+### 0.3长整除
+```java
+final long MICROS_PER_DAY = 24 * 60 * 60 *1000 *1000;
+final long MICROS_PER_DAY3 = 24l * 60 * 60 *1000 *1000;
+final long MICROS_PER_DAY2 = 86400000000l;
+final long MILLIS_PER_DAY = 24*60*60*1000;
+System.out.println(MICROS_PER_DAY/MILLIS_PER_DAY);//5
+System.out.println(MICROS_PER_DAY3/MILLIS_PER_DAY);//1000
+System.out.println(MICROS_PER_DAY2/MILLIS_PER_DAY);//1000
+```
+
+第一行报错：计算溢出。计算过程完全以int运算执行的，完成运算后才提升到long。
+
+### 0.4 long字面量 一定要用大写L
+```java
+System.out.println(12345+5432l);//会看成1
+```
+
+### 0.5 十六进制int扩展成long的高位
+```java
+//cafebabe （第33位丢了）
+System.out.println(Long.toHexString(0x100000000L+0xcafebabe));
+```
+左边是long 右边是32位int，十六进制32位int ，c的高位为1，负数，扩展为补1（F）
+```java
+//0xcafebabe被提升成0xffffffffcafebabe 等于十进制数‭-889275714‬
+System.out.println(Long.toHexString(0xcafebabe));
+    1111111 
+  0xffffffffcafebabeL 
++ 0x0000000100000000L 
+--------------------- 
+  0x00000000cafebabeL 
+```
+
+改正
+```java
+System.out.println(Long.toHexString(0x100000000L+0xcafebabeL));
+```
+
+### 0.6 转型的零扩展和符号位扩展
+```java
+//65536
+System.out.println((int)(char)(byte)-1);
+```
+1 转byte是只取低8位1111 1111 还是-1，
+2 byte->（符号扩展）char是无符号16位 扩展成16个1
+3 char扩展都是零扩展 就是16个1 65536
+没有符号位扩展：
+```java
+int i = c & 0xffff; 
+```
+如果byte转char不希望符号位扩展
+```java
+char c = (char) (b & 0xff); 
+```
+
+### 0.7
+
+
+### 创建泛型数组
+从List分`ArrayList`和`LinkedList`根据结构，根据元素的类型又可以分`String/Int`的ArrayList，乘法组合数量太多。
+
+`(E[]) new Object[n];`
+
+E 到底是什么属于对象的一部分 不是类的一部分
+`new Node<Integer>(value);`
+
 ### BinarySearch
 `Arrays.binarySearch()` method returns index of the search key, if it is contained in the array, 
 else it returns (-(insertion point) - 1).
