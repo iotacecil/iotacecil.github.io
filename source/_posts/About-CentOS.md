@@ -4,6 +4,13 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### 虚拟机jupyter notebook
+建立ssh通道
+```sh
+ssh root@10.1.18.15 -L 127.0.0.1:1234:127.0.0.1:8888 
+```
+
+
 ### 权限 7种文件类型（-文件 d目录 l软链接）
 `-rw-r--r--`10位权限 （r4 w2 x1 读写执行权限 -没有权限 rwx7r-x5r-x5）设计成2的幂次因为不会歧义
 `rw-`u所有者权限

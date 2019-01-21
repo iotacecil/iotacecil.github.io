@@ -4,6 +4,38 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### 获得素数向量
+```python
+def sieve_eratosthenes(n):
+    primes = [False, False] + [True for i in range(n-1)]
+    p = 2
+    while (p * p <= n):
+        if (primes[p] == True):
+            for i in range(p * 2, n + 1, p):
+                primes[i] = False
+        p += 1
+    return primes
+primes = np.array(sieve_eratosthenes(nb_cities)).astype(int)
+## 不是素数 +10%
+penalization = 0.1 * (1 - primes) + 1
+```
+
+### 2xn向量 n个点坐标，求i到其他n-1个点的距离
+```python
+## 所有城市到到当前城市的距离
+def dist_matrix(coords, i):
+    begin = np.array([df.X[i], df.Y[i]])[:, np.newaxis]
+    print(begin.shape)
+    mat =  coords - begin
+    return np.linalg.norm(mat, ord=2, axis=0)    
+```
+
+### pandas array根据index筛选，找到最小的标号
+```python
+def get_next_city(dist, avail):
+    return avail[np.argmin(dist[avail])]
+```
+
 ### Kaggle 1.Home Depot Product Search Relevance 回归问题
 Home Depot Product Search Relevance
 输入数据：[product id,title,search term,description,relevance]
