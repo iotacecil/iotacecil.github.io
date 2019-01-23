@@ -25,3 +25,9 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 
 
 6.数据库最左匹配原理
+
+7.http https
+![httphttps.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httphttps.jpg)
+
+8.进程间通信
+套接字，管道，消息队列，共享内存，信号量。
