@@ -185,7 +185,7 @@ public static long qlist(int k,int a,int x,int b,int y){
 }
 ```
 
-### lt168 吹气球 lc312
+### lc312 lt168 吹气球
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
 >in [4, 1, 5, 10]
 out 返回 270
@@ -199,40 +199,10 @@ nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
 
 ![lc312.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc312.jpg)
 
-超时的回溯法，n!，删掉这个继续删或者换一个继续删
-```java
-public int maxCoins(int[] nums) {
-  List<Integer> list = new ArrayList<>();
-    for(int i =0;i<nums.length;i++){
-        list.add(nums[i]);
-    }
-    return findMax(list);
-}
+回溯法超时ac
 
-public int findMax(List<Integer> nums) {
-    if(nums.size() == 1)return nums.get(0);
-    if(nums.size() == 0)return 0;
-    int max = 0;
-    for(int i =0;i<nums.size();i++){
-        int c = nums.get(i);
-        int l = i - 1<0?1:nums.get(i-1);
-        int r = i + 1>=nums.size()?1:nums.get(i+1);
-        int cur = nums.get(i)*l*r;
-        nums.remove(i);
-        max = Math.max(max,cur+findMax(nums) );
-        // 回溯
-        nums.add(i,c);
-    }
-    return max;
-}
-```
+1[4,1,5,10]1 如果最后是1[1]1,上一次只有两种可能性1[4,1]1,1[1,5]1。
 
-考虑最后一个删除的数作为分割，左边和右边都是子问题。
-注意：原问题加padding，子问题也加padding。
-注意递归终止条件：
-当`1 3 1 5 8 1` 用8 拆分成`1 3 1 5 8`和`8 1` + `5*8*1`
-当只有2个数字的子问题时，已经上一层计算过了 返回0(?是不是这样理解？)
-记忆化left和right的子问题
 ```java
 public int maxCoins(int[] iNums) {
     int[] nums = new int[iNums.length + 2];

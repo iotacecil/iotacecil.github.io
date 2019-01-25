@@ -101,6 +101,7 @@ class MyCalendar {
 
 ### 布隆过滤器 url去重
 https://blog.csdn.net/v_july_v/article/details/6685894
+https://link.springer.com/article/10.1007/s11036-011-0349-8#Sec9
 
 ### 746. Design Tic-Tac-Toe 井字棋
 

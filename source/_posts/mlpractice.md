@@ -4,6 +4,38 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### 估计总体的协方差矩阵（数据散点的形状估计）
+https://scikit-learn.org/stable/modules/covariance.html
+
+#### Empirical covariance 就是最大似然估计。只要数据量比特征量大很多
+最大似然估计是总体协方差矩阵的无偏估计。（More precisely, the Maximum Likelihood Estimator of a sample is an unbiased estimator of the corresponding population’s covariance matrix.）
+
+注意：训练集和测试集样本需要居中（均值一样）：
+参数assume_centered=False 则测试集应该和训练集有相同的平均值向量。
+如果assume_centered=True 应该由用户居中。
+`sklearn.preprocessing.StandardScaler（copy = True，with_mean = True，with_std = True ）` with_mean 默认为True，在缩放之前对数据分布居中处理。
+
+缺点：
+可能因为数学原因不可逆？
+empirical covariance matrix cannot be inverted for numerical reasons.
+
+#### Shrunk Covariance
+减小特征的最大值最小值的比率 或者对特征加上一个l2最大似然估计惩罚值。可以设定一个参数 bias/variance 参数 收缩是一个凸变换。
+
+#### Ledoit-Wolf shrinkage
+用来计算优化的收敛系数（上面的bias/variance）（？）
+
+####  Oracle Approximating Shrinkage
+比上面有更小的MSE
+
+#### Sparse inverse covariance
+用协方差矩阵的逆矩阵 如果两个条件独立则为0，用于学习，方差选择。
+在数据集小的情况下，大概只有特征数量那么大或者更小，这个比Shrunk Covariance好。
+而且这个能回复非对角数据。用GraphicalLasso 和GraphicalLassoCV 优化学习。
+
+#### Robust Covariance Estimation
+
+
 ### 获得素数向量
 ```python
 def sieve_eratosthenes(n):
