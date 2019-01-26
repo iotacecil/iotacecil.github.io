@@ -4,6 +4,55 @@ date: 2018-03-09 23:45:20
 tags: [alg]
 categories: [机器学习和数据处理python备忘]
 ---
+### crowdedness 预测
+
+#### 随机森林
+https://www.kaggle.com/nsrose7224/random-forest-regressor-accuracy-0-91
+
+时间戳居中到中午12点
+```python
+def time_to_seconds(time):
+    return time.hour * 3600 + time.minute * 60 + time.second
+noon = time_to_seconds(time(12, 0, 0))
+df.timestamp = df.timestamp.apply(lambda t: abs(noon - t))
+```
+
+时间序列星期/月/小时 编码
+月变成1-12列，小时变成0-23列，星期变成0-6列
+```python
+columns = ["day_of_week", "month", "hour"]
+df = pd.get_dummies(df, columns=columns)
+```
+
+切分数据集，全部归一化
+```python
+# Extract the training and test data
+data = df.values
+X = data[:, 1:]  # all rows, no label
+y = data[:, 0]  # all rows, label only
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+# Scale the data to be between -1 and 1
+scaler = StandardScaler()
+scaler.fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+```
+
+随机森林调参 并可视化R2
+```python
+estimators = np.arange(10, 200, 10)
+scores = []
+for n in estimators:
+    model.set_params(n_estimators=n)
+    model.fit(X_train, y_train)
+    scores.append(model.score(X_test, y_test))
+plt.title("Effect of n_estimators")
+plt.xlabel("n_estimator")
+plt.ylabel("score")
+plt.plot(estimators, scores)
+```
+
+
 ### 估计总体的协方差矩阵（数据散点的形状估计）
 https://scikit-learn.org/stable/modules/covariance.html
 
@@ -68,45 +117,7 @@ def get_next_city(dist, avail):
     return avail[np.argmin(dist[avail])]
 ```
 
-### Kaggle 1.Home Depot Product Search Relevance 回归问题
-Home Depot Product Search Relevance
-输入数据：[product id,title,search term,description,relevance]
-relevance 1不相关，2有点相关，3相关
-测试输入["product id",title,"search term"] 求relevance 实数
 
-方法
-1.将title，term，description都提取词干
-```python
-def str_stemmer(s):
-    return " ".join([stemmer.stem(word) for word in s.lower().split()])
-df_all['search_term'] = df_all['search_term'].map(lambda x:str_stemmer(x))
-```
-2.提取特征(1)search term的单词数，（2）标题中含关键字个数 （3）描述中含关键字个数
-```python
-df_all["len_of_query"] = df_all["search_term"].map(lambda x:len(x.split())).astype(np.int64)
-df_all["peoduct_info"] = df_all["search_term"]+"\t"+df_all["product_title"]+"\t"+df_all["product_description"]
-## serach term 的每个单词出现在 title里 的个数
-def str_common_word(str1,str2):
-    return sum(int(str2.find(word)>=0) for word in str1.split())
-df_all["wor_in_title"] = df_all['peoduct_info'].map(lambda x: str_common_word(x.split('\t')[0],x.split('\t')[1]))
-```
-3.随机森林和bagging 0.48982
-```python
-## 还原训练和测试
-df_train = df_all.iloc[:num_train]
-df_test = df_all.iloc[num_train:]
-# label
-y_train = df_train['relevance'].values
-# 删掉数据集里的label
-X_train = df_train.drop(["product_uid",'id','relevance'],axis=1).values
-X_test = df_test.drop(["product_uid",'id','relevance'],axis=1).values
-rf = RandomForestRegressor(n_estimators=15, max_depth=6, random_state=0)
-clf = BaggingRegressor(rf, n_estimators=45, max_samples=0.1, random_state=25)
-clf.fit(X_train, y_train)
-y_pred = clf.predict(X_test)
-id_test = df_test['id']
-pd.DataFrame({"id": id_test, "relevance": y_pred}).to_csv('submission.csv',index=False)
-```
 
 ### CountVectorizer 词袋模型
 

@@ -4,6 +4,18 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### git 撤销commit
+```shell
+$ git log
+commit 919a7ff091d04c9e4ec74124650ab82f2e68632f (HEAD -> master)
+Author: cloudPC <iotacecil@gmail.com>
+Date:   Sat Jan 26 16:59:27 2019 +0800
+
+    添加readme
+git reset --hard 7fc926f89eb823608e9b63a6472120c7291d3457
+```
+
+
 ### 虚拟机jupyter notebook
 建立ssh通道
 ```sh
