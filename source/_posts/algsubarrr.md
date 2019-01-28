@@ -4,6 +4,93 @@ date: 2018-10-28 11:17:19
 tags: [alg]
 categories: [算法备忘]
 ---
+### !!337 不可以抢父节点抢过的房子
+不可以抢父节点抢过的房子 ，注意不是层
+{% note %}
+输入: [2,1,3,null,4]
+```
+     2
+    / \
+   1   3
+  / \    
+null 4   
+```
+输出: 7
+解释: 小偷一晚能够盗取的最高金额 = 3 + 4 = 7.
+{% endnote%}
+
+思路：每个node保存偷/不偷的最大值。如果这个点不偷，最大值是左偷/不偷最大值+右偷/不偷最大值。如果这个点偷，是这个点+左右不偷的最大值。 
+
+1ms 99%
+```java
+public int rob(TreeNode root) {
+    int[] res = robSub(root);
+    return Math.max(res[0], res[1]);
+}
+private int[] robSub(TreeNode root) {
+    if (root == null) return new int[2];
+    
+    int[] left = robSub(root.left);
+    int[] right = robSub(root.right);
+    int[] res = new int[2];
+
+    res[0] = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+    res[1] = root.val + left[0] + right[0];
+    
+    return res;
+}
+```
+
+加上`Map<TreeNode,Integer>` 12ms 36%
+```java
+public int rob(TreeNode root) {
+    if(root == null )return 0;
+    int sum = root.val;
+
+    if(root.left!= null)
+        sum += rob(root.left.left) + rob(root.left.right);
+
+    if(root.right!= null)
+        sum += rob(root.right.left) + rob(root.right.right);
+
+    return Math.max(sum, rob(root.left) + rob(root.right));
+}
+```
+
+### ！309 只能卖掉再买，卖掉股票之后的一天不能买
+{% note %}
+Input: [1,2,3,0,2]
+Output: 3 
+Explanation: transactions = [buy, sell, cooldown, buy, sell]
+{% endnote %}
+You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times)  意思是可以不买不卖。
+思路：一共有3买，卖，不动种操作，记录每天以这三个状态结尾的最大值。
+![lc304.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc304.jpg)
+
+```java
+public int maxProfit(int[] prices) {
+    if(prices == null ||prices.length <1)return 0;
+   int n = prices.length;
+    int[] buy = new int[n];
+    int[] rest = new int[n];
+    int[] sell = new int[n];
+    buy[0] = - prices[0];
+    rest[0] = 0;
+    sell[0] = 0;
+    for(int i =1;i<n;i++){
+        // 不操作 或者 已经休息了1次了再买
+        buy[i] = Math.max(buy[i-1],rest[i-1] - prices[i]);
+        // 只能前一次是卖
+        rest[i] = sell[i-1];
+        // 前一次是买 或者不操作
+        sell[i] = Math.max(sell[i-1],buy[i-1] + prices[i]);
+    }
+    return sell[n-1];
+}
+```
+
+
+
 ### lt 45 最大子数组差
 >给出数组[1, 2, -3, 1]，返回 6
 找出两个不重叠的子数组A和B，使两个子数组和的差的绝对值|SUM(A) - SUM(B)|最大
