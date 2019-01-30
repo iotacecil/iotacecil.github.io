@@ -1,5 +1,5 @@
 ---
-title: js彩票项目
+title: reactlearn
 date: 2018-12-14 19:24:16
 tags: [js]
 category: [项目练习]
@@ -116,15 +116,160 @@ app.get('/data',function (req,res) {
 })
 ```
 
-### antd
+### antd 和组件
 ```shell
 cnpm install antd-mobile
 # 按需加载
 yarn eject
 npm install babel-plugin-import --save-dev
 ```
+在 package.json babel加上
+```js
+"plugins": [
+      ["import", { "libraryName": "antd-mobile",  "style": "css" }]
+    ]
+```
+可以删掉import css
+
+报错 
+```shell
+cnpm install react-dev-utils --save-dev
+```
+
+坑：
+react里class名字要大写，小写tag会被当成html标签
+```js
+class One extends Component{
+  constructor(props){
+    super(props)
+      this.state = {
+      arr:["a","b","c"]
+      }
+      // this.additem = this.additem.bind(this)
+  }
+// additem = () =>{
+
+  additem(){
+    this.setState(
+        {
+            arr:[...this.state.arr,"aaa"+Math.random()]
+        }
+    )
+  }
+
+  render(){
+    const boss2 = "boss1"
+      return (
+          <div>
+          <ul>
+              {this.state.arr.map(v=>{
+             return <li key={v}>{v}</li>
+              })}
+          </ul>
+          <h2>boss1:,{this.props.boss1}</h2>
+            <button onClick={()=>this.additem()}>add users</button>
+          </div>
+      )
+  }
+}
+```
+
+`<button onClick={this.additem}>add users</button>` 方法不能带小括号
+方法的this绑定在构造函数里,或者用箭头函数
+`<button onClick={()=>this.additem()}>add users</button>`
 
 
+
+### redux和异步redux
+
+```js
+// index.redux.js
+const ADD = "add"
+const REMOVE ="remove"
+export function counter(state=0,action) {
+    switch (action.type){
+        case ADD:
+            return state+1
+        case REMOVE:
+            return state-1
+        default:
+            return 10
+    }
+}
+
+export function add() {
+    return {type:ADD}
+}
+
+export function remove() {
+    return {type:REMOVE}
+}
+```
+
+```js
+//index.js
+import {counter,add,remove} from "./index.redux";
+
+const store = createStore(counter)
+function render() {
+    ReactDOM.render(<App store={store} add={add} remove={remove}/>, document.getElementById('root'));
+
+}
+render()
+store.subscribe(render)
+```
+
+```js
+//App.js
+class App extends Component {
+  render() {
+      const store = this.props.store
+      const num = store.getState()
+      const add = this.props.add
+      const remove = this.props.remove
+    return (
+        <div>
+            <h1>现在state是{num}</h1>
+            <Button onClick={()=>store.dispatch(add())}>添加</Button>
+            <Button onClick={()=>store.dispatch(remove())}>删除</Button>
+        </div>
+    );
+  }
+}
+```
+
+thunk中间件
+```shell
+cnpm install redux-thunk --save
+```
+
+```js
+//index.js
+import { createStore,applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
+const store = createStore(counter,applyMiddleware(thunk))
+function render() {
+    ReactDOM.render(<App store={store} add={add}  addAsync={addAsync}  remove={remove}/>, document.getElementById('root'));
+}
+```
+
+```js
+// index.redux.js
+export function addAsync(){
+    return dispatch=>{
+        setTimeout(()=>{
+            dispatch(add())
+        },2000)
+    }
+}
+```
+
+```js
+const addAsync = this.props.addAsync  
+<Button onClick={()=>store.dispatch(addAsync())}>异步</Button>
+```
+
+---
 
 ### 目录结构
 ```
