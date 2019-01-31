@@ -33,6 +33,46 @@ Sorted String Tables：
 
 ### 341 多层List迭代器
 
+### 981 key-timestamp-value
+{% note %}
+输入：inputs = ["TimeMap","set","get","get","set","get","get"], inputs = [[],["foo","bar",1],["foo",1],["foo",3],["foo","bar2",4],["foo",4],["foo",5]]
+输出：[null,null,"bar","bar",null,"bar2","bar2"]
+解释：  
+TimeMap kv;   
+kv.set("foo", "bar", 1); // 存储键 "foo" 和值 "bar" 以及时间戳 timestamp = 1   
+kv.get("foo", 1);  // 输出 "bar"   
+kv.get("foo", 3); // 输出 "bar" 因为在时间戳 3 和时间戳 2 处没有对应 "foo" 的值，所以唯一的值位于时间戳 1 处（即 "bar"）   
+kv.set("foo", "bar2", 4);   
+kv.get("foo", 4); // 输出 "bar2"   
+kv.get("foo", 5); // 输出 "bar2"   
+{% endnote %}
+
+```java
+class TimeMap {
+    Map<String,TreeMap<Integer,String>> map;
+    /** Initialize your data structure here. */
+    public TimeMap() {
+        map = new HashMap<>();
+    }
+    
+    public void set(String key, String value, int timestamp) {
+        if(!map.containsKey(key)){
+            map.put(key,new TreeMap<>());
+        }
+        map.get(key).put(timestamp,value);
+    }
+    
+    public String get(String key, int timestamp) {
+        if(!map.containsKey(key)){
+            return "";
+        }
+        TreeMap<Integer,String> tree = map.get(key);
+        Integer pre = tree.floorKey(timestamp);
+        return pre== null?"":tree.get(pre);
+    }
+}
+```
+
 ### 729 Calendar1 时间区间有无重叠
 1.`List<int[]>`
 两个区间是否重叠`s1<e2&&e1>s2`
