@@ -29,6 +29,11 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+熟练度
+https://docs.qq.com/sheet/DUGZ6cEtrUFJsSGxP
+
+有序矩阵nxn个复杂度O(n)
+
 在100-999这900个自然数中,若将组成这个数的三个数字认为是三条线段的长度,那么是三条线段组成一个等腰三角形(包括等边)的共有()个.
 先考虑等边三角形情况 
 则a=b=c=1，2，3，4，5，6，7，8，9，此时n有9个 
@@ -42,6 +47,262 @@ https://www.nowcoder.com/test/4575457/summary
 同理，若a，c是腰时，c也有52个，b，c是腰时也有52个 
 所以n共有9+3×52=165个 
 
+
+
+### !!97 s1和s2是否交错组成s3
+[Solution](https://leetcode.com/problems/interleaving-string/solution/)
+状态dp[len1][len2]表示s1长度len1，s2长度len2出现在s3[len1+len2]中
+任意位置s3[i]一定是由s1[m],s2[n]组成的
+```
+s1="aa  bc   c"
+s2="  db  bca"
+s3="aadbbcbcac"
+```
+dp行表示当前len1的匹配情况下，不断扩展len2与s3的匹配情况
+dp列表示当前len2的匹配情况下，不断扩展len1与s3的匹配情况
+```
+遍历s3的位置：
+  遍历s1的长度，s3+1-s1为s2的长度
+    如果s3当前位置与s2当前匹配&&dp[][s2-1]匹配了
+       ||s3当前与s1当前匹配并且dp[s1-1][s2]:
+         dp[s1][s2] = true
+```
+可以用滚动数组降成1维
+
+？？？按背包问题递减更新 99%
+ct的意义
+动态规划中的ct
+```java
+public boolean isInterleave(String s1, String s2, String s3) {
+    if (s1.length() + s2.length() != s3.length()) return false;
+    boolean[] dp = new boolean[s1.length() + 1];
+    dp[0] = true;
+    for (int i = 0; i < s3.length(); i++) {
+        boolean ct = true;
+        for (int j = Math.min(s1.length(), i + 1); j > 0; j--) {
+            if (dp[j] && (i-j)<s2.length() &&s2.charAt(i - j) == s3.charAt(i)) ct = false;
+            else if (dp[j - 1] && s1.charAt(j- 1) == s3.charAt(i)){
+                dp[j] = true;
+                ct = false;
+            }else dp[j] = false;
+        }
+        if(dp[0]&&i<s2.length()&&s2.charAt(i)==s3.charAt(i))ct = false;
+        if(ct)return false;
+    }
+    return true;
+}
+```
+
+### 添加最少字符回文串 区间dp
+可以在任意位置添加,
+{% note %}
+
+{% endnote %}
+
+### 最尾添加回文串 Manacher 最右回文边界
+https://www.nowcoder.com/questionTerminal/cfa3338372964151b19e7716e19987ac
+{% note %}
+对于一个字符串，我们想通过添加字符的方式使得新的字符串整体变成回文串，但是只能在原串的结尾添加字符，请返回在结尾添加的最短字符串。
+"ab"
+返回“a"  （aba）
+{% endnote %}
+思路：最后n位一定是回文的。
+例如 abc 12321 ，将前面不是回文的逆序加到后面。
+加#是为了偶回文。
+abc12321
+
+n^2的方法, 这个串反转，原串后n位和反转串n前位相同就是回文串。
+
+### ?409 string中字符组成回文串的最大长度
+1.开int[128]，直接用int[char]++计数
+2.奇数-1变偶数&(~1)
+3.判断奇数(&1)>0
+
+
+### 516 最长回文子序列
+
+
+### ！5 最长回文串 lt893
+
+http://windliang.cc/2018/08/05/leetCode-5-Longest-Palindromic-Substring/
+!!反转做法不行:abcxyzcba -> abczyxcba ->相同的abc并不是回文!! 不能用LCS
+“cba”是“abc”的 reversed copy 但是可以再加一步检查下标
+中心扩展法：回文的中心有奇数：n个，偶数：n-1个位置
+会输出靠后的abab->输出bab
+```java
+int len;
+public String longestPalindrome(String s) {
+    if(s==null||s.length()<2)return s;
+    len = s.length();
+    int start = 0;int end = 0;
+    // int max = 0;
+    for(int i =0;i<len;i++){
+        //"babad" ->"bab" ->i =1 len = 3   
+        //"cbbd" -> "bb" ->i=1 len = 2
+        int len1 = help(s,i,i);//奇数扩展
+        int len2 = help(s,i,i+1);//偶数扩展
+        int max = Math.max(len1,len2);
+        if(max>end-start){
+            start = i - (max-1)/2;//去掉中间那个左边长度的一半
+            end = i+max/2;//右边长度的一半
+        }//end-start= i+max/2-i+(max-1)/2 = max-1/2
+    }
+    return s.substring(start,end+1);     
+    
+}
+private int help(String s,int left,int right){
+    while(left>=0&&right<len&&s.charAt(left)==s.charAt(right)){
+        left--;
+        right++;
+        
+    }
+    return right-left-1;
+}
+```
+
+#### Manacher's 算法 O(n) 并不理解
+https://algs4.cs.princeton.edu/53substring/Manacher.java.html
+1回文半径数组，2最右回文串右边界，3最右回文右边界的最左回文中心
+情况1：回文右边界初始为-1，当前扩展位置是0，不在右边界里面，暴力扩，右边界到0位置。
+情况2：回文右边界在当前扩展位置右边。
+情况2.1：当前位置i的对称点i'的半径在当前最右中心的LR里面，则可以复制对称点的半径
+情况2.2：对称点i'的半径超过L 则半径就是i到R
+情况2.3：对称点i'的半径和L一样，i要扩展
+![mach.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mach.jpg)
+
+73%
+```java
+public String longestPalindrome2(String s) {
+    StringBuilder sb = new StringBuilder("^#");
+    for (int i = 0; i !=s.length() ; i++)
+        sb.append(s.charAt(i)).append("#");
+    sb.append("$");
+    final int N = sb.length();
+    int[] p = new int[N];
+    //id是长度为mx的回文串的中心
+    int id = 0,mx = 0;
+    int maxLen = 0,maxId= 0;
+    for (int i = 1; i <N-1 ; i++) {
+        // i在右边界里面, i'的回文半径长度 和 i到当前最右边界的距离 哪个小取哪个
+        // 如果i在右边界上或者i在右边界右边，不用扩展的区域只有自己
+        p[i] = mx > i ? Math.min(p[2 * id - i], mx - i ) : 1;
+        // 以i为中心扩展
+        while(sb.charAt(i+p[i])==sb.charAt(i-p[i]))
+            p[i]++;
+        // 更新最右边界和其中心
+        if(mx < i+p[i]){
+            mx = i+p[i];
+            id = i;
+        }
+        // 全局最大回文串和其中心
+        if(maxLen < p[i]){
+            maxLen = p[i];
+            maxId = i;
+        }
+    }
+    int start = (maxId-maxLen)/2;
+    return s.substring(start,start+maxLen-1);
+}
+```
+
+### 572 A树中是否有B作为一个完整的子树
+{% note %}
+Example 1:
+Given tree s:
+```
+     3
+    / \
+   4   5
+  / \
+ 1   2
+```
+Given tree t:
+```
+   4 
+  / \
+ 1   2
+```
+True
+{% endnote %}
+
+思路1：序列化之后indexOf  (kmp) 注意1每个value用“#”前后分割，2区分左右null
+```java
+private String tree2string(TreeNode root){
+    StringBuilder sb = new StringBuilder();
+    sb.append("#"+root.val+"#");
+    if(root.left==null)sb.append("l_");
+    else
+        sb.append(tree2string(root.left));
+    if(root.right==null)sb.append("r_");
+    else
+        sb.append(tree2string(root.right));
+    return sb.toString();
+}
+```
+
+方法2：递归
+```java
+ public boolean isSubtree(TreeNode s, TreeNode t) {
+        if(s == null)return false;
+        // 以根为子树相等
+        //左子树或者右子树 为子树相等
+        if(isSame(s,t))return true;
+        return isSubtree(s.left,t) || isSubtree(s.right,t);   
+    }
+    // 两棵树是不是每个节点都相等
+    private boolean isSame(TreeNode s,TreeNode t){
+        if(s == null && t == null)return true;
+        if(s == null || t == null)return false;
+        if(s.val != t.val)return false;
+        return isSame(s.left,t.left) && isSame(s.right,t.right);
+    }
+```
+
+### KMP算法 两个子串
+https://www.nowcoder.com/questionTerminal/abf0f0d6b4c44676b44e66060286c45a?orderByHotValue=0&commentTags=Python
+{% fold %}
+KMP算法核心，在S中indexOf(T),对T建立next数组
+1:next数组的用法
+![kmp1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kmp1.jpg)
+2:next数组构建
+![kmp2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kmp2.jpg)
+
+{% endfold %}
+
+
+{% note %}
+给定一个字符串s, 请计算输出含有连续两个s作为子串的最短字符串。 注意两个s可能有重叠部分。例如,"ababa"含有两个"aba". 
+{% endnote %}
+
+```java
+String in = sc.next();
+int n = in.length();
+int[] next = new int[n+1];
+Arrays.fill(next,0);
+next[0] = -1;
+next[1] = 0;
+for (int i = 2; i < n+1 ; i++) {
+    char pre = in.charAt(i-1);
+    // 前面多少位和开头一样 后退的位置(个数正好是从头数+1个的位置）
+    // abcab next[b] = 2
+    int k = next[i-1];
+    // 中止 如果 abc k = 0 c和开头的a还是不等，k=-1不能往前匹配了next[i]=0下一个
+    while (k!=-1){
+        if(in.charAt(k) == pre){
+            next[i] = next[i-1]+1;
+            break;
+        }
+        //如果 ab dd abc | ab dd abd
+        // k = next[b] = 6 c和d不等，
+        // next[c] = 2 d和d相等，所以最后的next[d] = 3
+        k = next[k];
+    }
+}
+// 求完最后一个位置的前缀后缀长度 abcdabc next = 3
+// abcdabc
+//     abc dabc
+System.out.println(in+in.substring(next[in.length()]));
+```
 
 ### 376 最长摇摆子序列
 {% note %}
@@ -810,49 +1071,7 @@ def isPrime(n):
 ---
 
 
-### !!97 s1和s2是否交错组成s3
-[Solution](https://leetcode.com/problems/interleaving-string/solution/)
-状态dp[len1][len2]表示s1长度len1，s2长度len2出现在s3[len1+len2]中
-任意位置s3[i]一定是由s1[m],s2[n]组成的
-```
-s1="aa  bc   c"
-s2="  db  bca"
-s3="aadbbcbcac"
-```
-dp行表示当前len1的匹配情况下，不断扩展len2与s3的匹配情况
-dp列表示当前len2的匹配情况下，不断扩展len1与s3的匹配情况
-```
-遍历s3的位置：
-  遍历s1的长度，s3+1-s1为s2的长度
-    如果s3当前位置与s2当前匹配&&dp[][s2-1]匹配了
-       ||s3当前与s1当前匹配并且dp[s1-1][s2]:
-         dp[s1][s2] = true
-```
-可以用滚动数组降成1维
 
-？？？按背包问题递减更新 99%
-ct的意义
-动态规划中的ct
-```java
-public boolean isInterleave(String s1, String s2, String s3) {
-    if (s1.length() + s2.length() != s3.length()) return false;
-    boolean[] dp = new boolean[s1.length() + 1];
-    dp[0] = true;
-    for (int i = 0; i < s3.length(); i++) {
-        boolean ct = true;
-        for (int j = Math.min(s1.length(), i + 1); j > 0; j--) {
-            if (dp[j] && (i-j)<s2.length() &&s2.charAt(i - j) == s3.charAt(i)) ct = false;
-            else if (dp[j - 1] && s1.charAt(j- 1) == s3.charAt(i)){
-                dp[j] = true;
-                ct = false;
-            }else dp[j] = false;
-        }
-        if(dp[0]&&i<s2.length()&&s2.charAt(i)==s3.charAt(i))ct = false;
-        if(ct)return false;
-    }
-    return true;
-}
-```
 
 
 
@@ -1424,7 +1643,7 @@ public int minTotalDistance(int[][] grid) {
 
 
 
-### 132 pattern
+### 456 !132 pattern
 > Input: [3, 1, 4, 2]
 Output: True
 Explanation: There is a 132 pattern in the sequence: [1, 4, 2].
@@ -1432,7 +1651,7 @@ Explanation: There is a 132 pattern in the sequence: [1, 4, 2].
 正确做法：栈
 
 
-方法1：用一个for循环找到当前之前的min
+方法1：用一个for循环找到当前i之前的min,从[i+1,n)找符合的两个数字
 ```java
 public boolean find132pattern(int[] nums) {
     int n = nums.length;
@@ -2304,11 +2523,6 @@ int bulbSwitch(int n) {
 
 
 
-
-
-
-
-### 516 最长回文子序列
 
 ### Rearrange a string
 https://www.geeksforgeeks.org/rearrange-a-string-so-that-all-same-characters-become-at-least-d-distance-away/
@@ -3891,29 +4105,6 @@ Output: 99
 {% endnote %}
 
 三进制不进位加法
-
-
-### 141链表环检测
-空间O(1) 快慢指针：快指针走2步，慢指针走一步，当快指针遇到慢指针
-最坏情况，快指针和慢指针相差环长q -1步
-{% fold cpp练习 %}
-```java
-class Solution{
-    public:
-    bool hasCycle(ListNode *head) {
-        auto slow = head;
-        auto fast = head;
-        while(fast){
-            if(!fast->next)return false;
-            fast = fast->next->next;
-            slow = slow->next;
-            if(fast == slow) return true;
-        }
-        return false;
-    }
-};
-```
-{% endfold %}
 
 
 

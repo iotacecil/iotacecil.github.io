@@ -436,6 +436,7 @@ static final class MapEntry<K,V> implements Map.Entry<K,V> {
         final K key; // non-null
         V val;       // non-null
         final ConcurrentHashMap<K,V> map;
+}
 ```
 
 V是volatile 线程同步

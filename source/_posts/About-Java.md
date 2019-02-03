@@ -4,6 +4,74 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 用静态工厂方法替代构造器
+```java
+public static Boolean valueOf(boolean b){
+    return b?Boolean.TRUE:Boolean.FALSE;
+}
+```
+1.对于特定参数的构造函数返回的特定对象，能有*名字*.（而不是用不同参数类型顺序的构造器）
+2.缓存调用重复对象。实例受控类。客户端就能用==不用equals。
+3.API隐藏实现类。Collections的集合接口有32个便利实现，不可修改、同步集合等。这些对象的类都是私有类。`EnumSet` 没有公有构造器，只有静态工厂方法，根据元素大小返回两种类。
+```java
+public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) {
+    Enum<?>[] universe = getUniverse(elementType);
+    if (universe == null)
+        throw new ClassCastException(elementType + " not an enum");
+
+    if (universe.length <= 64)
+        return new RegularEnumSet<>(elementType, universe);
+    else
+        return new JumboEnumSet<>(elementType, universe);
+}
+```
+
+服务提供者框架：
+http://www.importnew.com/27291.html
+JDBC：
+服务Service接口：Connection 提供者实现的
+```java
+public interface Connection  extends Wrapper, AutoCloseable {
+    Statement createStatement() throws SQLException;
+    PreparedStatement prepareStatement(String sql)
+        throws SQLException;
+    void commit() throws SQLException;
+    void setAutoCommit(boolean autoCommit) throws SQLException;
+}
+```
+
+
+提供者Provider注册API方法 DriverManager.registerDriver
+
+服务访问API方法：DriverManger.get Connection
+
+可选：服务提供者接口:Driver
+
+静态广场方法的管用名：`valeOf`,`of`,`getInstance`, `newInstance`,`getType`,`newTye`
+
+
+### 多个构造器参数
+重叠构造器：重新1、2、3参数的构造方法，不可行。
+```java
+public class NurtitionFacts{
+    private final int servingSize; // require
+    private final int fat;        //  optional
+    private final int sodium;     //  optional
+}
+```
+
+JavaBeans模式：无参构造器创建对象，然后setter方法。缺点：线程不安全。构造过程分成了几个调用，构造过程中JavaBeans可能不一致，而且不能做成变成不可变对象。
+```java
+private final int ser = -1;
+// 不行
+public void setSer(int ser){
+    this.ser = 1;
+}
+```
+Builder模式：
+
+
+
 ### 0.1奇偶性
 用==1 判断会有负数的问题，正确写法
 ```java

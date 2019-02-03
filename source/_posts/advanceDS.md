@@ -4,6 +4,8 @@ date: 2018-09-01 15:29:18
 tags: [并查集,Trie,线段树]
 categories: [算法备忘]
 ---
+### Merkle tree
+
 ### 归并树
 每个节点对应区间排好序的结果 O(nlogn)建立树
 

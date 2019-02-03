@@ -140,40 +140,7 @@ return head;
 ### 92反转从m到n的链表 一趟扫描
 
 
-### 206反转链表
-空间是n
-```java
-public ListNode reverseList(ListNode head) {
-    if(head == null || head.next == null)return head;
-    ListNode second = reverseList(head.next);
-    // 注意 不是second.next 因为second永远是最后一个 5，5->4,5->4->3
-    // 而head.next肯定是second链表的最后一个非null的5,4,3..
-    head.next.next = head;
-    head.next = null;
-    return second;
-}
-```
----
-迭代空间是1：
-三个指针pre,cur,next
-```java
-Npublic ListNode reverseList(ListNode head) {
-    if(head == null || head.next == null)return head;
-    ListNode prev = null;
-    ListNode curr = head;
-    while(curr != null){
-        ListNode next = curr.next;
-        curr.next = prev;
-        prev = curr;
-        curr = next;
-    }
- 
-    return prev;
-}
-```
 
-
-转成栈浪费空间并且代码复杂
 
 ### 二叉树
 
