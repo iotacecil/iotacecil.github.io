@@ -1,3 +1,4 @@
-cd D:\iotacecil.github.io\pushBlog
+call  %~d0
+call cd %~dp0
 _pushBlog.bat
 pause

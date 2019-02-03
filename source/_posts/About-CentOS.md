@@ -4,6 +4,12 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### coscmd
+```sh
+coscmd  config -a  k -s k -b  iota-1254040271 -r ap-shanghai
+```
+
+
 ### git 撤销commit
 ```shell
 $ git log
@@ -102,7 +108,7 @@ $ cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 `make install`
 `glpsol --math orienteering_problem.mod --data a8.dat --output "./out"`
 
-` kill -s 9 1827`
+`kill -s 9 1827`
 
 Linux终止一个前台进程可能用到的命令和操作:
 正确答案: B   你的答案: A (错误)
