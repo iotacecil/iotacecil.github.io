@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="归并树每个节点对应区间排好序的结果 O(nlogn)建立树 连通分量无向图的连通分量可以用并查集（集合）来做并查集：[12,3,4,5]-&amp;gt;[6,2,3,4,5]位置存放的是根节点有向图的连通分量Kosaraju 算法4p3801.将图的边反向,dfs得到逆后序2.按逆后序列dfs原图 cnt++ tarjan https://algs4.cs.princeton.edu/42digraph">
+<meta name="description" content="Merkle tree归并树每个节点对应区间排好序的结果 O(nlogn)建立树 连通分量无向图的连通分量可以用并查集（集合）来做并查集：[12,3,4,5]-&amp;gt;[6,2,3,4,5]位置存放的是根节点有向图的连通分量Kosaraju 算法4p3801.将图的边反向,dfs得到逆后序2.按逆后序列dfs原图 cnt++ tarjan https://algs4.cs.princeton.ed">
 <meta name="keywords" content="并查集,Trie,线段树">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构模板&amp;模板题">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/09/01/advanceDS/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="归并树每个节点对应区间排好序的结果 O(nlogn)建立树 连通分量无向图的连通分量可以用并查集（集合）来做并查集：[12,3,4,5]-&amp;gt;[6,2,3,4,5]位置存放的是根节点有向图的连通分量Kosaraju 算法4p3801.将图的边反向,dfs得到逆后序2.按逆后序列dfs原图 cnt++ tarjan https://algs4.cs.princeton.edu/42digraph">
+<meta property="og:description" content="Merkle tree归并树每个节点对应区间排好序的结果 O(nlogn)建立树 连通分量无向图的连通分量可以用并查集（集合）来做并查集：[12,3,4,5]-&amp;gt;[6,2,3,4,5]位置存放的是根节点有向图的连通分量Kosaraju 算法4p3801.将图的边反向,dfs得到逆后序2.按逆后序列dfs原图 cnt++ tarjan https://algs4.cs.princeton.ed">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/connect.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/unionfind.jpg">
@@ -102,10 +102,10 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/sqrtrm.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/segmentquery.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/segmentminquery.jpg">
-<meta property="og:updated_time" content="2018-11-27T10:19:58.920Z">
+<meta property="og:updated_time" content="2019-02-04T01:25:00.156Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构模板&amp;模板题">
-<meta name="twitter:description" content="归并树每个节点对应区间排好序的结果 O(nlogn)建立树 连通分量无向图的连通分量可以用并查集（集合）来做并查集：[12,3,4,5]-&amp;gt;[6,2,3,4,5]位置存放的是根节点有向图的连通分量Kosaraju 算法4p3801.将图的边反向,dfs得到逆后序2.按逆后序列dfs原图 cnt++ tarjan https://algs4.cs.princeton.edu/42digraph">
+<meta name="twitter:description" content="Merkle tree归并树每个节点对应区间排好序的结果 O(nlogn)建立树 连通分量无向图的连通分量可以用并查集（集合）来做并查集：[12,3,4,5]-&amp;gt;[6,2,3,4,5]位置存放的是根节点有向图的连通分量Kosaraju 算法4p3801.将图的边反向,dfs得到逆后序2.按逆后序列dfs原图 cnt++ tarjan https://algs4.cs.princeton.ed">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/connect.jpg">
 
 
@@ -352,8 +352,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-11-27T18:19:58+08:00">
-                2018-11-27
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-04T09:25:00+08:00">
+                2019-02-04
               </time>
             
           </span>
@@ -408,7 +408,7 @@
       
 
       
-        <h3 id="归并树"><a href="#归并树" class="headerlink" title="归并树"></a>归并树</h3><p>每个节点对应区间排好序的结果 O(nlogn)建立树</p>
+        <h3 id="Merkle-tree"><a href="#Merkle-tree" class="headerlink" title="Merkle tree"></a>Merkle tree</h3><h3 id="归并树"><a href="#归并树" class="headerlink" title="归并树"></a>归并树</h3><p>每个节点对应区间排好序的结果 O(nlogn)建立树</p>
 <h3 id="连通分量"><a href="#连通分量" class="headerlink" title="连通分量"></a>连通分量</h3><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/connect.jpg" alt="connect.jpg"><br>无向图的连通分量可以用并查集（集合）来做<br>并查集：[12,3,4,5]-&gt;[6,2,3,4,5]位置存放的是根节点<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/unionfind.jpg" alt="unionfind.jpg"><br>有向图的连通分量Kosaraju 算法4p380<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kosaraju.jpg" alt="kosaraju.jpg"><br>1.将图的边反向,dfs得到逆后序<br>2.按逆后序列dfs原图 cnt++<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kosaraju2.jpg" alt="kosaraju2.jpg"></p>
 <p><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm" target="_blank" rel="noopener">tarjan</a></p>
 <p><a href="https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html" target="_blank" rel="noopener">https://algs4.cs.princeton.edu/42digraph/TarjanSCC.java.html</a><br>和拓扑排序一样Tarjan算法的运行效率也比Kosaraju算法高30%左右<br>每个顶点都被访问了一次，且只进出了一次堆栈，每条边也只被访问了一次，所以该算法的时间复杂度为O(N+M)。</p>
@@ -623,7 +623,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -678,7 +678,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#归并树"><span class="nav-number">1.</span> <span class="nav-text">归并树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连通分量"><span class="nav-number">2.</span> <span class="nav-text">连通分量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#130-围棋-用并查集"><span class="nav-number">3.</span> <span class="nav-text">130 围棋 用并查集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lc200-number-of-islands-岛屿-水坑"><span class="nav-number">4.</span> <span class="nav-text">! lc200 number of islands 岛屿 水坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#！684-多余的连接（构成环）"><span class="nav-number">5.</span> <span class="nav-text">！684 多余的连接（构成环）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#547-互相是朋友的圈子有几个"><span class="nav-number">6.</span> <span class="nav-text">547 互相是朋友的圈子有几个</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#208-Trie树-前缀树"><span class="nav-number">7.</span> <span class="nav-text">208 Trie树 前缀树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#211-单词查询-匹配Trie"><span class="nav-number">8.</span> <span class="nav-text">211 单词查询.匹配Trie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#677计算单词前缀的累积和"><span class="nav-number">8.1.</span> <span class="nav-text">677计算单词前缀的累积和</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RMQ"><span class="nav-number">9.</span> <span class="nav-text">RMQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线段树Segment-Tree"><span class="nav-number">10.</span> <span class="nav-text">线段树Segment Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lc307-sum线段树"><span class="nav-number">11.</span> <span class="nav-text">lc307 sum线段树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Binary-Index-Tree-Fenwick-Tree-34-106ms"><span class="nav-number">11.1.</span> <span class="nav-text">Binary Index Tree/ Fenwick Tree 34% 106ms</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区间和查询305-修改307"><span class="nav-number">12.</span> <span class="nav-text">区间和查询305+修改307</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sqrt-n-复杂度拆分成sqrt份和-8-308ms"><span class="nav-number">12.1.</span> <span class="nav-text">sqrt(n)复杂度拆分成sqrt份和 8% 308ms</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt206区间求和"><span class="nav-number">13.</span> <span class="nav-text">lt206区间求和</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lt201按区间构造线段树"><span class="nav-number">13.1.</span> <span class="nav-text">lt201按区间构造线段树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lt439-对数组构造max线段树"><span class="nav-number">13.2.</span> <span class="nav-text">lt439 对数组构造max线段树</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#202-max线段树查询"><span class="nav-number">14.</span> <span class="nav-text">202 max线段树查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt203-线段树更新"><span class="nav-number">15.</span> <span class="nav-text">lt203 线段树更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt205区间最小数LogN-查询时间"><span class="nav-number">16.</span> <span class="nav-text">lt205区间最小数LogN 查询时间</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Merkle-tree"><span class="nav-number">1.</span> <span class="nav-text">Merkle tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#归并树"><span class="nav-number">2.</span> <span class="nav-text">归并树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连通分量"><span class="nav-number">3.</span> <span class="nav-text">连通分量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#130-围棋-用并查集"><span class="nav-number">4.</span> <span class="nav-text">130 围棋 用并查集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lc200-number-of-islands-岛屿-水坑"><span class="nav-number">5.</span> <span class="nav-text">! lc200 number of islands 岛屿 水坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#！684-多余的连接（构成环）"><span class="nav-number">6.</span> <span class="nav-text">！684 多余的连接（构成环）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#547-互相是朋友的圈子有几个"><span class="nav-number">7.</span> <span class="nav-text">547 互相是朋友的圈子有几个</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#208-Trie树-前缀树"><span class="nav-number">8.</span> <span class="nav-text">208 Trie树 前缀树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#211-单词查询-匹配Trie"><span class="nav-number">9.</span> <span class="nav-text">211 单词查询.匹配Trie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#677计算单词前缀的累积和"><span class="nav-number">9.1.</span> <span class="nav-text">677计算单词前缀的累积和</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RMQ"><span class="nav-number">10.</span> <span class="nav-text">RMQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线段树Segment-Tree"><span class="nav-number">11.</span> <span class="nav-text">线段树Segment Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lc307-sum线段树"><span class="nav-number">12.</span> <span class="nav-text">lc307 sum线段树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Binary-Index-Tree-Fenwick-Tree-34-106ms"><span class="nav-number">12.1.</span> <span class="nav-text">Binary Index Tree/ Fenwick Tree 34% 106ms</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区间和查询305-修改307"><span class="nav-number">13.</span> <span class="nav-text">区间和查询305+修改307</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sqrt-n-复杂度拆分成sqrt份和-8-308ms"><span class="nav-number">13.1.</span> <span class="nav-text">sqrt(n)复杂度拆分成sqrt份和 8% 308ms</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt206区间求和"><span class="nav-number">14.</span> <span class="nav-text">lt206区间求和</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lt201按区间构造线段树"><span class="nav-number">14.1.</span> <span class="nav-text">lt201按区间构造线段树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lt439-对数组构造max线段树"><span class="nav-number">14.2.</span> <span class="nav-text">lt439 对数组构造max线段树</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#202-max线段树查询"><span class="nav-number">15.</span> <span class="nav-text">202 max线段树查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt203-线段树更新"><span class="nav-number">16.</span> <span class="nav-text">lt203 线段树更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt205区间最小数LogN-查询时间"><span class="nav-number">17.</span> <span class="nav-text">lt205区间最小数LogN 查询时间</span></a></li></ol></div>
             
 
           </div>

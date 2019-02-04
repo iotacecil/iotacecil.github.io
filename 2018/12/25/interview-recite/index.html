@@ -89,7 +89,7 @@
 <meta property="og:description" content="https://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=21.泛型的好处 2.数据库索引INNDB的好处 3.CAS算法原理？优缺点？ 4.为什么是三次握手信道不可靠, 但是通信双发需要就某个问题达成一致. 而要解决这个问题, 三次通信是理论上的最小值。 为了防止已失效的连接请求报文段突然又传送到了">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httphttps.jpg">
-<meta property="og:updated_time" content="2019-01-23T12:35:41.214Z">
+<meta property="og:updated_time" content="2019-02-04T01:25:00.488Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=21.泛型的好处 2.数据库索引INNDB的好处 3.CAS算法原理？优缺点？ 4.为什么是三次握手信道不可靠, 但是通信双发需要就某个问题达成一致. 而要解决这个问题, 三次通信是理论上的最小值。 为了防止已失效的连接请求报文段突然又传送到了">
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-01-23T20:35:41+08:00">
-                2019-01-23
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-04T09:25:00+08:00">
+                2019-02-04
               </time>
             
           </span>
@@ -378,10 +378,13 @@
 <p>3.CAS算法原理？优缺点？</p>
 <p>4.为什么是三次握手<br>信道不可靠, 但是通信双发需要就某个问题达成一致. 而要解决这个问题, 三次通信是理论上的最小值。</p>
 <p>为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误。<br>如果A发送2个建立链接给B，第一个没丢只是滞留了，如果不第三次握手只要B同意连接就建立了。<br>如果B以为连接已经建立了，就一直等A。所以需要A再确认。</p>
-<p>5.为什么四次分手<br>由于TCP连接是全双工的，因此每个方向都必须单独进行关闭。<br>是当一方完成它的数据发送任务后就能发送一个FIN来终止这个方向的连接。<br>收到一个 FIN只意味着这一方向上没有数据流动，一个TCP连接在收到一个FIN后仍能发送数据。首先进行关闭的一方将执行主动关闭，而另一方执行被动关闭。</p>
+<p>5.为什么四次分手<br>1)由于TCP连接是全双工的，因此每个方向都必须单独进行关闭。<br>当一方完成它的数据发送任务后就能发送一个FIN来终止这个方向的连接。<br>收到一个 FIN只意味着这一方向上没有数据流动，一个TCP连接在收到一个FIN后仍能发送数据。首先进行关闭的一方将执行主动关闭，而另一方执行被动关闭。<br>2)让本连接持续时间内所有的报文都从网络中消失，下个连接中不会出现旧的请求报文。</p>
 <p>6.数据库最左匹配原理</p>
 <p>7.http https<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httphttps.jpg" alt="httphttps.jpg"></p>
 <p>8.进程间通信<br>套接字，管道，消息队列，共享内存，信号量。</p>
+<p>9.线程池的运行流程，使用参数以及方法策略<br>运行流程：</p>
+<p>一共有5种线程池</p>
+<p>10.线程同步的方法</p>
 
       
     </div>
@@ -492,7 +495,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
