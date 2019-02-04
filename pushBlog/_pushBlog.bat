@@ -2,6 +2,7 @@ call cd ../
 call echo %cd%
 call echo %cd%
 
+call coscmd download -rs /image %cd%\static\images 
 call coscmd upload -rs %cd%\static\images /image
 call git fetch
 call git merge
