@@ -3,10 +3,6 @@ call echo %cd%
 call echo %cd%
 
 call coscmd upload -rs %cd%\static\images /image
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/hexo-edit
 call git fetch
 call git merge
 call git add .
