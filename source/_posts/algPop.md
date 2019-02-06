@@ -29,7 +29,7 @@ public ListNode swapPairs(ListNode head) {
 
 ### 42 数组存水
 {% note %}
-{% ennote %}
+{% endnote %}
 
 ### 146 LRU cache HashMap<Integer,DoubleLinkedList>
 [Cache replacement policies](https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU)
