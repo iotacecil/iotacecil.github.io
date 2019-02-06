@@ -4,6 +4,140 @@ date: 2018-10-11 11:13:55
 tags:
 categories: [算法备忘]
 ---
+熟练度
+https://docs.qq.com/sheet/DUGZ6cEtrUFJsSGxP
+
+### 24 两个一组反转链表
+{% note %}
+Given 1->2->3->4, you should return the list as 2->1->4->3.
+{% endnote %}
+
+```java
+public ListNode swapPairs(ListNode head) {
+ if(head==null||head.next==null)return head;
+    //保留第二个
+    ListNode se = head.next;
+    //第一个指向第三个，第三个也是同样修改方案返回头指针
+    head.next = swapPairs(head.next.next);
+    //第二个指向第一个
+    se.next = head;
+    //返回第二个当作头指针
+    return se;
+}
+```
+
+
+### 42 数组存水
+{% note %}
+{% ennote %}
+
+### 146 LRU cache HashMap<Integer,DoubleLinkedList>
+[Cache replacement policies](https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU)
+least recently used cache最近最少使用缓存
+java:LinkedHashMap:
+https://docs.oracle.com/javase/8/docs/api/java/util/LinkedHashMap.html#removeEldestEntry-java.util.Map.Entry-
+
+双向链表+hashmap
+{% fold %}
+```java
+public class LRUCache {
+    //双向链表
+    class DoubleLinkedNode{
+        //和hashmap对应，用于日后扩容
+        int key;
+        int value;
+        DoubleLinkedNode pre;
+        DoubleLinkedNode next;
+    }
+    HashMap<Integer,DoubleLinkedNode> cache;
+    int capacity;
+    DoubleLinkedNode head;
+    DoubleLinkedNode tail;
+    //创建一个头节点
+
+    //链表操作：
+    //1. get/update中间的node移到链表最前面
+    private void move2head(DoubleLinkedNode node){
+        /**** star ****/
+        this.remove(node);
+        this.addNode(node);
+    }
+    //2. put1 头插
+    private void addNode(DoubleLinkedNode node){
+        node.pre = head;
+        node.next = head.next;
+
+        head.next.pre = node;
+        head.next = node;
+    }
+    //3. put2 删除节点 (1删除中间的，移到最开头 2.删除尾巴)
+    private void remove(DoubleLinkedNode node){
+        DoubleLinkedNode pre = node.pre;
+        DoubleLinkedNode next = node.next;
+        pre.next = next;
+        next.pre = pre;
+    }
+    //4.删除尾巴,
+    private int removeTail(){
+        DoubleLinkedNode pre = tail.pre;
+        this.remove(pre);
+        return  pre.key;
+
+    }
+
+    public LRUCache(int capacity) {
+        cache = new HashMap<>();
+        this.capacity = capacity;
+        //创建一个头节点
+        head = new DoubleLinkedNode();
+        head.pre = null;
+        //创建一个空尾巴
+        tail = new DoubleLinkedNode();
+        tail.next= null;
+
+        head.next = tail;
+        tail.pre = head;
+    }
+
+    public int get(int key) {
+        DoubleLinkedNode node = cache.get(key);
+        if(node == null)
+            return -1;
+        move2head(node);
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        DoubleLinkedNode node = cache.get(key);
+        if(node == null) {
+            //插入新值
+            DoubleLinkedNode newNode = new DoubleLinkedNode();
+            newNode.key = key;
+            newNode.value = value;
+            //1. 考虑容量剩余,满不满都要插入，但是满了要先删除
+            if (capacity == 0) {
+                //删除尾巴
+                int deleteKey = removeTail();
+                cache.remove(deleteKey);
+                capacity++;
+            }
+            //2. 插入队列
+            addNode(newNode);
+            //3. 加入hash
+            cache.put(key, newNode);
+            capacity--;
+        }else {
+            node.value = value;
+            move2head(node);
+        }
+
+    }
+}
+```
+{% endfold %}
+
+---
+
 ### 946 栈顺序
 {% note %}
 Input: pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
@@ -25,21 +159,28 @@ public boolean validateStackSequences(int[] pushed, int[] popped) {
 ```
 
 ### 206反转链表
+![reverselist2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/reverselist2.jpg)
+
 空间是n
 ```java
 public ListNode reverseList(ListNode head) {
     if(head == null || head.next == null)return head;
     ListNode second = reverseList(head.next);
     // 注意 不是second.next 因为second永远是最后一个 5，5->4,5->4->3
-    // 而head.next肯定是second链表的最后一个非null的5,4,3..
+    // head.next = 5,head = 4
+    // 5->4,
     head.next.next = head;
     head.next = null;
     return second;
 }
 ```
+
 ---
+
 迭代空间是1：
-三个指针pre,cur,next,用cur控制结束，一个暂存三个赋值。
+![reverselist.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/reverselist.jpg)
+
+三个指针pre（注意初始为null),cur,next(只用于cur跳跃),用cur控制结束，一个暂存三个赋值。
 ```java
 public ListNode reverseList(ListNode head) {
     if(head == null || head.next == null)return head;

@@ -192,6 +192,29 @@ return cnt;
 ```
 前一个的end在i+1的线段中，则跳过。
 
+### 986 合并交集 双指针
+{% note %}
+Input: A = `[[0,2],[5,10],[13,23],[24,25]]`, 
+       B = `[[1,5],[8,12],[15,24],[25,26]]`
+Output: `[[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]`
+{% endnote %}
+```java
+public Interval[] intervalIntersection(Interval[] A, Interval[] B) {
+      List<Interval> ans = new ArrayList<>();
+      int i = 0,j= 0;
+      while(i<A.length && j<B.length)
+      {
+          int lo = Math.max(A[i].start,B[j].start);
+          int hi = Math.min(A[i].end,B[j].end);
+          if(lo <= hi){
+              ans.add(new Interval(lo,hi));
+          }
+          if(A[i].end < B[j].end)i++;
+          else j++;
+      }
+      return ans.toArray(new Interval[0]);
+  }
+```
 
 ### lt821时间交集 区间交集 扫描线
 >seqA = [(1,2),(5,100)], seqB = [(1,6)], 返回 [(1,2),(5,6)]
@@ -225,9 +248,8 @@ public List<Interval> timeIntersection(List<Interval> seqA, List<Interval> seqB)
         events.add(new Event(i.start,Event.START));
         events.add(new Event(i.end,Event.END));
     }
-    System.out.println(events);
+   
     Collections.sort(events);
-    System.out.println(events);
 
     int count = 0;
     Integer start = null,end = null;
@@ -247,7 +269,6 @@ public List<Interval> timeIntersection(List<Interval> seqA, List<Interval> seqB)
             start = null;end = null;
         }
     }
-
     return res;
 }
 ```
