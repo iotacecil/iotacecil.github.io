@@ -1422,7 +1422,7 @@ return Result.success("登录成功");
 
 ### 7.分布式Session
 1.容器session同步 比较复杂
-2.登陆成功后生成token(sessionID)写到cookie传递给客户端，客户端每次访问上传cookie
+2.登陆成功后生成token(sessionID)写到cookie传递给客户端，客户端每次访问上传cookie,服务器根据token找到user对象
 
 新建生成ID的类
 用uuid，原生UUID带‘-’，去掉
@@ -1639,10 +1639,19 @@ public MiaoshaUser getByToken(HttpServletResponse response, String token) {
 
 在controller加response
 
-#### 判断登陆session的代码独立出来，Controller只传入一个User
+#### 判断登陆session的代码独立出来
+实现效果：每个Controller不用验证登陆，只需要注入一个User。
+相当于实现一个ArgumentResolver
 新建包config 
 `WebConfig.java`
-controller中的参数通过框架回调`WebMvcConfigurerAdapter`的`addArgumentResolvers` 赋值
+参数通过框架回调`WebMvcConfigurerAdapter`的`addArgumentResolvers` 
+
+addArgumentResolvers 是spring MVC里controller中可以带很多参数，都是框架回调这个方法给controller赋值的。
+所以只需要遍历方法的参数，如果有User这个参数，就赋值。
+
+添加一个Resolver
+
+赋值
 ```java
 @Configuration
 public class WebConfig  extends WebMvcConfigurerAdapter {
@@ -1654,11 +1663,9 @@ public class WebConfig  extends WebMvcConfigurerAdapter {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(userArgumentResolver);
     }
-    
 }
 ```
 
-实现`HandlerMethodArgumentResolver` 解析
 ```java
 @Service
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -1673,16 +1680,17 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        NativeWebRequest webRequest, 
+        WebDataBinderFactory binderFactory) throws Exception {
+        // 1. request 和 response
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
 
-        // 浏览器不同 token可能在cookie里也可能在参数里
+        // 2. 浏览器不同 token可能在cookie里也可能在参数里
         String paramToken = request.getParameter(MiaoshaUserService.COOKI_NAME_TOKEN);
         String cookieToken = getCookieValue(request, MiaoshaUserService.COOKI_NAME_TOKEN);
-        if(StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
-            return null;
-        }
+        if(StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)){return null;}
+        // 3. 根据客户端token获取user
         String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
         return userService.getByToken(response, token);
     }
@@ -1702,9 +1710,15 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         }
         return null;
     }
-
 }
 ```
+
+##### WebMvcConfigurerAdapter 已经被5弃用了（？）
+`public void configureContentNegotiation(ContentNegotiationConfigurer configurer)`内容协商：对象->Json
+`public void addInterceptors(InterceptorRegistry registry)` 拦截器
+`public void addResourceHandlers(ResourceHandlerRegistry registry)` 资源处理器
+`public void addCorsMappings(CorsRegistry registry)` 跨域
+
 
 可以删掉controller里检测登陆的代码：
 ```java
@@ -3338,9 +3352,9 @@ public OrderInfo createOrder(MiaoshaUser user, GoodVo goods) {
 
 ### 接口优化
 
-redis预减库存减少数据库访问，减库存请求入消息队列，返回排队中。
-服务端：请求出队，生成订单，减库存。
-客户端轮询秒杀是否成功。
+1）redis预减库存减少数据库访问，减库存请求入消息队列，返回排队中。
+2）服务端：请求出队，生成订单，减库存。
+3）客户端轮询秒杀是否成功。
 
 ### 安装 RabitMQ
 1.安装依赖`yum install ncurses-devel`
@@ -3804,11 +3818,13 @@ public Result<OrderInfo> list(MiaoshaUser user,
     return Result.success(orderInfo);
 }
 ```
-判断库存要读数据库，下单减库存生成订单要3次数据库。
-思路：减少数据库访问，将系统初始化时，将库存数量加载到redis。
-1.redis预减库存，如果redis里库存没有直接返回，否则放到消息队列，返回排队中。
-2.请求出队，生成订单，减少库存。
-3.客户端轮询是否秒杀成功。
+判断库存要读数据库，下单减库存update生成订单两个insert，一共要3次数据库。
+思路：
+1)减少数据库访问，将系统初始化时，将库存数量加载到redis。
+2)redis预减库存，如果redis里库存没有直接返回。
+3)否则【异步下单】放到消息队列，返回排队中。
+4)请求出队，生成订单，减少库存。
+5)客户端轮询是否秒杀成功。
 
 启动时将库存加载到redis：框架会回调，实现的方法。
 ```java
@@ -3818,6 +3834,7 @@ public class MiaoshaController implements InitializingBean{
 // 系统初始化 读数据库库存，写到redis
     @Override
     public void afterPropertiesSet() throws Exception {
+        // 查询出所有商品数量
         List<GoodVo> goodslist = goodsService.listGoodsVo();
         if(goodslist!=null){
             for(GoodVo goods : goodslist){
@@ -3832,6 +3849,7 @@ public class GoodsKey extends BasePrefix {
     }
     public static GoodsKey getGoodsList = new GoodsKey(60, "gl");
     public static GoodsKey getGoodsDetail = new GoodsKey(60, "gd");
+    // 添加 预加载库存key
     public static GoodsKey getMiaoshaGoodsStock= new GoodsKey(0, "gs");
 }
 ```
@@ -3952,7 +3970,94 @@ public class MiaoshaReceiver {
 }
 ```
 
-客户端轮询
+#### 客户端轮询
+
+##### 后台添加轮询接口
+MiaoshaController
+```java
+// 客户端轮询接口 判断是否秒杀到
+/*
+ orderID:成功
+ -1：秒杀失败
+ 0：排队中
+ */
+@RequestMapping(value = "/result",method = RequestMethod.GET)
+@ResponseBody
+public Result<Long> miaoshaResult(Model model,MiaoshaUser user,@RequestParam("goodsId")long goodsId){
+    model.addAttribute("user",user);
+    if(user == null){
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+    long rst = miaoshaService.getMiaoshaResult(user.getId(),goodsId);
+    return Result.success(rst);
+}
+```
+
+轮询方法：
+```java
+@Service
+public class MiaoshaService {
+    @Autowired
+    GoodsService goodsService;
+
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    RedisService redisService;
+
+    @Transactional
+    public OrderInfo miaosha(MiaoshaUser user, GoodVo goods) {
+
+        //减库存 下订单 写入秒杀订单
+        boolean success = goodsService.reduceStock(goods);
+        if(success){
+            //order_info maiosha_order
+            return orderService.createOrder(user, goods);
+        }else{
+            // 如果失败  说明秒杀失败 做标记 防止一直轮询
+            setGoodsOver(goods.getId());
+            return null;
+        }
+    }
+
+    public long getMiaoshaResult(Long userid, long goodsId) {
+        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(userid, goodsId);
+        // 订单不空，秒杀成功
+        if(order != null){
+            return order.getOrderId();
+        }else{
+            // 判断是排队中还是失败了
+            boolean isOver = getGoodsOver(goodsId);
+            if(isOver) {
+                return -1;
+            }else {
+                return 0;
+            }
+        }
+    }
+
+    private void setGoodsOver(Long goodsId) {
+        redisService.set(MiaoshaKey.isGoodsOver, ""+goodsId, true);
+    }
+
+    private boolean getGoodsOver(long goodsId) {
+        return redisService.exists(MiaoshaKey.isGoodsOver, ""+goodsId);
+    }
+}
+```
+
+用redis添加秒杀完库存的标记，防止一直轮询，判断是排队中还是秒杀完了。
+```java
+public class MiaoshaKey extends BasePrefix{
+
+    private MiaoshaKey(String prefix) {
+        super(prefix);
+    }
+    public static MiaoshaKey isGoodsOver = new MiaoshaKey("go");
+```
+
+##### 前端轮询：
 goods_detail.htm详情页中的秒杀按钮
 ```html
 <button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="doMiaosha()">立即秒杀</button>
@@ -4020,90 +4125,6 @@ function getMiaoshaResult(goodsId) {
 }
 ```
 
-后台添加轮询接口
-MiaoshaController
-```java
-// 客户端轮询接口 判断是否秒杀到
-/*
- orderID:成功
- -1：秒杀失败
- 0：排队中
- */
-@RequestMapping(value = "/result",method = RequestMethod.GET)
-@ResponseBody
-public Result<Long> miaoshaResult(Model model,MiaoshaUser user,@RequestParam("goodsId")long goodsId){
-    model.addAttribute("user",user);
-    if(user == null){
-        return Result.error(CodeMsg.SESSION_ERROR);
-    }
-    long rst = miaoshaService.getMiaoshaResult(user.getId(),goodsId);
-    return Result.success(rst);
-}
-```
-
-用redis添加标记防止一直轮询 区分失败和排队
-```java
-public class MiaoshaKey extends BasePrefix{
-
-    private MiaoshaKey(String prefix) {
-        super(prefix);
-    }
-    public static MiaoshaKey isGoodsOver = new MiaoshaKey("go");
-```
-
-轮询方法：
-```java
-@Service
-public class MiaoshaService {
-    @Autowired
-    GoodsService goodsService;
-
-    @Autowired
-    OrderService orderService;
-
-    @Autowired
-    RedisService redisService;
-
-    @Transactional
-    public OrderInfo miaosha(MiaoshaUser user, GoodVo goods) {
-
-        //减库存 下订单 写入秒杀订单
-        boolean success = goodsService.reduceStock(goods);
-        if(success){
-            //order_info maiosha_order
-            return orderService.createOrder(user, goods);
-        }else{
-            // 如果失败  说明秒杀失败 做标记 防止一直轮询
-            setGoodsOver(goods.getId());
-            return null;
-        }
-    }
-
-    public long getMiaoshaResult(Long userid, long goodsId) {
-        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(userid, goodsId);
-        if(order != null){
-            return order.getOrderId();
-        }else{
-            // 判断是排队中还是失败了
-            boolean isOver = getGoodsOver(goodsId);
-            if(isOver) {
-                return -1;
-            }else {
-                return 0;
-            }
-        }
-    }
-
-    private void setGoodsOver(Long goodsId) {
-        redisService.set(MiaoshaKey.isGoodsOver, ""+goodsId, true);
-    }
-
-    private boolean getGoodsOver(long goodsId) {
-        return redisService.exists(MiaoshaKey.isGoodsOver, ""+goodsId);
-    }
-}
-```
-
 清理redis
 ```shell
 redis-cli
@@ -4126,7 +4147,7 @@ if(stock < 0){
 
 内存标记，减少redis访问
 ```java
-// 结束标记
+// 结束标记 <商品ID,是否秒杀结束>
 private Map<Long,Boolean> localOverMap = new HashMap<Long, Boolean>();
 
 // 系统初始化 读数据库库存，写到redis
@@ -4136,6 +4157,7 @@ public void afterPropertiesSet() throws Exception {
     if(goodslist!=null){
         for(GoodVo goods : goodslist){
             redisService.set(GoodsKey.getMiaoshaGoodsStock,""+goods.getId() ,goods.getStockCount() );
+            // 初始化所有商品都没结束
             localOverMap.put(goods.getId(),  false);
         }
     }
@@ -4166,6 +4188,26 @@ public Result<Integer> list(MiaoshaUser user,
 
 
 重置操作：
+```java
+@RequestMapping(value="/reset", method=RequestMethod.GET)
+@ResponseBody
+public Result<Boolean> reset(Model model) {
+    List<GoodVo> goodsList = goodsService.listGoodsVo();
+    for(GoodVo goods : goodsList) {
+        // 库存还原成10个
+        goods.setStockCount(10);
+        // redis中库存也变成10个
+        redisService.set(GoodsKey.getMiaoshaGoodsStock, ""+goods.getId(), 10);
+        // 内存变量 所有商品重置成没结束
+        localOverMap.put(goods.getId(), false);
+    }
+    // 删除用户订单和秒杀标记缓存
+    redisService.delete(OrderKey.getMiaoshaOrderByUidGid);
+    redisService.delete(MiaoshaKey.isGoodsOver);
+    miaoshaService.reset(goodsList);
+    return Result.success(true);
+}
+```
 根据前缀删除redis
 ```java
 public boolean delete(KeyPrefix prefix) {
@@ -4217,23 +4259,635 @@ public List<String> scanKeys(String key) {
 }
 ```
 
-...
+mysql数据库中删除订单
+```java
+public void reset(List<GoodVo> goodsList) {
+    goodsService.resetStock(goodsList);
+    orderService.deleteOrders();
+}
+```
+dao：
+```java
+@Delete("delete from order_info")
+public void deleteOrders();
+
+@Delete("delete from miaosha_order")
+public void deleteMiaoshaOrders();
+```
+对`/miaosha/do_miaosha`压测5000个线程10次 一共5w个请求
+在服务器上测试jmeter
+1.在windows上录好jmx...
+2.运行`jmeter.sh -n -t xxx.jmx -l result.jtl`
+3.把result.jtl导入jmeter
+
 
 压测QPS->2000
 
 nginx 横向扩展（反向代理proxy_pass)配置多台服务器
 负载均衡 weight
+![nginx.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nginx.jpg)
 nginx 缓存
-
-LVS负载均衡
+```shell
+proxy_cache_path /usr/local/nginx/proxy_cache levels=1:2 keys_zone=my_cache:200m inactive=1d max_size=20g;
+proxy_ignore_headers x-Accel-Expires Expires Cache-Control;
+proxy_hide_header Cache-Control;
+proxy_hide_header Pragma;
+```
+LVS负载均衡 已经在linux内核里了
+浏览器-LVS-n个nginx-nn个tomcat
 
 ### 安全优化
 
 #### 秒杀接口地址隐藏
-请求服务端地址
+请求服务端秒杀地址，动态生成的
+方法：
+秒杀接口带上`PathVariable`，`@RequestMapping(value = "/{path}/do_miaosha"`
 
+
+前端秒杀按钮获取地址
+```html
+<button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="getmiaoshaPath()">立即秒杀</button>
+```
+
+后台path接口：
+新建redis key保存随机path，并且设置有效期
+```java
+private MiaoshaKey( int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+    public static MiaoshaKey isGoodsOver = new MiaoshaKey(0,"go");
+    public static MiaoshaKey getMiaoshaPath = new MiaoshaKey(60, "mp");
+}
+```
+
+随机生成path，每个用户，每个商品地址不一样 保存到redis
+```java
+@RequestMapping(value = "/path",method = RequestMethod.GET)
+@ResponseBody
+public Result<String> getMiaoShaPath(Model model,MiaoshaUser user,@RequestParam("goodsId")long goodsId){
+    model.addAttribute("user",user);
+    if(user == null){
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+    String path =  miaoshaService.createMiaoshaPath(user,goodsId);
+    return Result.success(path);
+}
+```
+path生成service方法
+```java
+public String createMiaoshaPath(MiaoshaUser user,long goodsId) {
+    String str = MD5Util.md5(UUIDUtil.uuid()+"123456");
+    redisService.set(MiaoshaKey.getMiaoshaPath,"" +user.getId()+"_"+goodsId,str );
+    return str;
+}
+```
+
+秒杀接口添加path变量
+添加非法请求key result/CodeMsg.java
+```java
+public static CodeMsg REQUEST_ILLEGAL = new CodeMsg(500102, "请求非法");
+```
+
+```java
+@Autowired
+MiaoshaService miaoshaService;
+@RequestMapping(value = "/{path}/do_miaosha",method = RequestMethod.POST)
+@ResponseBody
+public Result<Integer> list(MiaoshaUser user,
+                            @RequestParam("goodsId")long goodsId,
+                            @PathVariable("path")String path) {
+    // 没登陆
+    if(user == null) {
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+
+    //验证path
+    boolean check = miaoshaService.checkPath(user,goodsId,path);
+    if(!check){
+        return Result.error(CodeMsg.REQUEST_ILLEGAL);
+    }
+```
+
+```java
+public boolean checkPath(MiaoshaUser user, long goodsId, String path) {
+    if(user == null || path == null){
+        return false;
+    }
+    String pathRec = redisService.get(MiaoshaKey.getMiaoshaPath, "" + user.getId() + "_" + goodsId, String.class);ath
+    return path.equals(pathRec);
+}
+```
+
+前端的获取path的xhr方法，并且拼接后继续xhr doMiaosha()
+```js
+function getMiaoshaPath(){
+    var goodsId=$("#goodsId").val();
+    // 加载中的动画
+    g_showLoading();
+    $.ajax({
+        url: "/miaosha/path",
+        type: "GET",
+        data: {
+            goodsId: goodsId
+        },
+        success:function (data) {
+            if(data.code == 0){
+                var path = data.data;
+                doMiaosha(path)
+            }else {
+                layer.msg(data.msg);
+            }
+        },
+        error:function () {layer.msg("客户端请求有误");}
+    });
+}
+function doMiaosha(path){
+    $.ajax({
+        url:"/miaosha/"+path+"/do_miaosha",
+        type:"POST",
+        data:{
+            goodsId:$("#goodsId").val(),
+        },
+        success:function(data){
+            if(data.code == 0){
+                // 成功 排队中 轮询
+                getMiaoshaResult($("#goodsId").val());
+            }else{
+                layer.msg(data.msg);
+            }
+        },
+        error:function(){
+            layer.msg("客户端请求有误");
+        }
+    });
+}
+```
+
+完成动态获取秒杀path再秒杀
 
 #### 数学公式验证码
+点击秒杀之前先输入验证码
+`ScriptEngine` java中可以使用js v8
+
+前端验证码：
+```html
+<div class="row">
+    <div class="form-inline">
+        <img id="verifyCodeImg" width="80" height="32"  style="display:none" onclick="refreshVerifyCode()"/>
+        <input id="verifyCode"  class="form-control" style="display:none"/>
+        <button class="btn btn-primary" type="button" id="buyButton"onclick="getMiaoshaPath()">立即秒杀</button>
+    </div>
+</div>
+```
+
+页面初始化渲染render完页面后，在countDown方法里，生成验证码
+```js
+function countDown(){
+    var remainSeconds = $("#remainSeconds").val();
+    var timeout;
+    if(remainSeconds > 0){//秒杀还没开始，倒计时
+        $("#buyButton").attr("disabled", true);
+        $("#miaoshaTip").html("秒杀倒计时："+remainSeconds+"秒");
+        timeout = setTimeout(function(){
+            $("#countDown").text(remainSeconds - 1);
+            $("#remainSeconds").val(remainSeconds - 1);
+            countDown();
+        },1000);
+    }else if(remainSeconds == 0){//秒杀进行中
+        $("#buyButton").attr("disabled", false);
+        if(timeout){
+            clearTimeout(timeout);
+        }
+        $("#miaoshaTip").html("秒杀进行中");
+        $("#verifyCodeImg").attr("src","/miaosha/verifyCode?goodsId="+$("#goodsId").val());
+        $("#verifyCodeImg").show();
+        $("#verifyCode").show();
+    }else{//秒杀已经结束
+        $("#buyButton").attr("disabled", true);
+        $("#miaoshaTip").html("秒杀已经结束");
+        $("#verifyCodeImg").hide();
+        $("#verifyCode").hide();
+    }
+}
+```
+
+后台验证码接口
+
+生成验证码
+后台验证码redis key
+```java
+public static MiaoshaKey getMiaoshaVerifyCode = new MiaoshaKey(300, "vc");
+```
+添加秒杀失败msg
+```java
+public static CodeMsg MIAOSHA_FAIL = new CodeMsg(500502, "秒杀失败");
+```
+
+验证码接口 直接写到output上
+```java
+@RequestMapping(value = "/verifyCode",method = RequestMethod.GET)
+@ResponseBody
+public Result<String> getVerifyCode(HttpServletResponse response, MiaoshaUser user, @RequestParam("goodsId")long goodsId){
+    if(user == null){
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+    BufferedImage image = miaoshaService.createVerifyCode(user,goodsId);
+    try{
+        OutputStream out = response.getOutputStream();
+        ImageIO.write(image, "JPEG", out);
+        out.flush();
+        out.close();
+        return null;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+}
+```
+
+service：用Graphics生成图片
+```java
+public BufferedImage createVerifyCode(MiaoshaUser user, long goodsId) {
+    if(user == null || goodsId <=0){
+        return null;
+    }
+    int width = 80;
+    int height = 32;
+    //create the image
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    Graphics g = image.getGraphics();
+    // set the background color
+    g.setColor(new Color(0xDCDCDC));
+    g.fillRect(0, 0, width, height);
+    // draw the border
+    g.setColor(Color.black);
+    g.drawRect(0, 0, width - 1, height - 1);
+    // create a random instance to generate the codes
+    Random rdm = new Random();
+    // make some confusion
+    for (int i = 0; i < 50; i++) {
+        int x = rdm.nextInt(width);
+        int y = rdm.nextInt(height);
+        g.drawOval(x, y, 0, 0);
+    }
+
+    // 生成随机验证码 保存到key为用户,商品id用于用户输入的验证
+    String verifyCode = generateVerifyCode(rdm);
+    g.setColor(new Color(0, 100, 0));
+    g.setFont(new Font("Candara", Font.BOLD, 24));
+    g.drawString(verifyCode, 8, 24);
+    g.dispose();
+    //把验证码存到redis中
+    int rnd = calc(verifyCode);
+    redisService.set(MiaoshaKey.getMiaoshaVerifyCode, user.getId()+","+goodsId, rnd);
+    //输出图片  
+    return image;
+}
+// 计算表达式的结果
+private static int calc(String exp) {
+    try{
+        ScriptEngineManager manger = new ScriptEngineManager();
+        ScriptEngine engine = manger.getEngineByName("JavaScript");
+        return (Integer)engine.eval(exp);
+    }catch (Exception e){
+        e.printStackTrace();
+        return 0;
+    }
+}
+
+private static char[] ops = new char[] {'+', '-', '*'};
+// 加减乘的验证码
+private String generateVerifyCode(Random rdm) {
+    int num1 = rdm.nextInt(10);
+    int num2 = rdm.nextInt(10);
+    int num3 = rdm.nextInt(10);
+    char op1 = ops[rdm.nextInt(3)];
+    char op2 = ops[rdm.nextInt(3)];
+    String exp = ""+ num1 + op1 + num2 + op2 + num3;
+    return exp;
+}
+```
+
+已经可以显示了
+
+添加点击事件重新渲染验证码, 注意浏览器图片缓存
+```html
+<img id="verifyCodeImg" width="80" height="32"  style="display:none" onclick="refreshVerifyCode()"/>
+```
+
+```js
+function refreshVerifyCode(){
+    $("#verifyCodeImg").attr("src", "/miaosha/verifyCode?goodsId="+$("#goodsId").val()+"&timestamp="+new Date().getTime());
+}
+```
+
+![miaoshaverficode.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/miaoshaverficode.jpg)
+
+点击秒杀 获取秒杀地址之前校验验证码
+修改后台path接口，
+```java
+@RequestMapping(value = "/path",method = RequestMethod.GET)
+@ResponseBody
+public Result<String> getMiaoShaPath(Model model,MiaoshaUser user,
+                                     @RequestParam("goodsId")long goodsId,
+                                     @RequestParam("verifyCode")int verify){
+    model.addAttribute("user",user);
+    if(user == null){
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+
+    boolean check = miaoshaService.checkVerifyCode(user,goodsId,verify);
+    if(!check){
+        return Result.error(CodeMsg.REQUEST_ILLEGAL);
+    }
+    String path =  miaoshaService.createMiaoshaPath(user,goodsId);
+    return Result.success(path);
+}
+```
+
+service：
+```java
+public boolean checkVerifyCode(MiaoshaUser user, long goodsId, int verify) {
+    if(user == null || goodsId <=0){
+        return false;
+    }
+    Integer codeOld = redisService.get(MiaoshaKey.getMiaoshaVerifyCode, user.getId() + "," + goodsId, Integer.class);
+    if(codeOld == null || codeOld - verify != 0){
+        return false;
+    }
+    // 从redis删除 否则还可以用
+    redisService.delete(MiaoshaKey.getMiaoshaVerifyCode, user.getId() + "," + goodsId);
+    return true;
+}
+```
+
+前端获取path的时候传入 输入的验证码
+```js
+function getMiaoshaPath(){
+    var goodsId=$("#goodsId").val();
+    // 加载中的动画
+    g_showLoading();
+    $.ajax({
+        url: "/miaosha/path",
+        type: "GET",
+        data: {
+            goodsId: goodsId,
+            verifyCode: $("#verifyCode").val()
+        },
+        success:function (data) {
+            if(data.code == 0){
+                var path = data.data;
+                doMiaosha(path)
+            }else {
+                layer.msg(data.msg);
+            }
+        },
+        error:function () {layer.msg("客户端请求有误");}
+
+        });
+}
+```
+
+可以删除全部的Model了因为前后端分离了。
 
 #### 接口限流
+用缓存的有效期,key是用户访问的地址+用户id
+新建限流key
+```java
+public class AccessKey extends BasePrefix {
+    private AccessKey( int expireSeconds, String prefix) {
+        super(expireSeconds, prefix);
+    }
+    // 比枚举好 因为可以new一个动态参数的
+    public static AccessKey withExpire(int expireSeconds) {
+        return new AccessKey(expireSeconds, "access");
+    }
+}
+```
+request里的
+getURI`/miaosha/path`：the part of this request's URL from the protocol name up to the query string in the first line of the HTTP request.
+getURL`http://localhost:8022/miaosha/path`：The returned URL contains a protocol, server name, port number, and server path, but it does not include query string parameters.
 
+
+添加访问太频繁的错误
+```java
+public static CodeMsg ACCESS_LIMIT_REACHED= new CodeMsg(500104, "访问太频繁！");
+```
+
+```java
+@RequestMapping(value = "/path",method = RequestMethod.GET)
+@ResponseBody
+public Result<String> getMiaoShaPath(HttpServletRequest request,MiaoshaUser user,
+                                     @RequestParam("goodsId")long goodsId,
+                                     @RequestParam(value = "verifyCode",defaultValue = "0")int verify){
+    if(user == null){
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+
+    String uri = request.getRequestURI();
+    //限流
+    String acKey = uri + "_" + user.getId();
+    Integer count = redisService.get(AccessKey.withExpire(5), acKey, Integer.class);
+    if(count == null){
+        redisService.set(AccessKey.withExpire(5), acKey, 1);
+    }else if(count < 5){
+        redisService.incr(AccessKey.withExpire(5), acKey);
+    }else{
+        return Result.error(CodeMsg.ACCESS_LIMIT_REACHED);
+    }
+    // 验证码
+    boolean check = miaoshaService.checkVerifyCode(user,goodsId,verify);
+    if(!check){
+        return Result.error(CodeMsg.REQUEST_ILLEGAL);
+    }
+    String path =  miaoshaService.createMiaoshaPath(user,goodsId);
+    return Result.success(path);
+}
+```
+
+#### 使用拦截器（注解）抽取限流功能（因为不是业务代码）
+实现效果:5秒最多访问5次 需要登陆
+`@AccessLimit(seconds=5, maxCount=5, needLogin=true)`
+
+新建access包
+新建注解
+```java
+@Retention(RUNTIME)
+@Target(METHOD)
+public @interface AccessLimit {
+    int seconds();
+    int maxCount();
+    boolean needLogin() default true;
+}
+```
+新建拦截器顺便解析用户保存到线程 并更新之前 ArgumentResolver参数解析器实现的登陆
+拦截器比参数解析先执行，一个请求接收到之后是一个线程在执行。
+拦截器实现
+```java
+@Service
+public class AccessIntercepter extends HandlerInterceptorAdapter{
+
+    @Autowired
+    MiaoshaUserService userService;
+
+    @Autowired
+    RedisService redisService;
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+       if(handler instanceof HandlerMethod){
+           // 1. 取用户
+           MiaoshaUser user = getUser(request, response);
+           // 2. 用户存到threadlocal
+           UserContext.setUser(user);
+           // 3. 获取注解参数
+           HandlerMethod hm = (HandlerMethod)handler;
+           AccessLimit accessLimit = hm.getMethodAnnotation(AccessLimit.class);
+           if(accessLimit == null){
+               return true;
+           }
+           int second = accessLimit.seconds();
+           int maxcount = accessLimit.maxCount();
+           boolean needLogin = accessLimit.needLogin();
+
+           // 限制访问的key
+           String key = request.getRequestURI();
+
+           // 如果用户没登陆
+           if(needLogin){
+               if(user == null){
+                   render(response, CodeMsg.SESSION_ERROR);
+                   return false;
+               }
+               // 如果需要登陆 key + 用户id
+               key += "_"+user.getId();
+           }
+           // else key就只有path
+           AccessKey ak = AccessKey.withExpire(5);
+           Integer count = redisService.get(ak, key, Integer.class);
+           if(count == null){
+               redisService.set(ak, key, 1);
+           }else if(count < maxcount){
+               redisService.incr(ak, key);
+           }else{
+               render(response, CodeMsg.ACCESS_LIMIT_REACHED);
+               return false;
+           }
+       }
+       return false;
+    }
+    private void render(HttpServletResponse response, CodeMsg cm)throws Exception {
+        response.setContentType("application/json;charset=UTF-8");
+        OutputStream out = response.getOutputStream();
+        String str  = JSON.toJSONString(Result.error(cm));
+        out.write(str.getBytes("UTF-8"));
+        out.flush();
+        out.close();
+    }
+    private MiaoshaUser getUser(HttpServletRequest request, HttpServletResponse response) {
+        String paramToken = request.getParameter(MiaoshaUserService.COOKI_NAME_TOKEN);
+        String cookieToken = getCookieValue(request, MiaoshaUserService.COOKI_NAME_TOKEN);
+        if(StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
+            return null;
+        }
+        String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
+        return userService.getByToken(response, token);
+    }
+
+    private String getCookieValue(HttpServletRequest request, String cookiName) {
+        Cookie[]  cookies = request.getCookies();
+        if(cookies == null || cookies.length <= 0){
+            return null;
+        }
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals(cookiName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+}
+```
+
+WebConfig中注册拦截器：
+```java
+@Configuration
+public class WebConfig  extends WebMvcConfigurerAdapter {
+    
+    @Autowired
+    UserArgumentResolver userArgumentResolver;
+
+    @Autowired
+    AccessIntercepter accessIntercepter;
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(accessIntercepter);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(userArgumentResolver);
+    }
+}
+```
+
+
+在拦截器里就解析用户并保存到线程：
+```java
+public class UserContext {
+    private static ThreadLocal<MiaoshaUser> userHolder = new ThreadLocal<MiaoshaUser>();
+    public static void setUser(MiaoshaUser user) {
+        userHolder.set(user);
+    }
+
+    public static MiaoshaUser getUser() {
+        return userHolder.get();
+    }
+}
+```
+
+之前的参数解析器，直接从线程中获取
+```java
+@Service
+public class UserArgumentResolver implements HandlerMethodArgumentResolver {
+    @Autowired
+    MiaoshaUserService userService;
+    
+    public boolean supportsParameter(MethodParameter parameter) {
+        // 获取参数类型 是User类型才会做resolveArgument
+        Class<?> clazz = parameter.getParameterType();
+        return clazz==MiaoshaUser.class;
+    }
+
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        return UserContext.getUser();
+    }
+}
+```
+
+最后注解使用结果
+```java
+@AccessLimit(seconds = 5,maxCount = 5,needLogin = true)
+    @RequestMapping(value = "/path",method = RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getMiaoShaPath(HttpServletRequest request,
+        MiaoshaUser user,
+        @RequestParam("goodsId")long goodsId, 
+        @RequestParam("verifyCode")int verify){
+        if(user == null){
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        String uri = request.getRequestURI();
+        System.out.println("uri"+uri);
+        System.out.println("url"+request.getRequestURL());
+        // 验证码
+        boolean check = miaoshaService.checkVerifyCode(user,goodsId,verify);
+        if(!check){
+            return Result.error(CodeMsg.REQUEST_ILLEGAL);
+        }
+        String path =  miaoshaService.createMiaoshaPath(user,goodsId);
+        return Result.success(path);
+    }
+```

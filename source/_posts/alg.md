@@ -774,7 +774,7 @@ https://www.nowcoder.com/questionTerminal/abf0f0d6b4c44676b44e66060286c45a?order
 {% fold %}
 KMP算法核心，在S中indexOf(T),对T建立next数组
 1:next数组的用法
-![kmp1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kmp1.jpg)
+![kmp1.png](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kmp1.png)
 2:next数组构建
 ![kmp2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/kmp2.jpg)
 
@@ -3497,7 +3497,7 @@ Items can be broen down 贪心按value/weight排序
 
 ### 顶点覆盖
 ![pointcover.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pointcover.jpg)
-![vetexcover.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/vetexcover.jpg)
+![vertexcover.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/vertexcover.jpg)
 
 ### 最大团：在一个无向图中找出一个点数最多的完全图
 
