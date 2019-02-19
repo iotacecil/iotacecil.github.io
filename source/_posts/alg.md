@@ -93,6 +93,229 @@ public boolean isInterleave(String s1, String s2, String s3) {
 }
 ```
 
+### 316 删除重复字母，输出字典序最小的（按原顺序）
+{% note %}
+Input: "bcabc"
+Output: "abc"
+{% endnote %}
+
+
+### 677 优美排列，相邻两个数的差有k种的数组
+{% note %}
+输入: n = 3, k = 2
+输出: [1, 3, 2]
+解释: diff: [2, 1] 中有且仅有 2 个不同整数: 1 和 2
+k,n<10^4
+{% endnote %}
+
+大小数字插空放 能有不同的dif，之后就顺序放全部dif为1.
+```
+i: 1   2   3   4   5
+j:   9   8   7   6
+out: 1 9 2 8 3 7 4 6 5
+dif:  8 7 6 5 4 3 2 1
+```
+
+```java
+public int[] constructArray(int n, int k) {
+ int[] arr = new int[n];
+    int c = 0;
+    int l = 1, h = n;
+
+    while(l <= h)
+    {
+        if(k > 1)arr[c++]= ((k--%2 != 0)?l++:h--);
+        else arr[c++]=l++;
+    }
+
+   return arr;
+}
+```
+
+### 526 1-N构造i位数能整除i或者整除[i]位数的数组
+{% note %}
+输入: 2
+输出: 2
+解释: 
+
+第 1 个优美的排列是 [1, 2]:
+  第 1 个位置（i=1）上的数字是1，1能被 i（i=1）整除
+  第 2 个位置（i=2）上的数字是2，2能被 i（i=2）整除
+
+第 2 个优美的排列是 [2, 1]:
+  第 1 个位置（i=1）上的数字是2，2能被 i（i=1）整除
+  第 2 个位置（i=2）上的数字是1，i（i=2）能被 1 整除
+{% endnote %}
+bracktrack 计数
+
+### 796 字符串是不是旋转成的
+{% note %}
+Example 1:
+Input: A = 'ab cde', B = 'cde ab'
+Output: true
+{% endnote %}
+
+最正确的做法：虽然是N^2 contains
+```java
+public boolean rotateString(String A, String B) {
+   if(A.length() == B.length() && (A+A).contains(B))return true; 
+    else return false;
+}
+```
+
+rolling hash 很慢（？）
+
+
+### lc 73 矩阵如果有0,则整行/列置0
+{% note %}
+Input: 
+[
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
+]
+Output: 
+[
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]
+{% endnote %}
+
+正确做法：空间O(1),时间O(MxN)
+```java
+public void setZeroes(int[][] matrix) {
+    int n = matrix.length;
+    int m = matrix[0].length;
+    //用第一行和第一列 记录 所有行，所有列的0的个数。
+    // 第一行，第一列要不要变0可以存一个在[0][0]上，另一个用一个变量,
+    boolean col0 = false;
+    for (int i = 0; i < n; i++) {
+        // 不用考虑[0][0]，如果[0][0]本身是0，则0行全0. 只需考虑[0]列上有没有本身是0的。
+        if(matrix[i][0] == 0)col0 = true;
+        for (int j = 1; j <m ; j++) {
+            if(matrix[i][j]==0){
+                matrix[i][0] =  0;
+                matrix[0][j] = 0;
+            }
+        }
+    }
+    for (int i = n-1; i >=0 ; i--) {
+        for (int j = m-1; j >=1 ; j--) {
+            if(matrix[i][0] ==0 || matrix[0][j] ==0){
+                matrix[i][j] = 0;
+            }
+        }
+        // 注意一行完了再变第一列
+        if(col0)matrix[i][0] = 0;
+    }
+}
+```
+
+### 295 流数据找中位数
+{% note %}
+addNum(1)
+addNum(2)
+findMedian() -> 1.5
+addNum(3) 
+findMedian() -> 2
+{% endnote %}
+
+思路2：BST？
+思路1：leftmax堆和rightmin堆。保证left大小和right大小相等or大1。
+
+### lc 4 两个排序数组的中位数, 排序数组找第k小
+{% note %}
+nums1 = [1, 2]
+nums2 = [3, 4]
+
+The median is (2 + 3)/2 = 2.5
+{% endnote %}
+
+中位数是两个数组的划分位置，使两个数组左边加起来个数和右边一样。
+```
+x1 x2 |  x3 x4 x5 x6
+y1 y2 y3 y4 y5 |  y6 y7 y8
+
+x2（L1) <= y6(R2) && y5(L2)<= x3(R1)
+```
+
+如果划分在num1左边有partX个元素，总共是k=(n+m+1)/2个元素 ,
+则用这个数字在nums2应该划分出左边有(n+m+1)/2-partX个元素
+例子：如果partX = 2， k=(6+8+1)/2=7, partY应该=7-2=5.
+如果 y5=10 > x3 = 8.则表示partX 划少了。
+如果 x2 > y6 表示partX多了
+
+关键：如果二分partX是0或者n，则在nums2中数partY个肯定对的
+
+```java
+public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    int n1 = nums1.length;
+    int n2 = nums2.length;
+    if(n1 > n2) return findMedianSortedArrays(nums2, nums1);
+
+    int lo = 0, hi = n1;
+    while (lo <= hi){
+        // mid:短的那个
+        int partX = (lo + hi)/2;
+        int partY = (n1+n2+1)/2 - partX;
+        //L1<R2 && L2 < R1
+        /*
+        x1 x2 |  x3 x4 x5 x6
+        y1 y2 y3 y4 y5 |  y6 y7 y8
+
+        x2（L1) <= y6(R2) && y5(L2)<= x3(R1)
+         */
+        double L1 = (partX == 0)?Integer.MIN_VALUE:nums1[partX-1];
+        double L2 = (partY == 0)?Integer.MIN_VALUE:nums2[partY-1];
+        double R1 = (partX == n1)?Integer.MAX_VALUE:nums1[partX];
+        double R2 = (partY == n2)?Integer.MAX_VALUE:nums2[partY];
+
+        if(L1 <= R2 && L2 <= R1){
+            if((n1+n2) % 2 ==0){
+                return (Math.max(L1,L2) + Math.min(R1, R2))/2.0;
+            }
+            else return Math.max(L1, L2);
+        }else if(L1 > R2){
+            hi = partX - 1;
+        }else {
+            lo = partX + 1;
+        }
+    }
+    return -1;
+}
+```
+
+【前k二分】(为什么比暴力merge还慢）：在两个数组里都找第k/2个元素2,4, 2小，表示nums1 的[1]之前的元素都不可能是第k大。所以问题变成找第k-k/2大。
+边界条件：
+1 num1没有元素，两个数组的第k大就是nums2的B[idx2+k-1]
+2 终止条件：如果k=1，返回两个第一个元素小的那个。（注意，保证k/2-1是正的。)
+3 如果有一个数组已经没有k/2个了，则令这个数组的k/2个为无限大。
+```java
+public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+    int n1 = nums1.length;
+    int n2 = nums2.length;
+    int l = (n1+n2+1)/2;
+    int r = (n1+n2+2)/2;
+    return (getkth(nums1, 0, nums2,0 ,l )+getkth(nums1, 0, nums2,0 ,r ))/2;
+
+}
+public double getkth(int[] A,int idx1,int[]B,int idx2,int k){
+    if(idx1 > A.length - 1)return B[idx2+k-1];
+    if(idx2 > B.length - 1)return A[idx1+k-1];
+    if(k==1)return Math.min(A[idx1],B[idx2]);
+    int amid = Integer.MAX_VALUE,bmid = Integer.MAX_VALUE;
+    if(idx1+k/2-1<A.length) amid = A[idx1+k/2-1];
+    if(idx2+k/2-1<B.length) bmid = B[idx2+k/2-1];
+    if(amid < bmid)return getkth(A, idx1+k/2, B, idx2, k-k/2);
+    else return getkth(A, idx1, B,idx2+k/2,k-k/2 );
+}
+```
+
+
+
+
+
 ### 添加最少字符回文串 区间dp
 可以在任意位置添加,
 {% note %}
