@@ -1,5 +1,5 @@
 ---
-title: es-house
+title: es搜房网
 date: 2019-01-07 19:27:02
 tags: [项目流程]
 category: [项目流程]
@@ -36,5 +36,8 @@ ps aux | grep ‘elastic’
 sysctl -w vm.max_map_count=262144
 ```
 改limit需要重启(?)
+
+
+
 
 
