@@ -29,8 +29,296 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
-熟练度
-https://docs.qq.com/sheet/DUGZ6cEtrUFJsSGxP
+### 801
+
+### 926 hiho 1326 将01串变成前0后1或全0或全1的最少flip次数 前缀！
+> Input: "010110"
+Output: 2
+Explanation: We flip to get 011111, or alternatively 000111.
+
+思路1：前缀`[1..i]` 变成全0或者变成`[000111]`的最小反转次数,推到整个数组
+```
+0101100011 S
+0112333345 oCnt(把所有1转0)
+0011123444 fCnt(第一个1之后0的个数)
+0011122333 fCnt更新为min(将当前位置之前的所有1转0，或者当前位置之前1后0转1)
+```
+
+```java
+public int minFlipsMonoIncr(String S) {
+    int oCnt = 0;
+    int fCnt = 0;
+    for(int i =0;i<S.length();i++){
+        if(S.charAt(i) == '1'){
+            oCnt ++;
+        }else if(oCnt >0){
+            fCnt ++;
+        }
+        // 关键 fCnt 随前缀更新
+       fCnt = oCnt < fCnt ? oCnt:fCnt;
+    }
+    return fCnt;
+}
+```
+
+### 636 单核cpu函数调用栈
+日志是具有以下格式的字符串：function_id：start_or_end：timestamp。例如："0:start:0" 表示函数 0 从 0 时刻开始运行。"0:end:0" 表示函数 0 在 0 时刻结束。
+
+函数的独占时间定义是在该方法中花费的时间，调用其他函数花费的时间不算该函数的独占时间。
+> 输入 n = 2
+logs = 
+["0:start:0",
+ "1:start:2",
+ "1:end:5",
+ "0:end:6"]
+输出：[3, 4]
+
+函数 0 在时刻 0 开始，在执行了  2个时间单位结束于时刻 1。
+现在函数 0 调用函数 1，函数 1 在时刻 2 开始，执行 4 个时间单位后结束于时刻 5。
+函数 0 再次在时刻 6 开始执行，并在时刻 6 结束运行，从而执行了 1 个时间单位。
+所以函数 0 总共的执行了 2 +1 =3 个时间单位，函数 1 总共执行了 4 个时间单位。
+
+stack + start[] ac 15%
+
+### 3 !!最长不重复子串 做了3遍还是不熟练
+{% fold %}
+Input: "abcabcbb"
+Output: 3 
+Explanation: The answer is "abc", with the length of 3. 
+{% endfold %}
+
+思路：`abca`最长的是两个a之间,start是上一个a。`bbvfg`最长的是重复b之后更新start。
+关键：`tmmzuxt` start应该只增不减。`Math.max(start,map.get(c) + 1)`
+
+```java
+public int lengthOfLongestSubstring(String s) {
+    if(s==null || s.length() <1 )return 0;
+    int n = s.length();
+    int start = 0;
+    int mlen = 0;
+    Map<Character,Integer> map = new HashMap<>();
+    for(int i =0;i < n ;i++){
+        char c = s.charAt(i);
+        if(map.containsKey(c)){
+            start = Math.max(start,map.get(c) + 1);
+        }
+        mlen = Math.max(mlen,i - start +1);
+        map.put(c, i);
+    }
+    return mlen;
+}
+```
+
+方法2：用`Set<Character>`
+维持一个窗口[i,j)， 放到set中，如果没重复继续向右扩展，如果重复，窗口向右移动
+```java
+public int lengthOfLongestSubstring(String s){
+    int n = s.length();
+    Set<Character> set = new HashSet<>();
+    int ans = 0,i=0,j=0;
+    //维持一个窗口[i,j)， 放到set中，如果没重复继续向右扩展，如果重复，窗口向右移动
+    while (i<n&&j<n){
+        if(!set.contains(s.charAt(j))){
+            set.add(s.charAt(j++));
+            ans = Math.max(ans,j-i);
+        }else{
+            set.remove(s.charAt(i++));
+        }
+    }
+    return ans;
+}
+```
+
+### 763 划分尽可能多字母区间  返回各区间的长度 双指针
+>输入: S = "ababcbacadefegdehijhklij"
+输出: [9,7,8]
+解释:
+划分结果为 "ababcbaca", "defegde", "hijhklij"。
+每个字母最多出现在一个片段中。
+像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
+ababcba 从第一个a到最后一个a是必须包含的长度
+
+思路：字母last index数组，遍历string，维护一个当前字符出现的最晚index，直到当前字符index就是这个最晚index，可以划分，记录当前长度并且重置start计数。
+注意：不能直接i跳到curmaxend，因为abab如果a直接跳到下一个a会漏更新b的last index
+
+```java
+//45%
+public List<Integer> partitionLabels(String S) {
+    List<Integer> rst = new ArrayList<>();
+    //每个字母最后出现的index
+    int[] last = new int[26];
+
+    for(int i=0;i<S.length();i++){
+      last[S.charAt(i)-'a'] = i;
+    }
+    int start=0,end=0;
+    for(int i = 0;i<S.length();i++){
+        //更新当前字母的区间
+        end = Math.max(end,last[S.charAt(i)-'a']);
+        //关键
+        if(i==end){
+            rst.add(end-start+1);
+            start = end+1;
+        }
+    }
+    return rst;
+}
+```
+
+
+### 575 分糖果 两人数量相等 最大化一组的品种
+{% note %}
+Input: candies = [1,1,2,3]
+Output: 2
+{% endnote %}
+
+思路：
+获得的种类最多是n/2种 每种都不同，>2次的个数<=n/2。
+或者重复的元素很多,可以得到所有种类。
+```java
+public int distributeCandies(int[] candies) {
+   Set<Integer> set = new HashSet();
+    int n = candies.length;
+    for(int i = 0;i < n;i++){     
+        if(!set.contains(candies[i])){
+            set.add(candies[i]);
+        }
+        if(set.size() > n/2)return n/2;
+    }
+    return set.size();
+}
+```
+
+### 888 换1个糖果使两组和相等
+{% note %}
+交换A，B数组中的2个数字(exchange one candy bar)，数组总和相等
+Input: A = [2], B = [1,3]
+Output: [2,3] 
+输出是A和B要交换的数字
+{% endnote %}
+AC 排序二分
+
+---
+
+### 621 !!!!!!任务调度
+26 种不同种类的任务  每个任务都可以在 1 个单位时间内执行完
+两个相同种类的任务之间必须有长度为 n 的冷却时间
+> 输入: tasks = ["A","A","A","B","B","B"], n = 2
+输出: 8
+执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
+
+正确方法：找出slot
+
+方法1 排序： 45% 20ms思路：
+1.将任务数量排序，保证数量最大的几个任务都连续在数组尾部
+2.大循环终止条件 ： 最右>0,并且每次都排序。
+3.冷却时间循环n次，总时间和冷却时间计数器都++，从最后一个任务开始消耗,能消耗就消耗
+
+复杂度`O(time)`
+
+```java
+public int leastInterval(char[] tasks, int n) {
+    int[] cnt = new int[26];
+    int m = tasks.length;
+    for(char c :tasks){
+        cnt[c - 'A'] ++;
+    }
+    Arrays.sort(cnt);
+    int time = 0;
+    while(cnt[25]>0){
+        int i = 0;
+        while(i < d){
+            // 大循环的判断
+            if(cnt[25] == 0)break;
+            if(i < 26 && cnt[25 - i] > 0)cnt[25 - i]--;
+            time++;
+            i++;
+        }
+        Arrays.sort(cnt);
+    }
+    return time;
+}
+```
+
+### 453 数组中n-1个数字每次增加1，最少多少次数组中元素相等
+>[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
+
+思路：n-1个数字+1和一个数字-1是等价的。所以看需要多少次能把所有数字减成和最小的一样。
+
+```java
+public int minMoves(int[] nums) {
+    int min = nums[0];
+    for(int i :nums){
+        min = Math.min(min,i);
+    }
+    int cnt =0;
+    for(int i:nums){
+        cnt += i - min;
+    }
+    return cnt; 
+}
+```
+
+### 634 n个数字的错排有几个 lt869
+{% note %}
+在组合数学中，错乱是一组元素的排列，这种排列中没有元素出现在它的原始位置上。
+最初有一个由n个整数组成的数组，从1到n，按升序排列，你需要找到它能产生的错乱的数量。
+而且，由于答案可能非常大，您应该返回输出mod 10^9 + 7的结果
+
+给定n=3，返回 2.
+
+解释：
+原始数组是[1,2,3]。这两个错乱是[2,3,1]和[3,1,2]。
+{% endnote%}
+
+![Derangement.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Derangement.jpg)
+
+
+```java
+public int findDerangement(int n) {
+    long dn2 = 0,dn1= 1;
+    long res = (n==1)?0:1;
+    for(int i =3;i<=n;i++){
+        res = ((i - 1)*(dn1+dn2)) % 1000000007;
+        dn2 = dn1;
+        dn1 = res;
+    }
+    return (int)res;
+}
+```
+
+### 801 让数组递增的最少交换次数
+
+### 670 
+
+### 299 猜对了几个字符
+{% note %}
+A表示位置对+数值对，B表示位置不对。
+Input: secret = "1123", guess = "0111"
+
+Output: "1A1B"
+
+Explanation: The 1st 1 in friend's guess is a bull, the 2nd or 3rd 1 is a cow.
+{% endnote %}
+
+关键：计数，如果secret当前字符的计数<0，表示在guess出现过，b++,然后再计数这个字符。注意对secret和guess的当前字符都判断是否之前出现过，分别计数b。
+
+```java
+public String getHint(String secret, String guess) {
+    int bulls = 0;
+    int cows = 0;
+    int[] numbers = new int[10];
+    for (int i = 0; i<secret.length(); i++) {
+        if (secret.charAt(i) == guess.charAt(i)) bulls++;
+        else {
+            if (numbers[secret.charAt(i)-'0']++ < 0) cows++;
+            if (numbers[guess.charAt(i)-'0']-- > 0) cows++;
+        }
+    }
+    return bulls + "A" + cows + "B";
+}
+```
+
 
 有序矩阵nxn个复杂度O(n)
 
@@ -838,9 +1126,6 @@ public String[] findWords(String[] words){
 
 
 
-### 42
-
-
 ### 683 - K Empty Slots
 
 ### 最长01串
@@ -1521,204 +1806,7 @@ public static int highestOneBit(int i) {
 ### 292每个人可以拿1-3块石头，拿到最后一块的赢，所有4的倍数的情况先手不能赢 
 
 
-### 636 单核cpu函数调用栈
-日志是具有以下格式的字符串：function_id：start_or_end：timestamp。例如："0:start:0" 表示函数 0 从 0 时刻开始运行。"0:end:0" 表示函数 0 在 0 时刻结束。
 
-函数的独占时间定义是在该方法中花费的时间，调用其他函数花费的时间不算该函数的独占时间。
-> 输入 n = 2
-logs = 
-["0:start:0",
- "1:start:2",
- "1:end:5",
- "0:end:6"]
-输出：[3, 4]
-
-函数 0 在时刻 0 开始，在执行了  2个时间单位结束于时刻 1。
-现在函数 0 调用函数 1，函数 1 在时刻 2 开始，执行 4 个时间单位后结束于时刻 5。
-函数 0 再次在时刻 6 开始执行，并在时刻 6 结束运行，从而执行了 1 个时间单位。
-所以函数 0 总共的执行了 2 +1 =3 个时间单位，函数 1 总共执行了 4 个时间单位。
-
-stack + start[] ac 15%
-
-### 3 !!最长不重复子串 做了3遍还是不熟练
-{% fold %}
-Input: "abcabcbb"
-Output: 3 
-Explanation: The answer is "abc", with the length of 3. 
-{% endfold %}
-
-思路：`abca`最长的是两个a之间,start是上一个a。`bbvfg`最长的是重复b之后更新start。
-关键：`tmmzuxt` start应该只增不减。`Math.max(start,map.get(c) + 1)`
-
-```java
-public int lengthOfLongestSubstring(String s) {
-    if(s==null || s.length() <1 )return 0;
-    int n = s.length();
-    int start = 0;
-    int mlen = 0;
-    Map<Character,Integer> map = new HashMap<>();
-    for(int i =0;i < n ;i++){
-        char c = s.charAt(i);
-        if(map.containsKey(c)){
-            start = Math.max(start,map.get(c) + 1);
-
-        }
-        mlen = Math.max(mlen,i - start +1);
-        map.put(c, i);
-    }
-    return mlen;
-}
-```
-
-方法2：用`Set<Character>`
-维持一个窗口[i,j)， 放到set中，如果没重复继续向右扩展，如果重复，窗口向右移动
-```java
-public int lengthOfLongestSubstring(String s){
-    int n = s.length();
-    Set<Character> set = new HashSet<>();
-    int ans = 0,i=0,j=0;
-    //维持一个窗口[i,j)， 放到set中，如果没重复继续向右扩展，如果重复，窗口向右移动
-    while (i<n&&j<n){
-        if(!set.contains(s.charAt(j))){
-            set.add(s.charAt(j++));
-            ans = Math.max(ans,j-i);
-        }else{
-            set.remove(s.charAt(i++));
-        }
-    }
-    return ans;
-}
-```
-
-### 763 划分尽可能多字母区间  返回各区间的长度 双指针
->输入: S = "ababcbacadefegdehijhklij"
-输出: [9,7,8]
-解释:
-划分结果为 "ababcbaca", "defegde", "hijhklij"。
-每个字母最多出现在一个片段中。
-像 "ababcbacadefegde", "hijhklij" 的划分是错误的，因为划分的片段数较少。
-ababcba 从第一个a到最后一个a是必须包含的长度
-
-思路：字母last index数组，遍历string，维护一个当前字符出现的最晚index，直到当前字符index就是这个最晚index，可以划分，记录当前长度并且重置start计数。
-注意：不能直接i跳到curmaxend，因为abab如果a直接跳到下一个a会漏更新b的last index
-
-```java
-//45%
-public List<Integer> partitionLabels(String S) {
-    List<Integer> rst = new ArrayList<>();
-    //每个字母最后出现的index
-    int[] last = new int[26];
-
-    for(int i=0;i<S.length();i++){
-      last[S.charAt(i)-'a'] = i;
-    }
-    int start=0,end=0;
-    for(int i = 0;i<S.length();i++){
-        //更新当前字母的区间
-        end = Math.max(end,last[S.charAt(i)-'a']);
-        //关键
-        if(i==end){
-            rst.add(end-start+1);
-            start = end+1;
-        }
-    }
-    return rst;
-}
-```
-
-
-### 575 分糖果 两人数量相等 最大化一组的品种
-{% note %}
-Input: candies = [1,1,2,3]
-Output: 2
-{% endnote %}
-
-思路：
-获得的种类最多是n/2种 每种都不同，>2次的个数<=n/2。
-或者重复的元素很多,可以得到所有种类。
-```java
-public int distributeCandies(int[] candies) {
-   Set<Integer> set = new HashSet();
-    int n = candies.length;
-    for(int i = 0;i < n;i++){     
-        if(!set.contains(candies[i])){
-            set.add(candies[i]);
-        }
-        if(set.size() > n/2)return n/2;
-    }
-    return set.size();
-}
-```
-
-### 888 换1个糖果使两组和相等
-{% note %}
-交换A，B数组中的2个数字(exchange one candy bar)，数组总和相等
-Input: A = [2], B = [1,3]
-Output: [2,3] 
-输出是A和B要交换的数字
-{% endnote %}
-AC 排序二分
-
----
-
-### 621 !!!!!!任务调度
-26 种不同种类的任务  每个任务都可以在 1 个单位时间内执行完
-两个相同种类的任务之间必须有长度为 n 的冷却时间
-> 输入: tasks = ["A","A","A","B","B","B"], n = 2
-输出: 8
-执行顺序: A -> B -> (待命) -> A -> B -> (待命) -> A -> B.
-
-正确方法：找出slot
-
-方法1 排序： 45% 20ms思路：
-1.将任务数量排序，保证数量最大的几个任务都连续在数组尾部
-2.大循环终止条件 ： 最右>0,并且每次都排序。
-3.冷却时间循环n次，总时间和冷却时间计数器都++，从最后一个任务开始消耗,能消耗就消耗
-
-复杂度`O(time)`
-
-```java
-public int leastInterval(char[] tasks, int n) {
-    int[] cnt = new int[26];
-    int m = tasks.length;
-    for(char c :tasks){
-        cnt[c - 'A'] ++;
-    }
-    Arrays.sort(cnt);
-    int time = 0;
-    while(cnt[25]>0){
-        int i = 0;
-        while(i < d){
-            // 大循环的判断
-            if(cnt[25] == 0)break;
-            if(i < 26 && cnt[25 - i] > 0)cnt[25 - i]--;
-            time++;
-            i++;
-        }
-        Arrays.sort(cnt);
-    }
-    return time;
-}
-```
-
-### 453 数组中n-1个数字每次增加1，最少多少次数组中元素相等
->[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
-
-思路：n-1个数字+1和一个数字-1是等价的。所以看需要多少次能把所有数字减成和最小的一样。
-
-```java
-public int minMoves(int[] nums) {
-    int min = nums[0];
-    for(int i :nums){
-        min = Math.min(min,i);
-    }
-    int cnt =0;
-    for(int i:nums){
-        cnt += i - min;
-    }
-    return cnt; 
-}
-```
 
 ### 443 !压缩字符串
 The length after compression must always be smaller than or equal to the original array. aabb可以压缩成a2b2
@@ -2139,7 +2227,7 @@ public int climbStairs(int n) {
 
 $f(n)=f(n-1)+f(n-2)+f(n-3)$      (对于n>=4) 
 $f(n-1)=f(n-2)+f(n-3)+f(n-4)$    (对于n>=5) 
-前面两式相减可以得到：  $f(n)=2*f(n-1)-f(n-4)$  (对于n>=5)
+前面两式相减可以得到：  $f(n)=2\*f(n-1)-f(n-4)$  (对于n>=5)
 而对于n<=5的情况有： 
 f(1)=1 
 f(2)=2 
@@ -2236,35 +2324,7 @@ https://baike.baidu.com/item/%E7%B4%A0%E6%95%B0%E5%AE%9A%E7%90%86/1972457?fromti
 4.605170185988092
 ```
 
-### 926 hiho 1326 将01串变成前0后1或全0或全1的最少flip次数 前缀！
-> Input: "010110"
-Output: 2
-Explanation: We flip to get 011111, or alternatively 000111.
 
-思路1：前缀`[1..i]` 变成全0或者变成`[000111]`的最小反转次数,推到整个数组
-```
-0101100011 S
-0112333345 oCnt(把所有1转0)
-0011123444 fCnt(第一个1之后0的个数)
-0011122333 fCnt更新为min(将当前位置之前的所有1转0，或者当前位置之前1后0转1)
-```
-
-```java
-public int minFlipsMonoIncr(String S) {
-    int oCnt = 0;
-    int fCnt = 0;
-    for(int i =0;i<S.length();i++){
-        if(S.charAt(i) == '1'){
-            oCnt ++;
-        }else if(oCnt >0){
-            fCnt ++;
-        }
-        // 关键 fCnt 随前缀更新
-       fCnt = oCnt < fCnt ? oCnt:fCnt;
-    }
-    return fCnt;
-}
-```
 
 
 
@@ -2435,7 +2495,7 @@ public List<String> readBinaryWatch(int num){
 4  = 0100
 14 = 1110
 2  = 0010
-0x3+2*1+2*1+1*2
+0x3+2\*1+2\*1+1\*2
 
 ```java
 public int totalHammingDistance(int[] nums){
@@ -2467,8 +2527,6 @@ public int[] countBits(int num){
     return f;
 }
 ```
-
-
 
 
 
