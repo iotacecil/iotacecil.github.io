@@ -1,5 +1,5 @@
 ---
-title: 不要直接看答案 想两天再做两天前的题
+title: 刷题记录
 date: 2018-03-24 03:07:34
 tags: [alg]
 categories: [算法备忘]
@@ -3835,15 +3835,7 @@ prim优化：将marked[]和emst[] 替换为两个顶点索引数组edgeTo[] 和d
 ![singleclu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/singleclu.jpg)
 
 
-
-
-
-
 #### Inverse Burrows-Wheeler Transform (IBWT) 生成 Lyndon words.  
-
-
-
-
 
 ### 两个帅不能处在同一条直线上的所有可行位置
 ```

@@ -7,6 +7,9 @@ categories: [算法备忘]
 熟练度
 https://docs.qq.com/sheet/DUGZ6cEtrUFJsSGxP
 
+### 快速排序
+
+
 ### 24 两个一组反转链表
 {% note %}
 Given 1->2->3->4, you should return the list as 2->1->4->3.
@@ -145,7 +148,7 @@ Output: true
 {% endnote %}
 ```java
 public boolean validateStackSequences(int[] pushed, int[] popped) {
-     Deque<Integer> stk = new ArrayDeque<>();
+    Deque<Integer> stk = new ArrayDeque<>();
     int i = 0;
     for (int p : pushed) {
         stk.push(p);

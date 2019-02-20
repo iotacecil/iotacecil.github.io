@@ -10,9 +10,6 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 
 虚函数是实现多态 "动态编联”的基础，C++中如果用基类的指针来析构子类对象，基类的析构要加`virtual`，不然不会调用子类的析构，会内存泄漏。
 
-
-
-
 2.数据库索引INNDB的好处
 
 3.CAS算法原理？优缺点？
@@ -42,8 +39,6 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 运行流程：
 
 一共有5种线程池
-
-
 
 10.线程同步的方法
 
