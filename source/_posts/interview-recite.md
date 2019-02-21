@@ -11,6 +11,7 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 虚函数是实现多态 "动态编联”的基础，C++中如果用基类的指针来析构子类对象，基类的析构要加`virtual`，不然不会调用子类的析构，会内存泄漏。
 
 2.数据库索引INNDB的好处
+事务，主键索引
 
 3.CAS算法原理？优缺点？
 
@@ -33,7 +34,7 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 ![httphttps.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httphttps.jpg)
 
 8.进程间通信
-套接字，管道，消息队列，共享内存，信号量。
+套接字，管道，消息队列，共享内存，信号量,信号。
 
 9.线程池的运行流程，使用参数以及方法策略
 运行流程：
@@ -60,3 +61,159 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 15.基于比较的算法的最优时间复杂度是O(nlog(n))
 因为n个数字全排列是n! 一次比较之后，两个元素顺序确定，排列数为 n!/2!
 总的复杂度是O(log(n!)) 根据斯特林公式就等于O(nlog(n))
+
+16 快速排序
+基本：
+最普通的，每次取[0]作子集划分s1+[0]+s2,再递归两个子集。
+最坏情况123456 O(n^2)
+```java
+private void qS(int[] arr,int left,int right){
+        if(left>=right)return;
+        int pivot = arr[right];
+        // 因为保证i最后在左集合右边 用++i 
+        // 所以初始化的时候边界都向外扩一格
+        int i = left-1;int j = right;
+        while (true){
+            while (++i<=right && arr[i] < pivot);
+            while (--j>=left && arr[j] > pivot);
+            if(i < j){
+                swap(arr,i , j);
+            }
+            else break;
+        }
+        // 把主元放到左集合右边
+        swap(arr, i, right);
+        qS(arr, left, i-1);
+        qS(arr, i+1,right);
+    }
+```
+
+注意1：
+主元：1取头、中、尾的中位数比随机函数便宜。
+用ifelse判断这三个数，1)把最小的放到左边2)把最大的放到右边3)把中间的数替换到最后位置上
+`pivot = nums[n-1]`
+
+然后用pivot划分子集，i从左开始，j从右开始,i最后停在j右边，交换`[i],[n-1]`，pivot放了正确的位置。
+
+注意2：
+如果有重复元素 如果11111，
+1）重复元素也交换，最后pivot也会被换到中间，很等分nlogn。
+2）不交换，i直接比较到最后，pivot还是在最后，变成n^2
+
+注意3：
+小规模数据集（N不到100可能还不如插入排序）
+当递归的长度够小直接插入排序。
+
+JDK `Arrays.sort()`中的根据阈值从merge，quick，insert，count sort中选一个
+{% fold %}
+```java
+/**如果数组长度小于 this, Quicksort 优先于 merge sort.*/
+private static final int QUICKSORT_THRESHOLD = 286;
+
+/**如果数组长度小于 this , insertion sort 优先于 Quicksort.*/
+private static final int INSERTION_SORT_THRESHOLD = 47;
+
+/**如果Byte数组长度大于this, counting sort 优先于 insertion sort. */
+private static final int COUNTING_SORT_THRESHOLD_FOR_BYTE = 29;
+
+/** 如果short or char 数组长度大于 this, counting sort 优先于 Quicksort.*/
+private static final int COUNTING_SORT_THRESHOLD_FOR_SHORT_OR_CHAR = 3200;
+
+```
+{% endfold %}
+
+17 堆排序 不需要额外空间
+堆（数组实现的完全二叉树）
+左孩子是`(1+i<<1)` // 1+i<<2 奇数
+右孩子是`(i+1)<<1` //偶数
+父节点是`(i-1)>>1`
+
+堆排序：
+线性复杂度将数组调成最大堆O(n)，将堆顶和数组最后交换，堆规模-1，再调成最大堆。
+
+```java
+void heapSort(int[] arr){
+    int s = arr.length;
+    while (s>0) {
+        s--;
+        //swap(0,n-1)
+        int rst = arr[0];
+        int last = arr[s];
+        arr[s] = rst;
+        if (s != 0) {
+            shifDown(arr, 0, last,s);
+        }
+    }
+}
+```
+
+建堆方法1：
+从上到下，每个新加的结点放在最右下，然后shiftUp每个 复杂度O(nlogn) (都可以做全排序了)
+正确方法：
+思路：
+每个叶节点都成一个子堆，下滤操作能完成两个子堆的合并。
+
+```java
+private int poll(int[] arr){
+    int s = arr.length - 1;
+    int rst = arr[0];
+    int last = arr[s];
+    arr[s] = rst;
+    if(s!=0){
+        shifDown(arr, 0,last,arr.length);
+    }
+    return rst;
+}
+//down不会超过树的高度 所以O(logn)
+private void shifDown(int[] arr,int i,int x,int len){
+    int s = len;
+    int half = s >>>1;
+    while (i < half){
+        int child = 1 + (i<<1);
+        int el = arr[child];
+        int rc = child+1;
+        if(rc < s && arr[child] < arr[rc]){
+            el = arr[rc];
+            child = rc;
+        }
+        // 大顶堆，如果比叶子都大，下面已经是有序堆了，就完成了
+        if(x >= el){
+            break;
+        }
+        arr[i] = el;
+        i = child;
+    }
+    arr[i] = x;
+}
+// log(n)
+private void shifUp(int[] arr,int i,int x){
+    while (i>0){
+        int parent = (i-1)>>>1;
+        int e = arr[parent];
+        if(e >= x)break;
+        // 下移父节点
+        arr[i] = e;
+        i = parent;
+    }
+    arr[i] = x;
+}
+void heapify(int[] arr){
+    for (int i = (arr.length >>> 1) - 1; i >= 0; i--)
+        shifDown(arr,i, arr[i],arr.length);
+}
+```
+
+复杂度：
+复杂度每个节点只需要比较的长度最多是这个节点到叶子的高度（而不是在树中的深度）。O(N)的
+因为二叉树越底层节点越多。深度越高节点越多，所以上滤复杂度高。
+
+从右下开始依次下滤，所有叶子节点都不用下滤。
+如果全堆大小为n，内部节点最后一个的idx是`(n/2)-1`
+例子：一共9个节点 各层1，2，4，2个。最后一个内部节点是3，它的右边和下面都是叶子。
+
+
+
+18 没有中序没办法确定二叉树
+前序 根左右
+后序 左右根
+找不到左右的边界

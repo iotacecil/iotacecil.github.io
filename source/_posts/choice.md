@@ -3,6 +3,18 @@ title: 单选题记录
 date: 2018-12-25 15:34:13
 tags: [面试卡片]
 ---
+
+下面哪个行为被打断不会导致InterruptedException：（ ）？
+A Thread.join
+B Thread.sleep
+C Object.wait
+D CyclicBarrier.await
+E Thread.suspend
+他的回答： A (错误)
+正确答案： E
+
+如果抛出 InterruptedException 意味着一个方法是阻塞方法
+
 一个提供NAT服务的路由器在转发一个源IP地址为10.0.0.1、目的IP地址为131.12.1.1的IP分组时，可能重写的IP分组首部字段是
 Ⅰ.TTL
 Ⅱ.片偏移量
