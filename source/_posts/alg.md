@@ -29,7 +29,7 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
-### 801
+
 
 ### 926 hiho 1326 将01串变成前0后1或全0或全1的最少flip次数 前缀！
 > Input: "010110"
@@ -269,7 +269,7 @@ public int minMoves(int[] nums) {
 
 解释：
 原始数组是[1,2,3]。这两个错乱是[2,3,1]和[3,1,2]。
-{% endnote%}
+{% endnote %}
 
 ![Derangement.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/Derangement.jpg)
 
@@ -456,6 +456,7 @@ rolling hash 很慢（？）
 
 ### lc 73 矩阵如果有0,则整行/列置0
 {% note %}
+```
 Input: 
 [
   [1,1,1],
@@ -468,6 +469,7 @@ Output:
   [0,0,0],
   [1,0,1]
 ]
+```
 {% endnote %}
 
 正确做法：空间O(1),时间O(MxN)
