@@ -4,6 +4,64 @@ date: 2018-04-23 21:21:18
 tags:
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### 标记算法
+#### 引用计数法
+无法检测出循环引用，导致内存泄漏
+```java
+public class memleak {
+    public memleak childNode;
+}
+class problem{
+    public static void main(String[] args) {
+        memleak o1 = new memleak();
+        memleak o2 = new memleak();
+        // 循环引用
+        o1.childNode = o2;
+        o2.childNode = o1;
+    }
+}
+```
+
+#### 可达性算法
+遍历所有GC Root引用链 不可达的就是垃圾。
+GC Root 栈帧中的本地变量表 （局部变量）
+方法区中常量引用/类静态属性引用对象 （类中的常量对象）
+本地方法栈中JNI（Native方法）的引用对象。
+活跃线程引用对象。
+
+### 回收算法
+#### 标记清除算法
+用可达性找到垃圾，再遍历一遍，删掉和去标记。
+缺点：不移动对象。只对不存活的对象删除。 会产生内存碎片。
+
+#### 复制算法 （半区内存回收）
+对象存活率低的场景（因为存活的很少，需要复制的少）（年轻代）
+分为对象面和空闲面， 活得从对象面复制到存活面， 内存清除。
+
+#### 标记整理算法
+适用于存活率高的场景（老年代）
+先标记，移动所有存活对象到前面，然后吧末端全部回收。
+
+#### 分代收集算法
+只有年轻代Minor GC（复制算法）和老年代Full GC。 
+
+年轻代有3个区 Eden:from Survivor:to Survivor = 8:1:1 
+把Eden和from存活的复制到to区，并且存活对象年龄+1。
+年龄阈值`-XX:MaxTernuringThreshold` （或者年轻代放不下了或者对象很大(`-XX:+PretenuerSizeThreshold`))）之后放到老年代
+
+Full GC 老年代用标记清理/整理的时候一般年轻代也要整理，所以叫Full GC
+1）老年代空间不足
+2）使用GMS GC 出现……
+3）升级到老年代大于老年代剩余空间
+4）`System.gc()`
+5) 使用RMI进行RPC或管理的 JDK应用 每小时一次Full GC
+
+G1收集器
+堆划分成多个Region
+
+
+
+---
 
 ### 引用类型
 java 将其细分为四种：类、接口、数组类和泛型参数。由于泛型参数会在编译过程中被擦除（我会在专栏的第二部分详细介绍），因此 Java 虚拟机实际上只有前三种。在类、接口和数组类中，数组类是由 Java 虚拟机直接生成的，其他两种则有对应的字节流。

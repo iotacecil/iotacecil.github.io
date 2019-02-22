@@ -99,6 +99,11 @@ $ cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 ```
 
 ### 固定ip
+```shell
+cd /etc/sysconfig/network-scripts/
+
+service network restart
+```
 
 
 ### centos 安装GLPK

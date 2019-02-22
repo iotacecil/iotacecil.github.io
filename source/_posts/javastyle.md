@@ -185,6 +185,26 @@ JDK 8 中被 MetaSpace（元数据区）替代了。而且，默认缓存大小�
 使用下面参数开启，并且记得指定使用 G1 GC：
 `-XX:+UseStringDeduplication`
 
+
+jdk1.8
+```java
+// "a"只要出现了就放到常量池
+String s = new String("a");
+// 已经放不进常量池了
+s.intern();
+String s2 = "a";
+//false
+System.out.println(s==s2);
+String s3 = new String("a")+new String("a");
+// 放的是引用
+s3.intern();
+String s4 = "aa";
+//true
+System.out.println(s3==s4);
+```
+![stringintern.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringintern.jpg)
+
+
 #### JVM的 Intrinsic
 在运行时，字符串的一些基础操作会直接利用 JVM 内部的 Intrinsic机制，往往运行的就是特殊优化的本地代码，而根本就不是 Java 代码生成的字节码。
 `-XX:+PrintCompilation -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining `

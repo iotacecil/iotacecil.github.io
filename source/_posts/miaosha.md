@@ -650,6 +650,14 @@ public Result<Boolean> redisSet() {
 "{\"id\":1,\"name\":\"1111\"}"
 
 #### 模板模式`[接口<-抽象类<-实现类]`：封装缓存key，加上前缀 
+##### 模板方法模式：算法骨架，允许子类为一个或多个步骤提供实现
+子类不改变算法结构的情况下，重定义算法的某些步骤。
+1）一次性实现算法不变的部分，并将可变的留给子类实现。
+2）子类中的公共行为提取到一个公共父类，避免代码重复。
+可以实现钩子方法。
+例子：`AbstractList`、`HttpServlet`子类重写部分的`doGet/Post`等方法
+Mybatis：`BaseExecutor`中的`doUpdate`方法 有各种实现（batchExecutor等)类覆盖
+
 优化：将key加上Prefix，按业务模块区分缓存的key
 `KeyPrefix` 接口 `BasePrefix` 抽象类 `UserKey` `OrderKey`等模块实现类
 效果：在不同的controllor模块调用service时传入模块ID
@@ -2681,8 +2689,7 @@ public class UserUtil {
 }
 
 ```
-// 虚拟机压测todo
-
+// 1300
 
 ### 页面缓存
 页面静态化：前后端分离，通过ajax渲染页面
@@ -4891,3 +4898,4 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         return Result.success(path);
     }
 ```
+![jmeter-csvdata.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmeter-csvdata.jpg)

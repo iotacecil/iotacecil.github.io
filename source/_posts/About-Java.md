@@ -462,6 +462,7 @@ Java 类对象(class)存储区域已经用完
 Java 栈空间已经用完
 
 ### 强引用、软引用、弱引用、幻象引用
+![javaref.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaref.jpg)
 
 ![references.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/references.jpg)
 
@@ -490,13 +491,15 @@ public abstract class Reference<T> {
 原有对象。这意味着，利用软引用和弱引用，我们可以将访问到的对象，重新指向强引用，也就
 是人为的改变了对象的可达性状态
 
-#### SoftReference
-让对象豁免一些垃圾收集，只有当 JVM 认为内存不足时，才会去试图回收软引用指向的对象。
+#### SoftReference:软引用，缓存，配合引用队列
+让对象豁免一些垃圾收集，只有当 JVM 认为【内存不足】时，才会去试图回收软引用指向的对象。
 are cleared at the discretion（斟酌） of the garbage collector in response to memory demand.  
-软引用通常用来实现内存敏感的缓存，如果还有空闲内存，就可以暂时保留缓存，当内存不足时清理掉，这样就保证了使用缓存的同时，不会耗尽内存。
+软引用**通常用来实现内存敏感的缓存**，如果还有空闲内存，就可以暂时保留缓存，当内存不足时清理掉，这样就保证了使用缓存的同时，不会耗尽内存。
 Soft references are most often used to implement memory-sensitive caches.
 
-#### WeakReference
+
+#### WeakReference：弱引用，配合引用队列
+每次垃圾回收都回收掉。
 下面关于Java中weak reference的说法，哪个是正确的?
 正确答案: B   你的答案: B (正确)
 Weak reference指向的对象不会被GC回收。
@@ -507,15 +510,30 @@ Weak reference 指向的对象如果被回收，那么weak reference会收到通
 维护一种非强制性的映射关系，如果试图获取时对象还在，就使用它，否则重现实例化。它同样是很多缓存实现的选择。
 Weak references are most often used to implement canonicalizing mappings
 
-#### 幻象引用
+#### 幻象引用Phantom ：虚引用，GC的哨兵，必须和引用队列一起用
+```java
+String str = new String("abc");
+ReferenceQueue queue = new ReferenceQueue();
+PhantomReference ref = new PhantomReference(str,queue);
+```
 幻象引用，有时候也翻译成虚引用，你不能通过它访问对象。幻象引用仅仅是提供了一种确
 保对象被 finalize 以后，做某些事情的机制
 
 ### 引用队列 ReferenceQueue
+是链表，就是头节点`private volatile Reference<? extends T> head = null;`
+```java
+volatile ReferenceQueue<? super T> queue;
+
+    /* When active:   NULL
+     *     pending:   this
+     *    Enqueued:   next reference in queue (or this if last)
+     *    Inactive:   this
+     */
+@SuppressWarnings("rawtypes")
+Reference next;
+```
 创建各种引用并关联到响应对象时，可以选择是否需要关联引用队列，JVM 会在特定时机将引用 enqueue 到队列里。
 幻象引用，get 方法只返回 null，如果再不指定引用队列，基本就没有意义了。
-
-
 
 
 ### final、finally、 finalize
@@ -542,6 +560,38 @@ finalize 是基础类 java.lang.Object 的一个方法.保证对象在被垃圾�
 无法保证 finalize 什么时候执行，执行的是否符合预期。使用不当会影响
 性能，导致程序死锁、挂起等。
 
+跟c++的析构函数不同，垃圾回收要标记两次垃圾回收才回收 ，没引用的对象被放到F-Queue队列中
+
+可以用于对象重生
+```java
+public class Finalization {
+    public static Finalization finalization;
+
+    @Override
+    protected void finalize() throws Throwable {
+        System.out.println("Finalize");
+        finalization = this;
+    }
+
+    public static void main(String[] args) {
+        Finalization f = new Finalization();
+        System.out.println("初始化完成：" + f);
+        f = null;
+        // 会触发finalize()
+        System.gc();
+        try {
+            // 为了等垃圾回收线程完成 执行到finalization = this;
+            Thread.currentThread().sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("完成GC："+f);
+        System.out.println(finalization);
+        System.out.println(f+" "+finalization);
+    }
+}
+```
 
 #### post-mortem
 Java 平台目前在逐步使用 java.lang.ref.Cleaner 来替换掉原有的 finalize 实现。
