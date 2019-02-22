@@ -88,15 +88,16 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="BigIntegernumberOfTrailingZeros 二进制末尾0的个数 用时27比&amp;gt;&amp;gt;=2，while(i&amp;amp;1==0)快很多 用时1721234567891011public static int numberOfTrailingZeros(int i) &amp;#123;    // HD, Figure 5-14    int y;    if (i == 0) re">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringintern.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaobj.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javarefer.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaarr.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javastr.jpg">
-<meta property="og:updated_time" content="2018-12-13T08:25:01.714Z">
+<meta property="og:updated_time" content="2019-02-22T12:50:13.071Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java风格练习">
 <meta name="twitter:description" content="BigIntegernumberOfTrailingZeros 二进制末尾0的个数 用时27比&amp;gt;&amp;gt;=2，while(i&amp;amp;1==0)快很多 用时1721234567891011public static int numberOfTrailingZeros(int i) &amp;#123;    // HD, Figure 5-14    int y;    if (i == 0) re">
-<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaobj.jpg">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringintern.jpg">
 
 
 
@@ -342,8 +343,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-12-13T16:25:01+08:00">
-                2018-12-13
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-22T20:50:13+08:00">
+                2019-02-22
               </time>
             
           </span>
@@ -450,6 +451,8 @@
 </li>
 </ul>
 <p>使用下面参数开启，并且记得指定使用 G1 GC：<br><code>-XX:+UseStringDeduplication</code></p>
+<p>jdk1.8<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// "a"只要出现了就放到常量池</span></span><br><span class="line">String s = <span class="keyword">new</span> String(<span class="string">"a"</span>);</span><br><span class="line"><span class="comment">// 已经放不进常量池了</span></span><br><span class="line">s.intern();</span><br><span class="line">String s2 = <span class="string">"a"</span>;</span><br><span class="line"><span class="comment">//false</span></span><br><span class="line">System.out.println(s==s2);</span><br><span class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"a"</span>)+<span class="keyword">new</span> String(<span class="string">"a"</span>);</span><br><span class="line"><span class="comment">// 放的是引用</span></span><br><span class="line">s3.intern();</span><br><span class="line">String s4 = <span class="string">"aa"</span>;</span><br><span class="line"><span class="comment">//true</span></span><br><span class="line">System.out.println(s3==s4);</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringintern.jpg" alt="stringintern.jpg"></p>
 <h4 id="JVM的-Intrinsic"><a href="#JVM的-Intrinsic" class="headerlink" title="JVM的 Intrinsic"></a>JVM的 Intrinsic</h4><p>在运行时，字符串的一些基础操作会直接利用 JVM 内部的 Intrinsic机制，往往运行的就是特殊优化的本地代码，而根本就不是 Java 代码生成的字节码。<br><code>-XX:+PrintCompilation -XX:+UnlockDiagnosticVMOptions -XX:+PrintInlining</code></p>
 <p>Intrinsic 机制 ：<br>利用 native 方式hard-coded的逻辑，算是一种特别的内联，很多优化还是需要直接使用特定的 CPU 指令.</p>
 <hr>
@@ -704,7 +707,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -89,7 +89,7 @@
 <meta property="og:description" content="https://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=21.泛型的好处泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。用同一个调用形式，既能调用派生类又">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httphttps.jpg">
-<meta property="og:updated_time" content="2019-02-21T09:15:24.281Z">
+<meta property="og:updated_time" content="2019-02-22T13:32:46.564Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=21.泛型的好处泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。用同一个调用形式，既能调用派生类又">
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-02-21T17:15:24+08:00">
-                2019-02-21
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-22T21:32:46+08:00">
+                2019-02-22
               </time>
             
           </span>
@@ -408,6 +408,11 @@
 <p>复杂度：<br>复杂度每个节点只需要比较的长度最多是这个节点到叶子的高度（而不是在树中的深度）。O(N)的<br>因为二叉树越底层节点越多。深度越高节点越多，所以上滤复杂度高。</p>
 <p>从右下开始依次下滤，所有叶子节点都不用下滤。<br>如果全堆大小为n，内部节点最后一个的idx是<code>(n/2)-1</code><br>例子：一共9个节点 各层1，2，4，2个。最后一个内部节点是3，它的右边和下面都是叶子。</p>
 <p>18 没有中序没办法确定二叉树<br>前序 根左右<br>后序 左右根<br>找不到左右的边界</p>
+<p>19 redis动态字符串sds的优缺点<br>结构：1）len 2）free 3）buf数组<br>优点<br>1）以\0结尾，可以复用c string的库函数。<br>2）O(1)复杂度获取长度<br>3) <strong>杜绝缓冲区溢出</strong> （c如果没分配够空间就直接覆盖了)<br>4) 减少内存重分配（空间预分配和惰性空间释放）<br>5）二进制安全（可以存图片等特殊格式），c字符串中不能包含空字符。</p>
+<p>20 数据库三范式<br>第一范式：列不可拆分<br>第二范式：每个属性要完全依赖于主键<br>第三范式：消除传递依赖。各种信息只在一个地方存储，不出现在多张表中<br>BCNF：</p>
+<p>21 内存溢出OOM和内存泄漏memory leak</p>
+<p>22 四种引用类型<br>强引用，软引用，弱引用，虚引用</p>
+<p>23 Java线程状态<br>New， Runnable， Timed Waiting， Waiting，Blocked，Terminated</p>
 
       
     </div>
@@ -518,7 +523,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

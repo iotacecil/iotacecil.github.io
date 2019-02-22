@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="引用类型java 将其细分为四种：类、接口、数组类和泛型参数。由于泛型参数会在编译过程中被擦除（我会在专栏的第二部分详细介绍），因此 Java 虚拟机实际上只有前三种。在类、接口和数组类中，数组类是由 Java 虚拟机直接生成的，其他两种则有对应的字节流。 说到字节流，最常见的形式要属由 Java 编译器生成的 class 文件。除此之外，我们也可以在程序内部直接生成，或者从网络中获取（例如网页中">
+<meta name="description" content="标记算法引用计数法无法检测出循环引用，导致内存泄漏123456789101112public class memleak &amp;#123;    public memleak childNode;&amp;#125;class problem&amp;#123;    public static void main(String[] args) &amp;#123;        memleak o1 = new memle">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/04/23/JVM/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="引用类型java 将其细分为四种：类、接口、数组类和泛型参数。由于泛型参数会在编译过程中被擦除（我会在专栏的第二部分详细介绍），因此 Java 虚拟机实际上只有前三种。在类、接口和数组类中，数组类是由 Java 虚拟机直接生成的，其他两种则有对应的字节流。 说到字节流，最常见的形式要属由 Java 编译器生成的 class 文件。除此之外，我们也可以在程序内部直接生成，或者从网络中获取（例如网页中">
+<meta property="og:description" content="标记算法引用计数法无法检测出循环引用，导致内存泄漏123456789101112public class memleak &amp;#123;    public memleak childNode;&amp;#125;class problem&amp;#123;    public static void main(String[] args) &amp;#123;        memleak o1 = new memle">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg">
-<meta property="og:updated_time" content="2018-12-05T02:55:53.079Z">
+<meta property="og:updated_time" content="2019-02-22T13:40:49.857Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
-<meta name="twitter:description" content="引用类型java 将其细分为四种：类、接口、数组类和泛型参数。由于泛型参数会在编译过程中被擦除（我会在专栏的第二部分详细介绍），因此 Java 虚拟机实际上只有前三种。在类、接口和数组类中，数组类是由 Java 虚拟机直接生成的，其他两种则有对应的字节流。 说到字节流，最常见的形式要属由 Java 编译器生成的 class 文件。除此之外，我们也可以在程序内部直接生成，或者从网络中获取（例如网页中">
+<meta name="twitter:description" content="标记算法引用计数法无法检测出循环引用，导致内存泄漏123456789101112public class memleak &amp;#123;    public memleak childNode;&amp;#125;class problem&amp;#123;    public static void main(String[] args) &amp;#123;        memleak o1 = new memle">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/suanfaGC.jpg">
 
 
@@ -338,8 +338,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-12-05T10:55:53+08:00">
-                2018-12-05
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-22T21:40:49+08:00">
+                2019-02-22
               </time>
             
           </span>
@@ -394,7 +394,17 @@
       
 
       
-        <h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3><p>java 将其细分为四种：类、接口、数组类和泛型参数。由于泛型参数会在编译过程中被擦除（我会在专栏的第二部分详细介绍），因此 Java 虚拟机实际上只有前三种。在类、接口和数组类中，数组类是由 Java 虚拟机直接生成的，其他两种则有对应的字节流。</p>
+        <h3 id="标记算法"><a href="#标记算法" class="headerlink" title="标记算法"></a>标记算法</h3><h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>无法检测出循环引用，导致内存泄漏<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">memleak</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> memleak childNode;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">problem</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        memleak o1 = <span class="keyword">new</span> memleak();</span><br><span class="line">        memleak o2 = <span class="keyword">new</span> memleak();</span><br><span class="line">        <span class="comment">// 循环引用</span></span><br><span class="line">        o1.childNode = o2;</span><br><span class="line">        o2.childNode = o1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="可达性算法"><a href="#可达性算法" class="headerlink" title="可达性算法"></a>可达性算法</h4><p>遍历所有GC Root引用链 不可达的就是垃圾。<br>GC Root 栈帧中的本地变量表 （局部变量）<br>方法区中常量引用/类静态属性引用对象 （类中的常量对象）<br>本地方法栈中JNI（Native方法）的引用对象。<br>活跃线程引用对象。</p>
+<h3 id="回收算法"><a href="#回收算法" class="headerlink" title="回收算法"></a>回收算法</h3><h4 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h4><p>用可达性找到垃圾，再遍历一遍，删掉和去标记。<br>缺点：不移动对象。只对不存活的对象删除。 会产生内存碎片。</p>
+<h4 id="复制算法-（半区内存回收）"><a href="#复制算法-（半区内存回收）" class="headerlink" title="复制算法 （半区内存回收）"></a>复制算法 （半区内存回收）</h4><p>对象存活率低的场景（因为存活的很少，需要复制的少）（年轻代）<br>分为对象面和空闲面， 活得从对象面复制到存活面， 内存清除。</p>
+<h4 id="标记整理算法"><a href="#标记整理算法" class="headerlink" title="标记整理算法"></a>标记整理算法</h4><p>适用于存活率高的场景（老年代）<br>先标记，移动所有存活对象到前面，然后吧末端全部回收。</p>
+<h4 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h4><p>只有年轻代Minor GC（复制算法）和老年代Full GC。 </p>
+<p>年轻代有3个区 Eden:from Survivor:to Survivor = 8:1:1<br>把Eden和from存活的复制到to区，并且存活对象年龄+1。<br>年龄阈值<code>-XX:MaxTernuringThreshold</code> （或者年轻代放不下了或者对象很大(<code>-XX:+PretenuerSizeThreshold</code>))）之后放到老年代</p>
+<p>Full GC 老年代用标记清理/整理的时候一般年轻代也要整理，所以叫Full GC<br>1）老年代空间不足<br>2）使用GMS GC 出现……<br>3）升级到老年代大于老年代剩余空间<br>4）<code>System.gc()</code><br>5) 使用RMI进行RPC或管理的 JDK应用 每小时一次Full GC</p>
+<p>G1收集器<br>堆划分成多个Region</p>
+<hr>
+<h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3><p>java 将其细分为四种：类、接口、数组类和泛型参数。由于泛型参数会在编译过程中被擦除（我会在专栏的第二部分详细介绍），因此 Java 虚拟机实际上只有前三种。在类、接口和数组类中，数组类是由 Java 虚拟机直接生成的，其他两种则有对应的字节流。</p>
 <p>说到字节流，最常见的形式要属由 Java 编译器生成的 class 文件。除此之外，我们也可以在程序内部直接生成，或者从网络中获取（例如网页中内嵌的小程序 Java applet）字节流。这些不同形式的字节流，都会被加载到 Java 虚拟机中，成为类或接口。</p>
 <p>对于数组类来说，它并没有对应的字节流，而是由 Java 虚拟机直接生成的。<br>对于其他的类来说，Java 虚拟机则需要借助类加载器来完成查找字节流的过程。</p>
 <p>除了启动类加载器之外，其他的类加载器都是 java.lang.ClassLoader 的子类，因此有对应的 Java 对象。这些类加载器需要先由另一个类加载器，比如说启动类加载器，加载至 Java 虚拟机中，方能执行类加载。</p>
@@ -550,7 +560,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -605,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#引用类型"><span class="nav-number">1.</span> <span class="nav-text">引用类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">2.</span> <span class="nav-text">双亲委派模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器"><span class="nav-number">3.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jmx链接-远程tomecat配置Catalina-sh加上java-opt里的jmx端口"><span class="nav-number">4.</span> <span class="nav-text">jmx链接 远程tomecat配置Catalina.sh加上java_opt里的jmx端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack-发现死锁-jstack-pid-gt-out-txt"><span class="nav-number">5.</span> <span class="nav-text">jstack 发现死锁 jstack pid &gt; out.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javap-字节码指令"><span class="nav-number">6.</span> <span class="nav-text">javap 字节码指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat-查看类加载-GC-JIT编译信息"><span class="nav-number">7.</span> <span class="nav-text">jstat 查看类加载/GC/JIT编译信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinfo-查看运行中的jvm参数"><span class="nav-number">8.</span> <span class="nav-text">jinfo 查看运行中的jvm参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jps"><span class="nav-number">9.</span> <span class="nav-text">jps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM参数"><span class="nav-number">10.</span> <span class="nav-text">JVM参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XX参数-JVM调优和Debug"><span class="nav-number">10.1.</span> <span class="nav-text">XX参数(JVM调优和Debug)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Xmx-Xms"><span class="nav-number">10.1.1.</span> <span class="nav-text">-Xmx -Xms</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#X参数（非标准化参数）各个版本可能会变-不常用"><span class="nav-number">10.2.</span> <span class="nav-text">X参数（非标准化参数）各个版本可能会变 不常用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆外内存"><span class="nav-number">11.</span> <span class="nav-text">堆外内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#64位的JVM-寻址空间"><span class="nav-number">12.</span> <span class="nav-text">64位的JVM 寻址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类装载器"><span class="nav-number">13.</span> <span class="nav-text">类装载器</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记算法"><span class="nav-number">1.</span> <span class="nav-text">标记算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引用计数法"><span class="nav-number">1.1.</span> <span class="nav-text">引用计数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可达性算法"><span class="nav-number">1.2.</span> <span class="nav-text">可达性算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回收算法"><span class="nav-number">2.</span> <span class="nav-text">回收算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#标记清除算法"><span class="nav-number">2.1.</span> <span class="nav-text">标记清除算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制算法-（半区内存回收）"><span class="nav-number">2.2.</span> <span class="nav-text">复制算法 （半区内存回收）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标记整理算法"><span class="nav-number">2.3.</span> <span class="nav-text">标记整理算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分代收集算法"><span class="nav-number">2.4.</span> <span class="nav-text">分代收集算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用类型"><span class="nav-number">3.</span> <span class="nav-text">引用类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">4.</span> <span class="nav-text">双亲委派模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器"><span class="nav-number">5.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jmx链接-远程tomecat配置Catalina-sh加上java-opt里的jmx端口"><span class="nav-number">6.</span> <span class="nav-text">jmx链接 远程tomecat配置Catalina.sh加上java_opt里的jmx端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack-发现死锁-jstack-pid-gt-out-txt"><span class="nav-number">7.</span> <span class="nav-text">jstack 发现死锁 jstack pid &gt; out.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javap-字节码指令"><span class="nav-number">8.</span> <span class="nav-text">javap 字节码指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstat-查看类加载-GC-JIT编译信息"><span class="nav-number">9.</span> <span class="nav-text">jstat 查看类加载/GC/JIT编译信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jinfo-查看运行中的jvm参数"><span class="nav-number">10.</span> <span class="nav-text">jinfo 查看运行中的jvm参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jps"><span class="nav-number">11.</span> <span class="nav-text">jps</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM参数"><span class="nav-number">12.</span> <span class="nav-text">JVM参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XX参数-JVM调优和Debug"><span class="nav-number">12.1.</span> <span class="nav-text">XX参数(JVM调优和Debug)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Xmx-Xms"><span class="nav-number">12.1.1.</span> <span class="nav-text">-Xmx -Xms</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#X参数（非标准化参数）各个版本可能会变-不常用"><span class="nav-number">12.2.</span> <span class="nav-text">X参数（非标准化参数）各个版本可能会变 不常用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆外内存"><span class="nav-number">13.</span> <span class="nav-text">堆外内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#64位的JVM-寻址空间"><span class="nav-number">14.</span> <span class="nav-text">64位的JVM 寻址空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类装载器"><span class="nav-number">15.</span> <span class="nav-text">类装载器</span></a></li></ol></div>
             
 
           </div>
