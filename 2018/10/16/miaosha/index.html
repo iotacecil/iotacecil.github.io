@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nginx.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/miaoshaverficode.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jmeter-csvdata.jpg">
-<meta property="og:updated_time" content="2019-02-22T11:33:14.518Z">
+<meta property="og:updated_time" content="2019-02-23T02:32:58.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java秒杀">
 <meta name="twitter:description" content="1.前后台json格式实现效果，在Controller调用静态方法：    成功：Result.success(data); 成功时只返回数据    异常：Result.error(CodeMsg); 包括code和msg123456789101112131415161718192021222324252627282930313233class Result&amp;lt;T&amp;gt; &amp;#123;">
@@ -351,8 +351,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-02-22T19:33:14+08:00">
-                2019-02-22
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-23T10:32:58+08:00">
+                2019-02-23
               </time>
             
           </span>
@@ -664,7 +664,9 @@
 <p>回到sbin启动<code>./rabbitmq-server</code><br>可以看log 端口是5672<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sbin]# netstat -nap |grep 5672</span><br><span class="line">tcp        0      0 0.0.0.0:25672           0.0.0.0:*               LISTEN      14205/beam.smp      </span><br><span class="line">tcp6       0      0 :::5672                 :::*                    LISTEN      14205/beam.smp</span><br></pre></td></tr></table></figure></p>
 <p>关闭用<code>./rabbitmqctl stop</code><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost sbin]# netstat -nap |grep 5672</span><br><span class="line">tcp        0      0 127.0.0.1:43296         127.0.0.1:25672         TIME_WAIT   -</span><br></pre></td></tr></table></figure></p>
 <p>安装lsof<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ebin]# lsof -i:5672</span><br><span class="line">COMMAND    PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</span><br><span class="line">beam.smp 17480 root   68u  IPv6 176892      0t0  TCP *:amqp (LISTEN)</span><br><span class="line">beam.smp 17480 root   69u  IPv6 176909      0t0  TCP localhost.localdomain:amqp-&gt;10.1.18.15:10893 (ESTABLISHED)</span><br></pre></td></tr></table></figure></p>
-<h3 id="SpringBoot-集成RabbitMQ"><a href="#SpringBoot-集成RabbitMQ" class="headerlink" title="SpringBoot 集成RabbitMQ"></a>SpringBoot 集成RabbitMQ</h3><p>erlang有原生socket一样的延迟<br>AMQP协议模型<br>生产者：1.投递到server，2投递到virtual host，3投递到exchange<br>exchange 和 message queue 有绑定关系。<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/amqp.jpg" alt="amqp.jpg"></p>
+<h3 id="SpringBoot-集成RabbitMQ"><a href="#SpringBoot-集成RabbitMQ" class="headerlink" title="SpringBoot 集成RabbitMQ"></a>SpringBoot 集成RabbitMQ</h3><p>erlang有原生socket一样的延迟<br>AMQP协议模型<br>生产者：1.投递到server，2投递到virtual host，3投递到exchange</p>
+<p>RabbitMQ有一个消息确认机制来保证消息的不丢失：客户端从队列中取出消息之后，可能需要一段时间才能处理完成，如果在这个过程中，客户端出错了，异常退出了，而数据还没有处理完成，那么非常不幸，这段数据就丢失了，因为RabbitMQ默认会把此消息标记为已完成，然后从队列中移除，消息确认是客户端从RabbitMQ中取出消息，并处理完成之后，会发送一个ack告诉RabbitMQ，消息处理完成，当RabbitMQ收到客户端的获取消息请求之后，或标记为处理中，当再次收到ack之后，才会标记为已完成，然后从队列中删除。当RabbitMQ检测到客户端和自己断开链接之后，还没收到ack，则会重新将消息放回消息队列，交给下一个客户端处理，保证消息不丢失，也就是说，RabbitMQ给了客户端足够长的时间来做数据处理。</p>
+<p>exchange 和 message queue 有绑定关系。<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/amqp.jpg" alt="amqp.jpg"></p>
 <p>核心概念：<br><div class="note "><ul>
 <li>Server：Broker。接受连接。</li>
 <li>Connection:应用与Broker的网络连接。</li>
