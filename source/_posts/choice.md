@@ -97,6 +97,19 @@ D O(nlog2n).
 他的回答： B (错误)
 正确答案： C
 
+---
+
+### nagle 算法
+
+设置tcp的哪个socket参数会影响了 nagle算法？
+正确答案: D 
+TCP_MAXSEG
+TCP_KEEPALIVE
+TCP_SYNCNT
+TCP_NODELAY
+
+TCP/IP希望每次都能够以MSS尺寸的数据块来发送数据。Nagle算法就是为了尽可能发送大块数据,避免网络中充斥着许多小数据块.
+
 
 一个提供NAT服务的路由器在转发一个源IP地址为10.0.0.1、目的IP地址为131.12.1.1的IP分组时，可能重写的IP分组首部字段是
 Ⅰ.TTL

@@ -4,6 +4,10 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 吸烟者问题
+![cosproyan.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cosproyan.jpg)
+
+
 ### 线程安全的单例模式
 
 #### 懒汉模式 延迟加载`double check` 

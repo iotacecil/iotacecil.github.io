@@ -3412,6 +3412,9 @@ beam.smp 17480 root   69u  IPv6 176909      0t0  TCP localhost.localdomain:amqp-
 erlang有原生socket一样的延迟
 AMQP协议模型
 生产者：1.投递到server，2投递到virtual host，3投递到exchange
+
+RabbitMQ有一个消息确认机制来保证消息的不丢失：客户端从队列中取出消息之后，可能需要一段时间才能处理完成，如果在这个过程中，客户端出错了，异常退出了，而数据还没有处理完成，那么非常不幸，这段数据就丢失了，因为RabbitMQ默认会把此消息标记为已完成，然后从队列中移除，消息确认是客户端从RabbitMQ中取出消息，并处理完成之后，会发送一个ack告诉RabbitMQ，消息处理完成，当RabbitMQ收到客户端的获取消息请求之后，或标记为处理中，当再次收到ack之后，才会标记为已完成，然后从队列中删除。当RabbitMQ检测到客户端和自己断开链接之后，还没收到ack，则会重新将消息放回消息队列，交给下一个客户端处理，保证消息不丢失，也就是说，RabbitMQ给了客户端足够长的时间来做数据处理。
+
 exchange 和 message queue 有绑定关系。
 ![amqp.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/amqp.jpg)
 

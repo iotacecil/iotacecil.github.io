@@ -543,6 +543,8 @@ final 修饰的 class 代表不可以继承扩展.避免 API 使用者更改基�
 final 的变量是不可以修改的.，利用final 可能有助于 JVM 将方法进行内联(现代高性能 JVM（如 HotSpot）判断内联未必依赖final 的提示)，可以改善编译器进行条件编译的能力.
 final 的方法也是不可以重写的（override）
 
+一个类的private方法会被隐式声明为final方法。
+
 ##### final 并不等同于 immutable
 ```java
  final List<String> strList = new ArrayList<>(); 
