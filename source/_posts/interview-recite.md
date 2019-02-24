@@ -393,3 +393,39 @@ OPT：知道后面会访问什么。向之后看，之后最后出现/没出现�
 FIFO：Belady异常。
 LRU：如果满了，将内存块中的数值向前找，最早出现的那个删除。
 CLOCK：时钟置换算法，NRU最近未用算法。 循环队列。 访问位。
+
+
+### 32 
+个人介绍
+sb依赖注入控制反转
+知识图谱 之间的关系 和结构存储neo4j
+vue的特点
+和react的比较
+
+前后端跨域怎么实现
+
+redis string
+redis
+为什么要把页面放到redis中？
+redis常用数据结构
+
+如何用redis list实现mq
+
+mq怎么实现的
+消息队列时需要考虑到的问题，如RPC、高可用、顺序和重复消息、可靠投递、消费关系解析等
+
+linux 
+如何传文件 scp
+如何查进程 
+如何在文件找查一个字符串
+
+String StringBuilder StringBuffer 
+String 存在JVM哪里
+syncronize
+线程池 参数，常用的
+callable
+
+two sum
+如果数字在最后怎么优化
+如果有序two sum怎么做
+three sum

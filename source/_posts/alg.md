@@ -3136,6 +3136,72 @@ void permute(String s1, String s2, int idx) {
 ```
 {% endfold %}
 
+### pdd 大整数乘积
+[大数乘积](https://itimetraveler.github.io/2017/08/22/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A4%A7%E6%95%B0%E7%9B%B8%E4%B9%98%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E9%AB%98%E6%95%88%E7%AE%97%E6%B3%95/)
+
+### pdd 数组中找三个数乘积的最大值
+{% note %}
+3 4 1 2
+{% endnote %}
+```java
+package niuke.pdd;
+
+import java.util.Scanner;
+
+public class chenji {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        long[] nums = new long[n];
+        for (int i = 0; i <n ; i++) {
+            nums[i] = sc.nextInt();
+        }
+        if(n == 3){
+            System.out.println(nums[0] *
+                    nums[1] *
+                    nums[2]);
+
+        }else{
+            long max1 = Long.MIN_VALUE;
+            long max2 = Long.MIN_VALUE;
+            long max3 = Long.MIN_VALUE;
+            long min1 = Long.MAX_VALUE;
+            long min2 = Long.MAX_VALUE;
+
+
+//            System.out.println(numss.length);
+            for (int i = 0; i <n ; i++) {
+                Long tmp = nums[i];
+//                System.out.println(tmp);
+                if(tmp > max1){
+                    max3 = max2;max2 = max1;
+                    max1 = tmp;
+                }else if(tmp > max2){
+                    max3 = max2;max2 = tmp;
+                }else if(tmp > max3){
+                    max3 = tmp;
+                }
+
+                if(tmp < min1){
+                    min2 = min1;min1 = tmp;
+                }else if(tmp < min2){
+                    min2 = tmp;
+                }
+            }
+            System.out.println(Math.max(min1*min2*max1, max1*max2*max3));
+        }
+
+    }
+}
+```
+
+### 459 Repeated Substring Pattern 子串重复N次 S = N*T
+{% note %}
+Input: "ababab"
+Output: True
+Explanation: It's the substring "ab" 3次.
+{% endnote %}
+
 ### 爱奇艺 平方串  最长公共子序列
 {% note %}
 如果一个字符串S是由两个字符串T连接而成,即S = T + T, 我们就称S叫做平方串,例如"","aabaab","xxxx"都是平方串.

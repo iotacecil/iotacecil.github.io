@@ -4,6 +4,9 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### top
+http://www.cnblogs.com/peida/archive/2012/12/24/2831353.html
+
 ### coscmd
 ```sh
 coscmd  config -a  k -s k -b  iota-1254040271 -r ap-shanghai
