@@ -3,6 +3,8 @@ title: 面试卡片
 date: 2018-12-25 15:34:13
 tags: [面试卡片]
 ---
+
+https://github.com/randian666/algorithm-study
 https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 ### 1.泛型的好处
 泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。
@@ -412,6 +414,7 @@ redis常用数据结构
 如何用redis list实现mq
 
 mq怎么实现的
+AMQP协议
 消息队列时需要考虑到的问题，如RPC、高可用、顺序和重复消息、可靠投递、消费关系解析等
 
 linux 
@@ -442,6 +445,7 @@ String 存在JVM哪里
 本来永久代使用的是JVM内存，而元空间使用的是本地内存，字符串常量不会有性能问题（intern）和内存溢出。
 
 syncronize
+https://blog.csdn.net/javazejian/article/details/72828483
 线程池 参数，常用的
 callable
 
