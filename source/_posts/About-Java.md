@@ -4,6 +4,19 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 集合遍历并删除
+用迭代器
+```java
+Iterator<Integer> it = candy.iterator();
+while (it.hasNext()){
+   int tmp = it.next();
+   if(b.hungry >= tmp){
+       b.hungry-= tmp;
+       it.remove();
+   }
+}
+```
+
 ### 用静态工厂方法替代构造器
 ```java
 public static Boolean valueOf(boolean b){

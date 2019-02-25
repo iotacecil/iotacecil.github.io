@@ -16,6 +16,11 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 事务，主键索引
 
 ### 3.CAS算法原理？优缺点？
+CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存位置，旧的预期值，新值，
+
+AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
+
+当线程尝试更改AQS状态操作获得失败时，会将Thread对象抽象成Node对象 形成CLH队列，LIFO规则。
 
 ### 4.为什么是三次握手
 信道不可靠, 但是通信双发需要就某个问题达成一致. 而要解决这个问题, 三次通信是理论上的最小值。
@@ -396,11 +401,72 @@ FIFO：Belady异常。
 LRU：如果满了，将内存块中的数值向前找，最早出现的那个删除。
 CLOCK：时钟置换算法，NRU最近未用算法。 循环队列。 访问位。
 
+### 32 递归冒泡排序
+```java
+public void bubblesort(int[] array,int n) {
+    if (n == 1)
+        return;
+    if (array == null || array.length == 0)
+        return;
+    for (int i = 0; i < n - 1; i++) {
+        if (array[i] > array[i + 1]) {
+            swap(array,i,i+1);
+        }
+    }
+    bubblesort(array, n - 1);
+}
+```
+### 33 ajax的四个步骤
+1)创建xhr对象
+2)open方法参数：method，url，同步或异步
+3)send
+4)注册一个监听器`onreadystatechange` readyState=4和status200 获得响应`.responseText`
+
+### 34 XSS攻击，跨站脚本攻击
+网站没有对用户提交数据进行转义处理或者过滤不足的缺点，进而添加一些恶意的脚本代码（HTML、JavaScript）到Web页面中去，使别的用户访问都会执行相应的嵌入代码。
+解决方法：
+1）cookie设置成http Only 不让前端`document.cookie`拿到
+2）对输入多做一些检查
+
+### 35 防止表单重复提交
+1）submit方法最后把按钮disable掉
+2）用token
+3）重定向
+
+### 36 重定向的响应头为302，并且必须要有Location响应头；
+服务器通过response响应，重定向的url放在response的什么地方？
+后端在header里的设置的Location url
+
+### 37 二分
+2.[0,len) 保持len取不到 
+[0]:l=0,r=1,l++,while(l==r)的时候应该结束
+好处：len就是长度[a,a+len)，[a,b)+[b,c)=[a,c),[a,a)是空的
+```java
+int l = 0,r = n;
+while(l<r){
+    int mid = l+(r-l)/2;
+    if(arr[mid]==target)return mid;
+    if(arr[mid]>target){
+        //在左边，边界为取不到的数
+        r=mid;//[l,mid)
+    }else{
+        //左闭又开
+        l = mid+1;//[mid+1,r)
+    }
+}
+//如果l==r [1,1)表示空的
+return -1;
+```
 
 ### 32 
 个人介绍
 
-sb依赖注入控制反转。
+#### sb依赖注入控制反转。
+IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。
+
+依赖注入DI方式setter、接口、构造函数。组件之间依赖关系由容器在运行期决定。
+SpringBoot Autowired是自动注入，自动从spring的上下文找到合适的bean来注入
+
 IOC容器通过和注解配置(`Controller`)
 1）IOC容器就是`ApplicationContext` 可以通过web.xml或者加载xml或者文件用`application-context.xml`初始化。
 2）定义bean 然后`getBean()`就获取了对象可以调用方法了
@@ -415,6 +481,10 @@ vue的特点
 和react的比较
 
 前后端跨域怎么实现
+浏览器的同源策略导致了跨域。
+XSS 跨站脚本攻击
+CSRF 跨站请求伪造（利用用户登陆态）
+Cookie的 `SameSite`属性strict
 
 redis string
 redis
@@ -457,7 +527,7 @@ String 存在JVM哪里
 原来在永久代里的字符串常量池移到了堆中。而且元空间替代了永久代。
 本来永久代使用的是JVM内存，而元空间使用的是本地内存，字符串常量不会有性能问题（intern）和内存溢出。
 
-syncronize
+syncronize 可重入
 https://blog.csdn.net/javazejian/article/details/72828483
 线程池 参数，常用的
 callable

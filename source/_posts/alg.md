@@ -29,7 +29,50 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 797 All Paths From Source to Target
 
+### 437树中找部分路径，和为target的路径条数
+{% note %}
+```
+root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+
+      10
+     /  \
+    5   -3
+   / \    \
+  3   2   11
+ / \   \
+3  -2   1
+
+Return 3. The paths that sum to 8 are:
+
+1.  5 -> 3
+2.  5 -> 2 -> 1
+3. -3 -> 11
+```
+{% endnote %}
+
+hashMap+回溯
+```java
+public int pathSum(TreeNode root, int sum) {
+    // key:前缀和 value：有多少种方式可以得到这个值
+    HashMap<Integer,Integer> preSum = new HashMap<>();
+    preSum.put(0, 1);
+    return helper(root,0,sum,preSum);
+    }
+int helper(TreeNode root,int currSum,int target,HashMap<Integer,Integer> preSum){
+    if(root == null)return 0;
+    currSum += root.val;
+    int rst = preSum.getOrDefault(currSum - target,0);
+    preSum.put(currSum, preSum.getOrDefault(currSum,0)+1);
+    rst += helper(root.left,currSum,target,preSum)+helper(root.right,currSum,target,preSum);
+    // 关键 ？
+    preSum.put(currSum,preSum.get(currSum)-1);
+    return rst;
+}
+```
+
+### pdd 花灯铺路最远距离
 
 ### 926 hiho 1326 将01串变成前0后1或全0或全1的最少flip次数 前缀！
 > Input: "010110"
@@ -3906,6 +3949,21 @@ System.out.println(Arrays.toString(acu()));
 String dacffbdbfbea = Arrays.toString(axuu("dacffbdbfbea"));
 ```
 
+### pdd给定一堆点，判断能连成几个三角形
+{% note %}
+4
+0 0
+0 1
+1 0
+1 1
+输出 4
+{% endnote %}
+思路：遍历所有3个点的组合，只要不是三点共线都行
+```java
+int a = (x1-x2)*(y1-y3) ;
+int b = (y1-y2)*(x1-x3);
+if(a!=b)cnt++;
+```
 
 ### 数组组成三角形的最大周长nlogn
 贪心，排序，如果 $a[i]<a[i-1]+a[i-2]$ 则没有其他两条边可以两边之和`>`第三边了，换下一条当最长边。
