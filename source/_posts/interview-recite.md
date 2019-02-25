@@ -417,10 +417,30 @@ mq怎么实现的
 linux 
 如何传文件 scp
 如何查进程 
+ps -ef |grep
 如何在文件找查一个字符串
+`grep 'abc' abc.txt`
+`grep 'abc' abc*` 从abc开头的文件查找
+参数`-o`只输出正则匹配的部分
+参数`-v`输出不含正则的内容
+
+如果grep不带文件就等输入
+
+echo不支持标准输入
+
+如何查找一个文件  find默认是递归查找的
+`find ~ -name "abc.java`
+
+sed 替换
+awk 切片统计
 
 String StringBuilder StringBuffer 
 String 存在JVM哪里
+堆里面创建新的字符串，用intern可以放【引用】到常量池（jdk1.7之前只只能放一个副本放到常量池）
+方法区，方法区是JVM的一种规范。元空间MetaSpace和永久代PermGen都是方法区的实现。
+原来在永久代里的字符串常量池移到了堆中。而且元空间替代了永久代。
+本来永久代使用的是JVM内存，而元空间使用的是本地内存，字符串常量不会有性能问题（intern）和内存溢出。
+
 syncronize
 线程池 参数，常用的
 callable
