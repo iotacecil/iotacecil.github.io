@@ -13,7 +13,35 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 虚函数是实现多态 "动态编联”的基础，C++中如果用基类的指针来析构子类对象，基类的析构要加`virtual`，不然不会调用子类的析构，会内存泄漏。
 
 ### 2.数据库索引INNDB的好处
-事务，主键索引
+事务，主键索引，外键
+自增长列必须是主键，索引的第一个列，而且因为不是表锁要考虑并发增长。
+innodb其实不是根据每个记录产生行锁的，根据页加锁，而且用位图。
+
+意向锁。锁定对象分为几个层次，支持行锁、表锁同时存在。
+
+一致性非锁定读：读快照 多版本并发控制：read committed是最新快照，重复读是事务开始时的快照。通过undo完成的。
+
+redo 保证事务的一致性、持久性。undo 保证事务的一致性（回滚）和MVCC多版本并发控制。
+
+行锁会用gap锁锁住一个区间，阻止多个事务插入到同一范围内。是为了解决幻读问题。
+一个事务select * from t where a>2 for update;对[2+)加锁，另一个事务插入5失败。
+
+不走索引表锁。
+
+myisam 缓冲池之缓存索引文件，不缓存数据。 索引和数据分文件。
+
+### 脏读
+脏页是最终一致性的，数据库实例内存和磁盘异步造成的。脏（数据）读违反了隔离性。
+
+### XA事务 分布式事务
+事务管理器（Mysql客户端）和资源管理器（Mysql数据库）之间用两阶段提交，等所有参与全局事务的都能提交再提交
+用JAVA JTA API
+
+### 2.mysql日志文件（不是引擎）
+binlog(逻辑日志，是sql）用于主从复制、慢查询、查询、错误
+重做日志缓存，按一定频率写到重做日志文件 是innodb的。
+
+因为只有一个主键并且建了B+树，所以其他辅助索引的插入是离散的，所以，有insert buffer
 
 ### 3.CAS算法原理？优缺点？
 CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存位置，旧的预期值，新值，
@@ -24,6 +52,8 @@ AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行
 
 ### 4.为什么是三次握手
 信道不可靠, 但是通信双发需要就某个问题达成一致. 而要解决这个问题, 三次通信是理论上的最小值。
+
+初始化序号，互相通知自己的序号。
 
 为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误。
 如果A发送2个建立链接给B，第一个没丢只是滞留了，如果不第三次握手只要B同意连接就建立了。
@@ -235,10 +265,21 @@ void heapify(int[] arr){
 
 
 ### 20 数据库三范式
-第一范式：列不可拆分
+第一范式：列不可拆分 目的：列原子性
 第二范式：每个属性要完全依赖于主键
-第三范式：消除传递依赖。各种信息只在一个地方存储，不出现在多张表中
-BCNF：
+第三范式：每一列都要与主键直接相关。【消除传递依赖】。各种信息只在一个地方存储，不出现在多张表中
+BCNF：表的部分主键依赖于非主键部分 应该拆分。
+第四范式：两个均是1：N的关系，当出现在一张表的时候，会出现大量的冗余。所以就我们需要分解它，减少冗余。
+
+### 20 数据库 5约束
+主键约束PRIMARY KEY - NOT NULL 和 UNIQUE 的结合。
+唯一约束UNIQUE  默认值约束DEFAULT  非空约束NOT NULL 外键约束FOREIGN KEY CHECK （CHECK (P_Id>0)）
+
+### 20 自然连接 NATURAL JOIN
+columns with the same name of associate tables will appear once only.
+自然连接是指关系R和S在所有公共属性(common attribute)上的等接(Equijoin). 但在得到的结果中公共属性只保留一次, 其余删除.
+
+控制文件：Oracle服务器在启动期间用来标识物理文件和数据库结构的二进制文件
 
 ### 21 内存溢出OOM和内存泄漏memory leak
 
@@ -458,14 +499,17 @@ while(l<r){
 return -1;
 ```
 
-### 32 
-个人介绍
 
-#### sb依赖注入控制反转。
+#### 37 sb依赖注入控制反转。
 IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。
 
 依赖注入DI方式setter、接口、构造函数。组件之间依赖关系由容器在运行期决定。
 SpringBoot Autowired是自动注入，自动从spring的上下文找到合适的bean来注入
+
+IOC容器初始化
+1）Resource定位
+2）载入：把定义的Bean表示成IOC的数据结构（不包括Bean依赖注入）
+3）注册到容器的HashMap中
 
 IOC容器通过和注解配置(`Controller`)
 1）IOC容器就是`ApplicationContext` 可以通过web.xml或者加载xml或者文件用`application-context.xml`初始化。
@@ -480,7 +524,7 @@ bean有创建和销毁的回调函数。
 vue的特点
 和react的比较
 
-前后端跨域怎么实现
+### 38 前后端跨域怎么实现
 浏览器的同源策略导致了跨域。
 XSS 跨站脚本攻击
 CSRF 跨站请求伪造（利用用户登陆态）
@@ -491,12 +535,27 @@ redis
 为什么要把页面放到redis中？
 只是把页面商品信息放到了redis中
 redis常用数据结构
+string, hash,set,sorted set,list
+```sh
+redis> GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
+(integer) 2
+redis> GEODIST Sicily Palermo Catania
+"166274.1516"
+redis> GEORADIUS Sicily 15 37 100 km
+1) "Catania"
+redis> GEORADIUS Sicily 15 37 200 km
+1) "Palermo"
+2) "Catania"
+redis> 
+```
 
 如何用redis list实现mq
 
-mq怎么实现的
-AMQP协议
+### mq怎么实现的
+AMQP协议: 虚拟主机（virtual host），交换机（exchange），队列（queue）和绑定（binding）。一个虚拟主机持有一组交换机、队列和绑定.
+生产者和消费者是完全解耦.
 消息队列时需要考虑到的问题，如RPC、高可用、顺序和重复消息、可靠投递、消费关系解析等
+直接模式
 
 linux 
 如何传文件 scp
@@ -527,7 +586,8 @@ String 存在JVM哪里
 原来在永久代里的字符串常量池移到了堆中。而且元空间替代了永久代。
 本来永久代使用的是JVM内存，而元空间使用的是本地内存，字符串常量不会有性能问题（intern）和内存溢出。
 
-syncronize 可重入
+### syncronize 可重入
+对象头 Monitor entry set，wait set
 https://blog.csdn.net/javazejian/article/details/72828483
 线程池 参数，常用的
 callable
