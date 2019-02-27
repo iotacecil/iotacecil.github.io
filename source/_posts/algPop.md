@@ -169,9 +169,7 @@ public boolean validateStackSequences(int[] pushed, int[] popped) {
 public ListNode reverseList(ListNode head) {
     if(head == null || head.next == null)return head;
     ListNode second = reverseList(head.next);
-    // 注意 不是second.next 因为second永远是最后一个 5，5->4,5->4->3
-    // head.next = 5,head = 4
-    // 5->4,
+    // 1->(second:7->6->5..->2)   (second:7->6->5..->2) ->1->null
     head.next.next = head;
     head.next = null;
     return second;
@@ -196,6 +194,21 @@ public ListNode reverseList(ListNode head) {
         curr = next;
     }
     return prev;
+}
+```
+
+少一个指针 正确做法
+```java
+public ListNode reverseList(ListNode head) {
+    if(head == null || head.next == null)return head;
+   ListNode cur = null;
+    while(head!=null){
+        ListNode next = head.next;
+        head.next = cur; 
+        cur = head;
+        head = next;
+    }
+    return cur;   
 }
 ```
 

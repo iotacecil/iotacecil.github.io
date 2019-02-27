@@ -74,11 +74,39 @@ AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行
 套接字，管道，消息队列，共享内存，信号量,信号。
 
 ### 9.线程池的运行流程，使用参数以及方法策略
-运行流程：
 
-一共有5种线程池
+运行流程：
+1）如果运行的线程小于`corePollsize`，则创建新线程，即使其他事空闲的。
+2）当线程池中线程数量>`corePollsize` 则只有当`workQueue`满才去创建新线程处理任务
+3）如果没有空闲，任务封装成Work对象放到等待队列
+4) 如果队列满了，用`handler`指定的策略 （5种）
+`ctl` 状态值（高3位）和有效线程数（29位）
+
+![threadpoll.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threadpoll.jpg)
+
+线程池的状态：
+RUNNING： 能接受提交
+SHUTDOWN: 不能提交，但是能处理。
+STOP： 不接受提交也不处理 
+TIDYING： 所有任务都已经终止 有效线程数为0
+TERMINATED： 标识
+
+一共有5种线程池：
+1）fixed
+2）cached 处理大量短时间工作任务 长期闲置的时候不会消耗资源
+3）sigle 保证顺序执行多个任务
+4）scheduled 定时、周期工作调度
+5）`newWrokStealingPoll` 工作窃取
 
 ### 10.线程同步的方法
+互斥量(mutex) 
+条件变量(conditon) 允许线程阻塞和等待另一个线程发送信号
+ 读写锁 信号量
+synchronized  ReenreantLock
+volatile
+ThreadLocal
+LinkedBlockingQueue
+atomic
 
 ### 11.C++虚函数作用及底层实现
 虚函数是使用虚函数表和虚函数表指针实现的。
@@ -499,8 +527,26 @@ while(l<r){
 return -1;
 ```
 
+### 38 IO模型
+阻塞IO：等待数据（收到一个完整的TCP包）和系统内核拷贝到用户内核都阻塞了。
+非阻塞IO：内核数据没准备好直接返回错误，需要轮询。
+多路复用IO模型：事件驱动IO。select阻塞轮询所有socket，可以同时处理多个连接，（连接数不高的话不一定比多线程阻塞IO好）优势不在于单个连接处理更快，在于能处理更多的连接。而且单线程执行，事件探测和事件响应在一起。
+以上三个都属于同步IO，都会阻塞进程。
+select/poll/epoll都需要等待读写时间就绪后读写，异步IO会把数据从内核拷贝到用户。
+epoll是根据每个fd上面的callback函数实现的。而且有mmap内核空间和用户空间同处一块内存空间。
+异步IO：立即返回，内核完成数据准备+拷贝数据之后发送给用户进程一个信号。
 
-#### 37 sb依赖注入控制反转。
+### 39异常 Error 和 Exception的区别
+1）Error是JVM负责的
+2）RuntimeException 是程序负责的
+3）checked Exception 是编译器负责的
+![ErrirException.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg)
+
+异常处理机制：
+在堆上创建异常  try catch中有return之前都会先执行finally的return
+
+
+### 40 sb依赖注入控制反转。
 IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。
 
 依赖注入DI方式setter、接口、构造函数。组件之间依赖关系由容器在运行期决定。
@@ -576,6 +622,13 @@ echo不支持标准输入
 
 sed 替换
 awk 切片统计
+
+终端 `/dev/tty`当前终端
+
+列出所有tcp端口 `netstat -at`
+显示pid和进程名`netstat -p`
+
+打开的文件`lsof`
 
 String StringBuilder StringBuffer 
 String 存在JVM哪里

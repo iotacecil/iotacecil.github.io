@@ -867,6 +867,35 @@ Output: 6
 The first difference (if one exists) may be either positive or negative. 
 {% endnote %}
 
+### 324 摇摆序列sort
+{% note %}
+in：
+[4,5,5,6]
+out:
+[5,6,4,5]
+{% endnote %}
+
+
+{% fold %}
+```java
+public void wiggleSort(int[] nums) {
+    int n = nums.length;
+    int[] arr = nums.clone();
+    Arrays.sort(arr);
+    int j = n-1;
+    int half = (n+1)/2;
+    int i = half-1;
+    for(int k = 0;k<n;k++){
+        if((k%2) ==0){
+            nums[k] = arr[i--];
+        }else{
+            nums[k] = arr[j--];
+        }
+    }  
+}
+```
+{% endfold %}
+
 
 
 ### lc300 !!!最长上升子序列 最长递增子序列
