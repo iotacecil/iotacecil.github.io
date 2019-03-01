@@ -394,7 +394,7 @@
 
       
         <h3 id="Elasticsearch-搭建"><a href="#Elasticsearch-搭建" class="headerlink" title="Elasticsearch 搭建"></a>Elasticsearch 搭建</h3><p>不能以root启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">groupadd elasticsearch</span><br><span class="line">useradd elasticsearch -g elasticsearch -p elasticsearch</span><br><span class="line">chown  -R elasticsearch.elasticsearch *</span><br><span class="line">su elasticsearch</span><br></pre></td></tr></table></figure></p>
-<p>安装es插件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/mobz/elasticsearch-head/archive/master.zip</span><br><span class="line"><span class="meta">#</span> 安装nodejs</span><br><span class="line">sudo yum install nodejs</span><br><span class="line">cd elasticsearch-head</span><br><span class="line">npm install</span><br><span class="line"><span class="meta">#</span> 两个进程跨域</span><br><span class="line">cd elasticsearch-5.5.2</span><br><span class="line">vim config/elasticsearch.yml</span><br><span class="line"><span class="meta">#</span> 最后加 并且绑定ip</span><br><span class="line">http.cors.enable: true</span><br><span class="line">http.cors.allow-origin: "*"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span># 启动es</span><br><span class="line">./elasticsearch -d</span><br><span class="line"><span class="meta">#</span># 启动head</span><br><span class="line">npm run start</span><br><span class="line">ps aux | grep ‘elastic’</span><br><span class="line"></span><br><span class="line">sysctl -w vm.max_map_count=262144</span><br></pre></td></tr></table></figure></p>
+<p>安装es插件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/mobz/elasticsearch-head/archive/master.zip</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装nodejs</span></span><br><span class="line">sudo yum install nodejs</span><br><span class="line">cd elasticsearch-head</span><br><span class="line">npm install</span><br><span class="line"><span class="meta">#</span><span class="bash"> 两个进程跨域</span></span><br><span class="line">cd elasticsearch-5.5.2</span><br><span class="line">vim config/elasticsearch.yml</span><br><span class="line"><span class="meta">#</span><span class="bash"> 最后加 并且绑定ip</span></span><br><span class="line">http.cors.enable: true</span><br><span class="line">http.cors.allow-origin: "*"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 启动es</span></span></span><br><span class="line">./elasticsearch -d</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 启动head</span></span></span><br><span class="line">npm run start</span><br><span class="line">ps aux | grep ‘elastic’</span><br><span class="line"></span><br><span class="line">sysctl -w vm.max_map_count=262144</span><br></pre></td></tr></table></figure></p>
 <p>改limit需要重启(?)</p>
 
       
@@ -435,6 +435,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/01/produbbo/" rel="prev" title="produbbo">
+                produbbo <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -511,7 +515,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
