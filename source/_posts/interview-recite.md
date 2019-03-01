@@ -65,6 +65,12 @@ AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行
 收到一个 FIN只意味着这一方向上没有数据流动，一个TCP连接在收到一个FIN后仍能发送数据。首先进行关闭的一方将执行主动关闭，而另一方执行被动关闭。
 2)让本连接持续时间内所有的报文都从网络中消失，下个连接中不会出现旧的请求报文。
 
+#### TIME_WAIT
+1）发送FIN变成FIN_WAIT1，然后收到对方ACK+FIN，发完ACK
+2）FIN_WAIT1 收到ACK之后到FIN_WAIT2，然后收到FIN，发送ACK
+这个状态等2MSL后就CLOSED
+作用：让本连接持续时间内所有的报文都从网络中消失，下个连接中不会出现旧的请求报文。
+
 ### 6.数据库最左匹配原理
 
 ### 7.http https
@@ -314,6 +320,8 @@ columns with the same name of associate tables will appear once only.
 
 ### 22 四种引用类型
 强引用，软引用，弱引用，虚引用
+软引用：内存不够二次回收
+弱引用：回收
 
 ### 23 Java线程状态
 New， Runnable， Timed Waiting， Waiting，Blocked，Terminated
@@ -580,6 +588,11 @@ java线程同步的方法
 所以用的是 **可达性分析算法**：判断对象的引用链是否可达。
 从GC root（栈中的本地变量表中的对象、类（方法区）常量、静态属性保存的是对象……）
 
+
+
+类回收：
+ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
+
 ### 2进制字符串转16进制
 ```java
  String b2h(String bins){
@@ -604,6 +617,8 @@ java线程同步的方法
     return sb.reverse().toString();
 }
 ```
+
+### 十进制转2进制
 
 ### 编辑距离
 1）定义`dp[n][m]`表示从s1的前n个字符->s2的前m个字符最少的编辑距离。
@@ -647,6 +662,9 @@ public int minDistance(String word1, String word2) {
 进程和线程的区别
 线程之间什么是共享的
 栈为什么要线程独立
+运行时在模块入口时，数据区需求是确定的。
+栈是编译器可以管理创建和释放的内容，堆需要GC
+栈很少有碎片
 
 ### ThreadPoolExecutor 怎么实现的
 1）线程池状态
@@ -722,6 +740,8 @@ redis>
 ### mq怎么实现的
 AMQP协议: 虚拟主机（virtual host），交换机（exchange），队列（queue）和绑定（binding）。一个虚拟主机持有一组交换机、队列和绑定.
 生产者和消费者是完全解耦.
+？因为保证可靠消费？这样redis预减的库存就真的减少到mysql里了？不用再同步回来（？
+持久化？
 消息队列时需要考虑到的问题，如RPC、高可用、顺序和重复消息、可靠投递、消费关系解析等
 直接模式
 
