@@ -646,8 +646,11 @@ public double getkth(int[] A,int idx1,int[]B,int idx2,int k){
 ```
 
 
-
-
+### 9 判断回文
+{% note %}
+Input: 121
+Output: true
+{% endnote %}
 
 ### 添加最少字符回文串 区间dp
 可以在任意位置添加,
@@ -668,6 +671,18 @@ https://www.nowcoder.com/questionTerminal/cfa3338372964151b19e7716e19987ac
 abc12321
 
 n^2的方法, 这个串反转，原串后n位和反转串n前位相同就是回文串。
+
+### 131 Palindrome Partitioning 回文切割
+{% note %}
+```
+Input: "aab"
+Output:
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
+```
+{% endnote %}
 
 ### ?409 string中字符组成回文串的最大长度
 1.开int[128]，直接用int[char]++计数

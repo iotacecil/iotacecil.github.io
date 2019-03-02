@@ -3429,7 +3429,6 @@ exchange 和 message queue 有绑定关系。
 - Binding：Exchange和Queue的虚拟连接，可以有routing key。
 - Routing key：路由规则。host确定如何路由一个消息。
 - Queue:保存并转发给消费者。
-
 {% endnote %}
 
 核心配置文件位置：

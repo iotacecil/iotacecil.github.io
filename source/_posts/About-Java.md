@@ -4,6 +4,14 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 符号引用 直接引用
+符号引用：
+符号引用与虚拟机的内存布局无关，引用的目标并不一定加载到内存中。
+在编译时，java类并不知道所引用的类的实际地址，因此只能使用符号引用来代替。
+
+直接引用：
+同一个符号引用在不同的虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那引用的目标必定已经被加载入内存中了。
+
 ### 集合遍历并删除
 用迭代器
 ```java
@@ -171,6 +179,10 @@ Otherwise, a new array is allocated with the runtime type of the specified array
 ### BinarySearch
 `Arrays.binarySearch()` method returns index of the search key, if it is contained in the array, 
 else it returns (-(insertion point) - 1).
+
+### 动态分配
+JVM虚拟机在方法分派前会为当前相关类（自身类、接口、父类、子类）生成一个方法表
+JVM 首先查看常量池，确定方法调用的符号引用（名称、返回值等等），然后利用 this 指向的实例得到该实例的方法表，进而搜索方法表来找到合适的方法地址。
 
 ### 多态
 - Java中除了static方法和final方法（private方法本质上属于final方法，因为不能被子类访问）之外，其它所有的方法都是动态绑定
