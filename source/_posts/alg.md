@@ -2391,6 +2391,29 @@ public int hammingWeight(int n) {
 }
 ```
 
+
+### 405 十进制转16进制
+{% note %}
+Input:
+-1
+Output:
+"ffffffff"
+{% endnote %}
+每次用1111取右边四位，因为int已经补码表示了，正负都一样取4位直接转。
+(2^n的时候 位运算&(n-1)正好是取余（？）)
+```java
+public String toHex(int num) {
+    if(num == 0)return "0";
+    String hexs = "0123456789abcdef";
+    String str = "";
+    while(num != 0){
+        str = hexs.charAt((num & 15)) +str;
+        num >>>= 4;
+    }
+    return str;
+}
+```
+
 ### lc 325 lt 919
 
 ### 数组嵌套
@@ -4580,10 +4603,7 @@ public int getSum(int a, int b) {
 
 
 
-### 136 Single Number
-异或 0^12=12,12^12=0
-[single number](https://leetcode.com/articles/single-number/)
-$$2(a+b+c)-(a+a+b+b+c)$$ `2*sum(set(list))-sum(list)`
+
 
 ### 137 所有数字都出现3次，只有一个出现1次
 {% note %}
