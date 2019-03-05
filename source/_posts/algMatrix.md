@@ -4,6 +4,62 @@ date: 2018-10-21 14:51:19
 tags: [alg]
 categories: [算法备忘]
 ---
+
+
+### 48 Rotate Image
+{% fold %}
+逆时针：第一步交换主对角线两侧的对称元素，第二步交换第i行和第n-1-i行，即得到结果。 如果是顺时针， 第一步交换对角线两侧的对称元素，第二步交换第i行和第n-1-i行，即得到结果。
+```java
+public void rotate(int[][] matrix) {
+   int n = matrix.length;  
+    for(int i = 0;i<n;i++){
+        for(int j = i+1;j<n;j++){
+            if(i!=j){
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = tmp;  
+            }            
+        }
+    }
+    for(int i =0;i<n;i++){
+        for(int j = 0;j<n/2;j++){
+           int tmp = matrix[i][j];
+            matrix[i][j] = matrix[i][n-1-j];
+            matrix[i][n-1-j] = tmp;
+        }
+    }
+}
+```
+{% endfold %}
+
+### 快速幂
+给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+```java
+public double Power(double base, int ex) {
+    double rst = 1;
+    while(ex >0){
+        if((ex&1) != 0){
+            rst = rst*base;
+        }
+        base = base*base;
+        ex>>=1;
+    }
+    // 2，-3
+   if(ex <0){
+       ex = -ex;
+   }
+    while(ex >0){
+        if((ex&1) != 0){
+            rst = rst/base;
+        }
+        base = base*base;
+        ex>>=1;
+    }
+    return rst;
+}
+```
+
+
 ### 矩阵链乘法O(n^3)的dp
 
 ### 最大子矩阵和

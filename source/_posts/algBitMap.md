@@ -4,7 +4,88 @@ date: 2019-03-04 10:10:31
 tags: [alg]
 categories: [算法备忘]
 ---
-### 89 Gray Code 
+### 260 Single Number III 两个数字只出现一次，其它出现2次
+{% note %}
+Input:  [1,2,1,3,2,5]
+Output: [3,5]
+{% endnote %}
+
+### 137 Single Number II 所有数字都出现3次，只有一个出现1次
+{% note %}
+Input: [0,1,0,1,0,1,99]
+Output: 99
+{% endnote %}
+
+三进制不进位加法
+不会
+```java
+public int singleNumber(int[] A) {
+    int ones = 0, twos = 0;
+    for(int i = 0; i < A.length; i++){
+        ones = (ones ^ A[i]) & ~twos;
+        twos = (twos ^ A[i]) & ~ones;
+    }
+    return ones;
+}
+```
+
+
+### 190 Reverse Bits 逆序二进制位
+{% note %}
+Input: 00000010100101000001111010011100
+Output: 00111001011110000010100101000000
+{% endnote %}
+不熟练
+```java
+public int reverseBits(int n) {
+  int rst = 0;
+  for(int i = 0;i<32;i++){
+        rst <<= 1;
+        rst  += (n>>>i)&1;  
+    }
+    return rst;
+}
+```
+
+### 191 Number of 1 Bits 十进制数int有几个二进制1
+{% note %}
+Input: 00000000000000000000000000001011
+Output: 3
+Explanation: The input binary string 00000000000000000000000000001011 has a total of three '1' bits.
+{% endnote %}
+熟练
+```java
+public int hammingWeight(int n) {
+    int cnt =0;
+    while(n!=0){
+        n = n&(n-1);
+        n>>>=1;
+        cnt++;
+    }
+    return cnt;
+}
+```
+
+### 268 Missing Number 0-n个数字放进长度n-1的数组，少了哪个
+{% note %}
+Input: [3,0,1]
+Output: 2
+{% endnote %}
+
+熟练 位运算
+```java
+public int missingNumber(int[] nums) {
+    int n = nums.length;
+    int rst = n;
+    for(int i =0;i<n;i++){
+        rst ^= i^nums[i];
+    }
+    return rst;
+}
+```
+
+### 89 !Gray Code 格雷编码
+两个连续的数值仅有一个位数的差异。
 {% note %}
 Input: 2
 Output: [0,1,3,2]
@@ -14,6 +95,41 @@ Explanation:
 11 - 3
 10 - 2
 {% endnote %}
+
+不会
+`G(i) = i^ (i/2)`
+```java
+public List<Integer> grayCode(int n) {
+   List<Integer> rst = new ArrayList<>();
+    for(int i =0;i<(1<<n);i++){
+        rst.add(i^(i>>>1));
+    }
+    return rst;
+}
+```
+
+回溯？
+```java
+int num = 0;
+public List<Integer> grayCodeBack(int n) {
+    List<Integer> rst = new ArrayList<>();
+    backtrack(rst, n );
+    return rst;
+}
+
+private void backtrack(List<Integer> rst,int n){
+    if(n ==0){
+        rst.add(num );
+        return;
+    }
+   else{
+        backtrack(rst, n-1);
+        num ^= (1<< n-1);
+        backtrack(rst, n-1);
+    }
+}
+```
+
 
 ### 338 !Counting Bits 数1-num各数分别有几个1
 {% note %}
