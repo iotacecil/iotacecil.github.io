@@ -4,9 +4,30 @@ date: 2019-03-05 21:19:21
 tags: [alg]
 categories: [算法备忘]
 ---
+### 151. Reverse Words in a String
+{% note %}
+Input: "  hello world!  "
+Output: "world! hello"
+{% endnote %}
+
 ### 344. Reverse String 
 {% note %}
+Input: ["h","e","l","l","o"]
+Output: ["o","l","l","e","h"]
 {% endnote %}
+熟练
+```java
+public void reverseString(char[] s) {
+    int j = s.length-1;
+    int i = 0;
+    while(i<j){
+        char tmp = s[j];
+        s[j] = s[i];
+        s[i] =tmp;
+        i++;j--;
+    }
+}
+```
 
 ### 383 Ransom Note 从str2中选字符可以组成str1
 {% note %}

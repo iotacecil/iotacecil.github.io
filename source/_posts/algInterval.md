@@ -367,8 +367,6 @@ O(n log n) 的时间和 O(1) 的额外空间。 原地算法
 
 
 
-
-
 ### 57 插入一个区间并合并
 方法1： 将区间插到newInterval.start>interval.start之前的位置，用56的和last比较合并
 方法2： 分成left+new+right三部分并合并 中间部分取自身和重叠区间的min/max

@@ -334,33 +334,7 @@ public int findDerangement(int n) {
 
 ### 670 
 
-### 299 猜对了几个字符
-{% note %}
-A表示位置对+数值对，B表示位置不对。
-Input: secret = "1123", guess = "0111"
 
-Output: "1A1B"
-
-Explanation: The 1st 1 in friend's guess is a bull, the 2nd or 3rd 1 is a cow.
-{% endnote %}
-
-关键：计数，如果secret当前字符的计数<0，表示在guess出现过，b++,然后再计数这个字符。注意对secret和guess的当前字符都判断是否之前出现过，分别计数b。
-
-```java
-public String getHint(String secret, String guess) {
-    int bulls = 0;
-    int cows = 0;
-    int[] numbers = new int[10];
-    for (int i = 0; i<secret.length(); i++) {
-        if (secret.charAt(i) == guess.charAt(i)) bulls++;
-        else {
-            if (numbers[secret.charAt(i)-'0']++ < 0) cows++;
-            if (numbers[guess.charAt(i)-'0']-- > 0) cows++;
-        }
-    }
-    return bulls + "A" + cows + "B";
-}
-```
 
 
 有序矩阵nxn个复杂度O(n)
@@ -3353,9 +3327,6 @@ private static int LCS(String s,String t){
 
 }
 ```
-
-
-
 
 ### 718 最长公共子串40ms 90%
 {% note %}

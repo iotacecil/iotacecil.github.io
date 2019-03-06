@@ -4,6 +4,9 @@ date: 2018-10-16 21:18:11
 tags:
 category: [项目流程]
 ---
+### 其他优化点
+http://massivetechinterview.blogspot.com/2016/01/blog-post_48.html
+数据库的分片，主从复制（可能会id冲突，要应用自己生成id）
 
 ### 1.前后台json格式
 实现效果，在Controller调用静态方法：
@@ -1851,7 +1854,6 @@ dao
 ```java
 @Mapper
 public interface GoodsDao {
-
     /**
      * 查找商品信息和秒杀信息(库存和秒杀时间)
      */
@@ -2173,8 +2175,6 @@ public class MiaoshaService {
     }
 }
 ```
-
-
 
 1. 减少库存：查找miaosha商品ID并更新数据库：
 
@@ -2605,8 +2605,7 @@ delete from miaosha_user where nickname like 'user%';
 
 userutil
 ```java
-public class UserUtil {
-    
+public class UserUtil {  
     private static void createUser(int count) throws Exception{
         List<MiaoshaUser> users = new ArrayList<MiaoshaUser>(count);
         //生成用户
@@ -2691,11 +2690,11 @@ public class UserUtil {
 ```
 // 1300
 
-### 页面缓存
+### 页面缓存 商品列表页是把html直接存在redis里,SB渲染返回
 页面静态化：前后端分离，通过ajax渲染页面
 浏览器会把html缓存在客户端，页面数据不需要重复下载，只下载动态数据
 
-Redis 页面缓存key
+Redis 页面缓存key 一般页面缓存比较短，不然看不到页面变化
 ```java
 public class GoodsKey extends BasePrefix {
     private GoodsKey(int expireSeconds, String prefix) {
@@ -2741,7 +2740,8 @@ public String toLogin(HttpServletRequest request, HttpServletResponse response, 
 http://localhost:8080/goods/to_list
 连上redis 查看keys GoodsKey:gl
 
-### URL缓存 详情页缓存
+### URL缓存 详情页缓存 
+和页面缓存一样，通过整个html用sb渲染返回，每个页面缓存时间60s
 ```java
 @RequestMapping(value = "/to_detail/{goodsId}",produces="text/html")
 @ResponseBody
@@ -2754,7 +2754,7 @@ public String detail(HttpServletRequest request, HttpServletResponse response,
     if(!StringUtils.isEmpty(html)) {
         return html;
     }
-
+    // 读数据库的 保证刷新还是读到真实的库存
     GoodVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
     model.addAttribute("goods", goods);
 
@@ -2820,7 +2820,8 @@ public MiaoshaUser getById(long id) {
 }
 ```
 
-修改密码： 更新数据库，修改缓存
+修改密码： 更新数据库，再让缓存失效
+如果先删除缓存，数据库还没更新，又放了旧的数据在缓存里。
 
 Cache Aside Pattern
 ![cachepattern.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cachepattern.jpg)
@@ -2839,9 +2840,10 @@ public boolean updatePassword(String token, long id, String formPass) {
     toBeUpdate.setId(id);
     toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
     miaoshaUserDao.update(toBeUpdate);
-    //处理缓存
+    //以前的用户根据id取的缓存直接删掉
     redisService.delete(MiaoshaUserKey.getById, ""+id);
     user.setPassword(toBeUpdate.getPassword());
+    // 为了登陆不掉，更新token，还是之前那个token
     redisService.set(MiaoshaUserKey.token, token, user);
     return true;
 }
@@ -2877,14 +2879,14 @@ public interface MiaoshaUserDao {
     public void update(MiaoshaUser toBeUpdate);
 }
 ```
+// to_list 接口qps 1267->2884  load 15->5
 
-
-### 页面静态化
+### 页面静态化(前后端分离)
 不用`thymeleaf`
+页面只有html，动态数据通过接口获取。
 
 
 #### 详情页
-
 将商品详情页包装成vo
 ```java
 public class GoodsDetailVo {
@@ -2922,7 +2924,6 @@ function getDetail(){
 }
 ```
 
-
 js获取url后面的参数name的值
 ```javascript
 // 获取url参数
@@ -2934,7 +2935,8 @@ function g_getQueryString(name) {
 };
 ```
 
-成功之后的回调函数 渲染页面
+成功之后的回调函数 渲染页面 
+问题：时间不同步问题，应该定时和服务器同步一下，现在全靠自己刷新
 ```js
 function render(detail){
     var miaoshaStatus = detail.miaoshaStatus;
@@ -3213,7 +3215,6 @@ function render(detail){
         status = "待发货";
     }
     $("#orderStatus").text(status);
-    
 }
 
 $(function(){
@@ -3243,7 +3244,6 @@ function getOrderDetail(){
 </script>
 ```
 
-
 #### 静态化配置
 304是客户端（浏览器）向服务端自动加
 `If-Modified-Since: Fri, 28 Dec 2018 11:48:23 GMT`
@@ -3262,7 +3262,9 @@ spring.resources.chain.html-application-cache=true
 spring.resources.static-locations=classpath:/static/
 ```
 response里200 （但其实是来自缓存）响应头里有，达到从浏览器读。
-`Cache-Control: max-age=3600`
+Pragma是1.0的
+Expire带时区的（服务端）
+`Cache-Control: max-age=3600` 秒
 
 ### bug1：秒杀并发库存到0以下`and stock_count >0`
 code review
@@ -3315,7 +3317,6 @@ public int reduceStock(MiaoshaGoods g);
 数据库唯一索引，让一个用户只能有一个秒杀订单
 ![uniqueindex.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/uniqueindex.jpg)
 
-
 优化：
 查询用户是否买过这个商品不走数据库
 建key
@@ -3328,7 +3329,6 @@ public class OrderKey extends BasePrefix {
     public static OrderKey getMiaoshaOrderByUidGid = new OrderKey("moug");
 }
 ```
-
 
 ```java
 // 根据用户ID和商品ID查找相应订单
@@ -3358,10 +3358,16 @@ public OrderInfo createOrder(MiaoshaUser user, GoodVo goods) {
 3.CDN
 
 ### 接口优化
-
 1）redis预减库存减少数据库访问，减库存请求入消息队列，返回排队中。
 2）服务端：请求出队，生成订单，减库存。
 3）客户端轮询秒杀是否成功。
+
+并发队列：
+Java的并发包提供了三个常用的并发队列实现，分别是：ConcurrentLinkedQueue 、 LinkedBlockingQueue 和 ArrayBlockingQueue。
+ArrayBlockingQueue是初始容量固定的阻塞队列，我们可以用来作为数据库模块成功竞拍的队列，比如有10个商品，那么我们就设定一个10大小的数组队列。
+ConcurrentLinkedQueue使用的是CAS原语无锁队列实现，是一个异步队列，入队的速度很快，出队进行了加锁，性能稍慢。
+LinkedBlockingQueue也是阻塞的队列，入队和出队都用了加锁，当队空的时候线程会暂时阻塞。
+由于我们的系统入队需求要远大于出队需求，一般不会出现队空的情况，所以我们可以选择ConcurrentLinkedQueue来作为我们的请求队列实现
 
 ### 安装 RabitMQ
 1.安装依赖`yum install ncurses-devel`
@@ -4296,6 +4302,7 @@ nginx 横向扩展（反向代理proxy_pass)配置多台服务器
 负载均衡 weight
 ![nginx.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nginx.jpg)
 nginx 缓存
+https://linux.cn/article-5945-1.html
 ```shell
 proxy_cache_path /usr/local/nginx/proxy_cache levels=1:2 keys_zone=my_cache:200m inactive=1d max_size=20g;
 proxy_ignore_headers x-Accel-Expires Expires Cache-Control;
@@ -4660,6 +4667,7 @@ function getMiaoshaPath(){
 可以删除全部的Model了因为前后端分离了。
 
 #### 接口限流
+防止有用户写前端写for循环xhr
 用缓存的有效期,key是用户访问的地址+用户id
 新建限流key
 ```java

@@ -4,6 +4,9 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+http://www.cnblogs.com/lanxuezaipiao/p/4153070.html
+### 序列化 
+
 ### 符号引用 直接引用
 符号引用：
 符号引用与虚拟机的内存布局无关，引用的目标并不一定加载到内存中。

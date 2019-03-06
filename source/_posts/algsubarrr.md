@@ -244,48 +244,6 @@ public int lensum(int[] arr,int k){
 https://leetcode.com/articles/maximum-sum-of-3-non-overlapping-intervals/
 https://www.jiuzhang.com/solution/maximum-sum-of-3-non-overlapping-subarrays/
 
-### 121 只能买卖一次 买卖股票的利润
-> 输入: [7,1,5,3,6,4]
-输出: 5
-解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
-
-方法1：两次for，找最大差值 10% 262ms
-方法2：Kadane算法(maximum subarray)先找到最低值，保留并更新最低值，并更新最大差值 2ms 36%
-
-```java
-public int maxProfit(int[] prices){
-    int minP = Integer.MAX_VALUE;
-    int maxP = 0;
-    int n = prices.length;
-    for(int i =0;i<n;i++){
-        if(prices[i]<minP)minP = prices[i];
-        else if(prices[i]-minP>maxP)maxP = prices[i]-minP;
-    }
-    return maxP;
-}
-```
-
-dp 保留前i天的最低值 更新第i天的最大差值 3ms 19%
-```java
- public int maxProfit(int[] prices) {
-    int n = prices.length;
-    if(n<1)return 0;
-    int[] mindp = new int[n];
-    int[] maxdp = new int[n];
-    mindp[0] = prices[0];
-    maxdp[0] =0;
-    for(int i =1;i<n;i++){
-        mindp[i] = Math.min(mindp[i-1],prices[i]);
-       //当天的股价-前i-1天的min价格
-        maxdp[i] = Math.max(maxdp[i-1],prices[i]-mindp[i-1]);
-    }
-    return maxdp[n-1];
-}
-```
-dp2: 4 ms 15%
-转换成53 将price reduce成每天的收益
-`[7,1,5,3,6,4]->[ ,-6,4,-2,3,-2]`
-在[4,-2,3]持有股票，从day2 [1]买进后的累积和最大
 
 
 
