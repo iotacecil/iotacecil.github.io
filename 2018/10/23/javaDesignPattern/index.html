@@ -80,18 +80,26 @@
 
 
 
-<meta name="description" content="开闭原则场景：课程-课程打折JavaCourse implements ICourseJavaDiscountCourse extends JavaCourse">
+<meta name="description" content="依赖关系 虚线，指向被使用的 （参数关系、返回值） 关联关系 实线 一般是一个类中有另一个类的对象 继承关系 空心三角，指向父类（父类不知道子类） 组合关系，实心菱形 可以有基数 聚合关系 空心菱形 has a 独立生命周期 整体局部（大雁菱形-箭头大雁） 实现关系 简单工厂模式：不依赖具体的类，根据参数传入工厂返回具体类，并用泛型接收。例子 jdbc根据参数不一样创建不同的驱动 工厂方法：用泛型">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="javaDesignPattern">
+<meta property="og:title" content="设计模式">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/10/23/javaDesignPattern/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="开闭原则场景：课程-课程打折JavaCourse implements ICourseJavaDiscountCourse extends JavaCourse">
+<meta property="og:description" content="依赖关系 虚线，指向被使用的 （参数关系、返回值） 关联关系 实线 一般是一个类中有另一个类的对象 继承关系 空心三角，指向父类（父类不知道子类） 组合关系，实心菱形 可以有基数 聚合关系 空心菱形 has a 独立生命周期 整体局部（大雁菱形-箭头大雁） 实现关系 简单工厂模式：不依赖具体的类，根据参数传入工厂返回具体类，并用泛型接收。例子 jdbc根据参数不一样创建不同的驱动 工厂方法：用泛型">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-23T06:09:31.399Z">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlyilai.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlguanlian.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlzuhe.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umljuhe.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlinterface.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdfactory.jpg">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdfactory2.jpg">
+<meta property="og:updated_time" content="2019-03-06T09:04:57.445Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="javaDesignPattern">
-<meta name="twitter:description" content="开闭原则场景：课程-课程打折JavaCourse implements ICourseJavaDiscountCourse extends JavaCourse">
+<meta name="twitter:title" content="设计模式">
+<meta name="twitter:description" content="依赖关系 虚线，指向被使用的 （参数关系、返回值） 关联关系 实线 一般是一个类中有另一个类的对象 继承关系 空心三角，指向父类（父类不知道子类） 组合关系，实心菱形 可以有基数 聚合关系 空心菱形 has a 独立生命周期 整体局部（大雁菱形-箭头大雁） 实现关系 简单工厂模式：不依赖具体的类，根据参数传入工厂返回具体类，并用泛型接收。例子 jdbc根据参数不一样创建不同的驱动 工厂方法：用泛型">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlyilai.jpg">
 
 
 
@@ -127,7 +135,7 @@
 
 
 
-  <title>javaDesignPattern | Learn & practice</title>
+  <title>设计模式 | Learn & practice</title>
   
 
 
@@ -308,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">javaDesignPattern</h1>
+          <h1 class="post-title" itemprop="name headline">设计模式</h1>
         
 
         <div class="post-meta">
@@ -337,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-10-23T14:09:31+08:00">
-                2018-10-23
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-06T17:04:57+08:00">
+                2019-03-06
               </time>
             
           </span>
@@ -393,7 +401,14 @@
       
 
       
-        <h4 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h4><p>场景：课程-课程打折<br><code>JavaCourse implements ICourse</code><br><code>JavaDiscountCourse extends JavaCourse</code></p>
+        <p>依赖关系 虚线，指向被使用的 （参数关系、返回值）<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlyilai.jpg" alt="umlyilai.jpg"></p>
+<p>关联关系 实线 一般是一个类中有另一个类的对象<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlguanlian.jpg" alt="umlguanlian.jpg"></p>
+<p>继承关系 空心三角，指向父类（父类不知道子类）</p>
+<p>组合关系，实心菱形 可以有基数<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlzuhe.jpg" alt="umlzuhe.jpg"></p>
+<p>聚合关系 空心菱形 has a 独立生命周期 整体局部（大雁菱形-箭头大雁）<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umljuhe.jpg" alt="umljuhe.jpg"></p>
+<p>实现关系<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlinterface.jpg" alt="umlinterface.jpg"></p>
+<p>简单工厂模式：不依赖具体的类，根据参数传入工厂返回具体类，并用泛型接收。<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdfactory.jpg" alt="pdfactory.jpg"><br>例子 jdbc根据参数不一样创建不同的驱动</p>
+<p>工厂方法：用泛型工厂调用具体的类的工厂<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdfactory2.jpg" alt="pdfactory2.jpg"><br>至少添加类的时候不用改工厂</p>
 
       
     </div>
@@ -488,17 +503,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -558,22 +564,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#开闭原则"><span class="nav-number">1.</span> <span class="nav-text">开闭原则</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
