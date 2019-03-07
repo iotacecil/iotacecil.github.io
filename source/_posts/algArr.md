@@ -4,15 +4,204 @@ date: 2019-03-04 19:38:25
 tags: [alg]
 categories: [算法备忘]
 ---
+### 229 Majority Element II
+找到所有出现次数超过 ⌊ n/3 ⌋ 次的数字
+{% note %}
+Input: [3,2,3]
+Output: [3]
+{% endnote %}
 
-### 299 Bulls and Cows 猜对了几个字符
+### !!!169 众数 Boyer-Moore Voting Algorithm 
+{% note %}
+Input: [3,2,3]
+Output: 3
+{% endnote %}
+关键：计数变量
+```java
+public int majorityElement(int[] nums) {
+    int rst = 0;
+    int cnt =0;
+    for(int num:nums){
+        if(cnt == 0){
+            rst = num;
+        } 
+        if(rst != num){
+            cnt--;
+        }else{
+            cnt++;
+        }    
+    }
+    return rst;
+}
+```
+
+{% fold %}
+1.hashmap,直到有计数>n/2 break->return 11%
+2.随机数44% 因为一半以上都是这个数，可能只要循环两边就找到了
+```java
+public int majorityElement(int[] nums){
+    Random random = new Random(System.currentTimeMillis());
+    while(true){
+        int idx = random.nextInt(nums.length);
+        int choose = nums[idx];
+        int cnt = 0;
+        for(int num:nums){
+            if(num==cur&&++cnt>nums.length/2)return num;
+        }
+    }
+}
+```
+3.39% 计算用每个数字的每一位投票，1的个数>n/2则为1 
+```java
+public int majorityElement(int[] nums){
+    int n = nums.length;
+    int rst =0;
+    int mask =0;
+    for(int i=0;i<32;i++){
+        mask = 1<<i;
+        int cnt =0;
+        for(int num:nums){
+            if((num&mask)!=0)cnt++;
+        }
+        if(cnt>n/2)rst|=mask;
+    }
+    return rst;
+}
+```
+
+#### 4.moore voting 在线算法92%
+```java
+public int majorityElement(int[] nums){
+    //假设就是第一个数
+    int maj = nums[0];
+    int cnt=0;
+    for(int num:nums){
+        //第一个数就cnt=1
+        if(num==maj)cnt++;
+        else if(--cnt==0){
+            //等于0 从头开始做
+            cnt=1;
+            maj = num;
+        }
+    }
+    return maj;
+}
+```
+**优化100%**
+每次取两个不同的数删除，最后剩下的返回
+{% fold %}
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        if(nums==null)return -1;
+        int res=0;
+        int count=0;
+        for(int e : nums){
+            if(count==0){
+                res=e;
+            }
+                if(res!=e){
+                    count--;//删除这个数
+                }
+                else count++;
+        }
+        return res;
+    }
+}
+```
+{% endfold %}
+
+5.排序取中间的数
+6.C++专有 部分排序
+```cpp
+int majorityElement(vector<int> & nums){
+    nth_element(nums.begin(),nums.begin()+nums.size()/2,nums.end());
+    return nums[nums.size()/2];
+}
+```
+7.分治???
+{% endfold %}
+
+### 119 ！Pascal's Triangle II 帕斯卡三角形的第k行
+{% note %}
+Input: 3
+Output: [1,3,3,1]
+{% endnote %}
+不会
+
+
+### 118 Pascal's Triangle
+{% note %}
+Input: 5
+Output:
+```
+[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]
+```
+{% endnote %}
+
+```java
+public List<List<Integer>> generate(int numRows) {
+    List<List<Integer>> rst = new ArrayList<>();
+    for(int i = 0;i<numRows;i++){
+        List<Integer> row = new ArrayList<>();
+        row.add(1);
+        for(int j = 1;i>1&&j<i;j++){
+            row.add(rst.get(i-1).get(j-1)+rst.get(i-1).get(j));
+        }
+        if(i>0)row.add(1);
+        rst.add(row);
+    }
+    return rst;
+}
+```
+
+### 134 ！Gas Station 环形加油站出发点
+找到一个起点可以获得gas[i]汽油，到下一个花费cost[i]可以遍历完所有加油站回到起点的点。
+{% note %}
+Input: 
+gas  = [1,2,3,4,5]
+cost = [3,4,5,1,2]
+Output: 3
+{% endnote %}
+
+AC但是方法不对
+前段总的余量为负，即油不够用，要想有解，那么后段油量应该为正，此时才可能有解.
+
+反之，如果前段就为正了，那么显然可以直接选择前面的点为起点；
+
+如果整段加起来都是负的，那么无解
+
+```java
+public int canCompleteCircuit(int[] gas, int[] cost) {
+   int sum = 0;int total = 0;int rst = 0;
+    for(int i = 0;i<gas.length;i++){
+        sum += (gas[i]-cost[i]);       
+        if(sum<0){
+            total +=sum;
+            rst = i+1;
+            sum = 0;
+        }     
+    }
+    total +=sum;
+    return total>=0?rst:-1;
+}
+```
+
+### 299 !Bulls and Cows 猜对了几个字符
 {% note %}
 A表示位置对+数值对，B表示位置不对。
 Input: secret = "1123", guess = "0111"
 Output: "1A1B"
 {% endnote %}
 
-关键：计数，如果secret当前字符的计数<0，表示在guess出现过，b++,然后再计数这个字符。注意对secret和guess的当前字符都判断是否之前出现过，分别计数b。
+关键：计数，如果secret当前字符的计数<0，表示在guess出现过，b++,然后再计数这个字符。
+注意对secret和guess的当前字符都判断是否之前出现过，分别计数b。
 
 ```java
 public String getHint(String secret, String guess) {

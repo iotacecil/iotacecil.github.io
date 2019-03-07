@@ -521,56 +521,6 @@ AC 78% 1ms
 
 
 
-### ?90 有重复的subset[1,2,2,2]
-1. 选不同的2得到{1,2}是重复的
-2. 次序不同得到{1,2},{2,1}是重复的
-先排序，再去重。
-
-### 78 subset[1,2,3]->[1][1,2][1,2,3][2,3][2][3]
-回溯法：[[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]
-```java
-public List<List<Integer>> subsets(int[] nums) {
-    List<List<Integer>> rst = new ArrayList<>();
-    back(rst,new ArrayList<>(),nums,0);
-    return rst;
-    }
-private void back(List<List<Integer>> rst,List<Integer> item,int[] nums,int index){
-    rst.add(new ArrayList<>(item));
-    for(int i =index;i<nums.length;i++){
-        item.add(nums[i]);
-        back(rst,item,nums,i+1);
-        item.remove(item.size()-1);
-    }
-}
-```
-位运算法 集合每一项可以用0，1表示取不取
-输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]] 从000到111的过程
-{A,B,C}=111=7
-{A,B}=110=6
-{A}=100=5...
-一共有2^3种
-A用100表示
-B用010表示
-C用001表示
-如果i=011=3,添加j=0,001,j=1,010到item；i=100=4,添加j==2,1<<2=4
-```java
-public List<List<Integer>> subsets(int[] nums) {
-    List<List<Integer>> rst = new ArrayList<>();
-    for(int i=0;i<(1<<nums.length);i++){
-        List<Integer> tmp = new ArrayList<>();
-        for(int j =0;j<nums.length;j++){
-            if((i&(1<<j))!=0){
-                tmp.add(nums[j]);
-            }
-        }
-        rst.add(new ArrayList<>(tmp));
-    }
-    return rst;
-}
-```
-
-
-
 ### 45jump game cnt 2do next time
 dp:
 ```java

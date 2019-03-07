@@ -646,7 +646,7 @@ abc12321
 
 n^2的方法, 这个串反转，原串后n位和反转串n前位相同就是回文串。
 
-### 131 Palindrome Partitioning 回文切割
+### !131 Palindrome Partitioning 回文切割
 {% note %}
 ```
 Input: "aab"
@@ -664,7 +664,24 @@ Output:
 3.判断奇数(&1)>0
 
 
-### 516 最长回文子序列
+### ！！！516 最长回文子序列
+```java
+public static int longestPalindromeSubseq(String s) {
+    int[][] dp = new int[s.length()][s.length()];
+
+    for (int i = s.length() - 1; i >= 0; i--) {
+        dp[i][i] = 1;
+        for (int j = i+1; j < s.length(); j++) {
+            if (s.charAt(i) == s.charAt(j)) {
+                dp[i][j] = dp[i+1][j-1] + 2;
+            } else {
+                dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+            }
+        }
+    }
+    return dp[0][s.length()-1];
+}
+```
 
 
 ### ！5 最长回文串 lt893
@@ -1643,95 +1660,6 @@ def isPrime(n):
 
 
 
-
-
-
-
-### !!!169 众数 Boyer-Moore Voting Algorithm 
-1.hashmap,直到有计数>n/2 break->return 11%
-2.随机数44% 因为一半以上都是这个数，可能只要循环两边就找到了
-```java
-public int majorityElement(int[] nums){
-    Random random = new Random(System.currentTimeMillis());
-    while(true){
-        int idx = random.nextInt(nums.length);
-        int choose = nums[idx];
-        int cnt = 0;
-        for(int num:nums){
-            if(num==cur&&++cnt>nums.length/2)return num;
-        }
-    }
-}
-```
-3.39% 计算用每个数字的每一位投票，1的个数>n/2则为1 
-```java
-public int majorityElement(int[] nums){
-    int n = nums.length;
-    int rst =0;
-    int mask =0;
-    for(int i=0;i<32;i++){
-        mask = 1<<i;
-        int cnt =0;
-        for(int num:nums){
-            if((num&mask)!=0)cnt++;
-        }
-        if(cnt>n/2)rst|=mask;
-    }
-    return rst;
-}
-```
-
-#### 4.moore voting 在线算法92%
-```java
-public int majorityElement(int[] nums){
-    //假设就是第一个数
-    int maj = nums[0];
-    int cnt=0;
-    for(int num:nums){
-        //第一个数就cnt=1
-        if(num==maj)cnt++;
-        else if(--cnt==0){
-            //等于0 从头开始做
-            cnt=1;
-            maj = num;
-        }
-    }
-    return maj;
-}
-```
-**优化100%**
-每次取两个不同的数删除，最后剩下的返回
-{% fold %}
-```java
-class Solution {
-    public int majorityElement(int[] nums) {
-        if(nums==null)return -1;
-        int res=0;
-        int count=0;
-        for(int e : nums){
-            if(count==0){
-                res=e;
-            }
-                if(res!=e){
-                    count--;//删除这个数
-                }
-                else count++;
-        }
-        return res;
-    }
-}
-```
-{% endfold %}
-
-5.排序取中间的数
-6.C++专有 部分排序
-```cpp
-int majorityElement(vector<int> & nums){
-    nth_element(nums.begin(),nums.begin()+nums.size()/2,nums.end());
-    return nums[nums.size()/2];
-}
-```
-7.分治???
 
 ### A,B两人选k种可乐达到期望最大
 A选m个，B选(n-m)个
