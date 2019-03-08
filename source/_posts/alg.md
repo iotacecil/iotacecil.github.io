@@ -29,6 +29,92 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+
+### 4位25个字符的编码
+假定一种编码的编码范围是a ~ y的25个字母，从1位到4位的编码，如果我们把该编码按字典序排序，形成一个数组如下： a, aa, aaa, aaaa, aaab, aaac, … …, b, ba, baa, baaa, baab, baac … …, yyyw, yyyx, yyyy 其中a的Index为0，aa的Index为1，aaa的Index为2，以此类推。 编写一个函数，输入是任意一个编码，输出这个编码对应的Index.
+
+输入：baca
+输出：16331
+
+a开头的长度为4的编码一共有25^3个，长度为3有25^2个，长度为2有25个，长度为1有1个。
+例：bcd
+第一位是b所以处在第二大块，result += 1 *  (25^3+25^2+25+1) 
+第二位是c， result += 2 *（25^2+25+1）+1
+第三位是d， result += 3* （25+1）+1  （加一是因为最前面有个空）
+第四位是空，不管，因为空就是第一个
+result = 17658
+
+```java
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    String str = sc.next();
+    int n = str.length();
+    int rst = 0;
+    if(n>0)
+        rst += (str.charAt(0)-'a')*(25*25*25+25*25+25+1);
+    if(n>1)
+        rst += (str.charAt(1)-'a')*(25*25+25+1)+1;
+    if(n>2)
+        rst += (str.charAt(2)-'a')*(25+1)+1;
+    if(n>3)
+        rst += (str.charAt(3)-'a')+1;
+    System.out.println(rst);
+}
+```
+
+### geohash
+纬度的二进制编码[-90, 90]
+```java
+public static void main(String[] args) {
+    Scanner sc =new Scanner(System.in);
+    int wd = sc.nextInt();
+    StringBuilder sb = new StringBuilder();
+    int[] bound = {-90,90};
+    for (int i = 0; i <6 ; i++) {
+        int mid = (bound[0]+bound[1])/2;
+        if(wd>=mid){
+            sb.append(1);
+            bound[0] = mid;
+        }else {
+            sb.append(0);
+            bound[1] = mid;
+        }
+    }
+    System.out.println(sb.toString());
+}
+```
+
+### 素数
+生成<=n之内的所有素数
+给定一个正整数，编写程序计算有多少对质数的和等于输入的这个正整数，并输出结果。输入值小于1000。
+如，输入为10, 程序应该输出结果为2。（共有两对质数的和为10,分别为(5,5),(3,7)）
+```java
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        boolean[] prime = new boolean[num+1];
+        Arrays.fill(prime, true);
+        for(int i = 2; i <= num; i++){
+            if(prime[i]){
+                // 将i的2倍、3倍、4倍...都标记为非素数
+                for(int j = i * 2; j <= num; j =  j + i){
+                    prime[j] = false;
+                }
+            }
+        }
+        int cnt = 0;
+        for(int i = 2;i<=num/2;i++){
+                if(prime[i] && prime[num-i])cnt++;
+        }
+        System.out.println(cnt);
+    }
+```
+
+### 切铜板 哈夫曼编码
+给定数组{10,20,30}， 代表一共三个人， 整块金条长度为10+20+30=60. 金条要分成10,20,30三个部分。
+如果，先把长度60的金条分成10和50， 花费60 再把长度50的金条分成20和30，花费50一共花费110铜板。
+但是如果， 先把长度60的金条分成30和30， 花费60 再把长度30金条分成10和20， 花费30 一共花费90铜板。
+
 ### 797 All Paths From Source to Target
 
 ### 437树中找部分路径，和为target的路径条数

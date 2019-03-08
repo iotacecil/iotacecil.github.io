@@ -16,6 +16,9 @@ http://www.cnblogs.com/lanxuezaipiao/p/4153070.html
 同一个符号引用在不同的虚拟机实例上翻译出来的直接引用一般不会相同。如果有了直接引用，那引用的目标必定已经被加载入内存中了。
 
 ### 集合遍历并删除
+！！迭代器允许调用者利用定义良好的语义在迭代期间从迭代器所指向的 collection 移除元素。
+void remove()：删除迭代器刚越过的元素
+保证在遍历过程中不出错误，我们就应该保证在遍历过程中不会对集合产生结构上的修改（当然 remove 方法除外）
 用迭代器
 ```java
 Iterator<Integer> it = candy.iterator();
@@ -454,6 +457,8 @@ A 是     B 否
 `javap -v xx.class`
 
 ---
+
+interface里面的变量都是public static final
 
 以下说法中正确的有
 正确答案: A D   你的答案: A B D (错误)

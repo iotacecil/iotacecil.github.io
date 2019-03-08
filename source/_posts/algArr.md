@@ -4,12 +4,237 @@ date: 2019-03-04 19:38:25
 tags: [alg]
 categories: [算法备忘]
 ---
+### 376. Wiggle Subsequence 摇摆序列最长
+{% note %}
+Input: [1,17,5,10,13,15,10,5,16,8]
+Output: 7
+One is [1,17,10,13,10,16,8].
+{% endnote %}
+差值是先正后负交替
+
+### 283 Move Zeroes 所有0移到后面
+把0都放到后面并且保证原来顺序不变。 没有额外空间。
+{% note %}
+Input: [0,1,0,3,12]
+Output: [1,3,12,0,0]
+{% endnote %}
+思路：两个指针，如果找到非零，则和前面那个指针的交换
+j保证左边没有0，扫一遍i保证所有的非0都移到j的左边。
+011->101->110
+```java
+public void moveZeroes(int[] nums) {
+    for(int i = 0,j =0; i < nums.length; i++) {
+        if(nums[i] != 0) {
+            swap(nums,i,j++);
+        }
+    }
+}
+```
+
+### 88 Merge Sorted Array
+{% note %}
+Input:
+nums1 = [1,2,3,0,0,0], m = 3
+nums2 = [2,5,6],       n = 3
+
+Output: [1,2,2,3,5,6]
+{% endnote %}
+```java
+public void merge(int A[], int m, int B[], int n) {
+    int i=m-1, j=n-1, k=m+n-1;
+    while (i>-1 && j>-1) A[k--]= (A[i]>B[j]) ? A[i--] : B[j--];
+    while (j>-1)         A[k--]=B[j--];
+}
+```
+
+{% fold %}
+```java
+public void merge(int[] nums1, int m, int[] nums2, int n) {
+    int len = m+n-1;
+    int i = m-1;
+    int j = n-1;
+    while(len>=0){ 
+        if(j<0 || (i>=0 && j>=0 && nums1[i] >= nums2[j])){
+            nums1[len--] = nums1[i--]; 
+        }else if(i<0 || (i>=0 && j>=0 && nums1[i] < nums2[j])) {
+            nums1[len--] = nums2[j--];
+        }     
+    }
+}
+```
+{% endfold %}
+
+### 75 ！!Sort Colors
+{% note %}
+Input: [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
+{% endnote %}
+不会！
+思路：
+left 左边都是0 是1
+right 右边都是2 right是0/1
+用idx遍历，
+1）如果从left开始是1，可以后移，保证00011是正确的顺序
+2）如果是2，和right换，right--，因为idx是后面的数字还没遍历，所以idx不动
+3）如果是0，和left换，但是left是肯定对的，所以idx++，left被换成0了，保证了左边是0，left++。
+4）注意终止条件，因为right可能是0，所以当i==right的时候还可能跟right换一下，直到i>right
+```java
+public void sortColors(int[] nums) {
+    int n = nums.length;
+    int left = 0;
+    int right = n-1; 
+    int i = 0;
+    while(i <= right){
+        if(nums[i] == 0){
+            swap(nums,i++,left++);
+        }  
+        else if(nums[i] == 2){
+            swap(nums,i,right--);
+        }else 
+            i++;
+    }
+}
+private void swap(int[] arr,int i,int j){
+    int tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+}
+```
+
+### 228 Summary Ranges
+{% note %}
+输入: [0,1,2,4,5,7]
+输出: ["0->2","4->5","7"]
+{% endnote %}
+
+### 217 Contains Duplicate
+判断数组中是否有重复元素
+{% note %}
+Input: [1,2,3,1]
+Output: true
+{% endnote %}
+1)两个for循环 
+2）排序
+3）set
+
+
+### 275 H-Index II
+排好序的h-index
+{% note %}
+Input: citations = [0,1,3,5,6]
+Output: 3 
+{% endnote %}
+
+### 274 H-Index
+所有学术文章N中有h篇论文分别被引用了至少h次，他的H指数就是h.其他N-h篇论文都没有h次引用
+{% note %}
+Input: citations = [3,0,6,1,5]
+Output: 3
+{% endnote %}
+解释: 给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 3, 0, 6, 1, 5 次。
+由于研究者有 3 篇论文每篇至少被引用了 3 次，其余两篇论文每篇被引用不多于 3 次，所以她的 h 指数是 3。
+
+AC 方法不对
+正确做法：桶计数
+```java
+public int hIndex(int[] citations) {
+    int n = citations.length;
+    int[] cnt = new int[n+1];
+    for(int ci : citations){
+        if(ci > n)cnt[n]++;
+        else cnt[ci]++;
+    }
+    int rst = 0;
+    for(int i = n;i>=0;i--){
+        rst+=cnt[i];
+        if(rst >= i)return i;
+    }
+    return 0;
+}
+```
+
+### 485 Max Consecutive Ones 最多连续的1
+{% note %}
+Input: [1,1,0,1,1,1]
+Output: 3
+{% endnote %}
+
+AC
+```java
+public int findMaxConsecutiveOnes(int[] nums) {
+    int cnt = 0;
+    int max = 0;
+    for(int i =0;i<nums.length;i++){
+        if(nums[i] != 1 && cnt>0){
+            max = Math.max(max,cnt);
+            cnt =0;
+        }else if(nums[i] ==1){
+            cnt++;
+        }
+    }
+    max = Math.max(max,cnt);
+    return max;
+}
+```
+
 ### 229 Majority Element II
 找到所有出现次数超过 ⌊ n/3 ⌋ 次的数字
 {% note %}
 Input: [3,2,3]
 Output: [3]
 {% endnote %}
+
+不会
+思路：1）超过n/3的数最多只能有2个 注意顺序
+
+```java
+public List<Integer> majorityElement(int[] nums) {      
+    int n = nums.length;       
+    List<Integer> rst = new ArrayList<>();
+    int r1 = 0;int r2 = 0;
+    int cnt1 = 0;int cnt2 = 0;
+    for(int num:nums){
+        if(num == r1){
+            cnt1++;
+        }
+        else if(num == r2){
+            cnt2++;
+        }else if(cnt1 == 0){
+            r1=num;
+            cnt1++;
+        }else if(cnt2 == 0){
+            r2 = num;
+            cnt2++;
+        }    
+        else{
+            cnt1--;
+            cnt2--;
+        }
+        
+    }
+    cnt1 = 0;cnt2 = 0;
+    for(int num:nums){
+        if(num == r1){
+            cnt1++;
+            if(cnt1>n/3){
+                rst.add(r1);
+                break;
+            }
+        }
+    }
+    if(r2== r1)return rst;
+      for(int num:nums){  
+        if(num == r2){
+            cnt2++;
+            if(cnt2>n/3){
+                rst.add(r2);
+                break;
+            }
+        }
+    }
+    return rst;    
+}
+```
 
 ### !!!169 众数 Boyer-Moore Voting Algorithm 
 {% note %}

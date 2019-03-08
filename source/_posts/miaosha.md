@@ -1916,7 +1916,7 @@ public String toLogin(Model model,MiaoshaUser user) {
 
 html里`/goods/to_detail/'+${goods.id}`
 
-根据商品ID查询单个goodVO信息 并显示当前时间和秒杀时间的倒计时
+根据商品ID查询单个goodVO信息 并显示当前时间和秒杀时间的倒计时 （为什么不返回未来时间而要返回剩余时间？）
 controller:
 ```java
 @RequestMapping("/to_detail/{goodsId}")
