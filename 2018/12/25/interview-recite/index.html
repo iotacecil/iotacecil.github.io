@@ -98,7 +98,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/yinhang.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/yinhang2.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
-<meta property="og:updated_time" content="2019-03-08T11:19:22.425Z">
+<meta property="og:updated_time" content="2019-03-09T04:12:06.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://blog.csdn.net/jackfrued/article/details/44921941https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/x">
@@ -348,8 +348,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-08T19:19:22+08:00">
-                2019-03-08
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-09T12:12:06+08:00">
+                2019-03-09
               </time>
             
           </span>
@@ -511,7 +511,8 @@
 <p>大数据相关的</p>
 <h3 id="47-linux-怎么查询一个端口"><a href="#47-linux-怎么查询一个端口" class="headerlink" title="47 linux 怎么查询一个端口"></a>47 linux 怎么查询一个端口</h3><h3 id="48-操作系统-进程通信"><a href="#48-操作系统-进程通信" class="headerlink" title="48 操作系统 进程通信"></a>48 操作系统 进程通信</h3><p>进程和线程的区别<br>文件是进程创建的信息逻辑单元<br>每个进程有专用的线程表跟踪进程中的线程。和内核中的进程表类似。</p>
 <h4 id="进程结构：代码段、数据段、堆栈段"><a href="#进程结构：代码段、数据段、堆栈段" class="headerlink" title="进程结构：代码段、数据段、堆栈段"></a>进程结构：代码段、数据段、堆栈段</h4><p>代码段：多个进程运行同一个程序，可以使用同一个代码段。<br>数据段：全局变量、常量、静态变量。<br>栈：用于存放 【函数调用】，存放函数的 【参数】，函数内部的【局部变量】<br>PCB位于核心堆栈的底部。<br>进程组ID是一个进程的必备属性。</p>
-<p>子进程：<br>当调用<code>fork</code>时，子进程完全复制了父进程地址空间的内容，包括：堆、栈、数据段，并和父进程共享代码段，因为代码段是只读的，不会被修改。<br>子进程对数据段和堆、栈段的修改不会影响父进程。<br>“写时复制”：现在fork不会立刻复制，当子进程要修改的时候才会分配进程空间 并复制。</p>
+<p>子进程：<br>当调用<code>fork</code>时，子进程完全复制了父进程地址空间的内容，包括：堆、栈、数据段，并和父进程共享代码段，因为代码段是只读的，不会被修改。<br>在Linux上，对于多进程，子进程继承了父进程的下列哪些？<br>A 进程地址空间<br>B 共享内存<br>C 信号掩码<br>D 已打开的文件描述符<br>E 以上都不是</p>
+<p>子进程对数据段和堆、栈段的修改不会影响父进程。<br>“写时复制”：现在fork不会立刻复制，当子进程要修改的时候才会分配进程空间 并复制。</p>
 <h4 id="创建一个守护进程"><a href="#创建一个守护进程" class="headerlink" title="创建一个守护进程"></a>创建一个守护进程</h4><p>终端：系统与用户交互的界面，运行进程的终端被称为 【控制终端】。<br>控制终端关闭时，进程都会关闭，除了守护进程。<br>1）<code>fork()</code>一个子进程并退出父进程。<br>子进程拷贝了父进程的<br>【会话期、进程组、控制终端、工作目录、父进程的权限掩码、打开的文件描述符】。</p>
 <p>2）在子进程中创建会话<code>setid()</code>让进程摆脱1）原会话2）进程组3）控制终端 的控制。</p>
 <p>3）工作目录换成根目录<code>chdir(&quot;/&quot;)</code><br>4）文件权限掩码设置成0 <code>umask(0)</code><br>5）关闭所有打开的文件描述符</p>
