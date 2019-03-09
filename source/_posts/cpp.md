@@ -4,6 +4,39 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+### const int
+给出以下定义，下列哪些操作是合法的？
+1
+2
+const char *p1 = “hello”;
+char *const p2 = “world”;
+正确答案: A   你的答案: B (错误)
+p1++;
+p1[2] = ‘w’;
+p2[2] = ‘l’;
+p2++;
+即 const在*的左边不能改变字符串常量的值，故B错；
+const在*的右边不能改变指针的指向，故D错；
+若要修改其值，应该改为char str []= "world";
+"hello"这样声明的字符串是存储在只读存储区的，不可修改，所以B,C都错误
+
+
+
+正确答案: A B C   你的答案: A C E (错误)
+const int a; //const integer
+int const a; //const integer
+int const \*a; //a pointer which point to const integer
+const int \*a; //a const pointer which point to integer
+int const \*a; // a const pointer which point to integer
+```
+p是一个常量指针，指向一个普通变量
+int *const p;  /* p is a const pointer to int */
+
+p是一个常量指针，指向一个常量
+const int *const p;  /* p is a const pointer to int const */
+int const *const p;  /* p is a const pointer to const int */
+```
+
 ### inline 
 关于c++的inline关键字,以下说法正确的是()
 正确答案: D   你的答案: B (错误)

@@ -4,10 +4,12 @@ date: 2018-06-04 09:32:40
 tags:
 category: [网络]
 ---
-### Time wait状态
-1.FIN-WAIT2 -> A发送完FIN并且受到ACK后等待B关闭维持的状态
-2.CLOSING -> 两边都发了FIN，收到FIN发完ACK
-3.FIN-WAIT1 -> ?
+设有2条路由21.1.193.0/24和21.1.194.0/24，如果进行路由汇聚，汇聚这两条路由的地址是（）
+正确答案: C   你的答案: D (错误)
+21.1.200.0/22
+21.1.192.0/23
+21.1.192.0/21
+21.2.224.0/20
 
 ### PCI + SDU = PDU
 ![pdusdu.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdusdu.jpg)
@@ -68,12 +70,12 @@ Little-endian：将低序字节存储在起始地址（低位编址）
 
 ### epoll和select
 关于linux的I/O复用接口select和epoll,下列说法错误的是( C )
-select调用时会进行线性遍历,epoll采用回调函数机制,不需要线性遍历
-select的最大连接数为FD_SETSIZE
-select较适合于有大量并发连接,且活跃链接较多的场景
-epoll较适用于有大量并发连接，但活跃连接不多的场景
-epoll的效率不随FD数目增加而线性下降
-epoll通过共享存储实现内核和用户的数据交互
+A select调用时会进行线性遍历,epoll采用回调函数机制,不需要线性遍历
+B select的最大连接数为FD_SETSIZE
+C select较适合于有大量并发连接,且活跃链接较多的场景
+D epoll较适用于有大量并发连接，但活跃连接不多的场景
+E epoll的效率不随FD数目增加而线性下降
+F epoll通过共享存储实现内核和用户的数据交互
 
 ### TCP 2个序号，3个标志位
 seq：数据序号。
