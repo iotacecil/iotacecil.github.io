@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="学习一个技术不要轻易过去，要有技术深度做一个demo">
+<meta name="description" content="718 最长公共子串40ms 90%Input:A: [1,2,3,2,1]B: [3,2,1,4,7]Output: 3Explanation:The repeated subarray with maximum length is [3, 2, 1]. 思路：A从位置i开始，和B从j开始匹配的最大长度 123456789101112131415public int findLength(int">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="algDP">
 <meta property="og:url" content="http://blog.iotaa.xyz/2019/03/07/algDP/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="学习一个技术不要轻易过去，要有技术深度做一个demo">
+<meta property="og:description" content="718 最长公共子串40ms 90%Input:A: [1,2,3,2,1]B: [3,2,1,4,7]Output: 3Explanation:The repeated subarray with maximum length is [3, 2, 1]. 思路：A从位置i开始，和B从j开始匹配的最大长度 123456789101112131415public int findLength(int">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-07T12:57:06.180Z">
+<meta property="og:updated_time" content="2019-03-11T07:04:29.546Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="algDP">
-<meta name="twitter:description" content="学习一个技术不要轻易过去，要有技术深度做一个demo">
+<meta name="twitter:description" content="718 最长公共子串40ms 90%Input:A: [1,2,3,2,1]B: [3,2,1,4,7]Output: 3Explanation:The repeated subarray with maximum length is [3, 2, 1]. 思路：A从位置i开始，和B从j开始匹配的最大长度 123456789101112131415public int findLength(int">
 
 
 
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-07T20:57:06+08:00">
-                2019-03-07
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-11T15:04:29+08:00">
+                2019-03-11
               </time>
             
           </span>
@@ -393,7 +393,9 @@
       
 
       
-        
+        <h3 id="718-最长公共子串40ms-90"><a href="#718-最长公共子串40ms-90" class="headerlink" title="718 最长公共子串40ms 90%"></a>718 最长公共子串40ms 90%</h3><div class="note "><p>Input:<br>A: [1,2,3,2,1]<br>B: [3,2,1,4,7]<br>Output: 3<br>Explanation:<br>The repeated subarray with maximum length is [3, 2, 1].</p></div>
+<p>思路：A从位置i开始，和B从j开始匹配的最大长度</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findLength</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span>[] B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = A.length;</span><br><span class="line">        <span class="keyword">int</span> m = B.length;</span><br><span class="line">        <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>][m+<span class="number">1</span>];  </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">1</span>;j&lt;=m;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A[i-<span class="number">1</span>]==B[j-<span class="number">1</span>])&#123;</span><br><span class="line">                    dp[i][j] = dp[i-<span class="number">1</span>][j-<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line">                    max = Math.max(max,dp[i][j]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;     </span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -487,8 +489,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -548,6 +559,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#718-最长公共子串40ms-90"><span class="nav-number">1.</span> <span class="nav-text">718 最长公共子串40ms 90%</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
