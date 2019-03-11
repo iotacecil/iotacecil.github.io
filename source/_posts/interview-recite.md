@@ -9,6 +9,13 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/Signal.md
 http://www.linya.pub/
 
+索引什么时候会失效
+redis持久化
+currentHashMap
+mysql 的其他引擎
+数据库里的乐观锁和悲观锁
+设计数据库表
+
 ### 1.泛型的好处
 泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。
 用同一个调用形式，既能调用派生类又能调用基类的同名函数。
@@ -125,6 +132,9 @@ RSA:
 `trap "" INT` 表明忽略SIGINT信号，按Ctrl+C也不能使脚本退出
 
 https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/IPC.md
+
+管道只能两个进程
+消息队列能多个进程
 
 #### 管道 【随进程持续】：
 1）单向 半双工：把一个程序的输出直接连接到另一个程序的输入
@@ -685,6 +695,7 @@ java进程间通信
 
 
 java 线程通信
+全局变量
 2个线程之间的单向数据连接 NIO pipe 写sink 读source。
 java线程同步的方法
 

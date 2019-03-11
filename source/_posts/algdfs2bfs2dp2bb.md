@@ -232,8 +232,8 @@ board[i][j]='0';
 ？？为什么递归中不能写`dfs(idx++)`
 O(2^n)
 ```java
-private int dfs(int[] nums,int S,int idx){
-    if(idx == nums.length){
+private int dfs(int[] nums,int S,int pos){
+    if(pos == nums.length){
         if(S==0)return 1;
         else return 0;
     }
@@ -282,6 +282,7 @@ private void dfs(List<String> rst,String s,int idx,String cur,int cnt){
     }
 }
 ```
+
 ### 784 大小写字母的permutation
 `'a'-'A'=32`所以就是`(1<<5)`的位置是0或1，但是不会变快
 小写和数字都加上这一位继续dfs，大写要

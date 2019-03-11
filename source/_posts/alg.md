@@ -2902,9 +2902,6 @@ int bulbSwitch(int n) {
 ### 451 字符串按频率排序 桶排序
 
 
-
-
-
 ### Rearrange a string
 https://www.geeksforgeeks.org/rearrange-a-string-so-that-all-same-characters-become-at-least-d-distance-away/
 
@@ -2953,11 +2950,6 @@ permutation的字典序
  1.从右想左 找到第一次下降位置
  2.用后缀中比当前位置大的最小数字交换
  3.保证后缀最小（翻转？）
-
-
-
-
-
 
 
 
@@ -3293,7 +3285,7 @@ public class chenji {
 }
 ```
 
-### 459 Repeated Substring Pattern 子串重复N次 S = N*T
+### 459 Repeated Substring Pattern 子串重复N次 S = N\*T
 {% note %}
 Input: "ababab"
 Output: True
@@ -3342,29 +3334,7 @@ private static int LCS(String s,String t){
 }
 ```
 
-### 718 最长公共子串40ms 90%
-{% note %}
-Input:
-A: [1,2,3,2,1]
-B: [3,2,1,4,7]
-Output: 3
-Explanation: 
-The repeated subarray with maximum length is [3, 2, 1].
-{% endnote %}
-```java
-public int findLength(int[] a,int[] b){
-    int m = a.length,n = b.length;
-    if(m==0||n==0)return 0;
-    int[][] dp = new int[m+1][n+1];
-    int max= 0;
-    for(int i=m-1;i>=0;i--){
-        for(int j=n-1;j>=0;j--){
-            max = Math.max(max,dp[i][j]=a[i]==b[j]?1+dp[i+1][j+1]:0);
-        }
-    }
-    return max;
-}
-```
+
 ---
 
 
