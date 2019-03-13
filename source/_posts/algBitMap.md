@@ -140,7 +140,8 @@ Output: [0,1,1]
 不会
 0 1 1 2 2 3 
 0 1 2 3 4 5
-如果偶数，f[n] = f[n/2] 如果奇数f[n] = f[n/2]+1
+如果偶数，f[n] = f[n/2]  // 4：100 2：010
+如果奇数f[n] = f[n/2]+1  // 1：001 3：011
 ```java
 public int[] countBits(int num) {
     int[] cnt = new int[num+1];
@@ -150,7 +151,6 @@ public int[] countBits(int num) {
     return cnt;
 }
 ```
-
 
 ### 371 !!Sum of Two Integers 不用加减求和
 {% note %}

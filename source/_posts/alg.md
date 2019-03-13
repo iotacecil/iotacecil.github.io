@@ -29,6 +29,113 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### pdd 抢劫 (后缀最大值)
+{% note %}
+在一条街上的有n个银行，银行在xi位置，有ai元，然后有两个抢劫犯
+找两个相距不小于d的银行，使得这两个银行的权值加起来最大
+输入：
+6 3
+1 1
+3 5
+4 8
+6 4
+10 3
+11 2
+输出：
+11
+{% endnote %}
+思路：用两个一维数组保存包括位置i以及i右边 money最大值和最大值的index
+位置：1 3 4 6 10 11
+利润：1 5 8 4 3  2
+dp1 :8 8 8 4 3  2
+dp2 :2 2 2 3 4  5
+因为位置数组有序，用二分查找当前位置`w[i]`相距d之后的第一个符合的位置。就可以查找dp1得到选择w[i]银行 和距离d右边可能得到的最大利润，并且用dp2得到位置。
+
+pdd的题目银行位置不递增。可以考虑位置数组用于排序，用map记录位置和利润。
+{% note %}
+```java
+// 输出[0,n]
+public static int lowerBound(long[] nums, long target) {
+    if (nums == null || nums.length == 0) return -1;
+    int lb = -1, ub = nums.length;
+    while (lb + 1 < ub) {
+        int mid = lb + (ub - lb) / 2;
+        if (nums[mid] >= target) {
+            ub = mid;
+        } else {
+            lb = mid;
+        }
+    }
+    return ub;
+}
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    int d = sc.nextInt();
+    long[] w = new long[n];
+    Map<Long,Long> map = new HashMap<>();
+    for (int i = 0; i <n ; i++) {
+        w[i] = sc.nextLong();
+        map.put(w[i],sc.nextLong());
+    }
+    Arrays.sort(w);
+    long max = -1;
+    // [i:n-1]的最大值
+    long[] backsmax = new long[n+1];
+    backsmax[n] = -1;
+    for (int i = n-1; i >= 0; i--) {
+        backsmax[i] = Math.max(backsmax[i+1],map.get(w[i]));
+    }
+    for (int i = 0; i <n ; i++) {
+        long tmp = w[i] + d;
+        int idx = lowerBound(w, tmp);
+        if(backsmax[idx] + map.get(w[i]) > max){
+            max = Math.max(max, backsmax[idx] + map.get(w[i]));
+        }
+    }
+    System.out.println(max);
+}
+```
+{% endnote %}
+
+### 992 有K个不同整数的子数组的个数
+{% note %}
+输入：A = [1,2,1,3,4], K = 3
+输出：3
+解释：恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].
+{% endnote %}
+
+### 手串 
+莫队算法：有n个数组成一个序列，有m个形如询问L, R的询问，每次询问需要回答区间内至少出现2次的数有哪些。
+
+n个珠子的环，无色或有一个珠子很多种颜色，一共c种颜色，m个珠里同种颜色最多出现1次。
+给定n个珠的颜色
+输出：有多少种颜色在任意连续m个串珠中出现了至少两次。
+接下来n行每行的第一个数num_i(0 <= num_i <= c)表示第i颗珠子有多少种颜色。
+依次读入num_i个数字，每个数字x表示第i颗柱子上包含第x种颜色(1 <= x <= c)
+{% note %}
+输入
+n=5 m=2 c=3
+3 1 2 3
+0
+2 2 3
+1 2
+1 3
+输出
+2
+{% endnote %}
+
+思路：滑动窗口
+
+### 502 IPO
+{% note %}
+输入: k=2, W=0, Profits=[1,2,3], Capital=[0,1,1].
+输出: 4
+最初有W=0元钱，最多完成k个项目，每个项目有最低资本和利润，最后获得的钱数。
+从 0 号项目开始，总资本将变为 1。完成 2。最后最大化的资本，为 0 + 1 + 3 = 4。 完成项目是不扣资本的。
+{% endnote %}
+
+两个优先队列AC
 
 ### 4位25个字符的编码
 假定一种编码的编码范围是a ~ y的25个字母，从1位到4位的编码，如果我们把该编码按字典序排序，形成一个数组如下： a, aa, aaa, aaaa, aaab, aaac, … …, b, ba, baa, baaa, baab, baac … …, yyyw, yyyx, yyyy 其中a的Index为0，aa的Index为1，aaa的Index为2，以此类推。 编写一个函数，输入是任意一个编码，输出这个编码对应的Index.
