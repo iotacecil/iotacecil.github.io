@@ -484,12 +484,26 @@ public boolean isInterleave(String s1, String s2, String s3) {
 }
 ```
 
-### 316 删除重复字母，输出字典序最小的（按原顺序）
+### 316 !!删除重复字母，输出字典序最小的（按原顺序）
 {% note %}
 Input: "bcabc"
 Output: "abc"
 {% endnote %}
+pdd原题
+不会
 
+```java
+public String removeDuplicateLetters(String s) {
+    int[] cnt = new int[26];
+    int pos = 0; // the position for the smallest s[i]
+    for (int i = 0; i < s.length(); i++) cnt[s.charAt(i) - 'a']++;
+    for (int i = 0; i < s.length(); i++) {
+        if (s.charAt(i) < s.charAt(pos)) pos = i;
+        if (--cnt[s.charAt(i) - 'a'] == 0) break;
+    }
+    return s.length() == 0 ? "" : s.charAt(pos) + removeDuplicateLetters(s.substring(pos + 1).replaceAll("" + s.charAt(pos), ""));
+}
+```
 
 ### 677 优美排列，相邻两个数的差有k种的数组
 {% note %}
