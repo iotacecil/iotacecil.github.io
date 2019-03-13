@@ -10,7 +10,16 @@ https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/Signal.md
 http://www.linya.pub/
 
 索引什么时候会失效
-redis持久化
+
+
+### redis持久化
+RDB是压缩过的二进制文件。
+BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。
+AOF更新频率通常比RDB高。
+
+RDB是保存数据库中的键值对，AOF保存redis执行的命令。
+AOF会重写。
+
 currentHashMap
 mysql 的其他引擎
 数据库里的乐观锁和悲观锁
@@ -84,6 +93,9 @@ https://juejin.im/post/5a0444d45188255ea95b66bc
 
 首次握手隐患：服务器收到ACK 发送SYN-ACK之后没有回执，会重发SYN-ACK。产生SYN flood。
 用`tcp_syncookies` 参数
+
+
+### 4.1 快重传
 
 ### 5.为什么四次分手
 1)由于TCP连接是全双工的，因此每个方向都必须单独进行关闭。
@@ -933,7 +945,9 @@ redis
 页面缓存，将整个页面手动渲染，加上所有vo，设定有效期1分钟，让用户1看到的是1分钟前的页面
 详情页应该不能放（？）库存更新怎么办（？）
 只是把页面商品信息放到了redis中
-redis常用数据结构
+
+
+### redis常用数据结构
 string, hash,set,sorted set,list
 ```sh
 redis> GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
@@ -948,12 +962,18 @@ redis> GEORADIUS Sicily 15 37 200 km
 redis> 
 ```
 
+#### redis 有序集合
+skiplist和dict会共享元素的成员和分值。
+zset中的dict创建了一个从成员到分值的映射，程序可用O(1)的时间查找到【分值】(zscore)。
+跳跃表实现zrank,zrange 还有查找全是logN
+
 秒杀项目的请求流程
 
 ### 57 缓存与数据库一致性
 读请求和写请求串行化，串到一个内存队列里去。串行化就不会不一致。
 先更新数据库再删除缓存。
 
+<<<<<<< HEAD
 ![cacheone.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg)
 
 缓存更新的时候加锁 防止大量请求直接访问数据库雪崩或者缓存不一致
@@ -967,6 +987,13 @@ redis>
 
 
 ### 58 为什么秒杀系统需要mq 秒杀排队系统
+=======
+多redis扣库存
+一旦缓存丢失需要考虑恢复方案。比如抽奖系统扣奖品库存的时候，初始库存=总的库存数-已经发放的奖励数，但是如果是异步发奖，需要等到MQ消息消费完了才能重启redis初始化库存，否则也存在库存不一致的问题。
+需要一个分布式锁来控制只能有一个服务去初始化库存
+
+### 为什么秒杀系统需要mq 秒杀排队系统
+>>>>>>> refs/remotes/origin/hexo-edit
 https://www.infoq.cn/article/yhd-11-11-queuing-system-design
 1）削峰:减少瞬间流量。处理失败的消息退回队列，接收的下一条还是这个消息，这是因为消息传递不仅要保证一次且仅一次，还要保证顺序。
 2）限流保证数据库不会挂掉，不然会影响其他服务。主要还是为了减少数据库访问 透这么多请求来数据库没有意义,会有大量锁冲突导致读请求会发生大量的超时。如果均成功再放下一批.
