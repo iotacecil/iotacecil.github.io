@@ -4,6 +4,18 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+
+### 库文件
+中间目标文件(`.obj`,`.o`的打包叫 库文件 `.lib`,`.a`
+
+### 链接
+在所有目标文件中寻找函数实现。
+
+### makefile
+`target:prerequisites`
+target 中一个或多个 依赖于 preprequisites 中的文件，
+如果 preprequisites 有一个比target新，command就执行。
+
 ### const int
 给出以下定义，下列哪些操作是合法的？
 1
@@ -47,10 +59,10 @@ B头文件中可以包含inline函数的声明
 - 头文件中不仅要包含 inline 函数的声明，而且必须包含定义，且在定义时必须加上 inline 
 
 C可以在同一个项目的不同源文件内定义函数名相同但实现不同的inline函数
-- 头文件中不仅要包含 inline 函数的声明，而且必须包含定义，且在定义时必须加上 inline 
+-  inline 函数可以定义在源文件中，但多个源文件中的同名 inline 函数的实现必须相同。
 
 D定义在Class声明内的成员函数默认是inline函数
-- 定义在类声明之中的成员函数将自动地成为内联函数
+- 类内的成员函数，默认都是 inline 的。
 
 D优先使用Class声明内定义的inline函数
 E优先使用Class实现的内inline函数的实现

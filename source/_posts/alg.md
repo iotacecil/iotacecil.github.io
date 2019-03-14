@@ -1038,6 +1038,15 @@ KMP算法核心，在S中indexOf(T),对T建立next数组
 
 {% endfold %}
 
+给定的一个长度为N的字符串str,查找长度为P(P<N)的字符串在str中的出现次数.下面的说法正确的是()
+正确答案: D   你的答案: B (错误)
+A不存在比最坏时间复杂度O(NP)好的算法
+B不存在比最坏时间复杂度O(N^2)好的算法
+C不存在比最坏时间复杂度O(P^2)好的算法
+**D存在最坏时间复杂度为O(N+P)的算法**
+E存在最坏时间复杂度为O(log(N+P))的算法
+以上都不对
+
 
 {% note %}
 给定一个字符串s, 请计算输出含有连续两个s作为子串的最短字符串。 注意两个s可能有重叠部分。例如,"ababa"含有两个"aba". 
@@ -1073,12 +1082,46 @@ for (int i = 2; i < n+1 ; i++) {
 System.out.println(in+in.substring(next[in.length()]));
 ```
 
-### 376 最长摇摆子序列
+### 376 ！最长摇摆子序列
 {% note %}
 Input: [1,7,4,9,2,5]
 Output: 6
-The first difference (if one exists) may be either positive or negative. 
+第一个差能正能负，差正负交替的最长子序列。
 {% endnote %}
+
+贪心：
+```java
+public int wiggleMaxLength(int[] nums) {
+ if (nums == null) return 0;
+    if (nums.length <= 1) return nums.length;
+    int f = 1, b = 1; 
+    for (int i = 1; i < nums.length; i++) {
+        if (nums[i] > nums[i-1]) f = b + 1;
+        else if (nums[i] < nums[i-1]) b = f + 1;
+    }
+    return Math.max(f, b);
+}
+```
+
+正确做法：动态规划只要记住-1位置上的最大值就好了
+```java
+public int wiggleMaxLength(int[] nums) {
+  if(nums == null)return 0;
+  int n = nums.length;
+  if(n < 2)return n;
+  int predif = 0;
+  int cnt = 1;
+  for(int i =1;i<n;i++){
+      int dif = nums[i] - nums[i-1];
+      if(dif >0 && predif <=0 || 
+        dif <0 && predif >=0){
+          cnt++;
+          predif = dif;
+      }
+  }
+    return cnt;   
+}
+```
 
 ### 324 摇摆序列sort
 {% note %}
