@@ -245,13 +245,47 @@ TERMINATED： 标识
 
 ### 10.线程同步的方法
 互斥量(mutex) 
-条件变量(conditon) 允许线程阻塞和等待另一个线程发送信号
- 读写锁 信号量
-synchronized  ReenreantLock
+
+ 读写锁 
+synchronized  
 volatile
 ThreadLocal
 LinkedBlockingQueue
 atomic
+
+### 10.1信号量 Semaphore ： 管理多线程竞争
+例子：100个线程抢10个数据库连接。
+
+### 10.2 Condition ： 线程通信 多个阻塞队列线程间通信
+目的：Condition 可以在多线程中创建多个阻塞队列。
+例子1：实现 【仓库数量>1】 的生产者消费者：
+将生产者和消费者放入不同的阻塞队列，精准控制。
+生产者判断full满就阻塞，加入商品后唤醒所有阻塞empty的消费者线程。
+
+Condition
+1）由Lock对象生成
+2）`await` 会释放锁，阻塞。 `signal`能唤醒。 wait和notify只能建立一个阻塞队列。 
+
+### 10.3锁
+#### Lock ReenreantLock
+同一个账户的存钱、取钱业务应该先完整完成一次后才释放锁。
+Lock可以跨方法锁对象：登录加锁，登出释放。
+`tryLock`如果获取锁失败会立刻返回 false，不会阻塞。
+
+#### syncronize 可重入
+对象头 Monitor entry set，wait set
+https://blog.csdn.net/javazejian/article/details/72828483
+正确说法：给调用该方法的【对象】加锁。在一个方法调用结束之前，其他线程无法得到这个对象的控制权。
+
+缺点：只能实现方法级别的排他性，不能保证业务层面（多个方法）。
+
+#### `notify`和`wait`
+放置在sychronized作用域中，wait会释放synchronized关联的锁阻塞，
+实现存库为1的生产者消费者。
+
+
+线程池 参数，常用的
+callable
 
 ### 11.C++虚函数作用及底层实现
 虚函数是使用虚函数表和虚函数表指针实现的。
@@ -1116,11 +1150,6 @@ String 存在JVM哪里
 原来在永久代里的字符串常量池移到了堆中。而且元空间替代了永久代。
 本来永久代使用的是JVM内存，而元空间使用的是本地内存，字符串常量不会有性能问题（intern）和内存溢出。
 
-### syncronize 可重入
-对象头 Monitor entry set，wait set
-https://blog.csdn.net/javazejian/article/details/72828483
-线程池 参数，常用的
-callable
 
 two sum
 如果数字在最后怎么优化
