@@ -35,6 +35,39 @@ https://www.nowcoder.com/test/4575457/summary
 
 ### 491
 
+### 334
+
+### 639 解码方式
+{% note %}
+Input: "1*"
+Output: 9 + 9 = 18
+1* -> 10 11 12... 19  1,*-> 1,0 1,1...
+{% endnote %}
+
+```java
+public int numDecodings(String s) {
+    long e0 = 1,e1 = 0,e2=0,f0,f1,f2;
+    long M =1000_000_007;
+    for(char c : s.toCharArray()){
+        if(c == '*'){
+            f0 = 9*e0 + 9*e1 +6*e2;
+            f1 = e0;
+            f2 = e0;
+        }else{
+            f0 = ((c > '0')?1:0 )* e0 + e1 + ((c <= '6')?1:0) * e2;
+            f1 = ((c == '1')?1:0 ) * e0;
+            f2 = ((c == '2')?1:0 ) * e0;
+        }
+        e0 = f0 % M;
+        e1 = f1;
+        e2 = f2;
+    }
+    return (int)e0;
+}
+```
+
+
+
 ### 376 ！最长摇摆子序列
 {% note %}
 Input: [1,7,4,9,2,5]
@@ -2535,23 +2568,6 @@ void srand(unsigned int seed)
 
 ### 231 2的整数次
 
-### 191二进制中1的个数
-难点：如果把1一直右移 负数会死循环。如果拿1一直左移要32次。
-做法：从右去掉1能去掉多少次
-整数-1会把最右边的1变成0，如果右边有0全变成1.
-原数和这个数 与 就把最右边1以及右边都变成0
-```java
-public int hammingWeight(int n) {
-    int count = 0;
-    while(n != 0){
-        ++count;
-        n = (n-1)&n;
-    }
-    return count;
-}
-```
-
-
 ### 405 十进制转16进制
 {% note %}
 Input:
@@ -2595,10 +2611,6 @@ https://baike.baidu.com/item/%E7%B4%A0%E6%95%B0%E5%AE%9A%E7%90%86/1972457?fromti
 >>>math.log(100)
 4.605170185988092
 ```
-
-
-
-
 
 ### 925 是否是因长按重复的字符串
 > Input: name = "leelee", typed = "lleeelee"
@@ -2708,9 +2720,6 @@ public List<Integer> findDuplicates(int[] nums){
     return res;
 }
 ```
-
-
-
 
 
 ### 401 二进制手表
