@@ -35,7 +35,174 @@ https://www.nowcoder.com/test/4575457/summary
 
 ### 491
 
-### 334
+#### ？？？315 输出数组每个位置后有多少个数字比它小
+
+暴力n^2复杂度一般只能到1k数量级
+
+方法一：
+1.把input倒序，并映射到argsort的index
+2.建立unique frequence list 原数组中unique的元素+1
+3.逆序扫描input，更新相应的frequence[rank]++。
+    并求frequence rank-1前的sum #有几个元素比当前元素小
+4.依次读入的sum list 倒序就是结果
+
+方法2：BST
+1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
+
+方法3：归并排序
+![nixu315.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nixu315.jpg)
+
+#### 小和问题(右边有多少个数比它大)
+```
+1 3  4 2 5
+   /   \
+1 3 4  2 5
+  /\   
+13  4     
+```
+归并1,3得小和->+1
+归并13，4 得小和->+1,+3 并且merge好了[1,3,4]
+归并2,5 得小和->+2
+归并134,25 :
+1比右边多少个数小：2的位置是mid+1，所以通过index可以得到 小和1x2个
+p1指向3，p2指2，无小和
+p1=3 p2=5 小和3x1个
+p1=4 p2=5 小和4x1
+
+例子2
+```
+1 3 4 5 6 7
+1比多少个数小：
+13)->1
+13)4)->1
+13)4)567)->1*3
+```
+
+如果[p1...][p2...]
+如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+比归并排序就多这一句
+```java
+res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+```
+{% fold %}
+```java
+//数组每个数左边比当前小的数累加起来叫这个 组数的小和。
+//[1,3,4,2,5]->1 +1+3 +1 +1+3+4+2
+    public int xiaohe(int[] arr){
+        if(arr==null||arr.length<2)return 0;
+        return mergesort(arr,0,arr.length-1);
+
+    }
+    private int mergesort(int[] arr,int l,int r){
+        if(l==r)return 0;
+        int mid = l+((r-l)>>2);
+        return mergesort(arr,l,mid)+mergesort(arr,mid+1,r)+merge(arr,l,mid,r);
+    }
+//    如果[p1...][p2...]
+//    如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+    private static int merge(int[] arr,int l,int mid,int r){
+        int[] help = new int[r-l+1];
+        int i = 0;
+        int p1 = l;
+        int p2 = mid+1;
+        int res = 0;
+        while (p1<=mid&&p2<=r){
+            System.out.println(res);
+            res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+            help[i++] = arr[p1]<arr[p2]?arr[p1++]:arr[p2++];
+            System.out.println(Arrays.toString(help));
+
+        }
+        while (p1<=mid){
+            help[i++] = arr[p1++];
+        }
+        while (p2<=r){
+            help[i++] = arr[p2++];
+        }
+        for (int j = 0; j <help.length ; j++) {
+            arr[l+j] = help[j];
+        }
+        System.out.println(Arrays.toString(help));
+        return res;
+    }
+```
+{% endfold %}
+
+### lg1966
+让b数组中第i小的数和a数组中第i小的数在同一个位置
+
+### lg1455 搭配购买 必须搭配购买的背包问题
+买一朵云则与这朵云有搭配的云都要买，钱是有限的，所以你肯定是想用现有的钱买到尽量多价值的云。
+输入输出格式
+输入格式：
+第1行n,m,w,表示n朵云，m个搭配和你现有的钱的数目
+第2行至n+1行，每行ci,di表示i朵云的价钱和价值
+第n+2至n+1+m ，每行ui,vi表示买ui就必须买vi,同理，如果买vi就必须买ui
+
+输出格式：
+一行，表示可以获得的最大价值
+{% note %}
+输入输出样例
+输入样例#1：
+
+5 3 10
+3 10
+3 10
+3 10
+5 100
+10 1
+1 3
+3 2
+4 2
+输出样例#1：
+1
+{% endnote %}
+
+思路：用并查集把n个必须一起买的物品组合成一个大物品，再用背包
+```cpp
+int father[20001],c[20001],w[20001],f[20001];
+int n,m,k,x,y;
+
+int find(int x)  //并查集
+{
+    return x==father[x]?x:father[x]=find(father[x]);
+}
+
+int main()
+{
+    scanf("%d%d%d",&n,&m,&k);
+    for (int i=1;i<=n;i++)
+    {
+        scanf("%d%d",&w[i],&c[i]);
+        father[i]=i;  //初始化
+    } 
+    for (int i=1;i<=m;i++)
+    {
+        scanf("%d%d",&x,&y);
+        if (find(x)!=find(y)) father[find(y)]=find(x);  //划为同一集合
+    }
+    for (int i=1;i<=n;i++)
+     if (father[i]!=i)  //如果买了这一件商品就得买另一件商品
+     {
+        c[find(i)]+=c[i];
+        w[find(i)]+=w[i];  //划为同一集合
+        c[i]=w[i]=0;  //清零，不清零就可能会造成重复购买一件商品
+     }
+    for (int i=1;i<=n;i++)
+     for (int j=k;j>=w[i];j--)
+      f[j]=max(f[j],f[j-w[i]]+c[i]); //01背包
+    printf("%d\n",f[k]);
+    return 0;
+}
+```
+
+### 334 三个上升子序列
+`arr[i] < arr[j] < arr[k]`
+given 0 ≤ i < j < k ≤ n-1 else return false.
+{% note %}
+Input: [5,4,3,2,1]
+Output: false
+{% endnote %}
 
 ### 639 解码方式
 {% note %}
