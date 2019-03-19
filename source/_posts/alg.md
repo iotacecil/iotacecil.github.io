@@ -35,19 +35,13 @@ https://www.nowcoder.com/test/4575457/summary
 
 ### 491
 
-#### ？？？315 输出数组每个位置后有多少个数字比它小
+#### 315 输出数组每个位置后有多少个数字比它小
 
 暴力n^2复杂度一般只能到1k数量级
 
-方法一：
-1.把input倒序，并映射到argsort的index
-2.建立unique frequence list 原数组中unique的元素+1
-3.逆序扫描input，更新相应的frequence[rank]++。
-    并求frequence rank-1前的sum #有几个元素比当前元素小
-4.依次读入的sum list 倒序就是结果
-
-方法2：BST
-1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
+BST 二叉搜索树
+节点(val,sum,dup)sum是左（小）节点的个数，dup是当前数字重复的个数。
+1.逆序读入建BST
 
 方法3：归并排序
 ![nixu315.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nixu315.jpg)
@@ -91,11 +85,10 @@ res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
     public int xiaohe(int[] arr){
         if(arr==null||arr.length<2)return 0;
         return mergesort(arr,0,arr.length-1);
-
     }
     private int mergesort(int[] arr,int l,int r){
         if(l==r)return 0;
-        int mid = l+((r-l)>>2);
+        int mid = l+((r-l)>>1);
         return mergesort(arr,l,mid)+mergesort(arr,mid+1,r)+merge(arr,l,mid,r);
     }
 //    如果[p1...][p2...]
@@ -130,6 +123,22 @@ res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
 
 ### lg1966
 让b数组中第i小的数和a数组中第i小的数在同一个位置
+{% note %}
+4
+2 3 1 4
+3 2 1 4
+
+out:1
+{% endnote %}
+
+1）归并排序
+$c[b[i].loc]=a[i].loc$ 排序的交换次数，逆序对个数。
+利用下标的单调升序,用归并排序最后让c[i]=i
+(x,loc)按数值排序后
+a:`[(1,2), (2,0), (3,1), (4,3)]`
+b:`[(1,2), (2,1), (3,0), (4,3)]`
+c:`[1, 0, 2, 3]`
+1）树状数组
 
 ### lg1455 搭配购买 必须搭配购买的背包问题
 买一朵云则与这朵云有搭配的云都要买，钱是有限的，所以你肯定是想用现有的钱买到尽量多价值的云。
