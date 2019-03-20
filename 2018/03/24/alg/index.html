@@ -137,7 +137,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/graphcy.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/mounting.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fenzhi.jpg">
-<meta property="og:updated_time" content="2019-03-19T01:49:39.610Z">
+<meta property="og:updated_time" content="2019-03-20T07:46:49.222Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="刷题记录">
 <meta name="twitter:description" content="排序算法复杂度 刷题顺序https://vjudge.net/article/6https://www.cnblogs.com/JuneWang/p/3773880.html 网易https://www.nowcoder.com/discuss/105576?type=2 微软187https://blog.csdn.net/v_july_v/article/details/6697883面试ht">
@@ -387,8 +387,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-19T09:49:39+08:00">
-                2019-03-19
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-20T15:46:49+08:00">
+                2019-03-20
               </time>
             
           </span>
@@ -450,7 +450,9 @@
 <p><a href="https://www.educative.io/collection/page/5642554087309312/5679846214598656/140001" target="_blank" rel="noopener">https://www.educative.io/collection/page/5642554087309312/5679846214598656/140001</a></p>
 <p><a href="https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html" target="_blank" rel="noopener">https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html</a></p>
 <p>笔试题todo<br><a href="https://www.nowcoder.com/test/4575457/summary" target="_blank" rel="noopener">https://www.nowcoder.com/test/4575457/summary</a></p>
-<h3 id="395"><a href="#395" class="headerlink" title="395"></a>395</h3><h3 id="854"><a href="#854" class="headerlink" title="854"></a>854</h3><h3 id="491"><a href="#491" class="headerlink" title="491"></a>491</h3><h4 id="315-输出数组每个位置后有多少个数字比它小"><a href="#315-输出数组每个位置后有多少个数字比它小" class="headerlink" title="315 输出数组每个位置后有多少个数字比它小"></a>315 输出数组每个位置后有多少个数字比它小</h4><p>暴力n^2复杂度一般只能到1k数量级</p>
+<h3 id="395"><a href="#395" class="headerlink" title="395"></a>395</h3><h3 id="854"><a href="#854" class="headerlink" title="854"></a>854</h3><h3 id="491"><a href="#491" class="headerlink" title="491"></a>491</h3><h4 id="315-输出数组每个位置后有多少个数字比它小"><a href="#315-输出数组每个位置后有多少个数字比它小" class="headerlink" title="315 输出数组每个位置后有多少个数字比它小"></a>315 输出数组每个位置后有多少个数字比它小</h4><div class="note "><p>Input: [5,2,6,1]<br>Output: [2,1,1,0] </p></div>
+<p>暴力n^2复杂度一般只能到1k数量级</p>
+<p>BIT:<br>倒序:<code>[1,6,2,5]</code><br>rank:<code>[0,3,1,2]</code><br>prefix sum:建立rank计数数组，读1，6，2.. 并在prefix 上计数<br>并求和<br>pre：[]</p>
 <p>BST 二叉搜索树<br>节点(val,sum,dup)sum是左（小）节点的个数，dup是当前数字重复的个数。<br>1.逆序读入建BST</p>
 <p>方法3：归并排序<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nixu315.jpg" alt="nixu315.jpg"></p>
 <h4 id="小和问题-右边有多少个数比它大"><a href="#小和问题-右边有多少个数比它大" class="headerlink" title="小和问题(右边有多少个数比它大)"></a>小和问题(右边有多少个数比它大)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1 3  4 2 5</span><br><span class="line">   /   \</span><br><span class="line">1 3 4  2 5</span><br><span class="line">  /\   </span><br><span class="line">13  4</span><br></pre></td></tr></table></figure>
