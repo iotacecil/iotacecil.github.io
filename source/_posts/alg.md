@@ -36,8 +36,21 @@ https://www.nowcoder.com/test/4575457/summary
 ### 491
 
 #### 315 输出数组每个位置后有多少个数字比它小
+{% note %}
+Input: [5,2,6,1]
+Output: [2,1,1,0] 
+{% endnote %}
 
 暴力n^2复杂度一般只能到1k数量级
+
+BIT:
+倒序:`[1,6,2,5]`
+rank:`[0,3,1,2]`
+prefix sum:建立rank计数数组，读1，6，2.. 并在prefix 上计数
+并求和
+pre：[]
+
+
 
 BST 二叉搜索树
 节点(val,sum,dup)sum是左（小）节点的个数，dup是当前数字重复的个数。
