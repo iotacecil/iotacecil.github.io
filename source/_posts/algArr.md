@@ -4,13 +4,220 @@ date: 2019-03-04 19:38:25
 tags: [alg]
 categories: [算法备忘]
 ---
-### 376. Wiggle Subsequence 摇摆序列最长
+### 376. Wiggle Subsequence 最长摇摆序列
 {% note %}
 Input: [1,17,5,10,13,15,10,5,16,8]
 Output: 7
 One is [1,17,10,13,10,16,8].
+第一个差能正能负，差正负交替的最长子序列。
 {% endnote %}
-差值是先正后负交替
+
+贪心：
+```java
+public int wiggleMaxLength(int[] nums) {
+ if (nums == null) return 0;
+    if (nums.length <= 1) return nums.length;
+    int f = 1, b = 1; 
+    for (int i = 1; i < nums.length; i++) {
+        if (nums[i] > nums[i-1]) f = b + 1;
+        else if (nums[i] < nums[i-1]) b = f + 1;
+    }
+    return Math.max(f, b);
+}
+```
+
+正确做法：动态规划只要记住-1位置上的最大值就好了
+```java
+public int wiggleMaxLength(int[] nums) {
+  if(nums == null)return 0;
+  int n = nums.length;
+  if(n < 2)return n;
+  int predif = 0;
+  int cnt = 1;
+  for(int i =1;i<n;i++){
+      int dif = nums[i] - nums[i-1];
+      if(dif >0 && predif <=0 || 
+        dif <0 && predif >=0){
+          cnt++;
+          predif = dif;
+      }
+  }
+    return cnt;   
+}
+```
+
+
+### ！974 和整除k的子数组个数
+{% note %}
+Input: A = [4,5,0,-2,-3,1], K = 5
+Output: 7
+Explanation: There are 7 subarrays with a sum divisible by K = 5:
+`[4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]`
+{% endnote %}
+
+1)用前缀和可以快速得到区间和
+`P = [0,4,9,9,7,4,5]`,
+2）如果`(sums[i] - sums[j]) % K == 0`，说明sums[i]和sums[j]都是K的倍数，所以得出sums[i] % K == sums[j] % K
+例如：%K ==0的位置 [0]和[6] 得到子数组`[4, 5, 0, -2, -3, 1]`
+同余的如果有4个，两两组合的位置数有C(4,2)=6
+
+注意：presum为负数的时候，取模应该`(p % K + K) % K`
+-1 % 5 = -1, but we need the positive mod 4
+例如presum[1] = -1  presum[4] = 4
+```java
+public int subarraysDivByK(int[] A, int K) {
+    int n = A.length;
+    int rst = 0;
+    int[] presum = new int[n+1];
+    //[1]-[0] = pre[0:1)
+    for(int i =0;i<n;i++){
+        presum[i+1] = presum[i]+A[i];
+    }
+    int[] mod = new int[K];
+    for(int p:presum){
+        mod[((p%K)+K)%K]++;
+    }
+    for(int c:mod){
+        rst += (c*(c-1))/2;
+    }
+    return rst;
+}
+```
+
+### 209最小连续子数组 和>=K 的长度
+{% note %}
+Input: s = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: the subarray [4,3] 
+{% endnote %}
+
+1 二分搜索
+暴力法搜索前缀数组`sum[j]-sum[i]+nums[i]>=k`的最短ij
+二分发寻找`sum[j] >= sum[i]-nums[i]+k` j的最小值
+
+### 560 数组中有多少个和为k的子数组
+{% note %}
+输入:nums = [1,1,1], k = 2
+输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+{% endnote %}
+
+同930 一模一样,查找可以组成k的前缀，计数前缀
+69%
+{% fold %}
+```java
+public int subarraySum(int[] nums, int k) {
+    int psum = 0;
+    Map<Integer,Integer> map = new HashMap<>();
+    map.put(0,1);
+    int cnt =0;
+    for(int i =0;i<nums.length;i++){
+        psum += nums[i];
+        cnt += map.getOrDefault(psum - k,0);
+        map.put(psum,map.getOrDefault(psum,0)+1);
+    }
+    return cnt;
+}
+```
+{% endfold %}
+
+### 930 01数组中有多少个和=target的子数组
+{% note %}
+输入：A = [0,0,0,0,0], S = 0
+输出：15  5+4+3+2+1
+{% endnote %}
+
+思路： 计算前缀和`[1,1,2,2,3]`并放入map计数,`{1:2,2:2,3:1}`
+步骤[0,0,0,0,0] 初始化map`{0:1}`,扫描到第一个0,查找map中S-0=0有几个，cnt=1,更新`map{0:2}` ,扫描到第二个0，cnt=1+2...最后一个0，cnt+1+2+3+4+5 = 15
+```java
+public int numSubarraysWithSum(int[] A, int S) {
+    Map<Integer, Integer> c = new HashMap<>();
+    c.put(0, 1);
+    int psum = 0, res = 0;
+    for (int i : A) {
+        psum += i;
+        // 查找前缀
+        res += c.getOrDefault(psum - S, 0);
+        // 当前前缀计数
+        c.put(psum, c.getOrDefault(psum, 0)+1);
+    }
+    return res;
+}
+```
+
+### 713 乘积`<k`的子数组的个数
+输入[1,2,3,4] k = 10
+当s = 0,e = 0 窗口只有[1]
+窗口乘积p = 1 ，子数组个数 1 :[1]
+
+s = 0,e = 1 窗口[1,2]
+p = 2 子数组个数3: `[[1],   [2],[1,2]]` (+2)
+
+s = 0,e = 2 窗口[1,2,3]
+p = 6 子数组个数3: `[[1],[2][1,2],  [3],[2,3],[1,2,3]]` (+3)
+
+每次子数组的增长个数就是窗口大小
+如果 p >k 则s向右
+s = 1,e = 3 窗口[2,3,4]
+p = 24
+s = 2,e = 3窗口[3,4] 
+p = 12 子数组个数`[[3],  [4][3,4]]]` (+2)
+
+```java
+public int numSubarrayProductLessThanK(int[] nums, int k) {
+    int p = 1;
+    int cnt =0;
+    for(int s = 0, e = 0; e < nums.length;e++){
+        p *= nums[e];
+        while(p>=k && s<e){
+            p /= nums[s++];
+        }
+        if(p < k){
+            cnt += (e - s + 1);
+        }  
+    }
+    return cnt;
+}
+```
+
+### 862 和至少为K的最短子数组
+{% note %}
+Input: A = [2,-1,2], K = 3
+Output: 3
+{% endnote %}
+
+思路：用前缀和找区间和，关键：递增有序栈，
+用当前值更新队尾，如果当前的presum比队尾presum小，则下一个减这个得到的区间更短而且值更大。
+
+```java
+public int shortestSubarrayWindow(int[] A, int K) {
+    int n = A.length;
+    long[] presum = new long[n+1];
+
+    for (int i = 0; i <n ; i++) {
+        if(A[i] >=K)return 1;
+        presum[i+1] = presum[i] +A[i];
+    }
+    int minlen = n+1;
+
+    Deque<Integer> deque = new ArrayDeque<>();
+
+    for (int i = 0; i <n ; i++) {
+
+        while (deque.size() >0 && presum[i] - presum[deque.getFirst()] >= K){
+
+            minlen = Math.min(minlen, i-deque.pollFirst());
+        }
+        // 关键
+        while (deque.size() > 0 && presum[i] <= presum[deque.getLast()]){
+         deque.pollLast();
+        }
+        deque.addLast(i);
+
+    }
+    return minlen == n+1?-1:minlen;
+
+}
+```
 
 ### 283 Move Zeroes 所有0移到后面
 把0都放到后面并且保证原来顺序不变。 没有额外空间。

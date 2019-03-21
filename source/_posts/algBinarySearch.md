@@ -411,38 +411,7 @@ public int searchInsert(int[] a, int k) {
 }
 ```
 
-#### poj1064 n条线段切割成等长k段 的最大长度
-> in: 4 11 8.02 7.43 4.57 5.39
-> out:2.00 (4+3+2+2=11)
 
-{% fold %}
-```java
-/**
- * 长度为L的绳子 最多可以切 floor(L/x)段
- * @param x
- * @return
- */
-public static boolean C(double x){
-    int num = 0;
-    for (int i = 0; i <n ; i++) {
-        num+=(int)(lines[i]/x);
-    }
-    return num>=k;
-}
-public static double howlong(double[] lines,int k){
-    //All cables are at least 1 meter and at most 100 kilometers in length.
-    double l = 0,h = 100001;
-    // while ((h-l)>1e-6){
-     //可以达到10^-30的精度
-    for (int i = 0; i <100 ; i++) {
-        double mid = (l+h)/2;
-        if(C(mid))l = mid;
-        else h = mid;
-    }
-    return Math.floor(h*100)/100;
-}
-```
-{% endfold %}
 
 #### poj2456 最大化最小值 最大化最近两头牛的距离
 > in:5 3 [1,2,8,4,9]

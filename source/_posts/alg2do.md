@@ -133,7 +133,6 @@ return false;
 ---
 
 
-
 ### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
 https://leetcode.com/problems/predict-the-winner/solution/
 {3，9，1，2}

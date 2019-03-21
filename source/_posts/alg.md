@@ -35,6 +35,8 @@ https://www.nowcoder.com/test/4575457/summary
 
 ### 491
 
+
+
 #### 315 输出数组每个位置后有多少个数字比它小
 {% note %}
 Input: [5,2,6,1]
@@ -257,46 +259,7 @@ public int numDecodings(String s) {
 
 
 
-### 376 ！最长摇摆子序列
-{% note %}
-Input: [1,7,4,9,2,5]
-Output: 6
-第一个差能正能负，差正负交替的最长子序列。
-{% endnote %}
 
-贪心：
-```java
-public int wiggleMaxLength(int[] nums) {
- if (nums == null) return 0;
-    if (nums.length <= 1) return nums.length;
-    int f = 1, b = 1; 
-    for (int i = 1; i < nums.length; i++) {
-        if (nums[i] > nums[i-1]) f = b + 1;
-        else if (nums[i] < nums[i-1]) b = f + 1;
-    }
-    return Math.max(f, b);
-}
-```
-
-正确做法：动态规划只要记住-1位置上的最大值就好了
-```java
-public int wiggleMaxLength(int[] nums) {
-  if(nums == null)return 0;
-  int n = nums.length;
-  if(n < 2)return n;
-  int predif = 0;
-  int cnt = 1;
-  for(int i =1;i<n;i++){
-      int dif = nums[i] - nums[i-1];
-      if(dif >0 && predif <=0 || 
-        dif <0 && predif >=0){
-          cnt++;
-          predif = dif;
-      }
-  }
-    return cnt;   
-}
-```
 
 ### 324 摇摆序列sort
 {% note %}
@@ -328,74 +291,7 @@ public void wiggleSort(int[] nums) {
 {% endfold %}
 
 
-### pdd 抢劫 (后缀最大值)
-{% note %}
-在一条街上的有n个银行，银行在xi位置，有ai元，然后有两个抢劫犯
-找两个相距不小于d的银行，使得这两个银行的权值加起来最大
-输入：
-6 3
-1 1
-3 5
-4 8
-6 4
-10 3
-11 2
-输出：
-11
-{% endnote %}
-思路：用两个一维数组保存包括位置i以及i右边 money最大值和最大值的index
-位置：1 3 4 6 10 11
-利润：1 5 8 4 3  2
-dp1 :8 8 8 4 3  2
-dp2 :2 2 2 3 4  5
-因为位置数组有序，用二分查找当前位置`w[i]`相距d之后的第一个符合的位置。就可以查找dp1得到选择w[i]银行 和距离d右边可能得到的最大利润，并且用dp2得到位置。
 
-pdd的题目银行位置不递增。可以考虑位置数组用于排序，用map记录位置和利润。
-{% note %}
-```java
-// 输出[0,n]
-public static int lowerBound(long[] nums, long target) {
-    if (nums == null || nums.length == 0) return -1;
-    int lb = -1, ub = nums.length;
-    while (lb + 1 < ub) {
-        int mid = lb + (ub - lb) / 2;
-        if (nums[mid] >= target) {
-            ub = mid;
-        } else {
-            lb = mid;
-        }
-    }
-    return ub;
-}
-public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    int n = sc.nextInt();
-    int d = sc.nextInt();
-    long[] w = new long[n];
-    Map<Long,Long> map = new HashMap<>();
-    for (int i = 0; i <n ; i++) {
-        w[i] = sc.nextLong();
-        map.put(w[i],sc.nextLong());
-    }
-    Arrays.sort(w);
-    long max = -1;
-    // [i:n-1]的最大值
-    long[] backsmax = new long[n+1];
-    backsmax[n] = -1;
-    for (int i = n-1; i >= 0; i--) {
-        backsmax[i] = Math.max(backsmax[i+1],map.get(w[i]));
-    }
-    for (int i = 0; i <n ; i++) {
-        long tmp = w[i] + d;
-        int idx = lowerBound(w, tmp);
-        if(backsmax[idx] + map.get(w[i]) > max){
-            max = Math.max(max, backsmax[idx] + map.get(w[i]));
-        }
-    }
-    System.out.println(max);
-}
-```
-{% endnote %}
 
 ### 992 有K个不同整数的子数组的个数
 {% note %}
@@ -404,27 +300,7 @@ public static void main(String[] args) {
 解释：恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].
 {% endnote %}
 
-### 手串 
-莫队算法：有n个数组成一个序列，有m个形如询问L, R的询问，每次询问需要回答区间内至少出现2次的数有哪些。
 
-n个珠子的环，无色或有一个珠子很多种颜色，一共c种颜色，m个珠里同种颜色最多出现1次。
-给定n个珠的颜色
-输出：有多少种颜色在任意连续m个串珠中出现了至少两次。
-接下来n行每行的第一个数num_i(0 <= num_i <= c)表示第i颗珠子有多少种颜色。
-依次读入num_i个数字，每个数字x表示第i颗柱子上包含第x种颜色(1 <= x <= c)
-{% note %}
-输入
-n=5 m=2 c=3
-3 1 2 3
-0
-2 2 3
-1 2
-1 3
-输出
-2
-{% endnote %}
-
-思路：滑动窗口
 
 ### 502 IPO
 {% note %}
@@ -2494,43 +2370,6 @@ public int cutting(int[] prices, int n) {
 {% endfold %}
 
 
-### 862 和至少为K的最短子数组
-> Input: A = [2,-1,2], K = 3
-Output: 3
-
-思路：用前缀和找区间和，关键：递增有序栈，
-用当前值更新队尾，如果当前的presum比队尾presum小，则下一个减这个得到的区间更短而且值更大。
-
-```java
-public int shortestSubarrayWindow(int[] A, int K) {
-    int n = A.length;
-    long[] presum = new long[n+1];
-
-    for (int i = 0; i <n ; i++) {
-        if(A[i] >=K)return 1;
-        presum[i+1] = presum[i] +A[i];
-    }
-    int minlen = n+1;
-
-    Deque<Integer> deque = new ArrayDeque<>();
-
-    for (int i = 0; i <n ; i++) {
-
-        while (deque.size() >0 && presum[i] - presum[deque.getFirst()] >= K){
-
-            minlen = Math.min(minlen, i-deque.pollFirst());
-        }
-        // 关键
-        while (deque.size() > 0 && presum[i] <= presum[deque.getLast()]){
-         deque.pollLast();
-        }
-        deque.addLast(i);
-
-    }
-    return minlen == n+1?-1:minlen;
-
-}
-```
 
 ### 861 01矩阵反转能得到的最大01行和
 > Input: [[0,0,1,1],[1,0,1,0],[1,1,0,0]]
