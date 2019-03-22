@@ -125,53 +125,6 @@ public boolean wordBreak(String s, List<String> wordDict) {
 }
 ```
 
-### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
-226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
-1递归：8%
-```java
-Map<String,Integer> map = new HashMap<>();
-public int numDecodings(String s){
-    if(s.length()<1)return 1;
-    if(map.containsKey(s))return map.get(s);
-    if(s.charAt(0)=='0')return 0;
-    if(s.length()==1)return 1;
-    w = numDecodings(s.substring(1));
-    int pre2 = Integer.parseInt(s.substring(0,2));
-    if(pre2<=26){
-        w+=numDecodings(s.substring(2));
-    }
-    map.put(s,w);
-    return w;
-}
-```
-2递归改成index 63%
-```java
-public int numDecodings(String s){
-    return help(s,0,s.length()-1);
-    }
-private int help(String s,int l,int r){
-    if(l>s.length()-1)return 1;
-    if(s.charAt(0)=='0')return 0;
-    if(l>=r)return 1;
-    w = help(s,l+1,r);
-    int pre2 = (s.charAt(l)-'0')*10+s.charAt(l+1)-'0';
-    if(pre2<=26){
-        w+=help(s,l+2,r);
-    }
-    map2.put(l,w);
-    return w;
-}
-```
-3.dp[i]表示s[0..i]的解码方式？？？
-dp[0]=1
-226->s['2']->dp[1]=dp[0]=1
-   ->s['2']->s['22']->dp[2]=dp[1]+dp[0]=2
-   ->s['6']->s['26']->dp[3]=dp[2]+dp[1]=3
-
-102
-当s[i]合法,dp[i]=dp[i-1], dp[1]=dp[0]
-当s[i][i-1]合法dp[i]=dp[i-2] ,dp[2]=dp[0]
-当s[i-1]s[i]合法，dp[i]=dp[i-1]+dp[i-2]
 
 
 ### word search

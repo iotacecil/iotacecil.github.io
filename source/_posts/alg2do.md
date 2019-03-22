@@ -84,9 +84,6 @@ target = 3
 ### ！！！！76 最小的子串窗口 很重要的题
 
 
-
-
-
 ### 464 博弈
 A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。
 1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)
@@ -134,7 +131,6 @@ return false;
 另一个玩家能不能赢的state：`mask|visited` 在visited（上一个状态）的基础将i位也置1
 
 ---
-
 
 
 ### 486 两个人只能从list的两端取数，预测最后谁摸到的点数sum高
@@ -238,101 +234,6 @@ public boolean stoneGameDP1D(int[] piles) {
     return dp[0]>0;
 }
 ```
-
-
-
-#### ？？？315 输出数组每个位置后有多少个数字比它小
-
-暴力n^2复杂度一般只能到1k数量级
-
-方法一：
-1.把input倒序，并映射到argsort的index
-2.建立unique frequence list 原数组中unique的元素+1
-3.逆序扫描input，更新相应的frequence[rank]++。
-    并求frequence rank-1前的sum #有几个元素比当前元素小
-4.依次读入的sum list 倒序就是结果
-
-方法2：BST
-1.逆序读入建BST 动态更新 并sum所有有右节点的count+left累加和
-
-方法3：归并排序
-![nixu315.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nixu315.jpg)
-
-#### 小和问题(右边有多少个数比它大)
-```
-1 3  4 2 5
-   /   \
-1 3 4  2 5
-  /\   
-13  4     
-```
-归并1,3得小和->+1
-归并13，4 得小和->+1,+3 并且merge好了[1,3,4]
-归并2,5 得小和->+2
-归并134,25 :
-1比右边多少个数小：2的位置是mid+1，所以通过index可以得到 小和1x2个
-p1指向3，p2指2，无小和
-p1=3 p2=5 小和3x1个
-p1=4 p2=5 小和4x1
-
-例子2
-```
-1 3 4 5 6 7
-1比多少个数小：
-13)->1
-13)4)->1
-13)4)567)->1*3
-```
-
-如果[p1...][p2...]
-如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
-比归并排序就多这一句
-```java
-res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
-```
-{% fold %}
-```java
-//数组每个数左边比当前小的数累加起来叫这个 组数的小和。
-//[1,3,4,2,5]->1 +1+3 +1 +1+3+4+2
-    public int xiaohe(int[] arr){
-        if(arr==null||arr.length<2)return 0;
-        return mergesort(arr,0,arr.length-1);
-
-    }
-    private int mergesort(int[] arr,int l,int r){
-        if(l==r)return 0;
-        int mid = l+((r-l)>>2);
-        return mergesort(arr,l,mid)+mergesort(arr,mid+1,r)+merge(arr,l,mid,r);
-    }
-//    如果[p1...][p2...]
-//    如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
-    private static int merge(int[] arr,int l,int mid,int r){
-        int[] help = new int[r-l+1];
-        int i = 0;
-        int p1 = l;
-        int p2 = mid+1;
-        int res = 0;
-        while (p1<=mid&&p2<=r){
-            System.out.println(res);
-            res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
-            help[i++] = arr[p1]<arr[p2]?arr[p1++]:arr[p2++];
-            System.out.println(Arrays.toString(help));
-
-        }
-        while (p1<=mid){
-            help[i++] = arr[p1++];
-        }
-        while (p2<=r){
-            help[i++] = arr[p2++];
-        }
-        for (int j = 0; j <help.length ; j++) {
-            arr[l+j] = help[j];
-        }
-        System.out.println(Arrays.toString(help));
-        return res;
-    }
-```
-{% endfold %}
 
 ### ??Convert BST to Greater Tree
 [17ms 66% Reverse Morris In-order Traversal](https://leetcode.com/problems/convert-bst-to-greater-tree/solution/)

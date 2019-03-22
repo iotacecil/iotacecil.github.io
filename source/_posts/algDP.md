@@ -4,6 +4,75 @@ date: 2019-03-07 20:56:46
 tags: [alg]
 categories: [算法备忘]
 ---
+
+
+### 91 1-26数字对应26个字母，问一个数字对应多少种解码方式
+226->2(B)2(B)6(F),22(V)6(F),2(B)26(Z)
+
+3.dp[i]表示s[0..i]的解码方式
+关键：
+1）长度为0的时候解码方式为1
+2）判断前1位数字和前2位的合法性，加上前i-1,i-2长度的方案数
+3）越过0
+```java
+public int numDecodings(String s) {
+    int n = s.length();
+    int[] dp = new int[n+1];
+    dp[0] = 1;
+    dp[1] = s.charAt(0)!='0'?1:0;
+    for(int i =2;i<=n;i++){
+        int one = Integer.valueOf(s.substring(i-1,i));
+        if(one <10 && one >0)dp[i] += dp[i-1];
+        int two = Integer.valueOf(s.substring(i-2,i));
+        if(two <=26 && two >=10)dp[i] += dp[i-2];
+    }
+    return dp[n];
+}
+```
+
+{% fold %}
+1递归：8%
+```java
+Map<String,Integer> map = new HashMap<>();
+public int numDecodings(String s){
+    if(s.length()<1)return 1;
+    if(map.containsKey(s))return map.get(s);
+    if(s.charAt(0)=='0')return 0;
+    if(s.length()==1)return 1;
+    // 取一个数字之后的解码方式
+    w = numDecodings(s.substring(1));
+    // 取两个数字之后的解码方式
+    int pre2 = Integer.parseInt(s.substring(0,2));
+    if(pre2<=26){
+        w+=numDecodings(s.substring(2));
+    }
+    map.put(s,w);
+    return w;
+}
+```
+2递归改成index 63%
+```java
+public int numDecodings(String s){
+    return help(s,0,s.length()-1);
+    }
+private int help(String s,int l,int r){
+    if(l>s.length()-1)return 1;
+    if(s.charAt(0)=='0')return 0;
+    if(l>=r)return 1;
+    w = help(s,l+1,r);
+    int pre2 = (s.charAt(l)-'0')*10+s.charAt(l+1)-'0';
+    if(pre2<=26){
+        w+=help(s,l+2,r);
+    }
+    map2.put(l,w);
+    return w;
+}
+```
+{% endfold %}
+
+
+
+
 ### 718 最长公共子串40ms 90%
 {% note %}
 Input:

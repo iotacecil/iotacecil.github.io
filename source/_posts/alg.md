@@ -29,6 +29,288 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+### 395
+
+### 854
+
+### 491
+
+
+
+#### 315 输出数组每个位置后有多少个数字比它小
+{% note %}
+Input: [5,2,6,1]
+Output: [2,1,1,0] 
+{% endnote %}
+
+暴力n^2复杂度一般只能到1k数量级
+
+BIT:
+倒序:`[1,6,2,5]`
+rank:`[0,3,1,2]`
+prefix sum:建立rank计数数组，读1，6，2.. 并在prefix 上计数
+并求和
+pre：[]
+
+
+
+BST 二叉搜索树
+节点(val,sum,dup)sum是左（小）节点的个数，dup是当前数字重复的个数。
+1.逆序读入建BST
+
+方法3：归并排序
+![nixu315.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/nixu315.jpg)
+
+#### 小和问题(右边有多少个数比它大)
+```
+1 3  4 2 5
+   /   \
+1 3 4  2 5
+  /\   
+13  4     
+```
+归并1,3得小和->+1
+归并13，4 得小和->+1,+3 并且merge好了[1,3,4]
+归并2,5 得小和->+2
+归并134,25 :
+1比右边多少个数小：2的位置是mid+1，所以通过index可以得到 小和1x2个
+p1指向3，p2指2，无小和
+p1=3 p2=5 小和3x1个
+p1=4 p2=5 小和4x1
+
+例子2
+```
+1 3 4 5 6 7
+1比多少个数小：
+13)->1
+13)4)->1
+13)4)567)->1*3
+```
+
+如果[p1...][p2...]
+如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+比归并排序就多这一句
+```java
+res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+```
+{% fold %}
+```java
+//数组每个数左边比当前小的数累加起来叫这个 组数的小和。
+//[1,3,4,2,5]->1 +1+3 +1 +1+3+4+2
+    public int xiaohe(int[] arr){
+        if(arr==null||arr.length<2)return 0;
+        return mergesort(arr,0,arr.length-1);
+    }
+    private int mergesort(int[] arr,int l,int r){
+        if(l==r)return 0;
+        int mid = l+((r-l)>>1);
+        return mergesort(arr,l,mid)+mergesort(arr,mid+1,r)+merge(arr,l,mid,r);
+    }
+//    如果[p1...][p2...]
+//    如果p1比p2小，则p1比p2后面的数都小，是后面的数的小和
+    private static int merge(int[] arr,int l,int mid,int r){
+        int[] help = new int[r-l+1];
+        int i = 0;
+        int p1 = l;
+        int p2 = mid+1;
+        int res = 0;
+        while (p1<=mid&&p2<=r){
+            System.out.println(res);
+            res+=arr[p1]<arr[p2]?(r-p2+1)*arr[p1]:0;
+            help[i++] = arr[p1]<arr[p2]?arr[p1++]:arr[p2++];
+            System.out.println(Arrays.toString(help));
+
+        }
+        while (p1<=mid){
+            help[i++] = arr[p1++];
+        }
+        while (p2<=r){
+            help[i++] = arr[p2++];
+        }
+        for (int j = 0; j <help.length ; j++) {
+            arr[l+j] = help[j];
+        }
+        System.out.println(Arrays.toString(help));
+        return res;
+    }
+```
+{% endfold %}
+
+### lg1966
+让b数组中第i小的数和a数组中第i小的数在同一个位置
+{% note %}
+4
+2 3 1 4
+3 2 1 4
+
+out:1
+{% endnote %}
+
+1）归并排序
+$c[b[i].loc]=a[i].loc$ 排序的交换次数，逆序对个数。
+利用下标的单调升序,用归并排序最后让c[i]=i
+(x,loc)按数值排序后
+a:`[(1,2), (2,0), (3,1), (4,3)]`
+b:`[(1,2), (2,1), (3,0), (4,3)]`
+c:`[1, 0, 2, 3]`
+1）树状数组
+
+### lg1455 搭配购买 必须搭配购买的背包问题
+买一朵云则与这朵云有搭配的云都要买，钱是有限的，所以你肯定是想用现有的钱买到尽量多价值的云。
+输入输出格式
+输入格式：
+第1行n,m,w,表示n朵云，m个搭配和你现有的钱的数目
+第2行至n+1行，每行ci,di表示i朵云的价钱和价值
+第n+2至n+1+m ，每行ui,vi表示买ui就必须买vi,同理，如果买vi就必须买ui
+
+输出格式：
+一行，表示可以获得的最大价值
+{% note %}
+输入输出样例
+输入样例#1：
+
+5 3 10
+3 10
+3 10
+3 10
+5 100
+10 1
+1 3
+3 2
+4 2
+输出样例#1：
+1
+{% endnote %}
+
+思路：用并查集把n个必须一起买的物品组合成一个大物品，再用背包
+```cpp
+int father[20001],c[20001],w[20001],f[20001];
+int n,m,k,x,y;
+
+int find(int x)  //并查集
+{
+    return x==father[x]?x:father[x]=find(father[x]);
+}
+
+int main()
+{
+    scanf("%d%d%d",&n,&m,&k);
+    for (int i=1;i<=n;i++)
+    {
+        scanf("%d%d",&w[i],&c[i]);
+        father[i]=i;  //初始化
+    } 
+    for (int i=1;i<=m;i++)
+    {
+        scanf("%d%d",&x,&y);
+        if (find(x)!=find(y)) father[find(y)]=find(x);  //划为同一集合
+    }
+    for (int i=1;i<=n;i++)
+     if (father[i]!=i)  //如果买了这一件商品就得买另一件商品
+     {
+        c[find(i)]+=c[i];
+        w[find(i)]+=w[i];  //划为同一集合
+        c[i]=w[i]=0;  //清零，不清零就可能会造成重复购买一件商品
+     }
+    for (int i=1;i<=n;i++)
+     for (int j=k;j>=w[i];j--)
+      f[j]=max(f[j],f[j-w[i]]+c[i]); //01背包
+    printf("%d\n",f[k]);
+    return 0;
+}
+```
+
+### 334 三个上升子序列
+`arr[i] < arr[j] < arr[k]`
+given 0 ≤ i < j < k ≤ n-1 else return false.
+{% note %}
+Input: [5,4,3,2,1]
+Output: false
+{% endnote %}
+
+### 639 解码方式
+{% note %}
+Input: "1*"
+Output: 9 + 9 = 18
+1* -> 10 11 12... 19  1,*-> 1,0 1,1...
+{% endnote %}
+
+```java
+public int numDecodings(String s) {
+    long e0 = 1,e1 = 0,e2=0,f0,f1,f2;
+    long M =1000_000_007;
+    for(char c : s.toCharArray()){
+        if(c == '*'){
+            f0 = 9*e0 + 9*e1 +6*e2;
+            f1 = e0;
+            f2 = e0;
+        }else{
+            f0 = ((c > '0')?1:0 )* e0 + e1 + ((c <= '6')?1:0) * e2;
+            f1 = ((c == '1')?1:0 ) * e0;
+            f2 = ((c == '2')?1:0 ) * e0;
+        }
+        e0 = f0 % M;
+        e1 = f1;
+        e2 = f2;
+    }
+    return (int)e0;
+}
+```
+
+
+
+
+
+### 324 摇摆序列sort
+{% note %}
+in：
+[4,5,5,6]
+out:
+[5,6,4,5]
+{% endnote %}
+
+
+{% fold %}
+```java
+public void wiggleSort(int[] nums) {
+    int n = nums.length;
+    int[] arr = nums.clone();
+    Arrays.sort(arr);
+    int j = n-1;
+    int half = (n+1)/2;
+    int i = half-1;
+    for(int k = 0;k<n;k++){
+        if((k%2) ==0){
+            nums[k] = arr[i--];
+        }else{
+            nums[k] = arr[j--];
+        }
+    }  
+}
+```
+{% endfold %}
+
+
+
+
+### 992 有K个不同整数的子数组的个数
+{% note %}
+输入：A = [1,2,1,3,4], K = 3
+输出：3
+解释：恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].
+{% endnote %}
+
+
+
+### 502 IPO
+{% note %}
+输入: k=2, W=0, Profits=[1,2,3], Capital=[0,1,1].
+输出: 4
+最初有W=0元钱，最多完成k个项目，每个项目有最低资本和利润，最后获得的钱数。
+从 0 号项目开始，总资本将变为 1。完成 2。最后最大化的资本，为 0 + 1 + 3 = 4。 完成项目是不扣资本的。
+{% endnote %}
+
+两个优先队列AC
 
 ### 4位25个字符的编码
 假定一种编码的编码范围是a ~ y的25个字母，从1位到4位的编码，如果我们把该编码按字典序排序，形成一个数组如下： a, aa, aaa, aaaa, aaab, aaac, … …, b, ba, baa, baaa, baab, baac … …, yyyw, yyyx, yyyy 其中a的Index为0，aa的Index为1，aaa的Index为2，以此类推。 编写一个函数，输入是任意一个编码，输出这个编码对应的Index.
@@ -931,6 +1213,15 @@ KMP算法核心，在S中indexOf(T),对T建立next数组
 
 {% endfold %}
 
+给定的一个长度为N的字符串str,查找长度为P(P<N)的字符串在str中的出现次数.下面的说法正确的是()
+正确答案: D   你的答案: B (错误)
+A不存在比最坏时间复杂度O(NP)好的算法
+B不存在比最坏时间复杂度O(N^2)好的算法
+C不存在比最坏时间复杂度O(P^2)好的算法
+**D存在最坏时间复杂度为O(N+P)的算法**
+E存在最坏时间复杂度为O(log(N+P))的算法
+以上都不对
+
 
 {% note %}
 给定一个字符串s, 请计算输出含有连续两个s作为子串的最短字符串。 注意两个s可能有重叠部分。例如,"ababa"含有两个"aba". 
@@ -966,41 +1257,6 @@ for (int i = 2; i < n+1 ; i++) {
 System.out.println(in+in.substring(next[in.length()]));
 ```
 
-### 376 最长摇摆子序列
-{% note %}
-Input: [1,7,4,9,2,5]
-Output: 6
-The first difference (if one exists) may be either positive or negative. 
-{% endnote %}
-
-### 324 摇摆序列sort
-{% note %}
-in：
-[4,5,5,6]
-out:
-[5,6,4,5]
-{% endnote %}
-
-
-{% fold %}
-```java
-public void wiggleSort(int[] nums) {
-    int n = nums.length;
-    int[] arr = nums.clone();
-    Arrays.sort(arr);
-    int j = n-1;
-    int half = (n+1)/2;
-    int i = half-1;
-    for(int k = 0;k<n;k++){
-        if((k%2) ==0){
-            nums[k] = arr[i--];
-        }else{
-            nums[k] = arr[j--];
-        }
-    }  
-}
-```
-{% endfold %}
 
 
 
@@ -2114,43 +2370,6 @@ public int cutting(int[] prices, int n) {
 {% endfold %}
 
 
-### 862 和至少为K的最短子数组
-> Input: A = [2,-1,2], K = 3
-Output: 3
-
-思路：用前缀和找区间和，关键：递增有序栈，
-用当前值更新队尾，如果当前的presum比队尾presum小，则下一个减这个得到的区间更短而且值更大。
-
-```java
-public int shortestSubarrayWindow(int[] A, int K) {
-    int n = A.length;
-    long[] presum = new long[n+1];
-
-    for (int i = 0; i <n ; i++) {
-        if(A[i] >=K)return 1;
-        presum[i+1] = presum[i] +A[i];
-    }
-    int minlen = n+1;
-
-    Deque<Integer> deque = new ArrayDeque<>();
-
-    for (int i = 0; i <n ; i++) {
-
-        while (deque.size() >0 && presum[i] - presum[deque.getFirst()] >= K){
-
-            minlen = Math.min(minlen, i-deque.pollFirst());
-        }
-        // 关键
-        while (deque.size() > 0 && presum[i] <= presum[deque.getLast()]){
-         deque.pollLast();
-        }
-        deque.addLast(i);
-
-    }
-    return minlen == n+1?-1:minlen;
-
-}
-```
 
 ### 861 01矩阵反转能得到的最大01行和
 > Input: [[0,0,1,1],[1,0,1,0],[1,1,0,0]]
@@ -2377,23 +2596,6 @@ void srand(unsigned int seed)
 
 ### 231 2的整数次
 
-### 191二进制中1的个数
-难点：如果把1一直右移 负数会死循环。如果拿1一直左移要32次。
-做法：从右去掉1能去掉多少次
-整数-1会把最右边的1变成0，如果右边有0全变成1.
-原数和这个数 与 就把最右边1以及右边都变成0
-```java
-public int hammingWeight(int n) {
-    int count = 0;
-    while(n != 0){
-        ++count;
-        n = (n-1)&n;
-    }
-    return count;
-}
-```
-
-
 ### 405 十进制转16进制
 {% note %}
 Input:
@@ -2437,10 +2639,6 @@ https://baike.baidu.com/item/%E7%B4%A0%E6%95%B0%E5%AE%9A%E7%90%86/1972457?fromti
 >>>math.log(100)
 4.605170185988092
 ```
-
-
-
-
 
 ### 925 是否是因长按重复的字符串
 > Input: name = "leelee", typed = "lleeelee"
@@ -2506,18 +2704,6 @@ Output: true
 
 ### 373 start和end数组 拼成[start,end] 求start+end最小的k个点对
 
-### 719 数组中两两匹配，第k小的两数之差
-> nums = [1,3,1]
-k = 1
-输出：0 
-解释：
-所有数对如下：
-(1,3) -> 2
-(1,1) -> 0
-(3,1) -> 2
-因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
-
-
 
 ### lt1472 s任意交换奇数位字符和偶数位字符 能否变成t
 >给出 s="abcd"，t="cdab"，返回"Yes"。
@@ -2562,9 +2748,6 @@ public List<Integer> findDuplicates(int[] nums){
     return res;
 }
 ```
-
-
-
 
 
 ### 401 二进制手表

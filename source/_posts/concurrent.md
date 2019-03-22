@@ -4,6 +4,247 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### Lock实现业务级别加锁
+```java
+class AccountWithLock {
+    int balance;
+    private Lock lock;
+
+    public AccountWithLock() {
+        balance = 0;
+        lock = new ReentrantLock();
+    }
+
+    public void lockAccount() {
+        lock.lock();
+    }
+
+    public void unLockAccount() {
+        lock.unlock();
+    }
+
+    public void login() {
+    }
+
+    public void logout() {
+    }
+
+    public void add() {
+        balance += 800;
+        System.out.println("After add balance is:" + balance);
+    }
+
+    public void minus() {
+        balance -= 800;
+        System.out.println("After minus balance is:" + balance);
+    }
+}
+
+class AddThreadWithLock extends Thread {
+    String person;
+
+    AccountWithLock acc;
+
+    public AddThreadWithLock(String person, AccountWithLock acc) {
+        this.person = person;
+        this.acc = acc;
+    }
+
+    public void run() {
+        acc.lockAccount();
+        acc.login();
+        System.out.println(person + " login ");
+        for (int i = 0; i < 3; i++) {
+            System.out.println(person + " add money," + i + " cnt");
+            acc.add();          
+        }
+        System.out.println(person + " logout ");
+        acc.logout();
+        acc.unLockAccount();
+    }
+}
+
+class MinusThreadWithLock extends Thread {
+    AccountWithLock acc;
+    String person;
+
+    public MinusThreadWithLock(String person, AccountWithLock acc) {
+        this.person = person;
+        this.acc = acc;
+    }
+
+    public void run() {
+        acc.lockAccount();
+        System.out.println(person + " login ");
+        for (int i = 0; i < 3; i++) {           
+            System.out.println(person + " minus money," + i + " cnt");          
+            acc.minus();            
+        }
+        System.out.println(person + " logout ");
+        acc.logout();
+        acc.unLockAccount();
+    }
+}
+
+public class LockDemo {
+    public static void main(String[] args) {
+        AccountWithLock acc = new AccountWithLock();
+        Thread add = new AddThreadWithLock("Tom", acc);
+        Thread minus = new MinusThreadWithLock("Peter", acc);
+        add.start();
+        minus.start();
+    }
+}
+```
+
+### wait notify 实现库存==1 的生产者消费者
+```java
+class ProductData {
+    //表示被哪个生产者线程生产出来的编号
+    private int number;
+    // 标志位，true表示已经消费
+    private boolean flag = true;
+
+    public synchronized void product(int number) {
+        if (!flag) {
+            try {
+                // 未消费等待
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+        this.number = number;
+        // 标记已经生产
+        flag = false;
+        // 通知消费者已经生产，可以消费
+        notify();
+    }
+
+    public synchronized int consume() {
+        if (flag) {
+            try {
+                // 未生产等待
+                wait();
+            } catch (InterruptedException e) {
+                // 省略报异常的语句
+                // …
+            }
+        }
+        // 标记已经消费
+        flag = true;
+        // 通知需要生产
+        notify();
+        return this.number;
+    }
+}
+
+// 生产者线程
+class Producer extends Thread {
+    private ProductData s;
+
+    Producer(ProductData s) {
+        this.s = s;
+    }
+
+    public void run() {
+        for (int i = 0; i <= 5; i++) {
+            s.product(i);
+            System.out.println("P[" + i + "] Product.");
+        }
+    }
+}
+
+// 消费者线程
+class Consumer extends Thread {
+    private ProductData s;
+
+    Consumer(ProductData s) {
+        this.s = s;
+    }
+
+    public void run() {
+        int i;
+        do {
+            i = s.consume();
+            System.out.println("P[" + i + "] Consume.");
+        } while (i != 9);
+    }
+}
+
+public class ProducerConsumer {
+    public static void main(String argv[]) {
+        ProductData s = new ProductData();
+        new Producer(s).start();
+        new Consumer(s).start();
+    }
+}
+```
+
+### Condition实现库存>1的生产者消费者
+```java
+class Store {
+
+    private  Lock lock;
+    private  Condition notFull;
+    private  Condition notEmpty;
+    
+    private int maxSize;
+    private LinkedList<String> storage;
+
+    public Store(int maxSize) {
+        lock=new ReentrantLock();
+        notFull=lock.newCondition();
+        notEmpty=lock.newCondition();
+        
+        this.maxSize = maxSize;
+        storage = new LinkedList<String>();
+    }
+
+    // 生产方法
+    public void product() {
+        lock.lock();
+        try {   
+            //如果仓库满了
+            while (storage.size() == maxSize ){
+                System.out.println(Thread.currentThread().getName()+": wait ");;
+              //阻塞生产线程
+                notFull.await();
+            }
+            storage.add("Java Book");
+            System.out.println(Thread.currentThread().getName()+": put:"+storage.size());
+            Thread.sleep(1000);  
+            //唤醒消费线程
+            notEmpty.signalAll();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally{   
+            lock.unlock();
+        }
+    }
+
+    // 消费方法
+    public void consume() {
+        lock.lock();
+        try {  
+            //如果仓库空了
+            while (storage.size() ==0 ){
+                System.out.println(Thread.currentThread().getName()+": wait");;
+                notEmpty.await();//阻塞消费线程
+            }
+            //取出消费
+            System.out.println(storage.poll());
+            System.out.println(Thread.currentThread().getName()+": left:"+storage.size());
+            Thread.sleep(1000);         
+            notFull.signalAll();//唤醒生产线程
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally{
+            lock.unlock();
+        }
+    } 
+}
+```
+
 ### 吸烟者问题
 ![cosproyan.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cosproyan.jpg)
 
