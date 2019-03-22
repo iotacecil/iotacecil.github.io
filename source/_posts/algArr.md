@@ -91,6 +91,24 @@ Output: 2
 Explanation: the subarray [4,3] 
 {% endnote %}
 
+```java
+public int minSubArrayLen(int s, int[] nums) {
+    int n = nums.length;
+    int e = 0;
+    int st = 0;
+    int minl = n+1;
+    int sum = 0;
+    while(e < n){
+        sum += nums[e++];
+        while (st<=e&&sum>=s) {
+            minl = Math.min(minl, e - st);
+            sum -= nums[st++];
+        }
+    }
+    return minl==n+1?0:minl;
+}
+```
+
 1 二分搜索
 暴力法搜索前缀数组`sum[j]-sum[i]+nums[i]>=k`的最短ij
 二分发寻找`sum[j] >= sum[i]-nums[i]+k` j的最小值
@@ -145,6 +163,13 @@ public int numSubarraysWithSum(int[] A, int S) {
 ```
 
 ### 713 乘积`<k`的子数组的个数
+{% note %}
+Input: nums = [10, 5, 2, 6], k = 100
+Output: 8
+Explanation: The 8 subarrays that have product less than 100 are: `[10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6]`.
+Note that `[10, 5, 2]` is not included as the product of 100 is not strictly less than k.
+{% endnote %}
+
 输入[1,2,3,4] k = 10
 当s = 0,e = 0 窗口只有[1]
 窗口乘积p = 1 ，子数组个数 1 :[1]
@@ -161,6 +186,28 @@ s = 1,e = 3 窗口[2,3,4]
 p = 24
 s = 2,e = 3窗口[3,4] 
 p = 12 子数组个数`[[3],  [4][3,4]]]` (+2)
+
+
+{% fold%}
+```java
+ public int numSubarrayProductLessThanK(int[] nums, int k) {
+    int n = nums.length;
+    int s = 0;
+    int e = 0;
+    int p = 1;
+    int rst = 0;
+    //[2]+1  [2,3] +2 [2,3,4]->[3,4]+2
+    while(e<n){
+        p *= nums[e++];// e = 1
+        while(s<e && p>=k){
+            p /= nums[s++];
+        }// s = 0
+        rst += (e-s);
+    }
+    return rst;
+}
+```
+{% endfold %}
 
 ```java
 public int numSubarrayProductLessThanK(int[] nums, int k) {

@@ -13,12 +13,43 @@ http://www.linya.pub/
 
 
 ### redis持久化
-RDB是压缩过的二进制文件。
-BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。
-AOF更新频率通常比RDB高。
+持久化方式：
+1）快照 Mysql Dump和Redis RDB 2）写日志 Mysql Binlog Hbase Hlog Redis AOF
 
 RDB是保存数据库中的键值对，AOF保存redis执行的命令。
-AOF会重写。
+
+#### RDB
+RDB是压缩过的二进制文件,会生成临时文件，把老的RDB文件替换掉。
+BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。copy-on-write策略，但是父进程写入还会做副本 内存开销大。
+触发机制：从节点全量复制主节点会生成RDB文件。 debug reload 、 shutdown。
+缺点磁盘性能，宕机没快照的丢了。但是恢复速度快。
+
+#### AOF
+AOF更新频率通常比RDB高。
+写【命令】先从redis 写到硬盘缓冲区 再根据3种策略（everysec每秒，always，no（操作系统自己刷)）fsync到硬盘AOF文件。
+AOF会开子进程重写。
+
+#### 主从复制
+主从复制（副本）集群是为了解决多请求，读写分离，高可用，
+分布式是为了解决一个请求的多个步骤。
+数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
+进入redis用`info replication`可以查看主从状态
+
+##### 全量复制
+1）第一次是全量复制`full resync` master会`BGSAVE`。
+2）从节点的数据全部清除`Flushing old data`，通过网络接受RDB文件，加载RDB文件到内存。
+`info server |grep run` 
+3）在同步期间master的写命令会单独记录，rdb同步完后通过偏移同步给slave。
+可以看到redis实例的run_id。如果从复制的主节点的id发生变化，则需要全量复制。
+
+![fullsync.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fullsync.jpg)
+
+##### 部分复制
+`info replication` 可以看到master的偏移量`master_repl_offset`和slave的偏移量`slave_repl_offset`，主节点可以看到各个从节点的偏移量。
+偏移量主比从大表示主写入了数据还没同步到从。
+如果主从连接断了，先重连，从服务器发送runid和offset，主服务器发送buffer中的部分数据。
+
+#### redis 高可用 sentinel
 
 currentHashMap
 mysql 的其他引擎
@@ -242,6 +273,8 @@ TERMINATED： 标识
 3）sigle 保证顺序执行多个任务
 4）scheduled 定时、周期工作调度
 5）`newWrokStealingPoll` 工作窃取
+
+#### 如何优化线程池
 
 ### 10.线程同步的方法
 互斥量(mutex) 
@@ -1258,3 +1291,19 @@ ZooKeeper是以Paxos算法为基础分布式应用程序协调服务。
 对象的产生方式有
 1）原型对象(prototype 原型链)为基础的 （所有对象都是实例）
 2）基于类（Java)的对象模型。
+
+
+### 分布式文件系统HDFS
+1）每个文件拆分成很多小块128M（并行处理和负载均衡）.
+2）文件以多副本存储（副本因子），高可用。
+3）有一个节点存储着存储信息 1个Master，NameNode。N个Slave DataNode。
+
+NameNode：1）处理客户端请求 文件系统的读写操作 2）元素据
+DataNode：1）块的存储和操作 2）定期心跳
+
+分布式文件系统一致性
+HDFS 文件只能写1次 除了 append和truncate 而且不能多并发写。
+
+节点失效
+为什么本地文件系统不使用hash
+
