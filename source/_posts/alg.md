@@ -291,6 +291,38 @@ public void wiggleSort(int[] nums) {
 {% endfold %}
 
 
+### 891 子序列宽度和
+{% note %}
+Input: [2,1,3]
+Output: 6
+Explanation:
+Subsequences are [1], [2], [3], [2,1], [2,3], [1,3], [2,1,3].
+The corresponding widths are 0, 0, 0, 1, 1, 2, 2.
+The sum of these widths is 6.
+{% endnote %}
+思路，
+1）排序，对第`A[i]`个数字，
+有i个比它小，有2^i个序列A[i]是最大的(这i个数字选或者不选的集合），
+有n-1-i个比它大，有2^(n-1-i)个序列，A[i]是最小的。
+2）注意 2^i 用`1<<i` 如果数组长度>32答案会很奇怪（？）
+```java
+public int sumSubseqWidths(int[] A) {
+    long rst = 0;
+    int mod = 1_000_000_000+7;
+    Arrays.sort(A);
+    int n = A.length;
+   
+    long[] pow2 = new long[n];
+    pow2[0] = 1;
+    for (int i = 1; i < n; ++i)
+        pow2[i] = pow2[i-1] * 2 % mod;
+    for (int i = 0; i < n ; i++) {
+        rst = (rst+ (pow2[i] - pow2[n-1-i])*A[i])%mod;
+    }
+    return (int)rst;
+}
+```
+
 
 
 ### 992 有K个不同整数的子数组的个数
