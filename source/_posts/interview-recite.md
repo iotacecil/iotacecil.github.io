@@ -53,8 +53,19 @@ AOF会开子进程重写。
 
 currentHashMap
 mysql 的其他引擎
-数据库里的乐观锁和悲观锁
 设计数据库表
+
+### 数据库里的乐观锁和悲观锁
+悲观锁：`select ... for update;` 
+   主键明确&有结果行锁，无结果集（查空）无锁。 
+   查询无主键或者不走索引`where id<>'66'` `like`，表索 。
+乐观锁：数据库`version`字段
+
+### Hash碰撞的方法
+1）开放地址法 开放地址法分： 线性探测法（会聚集）、平方探测、双散列
+2）链地址法
+
+不成功平均查找长度，要按照冲突解决方法查找到当前位置为空位置。最后/散列函数的mod（hash函数的分类个数）
 
 ### 1.泛型的好处
 泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。
@@ -99,12 +110,13 @@ binlog(逻辑日志，是sql）用于主从复制、慢查询、查询、错误
 因为只有一个主键并且建了B+树，所以其他辅助索引的插入是离散的，所以，有insert buffer
 
 #### 主从复制
-从库可以配置从主库中读取这些log文件，并在从库的本地执行，这样便可以把主库的数据同步到从库。
-每个从库都会从主库读取完整的log文件，所以需要从库来记录“上次”同步的位置。
-1）Master上启动bin log，配置 `server-id=1`
-2) 每个Slave上配置 `server-id=2` 从库不用开binlog
-3）创建一个用来给 Slave 访问 Master 日志（binarylog）的用户
-4) 先给数据库加 `FLUSH TABLES WITH READ LOCK` 锁。需要先记录Master上的日志的当前位置（这样Slave才知道从哪儿开始执行BinaryLog中的事件）
+主节点创建线程发送binlog，读取binlog时会加锁。
+从节点I/O线程接受binlog，保存在relaylog。
+从节点SQL线程读取relaylog，并执行sql。完成数据一致性。
+
+主节点会为每一个当前连接的从节点建一个binary log dump 进程，而每个从节点都有自己的I/O进程，SQL进程。
+
+
 
 ### 3.CAS算法原理？优缺点？
 CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存位置，旧的预期值，新值，
@@ -331,9 +343,6 @@ callable
 
 ### 13.100亿个整数，内存足够，如何找到中位数？内存不足，如何找到中位数？
 
-### 14 单例模式
-实现：私有静态指针变量指向类的唯一实例，并用一个公有静态方法获取该实例。
-目的：保证整个应用程序的生命周期中的任何一个时刻，单例类的实例都只存在一个。
 
 ### 15.基于比较的算法的最优时间复杂度是O(nlog(n))
 因为n个数字全排列是n! 一次比较之后，两个元素顺序确定，排列数为 n!/2!
@@ -772,8 +781,25 @@ Proactor实现异步I/O，产生I/O调用的用户进程不会等待I/O发生，
 在堆上创建异常  try catch中有return之前都会先执行finally的return
 
 
-### 40 线程安全的单例模式
-懒加载
+### 40 !!!线程安全的单例模式
+【初始化占位类模式】
+如果是静态初始化对象不需要显示同步。
+静态初始化：JVM在类初始化阶段执行，在类加载后并在线程执行前。JVM会获取锁确保这个类已经被加载。任何一个线程调用`getInstance`的时候会使静态内部类被加载和初始化。
+```java
+public class Singleton {  
+    private static class SingletonHolder {  
+        private static final Singleton INSTANCE = new Singleton();  
+    }  
+    private Singleton (){}  
+    public static final Singleton getInstance() {  
+        return SingletonHolder.INSTANCE; 
+    }  
+}
+```
+
+双重检查锁已经被广泛地废弃了！
+
+懒加载 推迟高开销的对象初始化操作。
 同步 double checked locking 
 只希望在第一次创建 实例的时候进行同步
 创建对象分为3个步骤：
@@ -781,7 +807,11 @@ Proactor实现异步I/O，产生I/O调用的用户进程不会等待I/O发生，
 2）初始化对象
 3）obj指向内存地址
 关键：（2）、（3）会被重排序（因为理论上单线程不会有错，而且能提高性能），导致obj不未空，但还没初始化，所以volatile禁止重排序。
-Volatile变量规则。对一个volatile修饰的变量，对他的写操作先行发生于读操作
+如果两个操作之间没有happens-before则JVM可以重排序。
+Volatile变量规则。对一个volatile修饰的变量，对他的写操作先行发生于读操作。
+
+特别对于有final字段的对象，构造函数完成的时候才完成final的写入。
+初始化安全：防止对对象的初始引用被重排序到构造过程之前。
 
 ```java
 public class LazySingle(){
@@ -847,7 +877,7 @@ ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
 }
 ```
 
-### 43 十进制转2进制
+### 43 !十进制转2进制
 没有oj过
 ```java
 public String D2Bin(int de){
@@ -1287,6 +1317,12 @@ http://blog.jobbole.com/107958/
 ZooKeeper是以Paxos算法为基础分布式应用程序协调服务。
 锁过期强依赖于时间，但是ZK不需要依赖时间，依赖每个节点的Session。
 
+#### redis分布式锁
+流程1）`setnx(key,currenttime+timeout)`2)`expire(key)`3)业务执行完后`del(key)`
+其他tomcat获取不到锁返回0流程
+1）`get(key)`判断当前时间和value的时间，
+2)如果key超时了可以先get再set`getset(key,currenttime+timeout)` 如果get的值是null或者和之前的锁一样（？）继续`expire(key)`走加锁流程...
+
 ### 面向对象
 对象的产生方式有
 1）原型对象(prototype 原型链)为基础的 （所有对象都是实例）
@@ -1307,3 +1343,8 @@ HDFS 文件只能写1次 除了 append和truncate 而且不能多并发写。
 节点失效
 为什么本地文件系统不使用hash
 
+
+### 分布式
+1）均衡负载技术
+2）容灾设计
+3）高可用系统

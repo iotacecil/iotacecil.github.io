@@ -4,6 +4,51 @@ date: 2019-03-04 10:10:31
 tags: [alg]
 categories: [算法备忘]
 ---
+
+### 318 ！Maximum Product of Word Lengths 字符串数组中不共享字符的字符串长度的乘积
+{% note %}
+find the maximum value of length(word[i]) * length(word[j])
+输入: ["abcw","baz","foo","bar","xtfn","abcdef"]
+输出: 16 
+解释: 这两个单词为 "abcw", "xtfn"。
+{% endnote %}
+
+不会
+思路：每个字符串表示成一个【26位的int】，如果这两个int & 是0，表示没有重合的位。
+```java
+public int maxProduct(String[] words) {
+    int n = words.length;
+    int[] map = new int[n];
+    for(int i =0;i<n;i++){
+        for(char c : words[i].toCharArray()){
+            map[i] |= (1<<(c-'a'));
+        }
+    }
+    int max = 0;      
+    for(int i =0;i<n-1;i++){
+        for(int j = i+1;j < n;j++){
+            if((map[i] & map[j]) == 0){
+                max = Math.max(max,words[i].length() * words[j].length());
+            }
+        }
+    }
+    return max;
+}
+```
+
+
+### 868 Binary Gap 二进制1的间距
+{% note %}
+输入：22
+输出：2
+解释：
+22 的二进制是 0b10110 。
+在 22 的二进制表示中，有三个 1，组成两对连续的 1 。
+第一对连续的 1 中，两个 1 之间的距离为 2 。
+第二对连续的 1 中，两个 1 之间的距离为 1 。
+答案取两个距离之中最大的，也就是 2 。
+{% endnote %}
+
 ### 260 Single Number III 两个数字只出现一次，其它出现2次
 {% note %}
 Input:  [1,2,1,3,2,5]
@@ -216,37 +261,6 @@ public boolean validUtf8(int[] data) {
         }
     }
     return cnt == 0;
-}
-```
-
-### 318 ！Maximum Product of Word Lengths 字符串数组中不共享字符的字符串长度的乘积
-{% note %}
-find the maximum value of length(word[i]) * length(word[j])
-输入: ["abcw","baz","foo","bar","xtfn","abcdef"]
-输出: 16 
-解释: 这两个单词为 "abcw", "xtfn"。
-{% endnote %}
-
-不会
-思路：每个字符串表示成一个26位的int，如果这两个int & 是0，表示没有重合的位。
-```java
-public int maxProduct(String[] words) {
-    int n = words.length;
-    int[] map = new int[n];
-    for(int i =0;i<n;i++){
-        for(char c : words[i].toCharArray()){
-            map[i] |= (1<<(c-'a'));
-        }
-    }
-    int max = 0;      
-    for(int i =0;i<n-1;i++){
-        for(int j = i+1;j < n;j++){
-            if((map[i] & map[j]) == 0){
-                max = Math.max(max,words[i].length() * words[j].length());
-            }
-        }
-    }
-    return max;
 }
 ```
 

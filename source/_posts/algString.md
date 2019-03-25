@@ -10,7 +10,37 @@ Input: "  hello world!  "
 Output: "world! hello"
 {% endnote %}
 
-### 344. Reverse String 
+### 115 Distinct Subsequences 计算在S的子序列中T出现的次数
+{% note %}
+Input: S = "rabbbit", T = "rabbit"
+Output: 3
+{% endnote %}
+
+### 392 Is Subsequence 判断是否是子序列
+{% note %}
+Example 1:
+s = "abc", t = "ahbgdc"
+Return true.
+{% endnote %}
+```java
+public boolean isSubsequence(String s, String t) {
+    int n1 = s.length();
+    int n2 = t.length();
+    int p1 = 0;
+    int p2 = 0;
+    while(p1<n1){
+        while(p2<n2 && s.charAt(p1) != t.charAt(p2))p2++;
+        if(p2 >= n2)return false;
+        if(s.charAt(p1) == t.charAt(p2)){
+            // 注意p2也要++
+            p2++;  p1++;
+        }
+    }
+    return p1>=n1;
+}
+```
+
+### 344. Reverse String 逆转char数组
 {% note %}
 Input: ["h","e","l","l","o"]
 Output: ["o","l","l","e","h"]

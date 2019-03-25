@@ -1623,13 +1623,7 @@ public double champagneTower(int poured, int query_row, int query_glass) {
 ```
 
 
-
-
-
 ### 2^N 大整数
-
-
-
 
 
 ### 287 O(1)空间，找到数组中重复的数字
@@ -1752,11 +1746,7 @@ G 名成员 第i种犯罪会产生`profit[i]` 利润，需要`group[i]`名成员
 找末尾1的位置`x & -x`
 
 
-
 ### 131 
-
-
-
 
 
 ### 819 找出句子中出现频率最高没被ban掉的词
@@ -1880,6 +1870,25 @@ class Solution {
 ### 611数组中符合三角形边长的对数 
 线性扫描 复杂度n^2
 ![lc611.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc611.jpg)
+
+### 812 最大三角形面积
+{% note %}
+Example:
+Input: points = `[[0,0],[0,1],[1,0],[0,2],[2,0]]`
+Output: 2
+{% endnote %}
+三角形面积公式：
+https://leetcode.com/problems/largest-triangle-area/discuss/122711/C%2B%2BJavaPython-Solution-with-Explanation-and-Prove
+```java
+public double largestTriangleArea(int[][] p) {
+    double res = 0;
+    for (int[] i: p)
+        for (int[] j: p)
+            for (int[] k: p)
+        res = Math.max(res, 0.5 * Math.abs(i[0] * j[1] + j[0] * k[1] + k[0] * i[1]- j[0] * i[1] - k[0] * j[1] - i[0] * k[1]));
+    return res;
+}
+```
 
 ### 332 欧拉路径 每条边一次
 (这道题不用判断)

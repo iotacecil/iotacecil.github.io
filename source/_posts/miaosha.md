@@ -4,6 +4,14 @@ date: 2018-10-16 21:18:11
 tags:
 category: [项目流程]
 ---
+### shedule定时关单写库存
+数据库查找创建时间在当前时间前1小时的所有订单
+对每个订单的商品查找其库存，并且加锁。
+新创建一个product，只赋值商品id和库存，更新数据库
+``java
+
+```
+
 ### 其他优化点
 http://massivetechinterview.blogspot.com/2016/01/blog-post_48.html
 数据库的分片，主从复制（可能会id冲突，要应用自己生成id）
