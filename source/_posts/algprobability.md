@@ -4,6 +4,45 @@ date: 2018-10-18 20:59:40
 tags:
 categories: [算法备忘]
 ---
+### 233 Number of Digit One [1,n]中数字带1的个数
+{% note %}
+Input: 13
+Output: 6 
+Explanation: Digit 1 occurred in the following numbers: 1, 10, 11, 12, 13.
+{% endnote %}
+
+不会
+https://leetcode.com/problems/number-of-digit-one/discuss/64381/4%2B-lines-O(log-n)-C%2B%2BJavaPython
+
+```java
+public int countDigitOne(int n) {
+    int ones = 0;
+    for (long m = 1; m <= n; m *= 10)
+        ones += (n/m + 8) / 10 * m + (n/m % 10 == 1 ? n%m + 1 : 0);
+    return ones;
+}
+```
+
+
+### 172 Factorial Trailing Zeroes 阶乘后面后几个0
+{% note %}
+Input: 5
+Output: 1
+Explanation: 5! = 120, one trailing zero.
+{% endnote %}
+2一定比5多，算一下这些数一共有多少个5.
+
+```java
+public int trailingZeroes(int n) {
+   int rst = 0;
+    while(n != 0){
+        rst += n/5;
+        n/=5;
+    }
+    return rst;
+}
+```
+
 ### m个芒果n个人
 https://www.geeksforgeeks.org/count-ways-to-distribute-m-items-among-n-people/
 1）m个芒果，n个人，如果物品和人都是相同的
