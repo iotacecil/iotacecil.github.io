@@ -419,7 +419,6 @@ https://www.coursera.org/lecture/os-pku/ji-ben-nei-cun-guan-li-fang-an-2-p4N0u
  页表的起始地址在哪个数据结构？
 用 bitmap 位图管理物理内存
 
-### 死锁的4个条件
 
 ### Windows API让cpu使用率划出一条直线
 一个时钟周期可以执行多少条指令？ CPU流水线？

@@ -4,6 +4,43 @@ date: 2019-03-04 19:38:25
 tags: [alg]
 categories: [算法备忘]
 ---
+### 215 Kth Largest Element in an Array
+{% note %}
+Input: [3,2,1,5,6,4] and k = 2
+Output: 5
+{% endnote %}
+
+用快排用头中尾的中位数最快。
+找第k个最大，就是找下标为k = len-k = 4的数字
+
+```java
+public  int findKthLargest(int[] nums,int k){
+     k = nums.length-k;
+     int l = 0;
+     int r = nums.length-1;
+     while(l<r){
+         int idx = part(nums,l,r);
+         if(idx<k)l=idx+1;
+         else if(idx>k) r = idx-1;
+         else break;
+     }
+     return nums[k];
+}
+// 闭区间[l,r],r作为pivot
+private int part(int[] nums,int l,int r){
+    int i = l-1;
+    int j = r;
+    while(true){
+        while(++i<j&&nums[i]<nums[r]);
+        while(--j>i&&nums[r]<nums[j]);
+        if(i>=j)break;
+        swap(nums,i,j);
+    }
+    swap(nums,r,i);
+    return i;
+}
+```
+
 ### 376. Wiggle Subsequence 最长摇摆序列
 {% note %}
 Input: [1,17,5,10,13,15,10,5,16,8]
@@ -284,6 +321,18 @@ public void moveZeroes(int[] nums) {
     }
 }
 ```
+优化点：如果数组全部都是非零元素，每个元素都自己和自己交换了，防止自己和自己交换这种操作：
+```java
+public void moveZeroes(int[] nums) {
+    for(int i = 0,j =0; i < nums.length; i++) {
+        if(nums[i] != 0) {
+            if(i!=j)
+            swap(nums,i,j++);
+            else j++;
+        }
+    }
+}
+```
 
 ### 88 Merge Sorted Array
 {% note %}
@@ -327,6 +376,7 @@ Output: [0,0,1,1,2,2]
 思路：
 left 左边都是0 是1
 right 右边都是2 right是0/1
+
 用idx遍历，
 1）如果从left开始是1，可以后移，保证00011是正确的顺序
 2）如果是2，和right换，right--，因为idx是后面的数字还没遍历，所以idx不动
@@ -347,11 +397,6 @@ public void sortColors(int[] nums) {
         }else 
             i++;
     }
-}
-private void swap(int[] arr,int i,int j){
-    int tmp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
 }
 ```
 
@@ -828,6 +873,17 @@ public int removeDuplicates(int[] nums) {
 
 ### 27 Remove Element
 熟练
+```java
+public int removeElement(int[] nums, int val) {
+    int cnt = 0;
+    for(int i =0;i<nums.length;i++){
+        if(nums[i]!=val){
+           nums[cnt++] = nums[i]; 
+        }
+    }
+    return cnt;
+}
+```
 
 ### 121 Best Time to Buy and Sell Stock 只能买卖一次 买卖股票的利润
 > 输入: [7,1,5,3,6,4]
