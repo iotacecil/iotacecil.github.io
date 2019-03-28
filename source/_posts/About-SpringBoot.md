@@ -6,6 +6,22 @@ category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 
 
+
+---
+
+### schedule
+常用cron表达式
+http://www.bejson.com/othertools/cron/
+```
+0 0 0 * * ? 每天0点一次
+0 0 23 * * ? 每天23点一次
+0 */1 * * * ? 每1分钟一次
+0 0 */6 * * ? 每6小时一次
+0 0 */1 * * ? 每1小时一次
+```
+
+
+
 ### MVC ViewResolver View 接口
 
 测试网络

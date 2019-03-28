@@ -4,9 +4,71 @@ date: 2018-10-16 21:18:11
 tags:
 category: [项目流程]
 ---
+### nginx 负载均衡
+策略：轮询、权重、ip hash、 url hash (第三方)、fair (第三方)
+用权重把有定时任务的服务器配置权重低一些
+
+### Shedule定时关单写库存
+#### 1查找订单、加库存、关订单
+订单表要有创建时间、订单状态
+1)数据库查找创建时间在当前时间前1小时的所有订单
+2)对每个订单的商品查找其库存，并且加锁。
+3)新创建一个product，只赋值商品id和库存，更新数据库
+4)update数据库中订单状态为0
+```java
+@Override
+public void closeOrder(int hour) {
+    Date closeDateTime = DateUtils.addHours(new Date(),-hour);
+    List<Order> orderList = orderMapper.selectOrderStatusByCreateTime(Const.OrderStatusEnum.NO_PAY.getCode(),DateTimeUtil.dateToStr(closeDateTime));
+
+    for(Order order : orderList){
+        List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
+        for(OrderItem orderItem : orderItemList){
+
+            //一定要用主键where条件，防止锁表。同时必须是支持MySQL的InnoDB。
+            Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
+
+            //考虑到已生成的订单里的商品，被删除的情况
+            if(stock == null){
+                continue;
+            }
+            Product product = new Product();
+            product.setId(orderItem.getProductId());
+            product.setStock(stock+orderItem.getQuantity());
+            productMapper.updateByPrimaryKeySelective(product);
+        }
+        orderMapper.closeOrderByOrderId(order.getId());
+        log.info("关闭订单OrderNo：{}",order.getOrderNo());
+    }
+}
+```
+
+#### 定时任务 还可以使用quartz定时任务框架
+```java
+@Component
+@Slf4j
+public class CloseOrderTask {
+    @Autowired
+    private IOrderService iOrderService;
+    @Scheduled(cron="0 */1 * * * ?")//每1分钟(每个1分钟的整数倍)
+    public void closeOrderTaskV1(){
+        log.info("关闭订单定时任务启动");
+        int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
+        iOrderService.closeOrder(hour);
+        log.info("关闭订单定时任务结束");
+    }
+}
+```
+
+在Main上添加`@EnableScheduling`
+
+#### 解決多实例部署问题
+
+
 ### 其他优化点
 http://massivetechinterview.blogspot.com/2016/01/blog-post_48.html
 数据库的分片，主从复制（可能会id冲突，要应用自己生成id）
+其他缓存框架`hazelcast`
 
 ### 1.前后台json格式
 实现效果，在Controller调用静态方法：

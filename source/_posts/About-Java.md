@@ -4,6 +4,55 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+
+String的hashCode也是通过对该字符串每个字符的ASC码简单的算术运算所得，这样就可以保证相同的字符串的hashCode相同且equals()为真。
+
+### List<Object>不是List<String>的父类
+关于Java中泛型错误的是：
+正确答案: C D   你的答案: D (错误)
+A `List<? extends T>`为可以接受任何继承自T类型的List
+B 方法可以返回泛型类型
+C 可以把List<String>传递给一个接受List<Object>参数的方法
+D Array中可以用泛型
+
+
+### 系统在运行的时候会为每个【进程】分配不同的内存区域
+下列说法错误的是： 
+正确答案: C   你的答案: A (错误)
+进程是系统进行资源调度的基本单位。
+线程是CPU分派的基本单位
+系统在运行的时候会为每个线程分配不同的内存区域
+进程具有控制表PCB，而线程也有自己的控制表TCB
+
+### 属性不存在重写，只有方法(非私有方法、非静态方法、非final方法) 才存在重写，才能发生多态； 向上转型
+下列代码的输出结果是：a - function in B
+```java
+public class A { 
+        String name="a"; 
+        String go(){ 
+            return "- function in A"; 
+        } 
+    } 
+    public class B extends A { 
+        String name="b"; 
+        String go(){ 
+            return "- function in B"; 
+        } 
+    public static void main(String[] args) { 
+        A a= new B(); 
+        System.out.println(a.name+a.go()); 
+        }   
+    } 
+```
+
+
+下列说法正确的是： 
+正确答案: D   你的答案: C (错误)
+Java语言中，对于任意的整数i，i+1&gt;i都成立
+C++和Java都是面向对象的语言，都支持多继承
+在调用System.gc()后，Java虚拟机会立即进行垃圾回收
+Java语言中，Math.abs(Integer.MIN_VALUE)的值等于Integer.MIN_VALUE
+
 http://www.cnblogs.com/lanxuezaipiao/p/4153070.html
 ### 序列化 
 

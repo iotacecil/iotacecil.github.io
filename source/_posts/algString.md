@@ -4,13 +4,163 @@ date: 2019-03-05 21:19:21
 tags: [alg]
 categories: [算法备忘]
 ---
+## Sliding Window
+### 76 Minimum Window Substring
+
+### 30 Substring with Concatenation of All Words
+
+### 3
+
+### 395
+
+### 159 
+
+### lt 386 lc 340 Longest Substring with At Most K Distinct Characters 最多有k个不同字符的最长子字符串
+{% note %}
+输入: S = "eceba" 并且 k = 3
+输出: 4
+解释: T = "eceb"
+{% endnote %}
+
+```java
+public int lengthOfLongestSubstringKDistinct(String s, int k) {
+    int n = s.length();
+    int e = 0;int ss = 0;
+    int[] ch = new int[256];
+    if(k == 0)return 0;
+    int cnt = 0;
+    int rst = 0;
+    while (e<n){
+        char c = s.charAt(e);
+        if(ch[c]==0){
+            cnt++;
+            ch[c]++;
+            while (ss <e && cnt > k) {
+                rst = Math.max(rst,e-ss);
+                char cs = s.charAt(ss);
+                ch[cs]--;
+                if (ch[cs] == 0) cnt--;
+                ss++;
+            }
+        }else{
+            ch[c]++;
+        }
+        if(cnt<=k){
+            rst = Math.max(rst,e-ss+1);
+        }
+        e++;
+    }
+    return rst;
+}
+```
+
+### 925 是否是因长按重复的字符串
+> Input: name = "leelee", typed = "lleeelee"
+Output: true
+
+双指针
+```java
+public boolean isLongPressedNameCnt(String name, String typed) {
+    int ls1 = name.length();
+    int ls2 = typed.length();
+    if (ls1 < 1 || ls2 < ls1) {
+        return false;
+    }
+    int p2 = 0;
+    int p1 = 0;
+
+    while (p2 < ls2){
+        if(p1 < ls1 && name.charAt(p1) == typed.charAt(p2)){
+            p1++;
+            p2++;
+        }
+        // 关键 p1已经到下一个不相同的字符了，p2还在上一个
+        else if(p1>0 && name.charAt(p1-1) == typed.charAt(p2)){
+            p2++;
+        }
+        // 关键
+        else return false;
+    }
+    return p1 == ls1;
+}
+```
+
+
+### 459 Repeated Substring Pattern 子串重复N次 S = N\*T
+{% note %}
+Input: "ababab"
+Output: True
+Explanation: It's the substring "ab" 3次.
+{% endnote %} 
+abcabc abcabc -> b|c[abcabc]a|b
+```java
+public boolean repeatedSubstringPattern(String str) {
+    String s = str + str;
+    return s.substring(1, s.length() - 1).contains(str);
+}
+```
+
+
 ### 151. Reverse Words in a String
 {% note %}
 Input: "  hello world!  "
 Output: "world! hello"
 {% endnote %}
 
-### 344. Reverse String 
+### 115 Distinct Subsequences 计算在S的子序列中T出现的次数
+{% note %}
+Input: S = "rabbbit", T = "rabbit"
+Output: 3
+{% endnote %}
+关键：dp初始化T长度为0的时候匹配数量是1 
+dp[i][j] S[0,i)和T[0,j)的匹配数量
+```java
+public int numDistinct(String s, String t) {
+    int n = s.length();
+    int m = t.length();
+    int[][] dp = new int[n+1][m+1];
+    // 当t=”“
+    for (int i = 0; i <=n ; i++) {
+        dp[i][0] = 1;
+    }
+    for (int i = 1; i <=n ; i++) {
+        for (int j = 1; j <=m ; j++) {
+            if(s.charAt(i-1) == t.charAt(j-1)){
+                dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
+            }else
+                dp[i][j] = dp[i-1][j];
+        }
+    }
+    return dp[n][m];
+}
+```
+
+
+### 392 Is Subsequence 判断是否是子序列
+{% note %}
+Example 1:
+s = "abc", t = "ahbgdc"
+Return true.
+{% endnote %}
+```java
+public boolean isSubsequence(String s, String t) {
+    int n1 = s.length();
+    int n2 = t.length();
+    int p1 = 0;
+    int p2 = 0;
+    while(p1<n1){
+        while(p2<n2 && s.charAt(p1) != t.charAt(p2))p2++;
+        if(p2 >= n2)return false;
+        if(s.charAt(p1) == t.charAt(p2)){
+            // 注意p2也要++
+            p2++;  p1++;
+        }
+    }
+    return p1>=n1;
+}
+```
+
+### 344. Reverse String 逆转char数组
 {% note %}
 Input: ["h","e","l","l","o"]
 Output: ["o","l","l","e","h"]
@@ -96,7 +246,7 @@ public int lengthOfLastWord(String s) {
 Input: ["flower","flow","flight"]
 Output: "fl"
 {% endnote %}
-
+不断缩短第一个单词的长度
 ```java
 public String longestCommonPrefix(String[] strs) {
     if(strs == null || strs.length == 0)    return "";

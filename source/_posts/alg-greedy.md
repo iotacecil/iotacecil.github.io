@@ -19,6 +19,9 @@ https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with
 思路：
 1.从左向右扫，把所有上升序列设置成从1开始的递增糖数
 2.从右向左扫，更新右边向左边的递增糖数。
+
+相似题目： 32 最长匹配括号 
+
 ```java
 public int candy(int[] ratings) {
     int n = ratings.length;
