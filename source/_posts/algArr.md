@@ -4,6 +4,82 @@ date: 2019-03-04 19:38:25
 tags: [alg]
 categories: [算法备忘]
 ---
+### 719 数组中两两匹配，第k小的两数之差
+{% note %}
+nums = [1,3,1]
+k = 1
+输出：0 
+解释：
+所有数对如下：
+(1,3) -> 2
+(1,1) -> 0
+(3,1) -> 2
+因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
+{% endnote %}
+
+### 532 数组中有几个相差k的pair
+{% note %}
+输入: [3, 1, 4, 1, 5], k = 2
+输出: 2
+解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
+尽管数组中有两个1，但我们只应返回不同的数对的数量。
+{% endnote %}
+
+set的解法33% //todo比双指针慢
+
+### 220 数组中是否有相差<=t,idx差<=k 的元素
+>Input: nums = [1,2,3,1], k = 3, t = 0
+Output: true
+
+2.桶
+
+1.40% 用容量k的TreeSet,超过k删除最左
+判断能否和ceiling合floor<=t
+如果不能 放入treeset等待
+
+### 219 是否有重复元素 下标相差<=k
+{% note %}
+Input: nums = [1,2,3,1], k = 3
+Output: true
+{% endnote %}
+放进一个FIFO大小为(k+1) 相差k 的set，当有add失败的时候就true
+
+### 数对
+x和y均不大于n, 并且x除以y的余数大于等于k，一共有多少对(x,y)
+{% note %}
+输入：5 2
+输出：7
+满足条件的数对有(2,3),(2,4),(2,5),(3,4),(3,5),(4,5),(5,3)
+{% endnote %}
+思路：
+如果 y > x 能产生的余数是1-(y-1), 所以y>k，并且产生的余数>=k的有(y-k)个
+对于一个y，n个数字产生的完整余数区间有n/y个
+y = 3 -> +2 (2,3)(5,3) 1-5的余数 1 2 0| 1 2
+y = 4 -> +2 (2,4)(3,4) 1-5的余数 1 2 3 0 | 1
+y = 5 -> +3 (2,5)(3,5)(4,5) 1-5的余数 1 2 3 4 | 0
+对于最后一个区间不满y个数，最后一个区间>=k的个数是n%y+1-k ,例如5%3->2最后一个循环有2个符合的
+
+特殊情况如果k=0 xy可以相等n*n个
+```java
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    long n = sc.nextLong();
+    int k = sc.nextInt();
+    if(k == 0)System.out.println(n*n);
+    else {
+        long cnt = 0;
+        for (int y = k + 1; y <= n; y++) {
+            cnt += (n / y) * (y - k);
+            if (n % y >= k) {
+                cnt += (n % y) + 1 - k;
+            }
+        }
+        System.out.println(cnt);
+    }
+}
+```
+ 
+
 ### 215 Kth Largest Element in an Array
 {% note %}
 Input: [3,2,1,5,6,4] and k = 2

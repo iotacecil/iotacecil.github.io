@@ -29,22 +29,17 @@ https://hrbust-acm-team.gitbooks.io/acm-book/content/search/a_star_search.html
 笔试题todo
 https://www.nowcoder.com/test/4575457/summary
 
+数据范围 
+10^4 可以用(n^2)
+10^8 用O(n)
+10^7 O(nlogn)
+
+
 ### 395
 
 ### 854
 
-### 491 复制或者复制一半长度到n的最少操作次数
-字符串“A”，有两种操作1）复制所有字符 2）粘贴上一次复制的字符
-给定n问最少多少次输出n个A
-{% note %}
-输入: 3
-输出: 3
-解释:
-最初, 我们只有一个字符 'A'。
-第 1 步, 我们使用 Copy All 操作。
-第 2 步, 我们使用 Paste 操作来获得 'AA'。
-第 3 步, 我们使用 Paste 操作来获得 'AAA'。
-{% endnote %}
+
 
 ### 650
 
@@ -271,8 +266,6 @@ public int numDecodings(String s) {
     return (int)e0;
 }
 ```
-
-
 
 
 
@@ -767,7 +760,6 @@ public int findDerangement(int n) {
 同理，若a，c是腰时，c也有52个，b，c是腰时也有52个 
 所以n共有9+3×52=165个 
 
-### 20 括号匹配
 
 ### !!97 s1和s2是否交错组成s3
 [Solution](https://leetcode.com/problems/interleaving-string/solution/)
@@ -1685,61 +1677,6 @@ static int secondMax(int[] arr){
 方法1：按递减排序，减半，再排序，一共排序t次
 方法2：维持最大堆，每次取root减半再插入
 
-### ？445 链表数字相加
-> Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
-> Output: 7 -> 8 -> 0 -> 7
-
-？递归写法
-
-rolling hash
-https://leetcode.com/problems/maximum-length-of-repeated-subarray/solution/
-
-
-### 括号串达到匹配需要最小的逆转次数
-> Input:  exp = "}}}{"
-> Output: 2 
-
-将匹配的括号都去掉，`{`的个数是m=3，`}`的个数是n=3
-m/3+n/2 = 2+1=3
-![minbracket.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/minbracket.jpg)
-```java
-private int minReversal(String s){
-    int len = s.length();
-    if((len&1)!=0)return -1;
-    Deque<Character> que = new ArrayDeque<>();
-    int n=0;
-    for(int i=0;i<s.length();i++){
-        char c = s.charAt(i);
-        if(c=='}'&&!s.isEmpty()){
-            if(que.peek()=='{')que.pop();
-            else {
-                que.push(c);
-            }
-        }
-    }
-    int mn = que.size();
-    while (!que.isEmpty()&&que.peek()=='{'){
-        que.pop();
-        n++;
-    }
-    //当m+n是偶数的时候ceil(n/2)+ceil(m/2)=
-    return (mn/2+n%2);
-}
-```
-
-### 22 ??卡特兰数括号
-left括号数量小于n，right括号数量必须小于left不然(()))肯定不合理
-```java
-if(left>right)return;
-if(left==0&&right==0){rst.add(s);return;}
-if(left>0)help(rst,s+"(",left-1,right);
-if(right<0)help(rst,s+")",left,right+1);
-```
-
-### 32 ?括号字符串中合法的括号对
-方法1. stack:栈底放-1，当栈空&&读到是`)`将`)`的index当栈底。每次读到`)`弹栈，并更新`i-peek()`，因为peek为没消掉的`(`的前一个位置
-方法22. 从左向右扫描，当左括号数==右括号数更新max，当右括号>左括号置0.
-  从右向左扫描，同理更新max，当左括号>右括号重置0.
 
 
 #### 187 rolling-hash DNA序列中出现2次以上长为10的子串
@@ -2355,8 +2292,6 @@ public int minTotalDistance(int[][] grid) {
 ```
 
 
-
-
 ### 456 !132 pattern
 > Input: [3, 1, 4, 2]
 Output: True
@@ -2696,36 +2631,7 @@ https://baike.baidu.com/item/%E7%B4%A0%E6%95%B0%E5%AE%9A%E7%90%86/1972457?fromti
 4.605170185988092
 ```
 
-### 925 是否是因长按重复的字符串
-> Input: name = "leelee", typed = "lleeelee"
-Output: true
 
-双指针
-```java
-public boolean isLongPressedNameCnt(String name, String typed) {
-    int ls1 = name.length();
-    int ls2 = typed.length();
-    if (ls1 < 1 || ls2 < ls1) {
-        return false;
-    }
-    int p2 = 0;
-    int p1 = 0;
-
-    while (p2 < ls2){
-        if(p1 < ls1 && name.charAt(p1) == typed.charAt(p2)){
-            p1++;
-            p2++;
-        }
-        // 关键 p1已经到下一个不相同的字符了，p2还在上一个
-        else if(p1>0 && name.charAt(p1-1) == typed.charAt(p2)){
-            p2++;
-        }
-        // 关键
-        else return false;
-    }
-    return p1 == ls1;
-}
-```
 
 ### 平面最近点对 分治
 
@@ -2739,26 +2645,7 @@ out: True
 
 正常递归思路 超时
 
-### 532 数组中有几个相差k的pair
-> 输入: [3, 1, 4, 1, 5], k = 2
-输出: 2
-解释: 数组中有两个 2-diff 数对, (1, 3) 和 (3, 5)。
-尽管数组中有两个1，但我们只应返回不同的数对的数量。
 
-set的解法33% //todo比双指针慢
-
-### 220 数组中是否有相差<=t,idx差<=k 的元素
->Input: nums = [1,2,3,1], k = 3, t = 0
-Output: true
-
-2.桶
-
-
-1.40% 用容量k的TreeSet,超过k删除最左
-判断能否和ceiling合floor<=t
-如果不能 放入treeset等待
-
-### 373 start和end数组 拼成[start,end] 求start+end最小的k个点对
 
 
 ### lt1472 s任意交换奇数位字符和偶数位字符 能否变成t
@@ -2767,14 +2654,6 @@ Output: true
 
 对奇数位和偶数位计数
 
-
-
-
-### 219 是否有重复元素 下标相差<=k
->Input: nums = [1,2,3,1], k = 3
-Output: true
-
-放进一个FIFO大小为(k+1) 相差k 的set，当有add失败的时候就true
 
 ### 442  `1 ≤ a[i] ≤ n` 找到所有出现2次的元素 O(1) 空间
 > some elements appear twice and others appear once.
@@ -2866,24 +2745,6 @@ public int totalHammingDistance(int[] nums){
 ```
 
 
-
-### 338 0~n每个数字有几个1位 O(n)复杂度
->Input: 5
-Output: [0,1,1,2,1,2]
-
-```java
-public int[] countBits(int num){
-    int[] f = new int[num + 1];
-    for (int i = 1; i <= num ; i++) {
-        f[i] = f[i >> 1] + (i & 1);
-    }
-    return f;
-}
-```
-
-
-
-
 ### 87 判断两个字符串是不是拆分成两半二叉树交换子树构成的
 ```java
 public boolean isScramble(String s1, String s2) {
@@ -2940,9 +2801,6 @@ public boolean isOneEditDistance(String s, String t) {
 }
 ```
 
-### 72 编辑距离
-
-
 ### 取模和取余rem
 java的`%`取余 python 取模
 求 整数商： c = a/b;
@@ -2971,8 +2829,8 @@ java的`%`取余 python 取模
 x相差4，y相差8 求分成（/）最多多少份，x,y都是整数
 
 ### 火车编组 1,2,3,4不可能的出栈顺序 ACM列车长的烦恼
->3节车厢，按照1，2，3依次入轨编组，可以在左边形成1 2 3，1 3 2，2 1 3，2 3 1，321。
->问1-2-3-4能否编程4，1，3，2
+3节车厢，按照1，2，3依次入轨编组，可以在左边形成1 2 3，1 3 2，2 1 3，2 3 1，321。
+问1-2-3-4能否编程4，1，3，2
 
 ```java
 //假设序列是1,2,3,4
@@ -3359,9 +3217,6 @@ while(top!=0&&num.charAt(i)<stack[top-1]&&k>0){
 }
 ```
 
-
-
-
 ### 567 s1的一种排列是否在s2中
 {% note %}
 Input:s1 = "ab" s2 = "eidbaooo"
@@ -3479,9 +3334,6 @@ void permute(String s1, String s2, int idx) {
 ```
 {% endfold %}
 
-### pdd 大整数乘积
-[大数乘积](https://itimetraveler.github.io/2017/08/22/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E5%A4%A7%E6%95%B0%E7%9B%B8%E4%B9%98%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E9%AB%98%E6%95%88%E7%AE%97%E6%B3%95/)
-
 ### pdd 数组中找三个数乘积的最大值
 {% note %}
 3 4 1 2
@@ -3538,12 +3390,6 @@ public class chenji {
 }
 ```
 
-### 459 Repeated Substring Pattern 子串重复N次 S = N\*T
-{% note %}
-Input: "ababab"
-Output: True
-Explanation: It's the substring "ab" 3次.
-{% endnote %}
 
 ### 爱奇艺 平方串  最长公共子序列
 {% note %}

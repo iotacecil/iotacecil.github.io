@@ -4,7 +4,14 @@ date: 2019-03-27 19:58:00
 tags: [alg]
 categories: [算法备忘]
 ---
-### 241 Different Ways to Add Parentheses 给运算表达式加括号改变优先级
+### 301 ！！！Remove Invalid Parentheses 删除无效括号
+删除数量最少的所有正确可能
+{% note %}
+输入: "(a)())()"
+输出: ["(a)()()", "(a())()"]
+{% endnote %}
+
+### 241 !!! Different Ways to Add Parentheses 给运算表达式加括号改变优先级
 {% note %}
 输入: "2-1-1"
 输出: [0, 2]
@@ -12,6 +19,8 @@ categories: [算法备忘]
 ((2-1)-1) = 0 
 (2-(1-1)) = 2
 {% endnote %}
+
+本质是wrod break
 
 ### ？？？括号串达到匹配需要最小的逆转次数
 {% note %}

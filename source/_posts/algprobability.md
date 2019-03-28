@@ -1,9 +1,47 @@
 ---
-title: 概率问题
+title: 数学、概率问题
 date: 2018-10-18 20:59:40
 tags:
 categories: [算法备忘]
 ---
+### 343 Integer Break 和固定的数字的最大乘积
+{% note %}
+Input: 10
+Output: 36
+Explanation: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36.
+{% endnote %}
+
+
+
+### 43 Multiply Strings 大数相乘
+{% note %}
+Input: num1 = "2", num2 = "3"
+Output: "6"
+{% endnote %}
+两个关键位置i+j,i+j+1。并且记住右边那个是取模，左边那个是累加。
+```java
+public String multiply(String num1, String num2) {
+    int n = num1.length();
+    int m = num2.length();
+    StringBuilder sb = new StringBuilder();
+    int[] rst = new int[m+n];
+    for(int i = n-1;i>=0;i--){
+        for(int j = m-1;j>=0;j--){
+            int mul = (num1.charAt(i)-'0')*(num2.charAt(j)-'0');
+            int p1 = i+j,p2 = i+j+1;
+            mul += rst[p2];
+            rst[p2] = mul%10;
+            rst[p1] += mul/10;
+        }
+    }
+    for(int num:rst){
+        if(sb.length()==0 && num == 0)continue;
+        sb.append(num);
+    }
+    return sb.length()==0?"0":sb.toString();
+}
+```
+
 ### 233 Number of Digit One [1,n]中数字带1的个数
 {% note %}
 Input: 13

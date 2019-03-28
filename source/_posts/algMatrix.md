@@ -4,7 +4,38 @@ date: 2018-10-21 14:51:19
 tags: [alg]
 categories: [算法备忘]
 ---
-
+### Spiral Matrix II 生成旋转矩阵
+贪吃蛇法 ac
+```java
+public int[][] generateMatrix(int n) {
+    int[][] rst = new int[n][n];
+    int[] loc = {0,0}; 
+    int num = 1;
+    rst[loc[0]][loc[1]] = num++;
+    while(true){
+        int lx = loc[0];
+        int ly = loc[1];
+        while(loc[1]+1 < n && rst[loc[0]][loc[1]+1] == 0){
+            loc[1]+=1;
+            rst[loc[0]][loc[1]] = num++;
+        }
+        while(loc[0]+1 < n && rst[loc[0]+1][loc[1]] == 0){
+            loc[0]+=1;
+            rst[loc[0]][loc[1]] = num++;
+        }
+        while(loc[1]-1 >= 0 && rst[loc[0]][loc[1]-1] == 0){
+            loc[1]-=1;
+            rst[loc[0]][loc[1]] = num++;
+        }
+        while(loc[0]-1 >= 0 && rst[loc[0]-1][loc[1]] == 0){
+            loc[0]-=1;
+            rst[loc[0]][loc[1]] = num++;
+        }
+        if(lx == loc[0] &&ly==loc[1])break;
+    }
+    return rst;
+}
+```
 
 ### 48 Rotate Image
 {% fold %}
