@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="91 1-26数字对应26个字母，问一个数字对应多少种解码方式226-&amp;gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z) 3.dp[i]表示s[0..i]的解码方式关键：1）长度为0的时候解码方式为12）判断前1位数字和前2位的合法性，加上前i-1,i-2长度的方案数3）越过012345678910111213public int numDecodings(String s)">
+<meta name="description" content="491 复制或者复制一半长度到n的最少操作次数字符串“A”，有两种操作1）copyall 设定当前长度为一次粘贴的长度 C = K2）粘贴n次copy长度 K += C如何最快得到长度N这道题就是将N分解为M个数字的乘积，且M个数字的和最小输入: 3输出: 3解释:最初, 我们只有一个字符 ‘A’。第 1 步, 我们使用 Copy All 操作。第 2 步, 我们使用 Paste 操作来获得 ‘A">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="algDP">
 <meta property="og:url" content="http://blog.iotaa.xyz/2019/03/07/algDP/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="91 1-26数字对应26个字母，问一个数字对应多少种解码方式226-&amp;gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z) 3.dp[i]表示s[0..i]的解码方式关键：1）长度为0的时候解码方式为12）判断前1位数字和前2位的合法性，加上前i-1,i-2长度的方案数3）越过012345678910111213public int numDecodings(String s)">
+<meta property="og:description" content="491 复制或者复制一半长度到n的最少操作次数字符串“A”，有两种操作1）copyall 设定当前长度为一次粘贴的长度 C = K2）粘贴n次copy长度 K += C如何最快得到长度N这道题就是将N分解为M个数字的乘积，且M个数字的和最小输入: 3输出: 3解释:最初, 我们只有一个字符 ‘A’。第 1 步, 我们使用 Copy All 操作。第 2 步, 我们使用 Paste 操作来获得 ‘A">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-18T06:55:15.715Z">
+<meta property="og:updated_time" content="2019-03-26T13:13:12.529Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="algDP">
-<meta name="twitter:description" content="91 1-26数字对应26个字母，问一个数字对应多少种解码方式226-&amp;gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z) 3.dp[i]表示s[0..i]的解码方式关键：1）长度为0的时候解码方式为12）判断前1位数字和前2位的合法性，加上前i-1,i-2长度的方案数3）越过012345678910111213public int numDecodings(String s)">
+<meta name="twitter:description" content="491 复制或者复制一半长度到n的最少操作次数字符串“A”，有两种操作1）copyall 设定当前长度为一次粘贴的长度 C = K2）粘贴n次copy长度 K += C如何最快得到长度N这道题就是将N分解为M个数字的乘积，且M个数字的和最小输入: 3输出: 3解释:最初, 我们只有一个字符 ‘A’。第 1 步, 我们使用 Copy All 操作。第 2 步, 我们使用 Paste 操作来获得 ‘A">
 
 
 
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-18T14:55:15+08:00">
-                2019-03-18
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-26T21:13:12+08:00">
+                2019-03-26
               </time>
             
           </span>
@@ -393,7 +393,9 @@
       
 
       
-        <h3 id="91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><a href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式" class="headerlink" title="91 1-26数字对应26个字母，问一个数字对应多少种解码方式"></a>91 1-26数字对应26个字母，问一个数字对应多少种解码方式</h3><p>226-&gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z)</p>
+        <h3 id="491-复制或者复制一半长度到n的最少操作次数"><a href="#491-复制或者复制一半长度到n的最少操作次数" class="headerlink" title="491 复制或者复制一半长度到n的最少操作次数"></a>491 复制或者复制一半长度到n的最少操作次数</h3><p>字符串“A”，有两种操作<br>1）copyall 设定当前长度为一次粘贴的长度 C = K<br>2）粘贴n次copy长度 K += C<br>如何最快得到长度N<br>这道题就是将N分解为M个数字的乘积，且M个数字的和最小<br><div class="note "><p>输入: 3<br>输出: 3<br>解释:<br>最初, 我们只有一个字符 ‘A’。<br>第 1 步, 我们使用 Copy All 操作。<br>第 2 步, 我们使用 Paste 操作来获得 ‘AA’。<br>第 3 步, 我们使用 Paste 操作来获得 ‘AAA’。</p></div><br>1-&gt;0,2-&gt;cp(2),3-&gt;cpp(3),4-&gt;cpcp(4),5-&gt;cp(AA)ppp(5),6cppcp(5)</p>
+<p>求n的所有质因数之和。<br>// 6可以通过长度3的复制，再递归得到3需要多少步。<br>思路：从长度为2开始试（？）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minSteps</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> d = <span class="number">2</span>; d &lt;= n; d++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (n % d == <span class="number">0</span>) &#123;</span><br><span class="line">            s += d;</span><br><span class="line">            n /= d;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><a href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式" class="headerlink" title="91 1-26数字对应26个字母，问一个数字对应多少种解码方式"></a>91 1-26数字对应26个字母，问一个数字对应多少种解码方式</h3><p>226-&gt;2(B)2(B)6(F),22(V)6(F),2(B)26(Z)</p>
 <p>3.dp[i]表示s[0..i]的解码方式<br>关键：<br>1）长度为0的时候解码方式为1<br>2）判断前1位数字和前2位的合法性，加上前i-1,i-2长度的方案数<br>3）越过0<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = s.length();</span><br><span class="line">    <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">    dp[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    dp[<span class="number">1</span>] = s.charAt(<span class="number">0</span>)!=<span class="string">'0'</span>?<span class="number">1</span>:<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> one = Integer.valueOf(s.substring(i-<span class="number">1</span>,i));</span><br><span class="line">        <span class="keyword">if</span>(one &lt;<span class="number">10</span> &amp;&amp; one &gt;<span class="number">0</span>)dp[i] += dp[i-<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> two = Integer.valueOf(s.substring(i-<span class="number">2</span>,i));</span><br><span class="line">        <span class="keyword">if</span>(two &lt;=<span class="number">26</span> &amp;&amp; two &gt;=<span class="number">10</span>)dp[i] += dp[i-<span class="number">2</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
 <p>1递归：8%<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numDecodings</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s.length()&lt;<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(map.containsKey(s))<span class="keyword">return</span> map.get(s);</span><br><span class="line">    <span class="keyword">if</span>(s.charAt(<span class="number">0</span>)==<span class="string">'0'</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(s.length()==<span class="number">1</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 取一个数字之后的解码方式</span></span><br><span class="line">    w = numDecodings(s.substring(<span class="number">1</span>));</span><br><span class="line">    <span class="comment">// 取两个数字之后的解码方式</span></span><br><span class="line">    <span class="keyword">int</span> pre2 = Integer.parseInt(s.substring(<span class="number">0</span>,<span class="number">2</span>));</span><br><span class="line">    <span class="keyword">if</span>(pre2&lt;=<span class="number">26</span>)&#123;</span><br><span class="line">        w+=numDecodings(s.substring(<span class="number">2</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    map.put(s,w);</span><br><span class="line">    <span class="keyword">return</span> w;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -521,7 +523,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -576,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><span class="nav-number">1.</span> <span class="nav-text">91 1-26数字对应26个字母，问一个数字对应多少种解码方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#718-最长公共子串40ms-90"><span class="nav-number">2.</span> <span class="nav-text">718 最长公共子串40ms 90%</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#491-复制或者复制一半长度到n的最少操作次数"><span class="nav-number">1.</span> <span class="nav-text">491 复制或者复制一半长度到n的最少操作次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><span class="nav-number">2.</span> <span class="nav-text">91 1-26数字对应26个字母，问一个数字对应多少种解码方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#718-最长公共子串40ms-90"><span class="nav-number">3.</span> <span class="nav-text">718 最长公共子串40ms 90%</span></a></li></ol></div>
             
 
           </div>

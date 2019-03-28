@@ -80,19 +80,19 @@
 
 
 
-<meta name="description" content="where 子句中不能出现聚合函数（列函数）以下哪个函数不能直接出现在SQL的WHERE子句中正确答案: A B   你的答案: C (错误)A.SUMB.COUNTC.ORDER BYD.LIMIT聚集函数也叫列函数，它们都是基于整列数据进行计算的，而where子句则是对数据行进行过滤的。sql语句的执行顺序为 from子句 where 子句 group by 子句 having 子句 orde">
+<meta name="description" content="完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞下面有关事务隔离级别说法正确的是?正确答案: A B C D   你的答案: B C D (错误)A串行读(Serializable):完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞B未提交读(Read Uncommitted):允许脏读,也就是可能读取到其他会话中未提交事务修改 的数据C提交读(Read Committed">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库锁">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/03/16/DDB/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="where 子句中不能出现聚合函数（列函数）以下哪个函数不能直接出现在SQL的WHERE子句中正确答案: A B   你的答案: C (错误)A.SUMB.COUNTC.ORDER BYD.LIMIT聚集函数也叫列函数，它们都是基于整列数据进行计算的，而where子句则是对数据行进行过滤的。sql语句的执行顺序为 from子句 where 子句 group by 子句 having 子句 orde">
+<meta property="og:description" content="完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞下面有关事务隔离级别说法正确的是?正确答案: A B C D   你的答案: B C D (错误)A串行读(Serializable):完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞B未提交读(Read Uncommitted):允许脏读,也就是可能读取到其他会话中未提交事务修改 的数据C提交读(Read Committed">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/innodb16k.jpg">
 <meta property="og:image" content="http://blog.iotaa.xyz/images/hash.jpg">
-<meta property="og:updated_time" content="2018-12-10T05:47:28.368Z">
+<meta property="og:updated_time" content="2019-03-27T02:45:49.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库锁">
-<meta name="twitter:description" content="where 子句中不能出现聚合函数（列函数）以下哪个函数不能直接出现在SQL的WHERE子句中正确答案: A B   你的答案: C (错误)A.SUMB.COUNTC.ORDER BYD.LIMIT聚集函数也叫列函数，它们都是基于整列数据进行计算的，而where子句则是对数据行进行过滤的。sql语句的执行顺序为 from子句 where 子句 group by 子句 having 子句 orde">
+<meta name="twitter:description" content="完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞下面有关事务隔离级别说法正确的是?正确答案: A B C D   你的答案: B C D (错误)A串行读(Serializable):完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞B未提交读(Read Uncommitted):允许脏读,也就是可能读取到其他会话中未提交事务修改 的数据C提交读(Read Committed">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/innodb16k.jpg">
 
 
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-12-10T13:47:28+08:00">
-                2018-12-10
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-27T10:45:49+08:00">
+                2019-03-27
               </time>
             
           </span>
@@ -395,7 +395,8 @@
       
 
       
-        <h3 id="where-子句中不能出现聚合函数（列函数）"><a href="#where-子句中不能出现聚合函数（列函数）" class="headerlink" title="where 子句中不能出现聚合函数（列函数）"></a>where 子句中不能出现聚合函数（列函数）</h3><p>以下哪个函数不能直接出现在SQL的WHERE子句中<br>正确答案: A B   你的答案: C (错误)<br>A.SUM<br>B.COUNT<br>C.ORDER BY<br>D.LIMIT<br>聚集函数也叫列函数，它们都是基于整列数据进行计算的，而where子句则是对数据行进行过滤的。<br>sql语句的执行顺序为</p>
+        <h3 id="完全串行化的读-每次读都需要获得表级共享锁-读写相互都会阻塞"><a href="#完全串行化的读-每次读都需要获得表级共享锁-读写相互都会阻塞" class="headerlink" title="完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞"></a>完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞</h3><p>下面有关事务隔离级别说法正确的是?<br>正确答案: A B C D   你的答案: B C D (错误)<br>A串行读(Serializable):完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞<br>B未提交读(Read Uncommitted):允许脏读,也就是可能读取到其他会话中未提交事务修改 的数据<br>C提交读(Read Committed):只能读取到已经提交的数据<br>D可重复读(Repeated Read):在同一个事务内的查询都是事务开始时刻一致的</p>
+<h3 id="where-子句中不能出现聚合函数（列函数）"><a href="#where-子句中不能出现聚合函数（列函数）" class="headerlink" title="where 子句中不能出现聚合函数（列函数）"></a>where 子句中不能出现聚合函数（列函数）</h3><p>以下哪个函数不能直接出现在SQL的WHERE子句中<br>正确答案: A B   你的答案: C (错误)<br>A.SUM<br>B.COUNT<br>C.ORDER BY<br>D.LIMIT<br>聚集函数也叫列函数，它们都是基于整列数据进行计算的，而where子句则是对数据行进行过滤的。<br>sql语句的执行顺序为</p>
 <p>from子句</p>
 <p>where 子句</p>
 <p>group by 子句</p>
@@ -599,7 +600,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -654,7 +655,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#where-子句中不能出现聚合函数（列函数）"><span class="nav-number">1.</span> <span class="nav-text">where 子句中不能出现聚合函数（列函数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关系型数据库和对象"><span class="nav-number">2.</span> <span class="nav-text">关系型数据库和对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-树"><span class="nav-number">3.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inodb"><span class="nav-number">4.</span> <span class="nav-text">inodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久性延迟："><span class="nav-number">5.</span> <span class="nav-text">持久性延迟：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#故障恢复："><span class="nav-number">6.</span> <span class="nav-text">故障恢复：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁检测：碰撞检测-等锁超时"><span class="nav-number">7.</span> <span class="nav-text">死锁检测：碰撞检测/等锁超时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-分片"><span class="nav-number">8.</span> <span class="nav-text">Hash 分片</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-一致性哈希：和弦（chord）系统中提出。"><span class="nav-number">8.1.</span> <span class="nav-text">3. 一致性哈希：和弦（chord）系统中提出。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查询"><span class="nav-number">8.1.1.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新节点"><span class="nav-number">8.1.2.</span> <span class="nav-text">新节点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#稳定性检测"><span class="nav-number">8.1.3.</span> <span class="nav-text">稳定性检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP-一致性-多副本对外单副本-可用性（延迟）-分区容忍性（网络分区现象仍工作）"><span class="nav-number">9.</span> <span class="nav-text">CAP 一致性(多副本对外单副本) 可用性（延迟） 分区容忍性（网络分区现象仍工作）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幂等性："><span class="nav-number">10.</span> <span class="nav-text">幂等性：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一致性协议"><span class="nav-number">11.</span> <span class="nav-text">一致性协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#脏读"><span class="nav-number">11.1.</span> <span class="nav-text">脏读</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据日知录"><span class="nav-number"></span> <span class="nav-text">大数据日知录</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#完全串行化的读-每次读都需要获得表级共享锁-读写相互都会阻塞"><span class="nav-number">1.</span> <span class="nav-text">完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#where-子句中不能出现聚合函数（列函数）"><span class="nav-number">2.</span> <span class="nav-text">where 子句中不能出现聚合函数（列函数）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关系型数据库和对象"><span class="nav-number">3.</span> <span class="nav-text">关系型数据库和对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-树"><span class="nav-number">4.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inodb"><span class="nav-number">5.</span> <span class="nav-text">inodb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久性延迟："><span class="nav-number">6.</span> <span class="nav-text">持久性延迟：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#故障恢复："><span class="nav-number">7.</span> <span class="nav-text">故障恢复：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁检测：碰撞检测-等锁超时"><span class="nav-number">8.</span> <span class="nav-text">死锁检测：碰撞检测/等锁超时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-分片"><span class="nav-number">9.</span> <span class="nav-text">Hash 分片</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-一致性哈希：和弦（chord）系统中提出。"><span class="nav-number">9.1.</span> <span class="nav-text">3. 一致性哈希：和弦（chord）系统中提出。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#查询"><span class="nav-number">9.1.1.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#新节点"><span class="nav-number">9.1.2.</span> <span class="nav-text">新节点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#稳定性检测"><span class="nav-number">9.1.3.</span> <span class="nav-text">稳定性检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP-一致性-多副本对外单副本-可用性（延迟）-分区容忍性（网络分区现象仍工作）"><span class="nav-number">10.</span> <span class="nav-text">CAP 一致性(多副本对外单副本) 可用性（延迟） 分区容忍性（网络分区现象仍工作）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幂等性："><span class="nav-number">11.</span> <span class="nav-text">幂等性：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一致性协议"><span class="nav-number">12.</span> <span class="nav-text">一致性协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#脏读"><span class="nav-number">12.1.</span> <span class="nav-text">脏读</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据日知录"><span class="nav-number"></span> <span class="nav-text">大数据日知录</span></a></div>
             
 
           </div>
