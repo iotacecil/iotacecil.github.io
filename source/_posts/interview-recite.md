@@ -13,6 +13,11 @@ https://www.nowcoder.com/discuss/111311
 
 ### 索引什么时候会失效
 
+### 红黑树原理
+
+### Spring容器初始化过程
+ioc aop原理
+
 ### 协程
 
 ### Java内存分配策略
@@ -752,7 +757,11 @@ public void bubblesort(int[] array,int n) {
 网站没有对用户提交数据进行转义处理或者过滤不足的缺点，进而添加一些恶意的脚本代码（HTML、JavaScript）到Web页面中去，使别的用户访问都会执行相应的嵌入代码。
 解决方法：
 1）cookie设置成http Only 不让前端`document.cookie`拿到
-2）对输入多做一些检查
+2）对输入多做一些检查 对 html危险字符转义
+
+CSRF 盗取用户cookie或者session伪造请求
+1)每次提交加随机数token
+2）检查referer
 
 ### 35 防止表单重复提交
 1）submit方法最后把按钮disable掉

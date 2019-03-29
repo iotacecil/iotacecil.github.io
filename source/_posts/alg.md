@@ -1050,7 +1050,7 @@ Output: true
 ### 添加最少字符回文串 区间dp
 可以在任意位置添加,
 {% note %}
-
+？
 {% endnote %}
 
 ### 最尾添加回文串 Manacher 最右回文边界
