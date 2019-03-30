@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-03-29T07:45:11.852Z">
+<meta property="og:updated_time" content="2019-03-30T08:38:05.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://blog.csdn.net/jackfrued/article/details/44921941https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/x">
@@ -351,8 +351,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-29T15:45:11+08:00">
-                2019-03-29
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-30T16:38:05+08:00">
+                2019-03-30
               </time>
             
           </span>
@@ -454,6 +454,7 @@
 <h4 id="消息队列（链表）-msgget（同一台机器）-系统内核：-（一种逐渐被淘汰的方式）"><a href="#消息队列（链表）-msgget（同一台机器）-系统内核：-（一种逐渐被淘汰的方式）" class="headerlink" title="消息队列（链表） msgget（同一台机器） 系统内核： （一种逐渐被淘汰的方式）"></a>消息队列（链表） msgget（同一台机器） 系统内核： （一种逐渐被淘汰的方式）</h4><p><code>msgid = msgget((key_t)1234, 0666 | IPC_CREAT);</code>msgget()msgrcv()<br>1）异步：消息队列本身是【异步】的，消息队列独立于进程存在。它允许接收者在消息发送很长时间后再取回消息<br>2）消息必须以<code>long int</code> 开头 , 接收程序可以通过消息类型有选择地接收数据。<br>3）可以同时通过发送消息，避免命名管道的同步和阻塞问题，不需要由进程自己来提供同步方法。</p>
 <p>4）轮询：收者必须轮询消息队列，才能收到最近的消息。<br>5）优先级<br>6）与管道相比，消息队列提供了有格式的数据 【读写双方都需要<code>msgget</code>建立消息队列】<br>7）和信号相比，消息队列能够传递更多的信息</p>
 <h4 id="共享内存shmget-最快但是无法解决同步"><a href="#共享内存shmget-最快但是无法解决同步" class="headerlink" title="共享内存shmget 最快但是无法解决同步"></a>共享内存<code>shmget</code> 最快但是无法解决同步</h4><p>1）<code>shmget</code>创建一个 结构体大小的共享内存，有权限<br>2）<code>shmat</code> 映射到进程的地址空间。<br>3）读写的时候要用written标志防止两个进程同时读写 而且要把written变成原子操作<br>4）<code>shmdt</code>可以分离共享内存<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">shared_use_st</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> written;</span><br><span class="line">    <span class="keyword">char</span> text[<span class="number">2048</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>同一个Linux机器的两个进程访问同一块共享内存，他们访问共享内存中的同一个对象的时候，指针相同吗？<br>可能相同也可能不同</p>
 <h4 id="信号量semget-有权限"><a href="#信号量semget-有权限" class="headerlink" title="信号量semget 有权限"></a>信号量<code>semget</code> 有权限</h4><p>不是线程同步的posix信号量，是<code>SYSTEM V</code>信号量<br>信号量能解决 共享内存同步问题</p>
 <h3 id="9-线程池的运行流程，使用参数以及方法策略"><a href="#9-线程池的运行流程，使用参数以及方法策略" class="headerlink" title="9.线程池的运行流程，使用参数以及方法策略"></a>9.线程池的运行流程，使用参数以及方法策略</h3><p>运行流程：<br>1）如果运行的线程小于<code>corePollsize</code>，则创建新线程，即使其他事空闲的。<br>2）当线程池中线程数量&gt;<code>corePollsize</code> 则只有当<code>workQueue</code>满才去创建新线程处理任务<br>3）如果没有空闲，任务封装成Work对象放到等待队列<br>4) 如果队列满了，用<code>handler</code>指定的策略 （5种）<br><code>ctl</code> 状态值（高3位）和有效线程数（29位）</p>
 <p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/threadpoll.jpg" alt="threadpoll.jpg"></p>
