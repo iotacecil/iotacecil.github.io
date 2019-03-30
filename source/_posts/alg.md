@@ -34,12 +34,21 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 166. Fraction to Recurring Decimal 分数转小数用括号表示循环节
+{% note %}
+Input: numerator = 2, denominator = 3
+Output: "0.(6)"
+{% endnote %}
 
 ### 395
 
-### 854
+### 854 Split Array into Fibonacci Sequence
+{% note %}
+Input: "123456579"
+Output: [123,456,579]
+{% endnote %}
 
-
+### 842
 
 ### 650
 
