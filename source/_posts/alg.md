@@ -34,6 +34,13 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 746. Min Cost Climbing Stairs
+付钱可以跳1阶或者2阶台阶。
+{% note %}
+Input: cost = [10, 15, 20]
+Output: 15
+{% endnote %}
+
 ### 166. Fraction to Recurring Decimal 分数转小数用括号表示循环节
 {% note %}
 Input: numerator = 2, denominator = 3
@@ -48,12 +55,59 @@ Input: "123456579"
 Output: [123,456,579]
 {% endnote %}
 
+
+### 873. Length of Longest Fibonacci Subsequence
+{% note %}
+Input: [1,3,7,11,12,14,18]
+Output: 3
+Explanation:
+The longest subsequence that is fibonacci-like:
+[1,11,12], [3,11,14] or [7,11,18].
+{% endnote %}
+
 ### 842
 
 ### 650
 
 ### 493 Reverse Pairs 逆序对的个数
-如果 i < j and nums[i] > 2*nums[j].
+如果 i < j and nums[i] > 2*nums[j].算一个逆序对
+{% note %}
+Input: [1,3,2,3,1]
+Output: 2
+{% endnote %}
+```java
+public static int ret;
+public static int reversePairs(int[] nums) {
+    ret = 0;
+    mergeSort(nums, 0, nums.length-1);
+    return ret;
+}
+
+public static void mergeSort(int[] nums, int left, int right) {
+    if (right <= left) {
+        return;
+    }
+    int middle = left + (right - left)/2;
+    mergeSort(nums, left, middle);
+    mergeSort(nums,middle+1, right);
+
+    //count elements
+    int count = 0;
+    for (int l = left, r = middle+1; l <= middle;) {
+        if (r > right || (long)nums[l] <= 2*(long)nums[r]) {
+            l++;
+            ret += count;
+        } else {
+            r++;
+            count++;
+        }
+    }
+
+    //sort
+    Arrays.sort(nums, left, right + 1);
+}
+
+```
 
 
 #### 315 输出数组每个位置后有多少个数字比它小
@@ -747,7 +801,42 @@ public int findDerangement(int n) {
 }
 ```
 
-### 801 让数组递增的最少交换次数
+### 801 ??让数组递增的最少交换次数
+可以交换 A[i] 和 B[i] 的元素
+{% note %}
+Input: A = [1,3,5,4], B = [1,2,3,7]
+Output: 1
+交换 A[3] 和 B[3] 后，两个数组如下:
+A = [1, 3, 5, 7] ， B = [1, 2, 3, 4]
+两个数组均为严格递增的。
+{% endnote %}
+
+思路：如果两个数组`[i]>[i-1]`可以保持不变，如果`A[i]>B[i-1]&&B[i]>A[i-1]`可以尝试交换。
+dp思想，保存每个位置的两种状态：
+1）可以交换
+2）保持不变。
+
+```java
+public int minSwap(int[] A, int[] B) {
+   int n = A.length;
+    int[] swap = new int[n];
+    int[] keep = new int[n];
+    swap[0] = 1;
+    for (int i = 1; i <n ; i++) {
+        // 关键
+        keep[i] = swap[i] = n;
+        if(A[i-1] < A[i] && B[i-1]<B[i]){
+            keep[i] = keep[i-1];
+            swap[i] = swap[i-1] +1;
+        }
+        if(A[i-1] <B[i] && B[i-1] <A[i]){
+            keep[i] = Math.min(keep[i],swap[i-1]);
+            swap[i] = Math.min(swap[i],keep[i-1]+1);
+        }
+    }
+    return Math.min(keep[n-1],swap[n-1]);
+}
+```
 
 ### 670 
 

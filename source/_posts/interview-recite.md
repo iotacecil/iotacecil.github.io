@@ -11,6 +11,11 @@ http://www.linya.pub/
 
 https://www.nowcoder.com/discuss/111311
 
+### JVM分哪几个区
+
+### zookeeper的应用场景
+分布式锁
+
 ### 索引什么时候会失效
 
 ### 红黑树原理
