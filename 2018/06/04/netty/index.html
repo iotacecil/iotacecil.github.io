@@ -80,12 +80,12 @@
 
 
 
-<meta name="description" content="路由收敛：网络设备的路由表与网络拓扑结构保持一致。RIP，坏消息传得慢，如果有一个节点到达不了，会互相更新路由表直到不能再增加跳数。 设有2条路由21.1.193.0/24和21.1.194.0/24，如果进行路由汇聚，汇聚这两条路由的地址是（）正确答案: C   你的答案: D (错误)21.1.200.0/2221.1.192.0/2321.1.192.0/2121.2.224.0/20 PC">
+<meta name="description" content="系统通过一个四元组来唯一标识一条TCP连接. 这个四元组的结构是{local_ip, local_port, remote_ip, remote_port}, 对于IPv4, 系统理论上最多可以管理2^(32+16+32+16), 2的96次方个连接. 因为对于同一台服务器来说, 一般只有一个 local_ip, 那么, 同一台服务器可以管理 2^(16+32+16) 个连接. 而一个服务(进程,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty和网络">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/06/04/netty/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="路由收敛：网络设备的路由表与网络拓扑结构保持一致。RIP，坏消息传得慢，如果有一个节点到达不了，会互相更新路由表直到不能再增加跳数。 设有2条路由21.1.193.0/24和21.1.194.0/24，如果进行路由汇聚，汇聚这两条路由的地址是（）正确答案: C   你的答案: D (错误)21.1.200.0/2221.1.192.0/2321.1.192.0/2121.2.224.0/20 PC">
+<meta property="og:description" content="系统通过一个四元组来唯一标识一条TCP连接. 这个四元组的结构是{local_ip, local_port, remote_ip, remote_port}, 对于IPv4, 系统理论上最多可以管理2^(32+16+32+16), 2的96次方个连接. 因为对于同一台服务器来说, 一般只有一个 local_ip, 那么, 同一台服务器可以管理 2^(16+32+16) 个连接. 而一个服务(进程,">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdusdu.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/osi.jpg">
@@ -106,10 +106,10 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zwhf.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/wldz.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backlog.jpg">
-<meta property="og:updated_time" content="2019-03-29T09:05:19.535Z">
+<meta property="og:updated_time" content="2019-04-01T08:24:26.529Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty和网络">
-<meta name="twitter:description" content="路由收敛：网络设备的路由表与网络拓扑结构保持一致。RIP，坏消息传得慢，如果有一个节点到达不了，会互相更新路由表直到不能再增加跳数。 设有2条路由21.1.193.0/24和21.1.194.0/24，如果进行路由汇聚，汇聚这两条路由的地址是（）正确答案: C   你的答案: D (错误)21.1.200.0/2221.1.192.0/2321.1.192.0/2121.2.224.0/20 PC">
+<meta name="twitter:description" content="系统通过一个四元组来唯一标识一条TCP连接. 这个四元组的结构是{local_ip, local_port, remote_ip, remote_port}, 对于IPv4, 系统理论上最多可以管理2^(32+16+32+16), 2的96次方个连接. 因为对于同一台服务器来说, 一般只有一个 local_ip, 那么, 同一台服务器可以管理 2^(16+32+16) 个连接. 而一个服务(进程,">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdusdu.jpg">
 
 
@@ -356,8 +356,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-29T17:05:19+08:00">
-                2019-03-29
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-01T16:24:26+08:00">
+                2019-04-01
               </time>
             
           </span>
@@ -412,7 +412,10 @@
       
 
       
-        <p>路由收敛：网络设备的路由表与网络拓扑结构保持一致。<br>RIP，坏消息传得慢，如果有一个节点到达不了，会互相更新路由表直到不能再增加跳数。</p>
+        <p>系统通过一个四元组来唯一标识一条TCP连接. 这个四元组的结构是{local_ip, local_port, remote_ip, remote_port}, 对于IPv4, 系统理论上最多可以管理2^(32+16+32+16), 2的96次方个连接.</p>
+<p>因为对于同一台服务器来说, 一般只有一个 local_ip, 那么, 同一台服务器可以管理 2^(16+32+16) 个连接. 而一个服务(进程, 如 Nginx 进程)一般只监听一个 local_port, 那么, 同一台服务就可以管理 2^(32+16) 个连接. 而如果从一台远端机器(所谓的 client)来连接这台服务器上的一个服务, 那么 local_ip, local_port, remote_ip 这3个变量是固定的, 那么, 就只能建立 2^16=65536 个连接了. 这就是经典的误解的来源!</p>
+<p>一个IP报文，在网络上传输，原地址和目的地址会变吗？<br>如果目的地址经路由表对比，发现不是在本网中，nat将改变源地址的IP改为路由器的IP地址</p>
+<p>路由收敛：网络设备的路由表与网络拓扑结构保持一致。<br>RIP，坏消息传得慢，如果有一个节点到达不了，会互相更新路由表直到不能再增加跳数。</p>
 <p>设有2条路由21.1.193.0/24和21.1.194.0/24，如果进行路由汇聚，汇聚这两条路由的地址是（）<br>正确答案: C   你的答案: D (错误)<br>21.1.200.0/22<br>21.1.192.0/23<br>21.1.192.0/21<br>21.2.224.0/20</p>
 <h3 id="PCI-SDU-PDU"><a href="#PCI-SDU-PDU" class="headerlink" title="PCI + SDU = PDU"></a>PCI + SDU = PDU</h3><p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/pdusdu.jpg" alt="pdusdu.jpg"></p>
 <p><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/osi.jpg" alt="osi.jpg"></p>
@@ -675,7 +678,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-count">89</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
