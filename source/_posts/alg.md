@@ -35,11 +35,14 @@ https://www.nowcoder.com/test/4575457/summary
 10^7 O(nlogn)
 
 ### 746. Min Cost Climbing Stairs
-付钱可以跳1阶或者2阶台阶。
+付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始
 {% note %}
 Input: cost = [10, 15, 20]
 Output: 15
 {% endnote %}
+dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯
+
+dp定义为 到达第n阶楼梯的最小花费
 
 ### 166. Fraction to Recurring Decimal 分数转小数用括号表示循环节
 {% note %}
@@ -1918,8 +1921,56 @@ class Solution {
 
 
 ### 611数组中符合三角形边长的对数 
+{% note %}
+Input: [2,2,3,4]
+Output: 3
+Explanation:
+Valid combinations are: 
+2,3,4 (using the first 2)
+2,3,4 (using the second 2)
+2,2,3
+{% endnote %}
 线性扫描 复杂度n^2
 ![lc611.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc611.jpg)
+
+思路，排完序之后，固定一个数，用二分双指针，找之前的一个区间两数之和>target
+例如
+固定 4, 找[2,2,3] +2
+固定 3, 找[2,2] +1
+
+```java
+public int triangleNumber(int[] nums) {
+   int cnt = 0;
+    Arrays.sort(nums);
+    int n = nums.length;
+    for (int i = n-1; i >1 ; i--) {
+        int l = 0,r = i-1;
+        while (l<r){
+            if(nums[l] + nums[r] >nums[i]){
+                cnt += r-l;
+                r--;
+            }else l++;
+        }
+    }
+    return cnt;
+}
+```
+
+### 判断点D是否在三角形ABC内
+思路，计算边AB,BC,CA 顺时针的边和 点D的叉积是不是都>=0
+```java
+// 计算AB 和 AC的叉积 边AB和点C的叉积
+double Product(point A, point B,point C){
+    return (B.x - A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y);
+}
+boolean isIn(point A,point B,point C,point D){
+    if(Product(A, B, D) >= 0 && Product(B, C, D) >=0 && Product(C,A,D) >=0){
+        return true;
+    }
+    return false;
+}
+```
+
 
 ### 812 最大三角形面积
 {% note %}
@@ -1930,13 +1981,20 @@ Output: 2
 三角形面积公式：
 https://leetcode.com/problems/largest-triangle-area/discuss/122711/C%2B%2BJavaPython-Solution-with-Explanation-and-Prove
 ```java
-public double largestTriangleArea(int[][] p) {
-    double res = 0;
-    for (int[] i: p)
-        for (int[] j: p)
-            for (int[] k: p)
-        res = Math.max(res, 0.5 * Math.abs(i[0] * j[1] + j[0] * k[1] + k[0] * i[1]- j[0] * i[1] - k[0] * j[1] - i[0] * k[1]));
-    return res;
+double Product(int[] A, int[] B,int[] C){
+        return (B[0] - A[0])*(C[1]-A[1])-(C[0]-A[0])*(B[1]-A[1]);
+    }
+  public double largestTriangleArea(int[][] p) {
+    double rst = 0;
+      int n = p.length;
+      for(int i = 0;i<n-2;i++){
+          for(int j = i+1;j<n-1;j++){
+              for(int k = j+1;k<n;k++ ){
+                  rst = Math.max(rst,0.5 * Math.abs(Product(p[i],p[j],p[k])));
+              }
+          }
+      }
+      return rst;
 }
 ```
 
@@ -2915,41 +2973,56 @@ java的`%`取余 python 取模
 
 第二步：计算模和余数的公式相同，但因c的值不同，求模时r = 1，求余时r = -3。
 
-### 149 在同一条直线上最多的点数
+### 469 lt886 判断凸多边形
+{% note %}
+输入: points = [[0, 0], [0, 1], [1, 1], [1, 0]]
+输出:  true
+{% endnote %}
+思路：计算3个点的偏向，是否和之前3个点的偏向相同。注意环，最后一个点要模到第1、2个点
+```java
+double product(int[]A,int[]B,int[]C){
+     return (C[1]-A[1])*(B[0]-A[0]) - (C[0]-A[0])*(B[1]-A[1]);
+ }
+public boolean isConvex(int[][] point) {
+    int n = point.length;
+    double pre = 0;
+    for(int i = 0;i<n;i++){
+         double pro = product(point[i],point[(i+1)%n],point[(i+2)%n]);
+        if(pro!=0){
+            if(pro * pre <0)return false;
+            else pre = pro;
+        }
+    }
+    return true;
+}
+```
 
+
+### 149 在同一条直线上最多的点数
+{% note %}
+Input: [[1,1],[2,2],[3,3]]
+Output: 3
+Explanation:
+```
+^
+|
+|        o
+|     o
+|  o  
++------------->
+0  1  2  3  4
+```
+{% endnote %}
+注意如果x相等的斜率应该为INT_MAX不是0. 相同的点要单独算（？）
 
 ### 线段上格点的个数
-> P1=(1,11) P2=(5,3)
-> out: 3 (2,9) (3,7) (4,5)
+P1=(1,11) P2=(5,3)
+out: 3 (2,9) (3,7) (4,5)
 
 答案是gcd(|x1-x2|,|y1-y2|)-1
 最大公约数：共有约数中最大的一个
 x相差4，y相差8 求分成（/）最多多少份，x,y都是整数
 
-### 火车编组 1,2,3,4不可能的出栈顺序 ACM列车长的烦恼
-3节车厢，按照1，2，3依次入轨编组，可以在左边形成1 2 3，1 3 2，2 1 3，2 3 1，321。
-问1-2-3-4能否编程4，1，3，2
-
-```java
-//假设序列是1,2,3,4
-public static void main(String[] args) {
-    int[] train = {4,1,3,2};
-    boolean flag = false;
-    int m = train.length;
-    for (int i = 0; i < m ; i++) {
-        for (int j = i+1; j < m; j++) {
-            for (int k = j+1; k < m ; k++) {
-                if(train[i]>train[j]&&train[i]>train[k]&&train[k]>train[j]){
-                    flag = true;
-                    break;
-                }
-            }
-        }
-    }
-    if(!flag) System.out.println("Yes");
-    else System.out.println("No");
-}
-```
 
 ### 区间dp
 
