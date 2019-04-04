@@ -4,6 +4,26 @@ date: 2019-03-07 20:56:46
 tags: [alg]
 categories: [算法备忘]
 ---
+### 746. Min Cost Climbing Stairs
+付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始
+{% note %}
+Input: cost = [10, 15, 20]
+Output: 15
+{% endnote %}
+dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯
+
+dp定义为 到达第n阶楼梯的最小花费
+```java
+public int minCostClimbingStairs(int[] cost) {
+    int n = cost.length;
+    int[] dp = new int[n+1];
+    for(int i = 2;i<=n;i++){
+        dp[i] += Math.min(dp[i-1]+cost[i-1],dp[i-2]+cost[i-2]);
+    }
+    return dp[n]; 
+}
+```
+
 ### 491 复制或者复制一半长度到n的最少操作次数
 字符串“A”，有两种操作
 1）copyall 设定当前长度为一次粘贴的长度 C = K

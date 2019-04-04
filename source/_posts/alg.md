@@ -34,15 +34,7 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
-### 746. Min Cost Climbing Stairs
-付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始
-{% note %}
-Input: cost = [10, 15, 20]
-Output: 15
-{% endnote %}
-dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯
 
-dp定义为 到达第n阶楼梯的最小花费
 
 ### 166. Fraction to Recurring Decimal 分数转小数用括号表示循环节
 {% note %}

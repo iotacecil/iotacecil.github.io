@@ -28,6 +28,8 @@ ioc aop原理
 ### Java内存分配策略
 Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后被拆散为标量类型并间接地在栈上分配的情况），对象主要分配在新生代的Eden区上，如果启动了本地线程分配缓冲，则将按线程优先在TLAB（Thread Local Allocation Buffer）上分配。
 
+怎么把对象分配到老年代上
+
 ### redis持久化
 持久化方式：
 1）快照 Mysql Dump和Redis RDB 2）写日志 Mysql Binlog Hbase Hlog Redis AOF
