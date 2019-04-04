@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-04-01T08:25:06.375Z">
+<meta property="og:updated_time" content="2019-04-04T07:57:06.774Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://blog.csdn.net/jackfrued/article/details/44921941https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/x">
@@ -351,8 +351,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-01T16:25:06+08:00">
-                2019-04-01
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-04T15:57:06+08:00">
+                2019-04-04
               </time>
             
           </span>
@@ -390,6 +390,7 @@
 <h3 id="JVM分哪几个区"><a href="#JVM分哪几个区" class="headerlink" title="JVM分哪几个区"></a>JVM分哪几个区</h3><h3 id="zookeeper的应用场景"><a href="#zookeeper的应用场景" class="headerlink" title="zookeeper的应用场景"></a>zookeeper的应用场景</h3><p>分布式锁</p>
 <h3 id="索引什么时候会失效"><a href="#索引什么时候会失效" class="headerlink" title="索引什么时候会失效"></a>索引什么时候会失效</h3><h3 id="红黑树原理"><a href="#红黑树原理" class="headerlink" title="红黑树原理"></a>红黑树原理</h3><h3 id="Spring容器初始化过程"><a href="#Spring容器初始化过程" class="headerlink" title="Spring容器初始化过程"></a>Spring容器初始化过程</h3><p>ioc aop原理</p>
 <h3 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h3><h3 id="Java内存分配策略"><a href="#Java内存分配策略" class="headerlink" title="Java内存分配策略"></a>Java内存分配策略</h3><p>Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后被拆散为标量类型并间接地在栈上分配的情况），对象主要分配在新生代的Eden区上，如果启动了本地线程分配缓冲，则将按线程优先在TLAB（Thread Local Allocation Buffer）上分配。</p>
+<p>怎么把对象分配到老年代上</p>
 <h3 id="redis持久化"><a href="#redis持久化" class="headerlink" title="redis持久化"></a>redis持久化</h3><p>持久化方式：<br>1）快照 Mysql Dump和Redis RDB 2）写日志 Mysql Binlog Hbase Hlog Redis AOF</p>
 <p>RDB是保存数据库中的键值对，AOF保存redis执行的命令。</p>
 <h4 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h4><p>RDB是压缩过的二进制文件,会生成临时文件，把老的RDB文件替换掉。<br>BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。copy-on-write策略，但是父进程写入还会做副本 内存开销大。<br>触发机制：从节点全量复制主节点会生成RDB文件。 debug reload 、 shutdown。<br>缺点磁盘性能，宕机没快照的丢了。但是恢复速度快。</p>
