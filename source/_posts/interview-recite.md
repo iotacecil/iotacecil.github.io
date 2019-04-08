@@ -11,7 +11,34 @@ http://www.linya.pub/
 
 https://www.nowcoder.com/discuss/111311
 
+### 反爬虫
+1）单个IP、session统计 对header user-agent、referer检测
+
+### java8的新特性
+
+### Object有哪些方法
+还有`getClass()` 和`finalize`
+wait 方法必须在synchronized内用
+
+### mybatis和jdbc比有什么好处
+防止sql注入如何实现
+
+### 一个端口的连接数太多
+Linux中，一个端口能够接受tcp链接数量的理论上限是？无上限
+client端的情况下，最大tcp连接数为65535
+
+server端tcp连接4元组中只有remote ip（也就是client ip）和remote port（客户端port）是可变的，因此最大tcp连接为客户端ip数×客户端port数，对IPV4，不考虑ip地址分类等因素，最大tcp连接数约为2的32次方（ip数）×2的16次方（port数），也就是server端单机最大tcp连接数约为2的48次方。
+
+server端，通过增加内存、修改最大文件描述符个数等参数，单机最大并发TCP连接数超过10万 是没问题的
+
+有一个接口一下子快一下子慢
+1）用户怎么排查
+2）开发者怎么排查
+如果是一个数据库接口
+
 ### JVM分哪几个区
+JVM结构
+新生代有什么算法
 
 ### zookeeper的应用场景
 分布式锁
@@ -50,6 +77,10 @@ AOF会开子进程重写。
 #### 主从复制
 主从复制（副本）集群是为了解决多请求，读写分离，高可用，
 分布式是为了解决一个请求的多个步骤。
+
+redis主从同步的问题
+redis集群一致性hash如何解决分布不均匀
+
 数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
 进入redis用`info replication`可以查看主从状态
 
@@ -69,11 +100,16 @@ AOF会开子进程重写。
 
 #### redis 高可用 sentinel
 
+
+redis写失败怎么办
+
 currentHashMap
 mysql 的其他引擎
 设计数据库表
 
 ### 数据库里的乐观锁和悲观锁
+共享锁、排他锁
+
 悲观锁：`select ... for update;` 
    主键明确&有结果行锁，无结果集（查空）无锁。 
    查询无主键或者不走索引`where id<>'66'` `like`，表索 。
@@ -217,6 +253,10 @@ TCP连接状态书上一共11种
 ### 6.数据库最左匹配原理
 
 ### 7.http https
+
+https的过程：
+
+
 ![httphttps.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httphttps.jpg)
 http 有9种方法
 ![https2.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https2.jpg)
@@ -383,7 +423,24 @@ callable
 虚函数表指针： 存在于每个对象中，指向对象所在类的虚函数表的地址。
 多继承：存在多个虚函数表指针。
 
-### 12.
+### 12.千万数据的表怎么优化
+SQL优化：
+1）超过500w要分表
+  数据按照某种规则存储到多个结构相同的表中，例如按 id 的散列值、性别等进行划分
+  水平切分的实现：
+  Merge存储引擎允许将一组使用MyISAM存储引擎的并且表结构相同（即每张表的字段顺序、字段名称、字段类型、索引定义的顺序及其定义的方式必须相同）的数据表合并为一个表，方便了数据的查询。
+```sql
+CREATE TABLE log_merge(  
+    dt DATETIME NOT NULL,  
+    info VARCHAR(100) NOT NULL,  
+    INDEX(dt)  
+) ENGINE = MERGE UNION = (log_2004, log_2005, log_2006, log_2007)  
+INSERT_METHOD = LAST;
+```
+2）Explain
+3）减少查询列
+4）减少返回的行 limit
+5）拆分大的delete和insert，不然会一次锁住很多数据
 
 ### 13. 
 
@@ -1211,8 +1268,13 @@ Cookie的 `SameSite`属性strict
 3）会威胁客户隐私
 4）用于跟踪用户访问和状态
 
+cookie有两种
+cookie的实现
+cookie加密
+
 redis string
 redis
+
 ### 56 为什么要把页面放到redis中？
 页面缓存，将整个页面手动渲染，加上所有vo，设定有效期1分钟，让用户1看到的是1分钟前的页面
 详情页应该不能放（？）库存更新怎么办（？）
@@ -1335,6 +1397,8 @@ sed 替换
 awk 切片统计
 
 终端 `/dev/tty`当前终端
+
+vi： ZZ：命令模式下保存当前文件所做的修改后退出vi；
 
 
 ### netstat
@@ -1483,6 +1547,12 @@ HDFS 文件只能写1次 除了 append和truncate 而且不能多并发写。
 2）容灾设计
 3）高可用系统
 
+
+#### rpc通信
+jsonrpc没法区分int和long
+
+#### 通信开销
+加密和压缩
 
 Nginx是如何工作的？是如何配置的？
 
