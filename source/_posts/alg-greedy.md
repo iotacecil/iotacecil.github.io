@@ -4,6 +4,85 @@ date: 2019-03-21 18:59:20
 tags: [alg]
 categories: [算法备忘]
 ---
+### 316 Remove Duplicate Letters 删掉重复字符保证原顺序的   最小字典序
+
+### 122 买卖任意次数的股票
+{% note %}
+Input: [7,1,5,3,6,4]
+Output: 7
+Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4. Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+{% endnote %}
+熟练
+只要后一天涨就买。
+
+```java
+public int maxProfit(int[] prices) {
+    int n = prices.length;
+    int rst = 0;
+    for(int i = 1;i<n;i++){
+        if(prices[i]-prices[i-1]>0){
+            rst += prices[i]-prices[i-1];
+        }
+    }
+    return rst;
+}
+```
+
+### 45. Jump Game II
+{% note %}
+Input: [2,3,1,1,4]
+Output: 2
+{% endnote %}
+
+```java
+public int jump(int[] nums) {
+    int cur = 0;
+    int cnt = 0;
+    int max = nums[0];
+    for(int i = 0;i<nums.length;i++){
+        if(cur<i){
+            cur=max;
+            cnt++;
+        }
+        max = Math.max(max,i+nums[i]);
+    }
+    return cnt;
+}
+```
+
+### lg1658
+现在你手上有N种不同面值的硬币，每种硬币有无限多个。为了方便购物，你希望带尽量少的硬币，但要能组合出1到X之间的任意值。
+{% note %}
+20 4
+1 2 5 10
+
+5
+{% endnote %}
+从1开始凑，然后凑2，用面值最大的(1,2)凑。
+然后可以凑到的最大值为3，下面凑4，用面值最大的(1,2,2)凑。
+当前可以凑到最大值是5，下次凑6，用面值最大的(1,2,2,5)凑。
+当前可以凑到的最大为10,下次凑11，用面值最大的(1,2,2,5,10)凑。
+可以凑的的总数>20 ok
+
+```java
+Arrays.sort(coins);
+if(coins[0]!=1) System.out.println(-1);
+else{
+    int cnt = 0;
+    //凑最大面值
+    int sum = 0;
+    while (sum < x){
+        int i;
+        for (i =n-1; i>=0  ; i--) {
+            if (coins[i] <= sum + 1) break;
+        }
+            cnt++;
+            sum+=coins[i];
+    }
+    System.out.println(cnt);
+}
+```
+
 ### 135 Candy 分数发糖
 你需要按照以下要求，帮助老师给这些孩子分发糖果：
 每个孩子至少分配到 1 个糖果。
