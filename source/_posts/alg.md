@@ -70,6 +70,7 @@ The longest subsequence that is fibonacci-like:
 Input: [1,3,2,3,1]
 Output: 2
 {% endnote %}
+
 ```java
 public static int ret;
 public static int reversePairs(int[] nums) {
