@@ -4,6 +4,9 @@ date: 2018-03-16 15:31:34
 tags:
 categories: [数据库dockerHadoop微服务]
 ---
+### on duplicate key update
+如果存在则更新,如果不存在则新增
+
 ### 完全串行化的读,每次读都需要获得表级共享锁,读写相互都会阻塞
 下面有关事务隔离级别说法正确的是?
 正确答案: A B C D   你的答案: B C D (错误)

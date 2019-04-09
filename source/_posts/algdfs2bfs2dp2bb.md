@@ -4,6 +4,12 @@ date: 2018-09-09 15:22:54
 tags:
 categories: [算法备忘]
 ---
+### 60 Permutation Sequence 字典序第k个排列
+{% note %}
+Input: n = 3, k = 3
+Output: "213"
+{% endnote %}
+
 
 Bellman-Ford复杂度O（VE）还可以用于检查负圈。全部初始化为0而不是INF。如果第n（N个顶点的循环)还更新了 有负圈
 ![bellman.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bellman.jpg)

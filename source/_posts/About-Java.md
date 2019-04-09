@@ -4,6 +4,8 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### Java初始化顺序
+父类的静态成员初始化>父类的静态代码块>子类的静态成员初始化>子类的静态代码块>父类的代码块>父类的构造方法>子类的代码块>子类的构造方法
 
 String的hashCode也是通过对该字符串每个字符的ASC码简单的算术运算所得，这样就可以保证相同的字符串的hashCode相同且equals()为真。
 

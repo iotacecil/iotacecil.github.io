@@ -9,7 +9,20 @@ https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
 https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/Signal.md
 http://www.linya.pub/
 
+https://www.nowcoder.com/discuss/50571?type=2&order=0&pos=21&page=2
+
 https://www.nowcoder.com/discuss/111311
+
+架构扫盲
+https://github.com/doocs/advanced-java
+
+### String2Integer
+
+### 水槽问题
+
+### 字节流和字符流，读取一个配置文件读一行
+
+
 
 ### 反爬虫
 1）单个IP、session统计 对header user-agent、referer检测
@@ -21,7 +34,7 @@ https://www.nowcoder.com/discuss/111311
 wait 方法必须在synchronized内用
 
 ### mybatis和jdbc比有什么好处
-防止sql注入如何实现
+持久层框架 防止sql注入如何实现
 
 ### 一个端口的连接数太多
 Linux中，一个端口能够接受tcp链接数量的理论上限是？无上限
@@ -41,6 +54,7 @@ JVM结构
 新生代有什么算法
 
 ### zookeeper的应用场景
+分布式协调 节点注册监听
 分布式锁
 
 ### 索引什么时候会失效
@@ -50,12 +64,33 @@ JVM结构
 ### Spring容器初始化过程
 ioc aop原理
 
+#### SpringMVC工作原理
+1）servlet一共三个层次 
+HttpServletBean:直接继承java的HttpServlet，将Servlet中的配置参数设置到相应的属性。
+
+FrameworkServlet：初始化WebApplicationContext 抽象类静态方法 将不同类型请求合并到一个方法统一处理。还发布了一个事件。
+
+DispatcherServlet:初始化9大组件
+ doService方法保存redirect转发的参数和include的request快照。
+ 调用的doDispatch方法4步
+  1）根据request找到handler（@RequestMapping）
+  2）用mapper根据handler找到handlerAdapter 处理不同参数（不只是request和response）
+  3）handlerAdapter处理，先执行拦截器。Last-Modified
+  4）processDispatchResult处理View
+
 ### 协程
 
 ### Java内存分配策略
 Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后被拆散为标量类型并间接地在栈上分配的情况），对象主要分配在新生代的Eden区上，如果启动了本地线程分配缓冲，则将按线程优先在TLAB（Thread Local Allocation Buffer）上分配。
 
 怎么把对象分配到老年代上
+
+### redis高性能的原因
+1）内存
+2）单线程
+3）网络请求io多路复用
+“多路”指的是多个网络连接，“复用”指的是复用同一个线程。采用多路 I/O 复用技术可以让单个线程高效的处理多个连接请求（尽量减少网络 IO 的时间消耗），且 Redis 在内存中操作数据的速度非常快，也就是说内存内的操作不会成为影响Redis性能的瓶颈，主要由以上几点造就了 Redis 具有很高的吞吐量。
+
 
 ### redis持久化
 持久化方式：
@@ -253,9 +288,15 @@ TCP连接状态书上一共11种
 ### 6.数据库最左匹配原理
 
 ### 7.http https
-
+HTTP+ 加密 + 认证 + 完整性保护 =HTTPS
 https的过程：
+http先和ssl通信，再ssl和tcp通信。
+在交换密钥环节使用【公开密钥】加密方式，
+之后的建立通信交换报文阶段则使用【共享密钥】加密方式。
 
+对称和非对称 随机码用来？
+
+随机码用服务端的公钥加密，
 
 ![httphttps.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httphttps.jpg)
 http 有9种方法
@@ -1195,6 +1236,8 @@ public:
 ### 51ThreadPoolExecutor 怎么实现的
 1）线程池状态
 
+ExecutorService 源码
+
 ### 52 Java多继承
 https://juejin.im/post/5a903ef96fb9a063435ef0c8#heading-1
 内部类:每个内部类都能独立地继承自一个（接口的）实现，内部类允许继承多个非接口类型.
@@ -1271,6 +1314,8 @@ Cookie的 `SameSite`属性strict
 cookie有两种
 cookie的实现
 cookie加密
+
+原本需要由web服务器创建会话的过程转交给Spring-Session进行创建，本来创建的会话保存在Web服务器内存中，通过Spring-Session创建的会话信息可以保存第三方的服务中，如：redis,mysql等
 
 redis string
 redis
