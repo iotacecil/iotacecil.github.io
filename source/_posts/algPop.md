@@ -9,6 +9,36 @@ https://docs.qq.com/sheet/DUGZ6cEtrUFJsSGxP
 
 ### 快速排序
 
+### 25 k个一组反转链表
+{% note %}
+Given this linked list: 1->2->3->4->5
+For k = 2, you should return: 2->1->4->3->5
+For k = 3, you should return: 3->2->1->4->5
+{% endnote %}
+
+```java
+public ListNode reverseKGroup(ListNode head, int k) {
+    int cnt = 0;
+    ListNode cur = head;
+    while(cur!=null && cnt <k){
+        cur = cur.next;
+        cnt++;
+    }       
+    if(cnt == k){
+        // 4->3->5
+         cur = reverseKGroup(cur,k);
+        while(cnt-->0){
+            ListNode next = head.next;
+            head.next = cur;
+            cur = head;
+            head = next;
+        }
+        // 关键
+        head = cur;
+    }  
+    return head;   
+}
+```
 
 ### 24 两个一组反转链表
 {% note %}
@@ -29,10 +59,79 @@ public ListNode swapPairs(ListNode head) {
 }
 ```
 
-
-### 42 数组存水
+### 11 选两点容纳的水面积最大
 {% note %}
+Input: [1,8,6,2,5,4,8,3,7]
+Output: 49
 {% endnote %}
+
+```java
+public int maxArea(int[] height) {
+    int n = height.length;
+    int left = 0;
+    int right = n-1;
+    int rst = 0;
+    while(left<right){
+        int tmp = Math.min(height[left],height[right]) * (right-left);
+        rst = Math.max(rst,tmp);
+        if(height[left] >height[right])right--;
+        else left++;
+    }
+    return rst;
+}
+```
+
+### 42 雨水
+{% note %}
+Input: [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+{% endnote %}
+
+正确做法：双指针
+```java
+public int trap(int[] A){
+    int a=0;
+    int b=A.length-1;
+    int max=0;
+    int leftmax=0;
+    int rightmax=0;
+    while(a<=b){
+        leftmax=Math.max(leftmax,A[a]);
+        rightmax=Math.max(rightmax,A[b]);
+        if(leftmax<rightmax){
+            max+=(leftmax-A[a]);
+            a++;
+        }
+        else{
+            max+=(rightmax-A[b]);
+            b--;
+        }
+    }
+    return max;
+}
+```
+
+两个数组做法：left保存当前位置左边的max。right保存当前位置右边的max。
+```java
+public int trap(int[] height) {
+  int n  = height.length;
+  int[] left = new int[n];
+  int[] right = new int[n];
+  for(int i = 1;i<n;i++){
+      left[i] = Math.max(left[i-1],height[i-1]);
+  }
+  for(int i = n-2;i>=0;i--){
+      right[i] = Math.max(right[i+1],height[i+1]);
+  }
+    int rst = 0;
+    for(int i = 0;i<n;i++){
+        int tmp = Math.min(left[i],right[i]) - height[i];
+        if(tmp >0)
+        rst += tmp;
+    }
+    return rst;
+}
+```
 
 ### 146 LRU cache HashMap<Integer,DoubleLinkedList>
 [Cache replacement policies](https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU)
@@ -224,10 +323,6 @@ def reverseList(self, head):
 
 转成栈浪费空间并且代码复杂
 
-### 24 Swap Nodes in Pairs 两个一组反转链表
-{% note %}
-Given 1->2->3->4, you should return the list as 2->1->4->3.
-{% endnote %}
 
 ### 141链表环检测
 空间O(1) 快慢指针：快指针走2步，慢指针走一步，当快指针遇到慢指针

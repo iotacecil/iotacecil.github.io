@@ -4,6 +4,40 @@ date: 2018-03-08 13:49:14
 tags: [CentOS]
 category: [JVMlinux常用备注nginxredis配置]
 ---
+### 重装mysql
+```shell
+1 删除Mysql
+
+   yum remove  mysql mysql-server mysql-libs mysql-server;
+
+    find / -name mysql 将找到的相关东西delete掉；
+
+    rpm -qa|grep mysql(查询出来的东东yum remove掉)
+
+
+
+2 安装Mysql
+
+     yum install  mysql mysql-server mysql-libs mysql-server;
+```
+mysql远程连接
+```sql
+mysql>update user set password=PASSWORD(‘123456’) where User='root';
+mysql -u root –p
+mysql>use mysql;
+mysql>update user set host = '%' where user = 'root';
+mysql>select host, user from user;
+
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
+
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'jack'@’10.10.50.127’ IDENTIFIED BY '654321' WITH GRANT OPTION;
+mysql>FLUSH RIVILEGES
+
+mysql>FLUSH PRIVILEGES
+#退出MySQL服务器
+mysql>EXIT
+```
+
 ### top
 http://www.cnblogs.com/peida/archive/2012/12/24/2831353.html
 
