@@ -4,6 +4,20 @@ date: 2018-04-23 08:59:30
 tags:
 category: [cpp学习操作系统]
 ---
+### 有符号和无符号
+```cpp
+#include<stdio.h>
+int main(void){
+    unsigned int a = 1;
+    signed int b = -3;
+    int c;
+    (a+b>0)?(c=1):(c=0);
+    printf("%d",c);
+    return 0;
+}
+```
+无符号号整数和有符号整数相加，有符号整数转化为无符号整数.
+
 
 ### 赋值兼容规则也适用于多重继承的组合
 赋值兼容规则是指在需要【基类对象】的任何地方都可以使用【公有派生类的对象】来替代。

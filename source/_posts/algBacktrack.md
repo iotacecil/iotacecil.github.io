@@ -4,6 +4,11 @@ date: 2019-03-07 21:35:31
 tags: [alg]
 categories: [算法备忘]
 ---
+
+### 32 下一个排列
+
+
+
 ### 139 word break 用字典中的此能否拆分字符串
 {% note %}
 输入: s = "applepenapple", wordDict = ["apple", "pen"]

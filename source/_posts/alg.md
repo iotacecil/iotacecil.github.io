@@ -2398,48 +2398,6 @@ Explanation: The region on the left only builds two new walls.
 
 ---
 
-### lt912 最佳见面地点
->现在有三人分别居住在(0,0), (0,4), 和 (2,2)
-```
-1 - 0 - 0 - 0 - 1
-|   |   |   |   |
-0 - 0 - 0 - 0 - 0
-|   |   |   |   |
-0 - 0 - 1 - 0 - 0
-```
-点(0, 2)是最佳见面地点，最小的路程总和为2+2+2=6，返回6。
-
-思路：只要见面地点在A,B中间，到A,B的花费都是 AB长度。
-
-```java
-public int minTotalDistance(int[][] grid) {
-    int n = grid.length;
-    int m = grid[0].length;
-    List<Integer> cols = new ArrayList<>();
-    List<Integer> rows = new ArrayList<>();
-    for(int i =0;i<n;i++){
-        for(int j = 0;j<m;j++){
-            if(grid[i][j] == 1){
-                cols.add(j);
-                rows.add(i);
-            }
-        }
-    }
-    cols.sort(Integer::compareTo);
-    rows.sort(Integer::compareTo);
-    int sum = 0;
-    int l = 0;
-
-    for(int i =0;i<cols.size()/2;i++){
-        sum += cols.get(cols.size()-1 - i)-cols.get(i);
-    }
-    for(int i =0;i<rows.size()/2;i++){
-        sum += rows.get(rows.size()-1 - i)-rows.get(i);
-    }
-    return sum;
-}
-```
-
 
 ### 456 !132 pattern
 > Input: [3, 1, 4, 2]

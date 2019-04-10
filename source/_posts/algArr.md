@@ -4,6 +4,76 @@ date: 2019-03-04 19:38:25
 tags: [alg]
 categories: [算法备忘]
 ---
+
+
+### lt912 最佳见面地点 meeting point
+{% note %}
+现在有三人分别居住在(0,0), (0,4), 和 (2,2)
+```
+1 - 0 - 0 - 0 - 1
+|   |   |   |   |
+0 - 0 - 0 - 0 - 0
+|   |   |   |   |
+0 - 0 - 1 - 0 - 0
+```
+点(0, 2)是最佳见面地点，最小的路程总和为2+2+2=6，返回6。
+{% endnote %}
+
+思路：只要见面地点在A,B中间，到A,B的花费都是 AB长度。
+把横/纵坐标排序，每次取最大最小的两个，差就是AB。
+
+```java
+public int minTotalDistance(int[][] grid) {
+    int n = grid.length;
+    int m = grid[0].length;
+    List<Integer> cols = new ArrayList<>();
+    List<Integer> rows = new ArrayList<>();
+    for(int i =0;i<n;i++){
+        for(int j = 0;j<m;j++){
+            if(grid[i][j] == 1){
+                cols.add(j);
+                rows.add(i);
+            }
+        }
+    }
+    cols.sort(Integer::compareTo);
+    rows.sort(Integer::compareTo);
+    int sum = 0;
+    int l = 0;
+
+    for(int i =0;i<cols.size()/2;i++){
+        sum += cols.get(cols.size()-1 - i)-cols.get(i);
+    }
+    for(int i =0;i<rows.size()/2;i++){
+        sum += rows.get(rows.size()-1 - i)-rows.get(i);
+    }
+    return sum;
+}
+```
+
+### 462 选一个数字 +1 / -1 元素相等的最小步数
+{% note %}
+Input:
+[1,2,3]
+
+Output:
+2
+{% endnote %}
+
+```java
+public int minMoves2(int[] nums) {
+    Arrays.sort(nums);
+    int i = 0, j = nums.length-1;
+    int count = 0;
+    while(i < j){
+        count += nums[j]-nums[i];
+        i++;
+        j--;
+    }
+    return count;
+}
+```
+
 ### 719 数组中两两匹配，第k小的两数之差
 {% note %}
 nums = [1,3,1]

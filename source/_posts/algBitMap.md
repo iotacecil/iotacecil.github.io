@@ -5,6 +5,20 @@ tags: [alg]
 categories: [算法备忘]
 ---
 
+### CF558C Amr and Chemistry
+每个元素可以乘2 除2 变成相同元素的最少操作数
+思路：相当于可以左移1，右移1
+记录每个数字到变成每个数字的最小步数，而且变成的这个数一定是<=最大的数的 
+{% note %}
+输入：
+3
+3 5 6
+输出：
+5
+{% endnote %}
+内存超
+
+
 ### 318 ！Maximum Product of Word Lengths 字符串数组中不共享字符的字符串长度的乘积
 {% note %}
 find the maximum value of length(word[i]) * length(word[j])

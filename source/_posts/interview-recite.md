@@ -34,6 +34,8 @@ https://github.com/doocs/advanced-java
 wait 方法必须在synchronized内用
 
 ### mybatis和jdbc比有什么好处
+1)动态sql
+
 持久层框架 防止sql注入如何实现
 
 ### 一个端口的连接数太多
@@ -268,7 +270,7 @@ MSL是任何IP数据报的最长存活时间。
 
 #### TIME_WAIT 和 CLOSE_WAIT
 1）发送FIN变成FIN_WAIT1，然后收到对方ACK+FIN，发完ACK
-2）FIN_WAIT1 收到ACK之后到FIN_WAIT2，然后收到FIN，发送ACK
+2）FIN_WAIT1 收到ACK之后到FIN_WAIT2，然后收到FIN，发送ACK。如果最后一个ACK失败，重发FIN但是对方已关闭会得到RST，发送FIN方会报错。
 这个状态等2MSL后就CLOSED
 作用：让本连接持续时间内所有的报文都从网络中消失，下个连接中不会出现旧的请求报文。
 
@@ -502,9 +504,9 @@ private void qS(int[] arr,int left,int right){
         // 所以初始化的时候边界都向外扩一格
         int i = left-1;int j = right;
         while (true){
-            while (++i<=right && arr[i] < pivot);
-            while (--j>=left && arr[j] > pivot);
-            // 关键
+            // 关键 i<j
+            while (++i<j && arr[i] <= pivot);
+            while (--j>i && arr[j] >= pivot);
             if(i < j){
                 swap(arr,i , j);
             }
@@ -1127,6 +1129,11 @@ get：同样用这8个随机函数，查看这8位是否都为1。
 ### 48 操作系统 进程通信
 
 进程和线程的区别
+1）地址空间，打开的资源
+2）通信，全局变量：线程通信要加锁
+3）调度和切换：切换快。
+4）进程不是可执行的实体
+
 文件是进程创建的信息逻辑单元
 每个进程有专用的线程表跟踪进程中的线程。和内核中的进程表类似。
 
@@ -1232,6 +1239,34 @@ public:
 静态存储区：内存在程序编译的时候就已经分配好
 已经初始化过的全局变量在.data段，而未初始化的全局变量在.bss段。
 .bss段不占用可执行文件的大小，而是在加载程序的时候由操作系统自动分配并初始化为0
+
+#### 目标文件
+用于二进制文件、可执行文件、目标代码、共享库和核心转储 的标准文件格式。
+分为3种：
+1）可重定位的目标文件 .o文件 .a静态库文件 未链接 可以经过链接生成可执行的目标文件和可被共享的目标文件。
+没有程序进入点。
+2）可执行的目标文件 链接处理之后的
+3）可【共享】的目标文件 .so。 动态库文件。
+
+#### java static
+static方法不能被覆盖override：因为方法覆盖是运行时动态绑定的，static是编译时静态绑定的。
+
+### Hashtable
+Hashtable不允许键或者值是null
+
+### LinkedList
+LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用.
+
+### Comparable和Comparator接口 区别
+Comparable 是该类支持排序
+Comparator 是外部比较器
+
+### Enumeration接口和Iterator接口 的区别
+Enumeration快
+Iterator允许调用者删除底层集合里面的元素
+
+### finalize 方法
+JNI(Java Native Interface)调用non-Java程序（C或C++），finalize()的工作就是回收这部分的内存。
 
 ### 51ThreadPoolExecutor 怎么实现的
 1）线程池状态
@@ -1628,3 +1663,92 @@ volatile变量定义了8种操作顺序的规则，能保证代码执行的顺�
 7）store 工作内存传入主内存
 8）write 将store的值放入主内存
 
+### 快速失败fail-fast 和 安全失败 fail-safe
+快速失败：迭代器遍历过程中，集合对象修改会改modCount，和expected不一样，报错。java.util包下的集合类都是 快速失败的。
+
+安全失败：遍历是先拷贝在遍历。遍历过程中的修改不会影响迭代器，不会报错。java.util.concurrent包下都是安全失败。
+
+
+### 人民币转换
+链接：https://www.nowcoder.com/questionTerminal/00ffd656b9604d1998e966d555005a4b?commentTags=Java
+输入一个double数
+输出人民币格式
+1、中文大写金额数字前应标明“人民币”字样。中文大写金额数字应用壹、贰、叁、肆、伍、陆、柒、捌、玖、拾、佰、仟、万、亿、元、角、分、零、整等字样填写。（30分） 
+
+2、中文大写金额数字到“元”为止的，在“元”之后，应写“整字，如￥ 532.00应写成“人民币伍佰叁拾贰元整”。在”角“和”分“后面不写”整字。（30分） 
+
+3、阿拉伯数字中间有“0”时，中文大写要写“零”字，阿拉伯数字中间连续有几个“0”时，中文大写金额中间只写一个“零”字，如￥6007.14，应写成“人民币陆仟零柒元壹角肆分“。（
+
+151121.15
+人民币拾伍万壹仟壹佰贰拾壹元壹角伍分
+
+思路：整数部分：
+1）每个数字都是单位+数字（元+个位，十拾十位），
+2）单位顺序完整应该是
+【"元", "拾", "佰", "仟", "万", **"拾", "佰", "仟",** "亿", **"拾", "佰", "仟"**】
+3）对批量0做flag。
+4)如果14去掉1其它都ok。
+
+小数部分题目要求0角1分不用输出角则暴力
+
+```java
+public class Main {
+public static String[] RMB = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
+public static String[] unit1 = {"元", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟"};
+public static String[] unit2 = {"角", "分"};
+
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    while (sc.hasNext()) {
+        String s = sc.next();
+        String result = "";
+        if(s.contains(".")) {
+            String s1 = s.substring(s.indexOf('.') + 1);
+            String s2 = s.substring(0, s.indexOf('.'));
+            result = "人民币" + integer(s2) + decimal(s1);
+        } else
+            result = "人民币" + integer(s) + "整";
+        System.out.println(result);
+    }
+}
+// 处理整数
+public static String integer(String s) {
+    if(s.length() == 1 && s.charAt(0) == '0') return "";//RMB[0]+unit1[0];
+    int[] arr = new int[s.length()];
+    int idx = 0;
+    for (int i = s.length()-1; i >= 0; i -- )
+        arr[idx++] = s.charAt(i)-'0';
+    StringBuilder sb = new StringBuilder();
+    boolean zero = false;
+    for (int i = 0; i < arr.length; i ++ ) {
+        if(!zero && arr[i] == 0){
+            sb.append(RMB[arr[i]]);
+            zero = true;
+        }else if (arr[i] != 0){
+            sb.append(unit1[i] + RMB[arr[i]]);
+            zero = false;
+        }
+    }
+    sb = sb.reverse();
+    if(sb.charAt(0) == '壹' && sb.charAt(1) == '拾') sb.deleteCharAt(0);
+    return sb.toString();
+}
+// 处理小数
+    public static String decimal(String s) {
+        StringBuilder sb = new StringBuilder();
+//        boolean zero = true;
+        for (int i = s.length()-1; i >=0; i -- ) {
+            int tmp = s.charAt(i)-'0';
+            if( tmp ==0)continue;
+            // 1分 0角 输出角
+//            if(!zero || tmp > 0){
+//                sb.append(unit2[i] + RMB[tmp] );
+//                zero = false;
+//            }
+            //不输出角
+            sb.append(unit2[i] + RMB[tmp] );
+        }
+        return sb.length()<1?"整":sb.reverse().toString();
+    }
+
+```
