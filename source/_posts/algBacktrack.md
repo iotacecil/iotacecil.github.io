@@ -4,10 +4,47 @@ date: 2019-03-07 21:35:31
 tags: [alg]
 categories: [算法备忘]
 ---
+### 60 Permutation Sequence 字典序第k个排列
+{% note %}
+Input: n = 3, k = 3
+Output: "213"
+{% endnote %}
+康拓展开：计算排列与字典序排名的映射关系
+
 
 ### 32 下一个排列
+图解
+https://leetcode.com/problems/next-permutation/discuss/13994/Readable-code-without-confusing-ij-and-with-explanation
 
+思路：
+1）找到最后非递增的子数组725321 -> 5321 已经是这4个数字排列的最大值了。
+2）只能增大前面的72，从5321中挑一个比2大最少的数交换，增量最小。
+3）交换完后变成5221反转一下变成最小。
 
+```java
+public void nextPermutation(int[] nums) {
+    int n = nums.length;
+    int idx = n-2;
+    for(;idx>=0;idx--){
+        if(nums[idx] < nums[idx+1])break;
+    }
+    // idx停留在递增前一个 3 2 1 idx = -1
+   if(idx >= 0){
+    int mindif = Integer.MAX_VALUE;
+    int minidx = idx + 1;
+    // 和最右稍大那个换，这样逆序之后最小
+    for(int i = n-1;i >= idx+1;i--){
+        if(nums[i]>nums[idx] && nums[i] - nums[idx] < mindif){
+            mindif = nums[i] - nums[idx];
+            minidx = i;
+        }
+    }
+    swap(nums,idx,minidx);
+   }
+    int left = idx+1; int right = n-1;
+    while(left<right)swap(nums,left++,right--); 
+}
+```
 
 ### 139 word break 用字典中的此能否拆分字符串
 {% note %}

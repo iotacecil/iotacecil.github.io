@@ -36,7 +36,20 @@ wait 方法必须在synchronized内用
 ### mybatis和jdbc比有什么好处
 1)动态sql
 
-持久层框架 防止sql注入如何实现
+持久层框架 
+
+#### 防止sql注入如何实现
+`#{}` 会被替换成sql中的？调用PreparedStatement set进参数
+`${}` 是替换值
+
+字段名不一样，定义resultMap，id标签映射主键并设置column，其他列用result标签
+
+写模糊查询不要写在sql，用`#{}`传入
+
+分页原理：
+物理分页：limit offset
+逻辑分页
+
 
 ### 一个端口的连接数太多
 Linux中，一个端口能够接受tcp链接数量的理论上限是？无上限
@@ -60,6 +73,16 @@ JVM结构
 分布式锁
 
 ### 索引什么时候会失效
+1）有or or中的每个列都要有索引
+2）like 以%开头 
+用覆盖索引index_all 只访问索引的查询
+using index & using where：
+查找使用了索引，但是需要的数据都在索引列中能找到，所以不需要回表查询数据
+例如联合索引a,b一般不能单独用b的索引，但是count就能用
+
+3）如果where=字符串 一定要加引号
+4)如果数据太少还是全表扫描快就不用，如果查询的列太多，数据太多，会直接走主键全表扫描
+5）is null或者is not null
 
 ### 红黑树原理
 
@@ -195,8 +218,21 @@ myisam 缓冲池之缓存索引文件，不缓存数据。 索引和数据分文
 用JAVA JTA API
 
 ### 2.mysql日志文件（不是引擎）
-binlog(逻辑日志，是sql）用于主从复制、慢查询、查询、错误
-重做日志缓存，按一定频率写到重做日志文件 是innodb的。
+binlog(逻辑日志，是sql）记录了数据库更改的所有操作。
+有3种格式 Statement：sql语句。 row：记录行的更改情况，很占空间，而且对复制的网络开销也增加。mixed。
+用于point-in-time恢复、主从复制
+只有事务提交时写磁盘一次。
+
+慢查询、查询、错误
+
+数据完整性：记录每个页的更改物理情况
+redo重做日志缓存，按一定频率写到重做日志文件 是innodb的。
+事务进行中，缓存每秒写入一次文件。
+内部xa事务
+事务提交先写binlog再写reodlog也写入磁盘。
+
+doublewrite：内存中的2M buffer，磁盘上共享表空间的128个页（2M）
+在应用重做日志之前，需要通过副本还原页。页刷新都首先要放入doublewrite。
 
 因为只有一个主键并且建了B+树，所以其他辅助索引的插入是离散的，所以，有insert buffer
 
@@ -379,8 +415,11 @@ struct shared_use_st{
 不是线程同步的posix信号量，是`SYSTEM V`信号量
 信号量能解决 共享内存同步问题
 
+### 9.进程的调度方式
+1）
 
-### 9.线程池的运行流程，使用参数以及方法策略
+
+### 10.线程池的运行流程，使用参数以及方法策略
 
 运行流程：
 1）如果运行的线程小于`corePollsize`，则创建新线程，即使其他事空闲的。
@@ -553,7 +592,7 @@ private static final int COUNTING_SORT_THRESHOLD_FOR_SHORT_OR_CHAR = 3200;
 ```
 {% endfold %}
 
-### 17 堆排序 不需要额外空间
+### 17 堆排序 不需要额外空间 大顶堆
 堆（数组实现的完全二叉树）
 左孩子是`(1+i<<1)` // 1+i<<2 奇数
 右孩子是`(i+1)<<1` //偶数
@@ -563,18 +602,10 @@ private static final int COUNTING_SORT_THRESHOLD_FOR_SHORT_OR_CHAR = 3200;
 线性复杂度将数组调成最大堆O(n)，将堆顶和数组最后交换，堆规模-1，再调成最大堆。
 
 ```java
-void heapSort(int[] arr){
-    int s = arr.length;
-    while (s>0) {
-        s--;
-        //swap(0,n-1)
-        int rst = arr[0];
-        int last = arr[s];
-        arr[s] = rst;
-        if (s != 0) {
-            shifDown(arr, 0, last,s);
-        }
-    }
+heapify(arr);
+for (int i = 0; i <arr.length ; i++) {
+    swap(arr,0,n-1-i);
+    shiftDown(arr,0,n-1-i);
 }
 ```
 
@@ -585,38 +616,40 @@ void heapSort(int[] arr){
 每个叶节点都成一个子堆，下滤操作能完成两个子堆的合并。
 
 ```java
-private int poll(int[] arr){
-    int s = arr.length - 1;
-    int rst = arr[0];
-    int last = arr[s];
-    arr[s] = rst;
-    if(s!=0){
-        shifDown(arr, 0,last,arr.length);
+//大顶堆
+private static void shiftDown(int[] arr,int idx,int n){
+    int lowest = n/2;
+    while(idx < lowest){
+        int left = (idx*2) + 1;
+        int right = left + 1;
+        if(right < n && arr[left]<arr[right] && arr[right]>arr[idx]){
+            swap(arr,idx,right);
+            idx = right;
+        }else if(arr[idx] < arr[left]){
+            swap(arr,idx,left);
+            idx = left;
+        }else break;
     }
-    return rst;
 }
-//down不会超过树的高度 所以O(logn)
-private void shifDown(int[] arr,int i,int x,int len){
-    int s = len;
-    int half = s >>>1;
-    while (i < half){
-        int child = 1 + (i<<1);
-        int el = arr[child];
-        int rc = child+1;
-        if(rc < s && arr[child] < arr[rc]){
-            el = arr[rc];
-            child = rc;
-        }
-        // 大顶堆，如果比叶子都大，下面已经是有序堆了，就完成了
-        if(x >= el){
-            break;
-        }
-        arr[i] = el;
-        i = child;
+
+private static void heapify(int[]arr){
+    int n = arr.length;
+    for(int i = (n-1)/2;i>=0;i--){
+        shiftDown(arr,i,n);
     }
-    arr[i] = x;
 }
-// log(n)
+```
+
+复杂度：
+复杂度每个节点只需要比较的长度最多是这个节点到叶子的高度（而不是在树中的深度）。O(N)的
+因为二叉树越底层节点越多。深度越高节点越多，所以上滤复杂度高。
+
+从右下开始依次下滤，所有叶子节点都不用下滤。
+如果全堆大小为n，内部节点最后一个的idx是`(n/2)-1`
+例子：一共9个节点 各层1，2，4，2个。最后一个内部节点是3，它的右边和下面都是叶子。
+
+向堆添加节点（添加在数组最后，上滤）
+```java
 private void shifUp(int[] arr,int i,int x){
     while (i>0){
         int parent = (i-1)>>>1;
@@ -628,19 +661,7 @@ private void shifUp(int[] arr,int i,int x){
     }
     arr[i] = x;
 }
-void heapify(int[] arr){
-    for (int i = (arr.length >>> 1) - 1; i >= 0; i--)
-        shifDown(arr,i, arr[i],arr.length);
-}
 ```
-
-复杂度：
-复杂度每个节点只需要比较的长度最多是这个节点到叶子的高度（而不是在树中的深度）。O(N)的
-因为二叉树越底层节点越多。深度越高节点越多，所以上滤复杂度高。
-
-从右下开始依次下滤，所有叶子节点都不用下滤。
-如果全堆大小为n，内部节点最后一个的idx是`(n/2)-1`
-例子：一共9个节点 各层1，2，4，2个。最后一个内部节点是3，它的右边和下面都是叶子。
 
 ### 18 没有中序没办法确定二叉树
 前序 根左右
@@ -1171,7 +1192,7 @@ E 以上都不是
 
 
 #### 僵尸进程
-子进程推出，父进程没有调用wait，子进程的进程描述符仍然在系统中。父进程应该调用wait取得子进程的终止状态。
+子进程退出，父进程没有调用wait，子进程的进程描述符仍然在系统中。父进程应该调用wait取得子进程的终止状态。
 如果父进程退出，僵尸进程变成孤儿进程给init（1）进程，init会周期性调用wait清除僵尸进程。
 
 
@@ -1258,8 +1279,8 @@ Hashtable不允许键或者值是null
 LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用.
 
 ### Comparable和Comparator接口 区别
-Comparable 是该类支持排序
-Comparator 是外部比较器
+Comparable 是该类支持排序 实例具有内在的排序关系 不能跨越不同类型的对象比较
+Comparator 是外部比较器，需要一个非标准的排序关系。有多个域，按不同的域排序。加了很多default方法。
 
 ### Enumeration接口和Iterator接口 的区别
 Enumeration快
@@ -1644,6 +1665,10 @@ Nginx是如何工作的？是如何配置的？
 volatile变量定义了8种操作顺序的规则，能保证代码执行的顺序与程序顺序相同。保证long和double不被拆分。
 定义了8个happen before原则
 1）单线程控制流程序次序 2）管程 3）volatile 4）线程启动、5终止、6中断 7）对象finalize 8）传递性
+
+#### 为什么要padding 
+cache伪共享：多个线程读写同一个缓存行，volitale变量无关但是多个线程之间仍然要同步。
+把热点数据隔离在不同的缓存行
 
 #### 8个原子操作
 主内存变量线程独占：
