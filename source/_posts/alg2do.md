@@ -438,11 +438,7 @@ public int smallestDistancePair(int[] nums, int k) {
 
 ### 5只猴子分桃，每次拿走一个正好分成5堆，问桃子数
 
-### !543树中两点的最远路径，自己到自己0
-> [4,2,1,3]路径长度3
 
-![lc545.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc545.jpg)
-将每个点试当成转折点,在更新左右最长高度的同时更新rst = Max(rst,l+r);
 
 ### ！！687树中值相等的点的路径长
 

@@ -22,7 +22,9 @@ https://github.com/doocs/advanced-java
 
 ### 字节流和字符流，读取一个配置文件读一行
 
-
+### http
+如果输入163.com跳转到www.163
+301 重定向
 
 ### 反爬虫
 1）单个IP、session统计 对header user-agent、referer检测
@@ -255,6 +257,7 @@ CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存�
 AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
 
 #### AQS
+AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
 `private volatile int state;`
 `ReentrantLock`用来表示所有者重复获取该锁的次数
 `Semaphore`表示剩余许可数量
@@ -442,6 +445,11 @@ TERMINATED： 标识
 2）cached 处理大量短时间工作任务 长期闲置的时候不会消耗资源
 3）sigle 保证顺序执行多个任务
 4）scheduled 定时、周期工作调度
+最大线程数是Integer.MAX_VALUE，
+空闲工作线程生存时间是0，
+阻塞队列是DelayedWorkQueue，是堆
+
+
 5）`newWrokStealingPoll` 工作窃取
 
 #### 如何优化线程池
@@ -475,12 +483,18 @@ Condition
 2）`await` 会释放锁，阻塞。 `signal`能唤醒。 wait和notify只能建立一个阻塞队列。 
 
 ### 10.3锁
-#### Lock ReenreantLock
+#### Lock ReentreantLock
 1）可中断 2）可定时轮询 3）锁分段，每个链表节点用一个独立的锁，多线程能对链表的不同部分操作。
 4）公平性
+Sync继承AQS，
+公平锁的实现机理在于每次有线程来抢占锁的时候，都会检查一遍有没有等待队列
+
+5）可重入Thread.currentThread()
+6)业务锁
 同一个账户的存钱、取钱业务应该先完整完成一次后才释放锁。
 Lock可以跨方法锁对象：登录加锁，登出释放。
 `tryLock`如果获取锁失败会立刻返回 false，不会阻塞。
+
 
 #### syncronize 可重入
 对象头 Monitor(管程) entry set，wait set
@@ -1057,7 +1071,11 @@ http://blog.jobbole.com/109170/
 ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
 
 资源管理，如果数据库连接对象被收回，但是没有调用close，数据库连接的资源不会释放，数据库连接就少一个了，要放在try()里。
-    
+
+#### full GC
+1）System.gc()方法的调用
+2）老年代空间
+3）Minor GC后超过老年代可用空间
 
 ### 42  2进制字符串转16进制
 ```java

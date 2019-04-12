@@ -4,6 +4,23 @@ date: 2019-03-21 15:40:14
 tags: [alg]
 categories: [算法备忘]
 ---
+### bd02
+有n个勇士，都要要学会k个技能，有m个先知，
+先知教一个勇士1分钟，一个勇士只能同时学1个技能，一个先知同时也只能教一个勇士学技能
+不同先知或不同勇士可以在同一时间教授/学习技能
+一轮可以学m个技能，最有剩下少于m个技能只需要1秒。
+```java
+if (m >= n) {
+   System.out.println(k);
+}
+if (m < n) {
+   double M = (double) (m);
+   double res = (n * k) / M;
+   long result = (long) Math.ceil(res);
+   System.out.println(result);
+}
+```
+
 ### tt03 lc135
 n个人有得分，领取奖品
 如果某个人分数比左右的人高，那么奖品数量比左右多
