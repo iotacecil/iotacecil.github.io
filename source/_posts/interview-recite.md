@@ -22,6 +22,10 @@ https://github.com/doocs/advanced-java
 
 ### 字节流和字符流，读取一个配置文件读一行
 
+### nginx
+并发量一般多少 5w-10w
+
+
 ### http
 如果输入163.com跳转到www.163
 301 重定向
@@ -287,6 +291,9 @@ https://juejin.im/post/5a0444d45188255ea95b66bc
 
 
 ### 4.1 快重传
+当发送方连续收到了3个重复的确认响应的时候，就判断为传输失败，报文丢失，这个时候就利用快重传算法立即进行信息的重传。
+拥塞控制主要通过【慢开始，快重传，快恢复和避免拥塞】来实现的。
+快恢复 与快重传配合使用，当发送方接收到连续三个重复确认请求，为了避免网络拥塞，执行拥塞避免算法
 
 ### TCP滑动窗口window size 16bit位 可靠性+流量控制+拥塞控制
 window 接收端告诉发送端自己还有多少缓冲区可以接收数据rwnd
@@ -323,8 +330,11 @@ TCP连接状态书上一共11种
 #### 和UDP区别
 1）无连接 不可靠 无序
 2）广播
-3）速度快 报头只有8字节 TCP是字节流，数据分段TCP是无边界的，UDP面向报文，保留了边界。
+3）速度快 报头只有8字节 TCP是字节流 20字节（1行32位4字节)，数据分段TCP是无边界的，UDP面向报文，保留了边界。
 
+### ping命令原理
+发送ICMP请求报文（类型8）一定会从host或者getway返回一个ICMP 响应报文(类型0)
+发送一个32字节的测试数据，TTL经过一个路由器就-1. ping 127.0.0.1 TTL是128.
 
 ### 6.数据库最左匹配原理
 
@@ -448,6 +458,7 @@ TERMINATED： 标识
 最大线程数是Integer.MAX_VALUE，
 空闲工作线程生存时间是0，
 阻塞队列是DelayedWorkQueue，是堆
+ScheduledFutureTask实现了Comparable接口，是按照任务执行的时间来倒叙排序的
 
 
 5）`newWrokStealingPoll` 工作窃取
@@ -1293,6 +1304,10 @@ static方法不能被覆盖override：因为方法覆盖是运行时动态绑定
 ### Hashtable
 Hashtable不允许键或者值是null
 
+### ArrayList
+每次扩容1.5倍
+`int newCapacity = oldCapacity + (oldCapacity >> 1); `
+
 ### LinkedList
 LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用.
 
@@ -1504,6 +1519,12 @@ ps -ef |grep
 `grep 'abc' abc*` 从abc开头的文件查找
 参数`-o`只输出正则匹配的部分
 参数`-v`输出不含正则的内容
+
+遍历文件夹查找文本
+`grep -r "要查找的内容" ./`
+
+文件夹大小：
+`du -sh .`
 
 如果grep不带文件就等输入
 

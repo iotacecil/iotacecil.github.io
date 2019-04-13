@@ -122,15 +122,6 @@ D时间片用完
 
 ### 链接 文件共享
 
-
-
-下列关于链接描述，错误的是
-正确答案: B   你的答案: A (错误)
-A硬链接就是让链接文件的i节点号指向被链接文件的i节点
-B**硬链接和符号连接都是产生一个新的i节点**
-C链接分为硬链接和符号链接
-D硬连接不能链接目录文件
-
 https://www.ibm.com/developerworks/cn/linux/l-cn-hardandsymb-links/index.html#fig2
 
 ![softlink.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/softlink.jpg)

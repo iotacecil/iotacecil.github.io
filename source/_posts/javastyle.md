@@ -66,22 +66,7 @@ Arrays.toString(str.getBytes())
 6.拆分返回String[]`System.out.println(Arrays.toString(c1.split("\\d",4)));`
 7.静态方法`valueOf()`转换各种类型为String
 
----
-```java
-final String b = "b";//变成了常量
-String b1=b+"1";//编译期确定 =>String b2="b1" ==b1
-```
 
-```java
-private static String getString(){//方法在运行期才能确定
-    return "c";}
-main{
-final String c= getString();//加不加final都false 方法一定在运行期确定
-String c1=c+1;
-String c2="c1";
-System.out.println(c1==c2);//不等
-}
-```
 
 ---
 #### 源码：
@@ -186,23 +171,7 @@ JDK 8 中被 MetaSpace（元数据区）替代了。而且，默认缓存大小�
 `-XX:+UseStringDeduplication`
 
 
-jdk1.8
-```java
-// "a"只要出现了就放到常量池
-String s = new String("a");
-// 已经放不进常量池了
-s.intern();
-String s2 = "a";
-//false
-System.out.println(s==s2);
-String s3 = new String("a")+new String("a");
-// 放的是引用
-s3.intern();
-String s4 = "aa";
-//true
-System.out.println(s3==s4);
-```
-![stringintern.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringintern.jpg)
+
 
 
 #### JVM的 Intrinsic
