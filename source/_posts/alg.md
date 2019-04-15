@@ -36,6 +36,18 @@ https://www.nowcoder.com/test/4575457/summary
 
 
 
+
+### 349 数组交集
+{% note %}
+Input: nums1 = [1,2,2,1], nums2 = [2,2]
+Output: [2]
+{% endnote %}
+
+`set1.retainAll(set2);`
+
+### 字符串交集
+
+
 ### 166. Fraction to Recurring Decimal 分数转小数用括号表示循环节
 {% note %}
 Input: numerator = 2, denominator = 3
