@@ -34,7 +34,7 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
-
+### 629 K个逆序对的排列数量
 
 ### 166. Fraction to Recurring Decimal 分数转小数用括号表示循环节
 {% note %}
