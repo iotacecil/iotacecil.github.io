@@ -34,7 +34,7 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
-
+### 629 K个逆序对的排列数量
 
 
 ### 349 数组交集
