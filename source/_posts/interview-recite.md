@@ -90,7 +90,11 @@ using index & using where：
 4)如果数据太少还是全表扫描快就不用，如果查询的列太多，数据太多，会直接走主键全表扫描
 5）is null或者is not null
 
-### 红黑树原理
+### 二叉平衡树的应用 红黑树原理
+
+### 排序 希尔排序复杂度
+
+### 最小生成树的两种算法
 
 ### Spring容器初始化过程
 ioc aop原理
@@ -1301,7 +1305,7 @@ public:
 #### java static
 static方法不能被覆盖override：因为方法覆盖是运行时动态绑定的，static是编译时静态绑定的。
 
-### Hashtable
+### Hashtable 和 HashMap的区别
 Hashtable不允许键或者值是null
 
 ### ArrayList
@@ -1336,6 +1340,10 @@ socket编程
 mq有几种模式
 Binding:Exchange和Queue的虚拟连接
 
+接口和抽象类的区别
+抽象类里面能不能有非抽象方法 能不能被重写
+
+重写和重载的区别
 
 ### 53 sb依赖注入控制反转。
 IOC:控制反转

@@ -353,6 +353,13 @@ f(5)=f(4)+f(3)=1+9+5=15
 f(6)=f(5)+f(4)=1+15+9=25
 f(7)=f(6)+f(5)=25+15+1=41
 
+
+#### 数据结构
+广义表(((a,b,c),d,e,f))的长度是 
+1
+长度：去掉一层括号剩下的是几部分。 
+深度：去掉几层括号可以到最后一部分.
+
 ---
 
 ### 8.网络
@@ -463,3 +470,32 @@ C引用类型一般都具有继承性，但是值类型一般都是封装的，�
 D值类型变量的作用域主要是在栈上分配内存空间内，而引用类型变量作用域主要在分配的堆上。
 
 跟作用域没关系
+
+### 14. 泛型
+JVM p251
+```java
+public class Test {
+    public static void main(String[] args) {
+        Test t = new Test();
+        t.method(null);
+    }
+    public void method(Object o){
+        System.out.println("Object");
+    }
+    public void method(String s){
+        System.out.println("String");
+    }
+}
+```
+答案： String
+方法重载，编译期间静态分派 如果输入一个char去匹配
+1）先安全转型
+char->int>long>float->double
+不会匹配到byte和short 因为转型不安全
+2）在自动装箱
+Character，不会转成Integer
+3）然后转型成父类
+如果有多个父类，按继承关系，从下往上。如果实现了多个接口，优先级是一样的，不写明编译器报错。
+4）可变长参数(char... arg)的优先级最低，而且不会转型成int了
+
+注意重载时是通过静态类型（左边）而不是实际类型（右边）为依据，并且静态类型在编译期可知。
