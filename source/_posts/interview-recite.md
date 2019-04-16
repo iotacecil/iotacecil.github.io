@@ -16,103 +16,21 @@ https://www.nowcoder.com/discuss/111311
 架构扫盲
 https://github.com/doocs/advanced-java
 
-### String2Integer
 
-### 水槽问题
+## 1.数据库
 
-### 字节流和字符流，读取一个配置文件读一行 写入数据库
+mysql 的其他引擎
+设计数据库表
 
-### 一个网址输入之后发生了什么
+### 1.数据库里的乐观锁和悲观锁
+共享锁、排他锁
 
-### 7层模型是哪7层
+悲观锁：`select ... for update;` 
+   主键明确&有结果行锁，无结果集（查空）无锁。 
+   查询无主键或者不走索引`where id<>'66'` `like`，表索 。
+乐观锁：数据库`version`字段
 
-### 数据库隔离界别
-
-
-### nginx
-qps一般多少 5w-10w
-
-nginx的负载均衡策略
-
-### 正向代理和反向代理的区别
-正向代理：隐藏了真实的请求客户端，服务端不知道真实的客户端是谁。需要你主动设置代理服务器ip或者域名进行访问，由设置的服务器ip或者域名去获取访问内容并返回。
-
-反向代理：
-
-其他web服务器有哪些
-
-### nodejs为什么快？
-单进程，异步IO 事件驱动 超过5w
-主进程现在只要专心处理一些与I/O无关的逻辑处理
-
- Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈
-
-### 操作系统 三态转换
-
-
-### Java 类加载的过程
-类加载的过程包括了【加载、验证、准备、解析、初始化】五个阶段
-加载：堆中生成Class对象。静态存储结构放到运行时数据区。
-验证：文件格式、元数据、字节码（数据流、控制流）、符号引用 验证
-准备：分配内存，设初始值
-解析：符号引用->直接引用
-初始化
-
-### http
-如果输入163.com跳转到www.163
-301 重定向
-
-响应码
-
-### 反爬虫
-1）单个IP、session统计 对header user-agent、referer检测
-
-### java8的新特性
-
-### Object有哪些方法
-还有`getClass()` 和`finalize`
-wait 方法必须在synchronized内用
-
-### mybatis和jdbc比有什么好处
-1)动态sql
-
-持久层框架 
-
-#### 防止sql注入如何实现
-`#{}` 会被替换成sql中的？调用PreparedStatement set进参数
-`${}` 是替换值
-
-字段名不一样，定义resultMap，id标签映射主键并设置column，其他列用result标签
-
-写模糊查询不要写在sql，用`#{}`传入
-
-分页原理：
-物理分页：limit offset
-逻辑分页
-
-
-### 一个端口的连接数太多
-Linux中，一个端口能够接受tcp链接数量的理论上限是？无上限
-client端的情况下，最大tcp连接数为65535
-
-server端tcp连接4元组中只有remote ip（也就是client ip）和remote port（客户端port）是可变的，因此最大tcp连接为客户端ip数×客户端port数，对IPV4，不考虑ip地址分类等因素，最大tcp连接数约为2的32次方（ip数）×2的16次方（port数），也就是server端单机最大tcp连接数约为2的48次方。
-
-server端，通过增加内存、修改最大文件描述符个数等参数，单机最大并发TCP连接数超过10万 是没问题的
-
-有一个接口一下子快一下子慢
-1）用户怎么排查
-2）开发者怎么排查
-如果是一个数据库接口
-
-### JVM分哪几个区
-JVM结构
-新生代有什么算法
-
-### zookeeper的应用场景
-分布式协调 节点注册监听
-分布式锁
-
-### 索引什么时候会失效
+### 2.索引什么时候会失效
 1）有or or中的每个列都要有索引
 2）like 以%开头 
 用覆盖索引index_all 只访问索引的查询
@@ -124,7 +42,7 @@ using index & using where：
 4)如果数据太少还是全表扫描快就不用，如果查询的列太多，数据太多，会直接走主键全表扫描
 5）is null或者is not null
 
-### Mysql 有哪些索引
+### 3.Mysql 有哪些索引
 数据结构
 
 物理存储
@@ -132,146 +50,26 @@ using index & using where：
 逻辑角度
 
 
-### java类加载的过程
+### 4.数据库隔离界别
 
+### 5.mybatis和jdbc比有什么好处
+1)动态sql
 
-### 二叉平衡树的应用 红黑树原理
-红黑树确保没有一条路径会比其他路径长出俩倍
-AVL树是严格的平衡二叉树
-如果应用场景中对插入删除不频繁，只是对查找要求较高，那么AVL还是较优于红黑树。
-windows对进程地址空间的管理用到了AVL树
+持久层框架 
 
-### 排序 希尔排序复杂度
-当步长为1时，算法变为普通插入排序
-已知最好n(log^2)n
+### 6.防止sql注入如何实现
+`#{}` 会被替换成sql中的？调用PreparedStatement set进参数
+`${}` 是替换值
 
-### 最小生成树的两种算法
-Prim算法，标记已选点，选标记点可达的最近点标记，直到标记完所有点。
-把点划分为3类：不可达（不可选），可选，已选
-复杂度：邻接矩阵O(v^2) 邻接表O(elog2v)
+字段名不一样，定义resultMap，id标签映射主键并设置column，其他列用result标签
 
-Kruskal算法，存在相同权值的边。
-从权值最小的边开始遍历，直到图的点全部在一个连通分量中。
-复杂度：
+写模糊查询不要写在sql，用`#{}`传入
 
-### Spring容器初始化过程
-ioc aop原理
+### 7.分页原理：
+物理分页：limit offset
+逻辑分页
 
-#### ioc怎么实现
-
-#### Springboot的启动流程
-
-#### SpringMVC工作原理
-1）servlet一共三个层次 
-HttpServletBean:直接继承java的HttpServlet，将Servlet中的配置参数设置到相应的属性。
-
-FrameworkServlet：初始化WebApplicationContext 抽象类静态方法 将不同类型请求合并到一个方法统一处理。还发布了一个事件。
-
-DispatcherServlet:初始化9大组件
- doService方法保存redirect转发的参数和include的request快照。
- 调用的doDispatch方法4步
-  1）根据request找到handler（@RequestMapping）
-  2）用mapper根据handler找到handlerAdapter 处理不同参数（不只是request和response）
-  3）handlerAdapter处理，先执行拦截器。Last-Modified
-  4）processDispatchResult处理View
-
-### 协程
-
-### Java内存分配策略
-Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后被拆散为标量类型并间接地在栈上分配的情况），对象主要分配在新生代的Eden区上，如果启动了本地线程分配缓冲，则将按线程优先在TLAB（Thread Local Allocation Buffer）上分配。
-
-怎么把对象分配到老年代上
-
-### redis高性能的原因
-1）内存
-2）单线程
-3）网络请求io多路复用
-“多路”指的是多个网络连接，“复用”指的是复用同一个线程。采用多路 I/O 复用技术可以让单个线程高效的处理多个连接请求（尽量减少网络 IO 的时间消耗），且 Redis 在内存中操作数据的速度非常快，也就是说内存内的操作不会成为影响Redis性能的瓶颈，主要由以上几点造就了 Redis 具有很高的吞吐量。
-
-
-### redis持久化
-持久化方式：
-1）快照 Mysql Dump和Redis RDB 2）写日志 Mysql Binlog Hbase Hlog Redis AOF
-
-RDB是保存数据库中的键值对，AOF保存redis执行的命令。
-
-#### RDB
-RDB是压缩过的二进制文件,会生成临时文件，把老的RDB文件替换掉。
-BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。copy-on-write策略，但是父进程写入还会做副本 内存开销大。
-触发机制：从节点全量复制主节点会生成RDB文件。 debug reload 、 shutdown。
-缺点磁盘性能，宕机没快照的丢了。但是恢复速度快。
-
-#### AOF
-AOF更新频率通常比RDB高。
-写【命令】先从redis 写到硬盘缓冲区 再根据3种策略（everysec每秒，always，no（操作系统自己刷)）fsync到硬盘AOF文件。
-AOF会开子进程重写。
-
-#### 主从复制
-主从复制（副本）集群是为了解决多请求，读写分离，高可用，
-分布式是为了解决一个请求的多个步骤。
-
-redis主从同步的问题
-redis集群一致性hash如何解决分布不均匀
-
-数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
-进入redis用`info replication`可以查看主从状态
-
-##### 全量复制
-1）第一次是全量复制`full resync` master会`BGSAVE`。
-2）从节点的数据全部清除`Flushing old data`，通过网络接受RDB文件，加载RDB文件到内存。
-`info server |grep run` 
-3）在同步期间master的写命令会单独记录，rdb同步完后通过偏移同步给slave。
-可以看到redis实例的run_id。如果从复制的主节点的id发生变化，则需要全量复制。
-
-![fullsync.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fullsync.jpg)
-
-##### 部分复制
-`info replication` 可以看到master的偏移量`master_repl_offset`和slave的偏移量`slave_repl_offset`，主节点可以看到各个从节点的偏移量。
-偏移量主比从大表示主写入了数据还没同步到从。
-如果主从连接断了，先重连，从服务器发送runid和offset，主服务器发送buffer中的部分数据。
-
-#### redis 高可用 sentinel
-
-
-redis写失败怎么办
-
-#### currentHashMap
-https://blog.csdn.net/qq_33256688/article/details/79938886  
-1.7之前是头插，1.8之后是尾插
-
-不能为null
-
-hashmap也是尾插
-
-mysql 的其他引擎
-设计数据库表
-
-### 数据库里的乐观锁和悲观锁
-共享锁、排他锁
-
-悲观锁：`select ... for update;` 
-   主键明确&有结果行锁，无结果集（查空）无锁。 
-   查询无主键或者不走索引`where id<>'66'` `like`，表索 。
-乐观锁：数据库`version`字段
-
-### Hash碰撞的方法
-1）开放地址法 开放地址法分： 线性探测法（会聚集）、平方探测、双散列
-2）链地址法
-
-不成功平均查找长度，要按照冲突解决方法查找到当前位置为空位置。最后/散列函数的mod（hash函数的分类个数）
-
-### 1.泛型的好处
-泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。
-用同一个调用形式，既能调用派生类又能调用基类的同名函数。
-
-方法的重载和重写都是实现多态的方式，区别在于前者实现的是编译时的多态性，而后者实现的是运行时的多态性。
-
-- 为什么不能根据返回类型来区分重载?
-因为调用时不能指定类型信息，编译器不知道你要调用哪个函数。
-
-虚函数是实现多态 "动态编联”的基础，C++中如果用基类的指针来析构子类对象，基类的析构要加`virtual`，不然不会调用子类的析构，会内存泄漏。
-
-### 2.数据库索引INNDB的好处
+### 8.数据库索引INNDB的好处
 事务，主键索引，外键
 自增长列必须是主键，索引的第一个列，而且因为不是表锁要考虑并发增长。
 innodb其实不是根据每个记录产生行锁的，根据页加锁，而且用位图。
@@ -282,9 +80,6 @@ innodb其实不是根据每个记录产生行锁的，根据页加锁，而且�
 
 redo 保证事务的一致性、持久性。undo 保证事务的一致性（回滚）和MVCC多版本并发控制。
 
-行锁会用gap锁锁住一个区间，阻止多个事务插入到同一范围内。是为了解决幻读问题。
-一个事务select * from t where a>2 for update;对[2+)加锁，另一个事务插入5失败。
-
 不走索引表锁。
 
 myisam 缓冲池之缓存索引文件，不缓存数据。 索引和数据分文件。
@@ -292,11 +87,7 @@ myisam 缓冲池之缓存索引文件，不缓存数据。 索引和数据分文
 ### 脏读
 脏页是最终一致性的，数据库实例内存和磁盘异步造成的。脏（数据）读违反了隔离性。
 
-### XA事务 分布式事务
-事务管理器（Mysql客户端）和资源管理器（Mysql数据库）之间用两阶段提交，等所有参与全局事务的都能提交再提交
-用JAVA JTA API
-
-### 2.mysql日志文件（不是引擎）
+### 9.mysql日志文件（不是引擎）
 binlog(逻辑日志，是sql）记录了数据库更改的所有操作。
 有3种格式 Statement：sql语句。 row：记录行的更改情况，很占空间，而且对复制的网络开销也增加。mixed。
 用于point-in-time恢复、主从复制
@@ -315,6 +106,21 @@ doublewrite：内存中的2M buffer，磁盘上共享表空间的128个页（2M�
 
 因为只有一个主键并且建了B+树，所以其他辅助索引的插入是离散的，所以，有insert buffer
 
+#### mysql为什么可重复读
+不可重复读重点在于update和delete，而幻读的重点在于insert。
+幻读：虽然可重复读对第一次读到的数据加锁，但是插入还是可以的，就多了一行。
+
+因为binlog的Statement以commit顺序
+可重复读会对读取到的数据进行加锁（行锁），保证其他事务无法修改这些已经读过的数据，
+
+MVCC
+每个数据行会添加两个额外的隐藏列，分别记录这行数据何时被创建以及何时被删除，这里的时间用版本号控制
+
+所有的SELECT操作无需加锁，因为即使所读的数据在下一次读之前被其他事务更新了
+
+行锁会用gap锁锁住一个区间，阻止多个事务插入到同一范围内。是为了解决幻读问题。
+一个事务select * from t where a>2 for update;对[2+)加锁，另一个事务插入5失败。
+
 #### 主从复制
 主节点创建线程发送binlog，读取binlog时会加锁。
 从节点I/O线程接受binlog，保存在relaylog。
@@ -323,34 +129,54 @@ doublewrite：内存中的2M buffer，磁盘上共享表空间的128个页（2M�
 主节点会为每一个当前连接的从节点建一个binary log dump 进程，而每个从节点都有自己的I/O进程，SQL进程。
 
 
+### 10.数据库最左匹配原理
 
-### 3.CAS算法原理？优缺点？
-https://juejin.im/post/5ba66a7ef265da0abb1435ae 
-非阻塞算法：一个线程的失败或者挂起不会导致其他线程也失败或者挂起。
-无锁算法：算法的每个步骤，都存在某个线程能执行下去。多个线程竞争CAS总有一个线程胜出并继续执行。
+---
+## 2.网络 web服务器
 
-CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存位置，旧的预期值，新值，
-对于多个状态变量的场景，通过`AtomicReference`包装这个对象，每次更新先获取旧值，再创建新值，用这两个值进行CAS原子更新。
+### 1.一个端口的连接数太多
+Linux中，一个端口能够接受tcp链接数量的理论上限是？无上限
+client端的情况下，最大tcp连接数为65535
 
-#### CAS 实现原子操作的三大问题
-1) ABA问题 `AtomicStampedReference` 不可变对象pair
-2）循环CPU开销  JVM pause指令
-3）多个共享变量 `AtomicReference`
+server端tcp连接4元组中只有remote ip（也就是client ip）和remote port（客户端port）是可变的，因此最大tcp连接为客户端ip数×客户端port数，对IPV4，不考虑ip地址分类等因素，最大tcp连接数约为2的32次方（ip数）×2的16次方（port数），也就是server端单机最大tcp连接数约为2的48次方。
 
-AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
+server端，通过增加内存、修改最大文件描述符个数等参数，单机最大并发TCP连接数超过10万 是没问题的
 
-#### AQS
-AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
-`private volatile int state;`
-`ReentrantLock`用来表示所有者重复获取该锁的次数
-`Semaphore`表示剩余许可数量
-`FutureTask`用于表示任务状态(现在FutureTask不用AQS了)但也是state
+有一个接口一下子快一下子慢
+1）用户怎么排查
+2）开发者怎么排查
+如果是一个数据库接口
 
+### 2.反爬虫
+1）单个IP、session统计 对header user-agent、referer检测
 
+### 3.7层模型是哪7层
 
-当线程尝试更改AQS状态操作获得失败时，会将Thread对象抽象成Node对象 形成CLH队列，LIFO规则。
+### 4.http
+如果输入163.com跳转到www.163
+301 重定向
 
-### 4.为什么是三次握手
+响应码
+
+### 5.nginx
+qps一般多少 5w-10w
+
+nginx的负载均衡策略
+
+### 6.正向代理和反向代理的区别
+正向代理：隐藏了真实的请求客户端，服务端不知道真实的客户端是谁。需要你主动设置代理服务器ip或者域名进行访问，由设置的服务器ip或者域名去获取访问内容并返回。
+
+反向代理：
+
+其他web服务器有哪些
+
+### 7.nodejs为什么快？
+单进程，异步IO 事件驱动 超过5w
+主进程现在只要专心处理一些与I/O无关的逻辑处理
+
+ Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈
+
+### 8.为什么是三次握手
 三次握手的过程：
 https://juejin.im/post/5a0444d45188255ea95b66bc
 客户端 SYN=1+序号a ， 
@@ -368,23 +194,36 @@ https://juejin.im/post/5a0444d45188255ea95b66bc
 首次握手隐患：服务器收到ACK 发送SYN-ACK之后没有回执，会重发SYN-ACK。产生SYN flood。
 用`tcp_syncookies` 参数
 
+### 9.拥塞控制的方法
 
-### 4.1 快重传
+快恢复：网络拥塞后ssthresh设为拥塞的一半，cwnd不是变成1再慢开始
+
+### 10.快重传
 当发送方连续收到了3个重复的确认响应的时候，就判断为传输失败，报文丢失，这个时候就利用快重传算法立即进行信息的重传。
 拥塞控制主要通过【慢开始，快重传，快恢复和避免拥塞】来实现的。
 快恢复 与快重传配合使用，当发送方接收到连续三个重复确认请求，为了避免网络拥塞，执行拥塞避免算法
 
-### TCP滑动窗口window size 16bit位 可靠性+流量控制+拥塞控制
+### 11.可靠传输的方法
+1.确认重传
+2.数据校验
+3.数据合理分片和排序
+- UDP：IP数据报大于1500字节,大于MTU.这个时候发送方IP层就需要分片(fragmentation).把数据报分成若干片,使每一片都小于MTU.而接收方IP层则需要进行数据报的重组.这样就会多做许多事情,而更严重的是,由于UDP的特性,当某一片数据传送中丢失时,接收方便无法重组数据报.将导致丢弃整个UDP数据报.
+- TCP会按MTU合理分片，接收方会缓存未按序到达的数据，重新排序后再交给应用层。
+4、流量控制：当接收方来不及处理发送方的数据，能提示发送方降低发送的速率，防止包丢失。
+5、拥塞控制：当网络拥塞时，减少数据的发送。
+
+
+#### TCP滑动窗口window size 16bit位 可靠性+流量控制+拥塞控制
 window 接收端告诉发送端自己还有多少缓冲区可以接收数据rwnd
 option中还有一个窗口扩大因子
 
-### 5.为什么四次分手
+### 12.为什么四次分手
 1)由于TCP连接是全双工的，因此每个方向都必须单独进行关闭。
     当一方完成它的数据发送任务后就能发送一个FIN来终止这个方向的连接。
     收到一个 FIN只意味着这一方向上没有数据流动，一个TCP连接在收到一个FIN后仍能发送数据。首先进行关闭的一方将执行主动关闭，而另一方执行被动关闭。
 
 
-#### 为什么要TIME_WAIT等2MSL  最长报文段寿命
+### 13.为什么要TIME_WAIT等2MSL  最长报文段寿命
 1）可靠地实现TCP全双工连接终止。等最后一个ACK到达。
 MSL是任何IP数据报的最长存活时间。
 如果没收到ACK，则被动方重发FIN，再ACK正好是两个MSL。
@@ -393,7 +232,7 @@ MSL是任何IP数据报的最长存活时间。
 2)让本连接持续时间内所有的报文都从网络中消失，下个连接中不会出现旧的请求报文。
 为什么是2MSL是让某个方向上最多存活MSL被丢弃，另一个方向上的应答最多存活MSL被丢弃。
 
-#### TIME_WAIT 和 CLOSE_WAIT
+### 14.TIME_WAIT 和 CLOSE_WAIT
 1）发送FIN变成FIN_WAIT1，然后收到对方ACK+FIN，发完ACK
 2）FIN_WAIT1 收到ACK之后到FIN_WAIT2，然后收到FIN，发送ACK。如果最后一个ACK失败，重发FIN但是对方已关闭会得到RST，发送FIN方会报错。
 这个状态等2MSL后就CLOSED
@@ -406,21 +245,26 @@ CLOSE_WAIT 被动关闭后没有释放连接，一般是代码写的有问题。
 
 TCP连接状态书上一共11种
 
-#### 和UDP区别
+### 15.和UDP区别
 1）无连接 不可靠 无序
 2）广播
 3）速度快 报头只有8字节 TCP是字节流 20字节（1行32位4字节)，数据分段TCP是无边界的，UDP面向报文，保留了边界。
 
-### ping命令原理
+### 16.ping命令原理
 发送ICMP请求报文（类型8）一定会从host或者getway返回一个ICMP 响应报文(类型0)
 发送一个32字节的测试数据，TTL经过一个路由器就-1. ping 127.0.0.1 TTL是128.
 
-### HTTP 长连接怎么实现
-HTTP管道是什么
+### 17.输入URL之后经历什么
+1）查DNS，向DNS服务器发UDP包
+2）IP包到网关需要知道网关的MAC地址，用ARP
+3）DNS服务器会去查根据名服务器得到注册的域名服务器
+4）得到IP给浏览器，浏览器，发TCP建立连接
+5）接到重定向到Https，
 
-### 6.数据库最左匹配原理
+### 18.HTTP 长连接怎么实现
+HTTP管道是什么，客户端可以同时发出多个HTTP请求，而不用一个个等待响应
 
-### 7.http https
+### 19.http https
 HTTP+ 加密 + 认证 + 完整性保护 =HTTPS
 https的过程：
 http先和ssl通信，再ssl和tcp通信。
@@ -441,7 +285,14 @@ RSA:
 2）明文+印章（防抵赖）：用自己私钥签名，对方用公钥验签
 使用AOP实现
 
-### 8.进程间通信
+### 20.网络编程的一般步骤
+
+---
+## 3.操作系统 
+
+### 1.三态转换
+
+### 2.进程间通信
 套接字，管道，命名管道、邮件槽、远程过程调用、消息队列，共享内存，信号量,信号。
 
 信号：异步的通知机制，用来提醒进程一个事件已经发生
@@ -510,8 +361,279 @@ struct shared_use_st{
 不是线程同步的posix信号量，是`SYSTEM V`信号量
 信号量能解决 共享内存同步问题
 
-### 9.进程的调度方式
+### 3.进程的调度方式
 1）
+
+
+---
+## 4.java基础
+### 1.Java 类加载的过程
+类加载的过程包括了【加载、验证、准备、解析、初始化】五个阶段
+加载：堆中生成Class对象。静态存储结构（字面量和符号引用）放到运行时数据区。
+验证：文件格式、元数据、字节码（数据流、控制流）、符号引用 验证
+准备：分配内存，设初始值
+解析：符号引用->直接引用
+初始化
+
+### 2.java8的新特性
+
+### 3.Object有哪些方法
+还有`getClass()` 和`finalize`
+wait 方法必须在synchronized内用
+
+### 4.JVM分哪几个区
+虚拟机运行时数据区
+1）程序计数器-多线程轮流切换并分配处理器执行时间，多线程切换后恢复到正确的执行位置。
+2）虚拟机栈
+3）本地方法栈
+
+#### 介绍JVM堆和栈，有什么用
+虚拟机栈：生命周期与线程相同。Java 方法执行的内存模型，局部变量表、返回地址、操作数栈、动态链接（？）
+
+JVM结构
+新生代有什么算法
+
+### 5.Java内存分配策略
+Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后被拆散为标量类型并间接地在栈上分配的情况），对象主要分配在新生代的Eden区上，如果启动了本地线程分配缓冲，则将按线程优先在TLAB（Thread Local Allocation Buffer）上分配。
+
+怎么把对象分配到老年代上
+
+### 6.泛型的好处
+泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。
+用同一个调用形式，既能调用派生类又能调用基类的同名函数。
+
+### 7.方法的重载和重写都是实现多态的方式，
+区别在于前者实现的是编译时的多态性，而后者实现的是运行时的多态性。
+
+- 为什么不能根据返回类型来区分重载?
+因为调用时不能指定类型信息，编译器不知道你要调用哪个函数。
+
+虚函数是实现多态 "动态编联”的基础，C++中如果用基类的指针来析构子类对象，基类的析构要加`virtual`，不然不会调用子类的析构，会内存泄漏。
+
+### 8.虚拟机如何实现多态
+重载：静态分派
+重写：动态分派
+
+
+### 9.除了基本类型还有那些类能表示数字
+包装类，高精度BigDecimal，原子类
+
+
+## 5.分布式
+
+### 1.zookeeper的应用场景
+分布式协调 节点注册监听
+分布式锁
+
+### 2.XA事务 分布式事务
+事务管理器（Mysql客户端）和资源管理器（Mysql数据库）之间用两阶段提交，等所有参与全局事务的都能提交再提交
+用JAVA JTA API
+
+## 6.数据结构
+### 1.二叉平衡树的应用 红黑树原理
+红黑树确保没有一条路径会比其他路径长出俩倍
+AVL树是严格的平衡二叉树
+如果应用场景中对插入删除不频繁，只是对查找要求较高，那么AVL还是较优于红黑树。
+windows对进程地址空间的管理用到了AVL树
+
+### 2.排序 希尔排序复杂度
+当步长为1时，算法变为普通插入排序
+已知最好n(log^2)n
+
+### 3.最小生成树的两种算法
+Prim算法，标记已选点，选标记点可达的最近点标记，直到标记完所有点。
+把点划分为3类：不可达（不可选），可选，已选
+复杂度：邻接矩阵O(v^2) 邻接表O(elog2v)
+
+Kruskal算法，存在相同权值的边。
+从权值最小的边开始遍历，直到图的点全部在一个连通分量中。
+复杂度：
+
+### 4.Hash碰撞的方法
+1）开放地址法 开放地址法分： 线性探测法（会聚集）、平方探测、双散列
+2）链地址法
+
+不成功平均查找长度，要按照冲突解决方法查找到当前位置为空位置。最后/散列函数的mod（hash函数的分类个数）
+
+## 7.框架
+### 1.Spring容器初始化过程
+ioc aop原理
+
+#### 2.ioc怎么实现
+
+#### 3.Springboot的启动流程
+
+#### 4.SpringMVC工作原理
+1）servlet一共三个层次 
+HttpServletBean:直接继承java的HttpServlet，将Servlet中的配置参数设置到相应的属性。
+
+FrameworkServlet：初始化WebApplicationContext 抽象类静态方法 将不同类型请求合并到一个方法统一处理。还发布了一个事件。
+
+DispatcherServlet:初始化9大组件
+ doService方法保存redirect转发的参数和include的request快照。
+ 调用的doDispatch方法4步
+  1）根据request找到handler（@RequestMapping）
+  2）用mapper根据handler找到handlerAdapter 处理不同参数（不只是request和response）
+  3）handlerAdapter处理，先执行拦截器。Last-Modified
+  4）processDispatchResult处理View
+
+
+## 8.并发
+### 1.协程
+
+#### 2.currentHashMap
+https://blog.csdn.net/qq_33256688/article/details/79938886  
+1.7之前是头插，1.8之后是尾插
+
+不能为null
+
+hashmap也是尾插
+
+### 3.CAS算法原理？优缺点？
+https://juejin.im/post/5ba66a7ef265da0abb1435ae 
+非阻塞算法：一个线程的失败或者挂起不会导致其他线程也失败或者挂起。
+无锁算法：算法的每个步骤，都存在某个线程能执行下去。多个线程竞争CAS总有一个线程胜出并继续执行。
+
+CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存位置，旧的预期值，新值，
+对于多个状态变量的场景，通过`AtomicReference`包装这个对象，每次更新先获取旧值，再创建新值，用这两个值进行CAS原子更新。
+
+#### CAS 实现原子操作的三大问题
+1) ABA问题 `AtomicStampedReference` 不可变对象pair
+2）循环CPU开销  JVM pause指令
+3）多个共享变量 `AtomicReference`
+
+AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
+
+#### AQS
+AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
+`private volatile int state;`
+`ReentrantLock`用来表示所有者重复获取该锁的次数
+`Semaphore`表示剩余许可数量
+`FutureTask`用于表示任务状态(现在FutureTask不用AQS了)但也是state
+
+当线程尝试更改AQS状态操作获得失败时，会将Thread对象抽象成Node对象 形成CLH队列，LIFO规则。
+
+### juc的锁
+StampedLock多个读不互相阻塞，同时在读操作时不会阻塞写操作。
+
+
+---
+## 9.redis
+### 1.redis高性能的原因
+1）内存
+2）单线程
+3）网络请求io多路复用
+“多路”指的是多个网络连接，“复用”指的是复用同一个线程。采用多路 I/O 复用技术可以让单个线程高效的处理多个连接请求（尽量减少网络 IO 的时间消耗），且 Redis 在内存中操作数据的速度非常快，也就是说内存内的操作不会成为影响Redis性能的瓶颈，主要由以上几点造就了 Redis 具有很高的吞吐量。
+
+
+### 2.redis持久化
+持久化方式：
+1）快照 Mysql Dump和Redis RDB 2）写日志 Mysql Binlog Hbase Hlog Redis AOF
+
+RDB是保存数据库中的键值对，AOF保存redis执行的命令。
+
+#### RDB
+RDB是压缩过的二进制文件,会生成临时文件，把老的RDB文件替换掉。
+BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。copy-on-write策略，但是父进程写入还会做副本 内存开销大。
+触发机制：从节点全量复制主节点会生成RDB文件。 debug reload 、 shutdown。
+缺点磁盘性能，宕机没快照的丢了。但是恢复速度快。
+
+#### AOF
+AOF更新频率通常比RDB高。
+写【命令】先从redis 写到硬盘缓冲区 再根据3种策略（everysec每秒，always，no（操作系统自己刷)）fsync到硬盘AOF文件。
+AOF会开子进程重写。
+
+#### 主从复制
+主从复制（副本）集群是为了解决多请求，读写分离，高可用，
+分布式是为了解决一个请求的多个步骤。
+
+redis主从同步的问题
+redis集群一致性hash如何解决分布不均匀
+
+数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
+进入redis用`info replication`可以查看主从状态
+
+##### 全量复制
+1）第一次是全量复制`full resync` master会`BGSAVE`。
+2）从节点的数据全部清除`Flushing old data`，通过网络接受RDB文件，加载RDB文件到内存。
+`info server |grep run` 
+3）在同步期间master的写命令会单独记录，rdb同步完后通过偏移同步给slave。
+可以看到redis实例的run_id。如果从复制的主节点的id发生变化，则需要全量复制。
+
+![fullsync.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fullsync.jpg)
+
+##### 部分复制
+`info replication` 可以看到master的偏移量`master_repl_offset`和slave的偏移量`slave_repl_offset`，主节点可以看到各个从节点的偏移量。
+偏移量主比从大表示主写入了数据还没同步到从。
+如果主从连接断了，先重连，从服务器发送runid和offset，主服务器发送buffer中的部分数据。
+
+#### redis 高可用 sentinel
+
+
+#### redis写失败怎么办
+
+
+## 软工和测试
+### 白盒测试是什么
+### 怎么评价一个软件系统的好坏
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### java的进程通信
+管道 Java中没有命名管道 
+```java
+// 启动子进程
+ProcessBuilder pb = new ProcessBuilder("java", "com.test.process.T3"); 
+Process p = pb.start(); 
+// 或者
+Runtime rt = Runtime.getRuntime(); 
+Process process = rt.exec("java com.test.process.T3"); 
+// 子进程的输出
+BufferedInputStream in = new BufferedInputStream(p.getInputStream()); 
+```
+
+共享内存
+nio有内存映射文件mmap 
+https://cloud.tencent.com/developer/article/1031860
+```java
+RandomAccessFile raf = new RandomAccessFile("D:/a.txt", "rw"); 
+FileChannel fc = raf.getChannel();  
+// 核心 系统调用mmap
+MappedByteBuffer mbb = fc.map(MapMode.READ_WRITE, 0, 1024); 
+FileLock fl = fc.lock();//文件锁 
+```
+
+mmap和共享文件的区别
+操作系统划分出一块内存来共多个进程共享使用
+mmap需要把内容写回到文件，所以还需要与文件打交道；而SM则是完全的内存操作，不涉及文件IO，效率上可能会好很多。还有就是SM使用的系统调用是shmget和shmctl。
+
+FileChannel 是将共享内存和磁盘文件建立联系的文件通道类。
+
+信号量
+```java
+OperateSignal operateSignalHandler = new OperateSignal(); 
+Signal sig = new Signal("SEGV");//SEGV 这个linux和window不同 
+Signal.handle(sig, operateSignalHandler); 
+public class OperateSignal implements SignalHandler{ 
+    @Override 
+    public void handle(Signal arg0) { 
+    System.out.println("信号接收"); 
+    } 
+} 
+```
+
 
 
 ### 10.线程池的运行流程，使用参数以及方法策略
@@ -542,10 +664,10 @@ TERMINATED： 标识
 阻塞队列是DelayedWorkQueue，是堆
 ScheduledFutureTask实现了Comparable接口，是按照任务执行的时间来倒叙排序的
 
-
 5）`newWrokStealingPoll` 工作窃取
 
 #### 如何优化线程池
+怎么配置参数
 
 ### 10.线程同步的方法
 互斥量(mutex) 
@@ -583,6 +705,8 @@ Sync继承AQS，
 公平锁的实现机理在于每次有线程来抢占锁的时候，都会检查一遍有没有等待队列
 
 5）可重入Thread.currentThread()
+可重入是如何实现的？
+
 6)业务锁
 同一个账户的存钱、取钱业务应该先完整完成一次后才释放锁。
 Lock可以跨方法锁对象：登录加锁，登出释放。
@@ -638,137 +762,6 @@ INSERT_METHOD = LAST;
 因为n个数字全排列是n! 一次比较之后，两个元素顺序确定，排列数为 n!/2!
 总的复杂度是O(log(n!)) 根据斯特林公式就等于O(nlog(n))
 
-### 16 快速排序
-基本：
-最普通的，每次取[0]作子集划分s1+[0]+s2,再递归两个子集。
-最坏情况123456 O(n^2)
-```java
-private void qS(int[] arr,int left,int right){
-        if(left>=right)return;
-        int pivot = arr[right];
-        // 因为保证i最后在左集合右边 用++i 
-        // 所以初始化的时候边界都向外扩一格
-        int i = left-1;int j = right;
-        while (true){
-            // 关键 i<j
-            while (++i<j && arr[i] <= pivot);
-            while (--j>i && arr[j] >= pivot);
-            if(i < j){
-                swap(arr,i , j);
-            }
-            else break;
-        }
-        // 把主元放到左集合右边
-        swap(arr, i, right);
-        qS(arr, left, i-1);
-        qS(arr, i+1,right);
-    }
-```
-
-注意1：
-主元：1取头、中、尾的中位数比随机函数便宜。
-用ifelse判断这三个数，1)把最小的放到左边2)把最大的放到右边3)把中间的数替换到最后位置上
-`pivot = nums[n-1]`
-
-然后用pivot划分子集，i从左开始，j从右开始,i最后停在j右边，交换`[i],[n-1]`，pivot放了正确的位置。
-
-注意2：
-如果有重复元素 如果11111，
-1）重复元素也交换，最后pivot也会被换到中间，很等分nlogn。
-2）不交换，i直接比较到最后，pivot还是在最后，变成n^2
-
-注意3：
-小规模数据集（N不到100可能还不如插入排序）
-当递归的长度够小直接插入排序。
-
-JDK `Arrays.sort()`中的根据阈值从merge，quick，insert，count sort中选一个
-{% fold %}
-```java
-/**如果数组长度小于 this, Quicksort 优先于 merge sort.*/
-private static final int QUICKSORT_THRESHOLD = 286;
-
-/**如果数组长度小于 this , insertion sort 优先于 Quicksort.*/
-private static final int INSERTION_SORT_THRESHOLD = 47;
-
-/**如果Byte数组长度大于this, counting sort 优先于 insertion sort. */
-private static final int COUNTING_SORT_THRESHOLD_FOR_BYTE = 29;
-
-/** 如果short or char 数组长度大于 this, counting sort 优先于 Quicksort.*/
-private static final int COUNTING_SORT_THRESHOLD_FOR_SHORT_OR_CHAR = 3200;
-
-```
-{% endfold %}
-
-### 17 堆排序 不需要额外空间 大顶堆
-堆（数组实现的完全二叉树）
-左孩子是`(1+i<<1)` // 1+i<<2 奇数
-右孩子是`(i+1)<<1` //偶数
-父节点是`(i-1)>>1`
-
-堆排序：
-线性复杂度将数组调成最大堆O(n)，将堆顶和数组最后交换，堆规模-1，再调成最大堆。
-
-```java
-heapify(arr);
-for (int i = 0; i <arr.length ; i++) {
-    swap(arr,0,n-1-i);
-    shiftDown(arr,0,n-1-i);
-}
-```
-
-建堆方法1：
-从上到下，每个新加的结点放在最右下，然后shiftUp每个 复杂度O(nlogn) (都可以做全排序了)
-正确方法：
-思路：
-每个叶节点都成一个子堆，下滤操作能完成两个子堆的合并。
-
-```java
-//大顶堆
-private static void shiftDown(int[] arr,int idx,int n){
-    int lowest = n/2;
-    while(idx < lowest){
-        int left = (idx*2) + 1;
-        int right = left + 1;
-        if(right < n && arr[left]<arr[right] && arr[right]>arr[idx]){
-            swap(arr,idx,right);
-            idx = right;
-        }else if(arr[idx] < arr[left]){
-            swap(arr,idx,left);
-            idx = left;
-        }else break;
-    }
-}
-
-private static void heapify(int[]arr){
-    int n = arr.length;
-    for(int i = (n-1)/2;i>=0;i--){
-        shiftDown(arr,i,n);
-    }
-}
-```
-
-复杂度：
-复杂度每个节点只需要比较的长度最多是这个节点到叶子的高度（而不是在树中的深度）。O(N)的
-因为二叉树越底层节点越多。深度越高节点越多，所以上滤复杂度高。
-
-从右下开始依次下滤，所有叶子节点都不用下滤。
-如果全堆大小为n，内部节点最后一个的idx是`(n/2)-1`
-例子：一共9个节点 各层1，2，4，2个。最后一个内部节点是3，它的右边和下面都是叶子。
-
-向堆添加节点（添加在数组最后，上滤）
-```java
-private void shifUp(int[] arr,int i,int x){
-    while (i>0){
-        int parent = (i-1)>>>1;
-        int e = arr[parent];
-        if(e >= x)break;
-        // 下移父节点
-        arr[i] = e;
-        i = parent;
-    }
-    arr[i] = x;
-}
-```
 
 ### 18 没有中序没办法确定二叉树
 前序 根左右
@@ -787,8 +780,9 @@ private void shifUp(int[] arr,int i,int x){
 
 ### 20 数据库三范式
 第一范式：列不可拆分 目的：列原子性 
-第二范式：每个属性要完全依赖于主键
-第三范式：非主键关键字段之间不能存在依赖关系，避免更新、插入、删除异常。每一列都要与主键直接相关。【消除传递依赖】。各种信息只在一个地方存储，不出现在多张表中
+第二范式：每个属性要【完全依赖】于主键，如果主键有多个候选键，属性
+第三范式：非主键关键字段之间不能存在依赖关系，避免更新、插入、删除异常。每一列都要与主键直接相关。【消除传递依赖】。
+    例子： 各种信息只在一个地方存储，不出现在多张表中。 如果成员表已经有部门编号，不应该有部门表中的部门名称。
 BCNF：表的部分主键依赖于非主键部分 应该拆分。
 第四范式：两个均是1：N的关系，当出现在一张表的时候，会出现大量的冗余。所以就我们需要分解它，减少冗余。
 
@@ -977,21 +971,7 @@ FIFO：Belady异常。
 LRU：如果满了，将内存块中的数值向前找，最早出现的那个删除。
 CLOCK：时钟置换算法，NRU最近未用算法。 循环队列。 访问位。
 
-### 32 递归冒泡排序
-```java
-public void bubblesort(int[] array,int n) {
-    if (n == 1)
-        return;
-    if (array == null || array.length == 0)
-        return;
-    for (int i = 0; i < n - 1; i++) {
-        if (array[i] > array[i + 1]) {
-            swap(array,i,i+1);
-        }
-    }
-    bubblesort(array, n - 1);
-}
-```
+
 ### 33 ajax的四个步骤
 1)创建xhr对象
 2)open方法参数：method，url，同步或异步
@@ -1018,26 +998,8 @@ CSRF 盗取用户cookie或者session伪造请求
 后端在header里的设置的Location url
 重定向可以用于均衡负载
 
-### 37 二分
-2.[0,len) 保持len取不到 
-[0]:l=0,r=1,l++,while(l==r)的时候应该结束
-好处：len就是长度[a,a+len)，[a,b)+[b,c)=[a,c),[a,a)是空的
-```java
-int l = 0,r = n;
-while(l<r){
-    int mid = l+(r-l)/2;
-    if(arr[mid]==target)return mid;
-    if(arr[mid]>target){
-        //在左边，边界为取不到的数
-        r=mid;//[l,mid)
-    }else{
-        //左闭又开
-        l = mid+1;//[mid+1,r)
-    }
-}
-//如果l==r [1,1)表示空的
-return -1;
-```
+
+
 
 ### 38 IO模型
 
@@ -1088,70 +1050,7 @@ Proactor实现异步I/O，产生I/O调用的用户进程不会等待I/O发生，
 在堆上创建异常  try catch中有return之前都会先执行finally的return
 
 
-### 40 !!!线程安全的单例模式
-单元素枚举类是实现Singleton的最佳方法
-```java
-public enum Singleton{
 
-    //定义1个枚举的元素，即为单例类的1个实例
-    INSTANCE;
-
-    // 隐藏了1个空的、私有的 构造方法
-    // private Singleton () {}
-
-}
-// 获取单例的方式：
-Singleton singleton = Singleton.INSTANCE;
-```
-
-【初始化占位类模式】
-如果是静态初始化对象不需要显示同步。
-静态初始化：JVM在类初始化阶段执行，在类加载后并在线程执行前。JVM会获取锁确保这个类已经被加载。任何一个线程调用`getInstance`的时候会使静态内部类被加载和初始化。
-```java
-public class Singleton {  
-    private static class SingletonHolder {  
-        private static final Singleton INSTANCE = new Singleton();  
-    }  
-    private Singleton (){}  
-    public static final Singleton getInstance() {  
-        return SingletonHolder.INSTANCE; 
-    }  
-}
-```
-
-用反射强行调用私有构造函数可以创建多个实例。防止序列化：重写私有的`readReslove()` 当反序列化readObject()的时候会直接调用readReslove替换原本的返回值。
-
-双重检查锁已经被广泛地废弃了！
-
-懒加载 推迟高开销的对象初始化操作。
-同步 double checked locking 
-只希望在第一次创建 实例的时候进行同步
-创建对象分为3个步骤：
-1）分配内存
-2）初始化对象
-3）obj指向内存地址
-关键：（2）、（3）会被重排序（因为理论上单线程不会有错，而且能提高性能），导致obj不未空，但还没初始化，所以volatile禁止重排序。
-如果两个操作之间没有happens-before则JVM可以重排序。
-Volatile变量规则。对一个volatile修饰的变量，对他的写操作先行发生于读操作。
-
-特别对于有final字段的对象，构造函数完成的时候才完成final的写入。
-初始化安全：防止对对象的初始引用被重排序到构造过程之前。
-
-```java
-public class LazySingle(){
-    private volatile static LazySingle obj = null;
-    private LazySingle(){}
-    public static getInstance(){
-        if(obj == null){
-            // 1.只有一个线程能进来
-            synchronized(LazySingle.class){
-                if(obj == null){
-                    obj = new LazySingle();}}}
-        return obj;
-}}
-```
-
-方法2：静态内部类
 
 ### java进程间通信
 
@@ -1181,69 +1080,7 @@ ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
 2）老年代空间
 3）Minor GC后超过老年代可用空间
 
-### 42  2进制字符串转16进制
-```java
- String b2h(String bins){
-    int n = bins.length();
-    String hexs = "0123456789abcdf";
-    StringBuilder sb = new StringBuilder();
-    //0101 n =4
-    while (n>=4){
-        int idx = (bins.charAt(n - 1) - '0') +
-                ((bins.charAt(n - 2) - '0') * 2) +
-                ((bins.charAt(n - 3) - '0') * 4) +
-                ((bins.charAt(n - 4) - '0') * 8);
-        System.out.println(n);
-        sb.append(hexs.charAt(idx));
-        n-=4;
-    }
-    int last = 0;int cnt = 0;
-    while (n>0){
-        last += (bins.charAt(n-- - 1) - '0')*(1<<(cnt++));
-    }
-    sb.append(hexs.charAt(last));
-    return sb.reverse().toString();
-}
-```
 
-### 43 !十进制转2进制
-没有oj过
-```java
-public String D2Bin(int de){
-    StringBuilder sb = new StringBuilder();
-    while (de != 0){
-        sb.insert(0,de&1);
-        de >>>= 1;
-    }
-    return sb.toString();
-}
-```
-
-### 44 编辑距离
-1）定义`dp[n][m]`表示从s1的前n个字符->s2的前m个字符最少的编辑距离。
-2）加一个：[n-1][m]+1
-   减一个: [n][m-1]+1
-   变一个:[n-1][m-1] +1 
-   相等：[n-1][m-1]
-```java
-public int minDistance(String word1, String word2) {
-    int n = word1.length();
-    int m = word2.length();
-    int[][] dp = new int[n+1][m+1];
-    for(int i =0;i<=n;i++){dp[i][0] = i;}
-    for(int i =0;i<=m;i++){dp[0][i] = i;}
-    for(int i =1;i<=n;i++){
-        for(int j = 1;j<=m;j++){
-            if(word1.charAt(i-1) == word2.charAt(j-1)){
-                dp[i][j] = dp[i-1][j-1];          
-            }else {
-                dp[i][j] = Math.min(Math.min(dp[i-1][j]+1,dp[i][j-1]+1),dp[i-1][j-1]+1);
-            }
-        }
-    }
-    return dp[n][m];
-}
-```
 
 ### 45 布隆过滤器
 黑名单
@@ -1300,6 +1137,10 @@ E 以上都不是
 “写时复制”：现在fork不会立刻复制，当子进程要修改的时候才会分配进程空间 并复制。
 
 #### 创建一个守护进程
+java守护线程JVM的垃圾回收、内存管理等线程都是守护线程。
+Main退出，前台线程执行完毕，后台线程也直接结束了。生命周期
+
+
 终端：系统与用户交互的界面，运行进程的终端被称为 【控制终端】。
 控制终端关闭时，进程都会关闭，除了守护进程。
 1）`fork()`一个子进程并退出父进程。
@@ -1415,11 +1256,14 @@ Iterator允许调用者删除底层集合里面的元素
 ### finalize 方法
 JNI(Java Native Interface)调用non-Java程序（C或C++），finalize()的工作就是回收这部分的内存。
 
+任何对象的finalize只会被调用一次
+
 ### final finally finalize的区别
 
 ### Exception和Error的区别
 
 ### 事务是什么
+一个类里面有两个方法A和B，方法A有@Transaction，B没有，但B调用了A，外界调用B会不会触发事务？
 
 ### 51ThreadPoolExecutor 怎么实现的
 1）线程池状态
@@ -1522,12 +1366,6 @@ cookie加密
 redis string
 redis
 
-### 56 为什么要把页面放到redis中？
-页面缓存，将整个页面手动渲染，加上所有vo，设定有效期1分钟，让用户1看到的是1分钟前的页面
-详情页应该不能放（？）库存更新怎么办（？）
-只是把页面商品信息放到了redis中
-
-
 ### redis常用数据结构
 string, hash,set,sorted set,list
 ```sh
@@ -1548,93 +1386,12 @@ skiplist和dict会共享元素的成员和分值。
 zset中的dict创建了一个从成员到分值的映射，程序可用O(1)的时间查找到【分值】(zscore)。
 跳跃表实现zrank,zrange 还有查找全是logN
 
-秒杀项目的请求流程
-1）下订单和减库存如何保持一致？
-ACID强一致性，利用关系型数据库的强一致性，【订单表和库存表】放在一个关系型数据库事务，实时一致性。
-高并发场景提高关系型数据库吞吐量和存储，应该吧库存和订单放入同一个数据库分片。
-主从复制只能提高数据库读。
-BASE思想：分布式事务拆分，每个步骤都记录状态，使用【写前日志】或者数据库来记住任务的执行状态，一般通过行级锁实现比写前日志更快。
 
 
-#### 更新数据库的同时为什么不是马上更新缓存而是删除缓存
-更新数据库后更新缓存可能会因为多线程下导致写入脏数据（比如线程A先更新数据库成功，接下来要取更新缓存，接着线程B更新数据库，但B又更新了缓存，接着B的时间片用完了，线程A更新了缓存）  （？）
-
-#### 秒杀地址 + 接口限流
-如果有很多手机账号，公不公平？
-按收货地址（？）
-
-#### 如果订单表和库存表不在同一个数据库
-除了分布式锁更轻量级的做法？消息队列-异步处理
-
-
-
-
+### 如果一个千万条数据的表怎么优化
 数据库分片：
 1）分片ID
 2）无需分片的表
-
-
-
-### 57 缓存与数据库一致性
-读请求和写请求串行化，串到一个内存队列里去。串行化就不会不一致。
-先更新数据库再删除缓存。
-
-![cacheone.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg)
-
-缓存更新的时候加锁 防止大量请求直接访问数据库雪崩或者缓存不一致
-![cacheupdate.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg)
-
-缓存穿透：数据库中没这个数据，缓存中也没有，数据库被大量查询
-方法 BloomFilter
-1）查询结果为空的也缓存(命中不高 但是频繁更新的数据) 
-2）对可能为空的key统一存放（命中不高 更新不频繁）
-
-
-
-### 58 为什么秒杀系统需要mq 秒杀排队系统
-多redis扣库存
-一旦缓存丢失需要考虑恢复方案。比如抽奖系统扣奖品库存的时候，初始库存=总的库存数-已经发放的奖励数，但是如果是异步发奖，需要等到MQ消息消费完了才能重启redis初始化库存，否则也存在库存不一致的问题。
-需要一个分布式锁来控制只能有一个服务去初始化库存
-
-### 为什么秒杀系统需要mq 秒杀排队系统
-https://www.infoq.cn/article/yhd-11-11-queuing-system-design
-1）削峰:减少瞬间流量。处理失败的消息退回队列，接收的下一条还是这个消息，这是因为消息传递不仅要保证一次且仅一次，还要保证顺序。
-2）限流保证数据库不会挂掉，不然会影响其他服务。主要还是为了减少数据库访问 透这么多请求来数据库没有意义,会有大量锁冲突导致读请求会发生大量的超时。如果均成功再放下一批.
-3）持久化:就算库存系统出现故障,消息队列也能保证消息的可靠投递,不会导致消息丢失。
-4）订单和库存解耦. 
-```
-#从队列里每次取几个
-spring.rabbitmq.listener.simple.prefetch= 1
-# 消费失败会重新压入队列
-spring.rabbitmq.listener.simple.default-requeue-rejected= true
-```
-
-异步下单：
-异步下单的前提是确保进入队列的购买请求一定能处理成功。Redis天然是单线程的，其INCR/DECR操作可以保证线程安全。而且入队之前要对用户user+goodsId判重。
-假设处理一个秒杀订单需要1s，而将秒杀请求（或意向订单/预订单）加入队列（或消息系统等）可能只需要1ms。异步化将用户请求和业务处理解耦
-
-其他消息中间件
-
-如何用redis list实现mq
-
-### 59 mq集群模式
-Master-Slave模式
-NetWork模式 两组Master-Slave模式
-
-### 60 mq怎么实现的
-https://tech.meituan.com/2016/07/01/mq-design.html
-AMQP协议: 虚拟主机（virtual host），交换机（exchange），队列（queue）和绑定（binding）。一个虚拟主机持有一组交换机、队列和绑定.
-broker(消息队列服务端)
-1）数据流：例如producer发送给broker,broker发送给consumer,consumer回复消费确认，broker删除/备份消息等。 
-2）RPC:两次RPC发送者把消息投递到服务端（broker），服务端再将消息转发一手到接收端，消费端最终做消费确认的情况是三次RPC。然后考虑RPC的高可用性，尽量做到无状态，方便水平扩展。 
-3）消息堆积:存储消息，在合适的时机投递消息。
-4）广播：我维护消费关系，可以利用zk/config server等保存消费关系。
-
-生产者和消费者是完全解耦.
-？因为保证可靠消费？这样redis预减的库存就真的减少到mysql里了？不用再同步回来（？
-持久化？
-消息队列时需要考虑到的问题，如RPC、高可用、顺序和重复消息、可靠投递、消费关系解析等
-直接模式
 
 ### 61 linux 
 - 如何传文件 scp
@@ -1682,7 +1439,7 @@ vi： ZZ：命令模式下保存当前文件所做的修改后退出vi；
 
 打开的文件`lsof`
 
-String StringBuilder StringBuffer 
+### String StringBuilder StringBuffer 
 String 存在JVM哪里
 1）一旦有一个用引号的字符串就会放到字符串常量池。
 2）拼接创建的只在堆里。
@@ -1692,53 +1449,9 @@ String 存在JVM哪里
 本来永久代使用的是JVM内存，而元空间使用的是本地内存，字符串常量不会有性能问题（intern）和内存溢出。
 
 
-two sum
-如果数字在最后怎么优化
-如果有序two sum怎么做
-three sum
-
 ### 序列化的性能
 
-### 二维数组搜索
-```java
-public boolean searchMatrix(int[][] matrix, int target) {
-    int n = matrix.length;
-    if(n <1)return false;
-    int m = matrix[0].length;
-    if(m<1)return false;
-    int x = 0; int y = m-1;
-    while(x < n && y >=0){
-        if(matrix[x][y] == target)return true;
-        if(target > matrix[x][y])x++;
-        else if(target < matrix[x][y])y--;
-    }
-    return false;
-}
-```
 
-### 矩阵旋转90度 lc 48
-逆时针：第一步交换主对角线两侧的对称元素，第二步交换第i行和第n-1-i行，即得到结果。 如果是顺时针， 第一步交换对角线两侧的对称元素，第二步交换第i行和第n-1-i行，即得到结果。
-```java
-public void rotate(int[][] matrix) {
-   int n = matrix.length;  
-    for(int i = 0;i<n;i++){
-        for(int j = i+1;j<n;j++){
-            if(i!=j){
-                int tmp = matrix[i][j];
-                matrix[i][j] = matrix[j][i];
-                matrix[j][i] = tmp;  
-            }            
-        }
-    }
-    for(int i =0;i<n;i++){
-        for(int j = 0;j<n/2;j++){
-           int tmp = matrix[i][j];
-            matrix[i][j] = matrix[i][n-1-j];
-            matrix[i][n-1-j] = tmp;
-        }
-    }
-}
-```
 
 ### 短链接
 
@@ -1747,10 +1460,7 @@ public void rotate(int[][] matrix) {
 
 ### 归并排序
 
-### 缓存穿透
-有很多种方法可以有效地解决缓存穿透问题，最常见的则是采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。
 
-哈希表槽位数（大小）的改变平均只需要对 K/n个关键字重新映射，其中K是关键字的数量， n是槽位数量。
 
 ### 多线程归并排序
 
@@ -1864,87 +1574,110 @@ cache伪共享：多个线程读写同一个缓存行，volitale变量无关但�
 
 安全失败：遍历是先拷贝在遍历。遍历过程中的修改不会影响迭代器，不会报错。java.util.concurrent包下都是安全失败。
 
+---
+## 秒杀项目相关
+https://mp.weixin.qq.com/s/ktq2UOvi5qI1FymWIgp8jw
+秒杀项目的请求流程
+需求：秒杀地址隐藏，记录订单，减库存
 
-### 人民币转换
-链接：https://www.nowcoder.com/questionTerminal/00ffd656b9604d1998e966d555005a4b?commentTags=Java
-输入一个double数
-输出人民币格式
-1、中文大写金额数字前应标明“人民币”字样。中文大写金额数字应用壹、贰、叁、肆、伍、陆、柒、捌、玖、拾、佰、仟、万、亿、元、角、分、零、整等字样填写。（30分） 
+### 1.下订单和减库存如何保持一致？
+ACID强一致性，利用关系型数据库的强一致性，【订单表和库存表】放在一个关系型数据库事务，实时一致性。
+高并发场景提高关系型数据库吞吐量和存储，应该吧库存和订单放入同一个数据库分片。
+主从复制只能提高数据库读。
+BASE思想：分布式事务拆分，每个步骤都记录状态，使用【写前日志】或者数据库来记住任务的执行状态，一般通过行级锁实现比写前日志更快。
 
-2、中文大写金额数字到“元”为止的，在“元”之后，应写“整字，如￥ 532.00应写成“人民币伍佰叁拾贰元整”。在”角“和”分“后面不写”整字。（30分） 
+###  2.缓存与数据库一致性
+读请求和写请求串行化，串到一个内存队列里去。串行化就不会不一致。
+先更新数据库再删除缓存。
 
-3、阿拉伯数字中间有“0”时，中文大写要写“零”字，阿拉伯数字中间连续有几个“0”时，中文大写金额中间只写一个“零”字，如￥6007.14，应写成“人民币陆仟零柒元壹角肆分“。（
+![cacheone.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg)
 
-151121.15
-人民币拾伍万壹仟壹佰贰拾壹元壹角伍分
+缓存更新的时候加锁 防止大量请求直接访问数据库雪崩或者缓存不一致
+![cacheupdate.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg)
 
-思路：整数部分：
-1）每个数字都是单位+数字（元+个位，十拾十位），
-2）单位顺序完整应该是
-【"元", "拾", "佰", "仟", "万", **"拾", "佰", "仟",** "亿", **"拾", "佰", "仟"**】
-3）对批量0做flag。
-4)如果14去掉1其它都ok。
+### 3.更新数据库的同时为什么不是马上更新缓存而是删除缓存
+更新数据库后更新缓存可能会因为多线程下导致写入脏数据（比如线程A先更新数据库成功，接下来要取更新缓存，接着线程B更新数据库，但B又更新了缓存，接着B的时间片用完了，线程A更新了缓存）  （？）
 
-小数部分题目要求0角1分不用输出角则暴力
+### 4.缓存穿透：数据库中没这个数据，缓存中也没有，数据库被大量查询
+有很多种方法可以有效地解决缓存穿透问题，最常见的则是采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。
 
-```java
-public class Main {
-public static String[] RMB = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
-public static String[] unit1 = {"元", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟"};
-public static String[] unit2 = {"角", "分"};
+哈希表槽位数（大小）的改变平均只需要对 K/n个关键字重新映射，其中K是关键字的数量， n是槽位数量。
 
-public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    while (sc.hasNext()) {
-        String s = sc.next();
-        String result = "";
-        if(s.contains(".")) {
-            String s1 = s.substring(s.indexOf('.') + 1);
-            String s2 = s.substring(0, s.indexOf('.'));
-            result = "人民币" + integer(s2) + decimal(s1);
-        } else
-            result = "人民币" + integer(s) + "整";
-        System.out.println(result);
-    }
-}
-// 处理整数
-public static String integer(String s) {
-    if(s.length() == 1 && s.charAt(0) == '0') return "";//RMB[0]+unit1[0];
-    int[] arr = new int[s.length()];
-    int idx = 0;
-    for (int i = s.length()-1; i >= 0; i -- )
-        arr[idx++] = s.charAt(i)-'0';
-    StringBuilder sb = new StringBuilder();
-    boolean zero = false;
-    for (int i = 0; i < arr.length; i ++ ) {
-        if(!zero && arr[i] == 0){
-            sb.append(RMB[arr[i]]);
-            zero = true;
-        }else if (arr[i] != 0){
-            sb.append(unit1[i] + RMB[arr[i]]);
-            zero = false;
-        }
-    }
-    sb = sb.reverse();
-    if(sb.charAt(0) == '壹' && sb.charAt(1) == '拾') sb.deleteCharAt(0);
-    return sb.toString();
-}
-// 处理小数
-    public static String decimal(String s) {
-        StringBuilder sb = new StringBuilder();
-//        boolean zero = true;
-        for (int i = s.length()-1; i >=0; i -- ) {
-            int tmp = s.charAt(i)-'0';
-            if( tmp ==0)continue;
-            // 1分 0角 输出角
-//            if(!zero || tmp > 0){
-//                sb.append(unit2[i] + RMB[tmp] );
-//                zero = false;
-//            }
-            //不输出角
-            sb.append(unit2[i] + RMB[tmp] );
-        }
-        return sb.length()<1?"整":sb.reverse().toString();
-    }
+1）查询结果为空的也缓存(命中不高 但是频繁更新的数据) 
+2）对可能为空的key统一存放（命中不高 更新不频繁）
 
+### 5.数据库乐观锁减库存
+先查库存，在减库存的时候判断当前库存是否与读到的库存一样
+乐观锁适用于读多写少，但是大并发写（？）
+
+### 6.读写锁能不能用在大并发场景
+
+### 7.为什么要把页面放到redis中？
+页面缓存，将整个页面手动渲染，加上所有vo，设定有效期1分钟，让用户1看到的是1分钟前的页面
+详情页应该不能放（？）库存更新怎么办（？）
+只是把页面商品信息放到了redis中
+
+### 8.秒杀地址 + 接口限流
+如果有很多手机账号，公不公平？
+按收货地址（？）
+
+### 9.如果订单表和库存表不在同一个数据库
+除了分布式锁更轻量级的做法？消息队列-异步处理
+
+### 10.为什么秒杀系统需要mq 秒杀排队系统
+多redis扣库存
+一旦缓存丢失需要考虑恢复方案。比如抽奖系统扣奖品库存的时候，初始库存=总的库存数-已经发放的奖励数，但是如果是异步发奖，需要等到MQ消息消费完了才能重启redis初始化库存，否则也存在库存不一致的问题。
+需要一个分布式锁来控制只能有一个服务去初始化库存
+
+### 11.为什么秒杀系统需要mq 秒杀排队系统
+https://www.infoq.cn/article/yhd-11-11-queuing-system-design
+1）削峰:减少瞬间流量。处理失败的消息退回队列，接收的下一条还是这个消息，这是因为消息传递不仅要保证一次且仅一次，还要保证顺序。
+2）限流保证数据库不会挂掉，不然会影响其他服务。主要还是为了减少数据库访问 透这么多请求来数据库没有意义,会有大量锁冲突导致读请求会发生大量的超时。如果均成功再放下一批.
+3）持久化:就算库存系统出现故障,消息队列也能保证消息的可靠投递,不会导致消息丢失。
+4）订单和库存解耦. 
 ```
+#从队列里每次取几个
+spring.rabbitmq.listener.simple.prefetch= 1
+# 消费失败会重新压入队列
+spring.rabbitmq.listener.simple.default-requeue-rejected= true
+```
+
+异步下单：
+异步下单的前提是确保进入队列的购买请求一定能处理成功。Redis天然是单线程的，其INCR/DECR操作可以保证线程安全。而且入队之前要对用户user+goodsId判重。
+假设处理一个秒杀订单需要1s，而将秒杀请求（或意向订单/预订单）加入队列（或消息系统等）可能只需要1ms。异步化将用户请求和业务处理解耦
+
+其他消息中间件
+
+如何用redis list实现mq
+
+### 12.消息中间件的作用
+1）解耦 基于数据的接口层
+2）冗余（持久化）
+3）扩展性 解耦了 处理过程
+4）削峰
+5）降低进程耦合度
+6）顺序消费
+7）缓冲
+8）异步通信
+
+
+### 13.mq集群模式
+Master-Slave模式
+NetWork模式 两组Master-Slave模式
+
+### 14.mq怎么实现的
+https://tech.meituan.com/2016/07/01/mq-design.html
+AMQP协议: 虚拟主机（virtual host），交换机（exchange），队列（queue）和绑定（binding）。一个虚拟主机持有一组交换机、队列和绑定.
+broker(消息队列服务端)
+1）数据流：例如producer发送给broker,broker发送给consumer,consumer回复消费确认，broker删除/备份消息等。 
+2）RPC:两次RPC发送者把消息投递到服务端（broker），服务端再将消息转发一手到接收端，消费端最终做消费确认的情况是三次RPC。然后考虑RPC的高可用性，尽量做到无状态，方便水平扩展。 
+3）消息堆积:存储消息，在合适的时机投递消息。
+4）广播：我维护消费关系，可以利用zk/config server等保存消费关系。
+
+生产者和消费者是完全解耦.
+？因为保证可靠消费？这样redis预减的库存就真的减少到mysql里了？不用再同步回来（？
+持久化？
+消息队列时需要考虑到的问题，如RPC、高可用、顺序和重复消息、可靠投递、消费关系解析等
+直接模式
+
+### 15. mq的持久化
