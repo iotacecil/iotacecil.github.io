@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="746. Min Cost Climbing Stairs付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始Input: cost = [10, 15, 20]Output: 15dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯 dp定义为 到达第n阶楼梯的最小花费12345678public int minCostClimbingStairs(i">
+<meta name="description" content="击鼓传花每个同学都可以把花传给自己左右的两个同学中的一个（左右任意）有多少种不同的方法可以使得从小赛手里开始传的花，传了m次以后，又回到小赛手里。对于传递的方法当且仅当这两种方法中，接到花的同学按接球顺序组成的序列是不同的，才视作两种传花的方法不同。比如有3个同学1号、2号、3号，并假设小赛为1号，花传了3次回到小赛手里的方式有1-&amp;gt;2-&amp;gt;3-&amp;gt;1和1-&amp;gt;3-&amp;gt;2-&amp;">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="algDP">
 <meta property="og:url" content="http://blog.iotaa.xyz/2019/03/07/algDP/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="746. Min Cost Climbing Stairs付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始Input: cost = [10, 15, 20]Output: 15dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯 dp定义为 到达第n阶楼梯的最小花费12345678public int minCostClimbingStairs(i">
+<meta property="og:description" content="击鼓传花每个同学都可以把花传给自己左右的两个同学中的一个（左右任意）有多少种不同的方法可以使得从小赛手里开始传的花，传了m次以后，又回到小赛手里。对于传递的方法当且仅当这两种方法中，接到花的同学按接球顺序组成的序列是不同的，才视作两种传花的方法不同。比如有3个同学1号、2号、3号，并假设小赛为1号，花传了3次回到小赛手里的方式有1-&amp;gt;2-&amp;gt;3-&amp;gt;1和1-&amp;gt;3-&amp;gt;2-&amp;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-04T07:57:10.825Z">
+<meta property="og:updated_time" content="2019-04-15T16:18:53.254Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="algDP">
-<meta name="twitter:description" content="746. Min Cost Climbing Stairs付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始Input: cost = [10, 15, 20]Output: 15dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯 dp定义为 到达第n阶楼梯的最小花费12345678public int minCostClimbingStairs(i">
+<meta name="twitter:description" content="击鼓传花每个同学都可以把花传给自己左右的两个同学中的一个（左右任意）有多少种不同的方法可以使得从小赛手里开始传的花，传了m次以后，又回到小赛手里。对于传递的方法当且仅当这两种方法中，接到花的同学按接球顺序组成的序列是不同的，才视作两种传花的方法不同。比如有3个同学1号、2号、3号，并假设小赛为1号，花传了3次回到小赛手里的方式有1-&amp;gt;2-&amp;gt;3-&amp;gt;1和1-&amp;gt;3-&amp;gt;2-&amp;">
 
 
 
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-04T15:57:10+08:00">
-                2019-04-04
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T00:18:53+08:00">
+                2019-04-16
               </time>
             
           </span>
@@ -393,7 +393,8 @@
       
 
       
-        <h3 id="746-Min-Cost-Climbing-Stairs"><a href="#746-Min-Cost-Climbing-Stairs" class="headerlink" title="746. Min Cost Climbing Stairs"></a>746. Min Cost Climbing Stairs</h3><p>付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始<br><div class="note "><p>Input: cost = [10, 15, 20]<br>Output: 15</p></div><br>dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯</p>
+        <h3 id="击鼓传花"><a href="#击鼓传花" class="headerlink" title="击鼓传花"></a>击鼓传花</h3><p>每个同学都可以把花传给自己左右的两个同学中的一个（左右任意）有多少种不同的方法可以使得从小赛手里开始传的花，传了m次以后，又回到小赛手里。<br>对于传递的方法当且仅当这两种方法中，接到花的同学按接球顺序组成的序列是不同的，才视作两种传花的方法不同。比如有3个同学1号、2号、3号，并假设小赛为1号，花传了3次回到小赛手里的方式有1-&gt;2-&gt;3-&gt;1和1-&gt;3-&gt;2-&gt;1，共2种。</p>
+<h3 id="746-Min-Cost-Climbing-Stairs"><a href="#746-Min-Cost-Climbing-Stairs" class="headerlink" title="746. Min Cost Climbing Stairs"></a>746. Min Cost Climbing Stairs</h3><p>付钱可以跳1阶或者2阶台阶。可以从第0阶或者第1阶开始<br><div class="note "><p>Input: cost = [10, 15, 20]<br>Output: 15</p></div><br>dp定义为离开第i个台阶的最小花费，递推到离开第min(dp[n-2],dp[n-1])个楼梯</p>
 <p>dp定义为 到达第n阶楼梯的最小花费<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minCostClimbingStairs</span><span class="params">(<span class="keyword">int</span>[] cost)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cost.length;</span><br><span class="line">    <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        dp[i] += Math.min(dp[i-<span class="number">1</span>]+cost[i-<span class="number">1</span>],dp[i-<span class="number">2</span>]+cost[i-<span class="number">2</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[n]; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="491-复制或者复制一半长度到n的最少操作次数"><a href="#491-复制或者复制一半长度到n的最少操作次数" class="headerlink" title="491 复制或者复制一半长度到n的最少操作次数"></a>491 复制或者复制一半长度到n的最少操作次数</h3><p>字符串“A”，有两种操作<br>1）copyall 设定当前长度为一次粘贴的长度 C = K<br>2）粘贴n次copy长度 K += C<br>如何最快得到长度N<br>这道题就是将N分解为M个数字的乘积，且M个数字的和最小<br><div class="note "><p>输入: 3<br>输出: 3<br>解释:<br>最初, 我们只有一个字符 ‘A’。<br>第 1 步, 我们使用 Copy All 操作。<br>第 2 步, 我们使用 Paste 操作来获得 ‘AA’。<br>第 3 步, 我们使用 Paste 操作来获得 ‘AAA’。</p></div><br>1-&gt;0,2-&gt;cp(2),3-&gt;cpp(3),4-&gt;cpcp(4),5-&gt;cp(AA)ppp(5),6cppcp(5)</p>
 <p>求n的所有质因数之和。<br>// 6可以通过长度3的复制，再递归得到3需要多少步。<br>思路：从长度为2开始试（？）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minSteps</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> d = <span class="number">2</span>; d &lt;= n; d++) &#123;</span><br><span class="line">        <span class="keyword">while</span> (n % d == <span class="number">0</span>) &#123;</span><br><span class="line">            s += d;</span><br><span class="line">            n /= d;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -580,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#746-Min-Cost-Climbing-Stairs"><span class="nav-number">1.</span> <span class="nav-text">746. Min Cost Climbing Stairs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#491-复制或者复制一半长度到n的最少操作次数"><span class="nav-number">2.</span> <span class="nav-text">491 复制或者复制一半长度到n的最少操作次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><span class="nav-number">3.</span> <span class="nav-text">91 1-26数字对应26个字母，问一个数字对应多少种解码方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#718-最长公共子串40ms-90"><span class="nav-number">4.</span> <span class="nav-text">718 最长公共子串40ms 90%</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#击鼓传花"><span class="nav-number">1.</span> <span class="nav-text">击鼓传花</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#746-Min-Cost-Climbing-Stairs"><span class="nav-number">2.</span> <span class="nav-text">746. Min Cost Climbing Stairs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#491-复制或者复制一半长度到n的最少操作次数"><span class="nav-number">3.</span> <span class="nav-text">491 复制或者复制一半长度到n的最少操作次数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#91-1-26数字对应26个字母，问一个数字对应多少种解码方式"><span class="nav-number">4.</span> <span class="nav-text">91 1-26数字对应26个字母，问一个数字对应多少种解码方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#718-最长公共子串40ms-90"><span class="nav-number">5.</span> <span class="nav-text">718 最长公共子串40ms 90%</span></a></li></ol></div>
             
 
           </div>

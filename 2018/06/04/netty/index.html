@@ -106,7 +106,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/zwhf.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/wldz.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/backlog.jpg">
-<meta property="og:updated_time" content="2019-04-01T08:24:26.529Z">
+<meta property="og:updated_time" content="2019-04-15T16:18:53.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="netty和网络">
 <meta name="twitter:description" content="系统通过一个四元组来唯一标识一条TCP连接. 这个四元组的结构是{local_ip, local_port, remote_ip, remote_port}, 对于IPv4, 系统理论上最多可以管理2^(32+16+32+16), 2的96次方个连接. 因为对于同一台服务器来说, 一般只有一个 local_ip, 那么, 同一台服务器可以管理 2^(16+32+16) 个连接. 而一个服务(进程,">
@@ -356,8 +356,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-01T16:24:26+08:00">
-                2019-04-01
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T00:18:53+08:00">
+                2019-04-16
               </time>
             
           </span>
@@ -431,9 +431,7 @@
 <h3 id="epoll和select"><a href="#epoll和select" class="headerlink" title="epoll和select"></a>epoll和select</h3><p>关于linux的I/O复用接口select和epoll,下列说法错误的是( C )<br>A select调用时会进行线性遍历,epoll采用回调函数机制,不需要线性遍历<br>B select的最大连接数为FD_SETSIZE<br>C select较适合于有大量并发连接,且活跃链接较多的场景<br>D epoll较适用于有大量并发连接，但活跃连接不多的场景<br>E epoll的效率不随FD数目增加而线性下降<br>F epoll通过共享存储实现内核和用户的数据交互</p>
 <h3 id="TCP-2个序号，3个标志位"><a href="#TCP-2个序号，3个标志位" class="headerlink" title="TCP 2个序号，3个标志位"></a>TCP 2个序号，3个标志位</h3><p>seq：数据序号。<br>ack：接收端希望接收的下一个数据包的起始序号。<br>ACK :确认位，表示ack序号有用。所以第一次请求没有要确认的数据ACK0<br>SYN :同步位。建立连接的时候没有数据，则SYN=1将ack设为seq+1<br>FIN :终止位。</p>
 <p>DDOS SYN Flood 大量请求发出第一次握手之后不发出第三次，让服务器一直重发。</p>
-<h3 id="同一网段的主机ip"><a href="#同一网段的主机ip" class="headerlink" title="同一网段的主机ip"></a>同一网段的主机ip</h3><blockquote>
-<p>与10.110.12.29 mask 255.255.255.224属于同一网段的主机IP地址是?<br>主机号全1的是广播地址。</p>
-</blockquote>
+<h3 id="同一网段的主机ip"><a href="#同一网段的主机ip" class="headerlink" title="同一网段的主机ip"></a>同一网段的主机ip</h3><p>与10.110.12.29 mask 255.255.255.224属于同一网段的主机IP地址是?<br>主机号全1的是广播地址。</p>
 <p>224 -&gt;11100000<br>29  -&gt;00011101<br>范围为10.110.12.1~ 10.110.12.31<br>A错10.110.12.0<br>B正确10.110.12.30<br>C广播地址10.110.12.31<br>D错10.110.12.32</p>
 <p>自治：无主从关系<br>边缘部分：端系统<br>核心部分：路由器</p>
 <p>链路带宽： 主机发送数据的速率<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/daikuan.jpg" alt="daikuan.jpg"><br>传播速率: 2 x 10^8  200m / us<br>吞吐量： 单位时间内 通过 信道，接口的数据量 （小于带宽）<br>时延：发送（传输）/传播/排队/处理<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/yanchi.jpg" alt="yanchi.jpg"><br>时延带宽积(BDP) (缓冲区大小）bit:某段链路现在有多少bit 传播时延RTT(s) x 带宽<br>利用率：有数据通过的时间<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/typ.jpg" alt="typ.jpg"></p>
