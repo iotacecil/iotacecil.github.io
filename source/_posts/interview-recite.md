@@ -34,11 +34,20 @@ qps一般多少 5w-10w
 
 nginx的负载均衡策略
 
-正向代理和反向代理的区别
+### 正向代理和反向代理的区别
+正向代理：隐藏了真实的请求客户端，服务端不知道真实的客户端是谁。需要你主动设置代理服务器ip或者域名进行访问，由设置的服务器ip或者域名去获取访问内容并返回。
+
+反向代理：
 
 其他web服务器有哪些
 
-nodejs为什么快？
+### nodejs为什么快？
+单进程，异步IO 事件驱动 超过5w
+主进程现在只要专心处理一些与I/O无关的逻辑处理
+
+ Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈
+
+### 操作系统 三态转换
 
 
 ### Java 类加载的过程
@@ -226,7 +235,14 @@ redis集群一致性hash如何解决分布不均匀
 
 redis写失败怎么办
 
-currentHashMap
+#### currentHashMap
+https://blog.csdn.net/qq_33256688/article/details/79938886  
+1.7之前是头插，1.8之后是尾插
+
+不能为null
+
+hashmap也是尾插
+
 mysql 的其他引擎
 设计数据库表
 
@@ -792,7 +808,14 @@ columns with the same name of associate tables will appear once only.
 ### 22 四种引用类型
 强引用，软引用，弱引用，虚引用
 软引用：内存不够二次回收
-弱引用：回收
+弱引用：回收 
+弱引用应用：优惠券 `WeakHashMap<Coupan, <List<WeakReference <User>>>`
+    `weakCoupanHM.put(coupan1,weakUserList);`
+当某个优惠券（假设对应于coupan2对象）失效时，我们可以从coupanList里去除该对象，coupan2上就没有强引用了，只有weakCoupanHM对该对象还有个弱引用，这样coupan2对象能在下次垃圾回收时被回收，从而weakCoupanHM里就看不到了。
+
+当某个用户（假设user1）注销账号时，它会被从List<User>类型的userList对象中被移除。
+    
+
 
 ### 23 Java线程状态
 New， Runnable， Timed Waiting， Waiting，Blocked，Terminated
