@@ -23,7 +23,11 @@ mysql 的其他引擎
 设计数据库表
 
 ### 1.数据库里的乐观锁和悲观锁
-共享锁、排他锁
+共享锁：其他事务可以读也可以获取共享锁，但是不能写
+排他锁：其他事务不能获取共享锁
+意向锁是表锁
+意向共享锁（IS) ：某些行上加S锁 `SELECT ... LOCK IN SHARE MODE；`
+意向排他锁（IX）：某些行上加X锁 `SELECT ... FOR UPDATE`
 
 悲观锁：`select ... for update;` 
    主键明确&有结果行锁，无结果集（查空）无锁。 
@@ -73,8 +77,8 @@ using index & using where：
 事务，主键索引，外键
 自增长列必须是主键，索引的第一个列，而且因为不是表锁要考虑并发增长。
 innodb其实不是根据每个记录产生行锁的，根据页加锁，而且用位图。
-
-意向锁。锁定对象分为几个层次，支持行锁、表锁同时存在。
+innodb 意向锁（表锁、行锁）
+，在为数据行加共享 / 排他锁之前，InooDB 会先获取该数据行所在在数据表的对应意向锁。
 
 一致性非锁定读：读快照 多版本并发控制：read committed是最新快照，重复读是事务开始时的快照。通过undo完成的。
 
@@ -107,6 +111,9 @@ doublewrite：内存中的2M buffer，磁盘上共享表空间的128个页（2M�
 因为只有一个主键并且建了B+树，所以其他辅助索引的插入是离散的，所以，有insert buffer
 
 #### mysql为什么可重复读
+读已提交：事务读不会阻塞其他事务读和写，事务写会阻塞其他事务读和写。
+可重复读：事务读会**阻塞其他事务事务写**但不阻塞读，事务写会阻塞其他事务读和写。
+
 不可重复读重点在于update和delete，而幻读的重点在于insert。
 幻读：虽然可重复读对第一次读到的数据加锁，但是插入还是可以的，就多了一行。
 
@@ -130,6 +137,8 @@ MVCC
 
 
 ### 10.数据库最左匹配原理
+
+### 11.数据库连接池的原理
 
 ---
 ## 2.网络 web服务器
@@ -157,26 +166,39 @@ server端，通过增加内存、修改最大文件描述符个数等参数，�
 301 重定向
 
 响应码
+304 缓存验证有效，未命中回200，如果服务器对象已删除404
+
+####  重定向的响应头为302，并且必须要有Location响应头；
+服务器通过response响应，重定向的url放在response的什么地方？
+后端在header里的设置的Location url
+重定向可以用于均衡负载
 
 ### 5.nginx
 qps一般多少 5w-10w
+10 000 个非活动 HTTP 保持连接，占用大约 2.5MB 的内存。
 
 nginx的负载均衡策略
 
-### 6.正向代理和反向代理的区别
+### 6.Nginx是如何工作的？是如何配置的？
+比Apache占用内存更少
+tomcat nginx apache 区别
+Apache和nginx是 Http静态服务器
+tomcat 是 Servlet 的容器，处理动态资源。
+
+### 7.正向代理和反向代理的区别
 正向代理：隐藏了真实的请求客户端，服务端不知道真实的客户端是谁。需要你主动设置代理服务器ip或者域名进行访问，由设置的服务器ip或者域名去获取访问内容并返回。
 
 反向代理：
 
 其他web服务器有哪些
 
-### 7.nodejs为什么快？
+### 8.nodejs为什么快？
 单进程，异步IO 事件驱动 超过5w
 主进程现在只要专心处理一些与I/O无关的逻辑处理
 
  Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈
 
-### 8.为什么是三次握手
+### 9.为什么是三次握手
 三次握手的过程：
 https://juejin.im/post/5a0444d45188255ea95b66bc
 客户端 SYN=1+序号a ， 
@@ -194,17 +216,19 @@ https://juejin.im/post/5a0444d45188255ea95b66bc
 首次握手隐患：服务器收到ACK 发送SYN-ACK之后没有回执，会重发SYN-ACK。产生SYN flood。
 用`tcp_syncookies` 参数
 
-### 9.拥塞控制的方法
+### 10.拥塞控制的方法
 
 快恢复：网络拥塞后ssthresh设为拥塞的一半，cwnd不是变成1再慢开始
 
-### 10.快重传
+### 11.快重传
 当发送方连续收到了3个重复的确认响应的时候，就判断为传输失败，报文丢失，这个时候就利用快重传算法立即进行信息的重传。
 拥塞控制主要通过【慢开始，快重传，快恢复和避免拥塞】来实现的。
 快恢复 与快重传配合使用，当发送方接收到连续三个重复确认请求，为了避免网络拥塞，执行拥塞避免算法
 
 ### 11.可靠传输的方法
-1.确认重传
+1.确认重传  
+    1）超时重传 发送一个数据之后，就开启一个定时器，没收到对应的ACK，重传
+    2）快重传 当接收方收到【乱序片段】时，需要重复发送ACK
 2.数据校验
 3.数据合理分片和排序
 - UDP：IP数据报大于1500字节,大于MTU.这个时候发送方IP层就需要分片(fragmentation).把数据报分成若干片,使每一片都小于MTU.而接收方IP层则需要进行数据报的重组.这样就会多做许多事情,而更严重的是,由于UDP的特性,当某一片数据传送中丢失时,接收方便无法重组数据报.将导致丢弃整个UDP数据报.
@@ -227,10 +251,15 @@ option中还有一个窗口扩大因子
 1）可靠地实现TCP全双工连接终止。等最后一个ACK到达。
 MSL是任何IP数据报的最长存活时间。
 如果没收到ACK，则被动方重发FIN，再ACK正好是两个MSL。
-主动关闭方发送的最后一个 ack(fin) ，有可能丢失，这时被动方会重新发fin, 如果这时主动方处于 CLOSED 状态 ，就会响应 rst 而不是 ack。所以主动方要处于 TIME_WAIT 状态，而不能是 CLOSED 。
-【rst】是一种关闭连接的方式。
+
 2)让本连接持续时间内所有的报文都从网络中消失，下个连接中不会出现旧的请求报文。
 为什么是2MSL是让某个方向上最多存活MSL被丢弃，另一个方向上的应答最多存活MSL被丢弃。
+
+
+主动关闭方发送的最后一个 ack(fin) ，有可能丢失，这时被动方会重新发fin, 如果这时主动方处于 CLOSED 状态 ，就会响应 rst 而不是 ack。所以主动方要处于 TIME_WAIT 状态，而不能是 CLOSED 。
+【rst】是一种关闭连接的方式。
+如果另一端向我已经关闭的输入信道发送数据，操作系统就会向另一端发送一条RST。
+如果现在已经发送了10条，这十条的相应还在操作系统缓冲区，对方RST会让我清空缓冲区，已缓存的未读相应丢失。
 
 ### 14.TIME_WAIT 和 CLOSE_WAIT
 1）发送FIN变成FIN_WAIT1，然后收到对方ACK+FIN，发完ACK
@@ -259,10 +288,14 @@ TCP连接状态书上一共11种
 2）IP包到网关需要知道网关的MAC地址，用ARP
 3）DNS服务器会去查根据名服务器得到注册的域名服务器
 4）得到IP给浏览器，浏览器，发TCP建立连接
-5）接到重定向到Https，
+5）接到重定向到Https，先对443端口握手
+6）交换可用协议，约定随机数
 
 ### 18.HTTP 长连接怎么实现
 HTTP管道是什么，客户端可以同时发出多个HTTP请求，而不用一个个等待响应
+通过共享的TCP连接发起并发的HTTP请求。
+http1.0的`Connection：keep-Alive` 如果有多个中间的代理服务器会有问题，因为虽然客户端和服务端明白长连接，但是中间代理不懂，会发送关闭等待服务器关闭。
+http1.1 持久连接，如果要关闭，加`Connection:close`
 
 ### 19.http https
 HTTP+ 加密 + 认证 + 完整性保护 =HTTPS
@@ -376,6 +409,12 @@ struct shared_use_st{
 初始化
 
 ### 2.java8的新特性
+1)接口默认方法
+2）函数式接口、lambda表达式
+3）方法引用
+4）Stream流
+5）Optional防空指针
+6）Date/time LocalDate
 
 ### 3.Object有哪些方法
 还有`getClass()` 和`finalize`
@@ -418,180 +457,19 @@ Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后�
 ### 9.除了基本类型还有那些类能表示数字
 包装类，高精度BigDecimal，原子类
 
+### 10.垃圾收集器
+CMS
+G1
 
-## 5.分布式
-
-### 1.zookeeper的应用场景
-分布式协调 节点注册监听
-分布式锁
-
-### 2.XA事务 分布式事务
-事务管理器（Mysql客户端）和资源管理器（Mysql数据库）之间用两阶段提交，等所有参与全局事务的都能提交再提交
-用JAVA JTA API
-
-## 6.数据结构
-### 1.二叉平衡树的应用 红黑树原理
-红黑树确保没有一条路径会比其他路径长出俩倍
-AVL树是严格的平衡二叉树
-如果应用场景中对插入删除不频繁，只是对查找要求较高，那么AVL还是较优于红黑树。
-windows对进程地址空间的管理用到了AVL树
-
-### 2.排序 希尔排序复杂度
-当步长为1时，算法变为普通插入排序
-已知最好n(log^2)n
-
-### 3.最小生成树的两种算法
-Prim算法，标记已选点，选标记点可达的最近点标记，直到标记完所有点。
-把点划分为3类：不可达（不可选），可选，已选
-复杂度：邻接矩阵O(v^2) 邻接表O(elog2v)
-
-Kruskal算法，存在相同权值的边。
-从权值最小的边开始遍历，直到图的点全部在一个连通分量中。
-复杂度：
-
-### 4.Hash碰撞的方法
-1）开放地址法 开放地址法分： 线性探测法（会聚集）、平方探测、双散列
-2）链地址法
-
-不成功平均查找长度，要按照冲突解决方法查找到当前位置为空位置。最后/散列函数的mod（hash函数的分类个数）
-
-## 7.框架
-### 1.Spring容器初始化过程
-ioc aop原理
-
-#### 2.ioc怎么实现
-
-#### 3.Springboot的启动流程
-
-#### 4.SpringMVC工作原理
-1）servlet一共三个层次 
-HttpServletBean:直接继承java的HttpServlet，将Servlet中的配置参数设置到相应的属性。
-
-FrameworkServlet：初始化WebApplicationContext 抽象类静态方法 将不同类型请求合并到一个方法统一处理。还发布了一个事件。
-
-DispatcherServlet:初始化9大组件
- doService方法保存redirect转发的参数和include的request快照。
- 调用的doDispatch方法4步
-  1）根据request找到handler（@RequestMapping）
-  2）用mapper根据handler找到handlerAdapter 处理不同参数（不只是request和response）
-  3）handlerAdapter处理，先执行拦截器。Last-Modified
-  4）processDispatchResult处理View
+### 11.注解
+`@Override`方法的作用：
+1）准确判断是否覆盖成功 
+2）抽象类中对方法签名进行修改，其实现类会马上编译报错。 
 
 
-## 8.并发
-### 1.协程
+### 12.java的进程通信
+JMI不同虚拟机的通信，通过JRMP协议通信
 
-#### 2.currentHashMap
-https://blog.csdn.net/qq_33256688/article/details/79938886  
-1.7之前是头插，1.8之后是尾插
-
-不能为null
-
-hashmap也是尾插
-
-### 3.CAS算法原理？优缺点？
-https://juejin.im/post/5ba66a7ef265da0abb1435ae 
-非阻塞算法：一个线程的失败或者挂起不会导致其他线程也失败或者挂起。
-无锁算法：算法的每个步骤，都存在某个线程能执行下去。多个线程竞争CAS总有一个线程胜出并继续执行。
-
-CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存位置，旧的预期值，新值，
-对于多个状态变量的场景，通过`AtomicReference`包装这个对象，每次更新先获取旧值，再创建新值，用这两个值进行CAS原子更新。
-
-#### CAS 实现原子操作的三大问题
-1) ABA问题 `AtomicStampedReference` 不可变对象pair
-2）循环CPU开销  JVM pause指令
-3）多个共享变量 `AtomicReference`
-
-AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
-
-#### AQS
-AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
-`private volatile int state;`
-`ReentrantLock`用来表示所有者重复获取该锁的次数
-`Semaphore`表示剩余许可数量
-`FutureTask`用于表示任务状态(现在FutureTask不用AQS了)但也是state
-
-当线程尝试更改AQS状态操作获得失败时，会将Thread对象抽象成Node对象 形成CLH队列，LIFO规则。
-
-### juc的锁
-StampedLock多个读不互相阻塞，同时在读操作时不会阻塞写操作。
-
-
----
-## 9.redis
-### 1.redis高性能的原因
-1）内存
-2）单线程
-3）网络请求io多路复用
-“多路”指的是多个网络连接，“复用”指的是复用同一个线程。采用多路 I/O 复用技术可以让单个线程高效的处理多个连接请求（尽量减少网络 IO 的时间消耗），且 Redis 在内存中操作数据的速度非常快，也就是说内存内的操作不会成为影响Redis性能的瓶颈，主要由以上几点造就了 Redis 具有很高的吞吐量。
-
-
-### 2.redis持久化
-持久化方式：
-1）快照 Mysql Dump和Redis RDB 2）写日志 Mysql Binlog Hbase Hlog Redis AOF
-
-RDB是保存数据库中的键值对，AOF保存redis执行的命令。
-
-#### RDB
-RDB是压缩过的二进制文件,会生成临时文件，把老的RDB文件替换掉。
-BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。copy-on-write策略，但是父进程写入还会做副本 内存开销大。
-触发机制：从节点全量复制主节点会生成RDB文件。 debug reload 、 shutdown。
-缺点磁盘性能，宕机没快照的丢了。但是恢复速度快。
-
-#### AOF
-AOF更新频率通常比RDB高。
-写【命令】先从redis 写到硬盘缓冲区 再根据3种策略（everysec每秒，always，no（操作系统自己刷)）fsync到硬盘AOF文件。
-AOF会开子进程重写。
-
-#### 主从复制
-主从复制（副本）集群是为了解决多请求，读写分离，高可用，
-分布式是为了解决一个请求的多个步骤。
-
-redis主从同步的问题
-redis集群一致性hash如何解决分布不均匀
-
-数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
-进入redis用`info replication`可以查看主从状态
-
-##### 全量复制
-1）第一次是全量复制`full resync` master会`BGSAVE`。
-2）从节点的数据全部清除`Flushing old data`，通过网络接受RDB文件，加载RDB文件到内存。
-`info server |grep run` 
-3）在同步期间master的写命令会单独记录，rdb同步完后通过偏移同步给slave。
-可以看到redis实例的run_id。如果从复制的主节点的id发生变化，则需要全量复制。
-
-![fullsync.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fullsync.jpg)
-
-##### 部分复制
-`info replication` 可以看到master的偏移量`master_repl_offset`和slave的偏移量`slave_repl_offset`，主节点可以看到各个从节点的偏移量。
-偏移量主比从大表示主写入了数据还没同步到从。
-如果主从连接断了，先重连，从服务器发送runid和offset，主服务器发送buffer中的部分数据。
-
-#### redis 高可用 sentinel
-
-
-#### redis写失败怎么办
-
-
-## 软工和测试
-### 白盒测试是什么
-### 怎么评价一个软件系统的好坏
-
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-#### java的进程通信
 管道 Java中没有命名管道 
 ```java
 // 启动子进程
@@ -668,6 +546,199 @@ ScheduledFutureTask实现了Comparable接口，是按照任务执行的时间来
 
 #### 如何优化线程池
 怎么配置参数
+
+## 5.分布式
+
+### 1.zookeeper的应用场景
+分布式协调 节点注册监听
+分布式锁
+
+### 2.XA事务 分布式事务
+事务管理器（Mysql客户端）和资源管理器（Mysql数据库）之间用两阶段提交，等所有参与全局事务的都能提交再提交
+用JAVA JTA API
+
+### 3.微服务系统的最大挑战
+数据一致性问题
+1）多实例的并发访问、修改
+2）不同请求之间的数据隔离
+3）多服务的业务请求，原子性
+4）回滚
+
+## 6.数据结构
+### 1.二叉平衡树的应用 红黑树原理
+红黑树确保没有一条路径会比其他路径长出俩倍
+AVL树是严格的平衡二叉树
+如果应用场景中对插入删除不频繁，只是对查找要求较高，那么AVL还是较优于红黑树。
+windows对进程地址空间的管理用到了AVL树
+
+### 2.排序 希尔排序复杂度
+当步长为1时，算法变为普通插入排序
+已知最好n(log^2)n
+
+### 3.最小生成树的两种算法
+Prim算法，标记已选点，选标记点可达的最近点标记，直到标记完所有点。
+把点划分为3类：不可达（不可选），可选，已选
+复杂度：邻接矩阵O(v^2) 邻接表O(elog2v)
+
+Kruskal算法，存在相同权值的边。
+从权值最小的边开始遍历，直到图的点全部在一个连通分量中。
+复杂度：
+
+### 4.Hash碰撞的方法
+1）开放地址法 开放地址法分： 线性探测法（会聚集）、平方探测、双散列
+2）链地址法
+
+不成功平均查找长度，要按照冲突解决方法查找到当前位置为空位置。最后/散列函数的mod（hash函数的分类个数）
+
+## 7.框架
+### 1.Spring容器初始化过程
+ioc aop原理
+
+#### 2.ioc怎么实现
+构造函数、setter、注解
+
+#### 3.Springboot的启动流程
+
+#### 4.SpringMVC工作原理
+1）servlet一共三个层次 
+HttpServletBean:直接继承java的HttpServlet，将Servlet中的配置参数设置到相应的属性。
+
+FrameworkServlet：初始化WebApplicationContext 抽象类静态方法 将不同类型请求合并到一个方法统一处理。还发布了一个事件。
+
+DispatcherServlet:初始化9大组件
+ doService方法保存redirect转发的参数和include的request快照。
+ 调用的doDispatch方法4步
+  1）根据request找到handler（@RequestMapping）
+  2）用mapper根据handler找到handlerAdapter 处理不同参数（不只是request和response）
+  3）handlerAdapter处理，先执行拦截器。Last-Modified
+  4）processDispatchResult处理View
+
+### spring 事务
+
+## 8.并发
+### 1.协程
+
+#### 2.currentHashMap
+https://blog.csdn.net/qq_33256688/article/details/79938886  
+1.7之前是头插，1.8之后是尾插
+
+不能为null
+
+hashmap也是尾插
+ConcurrentLinkedQueue
+CountDownLatch，CyclicBarrier，线程池
+
+### 3.CAS算法原理？优缺点？
+https://juejin.im/post/5ba66a7ef265da0abb1435ae 
+非阻塞算法：一个线程的失败或者挂起不会导致其他线程也失败或者挂起。
+无锁算法：算法的每个步骤，都存在某个线程能执行下去。多个线程竞争CAS总有一个线程胜出并继续执行。
+
+CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存位置，旧的预期值，新值，
+对于多个状态变量的场景，通过`AtomicReference`包装这个对象，每次更新先获取旧值，再创建新值，用这两个值进行CAS原子更新。
+
+#### CAS 实现原子操作的三大问题
+1) ABA问题 `AtomicStampedReference` 不可变对象pair
+2）循环CPU开销  JVM pause指令
+3）多个共享变量 `AtomicReference`
+
+AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
+
+### 3.AQS
+AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
+`private volatile int state;`
+`ReentrantLock`用来表示所有者重复获取该锁的次数
+`Semaphore`表示剩余许可数量
+`FutureTask`用于表示任务状态(现在FutureTask不用AQS了)但也是state
+
+当线程尝试更改AQS状态操作获得失败时，会将Thread对象抽象成Node对象 形成CLH队列，LIFO规则。
+
+### juc的锁
+StampedLock多个读不互相阻塞，同时在读操作时不会阻塞写操作。
+
+
+---
+## 9.redis
+### 1.redis高性能的原因
+1）内存
+2）单线程
+3）网络请求io多路复用
+“多路”指的是多个网络连接，“复用”指的是复用同一个线程。采用多路 I/O 复用技术可以让单个线程高效的处理多个连接请求（尽量减少网络 IO 的时间消耗），且 Redis 在内存中操作数据的速度非常快，也就是说内存内的操作不会成为影响Redis性能的瓶颈，主要由以上几点造就了 Redis 具有很高的吞吐量。
+
+
+### 2.redis持久化
+持久化方式：
+1）快照 Mysql Dump和Redis RDB 2）写日志 Mysql Binlog Hbase Hlog Redis AOF
+
+RDB是保存数据库中的键值对，AOF保存redis执行的命令。
+
+#### RDB
+RDB是压缩过的二进制文件,会生成临时文件，把老的RDB文件替换掉。
+BGSAVE不会阻塞服务器进程，会创建子进程创建RBD文件。copy-on-write策略，但是父进程写入还会做副本 内存开销大。
+触发机制：从节点全量复制主节点会生成RDB文件。 debug reload 、 shutdown。
+缺点磁盘性能，宕机没快照的丢了。但是恢复速度快。
+
+#### AOF
+AOF更新频率通常比RDB高。
+写【命令】先从redis 写到硬盘缓冲区 再根据3种策略（everysec每秒，always，no（操作系统自己刷)）fsync到硬盘AOF文件。
+AOF会开子进程重写。
+
+#### 主从复制
+主从复制（副本）集群是为了解决多请求，读写分离，高可用，
+分布式是为了解决一个请求的多个步骤。
+
+redis主从同步的问题
+redis集群一致性hash如何解决分布不均匀
+
+数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
+进入redis用`info replication`可以查看主从状态
+
+##### 全量复制
+1）第一次是全量复制`full resync` master会`BGSAVE`。
+2）从节点的数据全部清除`Flushing old data`，通过网络接受RDB文件，加载RDB文件到内存。
+`info server |grep run` 
+3）在同步期间master的写命令会单独记录，rdb同步完后通过偏移同步给slave。
+可以看到redis实例的run_id。如果从复制的主节点的id发生变化，则需要全量复制。
+
+![fullsync.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/fullsync.jpg)
+
+##### 部分复制
+`info replication` 可以看到master的偏移量`master_repl_offset`和slave的偏移量`slave_repl_offset`，主节点可以看到各个从节点的偏移量。
+偏移量主比从大表示主写入了数据还没同步到从。
+如果主从连接断了，先重连，从服务器发送runid和offset，主服务器发送buffer中的部分数据。
+
+#### redis 高可用 sentinel
+
+
+#### redis写失败怎么办
+
+
+## 10.软工和测试
+### 白盒测试是什么
+### 怎么评价一个软件系统的好坏
+
+## 11.设计模式
+### 面向对象 和面向过程的区别
+代码复用
+
+对象的产生方式有
+1）原型对象(prototype 原型链)为基础的 （所有对象都是实例）
+2）基于类（Java)的对象模型。
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### 10.线程同步的方法
 互斥量(mutex) 
@@ -993,13 +1064,6 @@ CSRF 盗取用户cookie或者session伪造请求
 2）用token
 3）重定向
 
-### 36 重定向的响应头为302，并且必须要有Location响应头；
-服务器通过response响应，重定向的url放在response的什么地方？
-后端在header里的设置的Location url
-重定向可以用于均衡负载
-
-
-
 
 ### 38 IO模型
 
@@ -1041,9 +1105,11 @@ Proactor实现异步I/O，产生I/O调用的用户进程不会等待I/O发生，
 异步I/O需要操作系统支持，Linux异步I/O为AIO，Windows为IOCP。
 
 ### 39异常 Error 和 Exception的区别
-1）Error是JVM负责的
-2）RuntimeException 是程序负责的
-3）checked Exception 是编译器负责的
+1）都继承Throwable
+2）Error是JVM负责的
+3）分为：可检查和不可检查异常
+不检查：RuntimeException 是程序负责的
+检查：checked Exception 是编译器负责的
 ![ErrirException.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg)
 
 异常处理机制：
@@ -1357,7 +1423,9 @@ Cookie的 `SameSite`属性strict
 3）会威胁客户隐私
 4）用于跟踪用户访问和状态
 
-cookie有两种
+#### cookie有两种
+会话cookie和持久cookie，设置了Discard或者没设置Expires或Max-Age就是会话cookie
+
 cookie的实现
 cookie加密
 
@@ -1494,12 +1562,6 @@ ZooKeeper是以Paxos算法为基础分布式应用程序协调服务。
 1）`get(key)`判断当前时间和value的时间，
 2)如果key超时了可以先get再set`getset(key,currenttime+timeout)` 如果get的值是null或者和之前的锁一样（？）继续`expire(key)`走加锁流程...
 
-### 面向对象
-对象的产生方式有
-1）原型对象(prototype 原型链)为基础的 （所有对象都是实例）
-2）基于类（Java)的对象模型。
-
-
 ### 分布式文件系统HDFS
 1）每个文件拆分成很多小块128M（并行处理和负载均衡）.
 2）文件以多副本存储（副本因子），高可用。
@@ -1533,10 +1595,7 @@ jsonrpc没法区分int和long
 #### 通信开销
 加密和压缩
 
-#### Nginx是如何工作的？是如何配置的？
-tomcat nginx apache 区别
-Apache和nginx是 Http静态服务器
-tomcat 是 Servlet 的容器，处理动态资源。
+
 
 
 ### JMM 内存模型
@@ -1611,6 +1670,9 @@ BASE思想：分布式事务拆分，每个步骤都记录状态，使用【写�
 乐观锁适用于读多写少，但是大并发写（？）
 
 ### 6.读写锁能不能用在大并发场景
+1）读锁与写锁互相阻塞，读取/更新比较费时，出现更新或者读取线程被阻塞。
+2）Copy on write ， 读请求读取旧值，更新完后原子替换掉，并且用引用计数，读取前+1，读完-1，直到没人在用酒对象再删除。问题是，获取对象和计数不是原子的，所以获取，计数+1应该用锁封装成一个原子操作。替换、计数-1也应该是原子操作。
+3）无锁计数器
 
 ### 7.为什么要把页面放到redis中？
 页面缓存，将整个页面手动渲染，加上所有vo，设定有效期1分钟，让用户1看到的是1分钟前的页面

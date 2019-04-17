@@ -523,6 +523,7 @@ public int trap(int[] A){
     int a=0;
     int b=A.length-1;
     int max=0;
+    // 关键
     int leftmax=0;
     int rightmax=0;
     while(a<=b){
