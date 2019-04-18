@@ -34,6 +34,98 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 海盗分金
+https://baike.baidu.com/item/%E6%B5%B7%E7%9B%97%E5%88%86%E9%87%91
+
+### 403 青蛙跳石子
+第一步只能跳跃一步。上一步跳了k步，下一步可以跳k,[k]+1步或者[k]-1步。
+问能否跳到终点
+{% note %}
+8个石头
+[0,1,3,5,6,8,12,17]
+0->1跳1步，
+1->3跳2步，
+3->5跳2步
+5->8跳3步
+8->12跳4步
+12->17跳5步
+true
+{% endnote %}
+
+`[0,1,3,5,6,8,12,17]`
+
+`{17=[], 0=[1], 1=[1, 2], 3=[1, 2, 3], 5=[1, 2, 3], 6=[1, 2, 3, 4], 8=[1, 2, 3, 4], 12=[3, 4, 5]}`
+
+```java
+public boolean canCross(int[] stones) {
+   int n = stones.length;
+    Map<Integer,Set<Integer>> map = new HashMap<>();
+    for(int i = 0;i<n;i++){
+        map.put(stones[i],new HashSet<>());
+    }
+    map.get(0).add(1);
+    for(int i = 0;i<n;i++){
+        for(int step:map.get(stones[i])){
+            int nxt = stones[i]+step;
+            if(nxt == stones[n-1])return true;
+            if(map.containsKey(nxt)){
+                Set<Integer>steps = map.get(nxt);
+                steps.add(step);
+                if(step-1>0)
+                    steps.add(step-1);
+                steps.add(step+1);
+            }
+        }
+    }
+    return false;
+}
+```
+
+
+### 458 毒药
+1000个水桶，1个有毒药，喝了15分钟死，一小时内搞清哪个有毒最少需要多少只猪
+5只 
+4个水桶，1个有毒药，喝了15分钟死，30分钟搞清哪个有毒最少需要多少只猪
+2只 2轮
+
+假设有 n 只水桶，猪饮水中毒后会在 m 分钟内死亡，你需要多少猪（x）就能在 p 分钟内找出 “有毒” 水桶？这 n 只水桶里有且仅有一只有毒的桶。
+思路：2只猪可以把桶放成一个二维的矩形，每一轮2只确定一行和一列，找到一个坐标。
+如果3只猪，可以把桶放成三维X X X ，用三只每一轮确定一个位置。
+
+1 2
+3 4
+第一轮喝 1，2 另一个1，3，都死说明1，不然说明2或者3.不死说明4.
+
+1  2  3
+4  5  6
+7  8  9
+
+第一轮1 2 3， 另一个 1，4 ，7
+三只猪，测两次，可以测27桶
+
+求数组的维度，我们知道了数组的总个数，所以要尽量增加数组的长宽，尽量减少维度。
+
+数组的长宽其实都是测试的次数+1（因为全部测完了都没发生，下一轮不用测肯定在），所以我们首先要确定能测的次数，通过总测试时间除以毒发时间，再加上1就是测试次数。
+$$log_{T+1}(N)$$
+
+```java
+public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+    return (int)Math.ceil(Math.log(buckets)/Math.log(minutesToTest / minutesToDie + 1));
+}
+```
+
+正常思路：
+如果2只，4个桶，一轮
+都不喝0,A喝1，B喝2，AB喝3，
+00      01    10     11
+有x个猪可以表示2^x个状态。
+如果有t次尝试，用t位二进制去表示bucket。
+
+如果8个桶，15分钟死，有40分钟
+可以测试2轮，用3位二进制表示桶
+Math.log(8, 3).ceil
+
+
 ### 407 二维数组存水
 {% note %}
 [
@@ -44,6 +136,7 @@ https://www.nowcoder.com/test/4575457/summary
 
 Return 4.
 {% endnote %}
+用优先队列
 
 
 

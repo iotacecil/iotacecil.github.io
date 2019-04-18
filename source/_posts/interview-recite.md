@@ -32,7 +32,8 @@ mysql 的其他引擎
 悲观锁：`select ... for update;` 
    主键明确&有结果行锁，无结果集（查空）无锁。 
    查询无主键或者不走索引`where id<>'66'` `like`，表索 。
-乐观锁：数据库`version`字段
+   排他性的读写锁、两阶段锁是悲观锁
+乐观锁：数据库`version`字段 MVCC是乐观锁。读多写少，购票、余票系统。
 
 ### 2.索引什么时候会失效
 1）有or or中的每个列都要有索引
@@ -57,6 +58,7 @@ using index & using where：
 ### 4.数据库隔离界别
 
 ### 5.mybatis和jdbc比有什么好处
+mybatis分为哪3层
 1)动态sql
 
 持久层框架 
@@ -613,7 +615,15 @@ DispatcherServlet:初始化9大组件
   3）handlerAdapter处理，先执行拦截器。Last-Modified
   4）processDispatchResult处理View
 
-### spring 事务
+### Spring 事务传播行为
+7种类型的事务传播行为
+1）Required ： 被调用的事务会合并到外围事务中，一起回滚
+2）Supports：支持当前事务，如果没有事务，以非事务方式执行。
+3）NESTED：外围无事务，各自事务不干扰，外围required，有Savepoint和父事务一起提交
+4）MANDATORY：只能被一个父事务调用，不然异常
+5）REQUIRES_NEW
+6）NOT_SUPPORTED：如果B调用时B不支持，A事务会挂起
+7）never：不能在事务中运行，会异常
 
 ## 8.并发
 ### 1.协程
@@ -783,6 +793,8 @@ Sync继承AQS，
 Lock可以跨方法锁对象：登录加锁，登出释放。
 `tryLock`如果获取锁失败会立刻返回 false，不会阻塞。
 
+#### Lock 和 syncronize的区别
+异常机制区别
 
 #### syncronize 可重入
 对象头 Monitor(管程) entry set，wait set
@@ -1425,6 +1437,8 @@ Cookie的 `SameSite`属性strict
 
 #### cookie有两种
 会话cookie和持久cookie，设置了Discard或者没设置Expires或Max-Age就是会话cookie
+
+服务器创建Session ID，cookie的值就是Session ID。 
 
 cookie的实现
 cookie加密
