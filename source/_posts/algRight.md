@@ -241,17 +241,18 @@ private int zoknapdp1d(int W,int[] wt,int[] val,int n){
 ```
 
 #### ?taotao要吃鸡
-> h为0代表没有装备背包
-> n个物品，容量=m+h
-> 接下来n行，第i个物品的物品的重量Wi和威力值Vi。0<=Wi,Vi<=100. 
-> 当装备背包之后，如果可携带重量没有满，就可以拿一个任意重的东西。
-> 3 3 3 
-> 2 3 
-> 3 2 
-> 2 3 
-> 0 
-> 输出 
-> 8 拿了1，2物品val=5,weight=5<6，可以拿3
+h为0代表没有装备背包 n个物品，容量=m+h
+接下来n行，第i个物品的物品的重量Wi和威力值Vi。0<=Wi,Vi<=100. 
+当装备背包之后，如果可携带重量没有满，就可以拿一个任意重的东西。
+{% note %}
+3 3 3 
+2 3 
+3 2 
+2 3 
+0 
+输出 
+8 拿了1，2物品val=5,weight=5<6，可以拿3
+{% ednnote %}
 
 1.方法1
 m+h容量背包，在m+h没装满时可以任意取一个超过重量的
@@ -373,6 +374,7 @@ public static void main(String[] args) {
         int W = 10;
         System.out.println(knapsack(W, arr, arr.size()));
     }
+}
 ```
 {% endfold %}
 
@@ -391,8 +393,10 @@ public static void main(String[] args) {
 ---
 
 #### lt440完全背包 每个物品可用无限次
-> n = 3; `[3,4],[4,5],[2,3]`; W = 7;
-> out 10 (0选1个，2选2个)
+{% note %}
+n = 3; `[3,4],[4,5],[2,3]`; W = 7;
+out 10 (0选1个，2选2个)
+{% endnote %}
 
 ![dpcompbag.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/dpcompbag.jpg)
 `dp[i+1][j]`计算k的循环和`dp[i+1][j-w[i]]`计算k-1的循环是重复的

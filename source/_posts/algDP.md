@@ -4,6 +4,47 @@ date: 2019-03-07 20:56:46
 tags: [alg]
 categories: [算法备忘]
 ---
+
+### 派间谍 二维背包1 lg 1910
+https://www.luogu.org/problemnew/show/P1910
+
+### 称砝码 多重背包1
+[nowcoder](https://www.nowcoder.com/questionTerminal/f9a4c19050fc477e9e27eb75f3bfd49c?mutiTagIds=579&orderByHotValue=1&commentTags=C/C++)
+利用给定的数量的砝码可以称出的不同的重量数
+{% note %}
+2
+1 2
+2 1
+输出
+5
+{% endnote %}
+
+```java
+public static int fama(int n, int[] weight, int[] nums){
+    int sum = 0;
+    for (int i = 0; i <n ; i++) {
+        sum += weight[i]*nums[i];
+    }
+    boolean[][] dp = new boolean[n+1][sum+1];
+    dp[0][0] = true;
+    for (int i = 0; i <n ; i++) {
+        // 使用这个物品，尝试凑出这个总量，并且尝试使用几个
+        for (int j = 0; j <=sum ; j++) {
+            for (int k = 0; k <= nums[i] && k*weight[i]<=j ; k++) {
+                dp[i+1][j] |= dp[i][j-k*weight[i]];
+            }
+        }
+    }
+    int cnt = 0;
+    for (int i = 0; i <=sum ; i++) {
+        if(dp[n][i])cnt++;
+    }
+    return cnt;
+}
+```
+
+
+
 ### 击鼓传花
 每个同学都可以把花传给自己左右的两个同学中的一个（左右任意）有多少种不同的方法可以使得从小赛手里开始传的花，传了m次以后，又回到小赛手里。
 对于传递的方法当且仅当这两种方法中，接到花的同学按接球顺序组成的序列是不同的，才视作两种传花的方法不同。比如有3个同学1号、2号、3号，并假设小赛为1号，花传了3次回到小赛手里的方式有1->2->3->1和1->3->2->1，共2种。
