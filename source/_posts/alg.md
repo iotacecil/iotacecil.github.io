@@ -37,6 +37,8 @@ https://www.nowcoder.com/test/4575457/summary
 ### 海盗分金
 https://baike.baidu.com/item/%E6%B5%B7%E7%9B%97%E5%88%86%E9%87%91
 
+### 778 
+
 ### 403 青蛙跳石子
 第一步只能跳跃一步。上一步跳了k步，下一步可以跳k,[k]+1步或者[k]-1步。
 问能否跳到终点

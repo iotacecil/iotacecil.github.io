@@ -3944,7 +3944,6 @@ public class MiaoshaMessage {
 ```java
 @Autowired
 RedisService redisService;
-
 @Autowired
 MiaoshaSender sender;
 @Autowired
