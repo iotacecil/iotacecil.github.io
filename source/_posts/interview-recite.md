@@ -157,16 +157,38 @@ server端，通过增加内存、修改最大文件描述符个数等参数，�
 301 重定向
 
 响应码
+nginx会检查的
+405 Not Allowed 必须是GET/POST等指定的方法，header不合法，有下划线等
+414 Request URI too Large 请求行太长，超过buffer
+400 Bad request 单个header超过单个buffer大小
+413 Request Entity Too Large 浏览器发送的Content-Length 超过服务器的包体大小。
+
+### 重定向的响应头为302，并且必须要有Location响应头；
+服务器通过response响应，重定向的url放在response的什么地方？
+后端在header里的设置的Location url
+重定向可以用于均衡负载
 
 ### 5.nginx
-qps一般多少 5w-10w
+10w以上的并发连接
+
+#### Nginx是如何工作的？是如何配置的？
+1)事件驱动、全异步网络I/O 极少进程切换
+2）sendfile系统调用 硬盘->网络
+3）可靠性：多进程独立
+
+tomcat nginx apache 区别
+Apache和nginx是 Http静态服务器
+tomcat 是 Servlet 的容器，处理动态资源。
+
 
 nginx的负载均衡策略
 
 ### 6.正向代理和反向代理的区别
 正向代理：隐藏了真实的请求客户端，服务端不知道真实的客户端是谁。需要你主动设置代理服务器ip或者域名进行访问，由设置的服务器ip或者域名去获取访问内容并返回。
 
-反向代理：
+反向代理：接收外网请求，转发给内网上游服务器，并将结果返回给外网客户端。
+先接受完请求的1G文件，缓存客户端请求，
+建立转发，降低上游服务器负载（占用服务器的连接时间会非常短）。
 
 其他web服务器有哪些
 
@@ -621,7 +643,7 @@ mmap需要把内容写回到文件，所以还需要与文件打交道；而SM�
 
 FileChannel 是将共享内存和磁盘文件建立联系的文件通道类。
 
-信号量
+信号
 ```java
 OperateSignal operateSignalHandler = new OperateSignal(); 
 Signal sig = new Signal("SEGV");//SEGV 这个linux和window不同 
@@ -992,14 +1014,6 @@ CSRF 盗取用户cookie或者session伪造请求
 1）submit方法最后把按钮disable掉
 2）用token
 3）重定向
-
-### 36 重定向的响应头为302，并且必须要有Location响应头；
-服务器通过response响应，重定向的url放在response的什么地方？
-后端在header里的设置的Location url
-重定向可以用于均衡负载
-
-
-
 
 ### 38 IO模型
 
@@ -1533,10 +1547,6 @@ jsonrpc没法区分int和long
 #### 通信开销
 加密和压缩
 
-#### Nginx是如何工作的？是如何配置的？
-tomcat nginx apache 区别
-Apache和nginx是 Http静态服务器
-tomcat 是 Servlet 的容器，处理动态资源。
 
 
 ### JMM 内存模型
