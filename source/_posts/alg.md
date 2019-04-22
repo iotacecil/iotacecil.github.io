@@ -34,6 +34,35 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### poj 1013
+
+称硬币:已经分组称了3次12枚硬币，找出假币
+    > ABCD EFGH even
+    > ABI EFJK up
+    > ABIJ EFGH even
+    > 输出假的硬币
+    
+    + 数据结构 `char Left[3][7]``char Right[3][7]` `char result[3][7]` 一共称3次，每边最多放6个硬币，result（天平右边的情况）
+    + `isFake(char c,bool light )`假设函数：c是轻的
+    + `for(char c= 'A' to 'L')`枚举假硬币
+    + `for(3)`三次称重情况都匹配
+        + 如果假设c是轻的，数组保存输入的left,right;如果c是种的，right保存到left 互换
+        + `switch result[i][0]` 选择三种u,e,d的情况
+            + 如果 第一次实验为up,右边高，则c应该出现在right,当`right.indexOf(c)==null`//没出现 return false
+            + 如果even 判断出现在left||right
+            + d 判断出现在left
+
+### 406 按前面有几个高度比自己高的重排 
+[h,k] h 高度 k前面有几个比自己高的
+{% note %}
+Input:
+`[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]`
+
+Output:
+`[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]`
+{% endnote %}
+
+思路：按高度排序，再新建一个linkedlist按k插入到相应位置，再转成数组
 
 ### 海盗分金
 https://baike.baidu.com/item/%E6%B5%B7%E7%9B%97%E5%88%86%E9%87%91
@@ -4709,21 +4738,6 @@ O(MN)
 
     + a->[2,N];b->[2,a-1];c[c,a-1];d[c,a-1]
 
-3. 称硬币:已经分组称了3次12枚硬币，找出假币
-    > ABCD EFGH even
-    > ABI EFJK up
-    > ABIJ EFGH even
-    > 输出假的硬币
-    
-    + 数据结构 `char Left[3][7]``char Right[3][7]` `char result[3][7]` 一共称3次，每边最多放6个硬币，result（天平右边的情况）
-    + `isFake(char c,bool light )`假设函数：c是轻的
-    + `for(char c= 'A' to 'L')`枚举假硬币
-    + `for(3)`三次称重情况都匹配
-        + 如果假设c是轻的，数组保存输入的left,right;如果c是种的，right保存到left 互换
-        + `switch result[i][0]` 选择三种u,e,d的情况
-            + 如果 第一次实验为up,右边高，则c应该出现在right,当`right.indexOf(c)==null`//没出现 return false
-            + 如果even 判断出现在left||right
-            + d 判断出现在left
 ---
 4. 熄灯问题(deng.java)
     > 按一个位置，改变上下左右自己5个灯的状态，边角自动变少3，4

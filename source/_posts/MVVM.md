@@ -36,7 +36,8 @@ function myVue(options={}) {//传入的对象（{el:,data:}
   ///-------渲染
    new Compile(options.el,this)
 }
-  ```
+```
+
 3. 数据劫持（观察者）对_data定义get/set属性
 ```js
 function Observer(data) {

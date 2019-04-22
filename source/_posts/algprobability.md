@@ -4,6 +4,27 @@ date: 2018-10-18 20:59:40
 tags:
 categories: [算法备忘]
 ---
+
+
+### !!172 Factorial Trailing Zeroes 阶乘后面后几个0
+{% note %}
+Input: 5
+Output: 1
+Explanation: 5! = 120, one trailing zero.
+{% endnote %}
+2一定比5多，算一下这些数一共有多少个5.
+
+```java
+public int trailingZeroes(int n) {
+   int rst = 0;
+    while(n != 0){
+        rst += n/5;
+        n/=5;
+    }
+    return rst;
+}
+```
+
 ### 343 Integer Break 和固定的数字的最大乘积
 {% note %}
 Input: 10
@@ -75,24 +96,7 @@ public int countDigitOne(int n) {
 ```
 
 
-### 172 Factorial Trailing Zeroes 阶乘后面后几个0
-{% note %}
-Input: 5
-Output: 1
-Explanation: 5! = 120, one trailing zero.
-{% endnote %}
-2一定比5多，算一下这些数一共有多少个5.
 
-```java
-public int trailingZeroes(int n) {
-   int rst = 0;
-    while(n != 0){
-        rst += n/5;
-        n/=5;
-    }
-    return rst;
-}
-```
 
 ### m个芒果n个人
 https://www.geeksforgeeks.org/count-ways-to-distribute-m-items-among-n-people/

@@ -4,6 +4,8 @@ date: 2018-03-02 21:18:51
 tags: [java,Thread,SpringBoot]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+
+
 在64bit JVM（关闭压缩指针）下，一个Integer对象占用的内存空间为24Byte = 8Byte mark_header + 8Byte Klass 指针 + 4Byte int（用于存储数值）+ 4Byte（Padding，Java对象必须以8Byte为界对齐）
 CPU每次读内存时都可以一次性读取1个Cache Line（一般是64Byte）的内容，而一个boolean只占1Byte，所以达到很高的遍历速度。
 

@@ -4,6 +4,9 @@ date: 2018-04-13 08:46:51
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 不可变对象加锁，锁的不是同一个
+i++的例子里，如果是Integer，synchronized锁的对象不是同一个
+
 ### Lock实现业务级别加锁
 ```java
 class AccountWithLock {
