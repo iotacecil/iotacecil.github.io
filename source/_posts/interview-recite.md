@@ -666,6 +666,8 @@ Lock可以跨方法锁对象：登录加锁，登出释放。
 #### `StampedLock` 
 1.8新加。是单独的类型，不可重入，锁不是持有线程为单位的。
 问题：读写锁使得读和读可以完全并发，但是读锁会完全阻塞写锁。
+思路：试着先修改，然后通过validate方法确认是否进入了写模式，如果进入，则尝试获取读锁。
+读操作不需要等写操作完。
 StampedLock 是乐观锁，
 写锁`long stamp = .writeLock`，`.unlockWrite` 
 读锁`long stamp = .tryOptimisticRead()` ， `.validate(stamp)` `.unlockRead(stamp` 还可以强行时候悲观读
