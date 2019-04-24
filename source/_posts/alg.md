@@ -34,6 +34,45 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 330 从1-n中选哪些数字可以求和得到1-n
+最少需要给nums加几个数字，使其能组成[1,n]之间的所有数字
+{% note %}
+输入: nums = [1,3], n = 6
+输出: 1 
+解释:
+根据 nums 里现有的组合 [1], [3], [1,3]，可以得出 1, 3, 4。
+现在如果我们将 2 添加到 nums 中， 组合变为: [1], [2], [3], [1,3], [2,3], [1,2,3]。
+其和可以表示数字 1, 2, 3, 4, 5, 6，能够覆盖 [1, 6] 区间里所有的数。
+所以我们最少需要添加一个数字。
+{% endnote %}
+
+思路：int miss = [1-n] 中不能表示的最小值, 
+如果 现在能凑出1，遇到3 > miss 需要+miss这个数，不然凑不出 + 2，
+当前miss是4，遇到3，则可以凑出[1-4+3), 思考原来可以用1，2凑出[1,2,3]，每个数字+3
+注意：循环条件 miss<=n，不是数组，考虑空数组也应该++
+
+```java
+public int minPatches(int[] nums, int n) {
+    long miss = 1;
+    int len = nums.length;
+    int idx = 0;
+    int cnt = 0;
+    while(miss <= n){
+        //如果可以
+        if(idx < len && nums[idx] <= miss){
+            miss+= nums[idx];
+            idx++;
+        }else {
+            cnt++;
+            miss+=miss;
+        }
+    }
+    return cnt;
+}
+```
+
+### 942增减字符串匹配
+
 ### poj 1013
 
 称硬币:已经分组称了3次12枚硬币，找出假币

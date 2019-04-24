@@ -5,6 +5,37 @@ tags: [alg]
 categories: [算法备忘]
 ---
 
+### 337 树形house robber 不能抢相邻层
+{% note %}
+```
+Input: [3,2,3,null,3,null,1]
+     3
+    / \
+   2   3
+    \   \ 
+     3   1
+
+Output: 7 
+Explanation: Maximum amount of money the thief can rob = 3 + 3 + 1 = 7.
+```
+{% endnote %}
+每个节点有两种状态，偷或者不偷，保存的是当前节点及以下的最大利润
+```java
+public int rob(TreeNode root) {
+        int[] rst = robb(root);
+        return Math.max(rst[0],rst[1]);
+    }  
+    private int[] robb(TreeNode root){
+        if(root == null)return new int[2];
+        int[] rst = new int[2];  
+        int[] left = robb(root.left); 
+        int[] right = robb(root.right);
+        rst[0] = Math.max(left[0],left[1]) + Math.max(right[0],right[1]);
+        rst[1] = root.val+left[0]+right[0];
+        return rst;      
+ }
+```
+
 ### 派间谍 二维背包1 lg 1910
 https://www.luogu.org/problemnew/show/P1910
 
