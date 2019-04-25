@@ -4,6 +4,62 @@ date: 2019-03-07 20:56:46
 tags: [alg]
 categories: [算法备忘]
 ---
+### 968 树形dp 监控照相机覆盖
+{% note %}
+Input: [0,0,null,0,0]
+Output: 1
+Explanation
+{% endnote %}
+
+正确做法贪心dfs：，叶子节点不放，到cover不住叶子的时候再放
+3种状态：
+0.叶子节点 ： left和right返回状态都是2
+1.子节点有个叶子 ++,放照相机，被覆盖
+2.null / 子节点有个有照相机 ：没有照相机但是被覆盖
+
+考虑如果dfs返回就是叶子节点状态，need没有增加，要手动+1
+```java
+int need = 0;
+public int minCameraCover(TreeNode root) {
+    if(dfs(root)==0)return need+1;
+    return need;
+}
+private int dfs(TreeNode root){
+    if(root == null)return 2;
+    int left = dfs(root.left);
+    int right = dfs(root.right);
+    if(left == 0 || right == 0){
+        need++;
+        return 1;
+    }
+    if(left == 1 ||right == 1)return 2;
+    else if(left == 2 &&right == 2)return 0;
+    // return什么都行
+    else return 0;
+}
+```
+
+dp[3]记录3种状态当前节点及子树放的照相机数量。
+状态1：子树已经cover，这个节点还没
+状态2：子树和这个节点被cover，不放照相机
+状态3：子树和这个节点被cover，在此放置照相机（可能cover父节点）
+```java
+public int minCameraCover(TreeNode root) {
+   int[] rst = solve(root);
+    return Math.min(rst[1],rst[2]);
+}
+ public int[]solve(TreeNode node){
+    if(node == null)return new int[]{0,0,1};
+    // left not cover , left cover , left parent covered
+    int[] l = solve(node.left);
+    int[] r = solve(node.right);
+    return new int[]{l[1]+r[1],
+            Math.min(l[0]+r[0]+1, Math.min(l[2]+r[1],l[1]+r[2])),
+    Math.min(l[0],l[1])+Math.min(r[0],r[1])+1};
+}
+```
+
+
 
 ### 337 树形house robber 不能抢相邻层
 {% note %}

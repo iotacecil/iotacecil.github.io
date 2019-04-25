@@ -34,6 +34,31 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 979 树中分硬币
+https://leetcode.com/problems/distribute-coins-in-binary-tree/
+{% note %}
+Input: [0,3,0]
+Output: 3
+{% endnote %}
+N个硬币落在树节点上，每次可以移动1个硬币到相邻节点，问最少多少次能让每个节点只有1个硬币。
+思路：从叶子节点应该向外运几个或者向父节点要几个。
+```java
+int cnt = 0;
+public int distributeCoins(TreeNode root) {
+    dfs(root);
+    return cnt;
+}
+int dfs(TreeNode root){
+    if(root == null)return 0;
+    int left = dfs(root.left);
+    int right = dfs(root.right);
+    int sum = left + right+root.val;
+    cnt += Math.abs(sum-1);
+    return sum-1;
+}
+```
+
+
 ### 330 从1-n中选哪些数字可以求和得到1-n
 最少需要给nums加几个数字，使其能组成[1,n]之间的所有数字
 {% note %}
