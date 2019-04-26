@@ -4,7 +4,42 @@ date: 2018-09-03 14:44:31
 tags:
 categories: [算法备忘]
 ---
-### !!!!!239 数组给定滑动窗口大小的最大值
+### 37 数独
+```java
+public void solveSudoku(char[][] board){
+    if(board == null || board.length == 0)
+        return;
+    solve(board);
+}
+private boolean solve(char[][] board){
+    for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board[0].length ; j++) {
+            if(board[i][j] == '.'){
+                for(char c = '1';c<='9';c++){
+                    if(isValid(board,i,j,c)){
+                        board[i][j] = c;
+                        if(solve(board))return true;
+                        else board[i][j] = '.';
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+private boolean isValid(char[][] board,int row,int col,char c){
+    for (int i = 0; i <9 ; i++) {
+        if(board[i][col] == c)return false;
+        if(board[row][i] == c)return false;
+        if(board[3*(row/3) + i/3][3*(col/3)+i%3]==c)return false;
+    }
+    return true;
+}
+```
+
+### 239 滑动窗口最大值 不会x4
 {% note %}
 ```
 Input: nums = [1,3,-1,-3,5,3,6,7], and k = 3
@@ -21,8 +56,13 @@ Window position                Max
  1  3  -1  -3  5 [3  6  7]      7
 ```
 {% endnote %}
-思路：用双端队列，
-1保持队首到队尾递减 新加的比队列中大 就把之前比它小的都踢掉 2存index，当最左边最老的index已经不在窗口则踢掉。
+思路1：左右扫描：把数组按k划分
+A = [2,1,3,4,6,3,8,9,10,12,56], w=4
+2, 1, 3, 4 | 6, 3, 8, 9 | 10, 12, 56| 最后一组可能不足k个
+left_max[] = 2, 2, 3, 4 | 6, 6, 8, 9 | 10, 12, 56
+right_max[] = 4, 4, 4, 4 | 9, 9, 9, 9 | 56, 56, 56
+sliding-max(i) = max{right_max(i), left_max(i+w-1)}
+sliding_max = 4, 6, 6, 8, 9, 10, 12, 56
 
 ---
 
