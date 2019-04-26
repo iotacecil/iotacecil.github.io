@@ -59,6 +59,7 @@ public int minCameraCover(TreeNode root) {
 }
 ```
 
+### lg p1352
 
 
 ### 337 树形house robber 不能抢相邻层

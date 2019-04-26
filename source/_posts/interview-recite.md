@@ -151,6 +151,9 @@ server端，通过增加内存、修改最大文件描述符个数等参数，�
 1）单个IP、session统计 对header user-agent、referer检测
 
 ### 3.7层模型是哪7层
+表示层：数据格式变化，加密解密，压缩和恢复 会被放到应用层和会话层
+会话层：建立连接，有序传输数据。建立、管理、终止会话。使用校验点，使会话失效时从同步点/校验点恢复通信。（传文件）ADSP ASP
+传输层：第一个端到端通信。根据端口分报文到不同的进程。
 
 ### 4.http
 如果输入163.com跳转到www.163
@@ -1380,6 +1383,7 @@ JNI(Java Native Interface)调用non-Java程序（C或C++），finalize()的工�
 ### Exception和Error的区别
 
 ### 事务是什么
+数据库并发控制的基本单位。
 一个类里面有两个方法A和B，方法A有@Transaction，B没有，但B调用了A，外界调用B会不会触发事务？
 
 ### 51ThreadPoolExecutor 怎么实现的
