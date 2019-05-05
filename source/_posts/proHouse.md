@@ -352,3 +352,18 @@ thymeleaf 公共头部templates/admin/common.html
 `<header th:fragment="header" class="navbar-wrapper">`头部样式
 在要使用的页面使用那个header
 ` <div th:include="admin/common :: head"></div>`
+
+添加post接口
+
+
+文件上传配置类
+
+文件配置属性
+```java
+spring.http.multipart.enabled=true
+spring.http.multipart.location=E:\\houselearn\\tmp
+spring.http.multipart.file-size-threshold=5MB
+spring.http.multipart.max-request-size=20MB
+```
+
+
