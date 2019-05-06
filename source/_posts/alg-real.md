@@ -4,6 +4,161 @@ date: 2019-03-21 15:40:14
 tags: [alg]
 categories: [算法备忘]
 ---
+
+### mt01 切割树 树形DP计数
+https://www.luogu.org/problemnew/show/CF461B
+给你一棵含有n个结点的树，编号为0~n-1，这n个结点都被染成了黑色或白色。
+显然，对于一棵树而言，我们每去掉一条边就能把树分成两部分。
+现在，要求你把这棵树切开，使得**每一个连通块内只有一个白色结点**。
+问共有多少种切开的方式满足以上条件，如果被删除的边集不同，我们则认为两种方式不同，反之，认为相同。
+请输出对1000000007取模后的结果。
+{% note %}
+3
+0 0
+1 0 0
+输出样例1：
+2
+输入样例2：
+10
+0 0 1 2 0 5 1 2 3
+1 0 0 1 0 0 1 1 0 1
+输出样例2：
+3
+{% endnote %}
+转移方程
+```
+f[u]表示u的连通区域有一个白的方案数 
+g[u]表示u的连通区域没有白的方案数 
+// u的连通区域有1个白 自己是白，可以断开的方案数+自己不是白，不能断开的方案数 
+// 多个孩子节点为什么是乘法（？）
+// 1）自己是白 子树有/没有白f[u]*(g[son]+f(u)) 2)自己是黑，子树有白g[u]*f[son]
+f[u]=f[u]*g[son]+f[u]*f[son]+g[u]*f[son] 
+// 例子，如果dfs返回的一个son是白f[son] = 1,g[son] = 0当前也是白f[u] = 1 =0+1+0
+// 包括当前节点的树 没有白 子树怎么样都行的方案数
+g[u]=g[u]*g[son]+g[u]*f[son]
+// 每个节点的初始条件，如果是白，则f[u] = 1 不然g[u] = 1
+```
+```java
+public class Main {
+    static long[] f;
+    static long[] g;
+    final static long mod = 1000000007;
+    public static void dfs(List[] tree,int[]color,int idx,int fd){
+        // 白色
+        if(color[idx] == 0)f[idx] = 1;
+        else g[idx] = 1;
+        List<Integer> nexts = tree[idx];
+        for(Integer next : nexts){
+            if(next == fd)continue;
+            dfs(tree,color,next,idx);
+            f[idx] =(f[idx]*g[next]%mod + f[next]*f[idx]%mod + g[idx] *f[next]%mod)%mod;
+            g[idx] =(g[idx]*g[next]%mod + g[idx] * f[next]%mod)%mod;
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<Integer>[] tree = new ArrayList[n];
+        for (int i = 0; i <n ; i++) {
+            tree[i] = new ArrayList<>();
+        }
+        // 连接 当前节点 i+1和读入的father
+        for (int i = 0; i <n-1 ; i++) {
+            int fd = sc.nextInt();
+            tree[fd].add(i+1);
+            tree[i+1].add(fd);
+        }
+        int[] color = new int[n];
+        f = new long[n];
+        g = new long[n];
+        // 每个节点的颜色 0 白色 1 黑色
+        for (int i = 0; i <n ; i++) {
+            color[i] = sc.nextInt();
+        }
+        dfs(tree,color,0,-1);
+        System.out.println(f[0]);
+    }
+```
+
+### jd02 寻找子串
+给出m个字符串，和一个字符串T，在T中选出经可能多的子串，同时满足
+1）这些子串在T中互不相交
+2）这些子串是这m个中的 
+T最多能选多少个子串（注意一个串可以用好几次）（b,b,aa)(b,b,ac)
+{% note %}
+3
+aa
+b
+ac
+bbaac
+输出
+3
+{% endnote %}
+
+### jd01 逃生
+1是根，每个位置上只能有1个人，一分钟移动1个，问全部移动到1最短时间多少
+{% note %}
+input
+6
+3 2
+2 1
+4 3
+5 2
+6 1
+
+output
+4
+{% endnote %}
+```java
+public class taosheng {
+    static class Node{
+        int val;
+        List<Integer> nexts;
+
+        public Node(int val) {
+            this.val = val;
+            this.nexts = new ArrayList<>();
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        // 邻接表
+        Node[] graph = new Node[n];
+        for (int i = 0; i <n ; i++) {
+            graph[i] = new Node(i);
+        }
+        for (int i = 0; i <n-1 ; i++) {
+            int v = sc.nextInt();
+            int w = sc.nextInt();
+            graph[v-1].nexts.add(w-1);
+            graph[w-1].nexts.add(v-1);
+        }
+        int max = 0;
+        // 计算根节点的所有相邻点 的最大深度
+        List<Integer> roots = graph[0].nexts;
+        for(Integer root : roots){
+            int count = getEdgeCnt(graph,root,0);
+            max = Math.max(max, count);
+        }
+        System.out.println(max+1);
+    }
+    //dfs遍历计算子节点(边）个数
+    private static int getEdgeCnt(Node[] graph, Integer root, int i) {
+        int cnt = 0;
+        List<Integer> nexts = graph[root].nexts;
+        // 忽略到 父节点 i 的边
+        cnt += nexts.size()-1;
+        for(Integer next:nexts){
+            if(next == i)continue;
+            cnt += getEdgeCnt(graph, next, root);
+        }
+        return cnt;
+    }
+}
+
+```
+
 ### tt 变身程序员 lc994
 1是新鲜橘子，2是烂橘子,全部变成烂橘子的最少分钟数
 {% note %}
