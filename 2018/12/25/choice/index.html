@@ -90,7 +90,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/stringintern.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/bridge.jpg">
-<meta property="og:updated_time" content="2019-04-15T01:34:22.128Z">
+<meta property="og:updated_time" content="2019-04-23T04:44:05.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单选题记录">
 <meta name="twitter:description" content="1.类加载父类的静态成员初始化&amp;gt;父类的静态代码块&amp;gt;子类的静态成员初始化&amp;gt;子类的静态代码块&amp;gt;父类的代码块&amp;gt;父类的构造方法&amp;gt;子类的代码块&amp;gt;子类的构造方法 12345678910111213public class Test &amp;#123; public static void main(String[] args) &amp;#123;        System.ou">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-15T09:34:22+08:00">
-                2019-04-15
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-23T12:44:05+08:00">
+                2019-04-23
               </time>
             
           </span>
@@ -383,8 +383,10 @@
 <p>如果抛出 InterruptedException 意味着一个方法是阻塞方法</p>
 <p>如何在多线程中避免发生死锁？</p>
 <p>正确答案 : ABCD您的答案 : BCD<br>A允许进程同时访问某些资源。<br>B允许进程强行从占有者那里夺取某些资源。<br>C进程在运行前一次性地向系统申请它所需要的全部资源。<br>D把资源事先分类编号，按号分配，使进程在申请，占用资源时不会形成环路。</p>
-<hr>
-<h3 id="3-进程线程"><a href="#3-进程线程" class="headerlink" title="3. 进程线程"></a>3. 进程线程</h3><p>以下关于进程和线程的描述中，正确的一项是（ ）<br>A 一个进程就是一个独立的程序<br>B 进程间是互相独立的，同一进程的各线程间也是独立的，不能共享所属进程拥有的资源<br>C 每个线程都有自己的执行堆线和程序计数器为执行上下文<br>D 进程的特征包括动态性、并发性、独立性、同步性</p>
+<p>下列关于线程调度的叙述中,错误的是(  )</p>
+<p>正确答案 : C您的答案 : B<br>A调用线程的sleep()方法,可以使比当前线程优先级低的线程获得运行机会<br>B调用线程的yeild()方法,只会使与当前线程相同优先级的线程获得运行机会<br>C具有相同优先级的多个线程的调度一定是分时的<br>D分时调度模型是让所有线程轮流获得CPU使用权</p>
+<p>下列关于线程调度的叙述中，错误的是（）。<br>A调用线程的sleep()方法，可以使比当前线程优先级低的线程获得运行机会<br>B调用线程的yeild()方法，只会使与当前线程相同优先级的线程获得运行机会<br>C当有比当前线程的优先级高的线程出现时，高优先级线程将抢占CPU并运行<br>D一个线程由于某些原因进入阻塞状态，会放弃CPU<br>E具有相同优先级的多个线程的调度一定是分时的<br>F分时调度模型是让所有线程轮流获得CPU使用权</p>
+<h2 id="正确答案：B-C-E"><a href="#正确答案：B-C-E" class="headerlink" title="正确答案：B C E"></a>正确答案：B C E</h2><h3 id="3-进程线程"><a href="#3-进程线程" class="headerlink" title="3. 进程线程"></a>3. 进程线程</h3><p>以下关于进程和线程的描述中，正确的一项是（ ）<br>A 一个进程就是一个独立的程序<br>B 进程间是互相独立的，同一进程的各线程间也是独立的，不能共享所属进程拥有的资源<br>C 每个线程都有自己的执行堆线和程序计数器为执行上下文<br>D 进程的特征包括动态性、并发性、独立性、同步性</p>
 <p>他的回答： A (错误)<br>正确答案： C</p>
 <h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4><p>某系统中有4个并发进程，多需要同类资源5个，试问该系统无论怎样都不会发生死锁的最少资源数是</p>
 <hr>
@@ -423,19 +425,34 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        fib(<span class="number">7</span>);</span><br><span class="line">        System.out.println(cnt);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        cnt++;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (n == <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>cnt(n)=cnt(n-1)+cnt(n-2)+1<br>f(0) 1次 f(1) 1次<br>f(2)=f(0)+f(1)+1=3<br>f(3)=f(1)+f(2)=1+1+3=5<br>f(4)=f(2)+f(3)=1+3+5=9<br>f(5)=f(4)+f(3)=1+9+5=15<br>f(6)=f(5)+f(4)=1+15+9=25<br>f(7)=f(6)+f(5)=25+15+1=41</p>
 <h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h4><p>广义表(((a,b,c),d,e,f))的长度是<br>1<br>长度：去掉一层括号剩下的是几部分。<br>深度：去掉几层括号可以到最后一部分.</p>
+<p>以下序列中不可能是一棵二叉查找树的后序遍历结构的是:<br>A 1,2,3,4,5<br>B 3,5,1,4,2<br>C 1,2,5,4,3<br>D 5,4,3,2,1</p>
+<p>B 无法找到一个合理的划分点，来组成二叉查找树 </p>
+<p>一棵非空的二叉树的先序遍历序列与后序遍历序列正好相反，则该二叉树一定满足?</p>
+<p>正确答案 : C您的答案 : D<br>A所有的结点均无左孩子<br>B所有的结点均无右孩子<br>C只有一个叶子结点<br>D是一棵满二叉树</p>
+<p>具有7个顶点的【有向图】至少应有多少条边才可能成为一个强连通图?</p>
+<p>正确答案 : B您的答案 : A<br>A 6 B 7 C 8 D 12<br>有向图强连通：从任何一点出发都可以回到原处，每个节点至少要一条出路(单节点除外)至少有n条边，正好可以组成一个环<br>最多n(n-1) 最少n</p>
 <hr>
 <h3 id="8-网络"><a href="#8-网络" class="headerlink" title="8.网络"></a>8.网络</h3><h4 id="nagle-算法"><a href="#nagle-算法" class="headerlink" title="nagle 算法"></a>nagle 算法</h4><p>设置tcp的哪个socket参数会影响了 nagle算法？<br>正确答案: D<br>TCP_MAXSEG<br>TCP_KEEPALIVE<br>TCP_SYNCNT<br>TCP_NODELAY</p>
 <p>TCP/IP希望每次都能够以MSS尺寸的数据块来发送数据。Nagle算法就是为了尽可能发送大块数据,避免网络中充斥着许多小数据块.</p>
 <p>一个提供NAT服务的路由器在转发一个源IP地址为10.0.0.1、目的IP地址为131.12.1.1的IP分组时，可能重写的IP分组首部字段是<br>Ⅰ.TTL<br>Ⅱ.片偏移量<br>Ⅲ.源IP地址<br>Ⅳ.目的IP地址</p>
 <p>答案1，2，3<br>在路由器的分组转发过程中，间接转发时，源IP地址随着路由器的变化在不停变化，生存时间（TTL）每跳过一个路由器减1，片偏移量和偏移标志、首部检验和也可能发生变化。但目的IP地址始终不会变化。</p>
 <p>查看系统内存如下：<br>    [@server ~]# free -g<br>    total used free shared buffers cached<br>    Mem: 15 5 9 0 0 2<br>    -/+ buffers/cache: 3 12<br>    Swap: 0 0 0<br>那么程序实际可使用内存有多少</p>
-<h3 id="9-SQL"><a href="#9-SQL" class="headerlink" title="9.SQL"></a>9.SQL</h3><p>sql中，可以用来替换DISTINCT的语句是（ ）</p>
+<p>HTTP中的POST和GET在下列哪些方面有区别?(  )</p>
+<p>正确答案 : ABCDE您的答案 : ADE<br>A数据位置B明文密文C数据安全D长度限度E应用场景</p>
+<h3 id="9-数据库-SQL"><a href="#9-数据库-SQL" class="headerlink" title="9.数据库 SQL"></a>9.数据库 SQL</h3><p>sql中，可以用来替换DISTINCT的语句是（ ）</p>
+<p>mysql数据库中一张user表中,其中包含字段A,B,C,字段类型如下:A:int,B:int,C:int根据字段A,B,C按照ABC顺序建立复合索引idx_A_B_C,以下查询语句中使用到索引idx_A_B_C的语句有哪些？</p>
+<p>正确答案 : ABD您的答案 : AB<br>Aselect <em>from user where A=1 and B=1<br>Bselect </em>from user where 1=1 and A=1 and B=1<br>Cselect <em>from user where B=1 and C=1<br>Dselect </em>from user where A=1 and C=1</p>
+<p>对于满足SQL92标准的SQL语句:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> foo,<span class="keyword">count</span>(foo)<span class="keyword">from</span> pokes </span><br><span class="line"><span class="keyword">where</span> foo&gt;<span class="number">10</span> <span class="keyword">group</span> <span class="keyword">by</span> foo <span class="keyword">having</span> <span class="keyword">count</span> (*)&gt;<span class="number">5</span> </span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> foo</span><br></pre></td></tr></table></figure></p>
+<p>其执行顺序应该是?</p>
+<p>正确答案 : A您的答案 : B<br>A FROM-&gt;WHERE-&gt;GROUP BY-&gt;HAVING-&gt;SELECT-&gt;ORDER BY<br>B FROM-&gt;GROUP BY-&gt;WHERE-&gt;HAVING-&gt;SELECT-&gt;ORDER BY<br>C FROM-&gt;WHERE-&gt;GROUP BY-&gt;HAVING-&gt;ORDER BY-&gt;SELECT<br>D FROM-&gt;WHERE-&gt;ORDER BY-&gt;GROUP BY-&gt;HAVING-&gt;SELECT</p>
 <h3 id="10-shell"><a href="#10-shell" class="headerlink" title="10. shell"></a>10. shell</h3><p>Shell 脚本（shell script），是一种为 shell 编写的脚本程序。现有一个test.sh文件，且有可执行权限，文件中内容为：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">aa='Hello World !'</span><br></pre></td></tr></table></figure></p>
 <p>请问下面选项中哪个能正常显示Hello World !<br>sh test.sh &gt;/dev/null 1 &amp;&amp; echo $aa<br>./test.sh &gt;/dev/null 1 &amp;&amp; echo $aa<br>bash test.sh &gt;/dev/null 1 &amp;&amp; echo $aa<br>. ./test.sh &gt;/dev/null 1 &amp;&amp; echo $aa / source test.sh &gt;/dev/null 1 &amp;&amp; echo $aa<br>答案D<br>ABC都是开子shell，不影响当前环境中的变量<br>. ./test.sh等于source ./test.sh直接影响当前环境下的变量</p>
+<p>在linux系统中,有一个文件夹里面有若干文件,通常用哪个命令可以获取这个文件夹的大小:</p>
+<p>正确答案 : B您的答案 : B<br>Als -h Bdu -sh Cdf -h Dfdish -h</p>
 <h3 id="11-操作系统"><a href="#11-操作系统" class="headerlink" title="11. 操作系统"></a>11. 操作系统</h3><p>下列有关软连接描述正确的是</p>
 <p>正确答案 : C您的答案 : D<br>A与普通文件没什么不同，inode 都指向同一个文件在硬盘中的区块<br>B不能对目录创建软链接<br>C保存了其代表的文件的绝对路径，是另外一种文件，在硬盘上有独立的区块，访问时替换自身路径D不可以对不存在的文件创建软链接</p>
 <ul>
-<li>软链接有自己的文件属性及权限等；<br>-可对不存在的文件或目录创建软链接；<br>-软链接可交叉文件系统；<br>-软链接可对文件或目录创建；<br>-创建软链接时，链接计数 i_nlink 不会增加；<br>-删除软链接并不影响被指向的文件，但若被指向的原文件被删除，则相关软连接被称为死链接（即 dangling link，若被指向路径文件被重新创建，死链接可恢复为正常的软链接）</li>
+<li>软链接有自己的文件属性及权限等；<br>-<strong>可对不存在的文件或目录创建软链接</strong>；<br>-软链接可交叉文件系统；<br>-软链接可对文件或目录创建；<br>-创建软链接时，链接计数 i_nlink 不会增加；<br>-删除软链接并不影响被指向的文件，但若被指向的原文件被删除，则相关软连接被称为死链接（即 dangling link，若被指向路径文件被重新创建，死链接可恢复为正常的软链接）</li>
 </ul>
 <hr>
 <p>下列关于链接描述，错误的是<br>正确答案: B   你的答案: A (错误)<br>A硬链接就是让链接文件的i节点号指向被链接文件的i节点<br>B<strong>硬链接和符号连接都是产生一个新的i节点</strong><br>C链接分为硬链接和符号链接<br>D硬连接不能链接目录文件</p>
@@ -447,6 +464,8 @@
 <li>不能对目录进行创建，只可对文件创建；</li>
 <li>删除一个硬链接文件并不影响其他有相同 inode 号的文件。</li>
 </ul>
+<p>以下关于linux操作系统中硬链接和软链接的描述,正确的是?</p>
+<p>正确答案 : B您的答案 : D<br>A硬链接和软链接指向的inode的编号是一样的<br>B可以建立一个空文件的软链接<br>Clinux操作系统可以对目录进行硬链接<br>D硬链接指向inode节点</p>
 <h3 id="12-linux"><a href="#12-linux" class="headerlink" title="12. linux"></a>12. linux</h3><p>Linux文件权限一共10位长度(例如drwxrwxrwx)，分成四段，第三段表示的内容是:<br>正确答案: C   你的答案: B (错误)<br>A文件类型<br>B文件所有者的权限<br>C文件所有者所在组的权限<br>D其他用户的权限</p>
 <p><code>-rw-r--r--</code>10位权限 （r4 w2 x1 读写执行权限 -没有权限 rwx7r-x5r-x5）设计成2的幂次因为不会歧义<br><code>rw-</code>u所有者权限<br><code>r--</code>g所属组<br><code>r--</code>其他人</p>
 <h3 id="13-引用"><a href="#13-引用" class="headerlink" title="13. 引用"></a>13. 引用</h3><p>下面有关值类型和引用类型描述正确的是（）？</p>
@@ -455,6 +474,22 @@
 <h3 id="14-泛型"><a href="#14-泛型" class="headerlink" title="14. 泛型"></a>14. 泛型</h3><p>JVM p251<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Test t = <span class="keyword">new</span> Test();</span><br><span class="line">        t.method(<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(Object o)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Object"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"String"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>答案： String<br>方法重载，编译期间静态分派 如果输入一个char去匹配<br>1）先安全转型<br>char-&gt;int&gt;long&gt;float-&gt;double<br>不会匹配到byte和short 因为转型不安全<br>2）在自动装箱<br>Character，不会转成Integer<br>3）然后转型成父类<br>如果有多个父类，按继承关系，从下往上。如果实现了多个接口，优先级是一样的，不写明编译器报错。<br>4）可变长参数(char… arg)的优先级最低，而且不会转型成int了</p>
 <p>注意重载时是通过静态类型（左边）而不是实际类型（右边）为依据，并且静态类型在编译期可知。</p>
+<h3 id="cpp"><a href="#cpp" class="headerlink" title="cpp"></a>cpp</h3><p>以下代码输出什么?<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a =<span class="number">1</span>,b =<span class="number">32</span> ;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d,%d"</span>,a&lt;&lt;b,<span class="number">1</span>&lt;&lt;<span class="number">32</span>);</span><br></pre></td></tr></table></figure></p>
+<p>执行<code>a&lt;&lt;b</code>时，编译器会先将b与31进行and操作，以限制左移的次数小于等于31。<br>b&amp;31=0，则<code>a&lt;&lt;b=1</code><br>执行1&lt;&lt;32时，编译器直接执行算术左移的操作。</p>
+<p>具有相同类型的指针类型变量p与数组a,不能进行的操作是:</p>
+<p>正确答案 : D您的答案 : C<br>A <code>p=a;</code><br>B <code>*p=a[0];</code><br>C <code>p=&amp;a[0];</code><br>D <code>p=&amp;a;</code></p>
+<p>A C是一样的</p>
+<p>C++中构造函数和析构函数可以抛出异常吗?</p>
+<p>正确答案 : C您的答案 : B<br>A都不行B都可以C只有构造函数可以D只有析构函数可以</p>
+<p>开发C代码时,经常见到如下类型的结构体定义:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list_t</span>&#123;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_t</span> *<span class="title">next</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">list_t</span> *<span class="title">prev</span>;</span></span><br><span class="line"><span class="keyword">char</span> data[<span class="number">0</span>];</span><br><span class="line">&#125;<span class="keyword">list_t</span>;</span><br></pre></td></tr></table></figure></p>
+<p>最后一行<code>char data[0];</code>的作用是?</p>
+<p>正确答案 : AB您的答案 : B<br>A方便管理内存缓冲区B减少内存碎片化C标识结构体结束D没有作用</p>
+<p>很容易构造出变成结构体，如缓冲区，数据包等等<br>构造缓冲区就是方便管理内存缓冲区,减少内存碎片化,它的作用不是标志结构体结束,而是扩展</p>
+<h3 id="行测-数学"><a href="#行测-数学" class="headerlink" title="行测 数学"></a>行测 数学</h3><p>由A地到B地,中间有一段扶梯,总路程和扶梯长度是固定的,为赶时间全程都在行走(包含扶梯上),中途发现鞋带松了,需要停下来绑鞋带.请问在扶梯上绑鞋带和在路上绑鞋带两种方式比较(  )</p>
+<p>正确答案 : B您的答案 : C<br>A路上绑鞋带,全程用时短<br>B扶梯上绑鞋带,全程用时短<br>C用时一样<br>D和扶梯长度,绑鞋带具体用时有关</p>
+<p>将7723810的各位数字打乱排序,可组成的不同的7位自然数的个数是?</p>
+<p>正确答案 : B您的答案 : B<br>A1080<br>B2160<br>C3240<br>D4320<br>E5040</p>
+<p>共有7的阶乘（5040）种排列，然后0在首位的排列有6的阶乘（720）种，数字中有两个7，所以结果在除以2，（5040-720）/2=2160.</p>
 
       
     </div>
@@ -574,7 +609,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-count">90</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -629,7 +664,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-类加载"><span class="nav-number">1.</span> <span class="nav-text">1.类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-多线程"><span class="nav-number">2.</span> <span class="nav-text">2.多线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-进程线程"><span class="nav-number">3.</span> <span class="nav-text">3. 进程线程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#资源"><span class="nav-number">3.1.</span> <span class="nav-text">资源</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-字符串"><span class="nav-number">4.</span> <span class="nav-text">4. 字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-设计模式"><span class="nav-number">5.</span> <span class="nav-text">5.设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#桥接模式：通过组合建立两个类之间的联系-，而不是继承"><span class="nav-number">5.1.</span> <span class="nav-text">桥接模式：通过组合建立两个类之间的联系 ，而不是继承</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-try-catch"><span class="nav-number">6.</span> <span class="nav-text">6.try catch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#throw-要用在try-catch中"><span class="nav-number"></span> <span class="nav-text">throw 要用在try catch中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-复杂度"><span class="nav-number">1.</span> <span class="nav-text">7. 复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-算法"><span class="nav-number">2.</span> <span class="nav-text">8. 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构"><span class="nav-number">2.1.</span> <span class="nav-text">数据结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-网络"><span class="nav-number">3.</span> <span class="nav-text">8.网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nagle-算法"><span class="nav-number">3.1.</span> <span class="nav-text">nagle 算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-SQL"><span class="nav-number">4.</span> <span class="nav-text">9.SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-shell"><span class="nav-number">5.</span> <span class="nav-text">10. shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-操作系统"><span class="nav-number">6.</span> <span class="nav-text">11. 操作系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-linux"><span class="nav-number">7.</span> <span class="nav-text">12. linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-引用"><span class="nav-number">8.</span> <span class="nav-text">13. 引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-泛型"><span class="nav-number">9.</span> <span class="nav-text">14. 泛型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-类加载"><span class="nav-number">1.</span> <span class="nav-text">1.类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-多线程"><span class="nav-number">2.</span> <span class="nav-text">2.多线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正确答案：B-C-E"><span class="nav-number"></span> <span class="nav-text">正确答案：B C E</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-进程线程"><span class="nav-number">1.</span> <span class="nav-text">3. 进程线程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#资源"><span class="nav-number">1.1.</span> <span class="nav-text">资源</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-字符串"><span class="nav-number">2.</span> <span class="nav-text">4. 字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-设计模式"><span class="nav-number">3.</span> <span class="nav-text">5.设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#桥接模式：通过组合建立两个类之间的联系-，而不是继承"><span class="nav-number">3.1.</span> <span class="nav-text">桥接模式：通过组合建立两个类之间的联系 ，而不是继承</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-try-catch"><span class="nav-number">4.</span> <span class="nav-text">6.try catch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#throw-要用在try-catch中"><span class="nav-number"></span> <span class="nav-text">throw 要用在try catch中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-复杂度"><span class="nav-number">1.</span> <span class="nav-text">7. 复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-算法"><span class="nav-number">2.</span> <span class="nav-text">8. 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据结构"><span class="nav-number">2.1.</span> <span class="nav-text">数据结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-网络"><span class="nav-number">3.</span> <span class="nav-text">8.网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nagle-算法"><span class="nav-number">3.1.</span> <span class="nav-text">nagle 算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-数据库-SQL"><span class="nav-number">4.</span> <span class="nav-text">9.数据库 SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-shell"><span class="nav-number">5.</span> <span class="nav-text">10. shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-操作系统"><span class="nav-number">6.</span> <span class="nav-text">11. 操作系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-linux"><span class="nav-number">7.</span> <span class="nav-text">12. linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-引用"><span class="nav-number">8.</span> <span class="nav-text">13. 引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-泛型"><span class="nav-number">9.</span> <span class="nav-text">14. 泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpp"><span class="nav-number">10.</span> <span class="nav-text">cpp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行测-数学"><span class="nav-number">11.</span> <span class="nav-text">行测 数学</span></a></li></ol></div>
             
 
           </div>

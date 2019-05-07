@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="String的hashCode也是通过对该字符串每个字符的ASC码简单的算术运算所得，这样就可以保证相同的字符串的hashCode相同且equals()为真。 List不是List的父类关于Java中泛型错误的是：正确答案: C D   你的答案: D (错误)A List&amp;lt;? extends T&amp;gt;为可以接受任何继承自T类型的ListB 方法可以返回泛型类型C 可以把List传递给一个">
+<meta name="description" content="在64bit JVM（关闭压缩指针）下，一个Integer对象占用的内存空间为24Byte = 8Byte mark_header + 8Byte Klass 指针 + 4Byte int（用于存储数值）+ 4Byte（Padding，Java对象必须以8Byte为界对齐）CPU每次读内存时都可以一次性读取1个Cache Line（一般是64Byte）的内容，而一个boolean只占1Byte，所">
 <meta name="keywords" content="java,Thread,SpringBoot">
 <meta property="og:type" content="article">
 <meta property="og:title" content="About Java">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/03/02/About-Java/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="String的hashCode也是通过对该字符串每个字符的ASC码简单的算术运算所得，这样就可以保证相同的字符串的hashCode相同且equals()为真。 List不是List的父类关于Java中泛型错误的是：正确答案: C D   你的答案: D (错误)A List&amp;lt;? extends T&amp;gt;为可以接受任何继承自T类型的ListB 方法可以返回泛型类型C 可以把List传递给一个">
+<meta property="og:description" content="在64bit JVM（关闭压缩指针）下，一个Integer对象占用的内存空间为24Byte = 8Byte mark_header + 8Byte Klass 指针 + 4Byte int（用于存储数值）+ 4Byte（Padding，Java对象必须以8Byte为界对齐）CPU每次读内存时都可以一次性读取1个Cache Line（一般是64Byte）的内容，而一个boolean只占1Byte，所">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaref.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/references.jpg">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/access.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/finalnoname.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/refnoname.jpg">
-<meta property="og:updated_time" content="2019-04-13T06:55:24.506Z">
+<meta property="og:updated_time" content="2019-04-22T13:01:28.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="About Java">
-<meta name="twitter:description" content="String的hashCode也是通过对该字符串每个字符的ASC码简单的算术运算所得，这样就可以保证相同的字符串的hashCode相同且equals()为真。 List不是List的父类关于Java中泛型错误的是：正确答案: C D   你的答案: D (错误)A List&amp;lt;? extends T&amp;gt;为可以接受任何继承自T类型的ListB 方法可以返回泛型类型C 可以把List传递给一个">
+<meta name="twitter:description" content="在64bit JVM（关闭压缩指针）下，一个Integer对象占用的内存空间为24Byte = 8Byte mark_header + 8Byte Klass 指针 + 4Byte int（用于存储数值）+ 4Byte（Padding，Java对象必须以8Byte为界对齐）CPU每次读内存时都可以一次性读取1个Cache Line（一般是64Byte）的内容，而一个boolean只占1Byte，所">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/javaref.jpg">
 
 
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-13T14:55:24+08:00">
-                2019-04-13
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-22T21:01:28+08:00">
+                2019-04-22
               </time>
             
           </span>
@@ -400,7 +400,8 @@
       
 
       
-        <p>String的hashCode也是通过对该字符串每个字符的ASC码简单的算术运算所得，这样就可以保证相同的字符串的hashCode相同且equals()为真。</p>
+        <p>在64bit JVM（关闭压缩指针）下，一个Integer对象占用的内存空间为24Byte = 8Byte mark_header + 8Byte Klass 指针 + 4Byte int（用于存储数值）+ 4Byte（Padding，Java对象必须以8Byte为界对齐）<br>CPU每次读内存时都可以一次性读取1个Cache Line（一般是64Byte）的内容，而一个boolean只占1Byte，所以达到很高的遍历速度。</p>
+<p>String的hashCode也是通过对该字符串每个字符的ASC码简单的算术运算所得，这样就可以保证相同的字符串的hashCode相同且equals()为真。</p>
 <h3 id="List不是List的父类"><a href="#List不是List的父类" class="headerlink" title="List不是List的父类"></a>List<object>不是List<string>的父类</string></object></h3><p>关于Java中泛型错误的是：<br>正确答案: C D   你的答案: D (错误)<br>A <code>List&lt;? extends T&gt;</code>为可以接受任何继承自T类型的List<br>B 方法可以返回泛型类型<br>C 可以把List<string>传递给一个接受List<object>参数的方法<br>D Array中可以用泛型</object></string></p>
 <h3 id="系统在运行的时候会为每个【进程】分配不同的内存区域"><a href="#系统在运行的时候会为每个【进程】分配不同的内存区域" class="headerlink" title="系统在运行的时候会为每个【进程】分配不同的内存区域"></a>系统在运行的时候会为每个【进程】分配不同的内存区域</h3><p>下列说法错误的是：<br>正确答案: C   你的答案: A (错误)<br>进程是系统进行资源调度的基本单位。<br>线程是CPU分派的基本单位<br>系统在运行的时候会为每个线程分配不同的内存区域<br>进程具有控制表PCB，而线程也有自己的控制表TCB</p>
 <h3 id="属性不存在重写，只有方法-非私有方法、非静态方法、非final方法-才存在重写，才能发生多态；-向上转型"><a href="#属性不存在重写，只有方法-非私有方法、非静态方法、非final方法-才存在重写，才能发生多态；-向上转型" class="headerlink" title="属性不存在重写，只有方法(非私有方法、非静态方法、非final方法) 才存在重写，才能发生多态； 向上转型"></a>属性不存在重写，只有方法(非私有方法、非静态方法、非final方法) 才存在重写，才能发生多态； 向上转型</h3><p>下列代码的输出结果是：a - function in B<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123; </span><br><span class="line">        String name=<span class="string">"a"</span>; </span><br><span class="line">        <span class="function">String <span class="title">go</span><span class="params">()</span></span>&#123; </span><br><span class="line">            <span class="keyword">return</span> <span class="string">"- function in A"</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123; </span><br><span class="line">        String name=<span class="string">"b"</span>; </span><br><span class="line">        <span class="function">String <span class="title">go</span><span class="params">()</span></span>&#123; </span><br><span class="line">            <span class="keyword">return</span> <span class="string">"- function in B"</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123; </span><br><span class="line">        A a= <span class="keyword">new</span> B(); </span><br><span class="line">        System.out.println(a.name+a.go()); </span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
@@ -932,7 +933,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">88</span>
+                  <span class="site-state-item-count">90</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
