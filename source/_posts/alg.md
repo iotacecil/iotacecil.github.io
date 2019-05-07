@@ -34,6 +34,17 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### zh 化学试剂
+https://www.luogu.org/problemnew/show/CF558C
+1.容量翻倍
+2.容量减半 向下取整
+输出让所有试剂容量相等的最小操作数
+{% note %}
+3
+4 8 2
+输出 2
+{% endnote %}
+
 ### 979 树中分硬币
 https://leetcode.com/problems/distribute-coins-in-binary-tree/
 {% note %}

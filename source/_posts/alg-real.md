@@ -4,7 +4,6 @@ date: 2019-03-21 15:40:14
 tags: [alg]
 categories: [算法备忘]
 ---
-
 ### mt01 切割树 树形DP计数
 https://www.luogu.org/problemnew/show/CF461B
 给你一棵含有n个结点的树，编号为0~n-1，这n个结点都被染成了黑色或白色。
