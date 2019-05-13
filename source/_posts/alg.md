@@ -34,6 +34,19 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 646 递增链
+{% note %}
+Input: `[[1,2], [2,3], [3,4]]`
+Output: 2
+Explanation: The longest chain is [1,2] -> [3,4]
+{% endnote %}
+
+### 491 所有递增子序列
+{% note %}
+Input: [4, 6, 7, 7]
+Output: `[[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,7,7]]`
+{% endnote %}
+
 ### zh 化学试剂
 https://www.luogu.org/problemnew/show/CF558C
 1.容量翻倍
@@ -117,15 +130,14 @@ public int minPatches(int[] nums, int n) {
     > ABIJ EFGH even
     > 输出假的硬币
     
-    + 数据结构 `char Left[3][7]``char Right[3][7]` `char result[3][7]` 一共称3次，每边最多放6个硬币，result（天平右边的情况）
-    + `isFake(char c,bool light )`假设函数：c是轻的
-    + `for(char c= 'A' to 'L')`枚举假硬币
-    + `for(3)`三次称重情况都匹配
-        + 如果假设c是轻的，数组保存输入的left,right;如果c是种的，right保存到left 互换
-        + `switch result[i][0]` 选择三种u,e,d的情况
-            + 如果 第一次实验为up,右边高，则c应该出现在right,当`right.indexOf(c)==null`//没出现 return false
-            + 如果even 判断出现在left||right
-            + d 判断出现在left
+数据结构 `char Left[3][7]``char Right[3][7]` `char result[3][7]` 一共称3次，每边最多放6个硬币，result（天平右边的情况）
+`isFake(char c,bool light )`假设函数：c是轻的
+`for(char c= 'A' to 'L')`枚举假硬币
+`for(3)`三次称重情况都匹配
+如果假设c是轻的，数组保存输入的left,right;如果c是种的，right保存到left 互换
+`switch result[i][0]` 选择三种u,e,d的情况
+如果 第一次实验为up,右边高，则c应该出现在right,当`right.indexOf(c)==null`//没出现 return false
+如果even 判断出现在left||right + d 判断出现在left
 
 ### 406 按前面有几个高度比自己高的重排 
 [h,k] h 高度 k前面有几个比自己高的
@@ -142,7 +154,18 @@ Output:
 ### 海盗分金
 https://baike.baidu.com/item/%E6%B5%B7%E7%9B%97%E5%88%86%E9%87%91
 
-### 778 
+### 778 从左上到右下路径上所需最小最大值
+https://leetcode.com/problems/swim-in-rising-water/
+{% note %}
+Input: `[[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]]`
+Output: 16
+Explanation:
+ 0  1  2  3  4
+24 23 22 21  5
+12 13 14 15 16
+11 17 18 19 20
+10  9  8  7  6
+{% endnote %}
 
 ### 403 青蛙跳石子
 第一步只能跳跃一步。上一步跳了k步，下一步可以跳k,[k]+1步或者[k]-1步。
@@ -3078,6 +3101,23 @@ public int totalHammingDistance(int[] nums){
 
 
 ### 87 判断两个字符串是不是拆分成两半二叉树交换子树构成的
+{% note %}
+    great
+   /    \
+  gr    eat
+ / \    /  \
+g   r  e   at
+           / \
+          a   t
+可以换成
+    rgeat
+   /    \
+  rg    eat
+ / \    /  \
+r   g  e   at
+           / \
+          a   t
+{% endnote %}
 ```java
 public boolean isScramble(String s1, String s2) {
     if(s1.length()!=s2.length())return false;
