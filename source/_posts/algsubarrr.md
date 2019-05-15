@@ -4,6 +4,35 @@ date: 2018-10-28 11:17:19
 tags: [alg]
 categories: [算法备忘]
 ---
+### 689!!!高频题 找到三个长度为k互不重叠的子数组的最大和
+> Input: [1,2,1,2,6,7,5,1], 2
+> 不重叠窗口为2的数组的和  `[1, 2], [2, 6], [7, 5]`
+> 返回 起始索引为 [0, 3, 5]。
+> 也可以取 [2, 1], 但是结果 [1, 3, 5] 在字典序上更大。
+
+https://leetcode.com/articles/maximum-sum-of-3-non-overlapping-intervals/
+https://www.jiuzhang.com/solution/maximum-sum-of-3-non-overlapping-subarrays/
+
+
+### 53!!!最大subarray sum
+{% note %}
+Input: [-2,1,-3,4,-1,2,1,-5,4],
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
+{% endnote %}
+Kadane 14ms 19%
+```java
+public int maxSubArray(int[] nums){
+    int sum = nums[0],rst = nums[0];
+    for(int i=1;i<nums.length;i++){
+        sum = Math.max(nums[i],sum+nums[i]);
+        rst = Math.max(rst,sum);
+    }
+    return rst;
+}
+```
+greedy:
+
 ### !!337 不可以抢父节点抢过的房子
 不可以抢父节点抢过的房子 ，注意不是层
 {% note %}
@@ -234,33 +263,6 @@ public int lensum(int[] arr,int k){
 }
 ```
 
-
-### 689!!!高频题 找到三个长度为k互不重叠的子数组的最大和
-> Input: [1,2,1,2,6,7,5,1], 2
-> 不重叠窗口为2的数组的和  `[1, 2], [2, 6], [7, 5]`
-> 返回 起始索引为 [0, 3, 5]。
-> 也可以取 [2, 1], 但是结果 [1, 3, 5] 在字典序上更大。
-
-https://leetcode.com/articles/maximum-sum-of-3-non-overlapping-intervals/
-https://www.jiuzhang.com/solution/maximum-sum-of-3-non-overlapping-subarrays/
-
-
-
-
-
-#### 53!!!最大subarray sum
-Kadane 14ms 19%
-```java
-public int maxSubArray(int[] nums){
-    int sum = nums[0],rst = nums[0];
-    for(int i=1;i<nums.length;i++){
-        sum = Math.max(nums[i],sum+nums[i]);
-        rst = Math.max(rst,sum);
-    }
-    return rst;
-}
-```
-greedy:
 
 
 ### 198 不能偷相邻房屋 最大利润

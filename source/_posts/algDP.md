@@ -4,6 +4,70 @@ date: 2019-03-07 20:56:46
 tags: [alg]
 categories: [算法备忘]
 ---
+### lc312 lt168 吹气球
+每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
+{% note %}
+Input: [3,1,5,8]
+Output: 167 
+Explanation: nums = [3,1,5,8] --> [3,5,8] -->   [3,8]   -->  [8]  --> []
+             coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
+{% endnote %}
+思路 可以把这个问题建模成矩阵链,每次相乘之后中间一维就消失了
+变成5个矩阵A1(1x3)A2(3x1)A3(1,5)A4(5x8)A5(8x1)
+最优解是(((A1(A2xA3))A4)A5)
+i>=j dp[i][j] = 0 
+dp[i][j] = max(k∈[i,j]){dp[i][k]+dp[k+1][j]+nums[i-1]\*nums[k]\*nums[j]}
+
+![lc312.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc312.jpg)
+
+```java
+public int maxCoins(int[] nums) {
+    int n = nums.length;
+    int[] arr = new int[n+2];
+    int[][] dp = new int[n+2][n+2];
+    System.arraycopy(nums, 0, arr, 1, n);
+    arr[0] =1;
+    arr[n+1] = 1;
+    n = n+2;
+    // n+1个矩阵
+    for (int k = 2; k < n; k++) {
+        for(int left = 0;left <n-k;left++){
+            int right = left+k;
+            for (int i = left+1; i <right ; i++) {
+                dp[left][right] = Math.max(dp[left][right],arr[left]*arr[i]*arr[right] + dp[left][i]+dp[i][right] );
+            }
+        }     
+    }
+    return dp[0][n-1]; 
+}
+```
+
+回溯法超时ac
+
+1[4,1,5,10]1 如果最后是1[1]1,上一次只有两种可能性1[4,1]1,1[1,5]1。
+
+```java
+public int maxCoins(int[] iNums) {
+    int[] nums = new int[iNums.length + 2];
+    int n = 1;
+    for (int x : iNums) if (x > 0) nums[n++] = x;
+    nums[0] = nums[n++] = 1;
+    int[][] memo = new int[n][n];
+    return burst(memo, nums, 0, n - 1);
+}
+
+public int burst(int[][] memo, int[] nums, int left, int right) {
+    if (left + 1 == right) return 0;
+    if (memo[left][right] > 0) return memo[left][right];
+    int ans = 0;
+    for (int i = left + 1; i < right; ++i)
+        ans = Math.max(ans, nums[left] * nums[i] * nums[right] 
+        + burst(memo, nums, left, i) + burst(memo, nums, i, right));
+    memo[left][right] = ans;
+    return ans;
+}
+```
+
 ### 968 树形dp 监控照相机覆盖
 {% note %}
 Input: [0,0,null,0,0]

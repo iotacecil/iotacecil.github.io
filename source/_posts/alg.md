@@ -34,6 +34,7 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+<<<<<<< HEAD
 ### poj 3709 p342
 非严格单调递增序列a0..an-1 每次操作可以使任意一项-1。要使数列中每一项都满足其他项中至少有k-1项和它相等。最少要对这个数列操作的次数。
 {% note %}
@@ -62,6 +63,16 @@ public int minMoves(int[] nums) {
 }
 ```
 
+=======
+### 630 最多课程
+{% note %}
+Input: `[[100, 200], [200, 1300], [1000, 1250], [2000, 3200]]`
+Output: 3
+{% endnote %}
+选[100,200]，从101开始选[1000,1250],1101天开始选[2000,3200]或者[200,1300]都行
+
+
+>>>>>>> refs/remotes/origin/hexo-edit
 ### 646 递增链
 {% note %}
 Input: `[[1,2], [2,3], [3,4]]`
@@ -1871,15 +1882,15 @@ public static long qlist(int k,int a,int x,int b,int y){
 
 ### lc312 lt168 吹气球
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
->in [4, 1, 5, 10]
-out 返回 270
-```
-nums = [4, 1, 5, 10] burst 1, 得分 4 * 1 * 5 = 20
-nums = [4, 5, 10]    burst 5, 得分 4 * 5 * 10 = 200 
-nums = [4, 10]       burst 4, 得分 1 * 4 * 10 = 40
-nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
-总共的分数为 20 + 200 + 40 + 10 = 270
-```
+{% note %}
+Input: [3,1,5,8]
+Output: 167 
+Explanation: nums = [3,1,5,8] --> [3,5,8] -->   [3,8]   -->  [8]  --> []
+             coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
+{% endnote %}
+思路 可以把这个问题建模成矩阵链,每次相乘之后中间一维就消失了
+变成5个矩阵A1(1x3)A2(3x1)A3(1,5)A4(5x8)A5(8x1)
+最优解是(((A1(A2xA3))A4)A5)
 
 ![lc312.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lc312.jpg)
 
@@ -1893,7 +1904,6 @@ public int maxCoins(int[] iNums) {
     int n = 1;
     for (int x : iNums) if (x > 0) nums[n++] = x;
     nums[0] = nums[n++] = 1;
-
 
     int[][] memo = new int[n][n];
     return burst(memo, nums, 0, n - 1);
