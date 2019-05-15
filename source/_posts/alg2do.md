@@ -56,18 +56,42 @@ Window position                Max
  1  3  -1  -3  5 [3  6  7]      7
 ```
 {% endnote %}
-思路1：左右扫描：把数组按k划分
-A = [2,1,3,4,6,3,8,9,10,12,56], w=4
-2, 1, 3, 4 | 6, 3, 8, 9 | 10, 12, 56| 最后一组可能不足k个
-left_max[] = 2, 2, 3, 4 | 6, 6, 8, 9 | 10, 12, 56
-right_max[] = 4, 4, 4, 4 | 9, 9, 9, 9 | 56, 56, 56
+思路1：左右扫描：把数组按k划分，把每个区间划分成前一个分割right和后一个分割left，预处理先得到每个分割的max。
+A = [1,3,-1,-3,5,3,6,7], k=3
+1,3,-1,|-3,5,3,|6,7 最后一组可能不足k个
+left_max[] =  1, 3,  3,| -3, 5, 5 | 6, 7
+right_max[] = 3, 3, -1,|  5, 3, 3 | 7, 7
 sliding-max(i) = max{right_max(i), left_max(i+w-1)}
-sliding_max = 4, 6, 6, 8, 9, 10, 12, 56
+sliding_max =
+ right[0,2],left[0,0] = 3
+ right[1,2],left[3,3] = 3
+ right[2,2],left[3,4] = 5
+ right[3,5],left[5,5] = 5
+注意，算到边界重置,不用仔细算几个边界
+```java
+public int[] maxSlidingWindow(int[] nums, int k) {
+    int n = nums.length;
+    if(n == 0)return new int[]{};
+    int[] leftmax = nums.clone();
+    int[] rightmax = nums.clone();
+    for(int i = 1;i<n;i++){
+        if(i%k ==0)continue;
+        leftmax[i] = Math.max(leftmax[i],leftmax[i-1]);
+    }  
+     for(int i = n-2;i>=0;i--){
+        if(i%k ==k-1)continue;
+        rightmax[i] = Math.max(rightmax[i],rightmax[i+1]);
+    }
+    int[]rst = new int[n-k+1];    
+    for(int i = 0;i+k-1<n;i++){
+        rst[i] = Math.max(rightmax[i],leftmax[i+k-1]);
+    }
+    return rst;   
+}
+```
 
-思路2 单调队列 元素从大到小
-1）如果当前元素比队列头大，从头删掉比它小的
-2）如果当前的max正好是当前区间最左的index，pop该元素
-
+方法2：
+如果之前放入k队列的值比当前小，则这个值不会成为这个k队列区间的max，并且随着区间向后也用不到它了。
 
 ---
 

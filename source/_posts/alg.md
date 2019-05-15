@@ -34,6 +34,34 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### poj 3709 p342
+非严格单调递增序列a0..an-1 每次操作可以使任意一项-1。要使数列中每一项都满足其他项中至少有k-1项和它相等。最少要对这个数列操作的次数。
+{% note %}
+k=3
+2，2，3，4，4，5，5
+输出3 （2 2 2 4 4 4 4）
+{% endnote %}
+
+
+### 453 数组中n-1个数字每次增加1，最少多少次数组中元素相等
+>[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
+
+思路：n-1个数字+1和一个数字-1是等价的。所以看需要多少次能把所有数字减成和最小的一样。
+
+```java
+public int minMoves(int[] nums) {
+    int min = nums[0];
+    for(int i :nums){
+        min = Math.min(min,i);
+    }
+    int cnt =0;
+    for(int i:nums){
+        cnt += i - min;
+    }
+    return cnt; 
+}
+```
+
 ### 646 递增链
 {% note %}
 Input: `[[1,2], [2,3], [3,4]]`
@@ -46,6 +74,90 @@ Explanation: The longest chain is [1,2] -> [3,4]
 Input: [4, 6, 7, 7]
 Output: `[[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,7,7]]`
 {% endnote %}
+
+### lt476石子合并 区间dp
+> 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
+> in : 4 1 1 4 out: 18
+
+### lc 473 火柴拼正方形
+{% note %}
+输入: [1,1,2,2,2]
+输出: true
+{% endnote %}
+
+### lc 221 最大正方形
+{% note %}
+Input: 
+
+1 0 1 0 0
+1 0 1 1 1
+1 1 1 1 1
+1 0 0 1 0
+
+Output: 4
+{% endnote %}
+思路：通解1：用dp[x][y]算出左上角到x,y的和
+三个for循环确定矩阵起点、边长，计算sum
+注意：矩阵前缀和下标
+
+### lc 85 最大矩形
+{% note %}
+Input:
+`[
+  ["1","0","1","0","0"],
+  ["1","0","1","1","1"],
+  ["1","1","1","1","1"],
+  ["1","0","0","1","0"]
+]`
+Output: 6
+{% endnote %}
+想象成每一行为底的直方图
+
+### lc84直方图中的最大矩形poj2559 
+{% note %}
+Input: [2,1,5,6,2,3]
+Output: 10
+{% endnote %}
+挑战p335
+思路：以当前位置的高度为最终高度，如果左右比当前值更大，则这个矩形宽可以左右扩展。
+定义
+L[i] 找到以当前高度最大矩形的左边界，就是比hi更高的最左位置
+R[i] 右边界，比hi更高的最右
+        0 1 2 3 4 5
+height [2,1,5,6,2,3]
+left   [0,0,2,3,2,5]
+right  [0,5,3,3,5,5]
+rst    [2,6,10,6,8,3]
+递增栈 保持栈顶是挡住比当前hi小的元素的下标
+```java
+public int largestRectangleArea(int[] h) {
+    int rst = 0;
+    int n = h.length;
+    int[] stk = new int[n];
+    int[] L = new int[n];
+    int[] R = new int[n];
+    int t = 0;
+    for (int i = 0; i <h.length ; i++) {
+        while (t>0 && h[stk[t-1]]>=h[i])t--;
+        L[i] = t ==0?0:(stk[t-1] + 1);
+        stk[t++] = i;
+    }
+    t = 0;
+    for (int i = n-1; i >=0 ; i--) {
+        while (t>0 && h[stk[t-1]]>=h[i])t--;
+        R[i] = t ==0?n-1:(stk[t-1]-1);
+        stk[t++] = i;
+    }
+    for(int i = 0;i<n;i++){
+        rst = Math.max(rst,h[i]*(R[i]-L[i]+1));
+    }
+    return rst;
+}
+```
+
+
+
+
 
 ### zh 化学试剂
 https://www.luogu.org/problemnew/show/CF558C
@@ -998,24 +1110,7 @@ public int leastInterval(char[] tasks, int n) {
 }
 ```
 
-### 453 数组中n-1个数字每次增加1，最少多少次数组中元素相等
->[1,2,3]  =>  [2,3,3]  =>  [3,4,3]  =>  [4,4,4]
 
-思路：n-1个数字+1和一个数字-1是等价的。所以看需要多少次能把所有数字减成和最小的一样。
-
-```java
-public int minMoves(int[] nums) {
-    int min = nums[0];
-    for(int i :nums){
-        min = Math.min(min,i);
-    }
-    int cnt =0;
-    for(int i:nums){
-        cnt += i - min;
-    }
-    return cnt; 
-}
-```
 
 ### 634 n个数字的错排有几个 lt869
 {% note %}
@@ -3240,19 +3335,7 @@ out: 3 (2,9) (3,7) (4,5)
 x相差4，y相差8 求分成（/）最多多少份，x,y都是整数
 
 
-### 区间dp
 
-### lt476石子合并 区间dp
-> 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
-> in : 4 1 1 4 out: 18
-
-
-
-### lc84直方图中的最大矩形poj2559
-![histo1.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/histo1.jpg)
-```java
-//todo next
-```
 
 ---
 
