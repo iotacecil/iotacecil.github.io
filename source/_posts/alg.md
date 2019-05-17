@@ -34,6 +34,14 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 721 账户合并 并查集
+{% note %}
+```
+Input: 
+accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]
+Output: [["John", 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com'],  ["John", "johnnybravo@mail.com"], ["Mary", "mary@mail.com"]]
+```
+{% endnote %}
 
 ### poj 3709 p342
 非严格单调递增序列a0..an-1 每次操作可以使任意一项-1。要使数列中每一项都满足其他项中至少有k-1项和它相等。最少要对这个数列操作的次数。
