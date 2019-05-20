@@ -34,7 +34,8 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
-### 721 账户合并 并查集
+### 721 !!账户合并 并查集
+如果两个账户有至少一个相同的email 就合并，人名相同也是两个账号
 {% note %}
 ```
 Input: 
