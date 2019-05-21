@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-05-13T02:59:27.999Z">
+<meta property="og:updated_time" content="2019-05-21T03:42:13.639Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://blog.csdn.net/jackfrued/article/details/44921941https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/x">
@@ -351,8 +351,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-13T10:59:27+08:00">
-                2019-05-13
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-21T11:42:13+08:00">
+                2019-05-21
               </time>
             
           </span>
@@ -539,10 +539,10 @@
 <h3 id="2-XA事务-分布式事务"><a href="#2-XA事务-分布式事务" class="headerlink" title="2.XA事务 分布式事务"></a>2.XA事务 分布式事务</h3><p>事务管理器（Mysql客户端）和资源管理器（Mysql数据库）之间用两阶段提交，等所有参与全局事务的都能提交再提交<br>用JAVA JTA API</p>
 <h2 id="6-数据结构"><a href="#6-数据结构" class="headerlink" title="6.数据结构"></a>6.数据结构</h2><h3 id="1-二叉平衡树的应用-红黑树原理"><a href="#1-二叉平衡树的应用-红黑树原理" class="headerlink" title="1.二叉平衡树的应用 红黑树原理"></a>1.二叉平衡树的应用 红黑树原理</h3><p>关键性质：红黑树确保没有一条从根到叶子的路径会比其他从根岛叶子的路径长出两倍<br>1）根、叶子节点、红色节点的两个儿子都是黑色<br>2）任一节点到其每个叶子节点的所有简单路径 包含相同数目的黑色节点<br>AVL树是严格的平衡二叉树<br>如果应用场景中对插入删除不频繁，只是对查找要求较高，那么AVL还是较优于红黑树。<br>windows对进程地址空间的管理用到了AVL树</p>
 <h3 id="2-排序-希尔排序复杂度"><a href="#2-排序-希尔排序复杂度" class="headerlink" title="2.排序 希尔排序复杂度"></a>2.排序 希尔排序复杂度</h3><p>当步长为1时，算法变为普通插入排序<br>已知最好n(log^2)n</p>
-<h3 id="3-最小生成树的两种算法"><a href="#3-最小生成树的两种算法" class="headerlink" title="3.最小生成树的两种算法"></a>3.最小生成树的两种算法</h3><p>Prim算法，标记已选点，选标记点可达的最近点标记，直到标记完所有点。<br>把点划分为3类：不可达（不可选），可选，已选<br>维护一个数组：dis，作用为已用点到未用点的最短距离。</p>
+<h3 id="3-最小生成树的两种算法"><a href="#3-最小生成树的两种算法" class="headerlink" title="3.最小生成树的两种算法"></a>3.最小生成树的两种算法</h3><p>Prim算法，标记已选点，选标记点可达的最近点标记，直到标记完所有点。<br>贪心选择与当前顶点集合中距离最短的顶点。<br>把点划分为3类：不可达（不可选），可选，已选<br>维护一个数组：dis，作用为已用点到未用点的最短距离。</p>
 <p>证明：对于任意一个顶点v，连接到该顶点的所有边中的一条最短边(v, vj)必然属于最小生成树（即任意一个属于最小生成树的连通子图，从外部连接到该连通子图的所有边中的一条最短边必然属于最小生成树）</p>
-<p>复杂度：邻接矩阵O(v^2) 邻接表O(elog2v)</p>
-<p>Kruskal算法，存在相同权值的边。<br>从权值最小的边开始遍历，直到图的点全部在一个连通分量中。<br>复杂度：</p>
+<p>复杂度：O（n^2) n为图中顶点数。适合稠密图。邻接矩阵O(v^2) 邻接表O(elog2v)</p>
+<p>Kruskal算法，存在相同权值的边。O(mlogm) m为边树，与顶点数无关<br>扩展边，每次贪心选择剩余边中最小权重的边。<br>从权值最小的边开始遍历，直到图的点全部在一个连通分量中。<br>复杂度：</p>
 <h3 id="4-Hash碰撞的方法"><a href="#4-Hash碰撞的方法" class="headerlink" title="4.Hash碰撞的方法"></a>4.Hash碰撞的方法</h3><p>1）开放地址法（Nginx的散列表） 开放地址法分： 线性探测法（会聚集）、平方探测、双散列<br>2）链地址法</p>
 <p>不成功平均查找长度，要按照冲突解决方法查找到当前位置为空位置。最后/散列函数的mod（hash函数的分类个数）</p>
 <h2 id="7-框架"><a href="#7-框架" class="headerlink" title="7.框架"></a>7.框架</h2><h3 id="1-Spring容器初始化过程"><a href="#1-Spring容器初始化过程" class="headerlink" title="1.Spring容器初始化过程"></a>1.Spring容器初始化过程</h3><p>ioc aop原理</p>
