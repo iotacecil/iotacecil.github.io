@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+ 
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="alg," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="826 安排工作以达到最大收益输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]输出: 100解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。 394 字符串解码 hw aqy123s = &amp;quot;3[a]2[bc]&amp;quot;, 返回 &amp;q">
+<meta name="keywords" content="alg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="alg-cd-tc-wy">
+<meta property="og:url" content="http://blog.iotaa.xyz/2019/05/29/alg-cd/index.html">
+<meta property="og:site_name" content="Learn &amp; practice">
+<meta property="og:description" content="826 安排工作以达到最大收益输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]输出: 100解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。 394 字符串解码 hw aqy123s = &amp;quot;3[a]2[bc]&amp;quot;, 返回 &amp;q">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lexpermu.jpg">
+<meta property="og:updated_time" content="2019-05-30T12:54:53.868Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="alg-cd-tc-wy">
+<meta name="twitter:description" content="826 安排工作以达到最大收益输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]输出: 100解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。 394 字符串解码 hw aqy123s = &amp;quot;3[a]2[bc]&amp;quot;, 返回 &amp;q">
+<meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lexpermu.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.iotaa.xyz/2019/05/29/alg-cd/"/>
+
+
+
+
+
+  <title>alg-cd-tc-wy | Learn & practice</title>
+  
+
+
+
+
+
+
+
+
+  <!--prettify代码高亮脚本引入-->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="top-scroll-bar"></div>
+<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn & practice</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.iotaa.xyz/2019/05/29/alg-cd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn & practice">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">alg-cd-tc-wy</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-29T20:39:39+08:00">
+                2019-05-29
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-30T20:54:53+08:00">
+                2019-05-30
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">算法备忘</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="826-安排工作以达到最大收益"><a href="#826-安排工作以达到最大收益" class="headerlink" title="826 安排工作以达到最大收益"></a>826 安排工作以达到最大收益</h3><div class="note "><p>输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]<br>输出: 100<br>解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。</p></div>
+<h3 id="394-字符串解码-hw-aqy"><a href="#394-字符串解码-hw-aqy" class="headerlink" title="394 字符串解码 hw aqy"></a>394 字符串解码 hw aqy</h3><div class="note "><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s = &quot;3[a]2[bc]&quot;, 返回 &quot;aaabcbc&quot;.</span><br><span class="line">s = &quot;3[a2[c]]&quot;, 返回 &quot;accaccacc&quot;.</span><br><span class="line">s = &quot;2[abc]3[cd]ef&quot;, 返回 &quot;abcabccdcdcdef&quot;.</span><br></pre></td></tr></table></figure></div>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">decodeString</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    String res = <span class="string">""</span>;</span><br><span class="line">    Deque&lt;Integer&gt; nums = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    Deque&lt;String&gt; strs = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    <span class="keyword">int</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(idx &lt; s.length())&#123;</span><br><span class="line">        <span class="keyword">if</span>(Character.isDigit(s.charAt(idx)))&#123;</span><br><span class="line">            <span class="keyword">int</span> tmp = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> (Character.isDigit(s.charAt(idx)))&#123;</span><br><span class="line">                tmp = <span class="number">10</span>*tmp + (s.charAt(idx) - <span class="string">'0'</span>);</span><br><span class="line">                idx++;</span><br><span class="line">            &#125;</span><br><span class="line">            nums.push(tmp);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s.charAt(idx) == <span class="string">'['</span>)&#123;</span><br><span class="line">            <span class="comment">// 关键</span></span><br><span class="line">            strs.push(res);</span><br><span class="line">            res = <span class="string">""</span>;</span><br><span class="line">            idx ++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(s.charAt(idx) == <span class="string">']'</span>)&#123;</span><br><span class="line">            <span class="comment">// res = c tmps = a num = 2 res = acc tmps="" res = acc*3</span></span><br><span class="line">            StringBuilder tmps =<span class="keyword">new</span> StringBuilder(strs.pop());</span><br><span class="line">            <span class="keyword">int</span> num = nums.pop();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;num ; i++) &#123;</span><br><span class="line">                <span class="comment">//关键</span></span><br><span class="line">                tmps.append(res);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 关键</span></span><br><span class="line">            res = tmps.toString();</span><br><span class="line">            idx++;</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            res += s.charAt(idx++);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="664-奇怪的打印机wy"><a href="#664-奇怪的打印机wy" class="headerlink" title="664 奇怪的打印机wy"></a>664 奇怪的打印机wy</h3><p>打印机每次只能打印同一个字符。<br>每次可以在任意起始和结束位置打印新字符，并且会覆盖掉原来已有的字符。<br>给定一个只包含小写英文字母的字符串，你的任务是计算这个打印机打印它需要的最少次数。<br><div class="note "><p>输入: “aba”<br>输出: 2<br>解释: 首先打印 “aaa” 然后在第二个位置打印 “b” 覆盖掉原来的字符 ‘a’。</p></div></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">strangePrinter</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = s.length();</span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n][n];</span><br><span class="line">    <span class="keyword">return</span> dfs(s, <span class="number">0</span>, n-<span class="number">1</span>, dp);   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dfs</span><span class="params">(String s, <span class="keyword">int</span> i,<span class="keyword">int</span> j,<span class="keyword">int</span>[][] dp)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i &gt; j)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(dp[i][j] == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="comment">//最坏情况，后面的一个一个打</span></span><br><span class="line">        dp[i][j] = dfs(s,i,j-<span class="number">1</span>,dp)+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = i; k &lt; j; k++) &#123;</span><br><span class="line">            <span class="comment">// 可以同时打印 k和j</span></span><br><span class="line">            <span class="keyword">if</span>(s.charAt(k) == s.charAt(j))&#123;</span><br><span class="line">                dp[i][j] = Math.min(dp[i][j],dfs(s,i,k,dp)+dfs(s,k+<span class="number">1</span>,j-<span class="number">1</span>,dp) );</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[i][j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="493-Reverse-Pairs-逆序对的个数-cd"><a href="#493-Reverse-Pairs-逆序对的个数-cd" class="headerlink" title="493 Reverse Pairs 逆序对的个数 cd"></a>493 Reverse Pairs 逆序对的个数 cd</h3><p>如果 i &lt; j and nums[i] &gt; 2*nums[j].算一个逆序对<br><div class="note "><p>Input: [1,3,2,3,1]<br>Output: 2</p></div></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> ret;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">reversePairs</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    ret = <span class="number">0</span>;</span><br><span class="line">    mergeSort(nums, <span class="number">0</span>, nums.length-<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeSort</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (right &lt;= left) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> middle = left + (right - left)/<span class="number">2</span>;</span><br><span class="line">    mergeSort(nums, left, middle);</span><br><span class="line">    mergeSort(nums,middle+<span class="number">1</span>, right);</span><br><span class="line">    <span class="comment">//count elements</span></span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> l = left, r = middle+<span class="number">1</span>; l &lt;= middle;) &#123;</span><br><span class="line">        <span class="keyword">if</span> (r &gt; right || (<span class="keyword">long</span>)nums[l] &lt;= <span class="number">2</span>*(<span class="keyword">long</span>)nums[r]) &#123;</span><br><span class="line">            l++;</span><br><span class="line">            ret += count;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            r++;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//sort</span></span><br><span class="line">    Arrays.sort(nums, left, right + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="546-移除盒子-不会tc-cd"><a href="#546-移除盒子-不会tc-cd" class="headerlink" title="546 移除盒子 不会tc+cd"></a>546 移除盒子 不会tc+cd</h3><p>可以移除具有相同颜色的连续 k 个盒子（k &gt;= 1），这样一轮之后你将得到 k*k 个积分。<br><div class="note "><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Input:</span><br><span class="line">[1, 3, 2, 2, 2, 3, 4, 3, 1]</span><br><span class="line">Output:</span><br><span class="line">23</span><br><span class="line">Explanation:</span><br><span class="line">[1, 3, 2, 2, 2, 3, 4, 3, 1] </span><br><span class="line">----&gt; [1, 3, 3, 4, 3, 1] (3*3=9 points) </span><br><span class="line">----&gt; [1, 3, 3, 3, 1] (1*1=1 points) </span><br><span class="line">----&gt; [1, 1] (3*3=9 points) </span><br><span class="line">----&gt; [] (2*2=4 points)</span><br></pre></td></tr></table></figure></div><br>定义状态dp[i][j][k]表示j右边有k个和j一样的元素，可以消除掉j和k中间的其它元素一起消除这k+1个，得到的分数。<br>或者可以选择继续把ij区间拆分，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">removeBoxes</span><span class="params">(<span class="keyword">int</span>[] boxes)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = boxes.length;</span><br><span class="line">    <span class="keyword">int</span>[][][] dp  = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">101</span>][<span class="number">101</span>][<span class="number">101</span>];</span><br><span class="line">    <span class="keyword">return</span> dfs(boxes, <span class="number">0</span>, n-<span class="number">1</span>, <span class="number">0</span>, dp);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span>[] boxes,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> k,<span class="keyword">int</span>[][][] dp)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(r&lt;l)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (l&lt;r &amp;&amp; boxes[r-<span class="number">1</span>] == boxes[r])&#123;--r;++k;&#125;</span><br><span class="line">    <span class="keyword">if</span>(dp[l][r][k] &gt; <span class="number">0</span>)<span class="keyword">return</span> dp[l][r][k];</span><br><span class="line">    dp[l][r][k] = (<span class="number">1</span>+k)*(<span class="number">1</span>+k) + dfs(boxes, l, r-<span class="number">1</span>, <span class="number">0</span>, dp);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = l; i &lt; r ; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(boxes[i] == boxes[r])&#123;</span><br><span class="line">            dp[l][r][k] = Math.max(dp[l][r][k], dfs(boxes,l,i,k+<span class="number">1</span>,dp) +dfs(boxes,i+<span class="number">1</span>,r-<span class="number">1</span>,<span class="number">0</span>,dp));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[l][r][k];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="718-最长公共子串-最长公共子数组"><a href="#718-最长公共子串-最长公共子数组" class="headerlink" title="718 !!最长公共子串 最长公共子数组"></a>718 !!最长公共子串 最长公共子数组</h3><div class="note "><p>Input:<br>A: [1,2,3,2,1]<br>B: [3,2,1,4,7]<br>Output: 3<br>Explanation:<br>The repeated subarray with maximum length is [3, 2, 1].</p></div>
+<p>思路：A从位置i开始，和B从j开始匹配的最大长度</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findLength</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span>[] B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = A.length;</span><br><span class="line">        <span class="keyword">int</span> m = B.length;</span><br><span class="line">        <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>][m+<span class="number">1</span>];  </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j =<span class="number">1</span>;j&lt;=m;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(A[i-<span class="number">1</span>]==B[j-<span class="number">1</span>])&#123;</span><br><span class="line">                    dp[i][j] = dp[i-<span class="number">1</span>][j-<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line">                    max = Math.max(max,dp[i][j]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;     </span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="440-字典序的第k小"><a href="#440-字典序的第k小" class="headerlink" title="440 字典序的第k小"></a>440 字典序的第k小</h3><p>1-n的第k小<br><div class="note "><p>Input:<br>n: 13   k: 2</p>
+<p>Output:<br>10</p>
+<p>Explanation:<br>The lexicographical order is [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9], so the second smallest number is 10.</p></div><br>dfs超时</p>
+<h3 id="386-字典序数字-todo"><a href="#386-字典序数字-todo" class="headerlink" title="386 字典序数字 todo"></a>386 字典序数字 todo</h3><p>dfs 112ms 71%<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   1        2        3    ...</span><br><span class="line">  /\        /\       /\</span><br><span class="line">10 ...19  20...29  30...39   ....</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">lexicalOrder</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">     List&lt;Integer&gt; rst = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        dfs(rst,n,i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rst;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(List&lt;Integer&gt; rst,<span class="keyword">int</span> n,<span class="keyword">int</span> cur)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cur&gt;n)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        rst.add(cur);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;<span class="number">10</span> ; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(cur*<span class="number">10</span>+i&gt;n)<span class="keyword">return</span>;</span><br><span class="line">            dfs(rst,n,<span class="number">10</span>*cur+i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相关：<br>permutation的字典序<br>思想：字典序全排列算法：保证尽可能长的前缀不变，后缀慢慢增加<br> abc 保证前面不变，后面增加一点点 -&gt; acb ，cb不能增大了，-&gt;bac<br> 从右向左扫描 例如 321 是递增的 表示不能再增加<br> 从右向左扫描到第一次增大的位置，和右边比较大的数交换。1 2 3 扫描到2，和3交换。<br> 1 3 2 扫描到1降了，1和2交换 2 3 1  31不是最小后缀 变成2 1 3 </p>
+<p>算法：<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lexpermu.jpg" alt="lexpermu.jpg"><br> 1.从右想左 找到第一次下降位置<br> 2.用后缀中比当前位置大的最小数字交换<br> 3.保证后缀最小（翻转？）</p>
+<h3 id="4位25个字符的编码"><a href="#4位25个字符的编码" class="headerlink" title="4位25个字符的编码"></a>4位25个字符的编码</h3><p>假定一种编码的编码范围是a ~ y的25个字母，从1位到4位的编码，如果我们把该编码按字典序排序，形成一个数组如下： a, aa, aaa, aaaa, aaab, aaac, … …, b, ba, baa, baaa, baab, baac … …, yyyw, yyyx, yyyy 其中a的Index为0，aa的Index为1，aaa的Index为2，以此类推。 编写一个函数，输入是任意一个编码，输出这个编码对应的Index.</p>
+<p>输入：baca<br>输出：16331</p>
+<p>a开头的长度为4的编码一共有25^3个，长度为3有25^2个，长度为2有25个，长度为1有1个。<br>例：bcd<br>第一位是b所以处在第二大块，result += 1 *  (25^3+25^2+25+1)<br>第二位是c， result += 2 *（25^2+25+1）+1<br>第三位是d， result += 3* （25+1）+1  （加一是因为最前面有个空）<br>第四位是空，不管，因为空就是第一个<br>result = 17658</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">    String str = sc.next();</span><br><span class="line">    <span class="keyword">int</span> n = str.length();</span><br><span class="line">    <span class="keyword">int</span> rst = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(n&gt;<span class="number">0</span>)</span><br><span class="line">        rst += (str.charAt(<span class="number">0</span>)-<span class="string">'a'</span>)*(<span class="number">25</span>*<span class="number">25</span>*<span class="number">25</span>+<span class="number">25</span>*<span class="number">25</span>+<span class="number">25</span>+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(n&gt;<span class="number">1</span>)</span><br><span class="line">        rst += (str.charAt(<span class="number">1</span>)-<span class="string">'a'</span>)*(<span class="number">25</span>*<span class="number">25</span>+<span class="number">25</span>+<span class="number">1</span>)+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(n&gt;<span class="number">2</span>)</span><br><span class="line">        rst += (str.charAt(<span class="number">2</span>)-<span class="string">'a'</span>)*(<span class="number">25</span>+<span class="number">1</span>)+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(n&gt;<span class="number">3</span>)</span><br><span class="line">        rst += (str.charAt(<span class="number">3</span>)-<span class="string">'a'</span>)+<span class="number">1</span>;</span><br><span class="line">    System.out.println(rst);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/alg/" rel="tag"># alg</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/26/proHouse/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description">学习一个技术不要轻易过去，要有技术深度做一个demo</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">91</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#826-安排工作以达到最大收益"><span class="nav-number">1.</span> <span class="nav-text">826 安排工作以达到最大收益</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#394-字符串解码-hw-aqy"><span class="nav-number">2.</span> <span class="nav-text">394 字符串解码 hw aqy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#664-奇怪的打印机wy"><span class="nav-number">3.</span> <span class="nav-text">664 奇怪的打印机wy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#493-Reverse-Pairs-逆序对的个数-cd"><span class="nav-number">4.</span> <span class="nav-text">493 Reverse Pairs 逆序对的个数 cd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#546-移除盒子-不会tc-cd"><span class="nav-number">5.</span> <span class="nav-text">546 移除盒子 不会tc+cd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#718-最长公共子串-最长公共子数组"><span class="nav-number">6.</span> <span class="nav-text">718 !!最长公共子串 最长公共子数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#440-字典序的第k小"><span class="nav-number">7.</span> <span class="nav-text">440 字典序的第k小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#386-字典序数字-todo"><span class="nav-number">8.</span> <span class="nav-text">386 字典序数字 todo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4位25个字符的编码"><span class="nav-number">9.</span> <span class="nav-text">4位25个字符的编码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/custom/custom.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
