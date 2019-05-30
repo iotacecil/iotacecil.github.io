@@ -513,7 +513,7 @@ public void merge(int[] nums1, int m, int[] nums2, int n) {
 ```
 {% endfold %}
 
-### 75 ！!Sort Colors
+### 75 ！!！Sort Colors
 {% note %}
 Input: [2,0,2,1,1,0]
 Output: [0,0,1,1,2,2]

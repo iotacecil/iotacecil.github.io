@@ -442,46 +442,6 @@ The longest subsequence that is fibonacci-like:
 
 ### 650
 
-### 493 Reverse Pairs 逆序对的个数
-如果 i < j and nums[i] > 2*nums[j].算一个逆序对
-{% note %}
-Input: [1,3,2,3,1]
-Output: 2
-{% endnote %}
-
-```java
-public static int ret;
-public static int reversePairs(int[] nums) {
-    ret = 0;
-    mergeSort(nums, 0, nums.length-1);
-    return ret;
-}
-
-public static void mergeSort(int[] nums, int left, int right) {
-    if (right <= left) {
-        return;
-    }
-    int middle = left + (right - left)/2;
-    mergeSort(nums, left, middle);
-    mergeSort(nums,middle+1, right);
-
-    //count elements
-    int count = 0;
-    for (int l = left, r = middle+1; l <= middle;) {
-        if (r > right || (long)nums[l] <= 2*(long)nums[r]) {
-            l++;
-            ret += count;
-        } else {
-            r++;
-            count++;
-        }
-    }
-
-    //sort
-    Arrays.sort(nums, left, right + 1);
-}
-
-```
 
 
 #### 315 输出数组每个位置后有多少个数字比它小

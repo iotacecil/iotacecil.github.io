@@ -1,9 +1,208 @@
 ---
-title: alg-cd
+title: alg-cd-tc-wy
 date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 826 安排工作以达到最大收益
+{% note %}
+输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]
+输出: 100 
+解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。
+{% endnote %}
+
+### 394 字符串解码 hw aqy
+{% note %}
+```
+s = "3[a]2[bc]", 返回 "aaabcbc".
+s = "3[a2[c]]", 返回 "accaccacc".
+s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
+```
+{% endnote %}
+```java
+public String decodeString(String s) {
+    String res = "";
+    Deque<Integer> nums = new ArrayDeque<>();
+    Deque<String> strs = new ArrayDeque<>();
+    int idx = 0;
+    while(idx < s.length()){
+        if(Character.isDigit(s.charAt(idx))){
+            int tmp = 0;
+            while (Character.isDigit(s.charAt(idx))){
+                tmp = 10*tmp + (s.charAt(idx) - '0');
+                idx++;
+            }
+            nums.push(tmp);
+        }
+        else if(s.charAt(idx) == '['){
+            // 关键
+            strs.push(res);
+            res = "";
+            idx ++;
+        }
+        else if(s.charAt(idx) == ']'){
+            // res = c tmps = a num = 2 res = acc tmps="" res = acc*3
+            StringBuilder tmps =new StringBuilder(strs.pop());
+            int num = nums.pop();
+            for (int i = 0; i <num ; i++) {
+                //关键
+                tmps.append(res);
+            }
+            // 关键
+            res = tmps.toString();
+            idx++;
+
+        }else{
+            res += s.charAt(idx++);
+        }
+    }
+    return res;
+}
+```
+
+### 664 奇怪的打印机wy
+打印机每次只能打印同一个字符。
+每次可以在任意起始和结束位置打印新字符，并且会覆盖掉原来已有的字符。
+给定一个只包含小写英文字母的字符串，你的任务是计算这个打印机打印它需要的最少次数。
+{% note %}
+输入: "aba"
+输出: 2
+解释: 首先打印 "aaa" 然后在第二个位置打印 "b" 覆盖掉原来的字符 'a'。
+{% endnote %}
+
+```java
+public int strangePrinter(String s) {
+    int n = s.length();
+    int[][] dp = new int[n][n];
+    return dfs(s, 0, n-1, dp);   
+}
+
+private int dfs(String s, int i,int j,int[][] dp){
+    if(i > j)return 0;
+    if(dp[i][j] == 0){
+        //最坏情况，后面的一个一个打
+        dp[i][j] = dfs(s,i,j-1,dp)+1;
+        for (int k = i; k < j; k++) {
+            // 可以同时打印 k和j
+            if(s.charAt(k) == s.charAt(j)){
+                dp[i][j] = Math.min(dp[i][j],dfs(s,i,k,dp)+dfs(s,k+1,j-1,dp) );
+            }
+
+        }
+    }
+    return dp[i][j];
+}
+```
+
+### 493 Reverse Pairs 逆序对的个数 cd
+如果 i < j and nums[i] > 2*nums[j].算一个逆序对
+{% note %}
+Input: [1,3,2,3,1]
+Output: 2
+{% endnote %}
+
+```java
+public static int ret;
+public static int reversePairs(int[] nums) {
+    ret = 0;
+    mergeSort(nums, 0, nums.length-1);
+    return ret;
+}
+
+public static void mergeSort(int[] nums, int left, int right) {
+    if (right <= left) {
+        return;
+    }
+    int middle = left + (right - left)/2;
+    mergeSort(nums, left, middle);
+    mergeSort(nums,middle+1, right);
+    //count elements
+    int count = 0;
+    for (int l = left, r = middle+1; l <= middle;) {
+        if (r > right || (long)nums[l] <= 2*(long)nums[r]) {
+            l++;
+            ret += count;
+        } else {
+            r++;
+            count++;
+        }
+    }
+    //sort
+    Arrays.sort(nums, left, right + 1);
+}
+
+```
+
+### 546 移除盒子 不会tc+cd
+可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k*k 个积分。
+{% note %}
+```
+Input:
+[1, 3, 2, 2, 2, 3, 4, 3, 1]
+Output:
+23
+Explanation:
+[1, 3, 2, 2, 2, 3, 4, 3, 1] 
+----> [1, 3, 3, 4, 3, 1] (3*3=9 points) 
+----> [1, 3, 3, 3, 1] (1*1=1 points) 
+----> [1, 1] (3*3=9 points) 
+----> [] (2*2=4 points)
+```
+{% endnote %}
+定义状态dp[i][j][k]表示j右边有k个和j一样的元素，可以消除掉j和k中间的其它元素一起消除这k+1个，得到的分数。
+或者可以选择继续把ij区间拆分，
+
+```java
+public int removeBoxes(int[] boxes) {
+    int n = boxes.length;
+    int[][][] dp  = new int[101][101][101];
+    return dfs(boxes, 0, n-1, 0, dp);
+}
+private int dfs(int[] boxes,int l,int r,int k,int[][][] dp){
+    if(r<l)return 0;
+    while (l<r && boxes[r-1] == boxes[r]){--r;++k;}
+    if(dp[l][r][k] > 0)return dp[l][r][k];
+    dp[l][r][k] = (1+k)*(1+k) + dfs(boxes, l, r-1, 0, dp);
+    for (int i = l; i < r ; i++) {
+        if(boxes[i] == boxes[r]){
+            dp[l][r][k] = Math.max(dp[l][r][k], dfs(boxes,l,i,k+1,dp) +dfs(boxes,i+1,r-1,0,dp));
+        }
+    }
+    return dp[l][r][k];
+}
+```
+
+
+
+### 718 !!最长公共子串 最长公共子数组
+{% note %}
+Input:
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+Output: 3
+Explanation: 
+The repeated subarray with maximum length is [3, 2, 1].
+{% endnote %}
+思路：A从位置i开始，和B从j开始匹配的最大长度
+
+```java
+public int findLength(int[] A, int[] B) {
+        int n = A.length;
+        int m = B.length;
+        int max = 0;
+        int[][] dp = new int[n+1][m+1];  
+        for(int i = 1;i<=n;i++){
+            for(int j =1;j<=m;j++){
+                if(A[i-1]==B[j-1]){
+                    dp[i][j] = dp[i-1][j-1]+1;
+                    max = Math.max(max,dp[i][j]);
+                }
+            }
+        }     
+        return max;
+    }
+```
+
 ### 440 字典序的第k小
 1-n的第k小
 {% note %}
