@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="Elasticsearch 搭建不能以root启动1234groupadd elasticsearchuseradd elasticsearch -g elasticsearch -p elasticsearchchown  -R elasticsearch.elasticsearch *su elasticsearch 安装es插件12345678910111213141516171819wge">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-05T10:59:40.331Z">
+<meta property="og:updated_time" content="2019-05-31T06:48:32.675Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es搜房网">
 <meta name="twitter:description" content="Elasticsearch 搭建不能以root启动1234groupadd elasticsearchuseradd elasticsearch -g elasticsearch -p elasticsearchchown  -R elasticsearch.elasticsearch *su elasticsearch 安装es插件12345678910111213141516171819wge">
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-05T18:59:40+08:00">
-                2019-05-05
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-31T14:48:32+08:00">
+                2019-05-31
               </time>
             
           </span>
@@ -425,6 +425,7 @@
 <p>添加post接口</p>
 <p>文件上传配置类</p>
 <p>文件配置属性<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring.http.multipart.enabled=<span class="keyword">true</span></span><br><span class="line">spring.http.multipart.location=E:\\houselearn\\tmp</span><br><span class="line">spring.http.multipart.file-size-threshold=<span class="number">5</span>MB</span><br><span class="line">spring.http.multipart.max-request-size=<span class="number">20</span>MB</span><br></pre></td></tr></table></figure></p>
+<h3 id="ES-安装问题"><a href="#ES-安装问题" class="headerlink" title="ES 安装问题"></a>ES 安装问题</h3><p>不能用root启动 max_map太小<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chown -R es:es elasticsearch...</span><br><span class="line">su </span><br><span class="line">sysctl -w vm.max_map_count=262144</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -599,7 +600,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-搭建"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch 搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-后台工程"><span class="nav-number">2.</span> <span class="nav-text">1.后台工程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#spring-data和jpa"><span class="nav-number">2.1.</span> <span class="nav-text">spring data和jpa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单元测试"><span class="nav-number">2.2.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集成模板引擎"><span class="nav-number">2.3.</span> <span class="nav-text">集成模板引擎</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-架构设计"><span class="nav-number">3.</span> <span class="nav-text">2. 架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1前后端数据格式"><span class="nav-number">3.1.</span> <span class="nav-text">2.1前后端数据格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-异常拦截器（页面-api）"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 异常拦截器（页面/api）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-管理员页面-文件上传"><span class="nav-number">4.</span> <span class="nav-text">3. 管理员页面 文件上传</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-搭建"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch 搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-后台工程"><span class="nav-number">2.</span> <span class="nav-text">1.后台工程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#spring-data和jpa"><span class="nav-number">2.1.</span> <span class="nav-text">spring data和jpa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单元测试"><span class="nav-number">2.2.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集成模板引擎"><span class="nav-number">2.3.</span> <span class="nav-text">集成模板引擎</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-架构设计"><span class="nav-number">3.</span> <span class="nav-text">2. 架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1前后端数据格式"><span class="nav-number">3.1.</span> <span class="nav-text">2.1前后端数据格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-异常拦截器（页面-api）"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 异常拦截器（页面/api）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-管理员页面-文件上传"><span class="nav-number">4.</span> <span class="nav-text">3. 管理员页面 文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES-安装问题"><span class="nav-number">5.</span> <span class="nav-text">ES 安装问题</span></a></li></ol></div>
             
 
           </div>
