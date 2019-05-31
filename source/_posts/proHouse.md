@@ -366,4 +366,11 @@ spring.http.multipart.file-size-threshold=5MB
 spring.http.multipart.max-request-size=20MB
 ```
 
+### ES 安装问题
+不能用root启动 max_map太小
+```sh
+chown -R es:es elasticsearch...
+su 
+sysctl -w vm.max_map_count=262144
+```
 

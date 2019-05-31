@@ -4,6 +4,52 @@ date: 2019-03-07 20:56:46
 tags: [alg]
 categories: [算法备忘]
 ---
+### 517 每台可同时向两边分发，使数组每个值相等的最少步数 亚马逊
+{% note %}
+输入: [1,0,5]
+输出: 3
+解释: 
+第一步:    1     0 <-- 5    =>    1     1     4
+第二步:    1 <-- 1 <-- 4    =>    2     1     3    
+第三步:    2     1 <-- 3    =>    2     2     2   
+{% endnote %}
+思路2：
+```java
+public int findMinMoves(int[] machines) {
+    int sum = 0; 
+    for(int i: machines) sum+=i;
+     int n = machines.length;
+    if(sum%machines.length!=0) return -1;
+    int avg = sum/n;
+     int toleft = 0;
+     int toright = 0;
+     int rst = 0;
+    for(int load: machines){
+        toright += load-avg; 
+        rst = Math.max(Math.max(rst, Math.max(toleft + toright , toright )),toleft);
+        toleft = -toright;
+    }
+    return rst;
+}
+```
+
+思路1：计算每个位置和平均值的差数组[-1,-2,3]
+所以1要平衡，要求第二个位置多给一个变成[0,-3,3],再往后推[0,0,0]平衡了。
+要关心的值是差数组的最大值（原来的差（正的最大值，因为负的最大每次可以从两边接受2个）和每次递推的差的绝对值）
+```java
+public int findMinMoves(int[] machines) {
+    int total = 0; 
+    for(int i: machines) total+=i;
+    if(total%machines.length!=0) return -1;
+    int avg = total/machines.length, cnt = 0, max = 0;
+    for(int load: machines){
+        cnt += load-avg; //关键 load-avg不用绝对值
+        max = Math.max(Math.max(max, Math.abs(cnt)), load-avg);
+    }
+    return max;
+}
+```
+
 ### lc312 lt168 吹气球
 每次吹气球i可以得到的分数为 `nums[left] * nums[i] * nums[right]`，
 {% note %}

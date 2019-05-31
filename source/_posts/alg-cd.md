@@ -1,15 +1,89 @@
 ---
-title: alg-cd-tc-wy
+title: 国内公司面试高频题
 date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
-### 826 安排工作以达到最大收益
+### 460 LFU Cache cd tx 
+最不经常使用LFU缓存。最近最少使用的将被删除
+{% note %}
+{% endnote %}
+难点：put如何在O(1)找到访问频率最少的kv删掉，如果频次相同，把时间戳最远的删掉。
+注意：每次get/put修改堆中元素的排序指标并堆不会自动重排，要删除再插入。并且注意用堆不是O（1）
+正确做法：3个hashMap
+
+
+### 440 ！字典序的第k小 计数！
+1-n的第k小
+{% note %}
+Input:
+n: 13   k: 2
+Output:
+10
+Explanation:
+The lexicographical order is [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9], so the second smallest number is 10.
+{% endnote %}
+dfs超时
+思路：高效计算同层每个两个数字在树中的间隔，并递归计算每一层。字典序是10进制1层
+例如n=100 1和2之间的距离gap ->[1-2)的距离1 + [10-20)的距离10 + [100 -100]的距离 1 =12 
+（注意计数，右边界n2如果不在当前树n2-n1，如果n2>n ,右边界在这棵树中，这棵树中的节点数统计为n+1-n1。
+利用gap前进，如果k>gap则说明在当前子树。当前树根下移。
+
+```java
+public int findKthNumber(int n, int k) {   
+    int cur = 1;
+    k--;
+    while(k>0){
+    int gap = getGap(n,cur,cur+1);
+        if(k < gap){
+            cur*=10;
+            k--;
+    
+        }else{
+            k -= gap;
+            cur++;
+        }
+    }
+    return cur;
+}
+private int getGap(int n,long n1,long n2){
+    int gap = 0;
+    while(n1 <= n){
+        if(n2 >n){
+            gap += n-n1+1;
+        
+        }else{
+            gap += n2-n1;
+        }
+           n1 *=10;
+           n2 *=10;
+    }
+    return gap;
+}
+```
+
+### 826 安排工作以达到最大收益 wy
 {% note %}
 输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]
 输出: 100 
 解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。
 {% endnote %}
+排序ac
+```java
+public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+    List<Pair<Integer, Integer>> jobs = new ArrayList<>();
+    int N = profit.length, res = 0, i = 0, maxp = 0;
+    for (int j = 0; j < N; ++j) jobs.add(new Pair<Integer, Integer>(difficulty[j], profit[j]));
+    Collections.sort(jobs, Comparator.comparing(Pair::getKey));
+    Arrays.sort(worker);
+    for (int ability : worker) {
+        while (i < N && ability >= jobs.get(i).getKey())
+            maxp = Math.max(jobs.get(i++).getValue(), maxp);
+        res += maxp;
+    }
+    return res;
+}
+```
 
 ### 394 字符串解码 hw aqy
 {% note %}
@@ -203,19 +277,7 @@ public int findLength(int[] A, int[] B) {
     }
 ```
 
-### 440 字典序的第k小
-1-n的第k小
-{% note %}
-Input:
-n: 13   k: 2
 
-Output:
-10
-
-Explanation:
-The lexicographical order is [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9], so the second smallest number is 10.
-{% endnote %}
-dfs超时
 
 ### 386 字典序数字 todo
 dfs 112ms 71%
