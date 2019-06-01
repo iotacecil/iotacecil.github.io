@@ -81,57 +81,6 @@ public int maxArea(int[] height) {
 }
 ```
 
-### 42 雨水
-{% note %}
-Input: [0,1,0,2,1,0,1,3,2,1,2,1]
-Output: 6
-{% endnote %}
-
-正确做法：双指针
-```java
-public int trap(int[] A){
-    int a=0;
-    int b=A.length-1;
-    int max=0;
-    int leftmax=0;
-    int rightmax=0;
-    while(a<=b){
-        leftmax=Math.max(leftmax,A[a]);
-        rightmax=Math.max(rightmax,A[b]);
-        if(leftmax<rightmax){
-            max+=(leftmax-A[a]);
-            a++;
-        }
-        else{
-            max+=(rightmax-A[b]);
-            b--;
-        }
-    }
-    return max;
-}
-```
-
-两个数组做法：left保存当前位置左边的max。right保存当前位置右边的max。
-```java
-public int trap(int[] height) {
-  int n  = height.length;
-  int[] left = new int[n];
-  int[] right = new int[n];
-  for(int i = 1;i<n;i++){
-      left[i] = Math.max(left[i-1],height[i-1]);
-  }
-  for(int i = n-2;i>=0;i--){
-      right[i] = Math.max(right[i+1],height[i+1]);
-  }
-    int rst = 0;
-    for(int i = 0;i<n;i++){
-        int tmp = Math.min(left[i],right[i]) - height[i];
-        if(tmp >0)
-        rst += tmp;
-    }
-    return rst;
-}
-```
 
 ### 146 LRU cache HashMap<Integer,DoubleLinkedList>
 [Cache replacement policies](https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU)

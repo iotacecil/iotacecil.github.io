@@ -4,6 +4,111 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 93 分割IP地址
+注意：3个点之后还是要判断长度和数量关系
+
+
+### 53 最大子数组和
+```java
+public int maxSubArray(int[] nums) {
+    int sum = 0;
+    // 关键：测试用例[-1]
+    int rst = nums[0];
+    for(int num:nums){
+        sum = Math.max(sum+num,num);
+        rst = Math.max(sum,rst);
+    }
+    return rst;
+}
+```
+
+### ！！42 雨水
+{% note %}
+Input: [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+{% endnote %}
+
+思路：
+1 一个格子的水有两个边界，
+2 如果左边or右边有更低的，水都会流走，尽量从两边让墙越来越高
+3 如果当前格子靠近低的那侧，这个格子没可能更大了，最多就是left-A[i]水量，可以继续考虑这个格子更里那个格子。
+
+正确做法：双指针
+```java
+public int trap(int[] A){
+    int a=0;
+    int b=A.length-1;
+    int max=0;
+    int leftmax=0;
+    int rightmax=0;
+    while(a<=b){
+        leftmax=Math.max(leftmax,A[a]);
+        rightmax=Math.max(rightmax,A[b]);
+        if(leftmax<rightmax){
+            max+=(leftmax-A[a]);
+            a++;
+        }
+        else{
+            max+=(rightmax-A[b]);
+            b--;
+        }
+    }
+    return max;
+}
+```
+
+两个数组做法：left保存当前位置左边的max。right保存当前位置右边的max。
+注意 第0位置没有left，left只要计算到n-2个元素
+n-1没有right,只要计算到第1个元素
+```java
+public int trap(int[] height) {
+  int n  = height.length;
+  int[] left = new int[n];
+  int[] right = new int[n];
+  for(int i = 1;i<n;i++){
+      left[i] = Math.max(left[i-1],height[i-1]);
+  }
+  for(int i = n-2;i>=0;i--){
+      right[i] = Math.max(right[i+1],height[i+1]);
+  }
+    int rst = 0;
+    for(int i = 0;i<n;i++){
+        int tmp = Math.min(left[i],right[i]) - height[i];
+        if(tmp >0)
+        rst += tmp;
+    }
+    return rst;
+}
+```
+
+
+
+### 2 链表数字相加
+注意：p1,p2,p不要忘了前进。carry用除，值用取余。
+
+### 3 ！无重复的最长子串
+{% note %}
+输入:abba
+输出：2
+{% endnote %}
+注意：测试用例" "，注意last应该递增
+```java
+public int lengthOfLongestSubstring(String s) {
+    Map<Character,Integer> map = new HashMap<>();
+    int max = -1;
+    int last = 0;
+    for(int i = 0;i<s.length();i++){
+        if(map.containsKey(s.charAt(i))){
+            last = Math.max(last,map.get(s.charAt(i))+1);
+        }
+        map.put(s.charAt(i),i);
+        // 注意为了统一 “ ” 这个测试用例必须+1
+        max = Math.max(max,i-last+1);
+    }
+    return max==-1?s.length():max;
+}
+```
+
 ### 460 LFU Cache cd tx 
 最不经常使用LFU缓存。最近最少使用的将被删除
 {% note %}
