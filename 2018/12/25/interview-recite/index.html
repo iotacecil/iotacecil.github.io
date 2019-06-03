@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-05-30T12:54:15.676Z">
+<meta property="og:updated_time" content="2019-06-03T06:40:49.813Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://blog.csdn.net/jackfrued/article/details/44921941https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/x">
@@ -351,8 +351,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-30T20:54:15+08:00">
-                2019-05-30
+              <time title="更新于" itemprop="dateModified" datetime="2019-06-03T14:40:49+08:00">
+                2019-06-03
               </time>
             
           </span>
@@ -711,7 +711,7 @@
 <h4 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h4><p>抽象类里面能不能有非抽象方法 能不能被重写</p>
 <h4 id="String不能被继承"><a href="#String不能被继承" class="headerlink" title="String不能被继承"></a>String不能被继承</h4><p>重写和重载的区别</p>
 <h3 id="53-sb依赖注入控制反转。"><a href="#53-sb依赖注入控制反转。" class="headerlink" title="53 sb依赖注入控制反转。"></a>53 sb依赖注入控制反转。</h3><p>IOC:控制反转<br>控制：Java Bean的生命周期（创建、销毁）<br>反转：容器管理依赖关系。<br>IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。</p>
-<p>IOC的实现方式：带参构造函数，setter，auto</p>
+<p>IOC的实现方式：<br>1)设置注入/属性注入setter方法<property>元素<br>2）构造器注入<br>3）工厂方法注入</property></p>
 <p>依赖注入DI方式:把底层类作为参数传递给上层类，实现上层对下层的“控制”。<br>setter、接口、构造函数。<br>组件之间依赖关系由容器在运行期决定。<br>SpringBoot Autowired是自动注入，自动从spring的上下文找到合适的bean来注入</p>
 <p>IOC容器初始化<br>1）Resource定位<br>2）载入：把定义的Bean表示成IOC的数据结构（不包括Bean依赖注入）<br>3）注册到容器的HashMap中</p>
 <p>IOC容器通过和注解配置(<code>Controller</code>)<br>1）IOC容器就是<code>ApplicationContext</code> 可以通过web.xml或者加载xml或者文件用<code>application-context.xml</code>初始化。<br>2）定义bean 然后<code>getBean()</code>就获取了对象可以调用方法了<br>bean的作用域6种 默认是单例，多次<code>getBean</code>是同一个。<code>prototype</code>每次都是新的。<br>bean有创建和销毁的回调函数。<br>3）如果要用两个类的组合，一个类里需要<code>new</code>另一个类，这样那个类的构造参数都需要在这个类里面改，这样强耦合。所以这个外部对象应该用构造函数（强依赖）/setter（可选依赖（可配置的（颜色）））等方法注入。<br>    通过配置文件的方法，注入依赖的参数。</p>
