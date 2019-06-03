@@ -4,6 +4,51 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 726 化学式中各原子的数量
+{% note %}
+输入: 
+formula = "K4(ON(SO3)2)2"
+输出: "K4N2O14S4"
+解释: 
+原子的数量是 {'K': 4, 'N': 2, 'O': 14, 'S': 4}。
+{% endnote %}
+
+### 33 !!旋转数组查找
+{% note %}
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+{%endnote %}
+关键：第一步分割：
+mid>=最左，表示旋转点在mid右边，从左到mid是递增的，再考虑target在不在左侧>=left。
+else 旋转点在左侧，
+```java
+public int search(int[] nums, int target) {
+    int n = nums.length;
+    if(n <1)return -1;
+    int l = 0;
+    int r = n-1;
+    while(l<=r){
+        int mid = l+(r-l)/2;
+        if(nums[mid] == target)return mid;
+        // 旋转点在中位数右侧
+        if(nums[mid] >= nums[l]){
+            if(target < nums[mid] && target >= nums[l]){
+                r = mid-1;
+            }else{
+                l = mid+1;
+            }
+        }
+        else {
+            if(target >nums[mid] && target<= nums[r]){
+                l = mid+1;
+            }
+            else r = mid-1;
+        }
+    }
+     return -1;
+}
+```
+
 ### 93 分割IP地址
 注意：3个点之后还是要判断长度和数量关系
 

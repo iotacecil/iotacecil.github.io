@@ -37,6 +37,14 @@ sysctl -w vm.max_map_count=262144
 ```
 改limit需要重启(?)
 
+#### ES 安装问题
+不能用root启动 max_map太小
+```sh
+chown -R es:es elasticsearch...
+su 
+sysctl -w vm.max_map_count=262144
+```
+
 ### 1.后台工程
 
 #### spring data和jpa
@@ -343,8 +351,422 @@ public ApiResponse errorApiHandler(HttpServletRequest request) {
 }
 ```
 
-### 3. 管理员页面 文件上传
+### 3. 管理员页面 文件上传 本地+腾讯云
 管理员页面1.登陆 2.欢迎 3.管理员中心 4.添加房子
+
+#### security
+WebMvcConfig 在thymeleaf 添加 SpringSecurity方言
+配置页面解析器并且注册ModelMapper
+```java
+@Configuration
+public class WebMvcConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+    @Value("${spring.thymeleaf.cache}")
+    private boolean thymeleafCacheEnable = true;
+
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    /**
+     * 静态资源加载配置
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+    }
+
+    /**
+     * 模板资源解析器
+     * @return
+     */
+    @Bean
+    @ConfigurationProperties(prefix = "spring.thymeleaf")
+    public SpringResourceTemplateResolver templateResolver() {
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setApplicationContext(this.applicationContext);
+        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCacheable(thymeleafCacheEnable);
+        return templateResolver;
+    }
+
+    /**
+     * Thymeleaf标准方言解释器
+     */
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        // 支持Spring EL表达式
+        templateEngine.setEnableSpringELCompiler(true);
+
+        // 支持SpringSecurity方言
+        SpringSecurityDialect securityDialect = new SpringSecurityDialect();
+        templateEngine.addDialect(securityDialect);
+        return templateEngine;
+    }
+
+    /**
+     * 视图解析器
+     */
+    @Bean
+    public ThymeleafViewResolver viewResolver() {
+        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+        viewResolver.setTemplateEngine(templateEngine());
+        return viewResolver;
+    }
+
+     @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+    }
+```
+
+
+权限配置类
+```java
+@EnableWebSecurity
+@EnableGlobalMethodSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    /**
+     * HTTP权限控制
+     * @param http
+     * @throws Exception
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // 资源访问权限
+        http.authorizeRequests()
+                .antMatchers("/admin/login").permitAll() // 管理员登录入口
+                .antMatchers("/static/**").permitAll() // 静态资源
+                .antMatchers("/user/login").permitAll() // 用户登录入口
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/api/user/**").hasAnyRole("ADMIN",
+                "USER")
+                .and()
+                .formLogin()
+                .loginProcessingUrl("/login") // 配置角色登录处理入口
+                .failureHandler(authFailHandler())
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/logout/page")
+                // 登出擦除密码
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(urlEntryPoint())
+                .accessDeniedPage("/403");
+        //ifarme开发需要同源策略
+        http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
+    }
+
+    /**
+     * 自定义认证策略
+     */
+    @Autowired
+    public void configGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        //添加默认用户名密码
+        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN").and();
+    }
+}
+```
+对接数据库做真实的权限认证,获取用户名，从数据库查找密码比对输入的密码`authentication.getCredentials()`
+```java
+public class AuthProvider implements AuthenticationProvider {
+@Autowired
+private IUserService userService;
+
+private final Md5PasswordEncoder passwordEncoder = new Md5PasswordEncoder();
+
+@Override
+public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    String userName = authentication.getName();
+    String inputPassword = (String) authentication.getCredentials();
+
+    User user = userService.findUserByName(userName);
+    if (user == null) {
+        throw new AuthenticationCredentialsNotFoundException("authError");
+    }
+
+    if (this.passwordEncoder.isPasswordValid(user.getPassword(), inputPassword, user.getId())) {
+        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+    }
+
+    throw new BadCredentialsException("authError");
+
+}
+
+@Override
+public boolean supports(Class<?> authentication) {
+    return true;
+}
+```
+用户实体 实现security的方法...
+```java
+@Entity
+@Table(name = "user")
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String password;
+    private String email;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    private int status;
+    @Column(name = "create_time")
+    private Date createTime;
+    @Column(name = "last_login_time")
+    private Date lastLoginTime;
+    @Column(name = "last_update_time")
+    private Date lastUpdateTime;
+    private String avatar;
+    }
+    // 注意不在数据库中的属性，不持久化，避免jap检查
+    @Transient
+    private List<GrantedAuthority> authorityList;
+
+    public List<GrantedAuthority> getAuthorityList() {
+        return authorityList;
+    }
+
+    public void setAuthorityList(List<GrantedAuthority> authorityList) {
+        this.authorityList = authorityList;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorityList;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+```
+用户service
+```java
+public interface IUserService {
+    User findUserByName(String userName);
+```
+用户dao
+```java
+public interface UserRepository extends CrudRepository<User, Long> {
+    User findByName(String userName);
+```
+添加role信息
+```java
+@Entity
+@Table(name = "role")
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
+    private String name;
+```
+role查询 组装到userservice
+```java
+public interface RoleRepository extends CrudRepository<Role, Long> {
+    List<Role> findRolesByUserId(Long userId);
+}
+```
+userservice 通过名字查用户id，通过id查用户权限，并设置好完整的user返回
+```java
+ @Autowired
+private RoleRepository roleRepository;
+@Override
+public User findUserByName(String userName) {
+    User user = userRepository.findByName(userName);
+
+    if (user == null) {
+        return null;
+    }
+
+    List<Role> roles = roleRepository.findRolesByUserId(user.getId());
+    if (roles == null || roles.isEmpty()) {
+        throw new DisabledException("权限非法");
+    }
+
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
+    user.setAuthorityList(authorities);
+    return user;
+}
+```
+
+security的认证逻辑
+```java
+@Autowired
+    public void configGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authProvider()).eraseCredentials(true);
+    }
+    @Bean
+    public AuthProvider authProvider() {
+        return new AuthProvider();
+    }
+```
+
+添加用户登出接口HomeController 设置默认页面的页面跳转
+```java
+@Controller
+public class HomeController {
+    @GetMapping(value = {"/", "/index"})
+    public String index(Model model) {
+        return "index";
+    }
+
+    @GetMapping("/404")
+    public String notFoundPage() {
+        return "404";
+    }
+
+    @GetMapping("/403")
+    public String accessError() {
+        return "403";
+    }
+
+    @GetMapping("/500")
+    public String internalError() {
+        return "500";
+    }
+
+    @GetMapping("/logout/page")
+    public String logoutPage() {
+        return "logout";
+    }
+```
+
+普通用户的controller
+```java
+@Controller
+public class UserController {
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IHouseService houseService;
+
+    @GetMapping("/user/login")
+    public String loginPage() {
+        return "user/login";
+    }
+
+    @GetMapping("/user/center")
+    public String centerPage() {
+        return "user/center";
+    }
+```
+
+#### 无权限跳转到普通/管理员的登陆入口
+```java
+public class LoginUrlEntryPoint extends LoginUrlAuthenticationEntryPoint {
+    private final Map<String, String> authEntryPointMap;
+    private PathMatcher pathMatcher = new AntPathMatcher();
+    public LoginUrlEntryPoint(String loginFormUrl) {
+        super(loginFormUrl);
+        authEntryPointMap = new HashMap<>();
+
+        // 普通用户登录入口映射
+        authEntryPointMap.put("/user/**", "/user/login");
+        // 管理员登录入口映射
+        authEntryPointMap.put("/admin/**", "/admin/login");
+    }
+}
+@Override
+protected String determineUrlToUseForThisRequest(HttpServletRequest request, HttpServletResponse response,AuthenticationException exception) {
+    String uri = request.getRequestURI().replace(request.getContextPath(), "");
+
+    for (Map.Entry<String, String> authEntry : this.authEntryPointMap.entrySet()) {
+        if (this.pathMatcher.match(authEntry.getKey(), uri)) {
+            return authEntry.getValue();
+        }
+    }
+    return super.determineUrlToUseForThisRequest(request, response, exception);
+}
+```
+
+添加config
+```java
+@Bean
+public LoginUrlEntryPoint urlEntryPoint() {
+    return new LoginUrlEntryPoint("/user/login");
+}
+```
+添加`.authenticationEntryPoint(urlEntryPoint())`
+
+登陆失败
+```java
+public class LoginAuthFailHandler extends SimpleUrlAuthenticationFailureHandler {
+    private final LoginUrlEntryPoint urlEntryPoint;
+
+    public LoginAuthFailHandler(LoginUrlEntryPoint urlEntryPoint) {
+        this.urlEntryPoint = urlEntryPoint;
+    }
+
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException exception) throws IOException, ServletException {
+        String targetUrl =
+                this.urlEntryPoint.determineUrlToUseForThisRequest(request, response, exception);
+
+        targetUrl += "?" + exception.getMessage();
+        super.setDefaultFailureUrl(targetUrl);
+        super.onAuthenticationFailure(request, response, exception);
+    }
+```
+
+注册
+```java
+    @Bean
+    public LoginAuthFailHandler authFailHandler() {
+        return new LoginAuthFailHandler(urlEntryPoint());
+    }
+```
+```java
+.loginProcessingUrl("/login") // 配置角色登录处理入口
+.failureHandler(authFailHandler())
+```
+
+
+
 
 前端
 thymeleaf 公共头部templates/admin/common.html
@@ -353,10 +775,93 @@ thymeleaf 公共头部templates/admin/common.html
 在要使用的页面使用那个header
 ` <div th:include="admin/common :: head"></div>`
 
-添加post接口
+#### 图片上传 腾讯云
 
+添加post接口
+```java
+@PostMapping(value = "admin/upload/photo",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+@ResponseBody
+public ApiResponse uploadPhoto(@RequestParam("file") MultipartFile file){
+    if(file.isEmpty()){
+        return ApiResponse.ofStatus(ApiResponse.Status.NOT_VALID_PARAM);
+    }
+    String fileName = file.getOriginalFilename();
+    File target = new File("E:\\houselearn\\tmp\\"+fileName);
+    try {
+        file.transferTo(target);
+        PutObjectResult result = tecentService.uploadFile(target);
+        String s = gson.toJson(result);
+        System.out.println(s);
+        System.out.println(result);
+        TecentDTO ret = gson.fromJson(s, TecentDTO.class);
+        return ApiResponse.ofSuccess(ret);
+    } catch (IOException e) {
+        e.printStackTrace();
+        return ApiResponse.ofStatus(ApiResponse.Status.INTERNAL_SERVER_ERROR);
+    }
+}
+```
 
 文件上传配置类
+```java
+@Configuration
+@ConditionalOnClass({Servlet.class, StandardServletMultipartResolver.class, MultipartConfigElement.class})
+@ConditionalOnProperty(prefix = "spring.http.multipart", name = "enabled", matchIfMissing = true)
+@EnableConfigurationProperties(MultipartProperties.class)
+public class WebFileUploadConfig {
+    private final MultipartProperties multipartProperties;
+
+    public WebFileUploadConfig(MultipartProperties multipartProperties) {
+        this.multipartProperties = multipartProperties;
+    }
+    /**
+     * 上传配置
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public MultipartConfigElement multipartConfigElement() {
+        return this.multipartProperties.createMultipartConfig();
+    }
+
+    /**
+     * 注册解析器
+     */
+    @Bean(name = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME)
+    @ConditionalOnMissingBean(MultipartResolver.class)
+    public StandardServletMultipartResolver multipartResolver() {
+        StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
+        multipartResolver.setResolveLazily(this.multipartProperties.isResolveLazily());
+        return multipartResolver;
+    }
+    @Value("${tcent.secretId}")
+    private  String secretId;
+
+    @Value("${tcent.secretKey}")
+    private  String secretKey;
+
+    @Value("${tcent.bucket}")
+    private  String bucket;
+
+    @Value("${tcent.region}")
+    private  String region;
+
+    // 1 初始化用户身份信息（secretId, secretKey）。
+    @Bean
+    public COSCredentials cred(){
+        return new BasicCOSCredentials(secretId, secretKey);
+    }
+    //2 区域
+    @Bean
+    public ClientConfig clientConfig(){
+      return  new ClientConfig(new Region(region));
+    }
+    // 上传
+    @Bean
+    public COSClient cosClient(){
+        return new COSClient(cred(), clientConfig());
+    }
+}
+```
 
 文件配置属性
 ```java
@@ -366,11 +871,119 @@ spring.http.multipart.file-size-threshold=5MB
 spring.http.multipart.max-request-size=20MB
 ```
 
-### ES 安装问题
-不能用root启动 max_map太小
-```sh
-chown -R es:es elasticsearch...
-su 
-sysctl -w vm.max_map_count=262144
+定义和前端的图片大小dto 用imageIO 获取图片大小
+
+### 4.地区、地铁信息等表单数据库查询
+注意地址表中存储区和市信息，用一个字段level区分。
+并且有belong_to 字段形成树形结构。
+```java
+@Entity
+@Table(name = "support_address")
+public class SupportAddress {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // 上一级行政单位
+    @Column(name = "belong_to")
+    private String belongTo;
+
+    @Column(name = "en_name")
+    private String enName;
+
+    @Column(name = "cn_name")
+    private String cnName;
+
+    private String level;
+
+    @Column(name = "baidu_map_lng")
+    private double baiduMapLongitude;
+
+    @Column(name = "baidu_map_lat")
+    private double baiduMapLatitude;
 ```
+
+```java
+public enum Level {
+    CITY("city"),
+    REGION("region");
+
+    private String value;
+
+    Level(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+    public static Level of(String value) {
+        for (Level level : Level.values()) {
+            if (level.getValue().equals(value)) {
+                return level;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+}
+```
+
+为了分页统一包装成带数量的list类
+```java
+public class ServiceMultiResult<T> {
+    private long total;
+    private List<T> result;
+```
+在address实体中定义枚举类 用于按level查找所有城市
+```java
+public ServiceMultiResult<SupportAddressDTO> findAllCities() {
+        List<SupportAddress> addresses = supportAddressRepository.findAllByLevel(SupportAddress.Level.CITY.getValue());
+        // to DTO
+```
+查询地区需要City
+```java
+@Override
+public ServiceMultiResult<SupportAddressDTO> findAllRegionsByCityName(String cityName) {
+// 判空
+    List<SupportAddress> regions = supportAddressRepository.findAllByLevelAndBelongTo(SupportAddress.Level.REGION
+            .getValue(), cityName);
+ //转 DTO
+    return new ServiceMultiResult<>(regions.size(), result);
+}
+```
+地铁也按城市名查询，地铁站用地铁id查
+AddressService封装所有地铁、城市的查询。
+
+存储房屋实体到数据库，分别对应
+房屋、详情、图片、tag表，将整个表单定义成一个类接受前端表格
+定义service中的save方法
+在adminController中定义接口，并对前端数据做表单验证，
+注入addressService用于验证城市列表、城市的区域列表
+调用save方法会返回一个DTO
+```java
+@PostMapping("admin/add/house")
+@ResponseBody
+public ApiResponse addHouse(@Valid @ModelAttribute("form-house-add") HouseForm houseForm, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+        return new ApiResponse(HttpStatus.BAD_REQUEST.value(), bindingResult.getAllErrors().get(0).getDefaultMessage(), null);
+    }
+
+    if (houseForm.getPhotos() == null || houseForm.getCover() == null) {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "必须上传图片");
+    }
+    Map<SupportAddress.Level, SupportAddressDTO> addressMap = addressService.findCityAndRegion(houseForm.getCityEnName(), houseForm.getRegionEnName());
+    if (addressMap.keySet().size() != 2) {
+        return ApiResponse.ofStatus(ApiResponse.Status.NOT_VALID_PARAM);
+    }
+
+    ServiceResult<HouseDTO> result = houseService.save(houseForm);
+    if (result.isSuccess()) {
+        return ApiResponse.ofSuccess(result.getResult());
+    }
+
+    return ApiResponse.ofSuccess(ApiResponse.Status.NOT_VALID_PARAM);
+}
+```
+
+并定义相应的DTO
 
