@@ -951,6 +951,7 @@ public ServiceMultiResult<SupportAddressDTO> findAllRegionsByCityName(String cit
     return new ServiceMultiResult<>(regions.size(), result);
 }
 ```
+一旦用户选择好了市，直接发送2个xhr查地铁线和区
 地铁也按城市名查询，地铁站用地铁id查
 AddressService封装所有地铁、城市的查询。
 
@@ -987,3 +988,128 @@ public ApiResponse addHouse(@Valid @ModelAttribute("form-house-add") HouseForm h
 
 并定义相应的DTO
 
+将controller、dto、entity、repository放到web目录下并记得修改JPA配置
+
+### 5后台浏览增删功能 
+redis保存session
+```java
+ @GetMapping("admin/house/list")
+    public String houseListPage() {
+        return "admin/house-list";
+    }
+```
+
+#### redis session
+```
+spring.redis.database=0
+spring.redis.host=10.1.18.25
+spring.redis.password=
+spring.redis.port=6379
+spring.redis.pool.min-idle=1
+spring.redis.timeout=3000
+
+```
+添加依赖
+```
+<dependency>
+    <groupId>org.springframework.session</groupId>
+    <artifactId>spring-session</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+```
+redis配置
+```java
+@Configuration
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 86400)
+public class RedisSessionConfig {
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
+
+        return new StringRedisTemplate(factory);
+    }
+}
+```
+Unable to configure Redis to keyspace notifications
+忘了写密码
+
+monitor查看效果
+ "PEXPIRE" "spring:session:sessions:6ca6dd6b-a63a-4676-b1b0-db95fde689cc" "86700000"
+ ？怎么看
+
+#### 多维度排序和分页
+后台查询条件表单实体
+```java
+public class DatatableSearch {
+    /**
+     * Datatables要求回显字段
+     */
+    private int draw;
+
+    /**
+     * Datatables规定分页字段
+     */
+    private int start;
+    private int length;
+
+    private Integer status;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date createTimeMin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date createTimeMax;
+
+    private String city;
+    private String title;
+    private String direction;
+    private String orderBy;
+```
+用Sort实现默认查询排序
+pageable实现分页
+`ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody);`
+```java
+public interface HouseRepository extends PagingAndSortingRepository<House, Long>, JpaSpecificationExecutor<House> {
+```
+
+#### 编辑按钮
+编辑页面get方法
+从数据库从查询到的房屋表格数据放在model中
+编辑页面post方法
+增加find所有房屋表信息的service、update更新的service
+
+点击图片删除图片的接口、添加、删除tag接口
+```java
+@DeleteMapping("admin/house/photo")
+@ResponseBody
+public ApiResponse removeHousePhoto(@RequestParam(value = "id") Long id) {
+    ServiceResult result = this.houseService.removePhoto(id);
+
+    if (result.isSuccess()) {
+        return ApiResponse.ofStatus(ApiResponse.Status.SUCCESS);
+    } else {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), result.getMessage());
+    }
+}
+```
+
+#### 待审核到发布
+修改数据库房屋状态
+
+
+### 6. 客户页面房源搜索
+搜索请求
+```java
+public class RentSearch {
+    private String cityEnName;
+    private String regionEnName;
+    private String priceBlock;
+    private String areaBlock;
+    private int room;
+    private int direction;
+    private String keywords;
+    private int rentWay = -1;
+    private String orderBy = "lastUpdateTime";
+    private String orderDirection = "desc";
+```

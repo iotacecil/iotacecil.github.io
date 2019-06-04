@@ -4,6 +4,75 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+## 问题很大
+
+### 786 第 K 个最小的素数分数
+{% note %}
+输入: A = [1, 2, 3, 5], K = 3
+输出: [2, 5]
+解释:
+已构造好的分数,排序后如下所示:
+1/5, 1/3, 2/5, 1/2, 3/5, 2/3.
+很明显第三个最小的分数是 2/5.
+{% endnote %}
+思路：
+先把1/5，2/5，3/5放进去
+排序方法：`p/q<x/y` <==> `py<xq`
+
+二分查找
+不是找k个而是找一个m，使比m小的正好有7个。
+构建成 从左往右递减，从上下往下递增。确定一个m，从右上角向左向下。
+可以用O(n)确定有多少个<=m.复杂度log(max)n
+难点：二分搜索的精度A[i] will be between 1 and 30000.所以精度到1/30000
+```
+1/2 1/3 1/5
+-   2/3 2/5
+-   -   3/5
+```
+378 719
+
+### 135 Candy 分数发糖
+你需要按照以下要求，帮助老师给这些孩子分发糖果：
+每个孩子至少分配到 1 个糖果。
+相邻的孩子中，评分高的孩子必须获得更多的糖果。
+{% note %}
+输入: [1,0,2]
+输出: 5
+解释: 你可以分别给这三个孩子分发 2、1、2 颗糖果。
+{% endnote %}
+
+https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with-detail-explanation
+
+思路：
+1.从左向右扫，把所有上升序列设置成从1开始的递增糖数
+2.从右向左扫，更新右边向左边的递增糖数。
+
+相似题目： 32 最长匹配括号 
+
+```java
+public int candy(int[] ratings) {
+    int n = ratings.length;
+    int[] nums = new int[n];
+    nums[0] = 1;
+    for(int i = 1;i<n;i++){
+        // 1 2 3 4
+        if(ratings[i-1] < ratings[i]){
+            nums[i] = nums[i-1]+1;
+        }else nums[i]  = 1;
+    }
+    for(int i = n-1;i>0;i--){
+        if(ratings[i-1] > ratings[i]){
+            nums[i-1] = Math.max(nums[i] + 1, nums[i-1]); 
+        }
+    }
+    int rst = 0;
+    for(int num:nums){
+        rst += num;
+    }
+    return rst;
+}
+```
+
 ### 726 化学式中各原子的数量
 {% note %}
 输入: 
@@ -12,6 +81,140 @@ formula = "K4(ON(SO3)2)2"
 解释: 
 原子的数量是 {'K': 4, 'N': 2, 'O': 14, 'S': 4}。
 {% endnote %}
+
+### 460 LFU Cache cd tx 
+最不经常使用LFU缓存。最近最少使用的将被删除
+{% note %}
+{% endnote %}
+难点：put如何在O(1)找到访问频率最少的kv删掉，如果频次相同，把时间戳最远的删掉。
+注意：每次get/put修改堆中元素的排序指标并堆不会自动重排，要删除再插入。并且注意用堆不是O（1）
+正确做法：3个hashMap
+
+### 394 字符串解码 hw aqy
+{% note %}
+```
+s = "3[a]2[bc]", 返回 "aaabcbc".
+s = "3[a2[c]]", 返回 "accaccacc".
+s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
+```
+{% endnote %}
+```java
+public String decodeString(String s) {
+    String res = "";
+    Deque<Integer> nums = new ArrayDeque<>();
+    Deque<String> strs = new ArrayDeque<>();
+    int idx = 0;
+    while(idx < s.length()){
+        if(Character.isDigit(s.charAt(idx))){
+            int tmp = 0;
+            while (Character.isDigit(s.charAt(idx))){
+                tmp = 10*tmp + (s.charAt(idx) - '0');
+                idx++;
+            }
+            nums.push(tmp);
+        }
+        else if(s.charAt(idx) == '['){
+            // 关键
+            strs.push(res);
+            res = "";
+            idx ++;
+        }
+        else if(s.charAt(idx) == ']'){
+            // res = c tmps = a num = 2 res = acc tmps="" res = acc*3
+            StringBuilder tmps =new StringBuilder(strs.pop());
+            int num = nums.pop();
+            for (int i = 0; i <num ; i++) {
+                //关键
+                tmps.append(res);
+            }
+            // 关键
+            res = tmps.toString();
+            idx++;
+
+        }else{
+            res += s.charAt(idx++);
+        }
+    }
+    return res;
+}
+```
+
+### 664 奇怪的打印机wy
+打印机每次只能打印同一个字符。
+每次可以在任意起始和结束位置打印新字符，并且会覆盖掉原来已有的字符。
+给定一个只包含小写英文字母的字符串，你的任务是计算这个打印机打印它需要的最少次数。
+{% note %}
+输入: "aba"
+输出: 2
+解释: 首先打印 "aaa" 然后在第二个位置打印 "b" 覆盖掉原来的字符 'a'。
+{% endnote %}
+
+```java
+public int strangePrinter(String s) {
+    int n = s.length();
+    int[][] dp = new int[n][n];
+    return dfs(s, 0, n-1, dp);   
+}
+
+private int dfs(String s, int i,int j,int[][] dp){
+    if(i > j)return 0;
+    if(dp[i][j] == 0){
+        //最坏情况，后面的一个一个打
+        dp[i][j] = dfs(s,i,j-1,dp)+1;
+        for (int k = i; k < j; k++) {
+            // 可以同时打印 k和j
+            if(s.charAt(k) == s.charAt(j)){
+                dp[i][j] = Math.min(dp[i][j],dfs(s,i,k,dp)+dfs(s,k+1,j-1,dp) );
+            }
+
+        }
+    }
+    return dp[i][j];
+}
+```
+
+### 546 移除盒子 不会tc+cd
+可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k*k 个积分。
+{% note %}
+```
+Input:
+[1, 3, 2, 2, 2, 3, 4, 3, 1]
+Output:
+23
+Explanation:
+[1, 3, 2, 2, 2, 3, 4, 3, 1] 
+----> [1, 3, 3, 4, 3, 1] (3*3=9 points) 
+----> [1, 3, 3, 3, 1] (1*1=1 points) 
+----> [1, 1] (3*3=9 points) 
+----> [] (2*2=4 points)
+```
+{% endnote %}
+定义状态dp[i][j][k]表示j右边有k个和j一样的元素，可以消除掉j和k中间的其它元素一起消除这k+1个，得到的分数。
+或者可以选择继续把ij区间拆分，
+
+```java
+public int removeBoxes(int[] boxes) {
+    int n = boxes.length;
+    int[][][] dp  = new int[101][101][101];
+    return dfs(boxes, 0, n-1, 0, dp);
+}
+private int dfs(int[] boxes,int l,int r,int k,int[][][] dp){
+    if(r<l)return 0;
+    while (l<r && boxes[r-1] == boxes[r]){--r;++k;}
+    if(dp[l][r][k] > 0)return dp[l][r][k];
+    dp[l][r][k] = (1+k)*(1+k) + dfs(boxes, l, r-1, 0, dp);
+    for (int i = l; i < r ; i++) {
+        if(boxes[i] == boxes[r]){
+            dp[l][r][k] = Math.max(dp[l][r][k], dfs(boxes,l,i,k+1,dp) +dfs(boxes,i+1,r-1,0,dp));
+        }
+    }
+    return dp[l][r][k];
+}
+```
+
+---
+## 问题不大
+
 
 ### 33 !!旋转数组查找
 {% note %}
@@ -126,8 +329,6 @@ public int trap(int[] height) {
 }
 ```
 
-
-
 ### 2 链表数字相加
 注意：p1,p2,p不要忘了前进。carry用除，值用取余。
 
@@ -153,15 +354,6 @@ public int lengthOfLongestSubstring(String s) {
     return max==-1?s.length():max;
 }
 ```
-
-### 460 LFU Cache cd tx 
-最不经常使用LFU缓存。最近最少使用的将被删除
-{% note %}
-{% endnote %}
-难点：put如何在O(1)找到访问频率最少的kv删掉，如果频次相同，把时间戳最远的删掉。
-注意：每次get/put修改堆中元素的排序指标并堆不会自动重排，要删除再插入。并且注意用堆不是O（1）
-正确做法：3个hashMap
-
 
 ### 440 ！字典序的第k小 计数！
 1-n的第k小
@@ -235,89 +427,6 @@ public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
 }
 ```
 
-### 394 字符串解码 hw aqy
-{% note %}
-```
-s = "3[a]2[bc]", 返回 "aaabcbc".
-s = "3[a2[c]]", 返回 "accaccacc".
-s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
-```
-{% endnote %}
-```java
-public String decodeString(String s) {
-    String res = "";
-    Deque<Integer> nums = new ArrayDeque<>();
-    Deque<String> strs = new ArrayDeque<>();
-    int idx = 0;
-    while(idx < s.length()){
-        if(Character.isDigit(s.charAt(idx))){
-            int tmp = 0;
-            while (Character.isDigit(s.charAt(idx))){
-                tmp = 10*tmp + (s.charAt(idx) - '0');
-                idx++;
-            }
-            nums.push(tmp);
-        }
-        else if(s.charAt(idx) == '['){
-            // 关键
-            strs.push(res);
-            res = "";
-            idx ++;
-        }
-        else if(s.charAt(idx) == ']'){
-            // res = c tmps = a num = 2 res = acc tmps="" res = acc*3
-            StringBuilder tmps =new StringBuilder(strs.pop());
-            int num = nums.pop();
-            for (int i = 0; i <num ; i++) {
-                //关键
-                tmps.append(res);
-            }
-            // 关键
-            res = tmps.toString();
-            idx++;
-
-        }else{
-            res += s.charAt(idx++);
-        }
-    }
-    return res;
-}
-```
-
-### 664 奇怪的打印机wy
-打印机每次只能打印同一个字符。
-每次可以在任意起始和结束位置打印新字符，并且会覆盖掉原来已有的字符。
-给定一个只包含小写英文字母的字符串，你的任务是计算这个打印机打印它需要的最少次数。
-{% note %}
-输入: "aba"
-输出: 2
-解释: 首先打印 "aaa" 然后在第二个位置打印 "b" 覆盖掉原来的字符 'a'。
-{% endnote %}
-
-```java
-public int strangePrinter(String s) {
-    int n = s.length();
-    int[][] dp = new int[n][n];
-    return dfs(s, 0, n-1, dp);   
-}
-
-private int dfs(String s, int i,int j,int[][] dp){
-    if(i > j)return 0;
-    if(dp[i][j] == 0){
-        //最坏情况，后面的一个一个打
-        dp[i][j] = dfs(s,i,j-1,dp)+1;
-        for (int k = i; k < j; k++) {
-            // 可以同时打印 k和j
-            if(s.charAt(k) == s.charAt(j)){
-                dp[i][j] = Math.min(dp[i][j],dfs(s,i,k,dp)+dfs(s,k+1,j-1,dp) );
-            }
-
-        }
-    }
-    return dp[i][j];
-}
-```
-
 ### 493 Reverse Pairs 逆序对的个数 cd
 如果 i < j and nums[i] > 2*nums[j].算一个逆序对
 {% note %}
@@ -357,44 +466,6 @@ public static void mergeSort(int[] nums, int left, int right) {
 
 ```
 
-### 546 移除盒子 不会tc+cd
-可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k*k 个积分。
-{% note %}
-```
-Input:
-[1, 3, 2, 2, 2, 3, 4, 3, 1]
-Output:
-23
-Explanation:
-[1, 3, 2, 2, 2, 3, 4, 3, 1] 
-----> [1, 3, 3, 4, 3, 1] (3*3=9 points) 
-----> [1, 3, 3, 3, 1] (1*1=1 points) 
-----> [1, 1] (3*3=9 points) 
-----> [] (2*2=4 points)
-```
-{% endnote %}
-定义状态dp[i][j][k]表示j右边有k个和j一样的元素，可以消除掉j和k中间的其它元素一起消除这k+1个，得到的分数。
-或者可以选择继续把ij区间拆分，
-
-```java
-public int removeBoxes(int[] boxes) {
-    int n = boxes.length;
-    int[][][] dp  = new int[101][101][101];
-    return dfs(boxes, 0, n-1, 0, dp);
-}
-private int dfs(int[] boxes,int l,int r,int k,int[][][] dp){
-    if(r<l)return 0;
-    while (l<r && boxes[r-1] == boxes[r]){--r;++k;}
-    if(dp[l][r][k] > 0)return dp[l][r][k];
-    dp[l][r][k] = (1+k)*(1+k) + dfs(boxes, l, r-1, 0, dp);
-    for (int i = l; i < r ; i++) {
-        if(boxes[i] == boxes[r]){
-            dp[l][r][k] = Math.max(dp[l][r][k], dfs(boxes,l,i,k+1,dp) +dfs(boxes,i+1,r-1,0,dp));
-        }
-    }
-    return dp[l][r][k];
-}
-```
 
 
 
@@ -429,7 +500,7 @@ public int findLength(int[] A, int[] B) {
 
 
 
-### 386 字典序数字 todo
+#### 386 字典序数字 
 dfs 112ms 71%
 ```
    1        2        3    ...
@@ -501,5 +572,28 @@ public static void main(String[] args) {
     if(n>3)
         rst += (str.charAt(3)-'a')+1;
     System.out.println(rst);
+}
+```
+
+---
+## 没有问题
+### 1014 最佳观光组合
+一对景点（i < j）组成的观光组合的得分为（A[i] + A[j] + i - j）
+{% note %}
+输入：[8,1,5,2,6]
+输出：11
+解释：i = 0, j = 2, A[i] + A[j] + i - j = 8 + 5 + 0 - 2 = 11
+{% endnote %}
+```java
+public int maxScoreSightseeingPair(int[] A) {
+    int n = A.length;
+    int[] score = new int[n];
+    score[0] = A[0];
+    int rst = 0;
+    for(int i = 1;i<n;i++){
+        rst = Math.max(rst,A[i]+score[i-1]-i);
+        score[i-1] =Math.max(socre[i-1],A[i]+i);
+    }
+    return rst;
 }
 ```
