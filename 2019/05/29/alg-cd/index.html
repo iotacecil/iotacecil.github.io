@@ -80,19 +80,19 @@
 
 
 
-<meta name="description" content="问题很大786 第 K 个最小的素数分数输入: A = [1, 2, 3, 5], K = 3输出: [2, 5]解释:已构造好的分数,排序后如下所示:1/5, 1/3, 2/5, 1/2, 3/5, 2/3.很明显第三个最小的分数是 2/5. 思路：先把1/5，2/5，3/5放进去排序方法：p/q&amp;lt;x/y &amp;lt;==&amp;gt; py&amp;lt;xq 二分查找不是找k个而是找一个m，使比m小的正">
+<meta name="description" content="问题很大786 第 K 个最小的素数分数输入: A = [1, 2, 3, 5], K = 3输出: [2, 5]解释:已构造好的分数,排序后如下所示:1/5, 1/3, 2/5, 1/2, 3/5, 2/3.很明显第三个最小的分数是 2/5. 思路：先把1/5，2/5，3/5放进去排序方法：p/q&amp;lt;x/y &amp;lt;==&amp;gt; py&amp;lt;xq取k-1次，如果分母序号-1&amp;gt;分子，入堆">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="国内公司面试高频题">
 <meta property="og:url" content="http://blog.iotaa.xyz/2019/05/29/alg-cd/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="问题很大786 第 K 个最小的素数分数输入: A = [1, 2, 3, 5], K = 3输出: [2, 5]解释:已构造好的分数,排序后如下所示:1/5, 1/3, 2/5, 1/2, 3/5, 2/3.很明显第三个最小的分数是 2/5. 思路：先把1/5，2/5，3/5放进去排序方法：p/q&amp;lt;x/y &amp;lt;==&amp;gt; py&amp;lt;xq 二分查找不是找k个而是找一个m，使比m小的正">
+<meta property="og:description" content="问题很大786 第 K 个最小的素数分数输入: A = [1, 2, 3, 5], K = 3输出: [2, 5]解释:已构造好的分数,排序后如下所示:1/5, 1/3, 2/5, 1/2, 3/5, 2/3.很明显第三个最小的分数是 2/5. 思路：先把1/5，2/5，3/5放进去排序方法：p/q&amp;lt;x/y &amp;lt;==&amp;gt; py&amp;lt;xq取k-1次，如果分母序号-1&amp;gt;分子，入堆">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lexpermu.jpg">
-<meta property="og:updated_time" content="2019-06-04T06:39:22.423Z">
+<meta property="og:updated_time" content="2019-06-05T03:07:51.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="国内公司面试高频题">
-<meta name="twitter:description" content="问题很大786 第 K 个最小的素数分数输入: A = [1, 2, 3, 5], K = 3输出: [2, 5]解释:已构造好的分数,排序后如下所示:1/5, 1/3, 2/5, 1/2, 3/5, 2/3.很明显第三个最小的分数是 2/5. 思路：先把1/5，2/5，3/5放进去排序方法：p/q&amp;lt;x/y &amp;lt;==&amp;gt; py&amp;lt;xq 二分查找不是找k个而是找一个m，使比m小的正">
+<meta name="twitter:description" content="问题很大786 第 K 个最小的素数分数输入: A = [1, 2, 3, 5], K = 3输出: [2, 5]解释:已构造好的分数,排序后如下所示:1/5, 1/3, 2/5, 1/2, 3/5, 2/3.很明显第三个最小的分数是 2/5. 思路：先把1/5，2/5，3/5放进去排序方法：p/q&amp;lt;x/y &amp;lt;==&amp;gt; py&amp;lt;xq取k-1次，如果分母序号-1&amp;gt;分子，入堆">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/lexpermu.jpg">
 
 
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-06-04T14:39:22+08:00">
-                2019-06-04
+              <time title="更新于" itemprop="dateModified" datetime="2019-06-05T11:07:51+08:00">
+                2019-06-05
               </time>
             
           </span>
@@ -396,7 +396,7 @@
 
       
         <h2 id="问题很大"><a href="#问题很大" class="headerlink" title="问题很大"></a>问题很大</h2><h3 id="786-第-K-个最小的素数分数"><a href="#786-第-K-个最小的素数分数" class="headerlink" title="786 第 K 个最小的素数分数"></a>786 第 K 个最小的素数分数</h3><div class="note "><p>输入: A = [1, 2, 3, 5], K = 3<br>输出: [2, 5]<br>解释:<br>已构造好的分数,排序后如下所示:<br>1/5, 1/3, 2/5, 1/2, 3/5, 2/3.<br>很明显第三个最小的分数是 2/5.</p></div>
-<p>思路：<br>先把1/5，2/5，3/5放进去<br>排序方法：<code>p/q&lt;x/y</code> &lt;==&gt; <code>py&lt;xq</code></p>
+<p>思路：<br>先把1/5，2/5，3/5放进去<br>排序方法：<code>p/q&lt;x/y</code> &lt;==&gt; <code>py&lt;xq</code><br>取k-1次，如果分母序号-1&gt;分子，入堆</p>
 <p>二分查找<br>不是找k个而是找一个m，使比m小的正好有7个。<br>构建成 从左往右递减，从上下往下递增。确定一个m，从右上角向左向下。<br>可以用O(n)确定有多少个&lt;=m.复杂度log(max)n<br>难点：二分搜索的精度A[i] will be between 1 and 30000.所以精度到1/30000<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1/2 1/3 1/5</span><br><span class="line">-   2/3 2/5</span><br><span class="line">-   -   3/5</span><br></pre></td></tr></table></figure></p>
 <p>378 719</p>
 <h3 id="135-Candy-分数发糖"><a href="#135-Candy-分数发糖" class="headerlink" title="135 Candy 分数发糖"></a>135 Candy 分数发糖</h3><p>你需要按照以下要求，帮助老师给这些孩子分发糖果：<br>每个孩子至少分配到 1 个糖果。<br>相邻的孩子中，评分高的孩子必须获得更多的糖果。<br><div class="note "><p>输入: [1,0,2]<br>输出: 5<br>解释: 你可以分别给这三个孩子分发 2、1、2 颗糖果。</p></div></p>
