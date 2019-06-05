@@ -4,6 +4,136 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 330 从1-n中选哪些数字可以求和得到1-n 贪心 tx
+最少需要给nums加几个数字，使其能组成[1,n]之间的所有数字
+{% note %}
+输入: nums = [1,3], n = 6
+输出: 1 
+解释:
+根据 nums 里现有的组合 [1], [3], [1,3]，可以得出 1, 3, 4。
+现在如果我们将 2 添加到 nums 中， 组合变为: [1], [2], [3], [1,3], [2,3], [1,2,3]。
+其和可以表示数字 1, 2, 3, 4, 5, 6，能够覆盖 [1, 6] 区间里所有的数。
+所以我们最少需要添加一个数字。
+{% endnote %}
+
+思路：int miss = [1-n] 中不能表示的最小值, 
+如果 现在能凑出1，遇到3 > miss 需要+miss这个数，不然凑不出 + 2，
+当前miss是4，遇到3，则可以凑出[1-4+3), 思考原来可以用1，2凑出[1,2,3]，每个数字+3
+注意：循环条件 miss<=n，不是数组，考虑空数组也应该++
+
+```java
+public int minPatches(int[] nums, int n) {
+    long miss = 1;
+    int len = nums.length;
+    int idx = 0;
+    int cnt = 0;
+    while(miss <= n){
+        //如果可以
+        if(idx < len && nums[idx] <= miss){
+            miss+= nums[idx];
+            idx++;
+        }else {
+            cnt++;
+            miss+=miss;
+        }
+    }
+    return cnt;
+}
+```
+
+### 805 能否将数组划分成均值相等的两个数组
+第i个石头的位置是stones[i]，最大的位置和最小的位置是端点。
+每次可以移动一个端点到一个非端点。
+如果石子像 stones = [1,2,5] 这样，你将无法移动位于位置 5 
+的端点石子，因为无论将它移动到任何位置（例如 0 或 3），该石子都仍然会是端点石子。
+1,2,5->2,3,5->3,4,5
+当无法移动时游戏结束。问最少结束游戏的步数和最大结束的步数。
+{% note %}
+输入：[7,4,9]
+输出：[1,2]
+解释：
+我们可以移动一次，4 -> 8，游戏结束。
+或者，我们可以移动两次 9 -> 5，4 -> 6，游戏结束。
+{% endnote %}
+
+
+### 688 马K步留在棋盘的概率
+```java
+ int[][]dirs = {{-1,2},{-2,1},{1,2},{2,1},{-1,-2},{-2,-1},{2,-1},{1,-2}};
+
+public double knightProbability(int N, int K, int r, int c) {
+    memo = new double[N][N][K+1];
+    return dfs(N,r,c,K);
+}
+double[][][]memo;
+double dfs(int N,int x,int y,int K){
+    
+    if(x>=N  || x<0 || y<0 ||y>=N){
+        return 0;
+    }
+    if(memo[x][y][K] >0)return memo[x][y][K];
+    if(K == 0){
+        memo[x][y][K] = 1;
+        return 1;
+    }
+    double rate = 0;
+    for(int[] dir:dirs){
+        rate += 0.125 * dfs(N,x+dir[0],y+dir[1],K-1);
+    }
+    memo[x][y][K] = rate;
+    return rate; 
+}
+```
+
+### 71 !!简化路径
+
+
+### 135 Candy 分数发糖
+你需要按照以下要求，帮助老师给这些孩子分发糖果：
+每个孩子至少分配到 1 个糖果。
+相邻的孩子中，评分高的孩子必须获得更多的糖果。
+{% note %}
+输入: [1,0,2]
+输出: 5
+解释: 你可以分别给这三个孩子分发 2、1、2 颗糖果。
+{% endnote %}
+
+https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with-detail-explanation
+
+正常思路：计算递增序列的同时计算递减序列的长度，当递增or相等时，用求和公式结算递减序列长度。
+
+思路：
+1.从左向右扫，把所有上升序列设置成从1开始的递增糖数
+2.从右向左扫，更新右边向左边的递增糖数。
+
+相似题目： 32 最长匹配括号 
+
+```java
+ public int candy(int[] ratings) {
+        int sum = 0;
+        int n = ratings.length;
+        int[] left = new int[n];
+        Arrays.fill(left,1);
+        int[] right = new int[n];
+        Arrays.fill(right,1);
+        for(int i = 1;i<n;i++){
+            if(ratings[i]>ratings[i-1]){
+                left[i] = left[i-1]+1;
+            }        
+            if(ratings[n-1-i] > ratings[n-i]){
+                right[n-1-i] = right[n-i]+1;
+            }
+        }
+        for(int i = 0;i<n;i++){
+            sum += Math.max(left[i],right[i]);
+        }
+        return sum;
+    }
+```
+
+### 33 !!!搜索旋转排序数组
+
+
 ### 93 分割IP地址
 注意：3个点之后还是要判断长度和数量关系
 
