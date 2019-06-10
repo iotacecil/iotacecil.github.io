@@ -1195,3 +1195,257 @@ public class HouseSort {
 }
 
 ```
+
+### 7.添加ES构建索引
+API地址
+https://www.elastic.co/guide/en/elasticsearch/client/java-api/5.5/transport-client.html
+添加依赖注册客户端
+```java
+@Configuration
+public class ElasticSearchConfig {
+    @Value("${elasticsearch.host}")
+    private String esHost;
+
+    @Value("${elasticsearch.port}")
+    private int esPort;
+
+    @Value("${elasticsearch.cluster.name}")
+    private String esName;
+
+    @Bean
+    public TransportClient esClient() throws UnknownHostException {
+        Settings settings = Settings.builder()
+                .put("cluster.name", this.esName)
+                // 自动发现节点
+                .put("client.transport.sniff", true)
+                .build();
+
+        InetSocketTransportAddress master = new InetSocketTransportAddress(
+            InetAddress.getByName(esHost), esPort
+
+        );
+
+        TransportClient client = new PreBuiltTransportClient(settings)
+                .addTransportAddress(master);
+
+        return client;
+    }
+```
+配置
+```
+elasticsearch.cluster.name=elasticsearch
+elasticsearch.host=10.1.18.25
+elasticsearch.port=9300
+```
+
+索引接口
+```java
+public interface ISearchService {
+    /**
+     * 索引目标房源
+     * @param houseId
+     */
+    void index(Long houseId);
+
+    /**
+     * 移除房源索引
+     * @param houseId
+     */
+    void remove(Long houseId);
+```
+构建索引index方法：新增房源（上架），从数据库中查找到房源数据，建立索引分3种情况
+1单纯创建 2es里有，是update 3es异常，需要先删除再创建
+
+ES基础语法
+定义索引名、索引类型（mapper下面那个）
+```java
+@Service
+public class SearchServiceImpl implements ISearchService {
+    private static final Logger logger = LoggerFactory.getLogger(ISearchService.class);
+
+    private static final String INDEX_NAME = "shoufhang";
+
+    private static final String INDEX_TYPE = "house";
+
+    private static final String INDEX_TOPIC = "house_build";
+
+```
+
+建立索引结构和对应的索引类，用于对象转成json传给es API，官方推荐jackson的ObjectMapper
+添加Logger
+
+index方法创建一个Json文档
+```java
+private boolean create(HouseIndexTemplate indexTemplate) {
+    try {
+        IndexResponse response = this.esClient.prepareIndex(INDEX_NAME, INDEX_TYPE)
+                .setSource(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON).get();
+
+        logger.debug("Create index with house: " + indexTemplate.getHouseId());
+        if (response.status() == RestStatus.CREATED) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (JsonProcessingException e) {
+        logger.error("Error to index house " + indexTemplate.getHouseId(), e);
+        return false;
+    }
+}
+```
+更新，需要传入一个具体的文档目标
+```java
+private boolean update(String esId, HouseIndexTemplate indexTemplate) {
+    try {
+        UpdateResponse response = this.esClient.prepareUpdate(INDEX_NAME, INDEX_TYPE, esId)
+                .setDoc(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON).get();
+
+        logger.debug("Update index with house: " + indexTemplate.getHouseId());
+        if (response.status() == RestStatus.OK) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (JsonProcessingException e) {
+        logger.error("Error to index house " + indexTemplate.getHouseId(), e);
+        return false;
+    }
+}
+```
+删除创建，查询再删除，传入多少个查到的数据，比较删除的行数是否一致
+```java
+private boolean deleteAndCreate(long totalHit, HouseIndexTemplate indexTemplate) {
+    DeleteByQueryRequestBuilder builder = DeleteByQueryAction.INSTANCE
+            .newRequestBuilder(esClient)
+            .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, indexTemplate.getHouseId()))
+            .source(INDEX_NAME);
+
+    logger.debug("Delete by query for house: " + builder);
+
+    BulkByScrollResponse response = builder.get();
+    long deleted = response.getDeleted();
+    if (deleted != totalHit) {
+        logger.warn("Need delete {}, but {} was deleted!", totalHit, deleted);
+        return false;
+    } else {
+        return create(indexTemplate);
+    }
+}
+```
+一条文档还需要tag和detail、地铁城市信息
+```java
+@Override
+public void index(Long houseId) {
+    House house = houseRepository.findOne(houseId);
+    if (house == null) {
+        logger.error("Index house {} dose not exist!", houseId);
+        return;
+    }
+
+    HouseIndexTemplate indexTemplate = new HouseIndexTemplate();
+    modelMapper.map(house, indexTemplate);
+
+    HouseDetail detail = houseDetailRepository.findByHouseId(houseId);
+    modelMapper.map(detail, indexTemplate);
+    //ES中是字符串只有name 不用数据库格式的id和houseID
+    List<HouseTag> tags = tagRepository.findAllByHouseId(houseId);
+    if (tags != null && !tags.isEmpty()) {
+        List<String> tagStrings = new ArrayList<>();
+        tags.forEach(houseTag -> tagStrings.add(houseTag.getName()));
+        indexTemplate.setTags(tagStrings);
+    }
+    // 先查询这个ID有没有数据
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME).setTypes(INDEX_TYPE)
+            .setQuery(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId));
+
+    logger.debug(requestBuilder.toString());
+    SearchResponse searchResponse = requestBuilder.get();
+
+    boolean success;
+    long totalHit = searchResponse.getHits().getTotalHits();
+    if (totalHit == 0) {
+        success = create(indexTemplate);
+    } else if (totalHit == 1) {
+        String esId = searchResponse.getHits().getAt(0).getId();
+        success = update(esId, indexTemplate);
+    } else {
+        //同样的数据存了好多个
+        success = deleteAndCreate(totalHit, indexTemplate);
+    }
+    if (success){
+        logger.debug("Index success with house " + houseId);
+    }
+}
+```
+先写一个单测试一下
+报错log4j2
+ERROR StatusLogger Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...
+之前腾讯云把log4j和sl4j都删掉了
+还要添加一个log4j
+```xml
+<dependency>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-core</artifactId>
+<version>2.7</version>
+</dependency>
+```
+
+```java
+public class SearchServiceTests extends ApplicationTests{
+    @Autowired
+    private ISearchService searchService;
+
+    @Test
+    public void testIndex(){
+        Assert.assertTrue(searchService.index(15L));
+    }
+}
+```
+修改数据库并再次执行测试可以看到索引页更新了
+
+删除索引（下架or出租了）
+```java
+@Override
+public void remove(Long houseId) {
+    DeleteByQueryRequestBuilder builder = DeleteByQueryAction.INSTANCE
+            .newRequestBuilder(esClient)
+            .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId))
+            .source(INDEX_NAME);
+
+    logger.debug("Delete by query for house: " + builder);
+
+    BulkByScrollResponse response = builder.get();
+    long deleted = response.getDeleted();
+
+        logger.debug("Delete total", deleted);
+}
+```
+单测
+```java
+@Test
+public void testRemove(){
+   searchService.remove(15L);
+}
+```
+
+将索引方法逻辑加入到之前的状态变化方法中
+houseService的update方法
+```java
+if (house.getStatus() == HouseStatus.PASSES.getValue()) {
+    searchService.index(house.getId());
+}
+```
+updateStatus方法
+```java
+// 上架更新索引 其他情况都要删除索引
+if (status == HouseStatus.PASSES.getValue()) {
+    searchService.index(id);
+} else {
+    searchService.remove(id);
+}
+
+```
+测试发布按钮是否添加了索引
+
+#### 异步构建索引
+kafka

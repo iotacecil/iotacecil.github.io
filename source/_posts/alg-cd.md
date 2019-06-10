@@ -16,9 +16,28 @@ categories: [算法备忘]
 很明显第三个最小的分数是 2/5.
 {% endnote %}
 思路：
-先把1/5，2/5，3/5放进去
-排序方法：`p/q<x/y` <==> `py<xq`
-取k-1次，如果分母序号-1>分子，入堆
+先把所有数字/最后一个数 1/5，2/5，3/5放进去？？？
+排序方法：`p/q<x/y` <==> `py<xq`取k-1次，如果分母序号-1>分子，入堆
+```java
+public int[] kthSmallestPrimeFraction(int[] A, int K) {
+    int n = A.length;
+   //a[0]/a[1]<b[0]/b[0] -> a[0]b[1] - b
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->{
+        return A[a[0]]*A[b[1]] - A[a[1]]*A[b[0]];
+    });
+    for (int i = 0; i <n-1 ; i++) {
+        pq.add(new int[]{i,n-1});
+
+    }
+    while (--K >0){
+        int[] p = pq.poll();
+        if(--p[1]>p[0]){
+            pq.add(p);
+        }
+    }
+    return new int[]{A[pq.peek()[0]],A[pq.peek()[1]]};
+}
+```
 
 二分查找
 不是找k个而是找一个m，使比m小的正好有7个。
