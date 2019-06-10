@@ -2599,41 +2599,7 @@ public int compress(char[] chars) {
 当k=1 字符串只能旋转
 当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
 
-### hiho1892 S中字符可以移动首部，移动最少次数得到T
->选定S中的一个字符Si，将Si移动到字符串首位。  
-例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
-请你计算最少需要几次移动操作，可以使S变成T。
-in:
-ABCD  
-DBAC
-out:2
 
-思路：T的最后一个字符找到S中的对应位置之后 也就是说 S这个位置之后的，都应该是被提到最前面去了。然后S和T 都向前一格是一样的子问题。
-。
-```java
-public static int trans3(String s,String t){
-    if(s.length() != t.length())return -1;
-    int n = s.length();
-    int[] scnt  = new int[256];
-    int[] tcnt  = new int[256];
-    for (int i = 0; i <n ; i++) {
-        scnt[s.charAt(i)]++;
-        tcnt[t.charAt(i)]++;
-    }
-    for (int i = 0; i <256 ; i++) {
-        if(scnt[i]!=tcnt[i])return -1;
-    }
-    int tidx = n-1;
-    int ans = 0;
-    for (int i = n-1; i >=0 ; i--) {
-        if(s.charAt(i) == t.charAt(tidx)){
-            ans++;
-            tidx--;
-        }
-    }
-    return n-ans;
-}
-```
 
 
 ### lc749 病毒隔离

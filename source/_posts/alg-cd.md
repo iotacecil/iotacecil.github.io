@@ -4,6 +4,175 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 10正则
+{% note %}
+s = "aab"
+p = "c\*a\*b"
+Output: true
+{% endnote %}
+
+### 12整数转罗马
+{% note %}
+输入: 58
+输出: "LVIII"
+解释: L = 50, V = 5, III = 3.
+{% endnote %}
+
+```java
+public String intToRoman(int num) {
+   int[] nums = {1,4,5,9,10,40,50,90,100,400,500,900,1000};
+    String[] rm = {"I","IV","V","IX","X","XL","L","XC","C","CD","D","CM","M"};
+    StringBuilder sb = new StringBuilder();
+    for(int i = rm.length-1;i>=0 && num>0;i--){
+        while(num >= nums[i]){
+            sb.append(rm[i]);
+            num -= nums[i];
+        }
+    }
+    return sb.toString();
+}
+```
+
+### ！！！32 最长括号子串
+{% note %}
+输入: ")()())"
+输出: 4
+解释: 最长有效括号子串为 "()()"
+{% endnote %}
+```java
+public int longestValidParentheses(String s) {
+    Deque<Integer> stk =  new ArrayDeque<>();
+    stk.push(-1);
+    int n = s.length();
+    int rst = 0;
+    for(int i = 0;i < n;i++){
+        if(s.charAt(i) == '('){
+            stk.push(i);
+        }else {
+            stk.pop();
+            if(stk.isEmpty()){
+// 正确匹配串的左边一位可能是-1也可能是一个错误的右括号的位置
+                stk.push(i);
+            }else
+// 每次正确的右括号 记录串长
+            rst = Math.max(rst,i-stk.peek());
+        }
+    }
+    return rst;
+}
+```
+
+左右扫描两遍
+```java
+public int longestValidParentheses(String s) {
+  int rst = 0;
+    int left = 0;
+    int right = 0;
+    int n = s.length();
+    for(int i = 0;i<n;i++){
+        if(s.charAt(i)=='('){
+            left++;
+        }else if(s.charAt(i)==')'){
+            right++;
+        }
+        if(left == right){
+            rst = Math.max(rst,left*2);
+        }
+        else if(right > left){
+            left = 0;
+            right = 0;
+        }
+    }
+    left = 0;
+    right = 0;
+     for(int i = n-1;i>=0;i--){
+        if(s.charAt(i)=='('){
+            left++;
+        }else if(s.charAt(i)==')'){
+            right++;
+        }
+        if(left == right)rst = Math.max(rst,left*2);
+         //关键
+        else if(left > right){
+            left = 0;
+            right = 0;
+        }
+    }
+    return rst;
+}
+```
+
+### 765 情侣牵手 aqy
+{% note %}
+输入: row = [0, 2, 1, 3]
+输出: 1
+解释: 我们只需要交换row[1]和row[2]的位置即可。
+{% endnote %}
+思路：贪心 每次取一对，遍历所有之后的，将匹配的换上来，再下一对
+
+### 有趣的排序
+任取数组中的一个数然后将它放置在数组的最后一个位置。
+问最少操作多少次可以使得数组从小到大有序？
+{% note %}
+4
+19 7 8 25
+out:4
+{% endnote %}
+19 7 8 25
+7 8 19 25
+思路：统计有多少个不用移动位置
+```java
+int cnt = 0;
+int[] arr2 = arr.clone();
+Arrays.sort(arr2);
+int p1 = 0;int p2 =0;
+while(p1<n && p2<n){        
+     if(arr[p1] == arr2[p2]){
+        p1++;
+        p2++;
+        cnt++;
+    }else p1++;
+}
+System.out.println(n-cnt);
+```
+
+#### hiho1892 S中字符可以移动首部，移动最少次数得到T
+>选定S中的一个字符Si，将Si移动到字符串首位。  
+例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
+请你计算最少需要几次移动操作，可以使S变成T。
+in:
+ABCD  
+DBAC
+out:2
+
+思路：T的最后一个字符找到S中的对应位置之后 也就是说 S这个位置之后的，都应该是被提到最前面去了。然后S和T 都向前一格是一样的子问题。
+。
+```java
+public static int trans3(String s,String t){
+    if(s.length() != t.length())return -1;
+    int n = s.length();
+    int[] scnt  = new int[256];
+    int[] tcnt  = new int[256];
+    for (int i = 0; i <n ; i++) {
+        scnt[s.charAt(i)]++;
+        tcnt[t.charAt(i)]++;
+    }
+    for (int i = 0; i <256 ; i++) {
+        if(scnt[i]!=tcnt[i])return -1;
+    }
+    int tidx = n-1;
+    int ans = 0;
+    for (int i = n-1; i >=0 ; i--) {
+        if(s.charAt(i) == t.charAt(tidx)){
+            ans++;
+            tidx--;
+        }
+    }
+    return n-ans;
+}
+```
+
+
 ### 330 从1-n中选哪些数字可以求和得到1-n 贪心 tx
 最少需要给nums加几个数字，使其能组成[1,n]之间的所有数字
 {% note %}
@@ -131,113 +300,85 @@ https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with
     }
 ```
 
-### 33 !!!搜索旋转排序数组
 
 
-### 93 分割IP地址
-注意：3个点之后还是要判断长度和数量关系
+## 问题很大
 
-
-### 53 最大子数组和
-```java
-public int maxSubArray(int[] nums) {
-    int sum = 0;
-    // 关键：测试用例[-1]
-    int rst = nums[0];
-    for(int num:nums){
-        sum = Math.max(sum+num,num);
-        rst = Math.max(sum,rst);
-    }
-    return rst;
-}
-```
-
-### ！！42 雨水
+### 786 第 K 个最小的素数分数
 {% note %}
-Input: [0,1,0,2,1,0,1,3,2,1,2,1]
-Output: 6
+输入: A = [1, 2, 3, 5], K = 3
+输出: [2, 5]
+解释:
+已构造好的分数,排序后如下所示:
+1/5, 1/3, 2/5, 1/2, 3/5, 2/3.
+很明显第三个最小的分数是 2/5.
 {% endnote %}
+思路：
+先把1/5，2/5，3/5放进去
+排序方法：`p/q<x/y` <==> `py<xq`
+
+二分查找
+不是找k个而是找一个m，使比m小的正好有7个。
+构建成 从左往右递减，从上下往下递增。确定一个m，从右上角向左向下。
+可以用O(n)确定有多少个<=m.复杂度log(max)n
+难点：二分搜索的精度A[i] will be between 1 and 30000.所以精度到1/30000
+```
+1/2 1/3 1/5
+-   2/3 2/5
+-   -   3/5
+```
+378 719
+
+### 135 Candy 分数发糖
+你需要按照以下要求，帮助老师给这些孩子分发糖果：
+每个孩子至少分配到 1 个糖果。
+相邻的孩子中，评分高的孩子必须获得更多的糖果。
+{% note %}
+输入: [1,0,2]
+输出: 5
+解释: 你可以分别给这三个孩子分发 2、1、2 颗糖果。
+{% endnote %}
+
+https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with-detail-explanation
 
 思路：
-1 一个格子的水有两个边界，
-2 如果左边or右边有更低的，水都会流走，尽量从两边让墙越来越高
-3 如果当前格子靠近低的那侧，这个格子没可能更大了，最多就是left-A[i]水量，可以继续考虑这个格子更里那个格子。
+1.从左向右扫，把所有上升序列设置成从1开始的递增糖数
+2.从右向左扫，更新右边向左边的递增糖数。
 
-正确做法：双指针
+相似题目： 32 最长匹配括号 
+
 ```java
-public int trap(int[] A){
-    int a=0;
-    int b=A.length-1;
-    int max=0;
-    int leftmax=0;
-    int rightmax=0;
-    while(a<=b){
-        leftmax=Math.max(leftmax,A[a]);
-        rightmax=Math.max(rightmax,A[b]);
-        if(leftmax<rightmax){
-            max+=(leftmax-A[a]);
-            a++;
-        }
-        else{
-            max+=(rightmax-A[b]);
-            b--;
+public int candy(int[] ratings) {
+    int n = ratings.length;
+    int[] nums = new int[n];
+    nums[0] = 1;
+    for(int i = 1;i<n;i++){
+        // 1 2 3 4
+        if(ratings[i-1] < ratings[i]){
+            nums[i] = nums[i-1]+1;
+        }else nums[i]  = 1;
+    }
+    for(int i = n-1;i>0;i--){
+        if(ratings[i-1] > ratings[i]){
+            nums[i-1] = Math.max(nums[i] + 1, nums[i-1]); 
         }
     }
-    return max;
-}
-```
-
-两个数组做法：left保存当前位置左边的max。right保存当前位置右边的max。
-注意 第0位置没有left，left只要计算到n-2个元素
-n-1没有right,只要计算到第1个元素
-```java
-public int trap(int[] height) {
-  int n  = height.length;
-  int[] left = new int[n];
-  int[] right = new int[n];
-  for(int i = 1;i<n;i++){
-      left[i] = Math.max(left[i-1],height[i-1]);
-  }
-  for(int i = n-2;i>=0;i--){
-      right[i] = Math.max(right[i+1],height[i+1]);
-  }
     int rst = 0;
-    for(int i = 0;i<n;i++){
-        int tmp = Math.min(left[i],right[i]) - height[i];
-        if(tmp >0)
-        rst += tmp;
+    for(int num:nums){
+        rst += num;
     }
     return rst;
 }
 ```
 
-
-
-### 2 链表数字相加
-注意：p1,p2,p不要忘了前进。carry用除，值用取余。
-
-### 3 ！无重复的最长子串
+### 726 化学式中各原子的数量
 {% note %}
-输入:abba
-输出：2
+输入: 
+formula = "K4(ON(SO3)2)2"
+输出: "K4N2O14S4"
+解释: 
+原子的数量是 {'K': 4, 'N': 2, 'O': 14, 'S': 4}。
 {% endnote %}
-注意：测试用例" "，注意last应该递增
-```java
-public int lengthOfLongestSubstring(String s) {
-    Map<Character,Integer> map = new HashMap<>();
-    int max = -1;
-    int last = 0;
-    for(int i = 0;i<s.length();i++){
-        if(map.containsKey(s.charAt(i))){
-            last = Math.max(last,map.get(s.charAt(i))+1);
-        }
-        map.put(s.charAt(i),i);
-        // 注意为了统一 “ ” 这个测试用例必须+1
-        max = Math.max(max,i-last+1);
-    }
-    return max==-1?s.length():max;
-}
-```
 
 ### 460 LFU Cache cd tx 
 最不经常使用LFU缓存。最近最少使用的将被删除
@@ -246,79 +387,6 @@ public int lengthOfLongestSubstring(String s) {
 难点：put如何在O(1)找到访问频率最少的kv删掉，如果频次相同，把时间戳最远的删掉。
 注意：每次get/put修改堆中元素的排序指标并堆不会自动重排，要删除再插入。并且注意用堆不是O（1）
 正确做法：3个hashMap
-
-
-### 440 ！字典序的第k小 计数！
-1-n的第k小
-{% note %}
-Input:
-n: 13   k: 2
-Output:
-10
-Explanation:
-The lexicographical order is [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9], so the second smallest number is 10.
-{% endnote %}
-dfs超时
-思路：高效计算同层每个两个数字在树中的间隔，并递归计算每一层。字典序是10进制1层
-例如n=100 1和2之间的距离gap ->[1-2)的距离1 + [10-20)的距离10 + [100 -100]的距离 1 =12 
-（注意计数，右边界n2如果不在当前树n2-n1，如果n2>n ,右边界在这棵树中，这棵树中的节点数统计为n+1-n1。
-利用gap前进，如果k>gap则说明在当前子树。当前树根下移。
-
-```java
-public int findKthNumber(int n, int k) {   
-    int cur = 1;
-    k--;
-    while(k>0){
-    int gap = getGap(n,cur,cur+1);
-        if(k < gap){
-            cur*=10;
-            k--;
-    
-        }else{
-            k -= gap;
-            cur++;
-        }
-    }
-    return cur;
-}
-private int getGap(int n,long n1,long n2){
-    int gap = 0;
-    while(n1 <= n){
-        if(n2 >n){
-            gap += n-n1+1;
-        
-        }else{
-            gap += n2-n1;
-        }
-           n1 *=10;
-           n2 *=10;
-    }
-    return gap;
-}
-```
-
-### 826 安排工作以达到最大收益 wy
-{% note %}
-输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]
-输出: 100 
-解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。
-{% endnote %}
-排序ac
-```java
-public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
-    List<Pair<Integer, Integer>> jobs = new ArrayList<>();
-    int N = profit.length, res = 0, i = 0, maxp = 0;
-    for (int j = 0; j < N; ++j) jobs.add(new Pair<Integer, Integer>(difficulty[j], profit[j]));
-    Collections.sort(jobs, Comparator.comparing(Pair::getKey));
-    Arrays.sort(worker);
-    for (int ability : worker) {
-        while (i < N && ability >= jobs.get(i).getKey())
-            maxp = Math.max(jobs.get(i++).getValue(), maxp);
-        res += maxp;
-    }
-    return res;
-}
-```
 
 ### 394 字符串解码 hw aqy
 {% note %}
@@ -403,45 +471,6 @@ private int dfs(String s, int i,int j,int[][] dp){
 }
 ```
 
-### 493 Reverse Pairs 逆序对的个数 cd
-如果 i < j and nums[i] > 2*nums[j].算一个逆序对
-{% note %}
-Input: [1,3,2,3,1]
-Output: 2
-{% endnote %}
-
-```java
-public static int ret;
-public static int reversePairs(int[] nums) {
-    ret = 0;
-    mergeSort(nums, 0, nums.length-1);
-    return ret;
-}
-
-public static void mergeSort(int[] nums, int left, int right) {
-    if (right <= left) {
-        return;
-    }
-    int middle = left + (right - left)/2;
-    mergeSort(nums, left, middle);
-    mergeSort(nums,middle+1, right);
-    //count elements
-    int count = 0;
-    for (int l = left, r = middle+1; l <= middle;) {
-        if (r > right || (long)nums[l] <= 2*(long)nums[r]) {
-            l++;
-            ret += count;
-        } else {
-            r++;
-            count++;
-        }
-    }
-    //sort
-    Arrays.sort(nums, left, right + 1);
-}
-
-```
-
 ### 546 移除盒子 不会tc+cd
 可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k*k 个积分。
 {% note %}
@@ -481,6 +510,262 @@ private int dfs(int[] boxes,int l,int r,int k,int[][][] dp){
 }
 ```
 
+---
+## 问题不大
+
+
+### 33 !!旋转数组查找
+{% note %}
+Input: nums = [4,5,6,7,0,1,2], target = 0
+Output: 4
+{%endnote %}
+关键：第一步分割：
+mid>=最左，表示旋转点在mid右边，从左到mid是递增的，再考虑target在不在左侧>=left。
+else 旋转点在左侧，
+```java
+public int search(int[] nums, int target) {
+    int n = nums.length;
+    if(n <1)return -1;
+    int l = 0;
+    int r = n-1;
+    while(l<=r){
+        int mid = l+(r-l)/2;
+        if(nums[mid] == target)return mid;
+        // 旋转点在中位数右侧
+        if(nums[mid] >= nums[l]){
+            if(target < nums[mid] && target >= nums[l]){
+                r = mid-1;
+            }else{
+                l = mid+1;
+            }
+        }
+        else {
+            if(target >nums[mid] && target<= nums[r]){
+                l = mid+1;
+            }
+            else r = mid-1;
+        }
+    }
+     return -1;
+}
+```
+
+>>>>>>> refs/remotes/origin/hexo-edit
+### 93 分割IP地址
+注意：3个点之后还是要判断长度和数量关系
+
+
+### 53 最大子数组和
+```java
+public int maxSubArray(int[] nums) {
+    int sum = 0;
+    // 关键：测试用例[-1]
+    int rst = nums[0];
+    for(int num:nums){
+        sum = Math.max(sum+num,num);
+        rst = Math.max(sum,rst);
+    }
+    return rst;
+}
+```
+
+### ！！42 雨水
+{% note %}
+Input: [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+{% endnote %}
+
+思路：
+1 一个格子的水有两个边界，
+2 如果左边or右边有更低的，水都会流走，尽量从两边让墙越来越高
+3 如果当前格子靠近低的那侧，这个格子没可能更大了，最多就是left-A[i]水量，可以继续考虑这个格子更里那个格子。
+
+正确做法：双指针
+```java
+public int trap(int[] A){
+    int a=0;
+    int b=A.length-1;
+    int max=0;
+    int leftmax=0;
+    int rightmax=0;
+    while(a<=b){
+        leftmax=Math.max(leftmax,A[a]);
+        rightmax=Math.max(rightmax,A[b]);
+        if(leftmax<rightmax){
+            max+=(leftmax-A[a]);
+            a++;
+        }
+        else{
+            max+=(rightmax-A[b]);
+            b--;
+        }
+    }
+    return max;
+}
+```
+
+两个数组做法：left保存当前位置左边的max。right保存当前位置右边的max。
+注意 第0位置没有left，left只要计算到n-2个元素
+n-1没有right,只要计算到第1个元素
+```java
+public int trap(int[] height) {
+  int n  = height.length;
+  int[] left = new int[n];
+  int[] right = new int[n];
+  for(int i = 1;i<n;i++){
+      left[i] = Math.max(left[i-1],height[i-1]);
+  }
+  for(int i = n-2;i>=0;i--){
+      right[i] = Math.max(right[i+1],height[i+1]);
+  }
+    int rst = 0;
+    for(int i = 0;i<n;i++){
+        int tmp = Math.min(left[i],right[i]) - height[i];
+        if(tmp >0)
+        rst += tmp;
+    }
+    return rst;
+}
+```
+
+### 2 链表数字相加
+注意：p1,p2,p不要忘了前进。carry用除，值用取余。
+
+### 3 ！无重复的最长子串
+{% note %}
+输入:abba
+输出：2
+{% endnote %}
+注意：测试用例" "，注意last应该递增
+```java
+public int lengthOfLongestSubstring(String s) {
+    Map<Character,Integer> map = new HashMap<>();
+    int max = -1;
+    int last = 0;
+    for(int i = 0;i<s.length();i++){
+        if(map.containsKey(s.charAt(i))){
+            last = Math.max(last,map.get(s.charAt(i))+1);
+        }
+        map.put(s.charAt(i),i);
+        // 注意为了统一 “ ” 这个测试用例必须+1
+        max = Math.max(max,i-last+1);
+    }
+    return max==-1?s.length():max;
+}
+```
+
+### 440 ！字典序的第k小 计数！
+1-n的第k小
+{% note %}
+Input:
+n: 13   k: 2
+Output:
+10
+Explanation:
+The lexicographical order is [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9], so the second smallest number is 10.
+{% endnote %}
+dfs超时
+思路：高效计算同层每个两个数字在树中的间隔，并递归计算每一层。字典序是10进制1层
+例如n=100 1和2之间的距离gap ->[1-2)的距离1 + [10-20)的距离10 + [100 -100]的距离 1 =12 
+（注意计数，右边界n2如果不在当前树n2-n1，如果n2>n ,右边界在这棵树中，这棵树中的节点数统计为n+1-n1。
+利用gap前进，如果k>gap则说明在当前子树。当前树根下移。
+
+```java
+public int findKthNumber(int n, int k) {   
+    int cur = 1;
+    k--;
+    while(k>0){
+    int gap = getGap(n,cur,cur+1);
+        if(k < gap){
+            cur*=10;
+            k--;
+    
+        }else{
+            k -= gap;
+            cur++;
+        }
+    }
+    return cur;
+}
+private int getGap(int n,long n1,long n2){
+    int gap = 0;
+    while(n1 <= n){
+        if(n2 >n){
+            gap += n-n1+1;
+        
+        }else{
+            gap += n2-n1;
+        }
+           n1 *=10;
+           n2 *=10;
+    }
+    return gap;
+}
+```
+
+### 826 安排工作以达到最大收益 wy
+{% note %}
+输入: difficulty = [2,4,6,8,10], profit = [10,20,30,40,50], worker = [4,5,6,7]
+输出: 100 
+解释: 工人被分配的工作难度是 [4,4,6,6] ，分别获得 [20,20,30,30] 的收益。
+{% endnote %}
+排序ac
+```java
+public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+    List<Pair<Integer, Integer>> jobs = new ArrayList<>();
+    int N = profit.length, res = 0, i = 0, maxp = 0;
+    for (int j = 0; j < N; ++j) jobs.add(new Pair<Integer, Integer>(difficulty[j], profit[j]));
+    Collections.sort(jobs, Comparator.comparing(Pair::getKey));
+    Arrays.sort(worker);
+    for (int ability : worker) {
+        while (i < N && ability >= jobs.get(i).getKey())
+            maxp = Math.max(jobs.get(i++).getValue(), maxp);
+        res += maxp;
+    }
+    return res;
+}
+```
+
+### 493 Reverse Pairs 逆序对的个数 cd
+如果 i < j and nums[i] > 2*nums[j].算一个逆序对
+{% note %}
+Input: [1,3,2,3,1]
+Output: 2
+{% endnote %}
+
+```java
+public static int ret;
+public static int reversePairs(int[] nums) {
+    ret = 0;
+    mergeSort(nums, 0, nums.length-1);
+    return ret;
+}
+
+public static void mergeSort(int[] nums, int left, int right) {
+    if (right <= left) {
+        return;
+    }
+    int middle = left + (right - left)/2;
+    mergeSort(nums, left, middle);
+    mergeSort(nums,middle+1, right);
+    //count elements
+    int count = 0;
+    for (int l = left, r = middle+1; l <= middle;) {
+        if (r > right || (long)nums[l] <= 2*(long)nums[r]) {
+            l++;
+            ret += count;
+        } else {
+            r++;
+            count++;
+        }
+    }
+    //sort
+    Arrays.sort(nums, left, right + 1);
+}
+
+```
+
+
 
 
 ### 718 !!最长公共子串 最长公共子数组
@@ -514,7 +799,7 @@ public int findLength(int[] A, int[] B) {
 
 
 
-### 386 字典序数字 todo
+#### 386 字典序数字 
 dfs 112ms 71%
 ```
    1        2        3    ...
@@ -586,5 +871,28 @@ public static void main(String[] args) {
     if(n>3)
         rst += (str.charAt(3)-'a')+1;
     System.out.println(rst);
+}
+```
+
+---
+## 没有问题
+### 1014 最佳观光组合
+一对景点（i < j）组成的观光组合的得分为（A[i] + A[j] + i - j）
+{% note %}
+输入：[8,1,5,2,6]
+输出：11
+解释：i = 0, j = 2, A[i] + A[j] + i - j = 8 + 5 + 0 - 2 = 11
+{% endnote %}
+```java
+public int maxScoreSightseeingPair(int[] A) {
+    int n = A.length;
+    int[] score = new int[n];
+    score[0] = A[0];
+    int rst = 0;
+    for(int i = 1;i<n;i++){
+        rst = Math.max(rst,A[i]+score[i-1]-i);
+        score[i-1] =Math.max(socre[i-1],A[i]+i);
+    }
+    return rst;
 }
 ```
