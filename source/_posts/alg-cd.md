@@ -316,6 +316,7 @@ https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with
 思路：
 先把1/5，2/5，3/5放进去
 排序方法：`p/q<x/y` <==> `py<xq`
+取k-1次，如果分母序号-1>分子，入堆
 
 二分查找
 不是找k个而是找一个m，使比m小的正好有7个。

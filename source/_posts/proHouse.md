@@ -1125,3 +1125,85 @@ public class RentSearch {
     private String orderBy = "lastUpdateTime";
     private String orderDirection = "desc";
 ```
+
+跳转类如果session里没有city跳转到首页
+如果前端传入的数据有城市，放到session中
+```java
+ @GetMapping("rent/house")
+    public String rentHousePage(@ModelAttribute RentSearch rentSearch,
+                                Model model, HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+        if (rentSearch.getCityEnName() == null) {
+            String cityEnNameInSession = (String) session.getAttribute("cityEnName");
+            if (cityEnNameInSession == null) {
+                redirectAttributes.addAttribute("msg", "must_chose_city");
+                return "redirect:/index";
+            } else {
+                rentSearch.setCityEnName(cityEnNameInSession);
+            }
+        } else {
+            session.setAttribute("cityEnName", rentSearch.getCityEnName());
+        }
+
+        ServiceResult<SupportAddressDTO> city = addressService.findCity(rentSearch.getCityEnName());
+        if (!city.isSuccess()) {
+            redirectAttributes.addAttribute("msg", "must_chose_city");
+            return "redirect:/index";
+        }
+        model.addAttribute("currentCity", city.getResult());
+
+        ServiceMultiResult<SupportAddressDTO> addressResult = addressService.findAllRegionsByCityName(rentSearch.getCityEnName());
+        if (addressResult.getResult() == null || addressResult.getTotal() < 1) {
+            redirectAttributes.addAttribute("msg", "must_chose_city");
+            return "redirect:/index";
+        }
+        model.addAttribute("searchBody", rentSearch);
+        model.addAttribute("regions", addressResult.getResult());
+
+        model.addAttribute("priceBlocks", RentValueBlock.PRICE_BLOCK);
+        model.addAttribute("areaBlocks", RentValueBlock.AREA_BLOCK);
+
+        model.addAttribute("currentPriceBlock", RentValueBlock.matchPrice(rentSearch.getPriceBlock()));
+        model.addAttribute("currentAreaBlock", RentValueBlock.matchArea(rentSearch.getAreaBlock()));
+
+        return "rent-list";
+    }
+```
+
+房屋排序类
+```java
+public class HouseSort {
+    public static final String DEFAULT_SORT_KEY = "lastUpdateTime";
+
+    public static final String DISTANCE_TO_SUBWAY_KEY = "distanceToSubway";
+
+
+    private static final Set<String> SORT_KEYS = Sets.newHashSet(
+        DEFAULT_SORT_KEY,
+            "createTime",
+            "price",
+            "area",
+            DISTANCE_TO_SUBWAY_KEY
+    );
+
+    public static Sort generateSort(String key, String directionKey) {
+        key = getSortKey(key);
+
+        Sort.Direction direction = Sort.Direction.fromStringOrNull(directionKey);
+        if (direction == null) {
+            direction = Sort.Direction.DESC;
+        }
+
+        return new Sort(direction, key);
+    }
+
+    public static String getSortKey(String key) {
+        if (!SORT_KEYS.contains(key)) {
+            key = DEFAULT_SORT_KEY;
+        }
+
+        return key;
+    }
+}
+
+```
