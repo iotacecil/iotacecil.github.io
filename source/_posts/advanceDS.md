@@ -170,9 +170,7 @@ public void bfs(char[][] grid,boolean[][] marked,int x,int y){
             if(!marked[newx][newy] && grid[newx][newy] == '1'){
                 que.add(new int[]{newx,newy});
                 marked[newx][newy] = true;
-
             }
-
         }
     }
 }
@@ -220,9 +218,7 @@ public int[] findRedundantConnectionUF(int[][] edges) {
 
 
 ### 547 互相是朋友的圈子有几个
-```java
 
-```
 
 
 ### 208 Trie树 前缀树

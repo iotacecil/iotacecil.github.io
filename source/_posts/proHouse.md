@@ -49,6 +49,9 @@ sysctl -w vm.max_map_count=262144
 `sysctl -w vm.max_map_count=262144` 临时，重启后失效
 `/etc/sysctl.conf`添加`vm.max_map_count=262144` 然后执行`sysctl -p`立即 永久生效
 
+initial heap size [536870912] not equal to maximum heap size [994050048];
+修改config/jvm.options 修改xms和xmx相等
+
 #### ES 安装问题
 不能用root启动 max_map太小
 ```sh
@@ -1448,6 +1451,7 @@ if (house.getStatus() == HouseStatus.PASSES.getValue()) {
 }
 ```
 updateStatus方法
+
 ```java
 // 上架更新索引 其他情况都要删除索引
 if (status == HouseStatus.PASSES.getValue()) {
@@ -1460,4 +1464,238 @@ if (status == HouseStatus.PASSES.getValue()) {
 测试发布按钮是否添加了索引
 
 #### 异步构建索引
+https://kafka.apache.org/quickstart
+zookeeper添加listener的IP
 kafka
+:commit_memory(0x00000000c0000000, 1073741824, 0) failed; error='Cannot allocate memory' (errno=12)
+内存不够了
+
+有点问题
+```shell
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+```
+
+Option zookeeper is deprecated, use --bootstrap-server instead.
+
+```shell
+zkServer.sh start
+zkServer.sh status
+```
+server.properties里设置zookeeper 127.0.0.1可以启动
+```shell
+# 创建topic
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+Created topic test.
+# topic
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --list --bootstrap-server 10.1.18.25:9092
+__consumer_offsets
+test
+
+# 发送消息
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-console-producer.sh --broker-list 10.1.18.25:9092 --topic test
+>aaaaa
+>aaa
+>
+# 接收消息
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-console-consumer.sh --bootstrap-serr 10.1.18.25:9092 --topic test --from-beginning
+aaaaa
+aaa
+# 删除
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --delete --bootstrap-server 10.1.18.25:9092 --topic test
+#查看是否删除
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --bootstrap-server 10.1.18.25:9092 --list
+__consumer_offsets
+
+```
+
+为什么要用kafka，es服务可能不可用，上架不希望等待es建立完索引再响应
+
+配置kafka
+```
+# kafka
+spring.kafka.bootstrap-servers=10.1.18.25:9092
+spring.kafka.consumer.group-id=0
+```
+
+```xml
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+```
+
+SearchService
+```java
+@Autowired
+private KafkaTemplate<String, String> kafkaTemplate;
+
+@KafkaListener(topics = INDEX_TOPIC)
+private void handleMessage(String content) {
+    try {
+        HouseIndexMessage message = objectMapper.readValue(content, HouseIndexMessage.class);
+
+        switch (message.getOperation()) {
+            case HouseIndexMessage.INDEX:
+                this.createOrUpdateIndex(message);
+                break;
+            case HouseIndexMessage.REMOVE:
+                this.removeIndex(message);
+                break;
+            default:
+                logger.warn("Not support message content " + content);
+                break;
+        }
+    } catch (IOException e) {
+        logger.error("Cannot parse json for " + content, e);
+    }
+}
+```
+
+自定义消息结构体,用户创建和删除两个操作
+```java
+public class HouseIndexMessage {
+
+    public static final String INDEX = "index";
+    public static final String REMOVE = "remove";
+
+    public static final int MAX_RETRY = 3;
+
+    private Long houseId;
+    private String operation;
+    private int retry = 0;
+    /**
+     * 默认构造器 防止jackson序列化失败
+     */
+    public HouseIndexMessage() {
+    }
+}
+```
+
+#### es实现客户页面关键词查询
+多值查询，先按城市+地区的英文名过滤
+ａ标签当作按钮来使用，但又不希望页面刷新。这个时候就用到上面的javascript:void(0)；
+
+ISearchService单测 地点、根据关键词从0取10个查询到的ID
+```java
+@Test
+public void testQuery() {
+    RentSearch rentSearch = new RentSearch();
+    rentSearch.setCityEnName("bj");
+    rentSearch.setStart(0);
+    rentSearch.setSize(10);
+    rentSearch.setKeywords("国贸");
+    ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
+    Assert.assertTrue(serviceResult.getTotal() > 0);
+}
+```
+查到ID还需要去houseService中mysql查询，有关键字的时候才用ES
+参数：es得到的id数量，es得到的id List
+```java
+@Override
+public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
+    if (rentSearch.getKeywords() != null && !rentSearch.getKeywords().isEmpty()) {
+        ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
+        if (serviceResult.getTotal() == 0) {
+            return new ServiceMultiResult<>(0, new ArrayList<>());
+        }
+
+        return new ServiceMultiResult<>(serviceResult.getTotal(), wrapperHouseResult(serviceResult.getResult()));
+    }
+    return simpleQuery(rentSearch);
+}
+```
+通过ID查mysql （+house+detail+tag)，查询结果需要按es重排序
+```java
+private List<HouseDTO> wrapperHouseResult(List<Long> houseIds) {
+    List<HouseDTO> result = new ArrayList<>();
+
+    Map<Long, HouseDTO> idToHouseMap = new HashMap<>();
+    Iterable<House> houses = houseRepository.findAll(houseIds);
+    houses.forEach(house -> {
+        HouseDTO houseDTO = modelMapper.map(house, HouseDTO.class);
+        houseDTO.setCover(this.cdnPrefix + house.getCover());
+        idToHouseMap.put(house.getId(), houseDTO);
+    });
+
+    wrapperHouseList(houseIds, idToHouseMap);
+
+    // 矫正顺序
+    for (Long houseId : houseIds) {
+        result.add(idToHouseMap.get(houseId));
+    }
+    return result;
+}
+```
+simpleQuery 是原来db查询
+
+添加关键词功能
+```java
+ boolQuery.must(
+    QueryBuilders.multiMatchQuery(rentSearch.getKeywords(),
+            HouseIndexKey.TITLE,
+            HouseIndexKey.TRAFFIC,
+            HouseIndexKey.DISTRICT,
+            HouseIndexKey.ROUND_SERVICE,
+            HouseIndexKey.SUBWAY_LINE_NAME,
+            HouseIndexKey.SUBWAY_STATION_NAME
+    ));
+```
+但是还是不准
+添加面积 ALL 是空
+```java
+RentValueBlock area = RentValueBlock.matchArea(rentSearch.getAreaBlock());
+    if (!RentValueBlock.ALL.equals(area)) {
+        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(HouseIndexKey.AREA);
+        if (area.getMax() > 0) {
+            rangeQueryBuilder.lte(area.getMax());
+        }
+        if (area.getMin() > 0) {
+            rangeQueryBuilder.gte(area.getMin());
+        }
+        boolQuery.filter(rangeQueryBuilder);
+    }
+```
+
+添加价格
+```java
+RentValueBlock price = RentValueBlock.matchPrice(rentSearch.getPriceBlock());
+    if (!RentValueBlock.ALL.equals(price)) {
+        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(HouseIndexKey.PRICE);
+        if (price.getMax() > 0) {
+            rangeQuery.lte(price.getMax());
+        }
+        if (price.getMin() > 0) {
+            rangeQuery.gte(price.getMin());
+        }
+        boolQuery.filter(rangeQuery);
+    }
+```
+朝向、租赁方式
+```java
+if (rentSearch.getDirection() > 0) {
+    boolQuery.filter(
+            QueryBuilders.termQuery(HouseIndexKey.DIRECTION, rentSearch.getDirection())
+    );
+}
+
+if (rentSearch.getRentWay() > -1) {
+    boolQuery.filter(
+        QueryBuilders.termQuery(HouseIndexKey.RENT_WAY, rentSearch.getRentWay())
+    );
+}
+```
+
+分析分词效果
+get `http://10.1.18.25:9200/_analyze?analyzer=standard&pretty=true&text=这是一个句子`
+等于没分
+
+添加中文分词包
+https://github.com/medcl/elasticsearch-analysis-ik
+
+```shell
+./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v5.5.2/elasticsearch-analysis-ik-5.5.2.zip
+```
+
+
+
