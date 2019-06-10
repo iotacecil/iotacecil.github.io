@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-06-03T06:40:49.813Z">
+<meta property="og:updated_time" content="2019-06-10T05:13:49.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://blog.csdn.net/jackfrued/article/details/44921941https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/x">
@@ -351,8 +351,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-06-03T14:40:49+08:00">
-                2019-06-03
+              <time title="更新于" itemprop="dateModified" datetime="2019-06-10T13:13:49+08:00">
+                2019-06-10
               </time>
             
           </span>
@@ -519,7 +519,7 @@
 <h3 id="2-java8的新特性"><a href="#2-java8的新特性" class="headerlink" title="2.java8的新特性"></a>2.java8的新特性</h3><h3 id="3-Object有哪些方法"><a href="#3-Object有哪些方法" class="headerlink" title="3.Object有哪些方法"></a>3.Object有哪些方法</h3><p>还有<code>getClass()</code> 和<code>finalize</code><br>wait 方法必须在synchronized内用</p>
 <h3 id="4-JVM分哪几个区-JVM内存模型"><a href="#4-JVM分哪几个区-JVM内存模型" class="headerlink" title="4.JVM分哪几个区 - JVM内存模型"></a>4.JVM分哪几个区 - JVM内存模型</h3><p>虚拟机运行时数据区、类加载器、执行引擎、本地方法库<br>线程独占：<br>1）程序计数器-多线程轮流切换并分配处理器执行时间，多线程切换后恢复到正确的执行位置。<br>2）虚拟机栈<br>3）本地方法栈<br>线程共享：<br>堆、方法区（永久代、metaspace）</p>
 <h4 id="介绍JVM堆和栈，有什么用"><a href="#介绍JVM堆和栈，有什么用" class="headerlink" title="介绍JVM堆和栈，有什么用"></a>介绍JVM堆和栈，有什么用</h4><p>虚拟机栈：生命周期与线程相同。Java 方法执行的内存模型，局部变量表、返回地址、操作数栈、动态链接（？）</p>
-<p>JVM结构<br>新生代有什么算法<br>4大算法：引用计数，复制，标记清除，标记压缩<br>7个垃圾收集器</p>
+<p>JVM结构<br>新生代有什么算法<br>4大算法：引用计数，复制，标记清除，标记压缩<br>7个垃圾收集器<br>串行收集器适合单核CPU或者非常小堆。ES默认使用CMS收集器</p>
 <h3 id="5-Java内存分配策略"><a href="#5-Java内存分配策略" class="headerlink" title="5.Java内存分配策略"></a>5.Java内存分配策略</h3><p>Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后被拆散为标量类型并间接地在栈上分配的情况），对象主要分配在新生代的Eden区上，如果启动了本地线程分配缓冲，则将按线程优先在TLAB（Thread Local Allocation Buffer）上分配。</p>
 <p>怎么把对象分配到老年代上</p>
 <h3 id="6-泛型的好处"><a href="#6-泛型的好处" class="headerlink" title="6.泛型的好处"></a>6.泛型的好处</h3><p>泛型：向不同对象发送同一个消息，不同的对象在接收到时会产生不同的行为（即方法）；也就是说，每个对象可以用自己的方式去响应共同的消息。消息就是调用函数，不同的行为是指不同的实现（执行不同的函数）。<br>用同一个调用形式，既能调用派生类又能调用基类的同名函数。</p>
@@ -695,7 +695,7 @@
 <p>静态存储区：内存在程序编译的时候就已经分配好<br>已经初始化过的全局变量在.data段，而未初始化的全局变量在.bss段。<br>.bss段不占用可执行文件的大小，而是在加载程序的时候由操作系统自动分配并初始化为0</p>
 <h4 id="目标文件"><a href="#目标文件" class="headerlink" title="目标文件"></a>目标文件</h4><p>用于二进制文件、可执行文件、目标代码、共享库和核心转储 的标准文件格式。<br>分为3种：<br>1）可重定位的目标文件 .o文件 .a静态库文件 未链接 可以经过链接生成可执行的目标文件和可被共享的目标文件。<br>没有程序进入点。<br>2）可执行的目标文件 链接处理之后的<br>3）可【共享】的目标文件 .so。 动态库文件。</p>
 <h4 id="java-static"><a href="#java-static" class="headerlink" title="java static"></a>java static</h4><p>static方法不能被覆盖override：因为方法覆盖是运行时动态绑定的，static是编译时静态绑定的。</p>
-<h3 id="Hashtable-和-HashMap的区别"><a href="#Hashtable-和-HashMap的区别" class="headerlink" title="Hashtable 和 HashMap的区别"></a>Hashtable 和 HashMap的区别</h3><p>Hashtable不允许键或者值是null<br>hashMap线程不安全，遍历的时候会有环死循环</p>
+<h3 id="Hashtable-和-HashMap的区别"><a href="#Hashtable-和-HashMap的区别" class="headerlink" title="Hashtable 和 HashMap的区别"></a>Hashtable 和 HashMap的区别</h3><p>Hashtable不允许键或者值是null<br>hashMap线程不安全，遍历的时候会有环死循环<br>Hashtable 不能支持符合操作：若不存在则添加、若存在则删除，即使单个方法加锁，符合方法也线程不安全。<br>currentHashMap cas无锁，不涉及上下文切换效率高。</p>
 <h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><p>每次扩容1.5倍<br><code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</code><br>线程不安全，扩容的时候会发生数组越界</p>
 <h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><p>LinkedList比ArrayList更占内存，因为LinkedList为每一个节点存储了两个引用.</p>
 <h3 id="Comparable和Comparator接口-区别"><a href="#Comparable和Comparator接口-区别" class="headerlink" title="Comparable和Comparator接口 区别"></a>Comparable和Comparator接口 区别</h3><p>Comparable 是该类支持排序 实例具有内在的排序关系 不能跨越不同类型的对象比较<br>Comparator 是外部比较器，需要一个非标准的排序关系。有多个域，按不同的域排序。加了很多default方法。</p>
@@ -710,7 +710,7 @@
 <p>mq有几种模式<br>Binding:Exchange和Queue的虚拟连接</p>
 <h4 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h4><p>抽象类里面能不能有非抽象方法 能不能被重写</p>
 <h4 id="String不能被继承"><a href="#String不能被继承" class="headerlink" title="String不能被继承"></a>String不能被继承</h4><p>重写和重载的区别</p>
-<h3 id="53-sb依赖注入控制反转。"><a href="#53-sb依赖注入控制反转。" class="headerlink" title="53 sb依赖注入控制反转。"></a>53 sb依赖注入控制反转。</h3><p>IOC:控制反转<br>控制：Java Bean的生命周期（创建、销毁）<br>反转：容器管理依赖关系。<br>IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。</p>
+<h3 id="53-sb依赖注入控制反转。"><a href="#53-sb依赖注入控制反转。" class="headerlink" title="53 sb依赖注入控制反转。"></a>53 sb依赖注入控制反转。</h3><p>IOC:控制反转<br>控制：Java Bean的生命周期（创建、销毁）<br>反转：容器管理依赖关系。<br>IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。调用者不用创建被调用的实例，容器管理单例对象。</p>
 <p>IOC的实现方式：<br>1)设置注入/属性注入setter方法<property>元素<br>2）构造器注入<br>3）工厂方法注入</property></p>
 <p>依赖注入DI方式:把底层类作为参数传递给上层类，实现上层对下层的“控制”。<br>setter、接口、构造函数。<br>组件之间依赖关系由容器在运行期决定。<br>SpringBoot Autowired是自动注入，自动从spring的上下文找到合适的bean来注入</p>
 <p>IOC容器初始化<br>1）Resource定位<br>2）载入：把定义的Bean表示成IOC的数据结构（不包括Bean依赖注入）<br>3）注册到容器的HashMap中</p>
@@ -793,6 +793,7 @@
 <p>其他消息中间件</p>
 <p>如何用redis list实现mq</p>
 <h3 id="12-消息中间件的作用"><a href="#12-消息中间件的作用" class="headerlink" title="12.消息中间件的作用"></a>12.消息中间件的作用</h3><p>1）解耦 基于数据的接口层<br>2）冗余（持久化）<br>3）扩展性 解耦了 处理过程<br>4）削峰<br>5）降低进程耦合度<br>6）顺序消费<br>7）缓冲<br>8）异步通信</p>
+<p>rabbitMQ 的confirm通知是否持久化成功，ack或者nack方法，等到有千条消息再一次性刷新到磁盘<br>确保持久化：<br>1.放到redis ， DB，消息状态：发送中<br>2.投递消息，ack后删除消息<br>3.定时任务获取redis中的 发送中消息，补偿性投递，补偿次数&gt;3 失败，由人工排查<br>补偿方案要设计幂等性<br>乐观锁：操作库存的时候带上商品version</p>
 <h3 id="13-mq集群模式"><a href="#13-mq集群模式" class="headerlink" title="13.mq集群模式"></a>13.mq集群模式</h3><p>Master-Slave模式<br>NetWork模式 两组Master-Slave模式</p>
 <h3 id="14-mq怎么实现的"><a href="#14-mq怎么实现的" class="headerlink" title="14.mq怎么实现的"></a>14.mq怎么实现的</h3><p><a href="https://tech.meituan.com/2016/07/01/mq-design.html" target="_blank" rel="noopener">https://tech.meituan.com/2016/07/01/mq-design.html</a><br>AMQP协议: 虚拟主机（virtual host），交换机（exchange），队列（queue）和绑定（binding）。一个虚拟主机持有一组交换机、队列和绑定.<br>broker(消息队列服务端)<br>1）数据流：例如producer发送给broker,broker发送给consumer,consumer回复消费确认，broker删除/备份消息等。<br>2）RPC:两次RPC发送者把消息投递到服务端（broker），服务端再将消息转发一手到接收端，消费端最终做消费确认的情况是三次RPC。然后考虑RPC的高可用性，尽量做到无状态，方便水平扩展。<br>3）消息堆积:存储消息，在合适的时机投递消息。<br>4）广播：我维护消费关系，可以利用zk/config server等保存消费关系。</p>
 <p>生产者和消费者是完全解耦.<br>？因为保证可靠消费？这样redis预减的库存就真的减少到mysql里了？不用再同步回来（？<br>持久化？<br>消息队列时需要考虑到的问题，如RPC、高可用、顺序和重复消息、可靠投递、消费关系解析等<br>直接模式</p>
