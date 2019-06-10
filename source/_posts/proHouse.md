@@ -37,6 +37,18 @@ sysctl -w vm.max_map_count=262144
 ```
 改limit需要重启(?)
 
+堆大小检查：JVM堆大小调整可能会出现停顿，应把Xms和Xmx设成相同
+文件描述符： 每个分片有很多段，每个段有很多文件。
+`ulimit -n 65536` 只对当前终端生效
+`/etc/security/limits.conf` 配置`* - nofile 65536`
+最大线程数nproc
+最大虚拟内存：使用mmap映射部分索引到进程地址空间，保证es进程有足够的地址空间as为unlimited
+最大文件大小 fsize 设置为unlimited
+！！虚拟内存区域最大数：
+确保内核允许创建262144个【内存映射区】
+`sysctl -w vm.max_map_count=262144` 临时，重启后失效
+`/etc/sysctl.conf`添加`vm.max_map_count=262144` 然后执行`sysctl -p`立即 永久生效
+
 #### ES 安装问题
 不能用root启动 max_map太小
 ```sh

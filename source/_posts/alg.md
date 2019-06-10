@@ -213,42 +213,7 @@ int dfs(TreeNode root){
 ```
 
 
-### 330 从1-n中选哪些数字可以求和得到1-n
-最少需要给nums加几个数字，使其能组成[1,n]之间的所有数字
-{% note %}
-输入: nums = [1,3], n = 6
-输出: 1 
-解释:
-根据 nums 里现有的组合 [1], [3], [1,3]，可以得出 1, 3, 4。
-现在如果我们将 2 添加到 nums 中， 组合变为: [1], [2], [3], [1,3], [2,3], [1,2,3]。
-其和可以表示数字 1, 2, 3, 4, 5, 6，能够覆盖 [1, 6] 区间里所有的数。
-所以我们最少需要添加一个数字。
-{% endnote %}
 
-思路：int miss = [1-n] 中不能表示的最小值, 
-如果 现在能凑出1，遇到3 > miss 需要+miss这个数，不然凑不出 + 2，
-当前miss是4，遇到3，则可以凑出[1-4+3), 思考原来可以用1，2凑出[1,2,3]，每个数字+3
-注意：循环条件 miss<=n，不是数组，考虑空数组也应该++
-
-```java
-public int minPatches(int[] nums, int n) {
-    long miss = 1;
-    int len = nums.length;
-    int idx = 0;
-    int cnt = 0;
-    while(miss <= n){
-        //如果可以
-        if(idx < len && nums[idx] <= miss){
-            miss+= nums[idx];
-            idx++;
-        }else {
-            cnt++;
-            miss+=miss;
-        }
-    }
-    return cnt;
-}
-```
 
 ### 942增减字符串匹配
 
@@ -2644,41 +2609,7 @@ public int compress(char[] chars) {
 当k=1 字符串只能旋转
 当k>1的时候，固定第一位，可以把后面任意一位转到第二位，即确定第一位，可以和后面所有数字比较，然后放到最后，冒泡排序。
 
-### hiho1892 S中字符可以移动首部，移动最少次数得到T
->选定S中的一个字符Si，将Si移动到字符串首位。  
-例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
-请你计算最少需要几次移动操作，可以使S变成T。
-in:
-ABCD  
-DBAC
-out:2
 
-思路：T的最后一个字符找到S中的对应位置之后 也就是说 S这个位置之后的，都应该是被提到最前面去了。然后S和T 都向前一格是一样的子问题。
-。
-```java
-public static int trans3(String s,String t){
-    if(s.length() != t.length())return -1;
-    int n = s.length();
-    int[] scnt  = new int[256];
-    int[] tcnt  = new int[256];
-    for (int i = 0; i <n ; i++) {
-        scnt[s.charAt(i)]++;
-        tcnt[t.charAt(i)]++;
-    }
-    for (int i = 0; i <256 ; i++) {
-        if(scnt[i]!=tcnt[i])return -1;
-    }
-    int tidx = n-1;
-    int ans = 0;
-    for (int i = n-1; i >=0 ; i--) {
-        if(s.charAt(i) == t.charAt(tidx)){
-            ans++;
-            tidx--;
-        }
-    }
-    return n-ans;
-}
-```
 
 
 ### lc749 病毒隔离

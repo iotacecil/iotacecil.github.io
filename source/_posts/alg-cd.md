@@ -4,6 +4,304 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 10正则
+{% note %}
+s = "aab"
+p = "c\*a\*b"
+Output: true
+{% endnote %}
+
+### 12整数转罗马
+{% note %}
+输入: 58
+输出: "LVIII"
+解释: L = 50, V = 5, III = 3.
+{% endnote %}
+
+```java
+public String intToRoman(int num) {
+   int[] nums = {1,4,5,9,10,40,50,90,100,400,500,900,1000};
+    String[] rm = {"I","IV","V","IX","X","XL","L","XC","C","CD","D","CM","M"};
+    StringBuilder sb = new StringBuilder();
+    for(int i = rm.length-1;i>=0 && num>0;i--){
+        while(num >= nums[i]){
+            sb.append(rm[i]);
+            num -= nums[i];
+        }
+    }
+    return sb.toString();
+}
+```
+
+### ！！！32 最长括号子串
+{% note %}
+输入: ")()())"
+输出: 4
+解释: 最长有效括号子串为 "()()"
+{% endnote %}
+```java
+public int longestValidParentheses(String s) {
+    Deque<Integer> stk =  new ArrayDeque<>();
+    stk.push(-1);
+    int n = s.length();
+    int rst = 0;
+    for(int i = 0;i < n;i++){
+        if(s.charAt(i) == '('){
+            stk.push(i);
+        }else {
+            stk.pop();
+            if(stk.isEmpty()){
+// 正确匹配串的左边一位可能是-1也可能是一个错误的右括号的位置
+                stk.push(i);
+            }else
+// 每次正确的右括号 记录串长
+            rst = Math.max(rst,i-stk.peek());
+        }
+    }
+    return rst;
+}
+```
+
+左右扫描两遍
+```java
+public int longestValidParentheses(String s) {
+  int rst = 0;
+    int left = 0;
+    int right = 0;
+    int n = s.length();
+    for(int i = 0;i<n;i++){
+        if(s.charAt(i)=='('){
+            left++;
+        }else if(s.charAt(i)==')'){
+            right++;
+        }
+        if(left == right){
+            rst = Math.max(rst,left*2);
+        }
+        else if(right > left){
+            left = 0;
+            right = 0;
+        }
+    }
+    left = 0;
+    right = 0;
+     for(int i = n-1;i>=0;i--){
+        if(s.charAt(i)=='('){
+            left++;
+        }else if(s.charAt(i)==')'){
+            right++;
+        }
+        if(left == right)rst = Math.max(rst,left*2);
+         //关键
+        else if(left > right){
+            left = 0;
+            right = 0;
+        }
+    }
+    return rst;
+}
+```
+
+### 765 情侣牵手 aqy
+{% note %}
+输入: row = [0, 2, 1, 3]
+输出: 1
+解释: 我们只需要交换row[1]和row[2]的位置即可。
+{% endnote %}
+思路：贪心 每次取一对，遍历所有之后的，将匹配的换上来，再下一对
+
+### 有趣的排序
+任取数组中的一个数然后将它放置在数组的最后一个位置。
+问最少操作多少次可以使得数组从小到大有序？
+{% note %}
+4
+19 7 8 25
+out:4
+{% endnote %}
+19 7 8 25
+7 8 19 25
+思路：统计有多少个不用移动位置
+```java
+int cnt = 0;
+int[] arr2 = arr.clone();
+Arrays.sort(arr2);
+int p1 = 0;int p2 =0;
+while(p1<n && p2<n){        
+     if(arr[p1] == arr2[p2]){
+        p1++;
+        p2++;
+        cnt++;
+    }else p1++;
+}
+System.out.println(n-cnt);
+```
+
+#### hiho1892 S中字符可以移动首部，移动最少次数得到T
+>选定S中的一个字符Si，将Si移动到字符串首位。  
+例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
+请你计算最少需要几次移动操作，可以使S变成T。
+in:
+ABCD  
+DBAC
+out:2
+
+思路：T的最后一个字符找到S中的对应位置之后 也就是说 S这个位置之后的，都应该是被提到最前面去了。然后S和T 都向前一格是一样的子问题。
+。
+```java
+public static int trans3(String s,String t){
+    if(s.length() != t.length())return -1;
+    int n = s.length();
+    int[] scnt  = new int[256];
+    int[] tcnt  = new int[256];
+    for (int i = 0; i <n ; i++) {
+        scnt[s.charAt(i)]++;
+        tcnt[t.charAt(i)]++;
+    }
+    for (int i = 0; i <256 ; i++) {
+        if(scnt[i]!=tcnt[i])return -1;
+    }
+    int tidx = n-1;
+    int ans = 0;
+    for (int i = n-1; i >=0 ; i--) {
+        if(s.charAt(i) == t.charAt(tidx)){
+            ans++;
+            tidx--;
+        }
+    }
+    return n-ans;
+}
+```
+
+
+### 330 从1-n中选哪些数字可以求和得到1-n 贪心 tx
+最少需要给nums加几个数字，使其能组成[1,n]之间的所有数字
+{% note %}
+输入: nums = [1,3], n = 6
+输出: 1 
+解释:
+根据 nums 里现有的组合 [1], [3], [1,3]，可以得出 1, 3, 4。
+现在如果我们将 2 添加到 nums 中， 组合变为: [1], [2], [3], [1,3], [2,3], [1,2,3]。
+其和可以表示数字 1, 2, 3, 4, 5, 6，能够覆盖 [1, 6] 区间里所有的数。
+所以我们最少需要添加一个数字。
+{% endnote %}
+
+思路：int miss = [1-n] 中不能表示的最小值, 
+如果 现在能凑出1，遇到3 > miss 需要+miss这个数，不然凑不出 + 2，
+当前miss是4，遇到3，则可以凑出[1-4+3), 思考原来可以用1，2凑出[1,2,3]，每个数字+3
+注意：循环条件 miss<=n，不是数组，考虑空数组也应该++
+
+```java
+public int minPatches(int[] nums, int n) {
+    long miss = 1;
+    int len = nums.length;
+    int idx = 0;
+    int cnt = 0;
+    while(miss <= n){
+        //如果可以
+        if(idx < len && nums[idx] <= miss){
+            miss+= nums[idx];
+            idx++;
+        }else {
+            cnt++;
+            miss+=miss;
+        }
+    }
+    return cnt;
+}
+```
+
+### 805 能否将数组划分成均值相等的两个数组
+第i个石头的位置是stones[i]，最大的位置和最小的位置是端点。
+每次可以移动一个端点到一个非端点。
+如果石子像 stones = [1,2,5] 这样，你将无法移动位于位置 5 
+的端点石子，因为无论将它移动到任何位置（例如 0 或 3），该石子都仍然会是端点石子。
+1,2,5->2,3,5->3,4,5
+当无法移动时游戏结束。问最少结束游戏的步数和最大结束的步数。
+{% note %}
+输入：[7,4,9]
+输出：[1,2]
+解释：
+我们可以移动一次，4 -> 8，游戏结束。
+或者，我们可以移动两次 9 -> 5，4 -> 6，游戏结束。
+{% endnote %}
+
+
+### 688 马K步留在棋盘的概率
+```java
+ int[][]dirs = {{-1,2},{-2,1},{1,2},{2,1},{-1,-2},{-2,-1},{2,-1},{1,-2}};
+
+public double knightProbability(int N, int K, int r, int c) {
+    memo = new double[N][N][K+1];
+    return dfs(N,r,c,K);
+}
+double[][][]memo;
+double dfs(int N,int x,int y,int K){
+    
+    if(x>=N  || x<0 || y<0 ||y>=N){
+        return 0;
+    }
+    if(memo[x][y][K] >0)return memo[x][y][K];
+    if(K == 0){
+        memo[x][y][K] = 1;
+        return 1;
+    }
+    double rate = 0;
+    for(int[] dir:dirs){
+        rate += 0.125 * dfs(N,x+dir[0],y+dir[1],K-1);
+    }
+    memo[x][y][K] = rate;
+    return rate; 
+}
+```
+
+### 71 !!简化路径
+
+
+### 135 Candy 分数发糖
+你需要按照以下要求，帮助老师给这些孩子分发糖果：
+每个孩子至少分配到 1 个糖果。
+相邻的孩子中，评分高的孩子必须获得更多的糖果。
+{% note %}
+输入: [1,0,2]
+输出: 5
+解释: 你可以分别给这三个孩子分发 2、1、2 颗糖果。
+{% endnote %}
+
+https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with-detail-explanation
+
+正常思路：计算递增序列的同时计算递减序列的长度，当递增or相等时，用求和公式结算递减序列长度。
+
+思路：
+1.从左向右扫，把所有上升序列设置成从1开始的递增糖数
+2.从右向左扫，更新右边向左边的递增糖数。
+
+相似题目： 32 最长匹配括号 
+
+```java
+ public int candy(int[] ratings) {
+        int sum = 0;
+        int n = ratings.length;
+        int[] left = new int[n];
+        Arrays.fill(left,1);
+        int[] right = new int[n];
+        Arrays.fill(right,1);
+        for(int i = 1;i<n;i++){
+            if(ratings[i]>ratings[i-1]){
+                left[i] = left[i-1]+1;
+            }        
+            if(ratings[n-1-i] > ratings[n-i]){
+                right[n-1-i] = right[n-i]+1;
+            }
+        }
+        for(int i = 0;i<n;i++){
+            sum += Math.max(left[i],right[i]);
+        }
+        return sum;
+    }
+```
+
+
+
 ## 问题很大
 
 ### 786 第 K 个最小的素数分数
@@ -272,6 +570,7 @@ public int search(int[] nums, int target) {
 }
 ```
 
+>>>>>>> refs/remotes/origin/hexo-edit
 ### 93 分割IP地址
 注意：3个点之后还是要判断长度和数量关系
 
