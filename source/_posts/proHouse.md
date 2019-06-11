@@ -1697,5 +1697,232 @@ https://github.com/medcl/elasticsearch-analysis-ik
 ./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v5.5.2/elasticsearch-analysis-ik-5.5.2.zip
 ```
 
+删除索引 集群变黄？
+```shell
+curl -XDELETE 
+```
+
+修改索引，标题、desc都用analyzed加分词器
+```json
+ "title": {
+      "type": "text",
+      "index": "analyzed",
+      "analyzer": "ik_smart",
+      "search_analyzer": "ik_smart"
+    },
+```
+
+对数据库批量做索引
+
+#### 自动补全 ES的Suggesters
+接口
+```java
+ @GetMapping("rent/house/autocomplete")
+@ResponseBody
+public ApiResponse autocomplete(@RequestParam(value = "prefix") String prefix) {
+    if (prefix.isEmpty()) {
+        return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
+    }
+    ServiceResult<List<String>> result = this.searchService.suggest(prefix);
+    return ApiResponse.ofSuccess(result.getResult());
+}
+```
+新建ES返回的类型，添加到es结构中
+```java
+public class HouseSuggest {
+    private String input;
+    private int weight = 10; // 默认权重
+```
+Template
+`private List<HouseSuggest> suggest;`
+再修改es的索引结构
+```json
+"suggest": {
+  "type": "completion"
+},
+```
+新增updateSuggest方法，在创建or更新索引的时候调用
+```java
+private boolean create(HouseIndexTemplate indexTemplate) {
+ if(!updateSuggest(indexTemplate)){
+     return false;
+ }
+```
+Elasticsearch里设计了4种类别的Suggester，分别是:
+Term Suggester
+Phrase Suggester
+Completion Suggester
+Context Suggester
+
+而是将analyze过的数据编码成FST和索引一起存放。对于一个open状态的索引，FST会被ES整个装载到内存里的，进行前缀查找速度极快。但是FST只能用于前缀查找，这也是Completion Suggester的局限所在。
+
+逻辑：获得分词，封装到es请求类中
+构建分词请求，输入用于分词的字段，
+设置分词器
+获取分词
+
+```java
+private boolean updateSuggest(HouseIndexTemplate indexTemplate) {
+    AnalyzeRequestBuilder requestBuilder = new AnalyzeRequestBuilder(
+            this.esClient, AnalyzeAction.INSTANCE, INDEX_NAME, indexTemplate.getTitle(),
+            indexTemplate.getLayoutDesc(), indexTemplate.getRoundService(),
+            indexTemplate.getDescription(), indexTemplate.getSubwayLineName(),
+            indexTemplate.getSubwayStationName());
+
+    requestBuilder.setAnalyzer("ik_smart");
+
+    AnalyzeResponse response = requestBuilder.get();
+    List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
+    if (tokens == null) {
+        logger.warn("Can not analyze token for house: " + indexTemplate.getHouseId());
+        return false;
+    }
+
+    List<HouseSuggest> suggests = new ArrayList<>();
+    for (AnalyzeResponse.AnalyzeToken token : tokens) {
+        // 排序数字类型 & 小于2个字符的分词结果
+        if ("<NUM>".equals(token.getType()) || token.getTerm().length() < 2) {
+            continue;
+        }
+
+        HouseSuggest suggest = new HouseSuggest();
+        suggest.setInput(token.getTerm());
+        suggests.add(suggest);
+    }
+
+    // 定制化小区自动补全
+    HouseSuggest suggest = new HouseSuggest();
+    suggest.setInput(indexTemplate.getDistrict());
+    suggests.add(suggest);
+
+    indexTemplate.setSuggest(suggests);
+    return true;
+}
+```
+
+排除数字类型的词（token）
+对每个合适的词构建自定义的suggest，并设置权重（默认10）
+将suggest数组添加到es返回类中
+
+如果想添加一些不用分词的keyword类型，直接包装成suggest放到suggest数组中
+
+补全逻辑：
+调用search语法查询suggest
+```java
+@Override
+public ServiceResult<List<String>> suggest(String prefix) {
+    CompletionSuggestionBuilder suggestion = SuggestBuilders.completionSuggestion("suggest").prefix(prefix).size(5);
+
+    SuggestBuilder suggestBuilder = new SuggestBuilder();
+    suggestBuilder.addSuggestion("autocomplete", suggestion);
+
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .suggest(suggestBuilder);
+    logger.debug(requestBuilder.toString());
+
+    SearchResponse response = requestBuilder.get();
+    Suggest suggest = response.getSuggest();
+    if (suggest == null) {
+        return ServiceResult.of(new ArrayList<>());
+    }
+    Suggest.Suggestion result = suggest.getSuggestion("autocomplete");
+
+    int maxSuggest = 0;
+    
+    Set<String> suggestSet = new HashSet<>();
+    // 去重...
+    List<String> suggests = Lists.newArrayList(suggestSet.toArray(new String[]{}));
+    return ServiceResult.of(suggests);
+}
+```
 
 
+照理说不应该用house生成用户搜索的关键词，建立索引
+
+#### 用户输入存入自动补全索引表
+```json
+{
+  "mappings": {
+    "bar": {
+      "properties": {
+        "body": {
+          "type": "completion",
+          "analyzer": "ik_max_word"
+        }
+      }
+    }
+  }
+}
+```
+
+异步添加词、句子
+
+
+
+#### 一个小区有多少套房 数据聚合统计
+对小区名进行聚集
+controller
+```java
+ServiceResult<Long> aggResult = searchService.aggregateDistrictHouse(city.getEnName(), region.getEnName(), houseDTO.getDistrict());
+    model.addAttribute("houseCountInDistrict", aggResult.getResult());
+```
+
+聚合语法
+```java
+@Override
+public ServiceResult<Long> aggregateDistrictHouse(String cityEnName, String regionEnName, String district) {
+
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+            .filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName))
+            .filter(QueryBuilders.termQuery(HouseIndexKey.REGION_EN_NAME, regionEnName))
+            .filter(QueryBuilders.termQuery(HouseIndexKey.DISTRICT, district));
+
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addAggregation(
+                    AggregationBuilders.terms(HouseIndexKey.AGG_DISTRICT)
+                    .field(HouseIndexKey.DISTRICT)
+            ).setSize(0);
+
+    logger.debug(requestBuilder.toString());
+
+    SearchResponse response = requestBuilder.get();
+    if (response.status() == RestStatus.OK) {
+        Terms terms = response.getAggregations().get(HouseIndexKey.AGG_DISTRICT);
+        if (terms.getBuckets() != null && !terms.getBuckets().isEmpty()) {
+            return ServiceResult.of(terms.getBucketByKey(district).getDocCount());
+        }
+    } else {
+        logger.warn("Failed to Aggregate for " + HouseIndexKey.AGG_DISTRICT);
+
+    }
+    return ServiceResult.of(0L);
+}
+```
+
+#### es查询调优
+`_search?explain=true`
+对标题字段改权重
+```java
+boolQuery.must(
+    QueryBuilders.matchQuery(HouseIndexKey.TITLE, rentSearch.getKeywords()).boost(2.0f)
+);
+```
+还可以把must改成should
+
+查询条件返回的是整个es文档，只返回需要的字段
+```java
+SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+    .setTypes(INDEX_TYPE)
+    .setQuery(boolQuery)
+    .addSort(
+            HouseSort.getSortKey(rentSearch.getOrderBy()),
+            SortOrder.fromString(rentSearch.getOrderDirection())
+    )
+    .setFrom(rentSearch.getStart())
+    .setSize(rentSearch.getSize())
+    .setFetchSource(HouseIndexKey.HOUSE_ID, null);
+
+```

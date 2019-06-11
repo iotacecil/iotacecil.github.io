@@ -4,6 +4,32 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 19删除倒数第k个结点
+难点：
+1如果要删除的是头节点 2快指针在null的时候相差n步正好是倒数第n个，所以要在前一个，在.next!=null的时候就要停止
+```java
+public ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode p = head;
+    ListNode pp = head;
+    while(n-->0)p=p.next;
+    //关键
+    if(p==null)return head.next;
+    //关键
+    while(p.next!=null){
+        p = p.next;
+        pp = pp.next;
+    }
+    pp.next = pp.next.next;
+    return head;
+}
+```
+
+### 560 和为K的子数组个数 tc
+{% note %}
+输入:nums = [1,1,1], k = 2
+输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+{% endnote %}
+
 ### 10正则
 {% note %}
 s = "aab"

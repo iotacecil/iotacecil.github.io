@@ -43,11 +43,11 @@ using index & using where：
 5）is null或者is not null
 
 ### 3.Mysql 有哪些索引
-数据结构
+数据结构：B+，hash，全文索引，R-Tree
 
-物理存储
+物理存储：聚集索引、非聚集索引
 
-逻辑角度
+逻辑角度：主键、单列索引、多列索引、空间索引、覆盖索引（？）
 
 
 ### 4.数据库隔离界别
@@ -188,6 +188,10 @@ tomcat nginx apache 区别
 Apache和nginx是 Http静态服务器
 tomcat 是 Servlet 的容器，处理动态资源。
 
+#### cookie跨域问题
+web1想要拿到web2的cookie KV并且让path变成/web1发ajax，type：get，dataType：jsonp。jsonp利用回调函数，服务端response的outputstream返回`document.cookie="k=v;path=/web1"`（返回可执行的js代码，回调函数自动执行js）
+
+nginx
 
 nginx的负载均衡策略
 
@@ -210,7 +214,7 @@ nginx的负载均衡策略
 ### 8.为什么是三次握手
 三次握手的过程：
 https://juejin.im/post/5a0444d45188255ea95b66bc
-客户端 端口+SYN=1+序号a ， 
+客户端 端口+SYN=1+序号a SYN_SENT， 
 服务端 SYN=1，ACK=1,序号b，ack=序号a+1,  客户端ESTABLISHED
 客户端 ACK = 1，序号=a+1,ack=b+1,服务端ESTABLISHED
 
@@ -1448,6 +1452,7 @@ Hashtable不允许键或者值是null
 hashMap线程不安全，遍历的时候会有环死循环
 Hashtable 不能支持符合操作：若不存在则添加、若存在则删除，即使单个方法加锁，符合方法也线程不安全。
 currentHashMap cas无锁，不涉及上下文切换效率高。
+1.7版本分为16个segment分段锁，允许16个线程同时读写操作不同的段。
 
 ### ArrayList
 每次扩容1.5倍
@@ -1792,6 +1797,8 @@ BASE思想：分布式事务拆分，每个步骤都记录状态，使用【写�
 Cache Aside 同时更新缓存和数据库，（如果有并发写）一般是先更新 数据库再删除缓存
 Read/Write Through：先更新缓存，缓存负责同步更新数据库
 Write Behind Cacheing：先更新缓存，缓存定期异步更新数据库
+
+#### redis怎么保证缓存一致性
 
 
 ### 3.更新数据库的同时为什么不是马上更新缓存而是删除缓存

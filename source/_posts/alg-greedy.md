@@ -4,6 +4,8 @@ date: 2019-03-21 18:59:20
 tags: [alg]
 categories: [算法备忘]
 ---
+
+
 ### 316 Remove Duplicate Letters 删掉重复字符保证原顺序的   最小字典序
 
 ### 122 买卖任意次数的股票
@@ -76,7 +78,7 @@ https://baike.baidu.com/item/%E5%BE%B7%C2%B7%E6%A2%85%E9%BD%90%E9%87%8C%E4%BA%9A
 
 5
 {% endnote %}
-
+**如果已经凑出x以内的数(1)，枚举a[i]找到<=x+1的最大数则1-x+a[i]都可以凑出**
 
 从1开始凑，然后凑2，用面值最大的(1,2)凑。
 然后可以凑到的最大值为3，下面凑4，用面值最大的(1,2,2)凑。
@@ -93,6 +95,7 @@ else{
     int sum = 0;
     while (sum < x){
         int i;
+        // 关键
         for (i =n-1; i>=0  ; i--) {
             if (coins[i] <= sum + 1) break;
         }
