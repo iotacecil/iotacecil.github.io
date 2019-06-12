@@ -180,16 +180,36 @@ QUIC协议已经标准化为Http3协议。基于UDP，但提供了可靠性和�
 10w以上的并发连接
 
 #### Nginx是如何工作的？是如何配置的？
+工作模式：
+进程模式：一个master进程管理worker进程，监听连接请求。worker进程处理业务请求，每个worker可以并行处理数千个并发连接和请求。
+事件模式：网络、信号、定时器
+惊群现象
 1)事件驱动、全异步网络I/O 极少进程切换
 2）sendfile系统调用 硬盘->网络
 3）可靠性：多进程独立
+
+epoll：通过内核与用户空间mmap同一块内存实现的
 
 tomcat nginx apache 区别
 Apache和nginx是 Http静态服务器
 tomcat 是 Servlet 的容器，处理动态资源。
 
 
-nginx的负载均衡策略
+#### nginx的负载均衡策略
+1.round-robin 轮询
+2.最少连接 活动连接数量最少的服务器
+3.ip-hash
+```
+http {
+    upstream myapp1 {
+        //ip_hash, least_conn;
+        server srv1.example.com;
+        server srv2.example.com;
+        server srv3.example.com;
+    }
+```
+
+nginx限流是漏桶法
 
 ### 6.正向代理和反向代理的区别
 正向代理：隐藏了真实的请求客户端，服务端不知道真实的客户端是谁。需要你主动设置代理服务器ip或者域名进行访问，由设置的服务器ip或者域名去获取访问内容并返回。
