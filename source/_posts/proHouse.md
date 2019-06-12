@@ -1926,3 +1926,135 @@ SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
     .setFetchSource(HouseIndexKey.HOUSE_ID, null);
 
 ```
+
+### 8.百度地图 按地图找房
+创建两个应用，类别：服务端、浏览器端
+浏览器端的AK 复制到新建的rent-map页面，引入百度的css和js代码
+新建controller，利用session存一些东西
+查有多少个区域查数据库就ok，一共有多少房需要es聚合数据
+```java
+public class HouseBucketDTO {
+    private String key;
+    private long count;
+```
+
+```java
+ @Override
+public ServiceMultiResult<HouseBucketDTO> mapAggregate(String cityEnName) {
+    // 过滤城市
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName));
+    // 起名、根据enname字段聚合
+    AggregationBuilder aggBuilder = AggregationBuilders.terms(HouseIndexKey.AGG_REGION)
+            .field(HouseIndexKey.REGION_EN_NAME);
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addAggregation(aggBuilder);
+
+    logger.debug(requestBuilder.toString());
+
+    SearchResponse response = requestBuilder.get();
+    // 异常处理
+    List<HouseBucketDTO> buckets = new ArrayList<>();
+    if (response.status() != RestStatus.OK) {
+        logger.warn("Aggregate status is not ok for " + requestBuilder);
+        return new ServiceMultiResult<>(0, buckets);
+    }
+    // 根据刚起的名获取数据
+    Terms terms = response.getAggregations().get(HouseIndexKey.AGG_REGION);
+    for (Terms.Bucket bucket : terms.getBuckets()) {
+        buckets.add(new HouseBucketDTO(bucket.getKeyAsString(), bucket.getDocCount()));
+    }
+    return new ServiceMultiResult<>(response.getHits().getTotalHits(), buckets);
+}
+```
+
+前端地图拿到数据
+```js
+// 声明一个区域 设置好id
+ <div id="allmap" class="wrapper">
+<script type="text/javascript" th:inline="javascript">
+    // 初始化加载地图数据
+    var city = [[${city}]],
+        regions = [[${regions}]],
+        aggData = [[${aggData}]];
+    console.log(regions)
+    load(city, regions, aggData);
+</script>
+```
+画地图
+```js
+function load(city, regions, aggData) {
+    // 百度地图API功能
+    // 创建实例。设置地图显示最大级别为城市(不能缩放成世界）
+    var map = new BMap.Map("allmap", {minZoom: 12});
+    // 坐标拾取获取中心点 http://api.map.baidu.com/lbsapi/getpoint/index.html
+    var point = new BMap.Point(city.baiduMapLongitude, city.baiduMapLatitude);
+    // 初始化地图，设置中心点坐标及地图级别
+    map.centerAndZoom(point, 12);
+    // 添加比例尺控件
+    map.addControl(new BMap.NavigationControl({enableGeolocation: true}));
+    // 左上角
+    map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT}));
+    // 开启鼠标滚轮缩放
+    map.enableScrollWheelZoom(true);
+```
+给地图添加标签显示当前区域有多少套，
+从百度地图获取城市和区的经纬度，存在support_address表里
+
+文档Label：
+
+```
+setContent(content: String) none    设置文本标注的内容。支持HTML
+setStyle(styles: Object)    none    设置文本标注样式，该样式将作用于文本标注的容器元素上。其中styles为JavaScript对象常量，比如： setStyle({ color : "red", fontSize : "12px" }) 注意：如果css的属性名中包含连字符，需要将连字符去掉并将其后的字母进行大写处理，例如：背景色属性要写成：backgroundColor
+```
+
+`drawRegion(map, regions);`
+```java
+/**
+ * 刻画地区
+ * @param map
+ * @param regionList
+ */
+function drawRegion(map, regionList) {
+    var boundary = new BMap.Boundary();
+    var polygonContext = {};
+    var regionPoint;
+    var textLabel;
+    for (var i = 0; i < regionList.length; i++) {
+
+        regionPoint = new BMap.Point(regionList[i].baiduMapLongitude, regionList[i].baiduMapLatitude);
+
+        var houseCount = 0;
+        if (regionList[i].en_name in regionCountMap) {
+            houseCount = regionCountMap[regionList[i].en_name];
+        }
+        // 标签内容
+        var textContent = '<p style="margin-top: 20px; pointer-events: none">' + regionList[i].cn_name + '</p>' + '<p style="pointer-events: none">' +   houseCount + '套</p>';
+        
+        textLabel = new BMap.Label(textContent, {
+            // 标签位置
+            position: regionPoint,
+            // 文本偏移量
+            offset: new BMap.Size(-40, 20)
+        });
+        // 添加style 变成原型
+        textLabel.setStyle({
+            height: '78px',
+            width: '78px',
+            color: '#fff',
+            backgroundColor: '#0054a5',
+            border: '0px solid rgb(255, 0, 0)',
+            borderRadius: "50%",
+            fontWeight: 'bold',
+            display: 'inline',
+            lineHeight: 'normal',
+            textAlign: 'center',
+            opacity: '0.8',
+            zIndex: 2,
+            overflow: 'hidden'
+        });
+        // 将标签画在地图上
+        map.addOverlay(textLabel);
+```
