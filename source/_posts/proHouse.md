@@ -60,6 +60,8 @@ su
 sysctl -w vm.max_map_count=262144
 ```
 
+es经常卡住，而且新增房源要加到百度云麻点之类的功能
+
 ### 1.后台工程
 
 #### spring data和jpa
@@ -1481,8 +1483,15 @@ Option zookeeper is deprecated, use --bootstrap-server instead.
 ```shell
 zkServer.sh start
 zkServer.sh status
+[root@localhost kafka_2.12-2.2.0]# jps -l
+17889 org.apache.zookeeper.server.quorum.QuorumPeerMain
+30578 org.elasticsearch.bootstrap.Elasticsearch
+3653 sun.tools.jps.Jps
+18799 kafka.Kafka
+
 ```
 server.properties里设置zookeeper 127.0.0.1可以启动
+创建topic要设置副本数和分区数
 ```shell
 # 创建topic
 [root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
@@ -1498,7 +1507,7 @@ test
 >aaa
 >
 # 接收消息
-[root@localhost kafka_2.12-2.2.0]# bin/kafka-console-consumer.sh --bootstrap-serr 10.1.18.25:9092 --topic test --from-beginning
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-console-consumer.sh --bootstrap-server 10.1.18.25:9092 --topic test --from-beginning
 aaaaa
 aaa
 # 删除
@@ -2004,7 +2013,7 @@ function load(city, regions, aggData) {
 从百度地图获取城市和区的经纬度，存在support_address表里
 
 文档Label：
-
+http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference.html#a3b9
 ```
 setContent(content: String) none    设置文本标注的内容。支持HTML
 setStyle(styles: Object)    none    设置文本标注样式，该样式将作用于文本标注的容器元素上。其中styles为JavaScript对象常量，比如： setStyle({ color : "red", fontSize : "12px" }) 注意：如果css的属性名中包含连字符，需要将连字符去掉并将其后的字母进行大写处理，例如：背景色属性要写成：backgroundColor
@@ -2012,11 +2021,8 @@ setStyle(styles: Object)    none    设置文本标注样式，该样式将作�
 
 `drawRegion(map, regions);`
 ```java
-/**
- * 刻画地区
- * @param map
- * @param regionList
- */
+// 全局区域几套房数据
+var regionCountMap = {}
 function drawRegion(map, regionList) {
     var boundary = new BMap.Boundary();
     var polygonContext = {};
@@ -2025,7 +2031,7 @@ function drawRegion(map, regionList) {
     for (var i = 0; i < regionList.length; i++) {
 
         regionPoint = new BMap.Point(regionList[i].baiduMapLongitude, regionList[i].baiduMapLatitude);
-
+        // 从后端获取到的数据先保存成全局的了
         var houseCount = 0;
         if (regionList[i].en_name in regionCountMap) {
             houseCount = regionCountMap[regionList[i].en_name];
@@ -2058,3 +2064,388 @@ function drawRegion(map, regionList) {
         // 将标签画在地图上
         map.addOverlay(textLabel);
 ```
+pointer-events: none
+上面元素盖住下面地图，地图无法操作。
+
+但是这个Label一放大就没了
+
+添加区域覆盖 Polygon API
+```js
+// 记录行政区域覆盖物
+// 点集合
+polygonContext[textContent] = [];
+// 闭包传参
+(function (textContent) {
+    // 获取行政区域
+    boundary.get(city.cn_name + regionList[i].cn_name, function(rs) {
+        // 行政区域边界点集合长度
+        var count = rs.boundaries.length;
+        console.log(rs.boundaries)
+        if (count === 0) {
+            alert('未能获取当前输入行政区域')
+            return;
+        }
+
+        for (var j = 0; j < count; j++) {
+            // 建立多边形覆盖物
+            var polygon = new BMap.Polygon(
+                rs.boundaries[j],
+                {
+                    strokeWeight: 2,
+                    strokeColor:'#0054a5',
+                    fillOpacity: 0.3,
+                    fillColor: '#0054a5'
+                }
+            );
+            // 添加覆盖物
+            map.addOverlay(polygon);
+            polygonContext[textContent].push(polygon);
+            // 初始化隐藏边界
+            polygon.hide(); 
+        }
+    })
+})(textContent);
+// 添加鼠标事件
+textLabel.addEventListener('mouseover', function (event) {
+    var label = event.target;
+    console.log(event)
+    var boundaries = polygonContext[label.getContent()];
+
+    label.setStyle({backgroundColor: '#1AA591'});
+    for (var n = 0; n < boundaries.length; n++) {
+        boundaries[n].show();
+    }
+});
+
+textLabel.addEventListener('mouseout', function (event) {
+    var label = event.target;
+    var boundaries = polygonContext[label.getContent()];
+
+    label.setStyle({backgroundColor: '#0054a5'});
+    for (var n = 0; n < boundaries.length; n++) {
+        boundaries[n].hide();
+    }
+});
+
+textLabel.addEventListener('click', function (event) {
+    var label = event.target;
+    var map = label.getMap();
+    map.zoomIn();
+    map.panTo(event.point);
+});
+}
+```
+
+给es添加位置索引 es基于gps系统 百度地图是
+```json
+"location": {
+      "type": "geo_point"
+    }
+```
+
+新建地理位置类
+```java
+public class BaiduMapLocation {
+    @JsonProperty("lon")
+    private double longitude;
+    @JsonProperty("lat")
+    private double latitude;
+```
+在es显示对应类添加
+`private BaiduMapLocation location;`
+
+在addressService里添加根据城市和地址 根据百度地图API找经纬度
+在新建索引时调用（template是用于保存mysql中查询到的数据，保存到es）
+```java
+SupportAddress city = supportAddressRepository.findByEnNameAndLevel(house.getCityEnName(), SupportAddress.Level.CITY.getValue());
+SupportAddress region = supportAddressRepository.findByEnNameAndLevel(house.getRegionEnName(), SupportAddress.Level.REGION.getValue());
+String address = city.getCnName() + region.getCnName() + house.getStreet() + house.getDistrict() + detail.getDetailAddress();
+ServiceResult<BaiduMapLocation> location = addressService.getBaiduMapLocation(city.getCnName(), address);
+if (!location.isSuccess()) {
+    this.index(message.getHouseId(), message.getRetry() + 1);
+    return;
+}
+indexTemplate.setLocation(location.getResult());
+```
+
+addressService中的调用百度api
+包装成http格式（中文要用utf-8编码），HttpClient 拼接地址
+```java
+@Override
+public ServiceResult<BaiduMapLocation>  getBaiduMapLocation(String city, String address) {
+    String encodeAddress;
+    String encodeCity;
+
+    try {
+        encodeAddress = URLEncoder.encode(address, "UTF-8");
+        encodeCity = URLEncoder.encode(city, "UTF-8");
+        System.out.println(encodeAddress);
+        System.out.println(encodeCity);
+    } catch (UnsupportedEncodingException e) {
+        logger.error("Error to encode house address", e);
+        return new ServiceResult<BaiduMapLocation>(false, "Error to encode hosue address");
+    }
+
+    HttpClient httpClient = HttpClients.createDefault();
+    StringBuilder sb = new StringBuilder(BAIDU_MAP_GEOCONV_API);
+    sb.append("address=").append(encodeAddress).append("&")
+            .append("city=").append(encodeCity).append("&")
+            .append("output=json&")
+            .append("ak=").append(BAIDU_MAP_KEY);
+    // 执行
+    HttpGet get = new HttpGet(sb.toString());
+    try {
+        HttpResponse response = httpClient.execute(get);
+        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            return new ServiceResult<BaiduMapLocation>(false, "Can not get baidu map location");
+        }
+        // 拿结果 json
+        String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+        System.out.println("返回"+result);
+        JsonNode jsonNode = objectMapper.readTree(result);
+        int status = jsonNode.get("status").asInt();
+        if (status != 0) {
+            return new ServiceResult<BaiduMapLocation>(false, "Error to get map location for status: " + status);
+        } {
+            BaiduMapLocation location = new BaiduMapLocation();
+            JsonNode jsonLocation = jsonNode.get("result").get("location");
+            location.setLongitude(jsonLocation.get("lng").asDouble());
+            location.setLatitude(jsonLocation.get("lat").asDouble());
+            return ServiceResult.of(location);
+        }
+
+    } catch (IOException e) {
+        logger.error("Error to fetch baidumap api", e);
+        return new ServiceResult<BaiduMapLocation>(false, "Error to fetch baidumap api");
+    }
+}
+```
+
+测试
+```java
+@Test
+public void testGetMapLocation() {
+    String city = "北京";
+    String address = "北京市昌平区巩华家园1号楼2单元";
+    ServiceResult<BaiduMapLocation> serviceResult = addressService.getBaiduMapLocation(city, address);
+
+    Assert.assertTrue(serviceResult.isSuccess());
+
+    Assert.assertTrue(serviceResult.getResult().getLongitude() > 0 );
+    Assert.assertTrue(serviceResult.getResult().getLatitude() > 0 );
+
+}
+```
+
+地图找房，前端数据传递
+```java
+public class MapSearch {
+    private String cityEnName;
+
+    /**
+     * 地图缩放级别
+     */
+    private int level = 12;
+    private String orderBy = "lastUpdateTime";
+    private String orderDirection = "desc";
+    /**
+     * 左上角
+     */
+    private Double leftLongitude;
+    private Double leftLatitude;
+
+    /**
+     * 右下角
+     */
+    private Double rightLongitude;
+    private Double rightLatitude;
+
+    private int start = 0;
+    private int size = 5;
+```
+
+接口
+```java
+@GetMapping("rent/house/map/houses")
+@ResponseBody
+public ApiResponse rentMapHouses(@ModelAttribute MapSearch mapSearch) {
+    System.out.println("找房参数"+mapSearch);
+    if (mapSearch.getCityEnName() == null) {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "必须选择城市");
+    }
+    ServiceMultiResult<HouseDTO> serviceMultiResult;
+    if (mapSearch.getLevel() < 13) {
+        serviceMultiResult = houseService.wholeMapQuery(mapSearch);
+    } else {
+        // 小地图查询必须要传递地图边界参数
+        serviceMultiResult = houseService.boundMapQuery(mapSearch);
+    }
+
+    ApiResponse response = ApiResponse.ofSuccess(serviceMultiResult.getResult());
+    response.setMore(serviceMultiResult.getTotal() > (mapSearch.getStart() + mapSearch.getSize()));
+    return response;
+}
+```
+es查找的参数城市、排序方式、数量
+```java
+@Override
+public ServiceMultiResult<Long> mapQuery(String cityEnName, String orderBy,
+                                         String orderDirection,
+                                         int start,
+                                         int size) {
+    // 限定城市
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName));
+
+    // +排序 +分页
+    SearchRequestBuilder searchRequestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addSort(HouseSort.getSortKey(orderBy), SortOrder.fromString(orderDirection))
+            .setFrom(start)
+            .setSize(size);
+
+    List<Long> houseIds = new ArrayList<>();
+    SearchResponse response = searchRequestBuilder.get();
+    if (response.status() != RestStatus.OK) {
+        logger.warn("Search status is not ok for " + searchRequestBuilder);
+        return new ServiceMultiResult<>(0, houseIds);
+    }
+    // 从sorce获取数据obj->String->Long ->List
+    for (SearchHit hit : response.getHits()) {
+        houseIds.add(Longs.tryParse(String.valueOf(hit.getSource().get(HouseIndexKey.HOUSE_ID))));
+    }
+    return new ServiceMultiResult<>(response.getHits().getTotalHits(), houseIds);
+}
+```
+
+安装kafka manager
+sbt
+https://github.com/sbt/sbt/releases
+
+
+geo查询 bound查询
+```java
+@Override
+public ServiceMultiResult<Long> mapQuery(MapSearch mapSearch) {
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, mapSearch.getCityEnName()));
+
+    boolQuery.filter(
+        QueryBuilders.geoBoundingBoxQuery("location")
+            .setCorners(
+                    new GeoPoint(mapSearch.getLeftLatitude(), mapSearch.getLeftLongitude()),
+                    new GeoPoint(mapSearch.getRightLatitude(), mapSearch.getRightLongitude())
+            ));
+
+    SearchRequestBuilder builder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addSort(HouseSort.getSortKey(mapSearch.getOrderBy()),
+                    SortOrder.fromString(mapSearch.getOrderDirection()))
+            .setFrom(mapSearch.getStart())
+            .setSize(mapSearch.getSize());
+
+    List<Long> houseIds = new ArrayList<>();
+    SearchResponse response = builder.get();
+    if (RestStatus.OK != response.status()) {
+        logger.warn("Search status is not ok for " + builder);
+        return new ServiceMultiResult<>(0, houseIds);
+    }
+
+    for (SearchHit hit : response.getHits()) {
+        houseIds.add(Longs.tryParse(String.valueOf(hit.getSource().get(HouseIndexKey.HOUSE_ID))));
+    }
+    return new ServiceMultiResult<>(response.getHits().getTotalHits(), houseIds);
+}
+```
+
+#### 在地图上绘制各个房子的地点（麻点）
+lbs服务，将房源信息上传到lbs 创建数据（create poi）接口 post请求
+http://lbsyun.baidu.com/index.php?title=lbscloud/api/geodata
+用3：百度加密经纬度坐标
+示例 前端配置geotableId就可以直接放图层了
+http://lbsyun.baidu.com/jsdemo.htm#g0_4
+
+### 9.会员管理 短信登陆
+```java
+// 新增用户 更新用户表和权限表要加事务
+@Override
+@Transactional
+public User addUserByPhone(String telephone) {
+    User user = new User();
+    user.setPhoneNumber(telephone);
+    user.setName(telephone.substring(0, 3) + "****" + telephone.substring(7, telephone.length()));
+    Date now = new Date();
+    user.setCreateTime(now);
+    user.setLastLoginTime(now);
+    user.setLastUpdateTime(now);
+    user = userRepository.save(user);
+
+    Role role = new Role();
+    role.setName("USER");
+    role.setUserId(user.getId());
+    roleRepository.save(role);
+    user.setAuthorityList(Lists.newArrayList(new SimpleGrantedAuthority("ROLE_USER")));
+    return user;
+}
+```
+
+添加filter
+```java
+public class AuthFilter extends UsernamePasswordAuthenticationFilter {
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private ISmsService smsService;
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+        String name = obtainUsername(request);
+        if (!Strings.isNullOrEmpty(name)) {
+            request.setAttribute("username", name);
+            return super.attemptAuthentication(request, response);
+        }
+
+        String telephone = request.getParameter("telephone");
+        if (Strings.isNullOrEmpty(telephone) || !LoginUserUtil.checkTelephone(telephone)) {
+            throw new BadCredentialsException("Wrong telephone number");
+        }
+
+        User user = userService.findUserByTelephone(telephone);
+        String inputCode = request.getParameter("smsCode");
+        String sessionCode = smsService.getSmsCode(telephone);
+        if (Objects.equals(inputCode, sessionCode)) {
+            if (user == null) { // 如果用户第一次用手机登录 则自动注册该用户
+                user = userService.addUserByPhone(telephone);
+            }
+            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        } else {
+            throw new BadCredentialsException("smsCodeError");
+        }
+    }
+```
+
+阿里云短信
+
+es调优
+索引读写优化
+`index.store.type:"niofs`
+`dynamic=strict`
+关闭all字段，防止全部字段用于全文索引6.0已经没了`"_all":{ "enabled":flase}`
+
+延迟恢复分片
+`"index.unassigned.node_left.delayed_timeout":"5m"`
+
+配置成指挥节点和数据节点，数据节点的http功能可以关闭，只做tcp数据交互
+负载均衡节点master和data都是false，一般都是用nginx 不会用es节点
+堆内存空间 指针压缩 小于32G内存才会用
+批量操作 bulk
+
+
+nginx
+`./configure --with-stream`
+用stream模块
