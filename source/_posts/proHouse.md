@@ -772,11 +772,17 @@ public class LoginAuthFailHandler extends SimpleUrlAuthenticationFailureHandler 
 
 注册
 ```java
-    @Bean
-    public LoginAuthFailHandler authFailHandler() {
-        return new LoginAuthFailHandler(urlEntryPoint());
-    }
+@Bean
+public LoginUrlEntryPoint urlEntryPoint() {
+    return new LoginUrlEntryPoint("/user/login");
+}
+
+@Bean
+public LoginAuthFailHandler authFailHandler() {
+    return new LoginAuthFailHandler(urlEntryPoint());
+}
 ```
+
 ```java
 .loginProcessingUrl("/login") // 配置角色登录处理入口
 .failureHandler(authFailHandler())
@@ -2429,7 +2435,172 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
     }
 ```
 
-阿里云短信
+阿里云短信 security
+ 通过手机号查数据库用户
+```java
+@Override
+public User findUserByTelephone(String telephone) {
+    User user = userRepository.findUserByPhoneNumber(telephone);
+    if (user == null) {
+        return null;
+    }
+    List<Role> roles = roleRepository.findRolesByUserId(user.getId());
+    if (roles == null || roles.isEmpty()) {
+        throw new DisabledException("权限非法");
+    }
+
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
+    user.setAuthorityList(authorities);
+    return user;
+}
+```
+创建用户，生成用户名 要写role表和user表 需要事务
+没有密码
+```java
+@Override
+@Transactional
+public User addUserByPhone(String telephone) {
+    User user = new User();
+    user.setPhoneNumber(telephone);
+    user.setName(telephone.substring(0, 3) + "****" + telephone.substring(7, telephone.length()));
+    Date now = new Date();
+    user.setCreateTime(now);
+    user.setLastLoginTime(now);
+    user.setLastUpdateTime(now);
+    user = userRepository.save(user);
+
+    Role role = new Role();
+    role.setName("USER");
+    role.setUserId(user.getId());
+    roleRepository.save(role);
+    user.setAuthorityList(Lists.newArrayList(new SimpleGrantedAuthority("ROLE_USER")));
+    return user;
+}
+```
+
+调用读数据库，比较用户输入验证码
+```java
+public class AuthFilter extends UsernamePasswordAuthenticationFilter {
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private ISmsService smsService;
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+        System.out.println("登陆请求"+request.getRequestedSessionId());
+
+        String name = obtainUsername(request);
+        if (!Strings.isNullOrEmpty(name)) {
+            request.setAttribute("username", name);
+            return super.attemptAuthentication(request, response);
+        }
+
+        String telephone = request.getParameter("telephone");
+        if (Strings.isNullOrEmpty(telephone) || !LoginUserUtil.checkTelephone(telephone)) {
+            throw new BadCredentialsException("Wrong telephone number");
+        }
+
+        User user = userService.findUserByTelephone(telephone);
+        String inputCode = request.getParameter("smsCode");
+        String sessionCode = smsService.getSmsCode(telephone);
+        if (Objects.equals(inputCode, sessionCode)) {
+            if (user == null) { // 如果用户第一次用手机登录 则自动注册该用户
+                user = userService.addUserByPhone(telephone);
+            }
+            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        } else {
+            throw new BadCredentialsException("smsCodeError");
+        }
+    }
+}
+```
+配置到security
+```java
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    /**
+     * HTTP权限控制
+     * @param http
+     * @throws Exception
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
+}
+```
+
+注册manager和失败的bean
+```java
+@Bean
+public AuthenticationManager authenticationManager() {
+    AuthenticationManager authenticationManager = null;
+    try {
+        authenticationManager =  super.authenticationManager();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return authenticationManager;
+}
+@Bean
+public AuthFilter authFilter() {
+    AuthFilter authFilter = new AuthFilter();
+    authFilter.setAuthenticationManager(authenticationManager());
+    authFilter.setAuthenticationFailureHandler(authFailHandler());
+    return authFilter;
+}
+```
+
+#### 短信验证码
+发送验证码接口
+```java
+@GetMapping(value = "sms/code")
+@ResponseBody
+public ApiResponse smsCode(@RequestParam("telephone") String telephone) {
+    if (!LoginUserUtil.checkTelephone(telephone)) {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "请输入正确的手机号");
+    }
+    ServiceResult<String> result = smsService.sendSms(telephone);
+    if (result.isSuccess()) {
+        return ApiResponse.ofSuccess("");
+    } else {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), result.getMessage());
+    }
+}
+```
+
+添加初始化方法，在bean初始化的时候装配好client
+坑：阿里云的gson版本，把自己引入的gson删掉就行了
+
+
+
+
+
+预约功能和会员中心
+```java
+public interface UserRepository extends CrudRepository<User, Long> {
+
+    User findByName(String userName);
+
+    User findUserByPhoneNumber(String telephone);
+
+    @Modifying
+    @Query("update User as user set user.name = :name where id = :id")
+    void updateUsername(@Param(value = "id") Long id, @Param(value = "name") String name);
+
+    @Modifying
+    @Query("update User as user set user.email = :email where id = :id")
+    void updateEmail(@Param(value = "id") Long id, @Param(value = "email") String email);
+
+    @Modifying
+    @Query("update User as user set user.password = :password where id = :id")
+    void updatePassword(@Param(value = "id") Long id, @Param(value = "password") String password);
+}
+```
+
 
 es调优
 索引读写优化
