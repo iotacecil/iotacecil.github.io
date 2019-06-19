@@ -113,7 +113,8 @@ doublewrite：内存中的2M buffer，磁盘上共享表空间的128个页（2M�
 因为binlog的Statement以commit顺序
 可重复读会对读取到的数据进行加锁（行锁），保证其他事务无法修改这些已经读过的数据，
 
-MVCC
+MVCC实现可重复读
+只有写写之间相互阻塞，其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度
 每个数据行会添加两个额外的隐藏列，分别记录这行数据何时被创建以及何时被删除，这里的时间用版本号控制
 
 所有的SELECT操作无需加锁，因为即使所读的数据在下一次读之前被其他事务更新了
@@ -861,15 +862,21 @@ AOF更新频率通常比RDB高。
 写【命令】先从redis 写到硬盘缓冲区 再根据3种策略（everysec每秒，always，no（操作系统自己刷)）fsync到硬盘AOF文件。
 AOF会开子进程重写。
 
-#### 主从复制
+#### redis主从复制
+数据是单向的。可以通过`slaveof` 或者配置方式`slave-read-only yes`实现。
+进入redis用`info replication`可以查看主从状态
+
+老版本当从节点slaveof之后发送PSYNC，并发送自己的ID
+主节点bgsave向从节点发送rdb文件，设置offset，将偏移量之后的数据存在定长有界队列积压缓冲区中，一个字节一个offset。
+从节点发送offset给主节点继续从缓冲区同步。
+之后命令传播。
 主从复制（副本）集群是为了解决多请求，读写分离，高可用，
 分布式是为了解决一个请求的多个步骤。
 
 redis主从同步的问题
 redis集群一致性hash如何解决分布不均匀
 
-数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
-进入redis用`info replication`可以查看主从状态
+
 
 ##### 全量复制
 1）第一次是全量复制`full resync` master会`BGSAVE`。
