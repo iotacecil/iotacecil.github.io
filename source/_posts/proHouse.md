@@ -2575,6 +2575,95 @@ public ApiResponse smsCode(@RequestParam("telephone") String telephone) {
 添加初始化方法，在bean初始化的时候装配好client
 坑：阿里云的gson版本，把自己引入的gson删掉就行了
 
+任何对数据库有更改的接口都要加事务
+
+用户名、密码修改接口
+
+#### 房屋预约功能
+```java
+@Table(name = "house_subscribe")
+public class HouseSubscribe {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "house_id")
+    private Long houseId;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "admin_id")
+    private Long adminId;
+
+    // 预约状态 1-加入待看清单 2-已预约看房时间 3-看房完成
+    private int status;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "last_update_time")
+    private Date lastUpdateTime;
+
+    @Column(name = "order_time")
+    private Date orderTime;
+
+    private String telephone;
+
+    /**
+     * 踩坑 desc为MySQL保留字段 需要加转义
+     */
+    @Column(name = "`desc`")
+    private String desc;
+```
+
+经纪人看房记录，管理人联系用户
+经纪人后台list，操作看房完成标记
+
+
+api接口security拦截
+```java
+public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws IOException, ServletException {
+    String uri = request.getRequestURI();
+    if (uri.startsWith(API_FREFIX)) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType(CONTENT_TYPE);
+
+        PrintWriter pw = response.getWriter();
+        pw.write(API_CODE_403);
+        pw.close();
+    } else {
+        super.commence(request, response, authException);
+    }
+}
+```
+
+客服聊天系统 美洽
+
+
+
+监控
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+    <version>1.5.7.RELEASE</version>
+</dependency>
+```
+`management.security.enabled=false`
+
+用jconsole查看maxBean
+
+PS Scavenge 25次 262ms 新生代 吞吐量优先收集器复制算法，并行多线程
+PS MarkSweep（Parallel Old） 9次 2073ms 多线程压缩收集
+
+
+
+
+
+
+
 
 
 
