@@ -165,7 +165,7 @@ server端tcp连接4元组中只有remote ip（也就是client ip）和remote por
 
 server端，通过增加内存、修改最大文件描述符个数等参数，单机最大并发TCP连接数超过10万 是没问题的
 
-有一个接口一下子快一下子慢
+#### 有一个接口一下子快一下子慢
 1）用户怎么排查
 2）开发者怎么排查
 如果是一个数据库接口
@@ -181,6 +181,8 @@ server端，通过增加内存、修改最大文件描述符个数等参数，�
 ### 4.http
 如果输入163.com跳转到www.163
 301 重定向
+
+206 客户端发送range，服务端有accept-range
 
 响应码
 nginx会检查的
@@ -356,6 +358,7 @@ HTTP请求/响应
 
 ### 18.HTTP 长连接怎么实现
 HTTP管道是什么，客户端可以同时发出多个HTTP请求，而不用一个个等待响应
+
 
 ### 19.http https
 HTTP+ 加密 + 认证 + 完整性保护 =HTTPS
@@ -721,11 +724,21 @@ CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存�
 对于多个状态变量的场景，通过`AtomicReference`包装这个对象，每次更新先获取旧值，再创建新值，用这两个值进行CAS原子更新。
 
 #### CAS 实现原子操作的三大问题
-1) ABA问题 `AtomicStampedReference` 不可变对象pair
+1) ABA问题 解决：用`AtomicStampedReference` 不可变对象pair
 2）循环CPU开销  JVM pause指令 `Unsafe.park()`遇到线程中断不会抛异常，会立刻返回再次运行，CPU可能飙升，一直是RUNNABLE。
-3）多个共享变量 `AtomicReference`
+3）多个共享变量 解决：用`AtomicReference`
+
+### 线程安全的链表
+每个node有锁，保存链表尾指针
 
 AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
+
+MCS自旋锁 基于链表 公平自旋锁 在本地属性变量上自旋
+CLH自旋锁 基于链表 公平自旋锁 在前驱结点上自旋
+有N个线程 L个锁 空间需要O(L+N)
+
+
+
 
 ### 4.AQS
 AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
@@ -786,8 +799,37 @@ JVM提供了3种Monitor实现：偏向锁、轻量级锁、重量级锁
 
 
 #### `notify`和`wait`
+notify方法调用后不会释放锁！
 放置在sychronized作用域中，wait会释放synchronized关联的锁阻塞，
 实现存库为1的生产者消费者。
+
+#### join 方法
+`join(long millis)` 
+获取t2的对象锁，
+判断t2是否alive，
+放弃对t2的锁,将当前t3放入t2的【等待池】中，
+等待t2notify，一个线程结束后会调用notifyAll，
+被notify后会进入t2的锁池等待竞争锁
+
+wait(0)是一直等待
+```java
+ Thread t3 = new Thread(new Runnable() {
+      @Override
+      public void run() {
+          try {
+              // 引用t2线程，等待t2线程执行完
+              t2.join();
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+          System.out.println("t3");
+      }
+  });
+```
+
+如果没有判断isAlive,join的线程根本没启动会永远等待下去
+
+
 
 ### 10.1信号量 Semaphore ： 管理多线程竞争
 例子：100个线程抢10个数据库连接。
@@ -911,13 +953,18 @@ AOF会开子进程重写。
 进入redis用`info replication`可以查看主从状态
 
 老版本当从节点slaveof之后发送PSYNC，并发送自己的ID
-主节点bgsave向从节点发送rdb文件，设置offset，将偏移量之后的数据存在定长有界队列积压缓冲区中，一个字节一个offset。
+主节点bgsave向从节点发送rdb文件，设置offset，
+将偏移量之后的数据存在定长有界队列【积压缓冲区1M】中，一个字节一个offset。
 从节点发送offset给主节点继续从缓冲区同步。
 之后命令传播。
 主从复制（副本）集群是为了解决多请求，读写分离，高可用，
 分布式是为了解决一个请求的多个步骤。
 
 redis主从同步的问题
+
+master挂了，从节点全部得全量复制，复制风暴
+
+
 redis集群一致性hash如何解决分布不均匀
 
 
@@ -1256,6 +1303,11 @@ FIFO：Belady异常。
 LRU：如果满了，将内存块中的数值向前找，最早出现的那个删除。
 CLOCK：时钟置换算法，NRU最近未用算法。 循环队列。 访问位。
 
+问题
+LRU：出现一次冷数据批量查询，误淘汰大量热点数据
+LFU：起始频率值低，导致最近新加入的数据总会很容易被剔除
+FIFO：特殊领域：作业调度、消息队列
+
 
 ### 33 ajax的四个步骤
 1)创建xhr对象
@@ -1345,15 +1397,24 @@ java线程同步的方法
 http://blog.jobbole.com/109170/
 强引用=null
 引用计数算法 无法解决互相引用的情况。
+
+
 所以用的是 **可达性分析算法**：判断对象的引用链是否可达。
 如果循环引用，没有人指向这个环也会被回收。
 从GC root（栈中的本地变量表中的对象、类（方法区）常量、静态属性保存的是对象……）
+
+JIT编译时会在安全点记录下很多OopMap(一个对象内 偏移量：类型数据)压缩在内存中。
+GC的时候扫描对应偏移量
+
+
 
 
 类回收：
 ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
 
 资源管理，如果数据库连接对象被收回，但是没有调用close，数据库连接的资源不会释放，数据库连接就少一个了，要放在try()里。
+
+
 
 #### full GC
 1）System.gc()方法的调用
@@ -1728,8 +1789,6 @@ vi： ZZ：命令模式下保存当前文件所做的修改后退出vi；
 2：进程、cpu状态、内存状态（系统内核控制的内存数）
 
 打开的文件`lsof`
-
-
 
 
 ### 序列化的性能
