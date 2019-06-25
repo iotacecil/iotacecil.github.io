@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-06-24T13:25:15.817Z">
+<meta property="og:updated_time" content="2019-06-25T12:00:05.124Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://blog.csdn.net/jackfrued/article/details/44921941https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/x">
@@ -351,8 +351,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-06-24T21:25:15+08:00">
-                2019-06-24
+              <time title="更新于" itemprop="dateModified" datetime="2019-06-25T20:00:05+08:00">
+                2019-06-25
               </time>
             
           </span>
@@ -741,8 +741,8 @@
 <h4 id="AOP-面向切面编程-关注点分离，抽离业务逻辑"><a href="#AOP-面向切面编程-关注点分离，抽离业务逻辑" class="headerlink" title="AOP 面向切面编程 关注点分离，抽离业务逻辑"></a>AOP 面向切面编程 关注点分离，抽离业务逻辑</h4><p>知识图谱 之间的关系 和结构存储neo4j<br>vue的特点<br>和react的比较</p>
 <h3 id="54-前后端跨域怎么实现"><a href="#54-前后端跨域怎么实现" class="headerlink" title="54 前后端跨域怎么实现"></a>54 前后端跨域怎么实现</h3><p>浏览器的同源策略导致了跨域。<br>1)JSONP 但是只能直接发get请求<code>&lt;script src=&quot;http://127.0.0.1:8897&quot;&gt;&lt;script&gt;</code><br>2)<code>Access-Control-Allow-Origin&#39;:&#39;*&#39;</code><br>3)nginx反向代理</p>
 <p>XSS 跨站脚本攻击：篡改网页，注入恶意html脚本。<br>CSRF 跨站请求伪造（利用用户登陆态）<br>Cookie的 <code>SameSite</code>属性strict</p>
-<h3 id="55-cookies"><a href="#55-cookies" class="headerlink" title="55 cookies"></a>55 cookies</h3><p>1) 存储在客户主机<br>2）服务器产生<br>3）会威胁客户隐私<br>4）用于跟踪用户访问和状态</p>
-<p>cookie有两种<br>cookie的实现<br>cookie加密</p>
+<h3 id="55-cookies"><a href="#55-cookies" class="headerlink" title="55 cookies"></a>55 cookies</h3><p>1) 存储 浏览器的cookie数据库中<br>2）服务器产生<br>3）会威胁客户隐私<br>4）用于跟踪用户访问和状态</p>
+<p>cookie有两种:会话cookie（退出浏览器删除， 没设置discard或者expires 或者max-age） 持久cookie<br>cookie的实现<br>cookie加密</p>
 <p>原本需要由web服务器创建会话的过程转交给Spring-Session进行创建，本来创建的会话保存在Web服务器内存中，通过Spring-Session创建的会话信息可以保存第三方的服务中，如：redis,mysql等</p>
 <p>redis string<br>redis</p>
 <h3 id="redis常用数据结构"><a href="#redis常用数据结构" class="headerlink" title="redis常用数据结构"></a>redis常用数据结构</h3><p>string, hash,set,sorted set,list<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">redis&gt; GEOADD Sicily 13.361389 38.115556 <span class="string">"Palermo"</span> 15.087269 37.502669 <span class="string">"Catania"</span></span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">redis&gt; GEODIST Sicily Palermo Catania</span><br><span class="line"><span class="string">"166274.1516"</span></span><br><span class="line">redis&gt; GEORADIUS Sicily 15 37 100 km</span><br><span class="line">1) <span class="string">"Catania"</span></span><br><span class="line">redis&gt; GEORADIUS Sicily 15 37 200 km</span><br><span class="line">1) <span class="string">"Palermo"</span></span><br><span class="line">2) <span class="string">"Catania"</span></span><br><span class="line">redis&gt;</span><br></pre></td></tr></table></figure></p>
