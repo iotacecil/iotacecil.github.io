@@ -8,6 +8,37 @@ categories: [算法备忘]
 https://docs.qq.com/sheet/DUGZ6cEtrUFJsSGxP
 
 ### 快速排序
+插入排序好处：在线算法
+
+
+### 92 区间反转链表
+{% note %}
+Input: 1->2->3->4->5->NULL, m = 2, n = 4
+Output: 1->4->3->2->5->NULL
+{% endnote %}
+```java
+public ListNode reverseBetween(ListNode head, int m, int n) {
+    if(head == null || n == m)return head;
+    ListNode dumy = new ListNode(0);
+    dumy.next = head;
+    ListNode pre = dumy;
+    for (int i = 0; i <m-1 ; i++) {
+        pre = pre.next;
+    }
+    ListNode start = pre.next;
+    for (int i = 0; i <n-m ; i++) {
+        //3 下一个要反转到前面的
+        ListNode next = start.next;
+        //2->4 接上后面不动的
+       start.next = next.next;
+       //3->2 反转到最前面接上反转部分
+        next.next = pre.next;
+        //1->3 之前不动部分接上新换上来的节点
+        pre.next = next;
+    }
+    return dumy.next;
+}
+```
 
 ### 25 k个一组反转链表
 {% note %}
