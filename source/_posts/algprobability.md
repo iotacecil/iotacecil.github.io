@@ -5,6 +5,45 @@ tags:
 categories: [算法备忘]
 ---
 
+### 活字印刷
+{% note %}
+输入："AAB"
+输出：8
+解释：可能的序列为 "A", "B", "AA", "AB", "BA", "AAB", "ABA", "BAA"。
+{% endnote%}
+
+方法2
+```java
+public int numTilePossibilities(String tiles) {
+    int rst = 0;
+    int[] cnt = new int[26];
+    for(char c:tiles.toCharArray()){
+        cnt[c-'A']++;
+    }
+    return back(cnt);    
+}
+private int back(int[] cnt){   
+   int sum = 0;
+    // 长度为1的 a,b
+    // 长度为2的 aa,ab,ba
+    // 长度为3的 aab,aba,baa
+    for(int i =0;i<26;i++){
+        if(cnt[i]==0)continue;
+        sum++;
+        cnt[i]--;
+        sum+=back(cnt);
+        cnt[i]++;
+    }
+    return sum;
+}
+```
+
+方法1
+If we have a string of size n with i unique characters, and each character repeats m[i] times, the number of unique permutations is:
+
+n! / (m[1]! * m[2]! * .. * m[i]!)
+要计算出所有组合的排列数的累加
+
 
 ### !!172 Factorial Trailing Zeroes 阶乘后面后几个0
 {% note %}

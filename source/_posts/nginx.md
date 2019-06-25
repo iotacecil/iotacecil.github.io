@@ -4,6 +4,8 @@ date: 2018-04-02 13:18:31
 tags: [网络]
 category: [网络]
 ---
+对于Http1.1协议，如果响应头中的Transfer-encoding为chunked传输，则表示body是流式输出，body会被分成多个块，每块的开始会标识出当前块的长度，此时，body不需要通过content-length来指定，客户端会接收数据直到服务端主动断开连接
+
 ### 浏览器缓存
 ### Cache-control（秒）/Pragma 
 Pragma : http1.0用的
@@ -60,6 +62,14 @@ sendfile 是一个系统调用，直接在内核空间完成文件发送，不�
 http://xiaorui.cc/2015/06/24/%E6%89%AF%E6%B7%A1nginx%E7%9A%84sendfile%E9%9B%B6%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%A6%82%E5%BF%B5/
 1.系统调用sendfile()通过 DMA把硬盘数据拷贝到 kernel buffer，然后数据被 kernel直接拷贝到另外一个与 socket相关的 kernel buffer。这里没有 user mode和 kernel mode之间的切换，在 kernel中直接完成了从一个 buffer到另一个 buffer的拷贝。
 2、DMA 把数据从 kernelbuffer 直接拷贝给协议栈，没有切换，也不需要数据从 user mode 拷贝到 kernel mode，因为数据就在 kernel 里。
+
+在传统的文件传输方式（read、write/send方式），具体流程细节如下：
+
+调用read函数，文件数据拷贝到内核缓冲区
+read函数返回，数据从内核缓冲区拷贝到用户缓冲区
+调用write/send函数，将数据从用户缓冲区拷贝到内核socket缓冲区
+数据从内核socket缓冲区拷贝到协议引擎中
+在这个过程当中，文件数据实际上是经过了四次拷贝操作： 硬盘—>内核缓冲区—>用户缓冲区—>内核socket缓冲区—>协议引擎
 
 ### HTTP
 以下有关Http协议的描述中，正确的有

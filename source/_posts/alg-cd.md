@@ -4,6 +4,99 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+
+
+### 230 二叉搜索树/BST第K小元素
+{% note %}
+输入: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+输出: 1
+{% endnote %}
+方法1：计算节点数 53%
+```java
+private int cntNodes(TreeNode root){
+    if(root==null)return 0;
+    return cntNodes(root.left)+cntNodes(root.right)+1;
+}
+//left = 2 k=1 
+public int kthSmallest(TreeNode root, int k) {
+    int left = cntNodes(root.left);
+    if(left == k-1)return root.val;
+    else if(left < k-1)return kthSmallest(root.right,k-1-left);
+    else return kthSmallest(root.left,k);       
+}
+```
+
+方法2：中序遍历第k步的时候100%
+```java
+int rst = -1;
+int kk = 0;
+public int kthSmallest(TreeNode root, int k) {
+   kk = k;
+   find(root);
+   return rst;
+}
+private void find(TreeNode root){
+    if(root.left!=null)find(root.left);
+    kk--;
+    if(kk==0){
+        rst = root.val;
+        return; 
+    }
+    if(root.right!=null)find(root.right);
+}
+```
+
+方法3：用栈中序迭代54%
+```java
+public int kthSmallest(TreeNode root, int k) {
+  Deque<TreeNode> stk = new ArrayDeque<>();
+  while(root!=null){
+    stk.push(root);
+    root = root.left;
+  }
+  while(k>0){    
+        TreeNode cur = stk.pop();
+        k--;
+        if(k==0)return cur.val;
+        if(cur.right!=null){
+            root = cur.right;
+            while(root!=null){
+            stk.push(root);
+            root = root.left;
+          }
+        }       
+    }
+ return -1;
+}
+```
+
+
+### 846 一手顺子
+{% note %}
+Input: hand = [1,2,3,6,2,3,4,7,8], W = 3
+Output: true
+Explanation: Alice's hand can be rearranged as [1,2,3],[2,3,4],[6,7,8].
+{% endnote %}
+
+```java
+public boolean isNStraightHand(int[] hand, int W) {
+    int[] cnt = new int[W];
+    for(int v:hand){
+        // 关键
+        cnt[v%W]++;
+    }
+    for(int i = 1;i<W;i++){
+        if(cnt[i]!=cnt[i-1])return false;
+    }
+    return true;
+}
+```
+
 ### 10正则
 {% note %}
 s = "aab"
@@ -551,7 +644,7 @@ public int search(int[] nums, int target) {
 }
 ```
 
->>>>>>> refs/remotes/origin/hexo-edit
+
 ### 93 分割IP地址
 注意：3个点之后还是要判断长度和数量关系
 
