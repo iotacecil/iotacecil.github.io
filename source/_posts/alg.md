@@ -110,10 +110,43 @@ Output: `[[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,
 > in : 4 1 1 4 out: 18
 
 ### lc 473 火柴拼正方形 三星
+必须使用所有的火柴，可以连接火柴不能折断
 {% note %}
 输入: [1,1,2,2,2]
 输出: true
 {% endnote %}
+思路：已知周长，能否分成4个集合，和相等
+```java
+public boolean makesquare(int[] nums) {
+    if(nums.length==0)return false;
+    int sum = 0;
+    for(int num:nums){
+        sum += num;
+    }
+    if(sum%4!=0)return false;
+    return dfs(0,nums,new int[4],sum/4);
+    
+} 
+public boolean dfs(int idx,int[] nums,int[] sums,int max) {
+    if (idx == nums.length) {
+       return true;
+           //sums[0] == sums[1] && sums[1] == sums[2] && sums[2] == sums[3];
+    }
+    int e = nums[idx];
+    for(int i = 0; i < 4; i++) {
+        if (sums[i] + e <= max) {
+            sums[i] += e;
+            if (dfs(idx + 1,nums,sums,max)) {
+                return true;
+            }
+            sums[i] -= e;
+        }
+    }
+    return false;
+}
+```
+
+
 
 ### lc 221 最大正方形
 {% note %}
@@ -260,6 +293,42 @@ Output:
 
 ### 海盗分金
 https://baike.baidu.com/item/%E6%B5%B7%E7%9B%97%E5%88%86%E9%87%91
+
+### 1029 2N个人平分去A、B两地，让花费最小
+{% note %}
+Input: [[10,20],[30,200],[400,50],[30,20]]
+Output: 110
+{% endnote %}
+按照如果去A能省多少钱排序
+```java
+public int twoCitySchedCost(int[][] costs) {
+    Arrays.sort(costs,(a,b)->(b[1]-b[0])-(a[1]-a[0]));
+    int n = costs.length;
+    int rst = 0;
+    for(int i = 0;i<n/2;i++){
+        rst += costs[i][0];
+    }
+    for(int i = n/2;i<n;i++){
+        rst += costs[i][1];
+    }
+    return rst;
+}
+```
+
+### 777 在LR字符串中交换相邻字符
+一次移动操作指用一个"LX"替换一个"XL"，或者用一个"XR"替换一个"RX"。
+{% note %}
+输入: start = "RXXLRXRXL", end = "XRLXXRRLX"
+输出: True
+解释:
+我们可以通过以下几步将start转换成end:
+RXXLRXRXL ->
+XRXLRXRXL ->
+XRLXRXRXL ->
+XRLXXRRXL ->
+XRLXXRRLX
+{% endnote %}
+
 
 ### 778 从左上到右下路径上所需最小最大值
 https://leetcode.com/problems/swim-in-rising-water/

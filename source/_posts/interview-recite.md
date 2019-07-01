@@ -205,9 +205,15 @@ QUIC协议已经标准化为Http3协议。基于UDP，但提供了可靠性和�
 10w以上的并发连接
 
 #### Nginx是如何工作的？是如何配置的？
+工作模式：
+进程模式：一个master进程管理worker进程，监听连接请求。worker进程处理业务请求，每个worker可以并行处理数千个并发连接和请求。
+事件模式：网络、信号、定时器
+惊群现象
 1)事件驱动、全异步网络I/O 极少进程切换
 2）sendfile系统调用 硬盘->网络
 3）可靠性：多进程独立
+
+epoll：通过内核与用户空间mmap同一块内存实现的
 
 tomcat nginx apache 区别
 Apache和nginx是 Http静态服务器
@@ -220,9 +226,20 @@ nginx
 
 #### nginx的负载均衡策略
 1.轮询round robin 按配置文件中的顺序分发
-2.最少连接 当前谁的连接最少分发给谁
+2.最少连接 活动连接数量最少的服务器
 3.IP地址哈希 方便session保存
+```
+http {
+    upstream myapp1 {
+        //ip_hash, least_conn;
+        server srv1.example.com;
+        server srv2.example.com;
+        server srv3.example.com;
+    }
+```
 4.基于权重的均衡负载
+
+nginx限流是漏桶法
 
 
 ### 6.正向代理和反向代理的区别
@@ -330,6 +347,24 @@ TCP连接状态书上一共11种
 3）速度快 报头只有8字节 TCP是【字节流】 20字节（1行32位4字节)，数据分段TCP是无边界的，UDP面向【报文】，保留了边界。
 
 ### 16.ping命令原理
+https://juejin.im/post/5ba0bb05e51d450e6f2e38a0
+输入 ping IP 后敲回车，发包前会发生什么？
+如果是域名先要差dns解析ip
+
+1.根据目的IP和路由表决定走哪个【网卡】
+2.根据【网卡的子网掩码】地址判断目的IP是否在【子网】内。
+
+同一网段：
+3.不在则会通过【arp缓存】查询IP的网卡地址
+4.不存在的话会通过[arp广播]询问目的IP的mac地址
+5.同一个网段的Ping：A得到mac地址后，把B的MAC地址封装到ICMP包中，向主机B发送一个回显请求
+不同网段：
+3.发送arp找网关MAC
+4.把目的MAC是网关，目的IP是主机C的ICMP包
+5.路由器去掉原来ICMP的MAC头，MAC源地址改成自己的MAC出地址，目的是查询到C的MAC
+6.主机C直接ICMP回显
+
+
 ICMP回显应答时要输出 序号、TTL、往返时间，目的主机IP地址。
 
 type:回显询问ICMP_ECHO 和回答ICMP_ECHOREPLY
@@ -362,7 +397,17 @@ HTTP管道是什么，客户端可以同时发出多个HTTP请求，而不用一
 
 ### 19.http https
 HTTP+ 加密 + 认证 + 完整性保护 =HTTPS
+总共有3个随机数，客户端随机数，服务端随机数，预主密钥,
+对2个随机数和预主密钥生成主密钥用于之后数据加密
+
 https的过程：
+- 握手过程
+1.客户端client hello发送 随机数+支持的套件
+2.服务端server hello返回2个包，1）随机数+选择套件，2）证书（身份认证）
+3.握手完成，客户端返回用服务端公钥加密的预主密钥
+
+完成后两边都有预主密钥+2个随机数，用约定的hash算法，生成主密钥进行数据传输
+
 http先和ssl通信，再ssl和tcp通信。
 在交换密钥环节使用【公开密钥】加密方式，
 之后的建立通信交换报文阶段则使用【共享密钥】加密方式。
@@ -411,6 +456,7 @@ https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/IPC.md
 消息队列能多个进程
 
 #### 管道 【随进程持续】：
+管道的本质是内核维护了一块缓冲区与管道文件相关联。
 1）单向 半双工：把一个程序的输出直接连接到另一个程序的输入
 2）除非读端已经存在，否则写端的打开管道操作会一直阻塞
 3）只能父子进程、兄弟进程
@@ -464,7 +510,32 @@ struct shared_use_st{
 不是线程同步的posix信号量，是`SYSTEM V`信号量
 信号量能解决 共享内存同步问题
 
-### 3.进程调度方式
+### 3.进程调度方式 CFS 调度周期 计算运行时间vruntime
+Linux CFS 完全公平调度器：
+1.设定一个【调度周期】（sched_latency_ns），目标是让每个进程在这个周期内至少有机会运行一次。每个进程等待CPU的时间最长不超过这个调度周期。
+2.进程的数量，大家平分这个调度周期内的CPU使用权，由于进程的优先级即nice值不同，分割调度周期的时候要加权；
+3.每个进程的【累计运行时间】保存在自己的vruntime字段里，哪个进程的vruntime最小就获得本轮运行的权利。
+
+细节
+问题1：新进程
+fork之后的子进程优先于父进程
+每个CPU的运行队列cfs_rq都维护一个min_vruntime字段，记录该运行队列中所有进程的vruntime最小值，防止一直fork获得时间片，新进程一般要设置比min_vruntime大。
+
+问题2：休眠进程
+唤醒抢占特性
+被唤醒时当新进程重新设置vruntime
+
+问题3：频繁抢占
+CFS设定了进程占用CPU最小时间，如果进程太多，调度周期会根据最小时间x进程数
+
+问题4：进程切换CPU
+为保持相对公平，vruntime要减去当前CPU的min，在加到CPU2的min上
+
+红黑树而不用最小堆
+每个核用红黑树选区vruntime最小的进程
+进程调度有很多遍历操作，需要完全排序
+红黑树插入最多两次旋转，删除最多3次旋转，染色Logn
+
 
 进程的上下文切换：切换会保存寄存器、栈，需要用户态切换到内核态
 
@@ -567,6 +638,7 @@ Java对象的内存分配主要是指在堆上分配（也有经过JIT编译后�
 
 ### 9.除了基本类型还有那些类能表示数字
 包装类，高精度BigDecimal，原子类
+Atomic内部用native方法，使用了硬件支持的CAS
 
 1.8新加的原子类`LongAdder` 分离热点
 把value变成一个数组，变成hash计数，计数结果就是累加结果。
@@ -632,7 +704,7 @@ commit;
 
 ## 6.数据结构
 ### 1.二叉平衡树的应用 红黑树原理
-关键性质：红黑树确保没有一条从根到叶子的路径会比其他从根岛叶子的路径长出两倍
+关键性质：红黑树确保没有一条从根到叶子的路径会比其他从根到叶子的路径长出两倍
 1）根、叶子节点、红色节点的两个儿子都是黑色
 2）任一节点到其每个叶子节点的所有简单路径 包含相同数目的黑色节点
 AVL树是严格的平衡二叉树
@@ -716,6 +788,9 @@ hashmap也是尾插 保留了顺序，不会死循环。
 currentHashMap原理：1.7分段锁，降低锁定程度，1.8CAS自旋锁
 
 ### 3.CAS算法原理？优缺点？
+CAS 流程：线程在读取数据时不进行加锁，在写回数据时，比较原值是否修改，如果未被其它线程修改，则写回，不然重新读取。
+乐观认为并发操作不是总会发生。
+通过操作系统原语实现，保证操作过程中不会被中断。
 https://juejin.im/post/5ba66a7ef265da0abb1435ae 
 非阻塞算法：一个线程的失败或者挂起不会导致其他线程也失败或者挂起。
 无锁算法：算法的每个步骤，都存在某个线程能执行下去。多个线程竞争CAS总有一个线程胜出并继续执行。
@@ -741,7 +816,11 @@ CLH自旋锁 基于链表 公平自旋锁 在前驱结点上自旋
 
 
 ### 4.AQS
-AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
+AQS：队列同步器
+AQS的核心思想是基于volatile int state这样的一个标志位1表示有线程占用，其它线程需要进入同步队列
+同步队列是一个双向链表，当获得锁的线程等待条件，进入等待队列（可以有多个），满足后重新进入同步队列，获取锁竞争
+Unsafe类提供CAS方法
+同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
 `private volatile int state;`
 `ReentrantLock`用来表示所有者重复获取该锁的次数
 `Semaphore`表示剩余许可数量
@@ -751,10 +830,13 @@ AQS的核心思想是基于volatile int state这样的一个属性同时配合Un
 
 
 ### 5.线程池的运行流程，使用参数以及方法策略
+https://juejin.im/entry/59b232ee6fb9a0248d25139a#%E6%80%BB%E7%BB%93
+线程池中的线程包装成工作线程Worker放在HashSet中，Worder继承AQS实现了不可重入锁，Worker的run方法是for循环一直take队列中的runable对象执行
 
 运行流程：
-1）如果运行的线程小于`corePollsize`，则创建新线程，即使其他事空闲的。
-2）当线程池中线程数量>`corePollsize` 则只有当`workQueue`满才去创建新线程处理任务
+1）如果运行的线程小于`corePollsize`，则创建核心线程，即使其他是空闲的。
+2）当线程池中线程数量>`corePollsize`，判断缓冲队列是否满，没满放入队列，等待线程空闲执行。
+如果队列满了，判断是否达到最大线程数，没达到创建新线程，如果达到了，执行拒绝策略。 只有当`workQueue`满才去创建新线程处理任务 ！！先判断队列再判断最大线程数
 3）如果没有空闲，任务封装成Work对象放到等待队列
 4) 如果队列满了，用`handler`指定的策略 （5种）
 `ctl` 状态值（高3位）和有效线程数（29位）
@@ -769,39 +851,58 @@ TIDYING： 所有任务都已经终止 有效线程数为0
 TERMINATED： 标识
 
 一共有5种线程池：
-1）fixed
-2）cached 处理大量短时间工作任务 长期闲置的时候不会消耗资源
-3）sigle 保证顺序执行多个任务
+1）fixed 无界队列缓冲队列，适用于任务数量不均匀，内存压力不敏感，系统负载敏感。
+只要线程个数比核心线程个数多并且当前空闲则回收
+2）cached 核心0，最大INT_MAX,缓冲队列：synchronousQueue只要没有空闲线程就会新建（没有队列缓冲）不限制线程数，低延迟短期任务。处理大量短时间工作任务 长期闲置的时候不会消耗资源
+3）sigle 1个线程，异步执行，保证顺序执行多个任务
 4）scheduled 定时、周期工作调度
 最大线程数是Integer.MAX_VALUE，
 空闲工作线程生存时间是0，
-阻塞队列是DelayedWorkQueue，是堆
+阻塞队列是DelayedWorkQueue，是堆 按延迟时间获取任务的优先级
 ScheduledFutureTask实现了Comparable接口，是按照任务执行的时间来倒叙排序的
 
-5）`newWrokStealingPoll` 工作窃取
+5）`newWrokStealingPoll` 工作窃取，固定并行度的多任务队列，适合任务执行时长不均匀
 
-#### 6.如何优化线程池
+#### 6.如何优化线程池参数
+1.核心线程数 2.最大线程数 
+3.4 线程的空闲时间（可以通过allowcorethreadtimeout方法允许核心线程回收）
+5 缓冲队列ArrayBlockingQueue 有界队列 LinkedBlockingQueue 无界队列 SynchronousQueue 同步队列没有缓冲区
+6.线程工厂方法，用于定制线程的属性 例如线程的group，线程名 优先级
+7.线程池满时的拒绝策略4种Abourt异常（默认） Discard 抛弃 callerruns 提交者执行 discardoldest 丢弃最早
+
 怎么配置参数
 
 ### 7.线程同步的方法
+1.CAS 2.synchronize 3.Lock
 
-### syncronize 可重入
-对象头 Monitor(管程) entry set，wait set
+
+### synchronize 可重入
+对象头 Monitor(管程) 分三块：entry set，owner,wait set
 https://blog.csdn.net/javazejian/article/details/72828483
 正确说法：给调用该方法的【对象】加锁。在一个方法调用结束之前，其他线程无法得到这个对象的控制权。
+方法同步通过ACC_SYNCHRONIZED
+代码块同步通过monitorenter monitorexit
+
 
 缺点：只能实现方法级别的排他性，不能保证业务层面（多个方法）。
 
 #### Synchronized的锁优化机制
 JVM提供了3种Monitor实现：偏向锁、轻量级锁、重量级锁
-偏向锁（默认）：JVM在对象头上Mark word设置县城ID，用CAS操作。
-轻量级锁:有另外线程试图锁定已经偏向锁的对象，JVMrevoke撤销偏向锁。轻量级锁用CAS试图获得锁操作Mark Work，如果成功就轻量级锁，如果失败重量级锁。
+偏向锁（默认）：优先同一线程获取锁，JVM在对象头上Mark word设置线程ID，用CAS操作。
+轻量级锁:有另外线程试图锁定已经偏向锁的对象，JVMrevoke撤销偏向锁。
+如果失败，短暂自旋。轻量级锁用CAS试图获得锁操作Mark Work，如果成功就轻量级锁，如果失败重量级锁。
 
 
 #### `notify`和`wait`
 notify方法调用后不会释放锁！
 放置在sychronized作用域中，wait会释放synchronized关联的锁阻塞，
 实现存库为1的生产者消费者。
+
+#### wait和sleep的不同
+1.wait是object类，sleep是thread类
+2.wait会释放对象锁，sleep不会
+3.wait需要在同步块中使用，sleep可以在任何地方使用
+4.sleep要捕获异常，wait不需要
 
 #### join 方法
 `join(long millis)` 
@@ -847,9 +948,12 @@ Condition
 ### 10.3锁 Lock
 ####  ReentreantLock
 1）可中断 2）可定时轮询 3）锁分段，每个链表节点用一个独立的锁，多线程能对链表的不同部分操作。
-4）公平性
+4）公平性/非公平性
+5）tryLock，得不到锁立即返回
+
+读写锁 适合读并发多写并发少，读不用互斥另一个方法是copyonwrite
 Sync继承AQS，
-公平锁的实现机理在于每次有线程来抢占锁的时候，都会检查一遍有没有等待队列
+公平锁新来的线程有没有可能比同步队列中等待的线程更早获得锁。
 
 5）可重入Thread.currentThread()
 可重入是如何实现的？
@@ -866,7 +970,7 @@ Lock可以跨方法锁对象：登录加锁，登出释放。
  公平锁:如果读线程持有，写线程请求，其他读线程都不能去锁，直到写完。
 用处：包装map、linkedhashmap等，在put前后上写锁，get上读锁。
 
-#### `StampedLock` 
+#### `StampedLock` 使用CLH的乐观锁 防止写饥饿
 1.8新加。是单独的类型，不可重入，锁不是持有线程为单位的。
 问题：读写锁使得读和读可以完全并发，但是读锁会完全阻塞写锁。
 思路：试着先修改，然后通过validate方法确认是否进入了写模式，如果进入，则尝试获取读锁。
@@ -914,7 +1018,7 @@ cache伪共享：多个线程读写同一个缓存行，volitale变量无关但�
 安全失败：遍历是先拷贝在遍历。遍历过程中的修改不会影响迭代器，不会报错。java.util.concurrent包下都是安全失败。
 
 
-ThreadLocal
+#### ThreadLocal 使用弱引用的Map保存变量 线程数据隔离
 LinkedBlockingQueue
 
 直接交接队列`SynchronousQueue`不使用缓存，没有空闲线程就开线程，需要限定好线程池最大数量。
@@ -1127,6 +1231,7 @@ INSERT_METHOD = LAST;
 
 
 ### 20 数据库三范式
+目的：减少冗余、插入删除更新异常
 第一范式：列不可拆分 目的：列原子性 
 第二范式：每个属性要【完全依赖】于主键，如果主键有多个候选键，属性
 第三范式：非主键关键字段之间不能存在依赖关系，避免更新、插入、删除异常。每一列都要与主键直接相关。【消除传递依赖】。
@@ -1160,7 +1265,13 @@ columns with the same name of associate tables will appear once only.
 虚引用：要和引用队列一起使用，用于跟踪垃圾回收的过程
 
 ### 23 Java线程状态
+6种
 New， Runnable， Timed Waiting， Waiting，Blocked，Terminated
+创建线程 new状态
+调用start方法后j进入Runnable状态，不能马上运行，要先进入就绪状态等待线程调度（Ready），获取到CPU后到Running状态
+如果运行中获取锁失败Blocked状态，获取到后再变成就绪状态 
+调用`Thread.join` 或者`LockSupport.park`方法会进入Waiting可以通过notify或者unpark回到就绪状态。
+
 
 ### 24 生产者消费者问题（消费的是同一个东西） 1个互斥2个同步
 P表示-1，V表示+1
@@ -1387,7 +1498,7 @@ Proactor实现异步I/O，产生I/O调用的用户进程不会等待I/O发生，
 ### java进程间通信
 
 
-java 线程通信
+java 线程通信：wait notify，共享变量的synchronize，Lock同步机制
 全局变量
 2个线程之间的单向数据连接 NIO pipe 写sink 读source。
 java线程同步的方法
@@ -1668,6 +1779,9 @@ bean有创建和销毁的回调函数。
 ### tomcat的启动流程
 
 #### Spring 怎么解决循环引用
+构造器循环依赖：通过使用bean创建时的标识值
+setter循环依赖：通过引入objectfactory解决
+
 Spring容器整个生命周期内，有且只有一个对象，所以很容易想到这个对象应该存在Cache中，Spring为了解决单例的循环依赖问题，使用了三级缓存。
 ```java
 /** Cache of singleton objects: bean name --> bean instance */
@@ -1837,6 +1951,10 @@ ZooKeeper是以Paxos算法为基础分布式应用程序协调服务。
 2)如果key超时了可以先get再set`getset(key,currenttime+timeout)` 如果get的值是null或者和之前的锁一样（？）继续`expire(key)`走加锁流程...
 
 ### 面向对象和面向过程的区别
+封装：隐藏内部代码
+继承：复用现有代码
+多态：改写对象行为
+
 面向过程是结构化开发方法，面向数据流的开发方法，用数据流图建立系统的功能模型。自顶向下，逐层分解，适合数据处理领域，难以适应需求变化。每个模块确定输入输出。
 结构化方法包括了：结构化分析SA，结构化设计SD（转换成软件体系结构图），结构化程序设计SPD
 结构化设计包括：体系结构设计、数据设计、接口设计（内部和外部接口）、过程设计
