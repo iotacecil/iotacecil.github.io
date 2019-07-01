@@ -2666,9 +2666,14 @@ PS MarkSweep（Parallel Old） 9次 2073ms 多线程压缩收集
 
 
 
-
-
 预约功能和会员中心
+
+desc字段需要转义 必须变成
+```java
+@Column(name = "`desc`")
+private String desc;
+```
+
 ```java
 public interface UserRepository extends CrudRepository<User, Long> {
 
@@ -2709,3 +2714,80 @@ es调优
 nginx
 `./configure --with-stream`
 用stream模块
+
+开启慢查询日志
+```shql
+mysql> show variables  like '%slow_query_log%';
++---------------------+-----------------------------------+
+| Variable_name       | Value                             |
++---------------------+-----------------------------------+
+| slow_query_log      | OFF                               |
+| slow_query_log_file | /var/lib/mysql/localhost-slow.log |
++---------------------+-----------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> set global slow_query_log=1;
+Query OK, 0 rows affected (0.01 sec)
+```
+
+tcp反向代理
+```shell
+./configure --with-stream
+make install
+
+./nginx -s reload
+```
+
+日志路径
+```shell
+[root@localhost logs]# ls
+access.log  error.log  nginx.pid
+```
+
+nginx 坑
+访问首页没问题，但是在登录跳转重定向时域名被修改成upstream的名字
+一定要加！！！！Host
+
+在HTTP/1.1中，Host请求头部必须存在,否则会返回400 Bad Request
+
+curl 用法
+
+
+nginx access 日志
+```java
+10.1.18.87 - - [25/Jun/2019:19:08:50 +0800] "GET /static/lib/layer/2.4/layer.js HTTP/1.1" 200 19843 "http://10.1.18.27/" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36" "-"
+```
+
+
+### 日志采集Logstash
+```ruby
+input{
+        file{
+                path => ["/usr/local/nginx/logs/access.log"]
+                type => "nginx_access"
+                start_position => "beginning"
+        }
+}
+output{
+        stdout{
+                codec =>rubydebug
+        }
+}
+```
+
+启动
+```shell
+root@localhost logstash-5.5.2]# ./bin/logstash -f config/logstash.conf
+```
+提取了日志和时间戳
+```json
+{
+          "path" => "/usr/local/nginx/logs/access.log",
+    "@timestamp" => 2019-06-25T11:32:52.787Z,
+      "@version" => "1",
+          "host" => "localhost.localdomain",
+       "message" => "10.1.18.87 - - [25/Jun/2019:19:26:44 +0800] \"GET /static/lib/layer/2.4/skin/layer.css HTTP/1.1\" 200 14048 \"http://10.1.18.27/\" \"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36\" \"-\"",
+          "type" => "nginx_access"
+}
+
+```

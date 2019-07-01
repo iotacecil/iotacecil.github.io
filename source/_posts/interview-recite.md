@@ -1815,12 +1815,12 @@ CSRF 跨站请求伪造（利用用户登陆态）
 Cookie的 `SameSite`属性strict
 
 ###  55 cookies
-1) 存储在客户主机
+1) 存储 浏览器的cookie数据库中
 2）服务器产生
 3）会威胁客户隐私
 4）用于跟踪用户访问和状态
 
-cookie有两种
+cookie有两种:会话cookie（退出浏览器删除， 没设置discard或者expires 或者max-age） 持久cookie
 cookie的实现
 cookie加密
 
