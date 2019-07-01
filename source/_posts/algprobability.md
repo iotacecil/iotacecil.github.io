@@ -4,6 +4,7 @@ date: 2018-10-18 20:59:40
 tags:
 categories: [算法备忘]
 ---
+<<<<<<< HEAD
 
 ### 活字印刷
 {% note %}
@@ -44,6 +45,11 @@ If we have a string of size n with i unique characters, and each character repea
 n! / (m[1]! * m[2]! * .. * m[i]!)
 要计算出所有组合的排列数的累加
 
+=======
+称硬币的最少次数
+http://sighsmile.github.io/2017-08-02-weighing-puzzle/
+相当于把硬币分为三份：天平两侧各一份，其余硬币为一份。如果天平是平衡的，则假币在其余硬币那一份中；如果不平衡，则假币在天平某一侧的一份中，若假币更轻，则假币在更轻的一份中，否则在更重的一份中。因此，容易想到基于三进制的编号来解决这道问题。
+>>>>>>> refs/remotes/origin/hexo-edit
 
 ### !!172 Factorial Trailing Zeroes 阶乘后面后几个0
 {% note %}

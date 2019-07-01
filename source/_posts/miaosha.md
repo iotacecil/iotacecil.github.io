@@ -3904,6 +3904,7 @@ public Result<OrderInfo> list(MiaoshaUser user,
 5)客户端轮询是否秒杀成功。
 
 启动时将库存加载到redis：框架会回调，实现的方法。
+让Bean实现InitializingBean定义初始化逻辑，会被后置处理器在bean初始化之后执行
 ```java
 @Controller
 @RequestMapping("/miaosha")

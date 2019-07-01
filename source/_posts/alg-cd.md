@@ -4,6 +4,204 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 547 朋友圈
+{% note %}
+输入: 
+[[1,1,0],
+ [1,1,0],
+ [0,0,1]]
+输出: 2 
+说明：已知学生0和学生1互为朋友，他们在一个朋友圈。
+第2个学生自己在一个朋友圈。所以返回2。
+{% endnote %}
+
+
+### 322找钱最少硬币数 （递归求最小步数的解法）！
+贪心算法一般考举反例。
+不能用贪心的原因：如果coin={1,2,5,7,10}则使用2个7组成14是最少的，贪心不成立。
+满足贪心则需要coin满足倍数关系{1,5,10,20,100,200}
+
+
+> 输入：coins = [1, 2, 5], amount = 11
+> 输出：3 (11 = 5 + 5 + 1)
+
+1. 递归mincoins(coins,11)=mincoins(coins,11-1)+1=(mincoins,10-1)+1+1..=(mincoins,0)+n
+
+![coinchange.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/coinchange.jpg)
+递归 记忆子问题 剩下3，用2的硬币变成剩下1的子问题和 剩下2，用1的硬币 剩下1的子问题是相同的。递归给count赋值是从下往上的。
+```java
+public int coinChange3(int[] coins, int amount) {
+    if(amount<1)return 0;
+    return coinChange2(coins,amount,new int[amount]);
+}
+private int coinC(int[] coins,int left,int[] count){
+    if(left<0)return -1;
+    if(left==0)return 0;
+    //关键，不然超时
+    if(count[left]!=0)return count[left];
+    int min = Integer.MAX_VALUE;
+    for(int coin:coins){
+        int useCoin = coinC(coins,left-coin,count);
+        if(useCoin >=0&&useCoin<min){
+            min = 1+useCoin;
+        }
+    }
+    return count[left] = (min==Integer.MAX_VALUE)?-1:min;  
+}
+```
+
+![coin.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/coin.jpg)
+
+2. dp:
+    注意点：初值如果设为Int的max，两个都是max的话+1变成负数，所以设amount+1
+    j 从coin开始
+81%~94% 不稳定
+```java
+int[] dp = new int[amount+1];
+Arrays.fill(dp,amount+1);
+dp[0] =0;
+for(int coin:coins){
+    for(int j = coin;j<=amount;j++){
+        dp[j]=Math.min(dp[j],dp[j-coin]+1);
+    }
+}
+return dp[amount]>amount?-1:dp[amount];    
+```
+
+3. 最正确的方法：dfs分支限界
+    1.逆序coins数组 贪心从大硬币开始试
+    2.dfs终止条件是 找到硬币整除了，或者idx==0但是不能整除
+    3.剪枝条件是 考虑用当前`coins[idx]`i个之后，用下一个硬币至少1个，如果超了break
+99%
+```java
+int minCnt = Integer.MAX_VALUE;
+public int coinChangedfs(int[] coins,int amount){
+    Arrays.sort(coins);
+    dfs(amount,coins.length-1,)
+    return minCount == Integer.MAX_VALUE?-1:minCount;
+}
+private void dfs(int amount,int idx,int[] coins,int count){
+    if(amount%coins[idx]==0){
+        int bestCnt = count+amount/coins[idx];
+        //当[1,2,5] 11, 用掉两个5，count=2 idx=0,cnt+1=3 return
+        if(bestCnt<minCnt){
+            minCnt = bestCnt;
+            //这个return放在里面97%
+            return;
+        }
+        //本来应该放在这里 94%
+    }
+    if(idx==0)return;
+    for(int i = amount/coins[idx];i>=0;i--){
+        int leftA = amount - i*coins[idx];
+        int useCnt = count+i;
+        int nextCoin = coins[idx-1];
+        //保证只要left>0都还需要至少1枚硬币
+        //或者简单一点if(useCnt+1>minCount)break; 98%
+        if(useCnt+(leftA+nextCoin-1)/nextCoin>=minCount)break;
+        dfs(leftA,idx-1,coins,useCnt);
+    }
+}
+```
+
+### 55 ?jump game
+[jump game](https://leetcode.com/problems/jump-game/solution/)
+i+nums[i]大于lastp表示i位置可以跳到lastp位置。
+将lastp更新成现在的i。再向前直到lastp变成0，表示0位置可以到下一个lastp一直到len-1。
+```java
+lastp = len-1;
+for(int i =len-1;i>=0;i--)
+    if(i+nums[i]>=lastp)lastp==i;
+return lastp==0;
+```
+
+### 45 jump game最少跳跃次数
+
+### 754 向左向右走1-n步到达target，求最小n
+{% note %}
+Input: target = 3
+Output: 2
+Explanation:
+On the first move we step from 0 to 1.
+On the second step we step from 1 to 3.
+{% endnote %}
+10^9的题一般是logn或者sqrt的问题
+思路：相等于1..n中间放正负号等于target
+如果1..n=target+d 
+d是偶数很重要，因为改变一个数的符号会导致sum-2x
+
+target=11
+1+2+3+4+5 =15 (dif=4) 翻转2的符号ok
+target=12
+dif=3 +6 dif=9 +7 dif=16->凑一个8(1+3+4)//奇偶性??
+```java
+public int reachNumber(int target) {
+        target = Math.abs(target);
+        int sum = 0;
+        int cnt = 1;
+        while (target>sum || (target-sum)%2!=0){
+            sum+=cnt;
+            cnt++;
+          //  System.out.println(cnt+" "+sum);
+
+        }
+        return cnt-1;
+    }
+}
+```
+
+
+### 673 最长递增子序列的个数
+{% note %}
+Input: [1,3,5,4,7]
+Output: 2
+Explanation: The two longest increasing subsequence are [1, 3, 4, 7] and [1, 3, 5, 7].
+{% endnote %}
+
+### 223 矩形重叠后的总面积
+给出两个矩形的左下角 右上角坐标
+{% note %}
+输入: -3, 0, 3, 4, 0, -1, 9, 2
+输出: 45
+{% endnote %}
+思路： 计算重叠区域的长宽 注意int越界
+```java
+public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {   int x = 0;
+        if(Math.min(C,G)>Math.max(A,E)){
+            x = Math.min(C,G)-Math.max(A,E);
+        };
+        int y = 0;
+        if(Math.min(D,H)>Math.max(B,F)){
+            y = Math.min(D,H)-Math.max(B,F);
+        }
+        return (int)((D-B)*(C-A)+(G-E)*(H-F) -x*y);
+    }
+```
+
+
+### 836 矩形重叠
+{% note %}
+矩形以列表 [x1, y1, x2, y2] 的形式表示，其中 (x1, y1) 为左下角的坐标，(x2, y2) 是右上角的坐标。
+
+如果相交的面积为正，则称两矩形重叠。需要明确的是，只在角或边接触的两个矩形不构成重叠。
+输入：rec1 = [0,0,2,2], rec2 = [1,1,3,3]
+输出：true
+{% endnote %}
+关键：rec2在rec1的上、下、左、右都只要和一个坐标比就可以了。
+```java
+class Solution {
+    public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
+        return !(rec1[2] <= rec2[0] ||   // left
+                 rec1[3] <= rec2[1] ||   // bottom
+                 rec1[0] >= rec2[2] ||   // right
+                 rec1[1] >= rec2[3]);    // top
+    }
+}
+```
+
+```java
+return rec1[0] < rec2[2] && rec2[0] < rec1[2] && rec1[1] < rec2[3] && rec2[1] < rec1[3];
+```
 
 
 ### 230 二叉搜索树/BST第K小元素
@@ -97,12 +295,53 @@ public boolean isNStraightHand(int[] hand, int W) {
 }
 ```
 
+
+### 19删除倒数第k个结点
+难点：
+1如果要删除的是头节点 2快指针在null的时候相差n步正好是倒数第n个，所以要在前一个，在.next!=null的时候就要停止
+```java
+public ListNode removeNthFromEnd(ListNode head, int n) {
+    ListNode p = head;
+    ListNode pp = head;
+    while(n-->0)p=p.next;
+    //关键
+    if(p==null)return head.next;
+    //关键
+    while(p.next!=null){
+        p = p.next;
+        pp = pp.next;
+    }
+    pp.next = pp.next.next;
+    return head;
+}
+```
+
+### 560 和为K的子数组个数 tc
+{% note %}
+输入:nums = [1,1,1], k = 2
+输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+{% endnote %}
+
+
 ### 10正则
 {% note %}
 s = "aab"
 p = "c\*a\*b"
 Output: true
 {% endnote %}
+```java
+public boolean isMatch(String s, String p) {
+    // 注意一定要p全匹配完后再判断s是不是匹配完了，不然s = "aa" p="aa*b*c*"其实也是匹配的
+  if(p.length()==0)return s.length()==0;
+    // 注意现在p如果还有，如果s已经没了，first直接false，直接判断p是不是x*直接去掉
+    boolean first = s.length()>0&&(s.charAt(0)==p.charAt(0) || p.charAt(0)=='.');
+    if(p.length()>=2 &&p.charAt(1)=='*'){
+       return (first&&isMatch(s.substring(1),p)) || isMatch(s,p.substring(2));
+    }else return first && isMatch(s.substring(1),p.substring(1));    
+}
+```
+
+
 
 ### 12整数转罗马
 {% note %}
@@ -348,6 +587,31 @@ double dfs(int N,int x,int y,int K){
 ```
 
 ### 71 !!简化路径
+{% note %}
+输入："/a/./b/../../c/"
+输出："/c"
+{% endnote %}
+```java
+public String simplifyPath(String path) {
+    String[] paths = path.split("/");
+    Deque<String> stk = new ArrayDeque<>();
+    for(String p :paths){
+        p = p.replace("/","");
+        if(p.equals("..") && !stk.isEmpty()){
+            stk.pop();
+        }
+        if(!p.equals(".")&& !p.equals("")&&!p.equals("..")){
+            stk.push(p);
+        }
+    }
+    StringBuilder sb = new StringBuilder();
+    while(!stk.isEmpty()){
+        sb.insert(0,"/"+stk.pop());
+    }
+    if(sb.length()==0)return "/";
+    return sb.toString();
+}
+```
 
 
 ### 135 Candy 分数发糖
@@ -407,9 +671,28 @@ https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with
 很明显第三个最小的分数是 2/5.
 {% endnote %}
 思路：
-先把1/5，2/5，3/5放进去
-排序方法：`p/q<x/y` <==> `py<xq`
-取k-1次，如果分母序号-1>分子，入堆
+先把所有数字/最后一个数 1/5，2/5，3/5放进去？？？
+排序方法：`p/q<x/y` <==> `py<xq`取k-1次，如果分母序号-1>分子，入堆
+```java
+public int[] kthSmallestPrimeFraction(int[] A, int K) {
+    int n = A.length;
+   //a[0]/a[1]<b[0]/b[0] -> a[0]b[1] - b
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->{
+        return A[a[0]]*A[b[1]] - A[a[1]]*A[b[0]];
+    });
+    for (int i = 0; i <n-1 ; i++) {
+        pq.add(new int[]{i,n-1});
+
+    }
+    while (--K >0){
+        int[] p = pq.poll();
+        if(--p[1]>p[0]){
+            pq.add(p);
+        }
+    }
+    return new int[]{A[pq.peek()[0]],A[pq.peek()[1]]};
+}
+```
 
 二分查找
 不是找k个而是找一个m，使比m小的正好有7个。

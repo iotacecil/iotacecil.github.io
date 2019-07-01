@@ -19,6 +19,18 @@ https://github.com/doocs/advanced-java
 
 ## 1.数据库
 
+SQL生命周期：
+应用服务器与数据库服务器建立一个连接
+数据库进程拿到请求sql
+解析并生成执行计划，执行
+读取数据到内存并进行逻辑处理
+通过步骤一的连接，发送结果到客户端
+关掉连接，释放资源
+
+### 数据库连接池
+1.数据库更适合长连接，复用连接，维护连接对象、分配、管理、释放，也可以避免创建大量的连接对DB引发的各种问题
+2.通过请求排队缓解对db的冲击
+
 mysql 的其他引擎
 设计数据库表
 
@@ -43,11 +55,11 @@ using index & using where：
 5）is null或者is not null
 
 ### 3.Mysql 有哪些索引
-数据结构
+数据结构：B+，hash，全文索引，R-Tree
 
-物理存储
+物理存储：聚集索引、非聚集索引
 
-逻辑角度
+逻辑角度：主键、单列索引、多列索引、空间索引、覆盖索引（？）
 
 
 ### 4.数据库隔离界别
@@ -113,7 +125,8 @@ doublewrite：内存中的2M buffer，磁盘上共享表空间的128个页（2M�
 因为binlog的Statement以commit顺序
 可重复读会对读取到的数据进行加锁（行锁），保证其他事务无法修改这些已经读过的数据，
 
-MVCC
+MVCC实现可重复读
+只有写写之间相互阻塞，其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度
 每个数据行会添加两个额外的隐藏列，分别记录这行数据何时被创建以及何时被删除，这里的时间用版本号控制
 
 所有的SELECT操作无需加锁，因为即使所读的数据在下一次读之前被其他事务更新了
@@ -121,12 +134,22 @@ MVCC
 行锁会用gap锁锁住一个区间，阻止多个事务插入到同一范围内。是为了解决幻读问题。
 一个事务select * from t where a>2 for update;对[2+)加锁，另一个事务插入5失败。
 
-#### 主从复制
+#### mysql主从复制
 主节点创建线程发送binlog，读取binlog时会加锁。
-从节点I/O线程接受binlog，保存在relaylog。
+mysql在事务提交前，记录binlog。
+主库通过发送信号告知从库有新事件。
+从节点I/O线程接受binlog，保存在relaylog中继log。
 从节点SQL线程读取relaylog，并执行sql。完成数据一致性。
+也可以开启放到自身的二进制日志中。
+在主库上并发的操作变成串行的。 
 
 主节点会为每一个当前连接的从节点建一个binary log dump 进程，而每个从节点都有自己的I/O进程，SQL进程。
+
+复制一个库，先dump一个快照，得到当前快照时对应binlog中的偏移量：日志文件坐标
+
+mysql的两种复制方式：
+语句复制：只记录修改数据的查询。更新是串行的，需要很多锁
+基于行的复制：实际数据记录在binlog。 但是例如全表更新的操作 行数据让会binlog很大。
 
 
 ### 10.数据库最左匹配原理
@@ -142,7 +165,7 @@ server端tcp连接4元组中只有remote ip（也就是client ip）和remote por
 
 server端，通过增加内存、修改最大文件描述符个数等参数，单机最大并发TCP连接数超过10万 是没问题的
 
-有一个接口一下子快一下子慢
+#### 有一个接口一下子快一下子慢
 1）用户怎么排查
 2）开发者怎么排查
 如果是一个数据库接口
@@ -158,6 +181,8 @@ server端，通过增加内存、修改最大文件描述符个数等参数，�
 ### 4.http
 如果输入163.com跳转到www.163
 301 重定向
+
+206 客户端发送range，服务端有accept-range
 
 响应码
 nginx会检查的
@@ -194,11 +219,15 @@ tomcat nginx apache 区别
 Apache和nginx是 Http静态服务器
 tomcat 是 Servlet 的容器，处理动态资源。
 
+#### cookie跨域问题
+web1想要拿到web2的cookie KV并且让path变成/web1发ajax，type：get，dataType：jsonp。jsonp利用回调函数，服务端response的outputstream返回`document.cookie="k=v;path=/web1"`（返回可执行的js代码，回调函数自动执行js）
+
+nginx
 
 #### nginx的负载均衡策略
-1.round-robin 轮询
+1.轮询round robin 按配置文件中的顺序分发
 2.最少连接 活动连接数量最少的服务器
-3.ip-hash
+3.IP地址哈希 方便session保存
 ```
 http {
     upstream myapp1 {
@@ -208,8 +237,10 @@ http {
         server srv3.example.com;
     }
 ```
+4.基于权重的均衡负载
 
 nginx限流是漏桶法
+
 
 ### 6.正向代理和反向代理的区别
 正向代理：隐藏了真实的请求客户端，服务端不知道真实的客户端是谁。需要你主动设置代理服务器ip或者域名进行访问，由设置的服务器ip或者域名去获取访问内容并返回。
@@ -230,7 +261,7 @@ nginx限流是漏桶法
 ### 8.为什么是三次握手
 三次握手的过程：
 https://juejin.im/post/5a0444d45188255ea95b66bc
-客户端 端口+SYN=1+序号a ， 
+客户端 端口+SYN=1+序号a SYN_SENT， 
 服务端 SYN=1，ACK=1,序号b，ack=序号a+1,  客户端ESTABLISHED
 客户端 ACK = 1，序号=a+1,ack=b+1,服务端ESTABLISHED
 
@@ -318,6 +349,8 @@ TCP连接状态书上一共11种
 ### 16.ping命令原理
 https://juejin.im/post/5ba0bb05e51d450e6f2e38a0
 输入 ping IP 后敲回车，发包前会发生什么？
+如果是域名先要差dns解析ip
+
 1.根据目的IP和路由表决定走哪个【网卡】
 2.根据【网卡的子网掩码】地址判断目的IP是否在【子网】内。
 
@@ -361,9 +394,20 @@ HTTP请求/响应
 ### 18.HTTP 长连接怎么实现
 HTTP管道是什么，客户端可以同时发出多个HTTP请求，而不用一个个等待响应
 
+
 ### 19.http https
 HTTP+ 加密 + 认证 + 完整性保护 =HTTPS
+总共有3个随机数，客户端随机数，服务端随机数，预主密钥,
+对2个随机数和预主密钥生成主密钥用于之后数据加密
+
 https的过程：
+- 握手过程
+1.客户端client hello发送 随机数+支持的套件
+2.服务端server hello返回2个包，1）随机数+选择套件，2）证书（身份认证）
+3.握手完成，客户端返回用服务端公钥加密的预主密钥
+
+完成后两边都有预主密钥+2个随机数，用约定的hash算法，生成主密钥进行数据传输
+
 http先和ssl通信，再ssl和tcp通信。
 在交换密钥环节使用【公开密钥】加密方式，
 之后的建立通信交换报文阶段则使用【共享密钥】加密方式。
@@ -412,6 +456,7 @@ https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/IPC.md
 消息队列能多个进程
 
 #### 管道 【随进程持续】：
+管道的本质是内核维护了一块缓冲区与管道文件相关联。
 1）单向 半双工：把一个程序的输出直接连接到另一个程序的输入
 2）除非读端已经存在，否则写端的打开管道操作会一直阻塞
 3）只能父子进程、兄弟进程
@@ -465,7 +510,32 @@ struct shared_use_st{
 不是线程同步的posix信号量，是`SYSTEM V`信号量
 信号量能解决 共享内存同步问题
 
-### 3.进程调度方式
+### 3.进程调度方式 CFS 调度周期 计算运行时间vruntime
+Linux CFS 完全公平调度器：
+1.设定一个【调度周期】（sched_latency_ns），目标是让每个进程在这个周期内至少有机会运行一次。每个进程等待CPU的时间最长不超过这个调度周期。
+2.进程的数量，大家平分这个调度周期内的CPU使用权，由于进程的优先级即nice值不同，分割调度周期的时候要加权；
+3.每个进程的【累计运行时间】保存在自己的vruntime字段里，哪个进程的vruntime最小就获得本轮运行的权利。
+
+细节
+问题1：新进程
+fork之后的子进程优先于父进程
+每个CPU的运行队列cfs_rq都维护一个min_vruntime字段，记录该运行队列中所有进程的vruntime最小值，防止一直fork获得时间片，新进程一般要设置比min_vruntime大。
+
+问题2：休眠进程
+唤醒抢占特性
+被唤醒时当新进程重新设置vruntime
+
+问题3：频繁抢占
+CFS设定了进程占用CPU最小时间，如果进程太多，调度周期会根据最小时间x进程数
+
+问题4：进程切换CPU
+为保持相对公平，vruntime要减去当前CPU的min，在加到CPU2的min上
+
+红黑树而不用最小堆
+每个核用红黑树选区vruntime最小的进程
+进程调度有很多遍历操作，需要完全排序
+红黑树插入最多两次旋转，删除最多3次旋转，染色Logn
+
 
 进程的上下文切换：切换会保存寄存器、栈，需要用户态切换到内核态
 
@@ -607,6 +677,23 @@ String 存在JVM哪里
 使用过zookpeeper吗
 1.使用场景 2.解决的问题 3.特点 4.和其他同类型的框架的比较
 
+### 全局唯一id
+mysql实现
+```sql
+create table `tic`(
+ `id` bigint(20) unsigned not null auto_increment,
+  `stub` char(1) not null default '',
+  primary key (`id`),
+  unique key `stub` (`stub`)
+  )engine = myisam;
+  
+  
+      start transaction;
+replace into tic(stub) values('a');
+select last_insert_id();
+commit;
+```
+
 ### 1.zookeeper的应用场景
 分布式协调 节点注册监听
 分布式锁
@@ -617,7 +704,7 @@ String 存在JVM哪里
 
 ## 6.数据结构
 ### 1.二叉平衡树的应用 红黑树原理
-关键性质：红黑树确保没有一条从根到叶子的路径会比其他从根岛叶子的路径长出两倍
+关键性质：红黑树确保没有一条从根到叶子的路径会比其他从根到叶子的路径长出两倍
 1）根、叶子节点、红色节点的两个儿子都是黑色
 2）任一节点到其每个叶子节点的所有简单路径 包含相同数目的黑色节点
 AVL树是严格的平衡二叉树
@@ -701,6 +788,9 @@ hashmap也是尾插 保留了顺序，不会死循环。
 currentHashMap原理：1.7分段锁，降低锁定程度，1.8CAS自旋锁
 
 ### 3.CAS算法原理？优缺点？
+CAS 流程：线程在读取数据时不进行加锁，在写回数据时，比较原值是否修改，如果未被其它线程修改，则写回，不然重新读取。
+乐观认为并发操作不是总会发生。
+通过操作系统原语实现，保证操作过程中不会被中断。
 https://juejin.im/post/5ba66a7ef265da0abb1435ae 
 非阻塞算法：一个线程的失败或者挂起不会导致其他线程也失败或者挂起。
 无锁算法：算法的每个步骤，都存在某个线程能执行下去。多个线程竞争CAS总有一个线程胜出并继续执行。
@@ -709,14 +799,28 @@ CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存�
 对于多个状态变量的场景，通过`AtomicReference`包装这个对象，每次更新先获取旧值，再创建新值，用这两个值进行CAS原子更新。
 
 #### CAS 实现原子操作的三大问题
-1) ABA问题 `AtomicStampedReference` 不可变对象pair
+1) ABA问题 解决：用`AtomicStampedReference` 不可变对象pair
 2）循环CPU开销  JVM pause指令 `Unsafe.park()`遇到线程中断不会抛异常，会立刻返回再次运行，CPU可能飙升，一直是RUNNABLE。
-3）多个共享变量 `AtomicReference`
+3）多个共享变量 解决：用`AtomicReference`
+
+### 线程安全的链表
+每个node有锁，保存链表尾指针
 
 AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
 
+MCS自旋锁 基于链表 公平自旋锁 在本地属性变量上自旋
+CLH自旋锁 基于链表 公平自旋锁 在前驱结点上自旋
+有N个线程 L个锁 空间需要O(L+N)
+
+
+
+
 ### 4.AQS
-AQS的核心思想是基于volatile int state这样的一个属性同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
+AQS：队列同步器
+AQS的核心思想是基于volatile int state这样的一个标志位1表示有线程占用，其它线程需要进入同步队列
+同步队列是一个双向链表，当获得锁的线程等待条件，进入等待队列（可以有多个），满足后重新进入同步队列，获取锁竞争
+Unsafe类提供CAS方法
+同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
 `private volatile int state;`
 `ReentrantLock`用来表示所有者重复获取该锁的次数
 `Semaphore`表示剩余许可数量
@@ -726,10 +830,13 @@ AQS的核心思想是基于volatile int state这样的一个属性同时配合Un
 
 
 ### 5.线程池的运行流程，使用参数以及方法策略
+https://juejin.im/entry/59b232ee6fb9a0248d25139a#%E6%80%BB%E7%BB%93
+线程池中的线程包装成工作线程Worker放在HashSet中，Worder继承AQS实现了不可重入锁，Worker的run方法是for循环一直take队列中的runable对象执行
 
 运行流程：
-1）如果运行的线程小于`corePollsize`，则创建新线程，即使其他事空闲的。
-2）当线程池中线程数量>`corePollsize` 则只有当`workQueue`满才去创建新线程处理任务
+1）如果运行的线程小于`corePollsize`，则创建核心线程，即使其他是空闲的。
+2）当线程池中线程数量>`corePollsize`，判断缓冲队列是否满，没满放入队列，等待线程空闲执行。
+如果队列满了，判断是否达到最大线程数，没达到创建新线程，如果达到了，执行拒绝策略。 只有当`workQueue`满才去创建新线程处理任务 ！！先判断队列再判断最大线程数
 3）如果没有空闲，任务封装成Work对象放到等待队列
 4) 如果队列满了，用`handler`指定的策略 （5种）
 `ctl` 状态值（高3位）和有效线程数（29位）
@@ -744,38 +851,86 @@ TIDYING： 所有任务都已经终止 有效线程数为0
 TERMINATED： 标识
 
 一共有5种线程池：
-1）fixed
-2）cached 处理大量短时间工作任务 长期闲置的时候不会消耗资源
-3）sigle 保证顺序执行多个任务
+1）fixed 无界队列缓冲队列，适用于任务数量不均匀，内存压力不敏感，系统负载敏感。
+只要线程个数比核心线程个数多并且当前空闲则回收
+2）cached 核心0，最大INT_MAX,缓冲队列：synchronousQueue只要没有空闲线程就会新建（没有队列缓冲）不限制线程数，低延迟短期任务。处理大量短时间工作任务 长期闲置的时候不会消耗资源
+3）sigle 1个线程，异步执行，保证顺序执行多个任务
 4）scheduled 定时、周期工作调度
 最大线程数是Integer.MAX_VALUE，
 空闲工作线程生存时间是0，
-阻塞队列是DelayedWorkQueue，是堆
+阻塞队列是DelayedWorkQueue，是堆 按延迟时间获取任务的优先级
 ScheduledFutureTask实现了Comparable接口，是按照任务执行的时间来倒叙排序的
 
-5）`newWrokStealingPoll` 工作窃取
+5）`newWrokStealingPoll` 工作窃取，固定并行度的多任务队列，适合任务执行时长不均匀
 
-#### 6.如何优化线程池
+#### 6.如何优化线程池参数
+1.核心线程数 2.最大线程数 
+3.4 线程的空闲时间（可以通过allowcorethreadtimeout方法允许核心线程回收）
+5 缓冲队列ArrayBlockingQueue 有界队列 LinkedBlockingQueue 无界队列 SynchronousQueue 同步队列没有缓冲区
+6.线程工厂方法，用于定制线程的属性 例如线程的group，线程名 优先级
+7.线程池满时的拒绝策略4种Abourt异常（默认） Discard 抛弃 callerruns 提交者执行 discardoldest 丢弃最早
+
 怎么配置参数
 
 ### 7.线程同步的方法
+1.CAS 2.synchronize 3.Lock
 
-### syncronize 可重入
-对象头 Monitor(管程) entry set，wait set
+
+### synchronize 可重入
+对象头 Monitor(管程) 分三块：entry set，owner,wait set
 https://blog.csdn.net/javazejian/article/details/72828483
 正确说法：给调用该方法的【对象】加锁。在一个方法调用结束之前，其他线程无法得到这个对象的控制权。
+方法同步通过ACC_SYNCHRONIZED
+代码块同步通过monitorenter monitorexit
+
 
 缺点：只能实现方法级别的排他性，不能保证业务层面（多个方法）。
 
 #### Synchronized的锁优化机制
 JVM提供了3种Monitor实现：偏向锁、轻量级锁、重量级锁
-偏向锁（默认）：JVM在对象头上Mark word设置县城ID，用CAS操作。
-轻量级锁:有另外线程试图锁定已经偏向锁的对象，JVMrevoke撤销偏向锁。轻量级锁用CAS试图获得锁操作Mark Work，如果成功就轻量级锁，如果失败重量级锁。
+偏向锁（默认）：优先同一线程获取锁，JVM在对象头上Mark word设置线程ID，用CAS操作。
+轻量级锁:有另外线程试图锁定已经偏向锁的对象，JVMrevoke撤销偏向锁。
+如果失败，短暂自旋。轻量级锁用CAS试图获得锁操作Mark Work，如果成功就轻量级锁，如果失败重量级锁。
 
 
 #### `notify`和`wait`
+notify方法调用后不会释放锁！
 放置在sychronized作用域中，wait会释放synchronized关联的锁阻塞，
 实现存库为1的生产者消费者。
+
+#### wait和sleep的不同
+1.wait是object类，sleep是thread类
+2.wait会释放对象锁，sleep不会
+3.wait需要在同步块中使用，sleep可以在任何地方使用
+4.sleep要捕获异常，wait不需要
+
+#### join 方法
+`join(long millis)` 
+获取t2的对象锁，
+判断t2是否alive，
+放弃对t2的锁,将当前t3放入t2的【等待池】中，
+等待t2notify，一个线程结束后会调用notifyAll，
+被notify后会进入t2的锁池等待竞争锁
+
+wait(0)是一直等待
+```java
+ Thread t3 = new Thread(new Runnable() {
+      @Override
+      public void run() {
+          try {
+              // 引用t2线程，等待t2线程执行完
+              t2.join();
+          } catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+          System.out.println("t3");
+      }
+  });
+```
+
+如果没有判断isAlive,join的线程根本没启动会永远等待下去
+
+
 
 ### 10.1信号量 Semaphore ： 管理多线程竞争
 例子：100个线程抢10个数据库连接。
@@ -796,9 +951,9 @@ Condition
 4）公平性/非公平性
 5）tryLock，得不到锁立即返回
 
-读写锁 适合读多写少，读不用互斥
+读写锁 适合读并发多写并发少，读不用互斥另一个方法是copyonwrite
 Sync继承AQS，
-公平锁的实现机理在于每次有线程来抢占锁的时候，都会检查一遍有没有等待队列
+公平锁新来的线程有没有可能比同步队列中等待的线程更早获得锁。
 
 5）可重入Thread.currentThread()
 可重入是如何实现的？
@@ -815,7 +970,7 @@ Lock可以跨方法锁对象：登录加锁，登出释放。
  公平锁:如果读线程持有，写线程请求，其他读线程都不能去锁，直到写完。
 用处：包装map、linkedhashmap等，在put前后上写锁，get上读锁。
 
-#### `StampedLock` 
+#### `StampedLock` 使用CLH的乐观锁 防止写饥饿
 1.8新加。是单独的类型，不可重入，锁不是持有线程为单位的。
 问题：读写锁使得读和读可以完全并发，但是读锁会完全阻塞写锁。
 思路：试着先修改，然后通过validate方法确认是否进入了写模式，如果进入，则尝试获取读锁。
@@ -863,7 +1018,7 @@ cache伪共享：多个线程读写同一个缓存行，volitale变量无关但�
 安全失败：遍历是先拷贝在遍历。遍历过程中的修改不会影响迭代器，不会报错。java.util.concurrent包下都是安全失败。
 
 
-ThreadLocal
+#### ThreadLocal 使用弱引用的Map保存变量 线程数据隔离
 LinkedBlockingQueue
 
 直接交接队列`SynchronousQueue`不使用缓存，没有空闲线程就开线程，需要限定好线程池最大数量。
@@ -897,15 +1052,26 @@ AOF更新频率通常比RDB高。
 写【命令】先从redis 写到硬盘缓冲区 再根据3种策略（everysec每秒，always，no（操作系统自己刷)）fsync到硬盘AOF文件。
 AOF会开子进程重写。
 
-#### 主从复制
+#### redis主从复制
+数据是单向的。可以通过`slaveof` 或者配置方式`slave-read-only yes`实现。
+进入redis用`info replication`可以查看主从状态
+
+老版本当从节点slaveof之后发送PSYNC，并发送自己的ID
+主节点bgsave向从节点发送rdb文件，设置offset，
+将偏移量之后的数据存在定长有界队列【积压缓冲区1M】中，一个字节一个offset。
+从节点发送offset给主节点继续从缓冲区同步。
+之后命令传播。
 主从复制（副本）集群是为了解决多请求，读写分离，高可用，
 分布式是为了解决一个请求的多个步骤。
 
 redis主从同步的问题
+
+master挂了，从节点全部得全量复制，复制风暴
+
+
 redis集群一致性hash如何解决分布不均匀
 
-数据是单向的。可以通过`slaceof` 或者配置方式`slave-read-only yes`实现。
-进入redis用`info replication`可以查看主从状态
+
 
 ##### 全量复制
 1）第一次是全量复制`full resync` master会`BGSAVE`。
@@ -925,7 +1091,19 @@ redis集群一致性hash如何解决分布不均匀
 
 
 #### redis写失败怎么办
+更新数据库，缓存删除失败
+方法1：
+将需要删除的key发送到消息队列，发送给自己，继续消费，重新向redis删除。
 
+方法2：
+订阅数据库binlog
+（2）数据库会将操作信息写入binlog日志当中
+（3）订阅程序提取出所需要的数据以及key
+（4）另起一段非业务代码，获得该信息
+（5）尝试删除缓存操作，发现删除失败
+（6）将这些信息发送至消息队列
+（7）重新从消息队列中获得该数据，重试操作。
+mysql中有现成的中间件叫canal，可以完成订阅binlog日志的功能
 
 ## 软工和测试
 ### 白盒测试是什么
@@ -1024,6 +1202,10 @@ INSERT_METHOD = LAST;
 4）减少返回的行 limit
 5）拆分大的delete和insert，不然会一次锁住很多数据
 
+#### sql优化 计算两点距离
+100公里以内的餐馆，不要查询圆，查询方形
+两个between，如果第一列是范围查询，无法索引后面的列，所以只能索引第一个列。
+
 
 ### 13. 
 
@@ -1049,6 +1231,7 @@ INSERT_METHOD = LAST;
 
 
 ### 20 数据库三范式
+目的：减少冗余、插入删除更新异常
 第一范式：列不可拆分 目的：列原子性 
 第二范式：每个属性要【完全依赖】于主键，如果主键有多个候选键，属性
 第三范式：非主键关键字段之间不能存在依赖关系，避免更新、插入、删除异常。每一列都要与主键直接相关。【消除传递依赖】。
@@ -1082,7 +1265,13 @@ columns with the same name of associate tables will appear once only.
 虚引用：要和引用队列一起使用，用于跟踪垃圾回收的过程
 
 ### 23 Java线程状态
+6种
 New， Runnable， Timed Waiting， Waiting，Blocked，Terminated
+创建线程 new状态
+调用start方法后j进入Runnable状态，不能马上运行，要先进入就绪状态等待线程调度（Ready），获取到CPU后到Running状态
+如果运行中获取锁失败Blocked状态，获取到后再变成就绪状态 
+调用`Thread.join` 或者`LockSupport.park`方法会进入Waiting可以通过notify或者unpark回到就绪状态。
+
 
 ### 24 生产者消费者问题（消费的是同一个东西） 1个互斥2个同步
 P表示-1，V表示+1
@@ -1225,6 +1414,11 @@ FIFO：Belady异常。
 LRU：如果满了，将内存块中的数值向前找，最早出现的那个删除。
 CLOCK：时钟置换算法，NRU最近未用算法。 循环队列。 访问位。
 
+问题
+LRU：出现一次冷数据批量查询，误淘汰大量热点数据
+LFU：起始频率值低，导致最近新加入的数据总会很容易被剔除
+FIFO：特殊领域：作业调度、消息队列
+
 
 ### 33 ajax的四个步骤
 1)创建xhr对象
@@ -1304,7 +1498,7 @@ Proactor实现异步I/O，产生I/O调用的用户进程不会等待I/O发生，
 ### java进程间通信
 
 
-java 线程通信
+java 线程通信：wait notify，共享变量的synchronize，Lock同步机制
 全局变量
 2个线程之间的单向数据连接 NIO pipe 写sink 读source。
 java线程同步的方法
@@ -1314,15 +1508,24 @@ java线程同步的方法
 http://blog.jobbole.com/109170/
 强引用=null
 引用计数算法 无法解决互相引用的情况。
+
+
 所以用的是 **可达性分析算法**：判断对象的引用链是否可达。
 如果循环引用，没有人指向这个环也会被回收。
 从GC root（栈中的本地变量表中的对象、类（方法区）常量、静态属性保存的是对象……）
+
+JIT编译时会在安全点记录下很多OopMap(一个对象内 偏移量：类型数据)压缩在内存中。
+GC的时候扫描对应偏移量
+
+
 
 
 类回收：
 ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
 
 资源管理，如果数据库连接对象被收回，但是没有调用close，数据库连接的资源不会释放，数据库连接就少一个了，要放在try()里。
+
+
 
 #### full GC
 1）System.gc()方法的调用
@@ -1486,6 +1689,9 @@ static方法不能被覆盖override：因为方法覆盖是运行时动态绑定
 ### Hashtable 和 HashMap的区别
 Hashtable不允许键或者值是null
 hashMap线程不安全，遍历的时候会有环死循环
+Hashtable 不能支持符合操作：若不存在则添加、若存在则删除，即使单个方法加锁，符合方法也线程不安全。
+currentHashMap cas无锁，不涉及上下文切换效率高。
+1.7版本分为16个segment分段锁，允许16个线程同时读写操作不同的段。
 
 ### ArrayList
 每次扩容1.5倍
@@ -1541,7 +1747,7 @@ Binding:Exchange和Queue的虚拟连接
 IOC:控制反转
 控制：Java Bean的生命周期（创建、销毁）
 反转：容器管理依赖关系。
-IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。
+IOC是一种设计模式。将对象-对象关系解耦和对象-IOC容器-对象关系。容器管理依赖关系。依赖对象的获得被反转了。调用者不用创建被调用的实例，容器管理单例对象。
 
 IOC的实现方式：
 1)设置注入/属性注入setter方法<property>元素 
@@ -1573,6 +1779,9 @@ bean有创建和销毁的回调函数。
 ### tomcat的启动流程
 
 #### Spring 怎么解决循环引用
+构造器循环依赖：通过使用bean创建时的标识值
+setter循环依赖：通过引入objectfactory解决
+
 Spring容器整个生命周期内，有且只有一个对象，所以很容易想到这个对象应该存在Cache中，Spring为了解决单例的循环依赖问题，使用了三级缓存。
 ```java
 /** Cache of singleton objects: bean name --> bean instance */
@@ -1696,8 +1905,6 @@ vi： ZZ：命令模式下保存当前文件所做的修改后退出vi；
 打开的文件`lsof`
 
 
-
-
 ### 序列化的性能
 
 
@@ -1744,6 +1951,10 @@ ZooKeeper是以Paxos算法为基础分布式应用程序协调服务。
 2)如果key超时了可以先get再set`getset(key,currenttime+timeout)` 如果get的值是null或者和之前的锁一样（？）继续`expire(key)`走加锁流程...
 
 ### 面向对象和面向过程的区别
+封装：隐藏内部代码
+继承：复用现有代码
+多态：改写对象行为
+
 面向过程是结构化开发方法，面向数据流的开发方法，用数据流图建立系统的功能模型。自顶向下，逐层分解，适合数据处理领域，难以适应需求变化。每个模块确定输入输出。
 结构化方法包括了：结构化分析SA，结构化设计SD（转换成软件体系结构图），结构化程序设计SPD
 结构化设计包括：体系结构设计、数据设计、接口设计（内部和外部接口）、过程设计
@@ -1827,9 +2038,58 @@ BASE思想：分布式事务拆分，每个步骤都记录状态，使用【写�
 ![cacheupdate.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg)
 
 常用的缓存使用模式
-Cache Aside 同时更新缓存和数据库，（如果有并发写）一般是先更新 数据库再删除缓存
-Read/Write Through：先更新缓存，缓存负责同步更新数据库
-Write Behind Cacheing：先更新缓存，缓存定期异步更新数据库
+
+##### Cache Aside 
+同时更新缓存和数据库，
+！先更新数据库，【删除缓存】，下次使用会添加到缓存
+
+这种模式不保证 数据库和cache的一致性！
+数据库中的数据可以随时被外部进程修改，但是cache不会变。
+
+如果数据库是有备份的，经常同步问题会很严重。
+
+出问题的场景只有并发读和写，读在写之前读到数据库，在写返回删除缓存之后，读请求返回写旧缓存。基本不可能发生。
+可以通过2PC或者PAXOS保证一致性，实际操作还是设置过期时间。
+（并发操作包装成一个事务？）
+
+数据库被外部进程修改的场景：
+mysql读写分离：
+如果先删除缓存，请求B从从库查询，但是还没完成主从同步，旧值写入缓存。
+解决方案是 异步延迟删除，保证读请求完了再删除。
+
+如果删除缓存失败！！cache中是旧数据。
+1.失效时间 2.mq重试
+3.二次删除效率低
+
+解决方案还是binlog
+
+各个应用实例一定要用同样的分布式缓存。
+
+适用场景：数据是不变的，可以启动时预加载的
+
+
+##### Read/Write Through：
+先更新缓存，缓存负责同步更新数据库
+读：Cache Aside是由调用方负责把数据加载入缓存，而Read Through则用缓存服务自己来加载，从而对应用方是透明的。
+
+写:当有数据更新的时候，如果没有命中缓存，直接更新数据库，然后返回。如果命中了缓存，则更新缓存，然后再由Cache自己更新数据库（这是一个同步操作）
+
+1 每次写缓存都更新 
+2 写缓冲，下一次写强制刷新 
+
+
+##### Write Behind Cacheing：
+linux文件系统的page cache
+只更新缓存，缓存定期异步更新数据库
+write-behind 缓存中，数据的读取和更新通过缓存进行，与 write-through 缓存不同，更新的数据并不会立即传到数据库。
+相反，在缓存中一旦进行更新操作，缓存就会跟踪脏记录列表，并定期将当前的脏记录集刷新到数据库中。
+
+缓存会合并这些脏记录。只保证最后一次更新。
+
+会出现一瞬间cpu负载变高
+
+#### redis怎么保证缓存一致性
+更新cache成功，更新数据库失败怎么办？强一致性，你需要使用“两阶段提交协议
 
 
 ### 3.更新数据库的同时为什么不是马上更新缓存而是删除缓存

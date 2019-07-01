@@ -125,7 +125,7 @@ $ ssh-keygen -t dsa -P '' -f ~/.ssh/id_dsa
 $ cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 ```
 
-### 固定ip
+### 静态ip 固定ip
 ```shell
 cd /etc/sysconfig/network-scripts/
 

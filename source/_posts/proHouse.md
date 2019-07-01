@@ -49,6 +49,9 @@ sysctl -w vm.max_map_count=262144
 `sysctl -w vm.max_map_count=262144` 临时，重启后失效
 `/etc/sysctl.conf`添加`vm.max_map_count=262144` 然后执行`sysctl -p`立即 永久生效
 
+initial heap size [536870912] not equal to maximum heap size [994050048];
+修改config/jvm.options 修改xms和xmx相等
+
 #### ES 安装问题
 不能用root启动 max_map太小
 ```sh
@@ -56,6 +59,8 @@ chown -R es:es elasticsearch...
 su 
 sysctl -w vm.max_map_count=262144
 ```
+
+es经常卡住，而且新增房源要加到百度云麻点之类的功能
 
 ### 1.后台工程
 
@@ -767,11 +772,17 @@ public class LoginAuthFailHandler extends SimpleUrlAuthenticationFailureHandler 
 
 注册
 ```java
-    @Bean
-    public LoginAuthFailHandler authFailHandler() {
-        return new LoginAuthFailHandler(urlEntryPoint());
-    }
+@Bean
+public LoginUrlEntryPoint urlEntryPoint() {
+    return new LoginUrlEntryPoint("/user/login");
+}
+
+@Bean
+public LoginAuthFailHandler authFailHandler() {
+    return new LoginAuthFailHandler(urlEntryPoint());
+}
 ```
+
 ```java
 .loginProcessingUrl("/login") // 配置角色登录处理入口
 .failureHandler(authFailHandler())
@@ -1207,3 +1218,1494 @@ public class HouseSort {
 }
 
 ```
+
+### 7.添加ES构建索引
+API地址
+https://www.elastic.co/guide/en/elasticsearch/client/java-api/5.5/transport-client.html
+添加依赖注册客户端
+```java
+@Configuration
+public class ElasticSearchConfig {
+    @Value("${elasticsearch.host}")
+    private String esHost;
+
+    @Value("${elasticsearch.port}")
+    private int esPort;
+
+    @Value("${elasticsearch.cluster.name}")
+    private String esName;
+
+    @Bean
+    public TransportClient esClient() throws UnknownHostException {
+        Settings settings = Settings.builder()
+                .put("cluster.name", this.esName)
+                // 自动发现节点
+                .put("client.transport.sniff", true)
+                .build();
+
+        InetSocketTransportAddress master = new InetSocketTransportAddress(
+            InetAddress.getByName(esHost), esPort
+
+        );
+
+        TransportClient client = new PreBuiltTransportClient(settings)
+                .addTransportAddress(master);
+
+        return client;
+    }
+```
+配置
+```
+elasticsearch.cluster.name=elasticsearch
+elasticsearch.host=10.1.18.25
+elasticsearch.port=9300
+```
+
+索引接口
+```java
+public interface ISearchService {
+    /**
+     * 索引目标房源
+     * @param houseId
+     */
+    void index(Long houseId);
+
+    /**
+     * 移除房源索引
+     * @param houseId
+     */
+    void remove(Long houseId);
+```
+构建索引index方法：新增房源（上架），从数据库中查找到房源数据，建立索引分3种情况
+1单纯创建 2es里有，是update 3es异常，需要先删除再创建
+
+ES基础语法
+定义索引名、索引类型（mapper下面那个）
+```java
+@Service
+public class SearchServiceImpl implements ISearchService {
+    private static final Logger logger = LoggerFactory.getLogger(ISearchService.class);
+
+    private static final String INDEX_NAME = "shoufhang";
+
+    private static final String INDEX_TYPE = "house";
+
+    private static final String INDEX_TOPIC = "house_build";
+
+```
+
+建立索引结构和对应的索引类，用于对象转成json传给es API，官方推荐jackson的ObjectMapper
+添加Logger
+
+index方法创建一个Json文档
+```java
+private boolean create(HouseIndexTemplate indexTemplate) {
+    try {
+        IndexResponse response = this.esClient.prepareIndex(INDEX_NAME, INDEX_TYPE)
+                .setSource(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON).get();
+
+        logger.debug("Create index with house: " + indexTemplate.getHouseId());
+        if (response.status() == RestStatus.CREATED) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (JsonProcessingException e) {
+        logger.error("Error to index house " + indexTemplate.getHouseId(), e);
+        return false;
+    }
+}
+```
+更新，需要传入一个具体的文档目标
+```java
+private boolean update(String esId, HouseIndexTemplate indexTemplate) {
+    try {
+        UpdateResponse response = this.esClient.prepareUpdate(INDEX_NAME, INDEX_TYPE, esId)
+                .setDoc(objectMapper.writeValueAsBytes(indexTemplate), XContentType.JSON).get();
+
+        logger.debug("Update index with house: " + indexTemplate.getHouseId());
+        if (response.status() == RestStatus.OK) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (JsonProcessingException e) {
+        logger.error("Error to index house " + indexTemplate.getHouseId(), e);
+        return false;
+    }
+}
+```
+删除创建，查询再删除，传入多少个查到的数据，比较删除的行数是否一致
+```java
+private boolean deleteAndCreate(long totalHit, HouseIndexTemplate indexTemplate) {
+    DeleteByQueryRequestBuilder builder = DeleteByQueryAction.INSTANCE
+            .newRequestBuilder(esClient)
+            .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, indexTemplate.getHouseId()))
+            .source(INDEX_NAME);
+
+    logger.debug("Delete by query for house: " + builder);
+
+    BulkByScrollResponse response = builder.get();
+    long deleted = response.getDeleted();
+    if (deleted != totalHit) {
+        logger.warn("Need delete {}, but {} was deleted!", totalHit, deleted);
+        return false;
+    } else {
+        return create(indexTemplate);
+    }
+}
+```
+一条文档还需要tag和detail、地铁城市信息
+```java
+@Override
+public void index(Long houseId) {
+    House house = houseRepository.findOne(houseId);
+    if (house == null) {
+        logger.error("Index house {} dose not exist!", houseId);
+        return;
+    }
+
+    HouseIndexTemplate indexTemplate = new HouseIndexTemplate();
+    modelMapper.map(house, indexTemplate);
+
+    HouseDetail detail = houseDetailRepository.findByHouseId(houseId);
+    modelMapper.map(detail, indexTemplate);
+    //ES中是字符串只有name 不用数据库格式的id和houseID
+    List<HouseTag> tags = tagRepository.findAllByHouseId(houseId);
+    if (tags != null && !tags.isEmpty()) {
+        List<String> tagStrings = new ArrayList<>();
+        tags.forEach(houseTag -> tagStrings.add(houseTag.getName()));
+        indexTemplate.setTags(tagStrings);
+    }
+    // 先查询这个ID有没有数据
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME).setTypes(INDEX_TYPE)
+            .setQuery(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId));
+
+    logger.debug(requestBuilder.toString());
+    SearchResponse searchResponse = requestBuilder.get();
+
+    boolean success;
+    long totalHit = searchResponse.getHits().getTotalHits();
+    if (totalHit == 0) {
+        success = create(indexTemplate);
+    } else if (totalHit == 1) {
+        String esId = searchResponse.getHits().getAt(0).getId();
+        success = update(esId, indexTemplate);
+    } else {
+        //同样的数据存了好多个
+        success = deleteAndCreate(totalHit, indexTemplate);
+    }
+    if (success){
+        logger.debug("Index success with house " + houseId);
+    }
+}
+```
+先写一个单测试一下
+报错log4j2
+ERROR StatusLogger Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...
+之前腾讯云把log4j和sl4j都删掉了
+还要添加一个log4j
+```xml
+<dependency>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-core</artifactId>
+<version>2.7</version>
+</dependency>
+```
+
+```java
+public class SearchServiceTests extends ApplicationTests{
+    @Autowired
+    private ISearchService searchService;
+
+    @Test
+    public void testIndex(){
+        Assert.assertTrue(searchService.index(15L));
+    }
+}
+```
+修改数据库并再次执行测试可以看到索引页更新了
+
+删除索引（下架or出租了）
+```java
+@Override
+public void remove(Long houseId) {
+    DeleteByQueryRequestBuilder builder = DeleteByQueryAction.INSTANCE
+            .newRequestBuilder(esClient)
+            .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId))
+            .source(INDEX_NAME);
+
+    logger.debug("Delete by query for house: " + builder);
+
+    BulkByScrollResponse response = builder.get();
+    long deleted = response.getDeleted();
+
+        logger.debug("Delete total", deleted);
+}
+```
+单测
+```java
+@Test
+public void testRemove(){
+   searchService.remove(15L);
+}
+```
+
+将索引方法逻辑加入到之前的状态变化方法中
+houseService的update方法
+```java
+if (house.getStatus() == HouseStatus.PASSES.getValue()) {
+    searchService.index(house.getId());
+}
+```
+updateStatus方法
+
+```java
+// 上架更新索引 其他情况都要删除索引
+if (status == HouseStatus.PASSES.getValue()) {
+    searchService.index(id);
+} else {
+    searchService.remove(id);
+}
+
+```
+测试发布按钮是否添加了索引
+
+#### 异步构建索引
+https://kafka.apache.org/quickstart
+zookeeper添加listener的IP
+kafka
+:commit_memory(0x00000000c0000000, 1073741824, 0) failed; error='Cannot allocate memory' (errno=12)
+内存不够了
+
+有点问题
+```shell
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+```
+
+Option zookeeper is deprecated, use --bootstrap-server instead.
+
+```shell
+zkServer.sh start
+zkServer.sh status
+[root@localhost kafka_2.12-2.2.0]# jps -l
+17889 org.apache.zookeeper.server.quorum.QuorumPeerMain
+30578 org.elasticsearch.bootstrap.Elasticsearch
+3653 sun.tools.jps.Jps
+18799 kafka.Kafka
+
+```
+server.properties里设置zookeeper 127.0.0.1可以启动
+创建topic要设置副本数和分区数
+```shell
+# 创建topic
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+Created topic test.
+# topic
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --list --bootstrap-server 10.1.18.25:9092
+__consumer_offsets
+test
+
+# 发送消息
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-console-producer.sh --broker-list 10.1.18.25:9092 --topic test
+>aaaaa
+>aaa
+>
+# 接收消息
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-console-consumer.sh --bootstrap-server 10.1.18.25:9092 --topic test --from-beginning
+aaaaa
+aaa
+# 删除
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --delete --bootstrap-server 10.1.18.25:9092 --topic test
+#查看是否删除
+[root@localhost kafka_2.12-2.2.0]# bin/kafka-topics.sh --bootstrap-server 10.1.18.25:9092 --list
+__consumer_offsets
+
+```
+
+为什么要用kafka，es服务可能不可用，上架不希望等待es建立完索引再响应
+
+配置kafka
+```
+# kafka
+spring.kafka.bootstrap-servers=10.1.18.25:9092
+spring.kafka.consumer.group-id=0
+```
+
+```xml
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+```
+
+SearchService
+```java
+@Autowired
+private KafkaTemplate<String, String> kafkaTemplate;
+
+@KafkaListener(topics = INDEX_TOPIC)
+private void handleMessage(String content) {
+    try {
+        HouseIndexMessage message = objectMapper.readValue(content, HouseIndexMessage.class);
+
+        switch (message.getOperation()) {
+            case HouseIndexMessage.INDEX:
+                this.createOrUpdateIndex(message);
+                break;
+            case HouseIndexMessage.REMOVE:
+                this.removeIndex(message);
+                break;
+            default:
+                logger.warn("Not support message content " + content);
+                break;
+        }
+    } catch (IOException e) {
+        logger.error("Cannot parse json for " + content, e);
+    }
+}
+```
+
+自定义消息结构体,用户创建和删除两个操作
+```java
+public class HouseIndexMessage {
+
+    public static final String INDEX = "index";
+    public static final String REMOVE = "remove";
+
+    public static final int MAX_RETRY = 3;
+
+    private Long houseId;
+    private String operation;
+    private int retry = 0;
+    /**
+     * 默认构造器 防止jackson序列化失败
+     */
+    public HouseIndexMessage() {
+    }
+}
+```
+
+#### es实现客户页面关键词查询
+多值查询，先按城市+地区的英文名过滤
+ａ标签当作按钮来使用，但又不希望页面刷新。这个时候就用到上面的javascript:void(0)；
+
+ISearchService单测 地点、根据关键词从0取10个查询到的ID
+```java
+@Test
+public void testQuery() {
+    RentSearch rentSearch = new RentSearch();
+    rentSearch.setCityEnName("bj");
+    rentSearch.setStart(0);
+    rentSearch.setSize(10);
+    rentSearch.setKeywords("国贸");
+    ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
+    Assert.assertTrue(serviceResult.getTotal() > 0);
+}
+```
+查到ID还需要去houseService中mysql查询，有关键字的时候才用ES
+参数：es得到的id数量，es得到的id List
+```java
+@Override
+public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
+    if (rentSearch.getKeywords() != null && !rentSearch.getKeywords().isEmpty()) {
+        ServiceMultiResult<Long> serviceResult = searchService.query(rentSearch);
+        if (serviceResult.getTotal() == 0) {
+            return new ServiceMultiResult<>(0, new ArrayList<>());
+        }
+
+        return new ServiceMultiResult<>(serviceResult.getTotal(), wrapperHouseResult(serviceResult.getResult()));
+    }
+    return simpleQuery(rentSearch);
+}
+```
+通过ID查mysql （+house+detail+tag)，查询结果需要按es重排序
+```java
+private List<HouseDTO> wrapperHouseResult(List<Long> houseIds) {
+    List<HouseDTO> result = new ArrayList<>();
+
+    Map<Long, HouseDTO> idToHouseMap = new HashMap<>();
+    Iterable<House> houses = houseRepository.findAll(houseIds);
+    houses.forEach(house -> {
+        HouseDTO houseDTO = modelMapper.map(house, HouseDTO.class);
+        houseDTO.setCover(this.cdnPrefix + house.getCover());
+        idToHouseMap.put(house.getId(), houseDTO);
+    });
+
+    wrapperHouseList(houseIds, idToHouseMap);
+
+    // 矫正顺序
+    for (Long houseId : houseIds) {
+        result.add(idToHouseMap.get(houseId));
+    }
+    return result;
+}
+```
+simpleQuery 是原来db查询
+
+添加关键词功能
+```java
+ boolQuery.must(
+    QueryBuilders.multiMatchQuery(rentSearch.getKeywords(),
+            HouseIndexKey.TITLE,
+            HouseIndexKey.TRAFFIC,
+            HouseIndexKey.DISTRICT,
+            HouseIndexKey.ROUND_SERVICE,
+            HouseIndexKey.SUBWAY_LINE_NAME,
+            HouseIndexKey.SUBWAY_STATION_NAME
+    ));
+```
+但是还是不准
+添加面积 ALL 是空
+```java
+RentValueBlock area = RentValueBlock.matchArea(rentSearch.getAreaBlock());
+    if (!RentValueBlock.ALL.equals(area)) {
+        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(HouseIndexKey.AREA);
+        if (area.getMax() > 0) {
+            rangeQueryBuilder.lte(area.getMax());
+        }
+        if (area.getMin() > 0) {
+            rangeQueryBuilder.gte(area.getMin());
+        }
+        boolQuery.filter(rangeQueryBuilder);
+    }
+```
+
+添加价格
+```java
+RentValueBlock price = RentValueBlock.matchPrice(rentSearch.getPriceBlock());
+    if (!RentValueBlock.ALL.equals(price)) {
+        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(HouseIndexKey.PRICE);
+        if (price.getMax() > 0) {
+            rangeQuery.lte(price.getMax());
+        }
+        if (price.getMin() > 0) {
+            rangeQuery.gte(price.getMin());
+        }
+        boolQuery.filter(rangeQuery);
+    }
+```
+朝向、租赁方式
+```java
+if (rentSearch.getDirection() > 0) {
+    boolQuery.filter(
+            QueryBuilders.termQuery(HouseIndexKey.DIRECTION, rentSearch.getDirection())
+    );
+}
+
+if (rentSearch.getRentWay() > -1) {
+    boolQuery.filter(
+        QueryBuilders.termQuery(HouseIndexKey.RENT_WAY, rentSearch.getRentWay())
+    );
+}
+```
+
+分析分词效果
+get `http://10.1.18.25:9200/_analyze?analyzer=standard&pretty=true&text=这是一个句子`
+等于没分
+
+添加中文分词包
+https://github.com/medcl/elasticsearch-analysis-ik
+
+```shell
+./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v5.5.2/elasticsearch-analysis-ik-5.5.2.zip
+```
+
+删除索引 集群变黄？
+```shell
+curl -XDELETE 
+```
+
+修改索引，标题、desc都用analyzed加分词器
+```json
+ "title": {
+      "type": "text",
+      "index": "analyzed",
+      "analyzer": "ik_smart",
+      "search_analyzer": "ik_smart"
+    },
+```
+
+对数据库批量做索引
+
+#### 自动补全 ES的Suggesters
+接口
+```java
+ @GetMapping("rent/house/autocomplete")
+@ResponseBody
+public ApiResponse autocomplete(@RequestParam(value = "prefix") String prefix) {
+    if (prefix.isEmpty()) {
+        return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
+    }
+    ServiceResult<List<String>> result = this.searchService.suggest(prefix);
+    return ApiResponse.ofSuccess(result.getResult());
+}
+```
+新建ES返回的类型，添加到es结构中
+```java
+public class HouseSuggest {
+    private String input;
+    private int weight = 10; // 默认权重
+```
+Template
+`private List<HouseSuggest> suggest;`
+再修改es的索引结构
+```json
+"suggest": {
+  "type": "completion"
+},
+```
+新增updateSuggest方法，在创建or更新索引的时候调用
+```java
+private boolean create(HouseIndexTemplate indexTemplate) {
+ if(!updateSuggest(indexTemplate)){
+     return false;
+ }
+```
+Elasticsearch里设计了4种类别的Suggester，分别是:
+Term Suggester
+Phrase Suggester
+Completion Suggester
+Context Suggester
+
+而是将analyze过的数据编码成FST和索引一起存放。对于一个open状态的索引，FST会被ES整个装载到内存里的，进行前缀查找速度极快。但是FST只能用于前缀查找，这也是Completion Suggester的局限所在。
+
+逻辑：获得分词，封装到es请求类中
+构建分词请求，输入用于分词的字段，
+设置分词器
+获取分词
+
+```java
+private boolean updateSuggest(HouseIndexTemplate indexTemplate) {
+    AnalyzeRequestBuilder requestBuilder = new AnalyzeRequestBuilder(
+            this.esClient, AnalyzeAction.INSTANCE, INDEX_NAME, indexTemplate.getTitle(),
+            indexTemplate.getLayoutDesc(), indexTemplate.getRoundService(),
+            indexTemplate.getDescription(), indexTemplate.getSubwayLineName(),
+            indexTemplate.getSubwayStationName());
+
+    requestBuilder.setAnalyzer("ik_smart");
+
+    AnalyzeResponse response = requestBuilder.get();
+    List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
+    if (tokens == null) {
+        logger.warn("Can not analyze token for house: " + indexTemplate.getHouseId());
+        return false;
+    }
+
+    List<HouseSuggest> suggests = new ArrayList<>();
+    for (AnalyzeResponse.AnalyzeToken token : tokens) {
+        // 排序数字类型 & 小于2个字符的分词结果
+        if ("<NUM>".equals(token.getType()) || token.getTerm().length() < 2) {
+            continue;
+        }
+
+        HouseSuggest suggest = new HouseSuggest();
+        suggest.setInput(token.getTerm());
+        suggests.add(suggest);
+    }
+
+    // 定制化小区自动补全
+    HouseSuggest suggest = new HouseSuggest();
+    suggest.setInput(indexTemplate.getDistrict());
+    suggests.add(suggest);
+
+    indexTemplate.setSuggest(suggests);
+    return true;
+}
+```
+
+排除数字类型的词（token）
+对每个合适的词构建自定义的suggest，并设置权重（默认10）
+将suggest数组添加到es返回类中
+
+如果想添加一些不用分词的keyword类型，直接包装成suggest放到suggest数组中
+
+补全逻辑：
+调用search语法查询suggest
+```java
+@Override
+public ServiceResult<List<String>> suggest(String prefix) {
+    CompletionSuggestionBuilder suggestion = SuggestBuilders.completionSuggestion("suggest").prefix(prefix).size(5);
+
+    SuggestBuilder suggestBuilder = new SuggestBuilder();
+    suggestBuilder.addSuggestion("autocomplete", suggestion);
+
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .suggest(suggestBuilder);
+    logger.debug(requestBuilder.toString());
+
+    SearchResponse response = requestBuilder.get();
+    Suggest suggest = response.getSuggest();
+    if (suggest == null) {
+        return ServiceResult.of(new ArrayList<>());
+    }
+    Suggest.Suggestion result = suggest.getSuggestion("autocomplete");
+
+    int maxSuggest = 0;
+    
+    Set<String> suggestSet = new HashSet<>();
+    // 去重...
+    List<String> suggests = Lists.newArrayList(suggestSet.toArray(new String[]{}));
+    return ServiceResult.of(suggests);
+}
+```
+
+
+照理说不应该用house生成用户搜索的关键词，建立索引
+
+#### 用户输入存入自动补全索引表
+```json
+{
+  "mappings": {
+    "bar": {
+      "properties": {
+        "body": {
+          "type": "completion",
+          "analyzer": "ik_max_word"
+        }
+      }
+    }
+  }
+}
+```
+
+异步添加词、句子
+
+
+
+#### 一个小区有多少套房 数据聚合统计
+对小区名进行聚集
+controller
+```java
+ServiceResult<Long> aggResult = searchService.aggregateDistrictHouse(city.getEnName(), region.getEnName(), houseDTO.getDistrict());
+    model.addAttribute("houseCountInDistrict", aggResult.getResult());
+```
+
+聚合语法
+```java
+@Override
+public ServiceResult<Long> aggregateDistrictHouse(String cityEnName, String regionEnName, String district) {
+
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
+            .filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName))
+            .filter(QueryBuilders.termQuery(HouseIndexKey.REGION_EN_NAME, regionEnName))
+            .filter(QueryBuilders.termQuery(HouseIndexKey.DISTRICT, district));
+
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addAggregation(
+                    AggregationBuilders.terms(HouseIndexKey.AGG_DISTRICT)
+                    .field(HouseIndexKey.DISTRICT)
+            ).setSize(0);
+
+    logger.debug(requestBuilder.toString());
+
+    SearchResponse response = requestBuilder.get();
+    if (response.status() == RestStatus.OK) {
+        Terms terms = response.getAggregations().get(HouseIndexKey.AGG_DISTRICT);
+        if (terms.getBuckets() != null && !terms.getBuckets().isEmpty()) {
+            return ServiceResult.of(terms.getBucketByKey(district).getDocCount());
+        }
+    } else {
+        logger.warn("Failed to Aggregate for " + HouseIndexKey.AGG_DISTRICT);
+
+    }
+    return ServiceResult.of(0L);
+}
+```
+
+#### es查询调优
+`_search?explain=true`
+对标题字段改权重
+```java
+boolQuery.must(
+    QueryBuilders.matchQuery(HouseIndexKey.TITLE, rentSearch.getKeywords()).boost(2.0f)
+);
+```
+还可以把must改成should
+
+查询条件返回的是整个es文档，只返回需要的字段
+```java
+SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+    .setTypes(INDEX_TYPE)
+    .setQuery(boolQuery)
+    .addSort(
+            HouseSort.getSortKey(rentSearch.getOrderBy()),
+            SortOrder.fromString(rentSearch.getOrderDirection())
+    )
+    .setFrom(rentSearch.getStart())
+    .setSize(rentSearch.getSize())
+    .setFetchSource(HouseIndexKey.HOUSE_ID, null);
+
+```
+
+### 8.百度地图 按地图找房
+创建两个应用，类别：服务端、浏览器端
+浏览器端的AK 复制到新建的rent-map页面，引入百度的css和js代码
+新建controller，利用session存一些东西
+查有多少个区域查数据库就ok，一共有多少房需要es聚合数据
+```java
+public class HouseBucketDTO {
+    private String key;
+    private long count;
+```
+
+```java
+ @Override
+public ServiceMultiResult<HouseBucketDTO> mapAggregate(String cityEnName) {
+    // 过滤城市
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName));
+    // 起名、根据enname字段聚合
+    AggregationBuilder aggBuilder = AggregationBuilders.terms(HouseIndexKey.AGG_REGION)
+            .field(HouseIndexKey.REGION_EN_NAME);
+    SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addAggregation(aggBuilder);
+
+    logger.debug(requestBuilder.toString());
+
+    SearchResponse response = requestBuilder.get();
+    // 异常处理
+    List<HouseBucketDTO> buckets = new ArrayList<>();
+    if (response.status() != RestStatus.OK) {
+        logger.warn("Aggregate status is not ok for " + requestBuilder);
+        return new ServiceMultiResult<>(0, buckets);
+    }
+    // 根据刚起的名获取数据
+    Terms terms = response.getAggregations().get(HouseIndexKey.AGG_REGION);
+    for (Terms.Bucket bucket : terms.getBuckets()) {
+        buckets.add(new HouseBucketDTO(bucket.getKeyAsString(), bucket.getDocCount()));
+    }
+    return new ServiceMultiResult<>(response.getHits().getTotalHits(), buckets);
+}
+```
+
+前端地图拿到数据
+```js
+// 声明一个区域 设置好id
+ <div id="allmap" class="wrapper">
+<script type="text/javascript" th:inline="javascript">
+    // 初始化加载地图数据
+    var city = [[${city}]],
+        regions = [[${regions}]],
+        aggData = [[${aggData}]];
+    console.log(regions)
+    load(city, regions, aggData);
+</script>
+```
+画地图
+```js
+function load(city, regions, aggData) {
+    // 百度地图API功能
+    // 创建实例。设置地图显示最大级别为城市(不能缩放成世界）
+    var map = new BMap.Map("allmap", {minZoom: 12});
+    // 坐标拾取获取中心点 http://api.map.baidu.com/lbsapi/getpoint/index.html
+    var point = new BMap.Point(city.baiduMapLongitude, city.baiduMapLatitude);
+    // 初始化地图，设置中心点坐标及地图级别
+    map.centerAndZoom(point, 12);
+    // 添加比例尺控件
+    map.addControl(new BMap.NavigationControl({enableGeolocation: true}));
+    // 左上角
+    map.addControl(new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT}));
+    // 开启鼠标滚轮缩放
+    map.enableScrollWheelZoom(true);
+```
+给地图添加标签显示当前区域有多少套，
+从百度地图获取城市和区的经纬度，存在support_address表里
+
+文档Label：
+http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference.html#a3b9
+```
+setContent(content: String) none    设置文本标注的内容。支持HTML
+setStyle(styles: Object)    none    设置文本标注样式，该样式将作用于文本标注的容器元素上。其中styles为JavaScript对象常量，比如： setStyle({ color : "red", fontSize : "12px" }) 注意：如果css的属性名中包含连字符，需要将连字符去掉并将其后的字母进行大写处理，例如：背景色属性要写成：backgroundColor
+```
+
+`drawRegion(map, regions);`
+```java
+// 全局区域几套房数据
+var regionCountMap = {}
+function drawRegion(map, regionList) {
+    var boundary = new BMap.Boundary();
+    var polygonContext = {};
+    var regionPoint;
+    var textLabel;
+    for (var i = 0; i < regionList.length; i++) {
+
+        regionPoint = new BMap.Point(regionList[i].baiduMapLongitude, regionList[i].baiduMapLatitude);
+        // 从后端获取到的数据先保存成全局的了
+        var houseCount = 0;
+        if (regionList[i].en_name in regionCountMap) {
+            houseCount = regionCountMap[regionList[i].en_name];
+        }
+        // 标签内容
+        var textContent = '<p style="margin-top: 20px; pointer-events: none">' + regionList[i].cn_name + '</p>' + '<p style="pointer-events: none">' +   houseCount + '套</p>';
+        
+        textLabel = new BMap.Label(textContent, {
+            // 标签位置
+            position: regionPoint,
+            // 文本偏移量
+            offset: new BMap.Size(-40, 20)
+        });
+        // 添加style 变成原型
+        textLabel.setStyle({
+            height: '78px',
+            width: '78px',
+            color: '#fff',
+            backgroundColor: '#0054a5',
+            border: '0px solid rgb(255, 0, 0)',
+            borderRadius: "50%",
+            fontWeight: 'bold',
+            display: 'inline',
+            lineHeight: 'normal',
+            textAlign: 'center',
+            opacity: '0.8',
+            zIndex: 2,
+            overflow: 'hidden'
+        });
+        // 将标签画在地图上
+        map.addOverlay(textLabel);
+```
+pointer-events: none
+上面元素盖住下面地图，地图无法操作。
+
+但是这个Label一放大就没了
+
+添加区域覆盖 Polygon API
+```js
+// 记录行政区域覆盖物
+// 点集合
+polygonContext[textContent] = [];
+// 闭包传参
+(function (textContent) {
+    // 获取行政区域
+    boundary.get(city.cn_name + regionList[i].cn_name, function(rs) {
+        // 行政区域边界点集合长度
+        var count = rs.boundaries.length;
+        console.log(rs.boundaries)
+        if (count === 0) {
+            alert('未能获取当前输入行政区域')
+            return;
+        }
+
+        for (var j = 0; j < count; j++) {
+            // 建立多边形覆盖物
+            var polygon = new BMap.Polygon(
+                rs.boundaries[j],
+                {
+                    strokeWeight: 2,
+                    strokeColor:'#0054a5',
+                    fillOpacity: 0.3,
+                    fillColor: '#0054a5'
+                }
+            );
+            // 添加覆盖物
+            map.addOverlay(polygon);
+            polygonContext[textContent].push(polygon);
+            // 初始化隐藏边界
+            polygon.hide(); 
+        }
+    })
+})(textContent);
+// 添加鼠标事件
+textLabel.addEventListener('mouseover', function (event) {
+    var label = event.target;
+    console.log(event)
+    var boundaries = polygonContext[label.getContent()];
+
+    label.setStyle({backgroundColor: '#1AA591'});
+    for (var n = 0; n < boundaries.length; n++) {
+        boundaries[n].show();
+    }
+});
+
+textLabel.addEventListener('mouseout', function (event) {
+    var label = event.target;
+    var boundaries = polygonContext[label.getContent()];
+
+    label.setStyle({backgroundColor: '#0054a5'});
+    for (var n = 0; n < boundaries.length; n++) {
+        boundaries[n].hide();
+    }
+});
+
+textLabel.addEventListener('click', function (event) {
+    var label = event.target;
+    var map = label.getMap();
+    map.zoomIn();
+    map.panTo(event.point);
+});
+}
+```
+
+给es添加位置索引 es基于gps系统 百度地图是
+```json
+"location": {
+      "type": "geo_point"
+    }
+```
+
+新建地理位置类
+```java
+public class BaiduMapLocation {
+    @JsonProperty("lon")
+    private double longitude;
+    @JsonProperty("lat")
+    private double latitude;
+```
+在es显示对应类添加
+`private BaiduMapLocation location;`
+
+在addressService里添加根据城市和地址 根据百度地图API找经纬度
+在新建索引时调用（template是用于保存mysql中查询到的数据，保存到es）
+```java
+SupportAddress city = supportAddressRepository.findByEnNameAndLevel(house.getCityEnName(), SupportAddress.Level.CITY.getValue());
+SupportAddress region = supportAddressRepository.findByEnNameAndLevel(house.getRegionEnName(), SupportAddress.Level.REGION.getValue());
+String address = city.getCnName() + region.getCnName() + house.getStreet() + house.getDistrict() + detail.getDetailAddress();
+ServiceResult<BaiduMapLocation> location = addressService.getBaiduMapLocation(city.getCnName(), address);
+if (!location.isSuccess()) {
+    this.index(message.getHouseId(), message.getRetry() + 1);
+    return;
+}
+indexTemplate.setLocation(location.getResult());
+```
+
+addressService中的调用百度api
+包装成http格式（中文要用utf-8编码），HttpClient 拼接地址
+```java
+@Override
+public ServiceResult<BaiduMapLocation>  getBaiduMapLocation(String city, String address) {
+    String encodeAddress;
+    String encodeCity;
+
+    try {
+        encodeAddress = URLEncoder.encode(address, "UTF-8");
+        encodeCity = URLEncoder.encode(city, "UTF-8");
+        System.out.println(encodeAddress);
+        System.out.println(encodeCity);
+    } catch (UnsupportedEncodingException e) {
+        logger.error("Error to encode house address", e);
+        return new ServiceResult<BaiduMapLocation>(false, "Error to encode hosue address");
+    }
+
+    HttpClient httpClient = HttpClients.createDefault();
+    StringBuilder sb = new StringBuilder(BAIDU_MAP_GEOCONV_API);
+    sb.append("address=").append(encodeAddress).append("&")
+            .append("city=").append(encodeCity).append("&")
+            .append("output=json&")
+            .append("ak=").append(BAIDU_MAP_KEY);
+    // 执行
+    HttpGet get = new HttpGet(sb.toString());
+    try {
+        HttpResponse response = httpClient.execute(get);
+        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            return new ServiceResult<BaiduMapLocation>(false, "Can not get baidu map location");
+        }
+        // 拿结果 json
+        String result = EntityUtils.toString(response.getEntity(), "UTF-8");
+        System.out.println("返回"+result);
+        JsonNode jsonNode = objectMapper.readTree(result);
+        int status = jsonNode.get("status").asInt();
+        if (status != 0) {
+            return new ServiceResult<BaiduMapLocation>(false, "Error to get map location for status: " + status);
+        } {
+            BaiduMapLocation location = new BaiduMapLocation();
+            JsonNode jsonLocation = jsonNode.get("result").get("location");
+            location.setLongitude(jsonLocation.get("lng").asDouble());
+            location.setLatitude(jsonLocation.get("lat").asDouble());
+            return ServiceResult.of(location);
+        }
+
+    } catch (IOException e) {
+        logger.error("Error to fetch baidumap api", e);
+        return new ServiceResult<BaiduMapLocation>(false, "Error to fetch baidumap api");
+    }
+}
+```
+
+测试
+```java
+@Test
+public void testGetMapLocation() {
+    String city = "北京";
+    String address = "北京市昌平区巩华家园1号楼2单元";
+    ServiceResult<BaiduMapLocation> serviceResult = addressService.getBaiduMapLocation(city, address);
+
+    Assert.assertTrue(serviceResult.isSuccess());
+
+    Assert.assertTrue(serviceResult.getResult().getLongitude() > 0 );
+    Assert.assertTrue(serviceResult.getResult().getLatitude() > 0 );
+
+}
+```
+
+地图找房，前端数据传递
+```java
+public class MapSearch {
+    private String cityEnName;
+
+    /**
+     * 地图缩放级别
+     */
+    private int level = 12;
+    private String orderBy = "lastUpdateTime";
+    private String orderDirection = "desc";
+    /**
+     * 左上角
+     */
+    private Double leftLongitude;
+    private Double leftLatitude;
+
+    /**
+     * 右下角
+     */
+    private Double rightLongitude;
+    private Double rightLatitude;
+
+    private int start = 0;
+    private int size = 5;
+```
+
+接口
+```java
+@GetMapping("rent/house/map/houses")
+@ResponseBody
+public ApiResponse rentMapHouses(@ModelAttribute MapSearch mapSearch) {
+    System.out.println("找房参数"+mapSearch);
+    if (mapSearch.getCityEnName() == null) {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "必须选择城市");
+    }
+    ServiceMultiResult<HouseDTO> serviceMultiResult;
+    if (mapSearch.getLevel() < 13) {
+        serviceMultiResult = houseService.wholeMapQuery(mapSearch);
+    } else {
+        // 小地图查询必须要传递地图边界参数
+        serviceMultiResult = houseService.boundMapQuery(mapSearch);
+    }
+
+    ApiResponse response = ApiResponse.ofSuccess(serviceMultiResult.getResult());
+    response.setMore(serviceMultiResult.getTotal() > (mapSearch.getStart() + mapSearch.getSize()));
+    return response;
+}
+```
+es查找的参数城市、排序方式、数量
+```java
+@Override
+public ServiceMultiResult<Long> mapQuery(String cityEnName, String orderBy,
+                                         String orderDirection,
+                                         int start,
+                                         int size) {
+    // 限定城市
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, cityEnName));
+
+    // +排序 +分页
+    SearchRequestBuilder searchRequestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addSort(HouseSort.getSortKey(orderBy), SortOrder.fromString(orderDirection))
+            .setFrom(start)
+            .setSize(size);
+
+    List<Long> houseIds = new ArrayList<>();
+    SearchResponse response = searchRequestBuilder.get();
+    if (response.status() != RestStatus.OK) {
+        logger.warn("Search status is not ok for " + searchRequestBuilder);
+        return new ServiceMultiResult<>(0, houseIds);
+    }
+    // 从sorce获取数据obj->String->Long ->List
+    for (SearchHit hit : response.getHits()) {
+        houseIds.add(Longs.tryParse(String.valueOf(hit.getSource().get(HouseIndexKey.HOUSE_ID))));
+    }
+    return new ServiceMultiResult<>(response.getHits().getTotalHits(), houseIds);
+}
+```
+
+安装kafka manager
+sbt
+https://github.com/sbt/sbt/releases
+
+
+geo查询 bound查询
+```java
+@Override
+public ServiceMultiResult<Long> mapQuery(MapSearch mapSearch) {
+    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+    boolQuery.filter(QueryBuilders.termQuery(HouseIndexKey.CITY_EN_NAME, mapSearch.getCityEnName()));
+
+    boolQuery.filter(
+        QueryBuilders.geoBoundingBoxQuery("location")
+            .setCorners(
+                    new GeoPoint(mapSearch.getLeftLatitude(), mapSearch.getLeftLongitude()),
+                    new GeoPoint(mapSearch.getRightLatitude(), mapSearch.getRightLongitude())
+            ));
+
+    SearchRequestBuilder builder = this.esClient.prepareSearch(INDEX_NAME)
+            .setTypes(INDEX_TYPE)
+            .setQuery(boolQuery)
+            .addSort(HouseSort.getSortKey(mapSearch.getOrderBy()),
+                    SortOrder.fromString(mapSearch.getOrderDirection()))
+            .setFrom(mapSearch.getStart())
+            .setSize(mapSearch.getSize());
+
+    List<Long> houseIds = new ArrayList<>();
+    SearchResponse response = builder.get();
+    if (RestStatus.OK != response.status()) {
+        logger.warn("Search status is not ok for " + builder);
+        return new ServiceMultiResult<>(0, houseIds);
+    }
+
+    for (SearchHit hit : response.getHits()) {
+        houseIds.add(Longs.tryParse(String.valueOf(hit.getSource().get(HouseIndexKey.HOUSE_ID))));
+    }
+    return new ServiceMultiResult<>(response.getHits().getTotalHits(), houseIds);
+}
+```
+
+#### 在地图上绘制各个房子的地点（麻点）
+lbs服务，将房源信息上传到lbs 创建数据（create poi）接口 post请求
+http://lbsyun.baidu.com/index.php?title=lbscloud/api/geodata
+用3：百度加密经纬度坐标
+示例 前端配置geotableId就可以直接放图层了
+http://lbsyun.baidu.com/jsdemo.htm#g0_4
+
+### 9.会员管理 短信登陆
+```java
+// 新增用户 更新用户表和权限表要加事务
+@Override
+@Transactional
+public User addUserByPhone(String telephone) {
+    User user = new User();
+    user.setPhoneNumber(telephone);
+    user.setName(telephone.substring(0, 3) + "****" + telephone.substring(7, telephone.length()));
+    Date now = new Date();
+    user.setCreateTime(now);
+    user.setLastLoginTime(now);
+    user.setLastUpdateTime(now);
+    user = userRepository.save(user);
+
+    Role role = new Role();
+    role.setName("USER");
+    role.setUserId(user.getId());
+    roleRepository.save(role);
+    user.setAuthorityList(Lists.newArrayList(new SimpleGrantedAuthority("ROLE_USER")));
+    return user;
+}
+```
+
+添加filter
+```java
+public class AuthFilter extends UsernamePasswordAuthenticationFilter {
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private ISmsService smsService;
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+        String name = obtainUsername(request);
+        if (!Strings.isNullOrEmpty(name)) {
+            request.setAttribute("username", name);
+            return super.attemptAuthentication(request, response);
+        }
+
+        String telephone = request.getParameter("telephone");
+        if (Strings.isNullOrEmpty(telephone) || !LoginUserUtil.checkTelephone(telephone)) {
+            throw new BadCredentialsException("Wrong telephone number");
+        }
+
+        User user = userService.findUserByTelephone(telephone);
+        String inputCode = request.getParameter("smsCode");
+        String sessionCode = smsService.getSmsCode(telephone);
+        if (Objects.equals(inputCode, sessionCode)) {
+            if (user == null) { // 如果用户第一次用手机登录 则自动注册该用户
+                user = userService.addUserByPhone(telephone);
+            }
+            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        } else {
+            throw new BadCredentialsException("smsCodeError");
+        }
+    }
+```
+
+阿里云短信 security
+ 通过手机号查数据库用户
+```java
+@Override
+public User findUserByTelephone(String telephone) {
+    User user = userRepository.findUserByPhoneNumber(telephone);
+    if (user == null) {
+        return null;
+    }
+    List<Role> roles = roleRepository.findRolesByUserId(user.getId());
+    if (roles == null || roles.isEmpty()) {
+        throw new DisabledException("权限非法");
+    }
+
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
+    user.setAuthorityList(authorities);
+    return user;
+}
+```
+创建用户，生成用户名 要写role表和user表 需要事务
+没有密码
+```java
+@Override
+@Transactional
+public User addUserByPhone(String telephone) {
+    User user = new User();
+    user.setPhoneNumber(telephone);
+    user.setName(telephone.substring(0, 3) + "****" + telephone.substring(7, telephone.length()));
+    Date now = new Date();
+    user.setCreateTime(now);
+    user.setLastLoginTime(now);
+    user.setLastUpdateTime(now);
+    user = userRepository.save(user);
+
+    Role role = new Role();
+    role.setName("USER");
+    role.setUserId(user.getId());
+    roleRepository.save(role);
+    user.setAuthorityList(Lists.newArrayList(new SimpleGrantedAuthority("ROLE_USER")));
+    return user;
+}
+```
+
+调用读数据库，比较用户输入验证码
+```java
+public class AuthFilter extends UsernamePasswordAuthenticationFilter {
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private ISmsService smsService;
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+        System.out.println("登陆请求"+request.getRequestedSessionId());
+
+        String name = obtainUsername(request);
+        if (!Strings.isNullOrEmpty(name)) {
+            request.setAttribute("username", name);
+            return super.attemptAuthentication(request, response);
+        }
+
+        String telephone = request.getParameter("telephone");
+        if (Strings.isNullOrEmpty(telephone) || !LoginUserUtil.checkTelephone(telephone)) {
+            throw new BadCredentialsException("Wrong telephone number");
+        }
+
+        User user = userService.findUserByTelephone(telephone);
+        String inputCode = request.getParameter("smsCode");
+        String sessionCode = smsService.getSmsCode(telephone);
+        if (Objects.equals(inputCode, sessionCode)) {
+            if (user == null) { // 如果用户第一次用手机登录 则自动注册该用户
+                user = userService.addUserByPhone(telephone);
+            }
+            return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        } else {
+            throw new BadCredentialsException("smsCodeError");
+        }
+    }
+}
+```
+配置到security
+```java
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    /**
+     * HTTP权限控制
+     * @param http
+     * @throws Exception
+     */
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
+}
+```
+
+注册manager和失败的bean
+```java
+@Bean
+public AuthenticationManager authenticationManager() {
+    AuthenticationManager authenticationManager = null;
+    try {
+        authenticationManager =  super.authenticationManager();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return authenticationManager;
+}
+@Bean
+public AuthFilter authFilter() {
+    AuthFilter authFilter = new AuthFilter();
+    authFilter.setAuthenticationManager(authenticationManager());
+    authFilter.setAuthenticationFailureHandler(authFailHandler());
+    return authFilter;
+}
+```
+
+#### 短信验证码
+发送验证码接口
+```java
+@GetMapping(value = "sms/code")
+@ResponseBody
+public ApiResponse smsCode(@RequestParam("telephone") String telephone) {
+    if (!LoginUserUtil.checkTelephone(telephone)) {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), "请输入正确的手机号");
+    }
+    ServiceResult<String> result = smsService.sendSms(telephone);
+    if (result.isSuccess()) {
+        return ApiResponse.ofSuccess("");
+    } else {
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), result.getMessage());
+    }
+}
+```
+
+添加初始化方法，在bean初始化的时候装配好client
+坑：阿里云的gson版本，把自己引入的gson删掉就行了
+
+任何对数据库有更改的接口都要加事务
+
+用户名、密码修改接口
+
+#### 房屋预约功能
+```java
+@Table(name = "house_subscribe")
+public class HouseSubscribe {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "house_id")
+    private Long houseId;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "admin_id")
+    private Long adminId;
+
+    // 预约状态 1-加入待看清单 2-已预约看房时间 3-看房完成
+    private int status;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "last_update_time")
+    private Date lastUpdateTime;
+
+    @Column(name = "order_time")
+    private Date orderTime;
+
+    private String telephone;
+
+    /**
+     * 踩坑 desc为MySQL保留字段 需要加转义
+     */
+    @Column(name = "`desc`")
+    private String desc;
+```
+
+经纪人看房记录，管理人联系用户
+经纪人后台list，操作看房完成标记
+
+
+api接口security拦截
+```java
+public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws IOException, ServletException {
+    String uri = request.getRequestURI();
+    if (uri.startsWith(API_FREFIX)) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType(CONTENT_TYPE);
+
+        PrintWriter pw = response.getWriter();
+        pw.write(API_CODE_403);
+        pw.close();
+    } else {
+        super.commence(request, response, authException);
+    }
+}
+```
+
+客服聊天系统 美洽
+
+
+
+监控
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+    <version>1.5.7.RELEASE</version>
+</dependency>
+```
+`management.security.enabled=false`
+
+用jconsole查看maxBean
+
+PS Scavenge 25次 262ms 新生代 吞吐量优先收集器复制算法，并行多线程
+PS MarkSweep（Parallel Old） 9次 2073ms 多线程压缩收集
+
+
+
+
+
+
+
+
+
+
+
+预约功能和会员中心
+```java
+public interface UserRepository extends CrudRepository<User, Long> {
+
+    User findByName(String userName);
+
+    User findUserByPhoneNumber(String telephone);
+
+    @Modifying
+    @Query("update User as user set user.name = :name where id = :id")
+    void updateUsername(@Param(value = "id") Long id, @Param(value = "name") String name);
+
+    @Modifying
+    @Query("update User as user set user.email = :email where id = :id")
+    void updateEmail(@Param(value = "id") Long id, @Param(value = "email") String email);
+
+    @Modifying
+    @Query("update User as user set user.password = :password where id = :id")
+    void updatePassword(@Param(value = "id") Long id, @Param(value = "password") String password);
+}
+```
+
+
+es调优
+索引读写优化
+`index.store.type:"niofs`
+`dynamic=strict`
+关闭all字段，防止全部字段用于全文索引6.0已经没了`"_all":{ "enabled":flase}`
+
+延迟恢复分片
+`"index.unassigned.node_left.delayed_timeout":"5m"`
+
+配置成指挥节点和数据节点，数据节点的http功能可以关闭，只做tcp数据交互
+负载均衡节点master和data都是false，一般都是用nginx 不会用es节点
+堆内存空间 指针压缩 小于32G内存才会用
+批量操作 bulk
+
+
+nginx
+`./configure --with-stream`
+用stream模块

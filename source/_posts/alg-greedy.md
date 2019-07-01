@@ -5,12 +5,17 @@ tags: [alg]
 categories: [算法备忘]
 ---
 
+<<<<<<< HEAD
 ### 316 !!!Remove Duplicate Letters 删掉重复字符保证原顺序的   最小字典序 1081 不同字符的最小子序列
 去除字符串中重复的字母，使得每个字母只出现一次。需保证返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
 {% note %}
 输入: "cbacdcbc"
 输出: "acdb"
 {% endnote %}
+=======
+
+### 316 Remove Duplicate Letters 删掉重复字符保证原顺序的   最小字典序
+>>>>>>> refs/remotes/origin/hexo-edit
 
 ### 122 买卖任意次数的股票
 {% note %}
@@ -82,7 +87,7 @@ https://baike.baidu.com/item/%E5%BE%B7%C2%B7%E6%A2%85%E9%BD%90%E9%87%8C%E4%BA%9A
 
 5
 {% endnote %}
-
+**如果已经凑出x以内的数(1)，枚举a[i]找到<=x+1的最大数则1-x+a[i]都可以凑出**
 
 从1开始凑，然后凑2，用面值最大的(1,2)凑。
 然后可以凑到的最大值为3，下面凑4，用面值最大的(1,2,2)凑。
@@ -99,6 +104,7 @@ else{
     int sum = 0;
     while (sum < x){
         int i;
+        // 关键
         for (i =n-1; i>=0  ; i--) {
             if (coins[i] <= sum + 1) break;
         }

@@ -5,7 +5,7 @@ tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
 
-
+@Configuration注解的类通过简单地在调用同一个类中其他的@Bean方法来定义bean之间的依赖关系。
 
 ---
 

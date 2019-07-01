@@ -34,6 +34,18 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+### 420 强密码检验器
+{% note %}
+由至少6个，至多20个字符组成。
+至少包含一个小写字母，一个大写字母，和一个数字。
+同一字符不能连续出现三次 (比如 "...aaa..." 是不允许的, 但是 "...aa...a..." 是可以的)。
+如果符合返回0，否则返回需要修改的最小步数
+{% endnote %}
+
+
+关键：计算每个字母连续出现的次数
+
+
 ### 721 !!账户合并 并查集
 如果两个账户有至少一个相同的email 就合并，人名相同也是两个账号
 {% note %}
@@ -97,11 +109,44 @@ Output: `[[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,
 > 有n堆石子排成一列，每堆石子有一个重量w[i], 每次合并可以合并相邻的两堆石子，一次合并的代价为两堆石子的重量和w[i]+w[i+1]。问安排怎样的合并顺序，能够使得总合并代价达到最小
 > in : 4 1 1 4 out: 18
 
-### lc 473 火柴拼正方形
+### lc 473 火柴拼正方形 三星
+必须使用所有的火柴，可以连接火柴不能折断
 {% note %}
 输入: [1,1,2,2,2]
 输出: true
 {% endnote %}
+思路：已知周长，能否分成4个集合，和相等
+```java
+public boolean makesquare(int[] nums) {
+    if(nums.length==0)return false;
+    int sum = 0;
+    for(int num:nums){
+        sum += num;
+    }
+    if(sum%4!=0)return false;
+    return dfs(0,nums,new int[4],sum/4);
+    
+} 
+public boolean dfs(int idx,int[] nums,int[] sums,int max) {
+    if (idx == nums.length) {
+       return true;
+           //sums[0] == sums[1] && sums[1] == sums[2] && sums[2] == sums[3];
+    }
+    int e = nums[idx];
+    for(int i = 0; i < 4; i++) {
+        if (sums[i] + e <= max) {
+            sums[i] += e;
+            if (dfs(idx + 1,nums,sums,max)) {
+                return true;
+            }
+            sums[i] -= e;
+        }
+    }
+    return false;
+}
+```
+
+
 
 ### lc 221 最大正方形
 {% note %}
@@ -248,6 +293,42 @@ Output:
 
 ### 海盗分金
 https://baike.baidu.com/item/%E6%B5%B7%E7%9B%97%E5%88%86%E9%87%91
+
+### 1029 2N个人平分去A、B两地，让花费最小
+{% note %}
+Input: [[10,20],[30,200],[400,50],[30,20]]
+Output: 110
+{% endnote %}
+按照如果去A能省多少钱排序
+```java
+public int twoCitySchedCost(int[][] costs) {
+    Arrays.sort(costs,(a,b)->(b[1]-b[0])-(a[1]-a[0]));
+    int n = costs.length;
+    int rst = 0;
+    for(int i = 0;i<n/2;i++){
+        rst += costs[i][0];
+    }
+    for(int i = n/2;i<n;i++){
+        rst += costs[i][1];
+    }
+    return rst;
+}
+```
+
+### 777 在LR字符串中交换相邻字符
+一次移动操作指用一个"LX"替换一个"XL"，或者用一个"XR"替换一个"RX"。
+{% note %}
+输入: start = "RXXLRXRXL", end = "XRLXXRRLX"
+输出: True
+解释:
+我们可以通过以下几步将start转换成end:
+RXXLRXRXL ->
+XRXLRXRXL ->
+XRLXRXRXL ->
+XRLXXRRXL ->
+XRLXXRRLX
+{% endnote %}
+
 
 ### 778 从左上到右下路径上所需最小最大值
 https://leetcode.com/problems/swim-in-rising-water/
@@ -405,8 +486,18 @@ The longest subsequence that is fibonacci-like:
 
 ### 842
 
-### 650
-
+### 650 只有两个键的键盘
+{% note %}
+输入: 3
+输出: 3
+解释:
+最初, 我们只有一个字符 'A'。
+第 1 步, 我们使用 Copy All 操作。
+第 2 步, 我们使用 Paste 操作来获得 'AA'。
+第 3 步, 我们使用 Paste 操作来获得 'AAA'。
+{% endnote %}
+n>1时 其实就是将n分解为m个数字的乘积 且m个数字的和最小 即把一个数分解为n个质数的和 从小到大的去试探
+如果这个数是质数 则这个数只能一个一个的复制得到 操作步数就是这个数本身 如果不是质数 则可以由复制得到 例如20可以由10复制得到 10可以由5复制得到 而5是质数 只能一个一个复制 所以minStep （20） = 9
 
 
 #### 315 输出数组每个位置后有多少个数字比它小
