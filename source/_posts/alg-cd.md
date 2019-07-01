@@ -4,6 +4,17 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 638 大礼包
+{% note %}
+输入: [2,5], [[3,0,5],[1,2,10]], [3,2]
+输出: 14
+解释: 
+有A和B两种物品，价格分别为¥2和¥5。
+大礼包1，你可以以¥5的价格购买3A和0B。
+大礼包2， 你可以以¥10的价格购买1A和2B。
+你需要购买3个A和2个B， 所以你付了¥10购买了1A和2B（大礼包2），以及¥4购买2A。
+{% endnote %}
+
 ### 547 朋友圈
 {% note %}
 输入: 
@@ -323,24 +334,6 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
 {% endnote %}
 
 
-### 10正则
-{% note %}
-s = "aab"
-p = "c\*a\*b"
-Output: true
-{% endnote %}
-```java
-public boolean isMatch(String s, String p) {
-    // 注意一定要p全匹配完后再判断s是不是匹配完了，不然s = "aa" p="aa*b*c*"其实也是匹配的
-  if(p.length()==0)return s.length()==0;
-    // 注意现在p如果还有，如果s已经没了，first直接false，直接判断p是不是x*直接去掉
-    boolean first = s.length()>0&&(s.charAt(0)==p.charAt(0) || p.charAt(0)=='.');
-    if(p.length()>=2 &&p.charAt(1)=='*'){
-       return (first&&isMatch(s.substring(1),p)) || isMatch(s,p.substring(2));
-    }else return first && isMatch(s.substring(1),p.substring(1));    
-}
-```
-
 
 
 ### 12整数转罗马
@@ -469,7 +462,7 @@ System.out.println(n-cnt);
 ```
 
 #### hiho1892 S中字符可以移动首部，移动最少次数得到T
->选定S中的一个字符Si，将Si移动到字符串首位。  
+选定S中的一个字符Si，将Si移动到字符串首位。  
 例如对于S="ABCD"，小Ho可以选择移动B从而得到新的S="BACD"；也可以选择移动C得到"CABD"；也可以选择移动D得到"DABC"。  
 请你计算最少需要几次移动操作，可以使S变成T。
 in:
@@ -706,47 +699,7 @@ public int[] kthSmallestPrimeFraction(int[] A, int K) {
 ```
 378 719
 
-### 135 Candy 分数发糖
-你需要按照以下要求，帮助老师给这些孩子分发糖果：
-每个孩子至少分配到 1 个糖果。
-相邻的孩子中，评分高的孩子必须获得更多的糖果。
-{% note %}
-输入: [1,0,2]
-输出: 5
-解释: 你可以分别给这三个孩子分发 2、1、2 颗糖果。
-{% endnote %}
 
-https://leetcode.com/problems/candy/discuss/42774/Very-Simple-Java-Solution-with-detail-explanation
-
-思路：
-1.从左向右扫，把所有上升序列设置成从1开始的递增糖数
-2.从右向左扫，更新右边向左边的递增糖数。
-
-相似题目： 32 最长匹配括号 
-
-```java
-public int candy(int[] ratings) {
-    int n = ratings.length;
-    int[] nums = new int[n];
-    nums[0] = 1;
-    for(int i = 1;i<n;i++){
-        // 1 2 3 4
-        if(ratings[i-1] < ratings[i]){
-            nums[i] = nums[i-1]+1;
-        }else nums[i]  = 1;
-    }
-    for(int i = n-1;i>0;i--){
-        if(ratings[i-1] > ratings[i]){
-            nums[i-1] = Math.max(nums[i] + 1, nums[i-1]); 
-        }
-    }
-    int rst = 0;
-    for(int num:nums){
-        rst += num;
-    }
-    return rst;
-}
-```
 
 ### 726 化学式中各原子的数量
 {% note %}
