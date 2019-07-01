@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/tirinsert.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/anagram.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/anagram2.jpg">
-<meta property="og:updated_time" content="2019-05-16T02:41:58.056Z">
+<meta property="og:updated_time" content="2019-07-01T02:05:45.095Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ToDoAgain">
 <meta name="twitter:description" content="37 数独12345678910111213141516171819202122232425262728293031public void solveSudoku(char[][] board)&amp;#123;    if(board == null || board.length == 0)        return;    solve(board);&amp;#125;private boolean s">
@@ -341,8 +341,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-16T10:41:58+08:00">
-                2019-05-16
+              <time title="更新于" itemprop="dateModified" datetime="2019-07-01T10:05:45+08:00">
+                2019-07-01
               </time>
             
           </span>
@@ -414,7 +414,10 @@
 <blockquote>
 <p>输入:<br>target = 3<br>输出: 2<br>解释:<br>最短指令列表为 “AA”<br>位置变化为 0-&gt;1-&gt;3</p>
 </blockquote>
-<h3 id="464-博弈"><a href="#464-博弈" class="headerlink" title="464 博弈"></a>464 博弈</h3><p>A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。<br>1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)<br>2.因为1,2…和2,1…是一样的，所以可以降为$2^n$<br>状态压缩</p>
+<h3 id="464-博弈"><a href="#464-博弈" class="headerlink" title="464 博弈"></a>464 博弈</h3><div class="note "><p>两名玩家轮流选择从 1 到 10 的任意整数，累计整数和，先使得累计整数和达到 100 的玩家，即为胜者。<br>输入：<br>maxChoosableInteger = 10<br>desiredTotal = 11</p>
+<p>输出：<br>false</p></div>
+<p>暴力递归</p>
+<p>A,B玩家轮流从1-10中选数组加到同一个total，让total先大于11的赢.B肯定赢。<br>1.计算1-n个数的permutation，并判断每个赢的可能性复杂度(n!)<br>2.因为1,2…和2,1…是一样的，所以可以降为$2^n$<br>状态压缩</p>
 <ol>
 <li>子状态，m个数state[m+1]表示visited</li>
 <li>记忆化递归key是子状态，<code>Arrays.toString(state)</code></li>

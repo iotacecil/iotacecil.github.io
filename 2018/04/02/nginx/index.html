@@ -80,13 +80,13 @@
 
 
 
-<meta name="description" content="浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先级比Expires高指定缓存多少秒 和服务端时间无关。 Expires:日期 带时区的时间是服务端时间浏览器发出请求之前检查页面这个字段，过期了重新发请求。 Last-Modified/Etag服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modifi">
+<meta name="description" content="对于Http1.1协议，如果响应头中的Transfer-encoding为chunked传输，则表示body是流式输出，body会被分成多个块，每块的开始会标识出当前块的长度，此时，body不需要通过content-length来指定，客户端会接收数据直到服务端主动断开连接 浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先">
 <meta name="keywords" content="网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx&#x2F;Http&#x2F;HSTS">
 <meta property="og:url" content="http://blog.iotaa.xyz/2018/04/02/nginx/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先级比Expires高指定缓存多少秒 和服务端时间无关。 Expires:日期 带时区的时间是服务端时间浏览器发出请求之前检查页面这个字段，过期了重新发请求。 Last-Modified/Etag服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modifi">
+<meta property="og:description" content="对于Http1.1协议，如果响应头中的Transfer-encoding为chunked传输，则表示body是流式输出，body会被分成多个块，每块的开始会标识出当前块的长度，此时，body不需要通过content-length来指定，客户端会接收数据直到服务端主动断开连接 浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg">
@@ -98,10 +98,10 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/https.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/jack_https.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/htps.jpg">
-<meta property="og:updated_time" content="2018-12-28T12:32:41.787Z">
+<meta property="og:updated_time" content="2019-07-01T02:05:45.098Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx&#x2F;Http&#x2F;HSTS">
-<meta name="twitter:description" content="浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先级比Expires高指定缓存多少秒 和服务端时间无关。 Expires:日期 带时区的时间是服务端时间浏览器发出请求之前检查页面这个字段，过期了重新发请求。 Last-Modified/Etag服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modifi">
+<meta name="twitter:description" content="对于Http1.1协议，如果响应头中的Transfer-encoding为chunked传输，则表示body是流式输出，body会被分成多个块，每块的开始会标识出当前块的长度，此时，body不需要通过content-length来指定，客户端会接收数据直到服务端主动断开连接 浏览器缓存Cache-control（秒）/PragmaPragma : http1.0用的Cache-control 优先">
 <meta name="twitter:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg">
 
 
@@ -348,8 +348,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-12-28T20:32:41+08:00">
-                2018-12-28
+              <time title="更新于" itemprop="dateModified" datetime="2019-07-01T10:05:45+08:00">
+                2019-07-01
               </time>
             
           </span>
@@ -404,7 +404,8 @@
       
 
       
-        <h3 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h3><h3 id="Cache-control（秒）-Pragma"><a href="#Cache-control（秒）-Pragma" class="headerlink" title="Cache-control（秒）/Pragma"></a>Cache-control（秒）/Pragma</h3><p>Pragma : http1.0用的<br>Cache-control 优先级比Expires高<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg" alt="httpcachepramgma.jpg"><br>指定缓存多少秒 和服务端时间无关。</p>
+        <p>对于Http1.1协议，如果响应头中的Transfer-encoding为chunked传输，则表示body是流式输出，body会被分成多个块，每块的开始会标识出当前块的长度，此时，body不需要通过content-length来指定，客户端会接收数据直到服务端主动断开连接</p>
+<h3 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h3><h3 id="Cache-control（秒）-Pragma"><a href="#Cache-control（秒）-Pragma" class="headerlink" title="Cache-control（秒）/Pragma"></a>Cache-control（秒）/Pragma</h3><p>Pragma : http1.0用的<br>Cache-control 优先级比Expires高<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/httpcachepramgma.jpg" alt="httpcachepramgma.jpg"><br>指定缓存多少秒 和服务端时间无关。</p>
 <h3 id="Expires-日期-带时区的时间"><a href="#Expires-日期-带时区的时间" class="headerlink" title="Expires:日期 带时区的时间"></a>Expires:日期 带时区的时间</h3><p>是服务端时间<br>浏览器发出请求之前检查页面这个字段，过期了重新发请求。</p>
 <h3 id="Last-Modified-Etag"><a href="#Last-Modified-Etag" class="headerlink" title="Last-Modified/Etag"></a>Last-Modified/Etag</h3><p>服务器在响应中返回Last-Modified。浏览器会在请求头加if-Modified-Since，如果缓存是最新的 返回304.</p>
 <p>Etag：服务器为每个页面分配编号。用编号区分这个页面是否最新。</p>
@@ -418,6 +419,8 @@
 <p>当 Nginx 是一个静态文件服务器的时候，开启 SENDFILE 配置项能大大提高 Nginx 的性能。</p>
 <p>当 Nginx 是作为一个反向代理来使用的时候，SENDFILE 则没什么用了，因为 Nginx 是反向代理的时候。 in_fd 就不是文件句柄而是 socket，此时就不符合 sendfile 函数的参数要求了。</p>
 <p><a href="http://xiaorui.cc/2015/06/24/%E6%89%AF%E6%B7%A1nginx%E7%9A%84sendfile%E9%9B%B6%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%A6%82%E5%BF%B5/" target="_blank" rel="noopener">http://xiaorui.cc/2015/06/24/%E6%89%AF%E6%B7%A1nginx%E7%9A%84sendfile%E9%9B%B6%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%A6%82%E5%BF%B5/</a><br>1.系统调用sendfile()通过 DMA把硬盘数据拷贝到 kernel buffer，然后数据被 kernel直接拷贝到另外一个与 socket相关的 kernel buffer。这里没有 user mode和 kernel mode之间的切换，在 kernel中直接完成了从一个 buffer到另一个 buffer的拷贝。<br>2、DMA 把数据从 kernelbuffer 直接拷贝给协议栈，没有切换，也不需要数据从 user mode 拷贝到 kernel mode，因为数据就在 kernel 里。</p>
+<p>在传统的文件传输方式（read、write/send方式），具体流程细节如下：</p>
+<p>调用read函数，文件数据拷贝到内核缓冲区<br>read函数返回，数据从内核缓冲区拷贝到用户缓冲区<br>调用write/send函数，将数据从用户缓冲区拷贝到内核socket缓冲区<br>数据从内核socket缓冲区拷贝到协议引擎中<br>在这个过程当中，文件数据实际上是经过了四次拷贝操作： 硬盘—&gt;内核缓冲区—&gt;用户缓冲区—&gt;内核socket缓冲区—&gt;协议引擎</p>
 <h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>以下有关Http协议的描述中，正确的有<br>正确答案: A B C   你的答案: B C D (错误)<br>A.post请求一般用于修改服务器上的资源，对发送的消息数据量没有限制，通过表单方式提交<br>B.可以通过206返回码实现断点续传<br>C.HTTP1.1实现了持久连接和管线化操作以及主动通知功能，相比http1.0有大福性能提升<br>D.HTTP返回码302表示永久重定向，需要重新URI</p>
 <p>http/1.1 字符串传输<br>持久链接：一个tcp链接里可以发送很多http请求。减少三次握手次数。<br>pipeline:<br>添加了host：</p>
 <p>《Web性能权威指南》<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/http2.jpg" alt="http2.jpg"></p>
