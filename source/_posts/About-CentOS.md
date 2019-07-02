@@ -126,6 +126,7 @@ $ cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 ```
 
 ### 静态ip 固定ip
+https://blog.csdn.net/hzhsan/article/details/45224371
 ```shell
 cd /etc/sysconfig/network-scripts/
 

@@ -154,6 +154,27 @@ mysql的两种复制方式：
 
 ### 10.数据库最左匹配原理
 
+### 11.jdbc数据库过程
+```java
+//1加载驱动
+//用调用者的类加载器 加载类并初始化（静态变量赋值和静态代码块）
+Class.forName("com.mysql.jdbc.Driver");
+//2.获取数据库连接
+// 
+Connection conn = DriverManger.getConnection(DB_URL,USER,PASS);
+//3.创建Statement
+Statement stmt = conn.createStatement();
+//4.执行sql
+ResultSet rs = stmt.executeQuery(SQL);
+//5遍历结果
+while(rs.next()){
+  rs.getString(列名);
+}
+//6，异常cache
+//7.finally关闭连接
+```
+Spring jdbcTemplate可以将查询结果用RowMapper返回成一个对象list
+
 ---
 ## 2.网络 web服务器
 
@@ -200,6 +221,12 @@ nginx会检查的
 
 QUIC协议已经标准化为Http3协议。基于UDP，但提供了可靠性和流量控制。
 可以避免Http2的前序包阻塞
+
+#### HTTP2
+以frame 分帧发送
+只建立一个连接 并发发送
+服务端推送
+
 
 ### 重定向的响应头为302，并且必须要有Location响应头；
 服务器通过response响应，重定向的url放在response的什么地方？
@@ -589,6 +616,11 @@ CFS设定了进程占用CPU最小时间，如果进程太多，调度周期会�
 3）作为父类，子类被初始化
 4）调用main
 5）`MethodHandle`
+
+
+每个类都会使用 当前类加载器（自己的类加载器）加载依赖的其它对象
+线程类加载器：继承父线程的上下文类加载器，运行初始线程上下文类加载器是Applicaton
+mysql的Connection接口是JDK内置的rt.jar，由bootstrap类加载器加载的，但是厂商的实现是applicaton类加载器加载的，双亲委托模型
 
 ### 2.java8的新特性
 
@@ -1190,6 +1222,8 @@ callable
 表设计：
 SQL优化：
 1）超过500w要分表
+分表方案：水平分表（时间、id、hash）、垂直分表
+
   数据按照某种规则存储到多个结构相同的表中，例如按 id 的散列值、性别等进行划分
   水平切分的实现：
   Merge存储引擎允许将一组使用MyISAM存储引擎的并且表结构相同（即每张表的字段顺序、字段名称、字段类型、索引定义的顺序及其定义的方式必须相同）的数据表合并为一个表，方便了数据的查询。
@@ -1819,6 +1853,23 @@ vue的特点
 XSS 跨站脚本攻击：篡改网页，注入恶意html脚本。
 CSRF 跨站请求伪造（利用用户登陆态）
 Cookie的 `SameSite`属性strict
+
+### http缓存
+响应：
+Expires是日期
+Cache-Control 的no-cache每次都要验证（ctrl+F5强制刷新）
+mag-age是给浏览器，s-max-age是给代理
+Etag不是秒，一秒修改很多次的情况，比较版本号
+条件式：
+过期了会带条件询问
+请求if-modified-since- 响应Last-modified 304
+
+用户的cookie无法缓存，post和put都不缓存
+
+Vary 加上对应的头信息，匹配才使用缓存
+
+
+
 
 ###  55 cookies
 1) 存储 浏览器的cookie数据库中
