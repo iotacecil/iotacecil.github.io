@@ -168,6 +168,41 @@ Input: [1,3,5,4,7]
 Output: 2
 Explanation: The two longest increasing subsequence are [1, 3, 4, 7] and [1, 3, 5, 7].
 {% endnote %}
+思路：cnt[j]记录以j结尾最大长度的个数，
+如果dp[i]==dp[j]+1就表示之前cnt[j]个结尾的+1都可以变成dp[i]长度，
+如果当前`dp[i]<dp[j]+1`表示找到了一条更长的，个数是cnt[j]条
+
+```java
+public int findNumberOfLIS(int[] nums) {
+    int n = nums.length;
+    if(n==0)return 0;
+    int[] cnt = new int[n];
+    int[] dp = new int[n];
+    Arrays.fill(dp,1);
+    Arrays.fill(cnt,1);
+    int rst = 0;
+    int max = 1;     
+    for(int i = 1;i<n;i++){
+        for(int j = 0;j<i;j++){
+            if(nums[i]>nums[j]){       
+                if(dp[j]+1==dp[i]){
+                     cnt[i] += cnt[j];
+                }else if(dp[j]+1>dp[i]){
+                     cnt[i] = cnt[j];
+                }   
+                dp[i] = Math.max(dp[i],dp[j]+1);
+                max = Math.max(dp[i],max);
+            }                
+        }
+    }
+    for(int i = 0;i<n;i++){
+        if(dp[i] == max){
+            rst += cnt[i];
+        }
+    }  
+    return rst;
+}
+```
 
 ### 223 矩形重叠后的总面积
 给出两个矩形的左下角 右上角坐标
