@@ -1644,7 +1644,7 @@ private List<HouseDTO> wrapperHouseResult(List<Long> houseIds) {
 ```
 simpleQuery 是原来db查询
 
-添加关键词功能
+#### 添加关键词功能
 ```java
  boolQuery.must(
     QueryBuilders.multiMatchQuery(rentSearch.getKeywords(),

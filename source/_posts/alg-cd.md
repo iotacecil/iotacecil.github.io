@@ -4,6 +4,7 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+<<<<<<< HEAD
 ### 730 统计不同回文子字符串 bd
 {% note %}
 输入：
@@ -43,6 +44,33 @@ public ListNode reverseKGroup(ListNode head, int k) {
         head = cur;
     }  
     return head;   
+=======
+
+### 124 二叉树最大路径和
+{% note %}
+输入: [1,2,3]
+       1
+      / \
+     2   3
+输出: 6
+{% endnote %}
+```java
+int max = Integer.MIN_VALUE;
+public int maxPathSum(TreeNode root) {
+    maxhelp(root);     
+    return max;
+}
+
+private int maxhelp(TreeNode root){
+    if(root == null)return 0;
+    //int t1 = maxPathSum(root.left)+maxPathSum(root.right)+root.val;
+    int left =  Math.max(0,maxhelp(root.left));
+    int right =  Math.max(0,maxhelp(root.right));
+    // 每个点汇总一下有左右的情况是不是更大,注意左右一定正的，如果root是负，left或right的最大值再上次递归已经记录了
+    max = Math.max(max,root.val+left+right);
+    // 选择大的一条路径向上递归
+    return Math.max(left,right)+root.val;
+>>>>>>> refs/remotes/origin/hexo-edit
 }
 ```
 
