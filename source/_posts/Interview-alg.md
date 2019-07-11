@@ -447,36 +447,7 @@ public static String integer(String s) {
 
 ### 快速排序
 
-### 25 k个一组反转链表
-{% note %}
-Given this linked list: 1->2->3->4->5
-For k = 2, you should return: 2->1->4->3->5
-For k = 3, you should return: 3->2->1->4->5
-{% endnote %}
 
-```java
-public ListNode reverseKGroup(ListNode head, int k) {
-    int cnt = 0;
-    ListNode cur = head;
-    while(cur!=null && cnt <k){
-        cur = cur.next;
-        cnt++;
-    }       
-    if(cnt == k){
-        // 4->3->5
-         cur = reverseKGroup(cur,k);
-        while(cnt-->0){
-            ListNode next = head.next;
-            head.next = cur;
-            cur = head;
-            head = next;
-        }
-        // 关键
-        head = cur;
-    }  
-    return head;   
-}
-```
 
 ### 24 两个一组反转链表
 {% note %}

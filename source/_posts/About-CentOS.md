@@ -85,6 +85,9 @@ D.chmod o+x g+w aaa
 所有人`chmod a=rwx file`
 `chomd 777 fild`
 
+### iostat
+` yum install sysstat`
+
 ### lsof 
 Linux 系统中列出当前占用8080端口进程的命令()
 `lsof -i:8080`
@@ -126,7 +129,13 @@ $ cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 ```
 
 ### 静态ip 固定ip
+https://blog.csdn.net/hzhsan/article/details/45224371
 ```shell
+
+#添加默认网关：
+route add default gw 192.168.56.101
+#注：192.168.56.101是windows主机上host-only网卡上的ip地址。
+
 cd /etc/sysconfig/network-scripts/
 
 service network restart

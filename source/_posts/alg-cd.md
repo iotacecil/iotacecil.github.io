@@ -4,6 +4,113 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+### 730 统计不同回文子字符串 bd
+{% note %}
+输入：
+S = 'bccb'
+输出：6
+解释：
+6 个不同的非空回文子字符序列分别为：'b', 'c', 'bb', 'cc', 'bcb', 'bccb'。
+注意：'bcb' 虽然出现两次但仅计数一次。
+{% endnote %}
+
+### 25 k个一组反转链表
+{% note %}
+Given this linked list: 1->2->3->4->5
+For k = 2, you should return: 2->1->4->3->5
+For k = 3, you should return: 3->2->1->4->5
+{% endnote %}
+
+```java
+public ListNode reverseKGroup(ListNode head, int k) {
+    int cnt = 0;
+    ListNode cur = head;
+    while(cur!=null && cnt <k){
+        cur = cur.next;
+        cnt++;
+    }       
+    // 如果不到k个不翻转
+    if(cnt == k){
+        // 4->3->5
+         cur = reverseKGroup(cur,k);
+        while(cnt-->0){
+            ListNode next = head.next;
+            head.next = cur;
+            cur = head;
+            head = next;
+        }
+        // 关键
+        head = cur;
+    }  
+    return head;   
+}
+```
+
+### 698 划分成k个相等子集
+{% note %}
+输入： nums = [4, 3, 2, 3, 5, 2, 1], k = 4
+输出： True
+说明： 有可能将其分成 4 个子集（5），（1,4），（2,3），（2,3）等于总和。
+{% endnote %}
+
+//todo DP
+https://leetcode.com/problems/partition-to-k-equal-sum-subsets/
+
+1.计算出数组的sum看能不能整除k，同时得到了每组的subsum
+2.如果数组中有一个元素>subsum则不可能。最大的几个==subsum，自己分成一组。
+3.对前面都比subsum小的元素回溯将数字放入group数组。变成 Combination tum target
+```java
+public boolean canPartitionKSubsets(int[] nums, int k) {
+    // 1. 求每组应该的平均值
+    int sum = 0;
+    for(int num : nums){
+        sum += num;
+    }
+    if(sum % k != 0){
+        return false;
+    }
+    int subsum = sum/k;
+    // 2. 等于平均值的单独分成一组
+    Arrays.sort(nums);
+    int n = nums.length;
+    int idx = n-1;
+    if(nums[n-1] > subsum)return false;
+    for(int i = n-1;i >= 0;i--){
+        if(nums[i] < subsum)break;
+        if(nums[i] == subsum){
+            k--;
+            idx--;
+        }
+    }
+    // 3. 回溯分组
+    int[] group = new int[k];
+    return back(group,idx,subsum,nums);
+}
+private boolean back(int[] group,int idx,int target,int[] nums){
+    // 全部都分组好了
+    if(idx < 0){
+        return true;
+    }
+         // 试着放到每一组
+    for(int i = 0;i < group.length;i++){
+        if(group[i] + nums[idx] > target){
+            continue;
+        }
+        group[i] += nums[idx];
+        if(back(group,idx-1,target,nums)){
+            return true;
+        }
+        group[i] -= nums[idx];
+        // 重要剪枝30%->100% 
+        // 如果这个桶已经装过了，减到0了，用其他数字装这个桶的结果其实已经在别的桶实现过了
+        // 一个桶肯定有一个数字，减到没有数字其他桶也没可能了，直接退出
+        if (group[i] == 0) break;
+
+    }
+    return false;
+}
+```
+
 ### 638 大礼包
 {% note %}
 输入: [2,5], [[3,0,5],[1,2,10]], [3,2]
@@ -944,6 +1051,36 @@ Output: 6
 1 一个格子的水有两个边界，
 2 如果左边or右边有更低的，水都会流走，尽量从两边让墙越来越高
 3 如果当前格子靠近低的那侧，这个格子没可能更大了，最多就是left-A[i]水量，可以继续考虑这个格子更里那个格子。
+
+普通做法 栈
+```java
+public int trap(int[] height) {
+   if(height==null)return 0;
+   int n  = height.length;
+   Deque<Integer> stk = new ArrayDeque<>();
+   int idx = 0;
+   int tmp = 0;
+   int rst = 0;
+   while(idx<n){
+       // 关键，==的时候也入栈
+       if(stk.isEmpty() || height[idx] <= height[stk.peek()]){
+           stk.push(idx++);
+        
+       }else{
+           int top = stk.pop();
+           // 如果是递增的坡 1 2 3 没水
+           if(stk.isEmpty())tmp=0;
+           else{}
+            // 关键
+           tmp = (Math.min(height[idx],height[stk.peek()])-height[top])*(idx-stk.peek()-1);
+            }
+           rst += tmp;
+           
+       }
+   }
+   return rst;
+```
+
 
 正确做法：双指针
 ```java
