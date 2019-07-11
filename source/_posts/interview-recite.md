@@ -288,7 +288,7 @@ nginx限流是漏桶法
 单进程，非阻塞异步IO，通过回调高度用户 事件驱动 超过5w
 主进程现在只要专心处理一些与I/O无关的逻辑处理
 
- Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈
+**Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈**
 
 linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
 
@@ -862,7 +862,12 @@ CAS 是实现非阻塞同步的计算机指令，它有三个操作数，内存�
 3）多个共享变量 解决：用`AtomicReference`
 
 ### 线程安全的链表
-每个node有锁，保存链表尾指针
+1.静态内部类Node
+2.Node.next是AtomicReference<Node<E>> 
+3.需要dummy，还有AtomicReference<Node<E>> head就tail，初始都是包装dumy。
+4.put操作，CAS中获取尾节点`curtail = tail.get()`和尾节点的next指针`tailnext = tail.next.get()`并保存,
+4.1判断当前尾节点==tail.get(),但是刚刚保存的tailnext不为空。说明有线程put还没完成tail的修改，需要用CAS机制判断现在的taill是不是curTail并且修改成刚刚保存的next实现推进。
+4.2如果没有冲突，next就是null，用CAS尝试插入新节点如果成功再尝试CAS把尾节点变成新节点。
 
 AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行阻塞和唤醒从而实现更为灵活的同步操作。
 
@@ -875,7 +880,8 @@ CLH自旋锁 基于链表 公平自旋锁 在前驱结点上自旋
 
 ### 4.AQS
 AQS：队列同步器
-AQS的核心思想是基于volatile int state这样的一个标志位1表示有线程占用，其它线程需要进入同步队列
+AQS的核心思想是基于volatile int 
+state这样的一个标志位1表示有线程占用，其它线程需要进入同步队列
 同步队列是一个双向链表，当获得锁的线程等待条件，进入等待队列（可以有多个），满足后重新进入同步队列，获取锁竞争
 Unsafe类提供CAS方法
 同时配合Unsafe工具对其原子性的操作来实现对当前锁的状态进行修改。
@@ -1049,7 +1055,7 @@ volatile变量定义了8种操作顺序的规则，能保证代码执行的顺�
 1）单线程控制流程序次序 2）管程 3）volatile 4）线程启动、5终止、6中断 7）对象finalize 8）传递性
 
 #### 为什么要padding 
-cache伪共享：多个线程读写同一个缓存行，volitale变量无关但是多个线程之间仍然要同步。
+cache伪共享：多个线程读写同一个缓存行，volatile变量无关但是多个线程之间仍然要同步。
 把热点数据隔离在不同的缓存行
 
 #### 8个原子操作
@@ -1266,6 +1272,8 @@ INSERT_METHOD = LAST;
 应用层优化
 4）减少返回的行 limit
 5）拆分大的delete和insert，不然会一次锁住很多数据
+
+如果明确知道只有一条结果返回，limit 1 能够提高效率
 
 #### sql优化 计算两点距离
 100公里以内的餐馆，不要查询圆，查询方形
@@ -2331,20 +2339,85 @@ text会解析生成倒排索引，倒排列表中每个节点存储document地�
 geo-point类型
 
 _search查询类型：
-简单查询
-match 会对输入进行分词并在字段中搜索
-term 查询关键词不会分词
-terms 查询批量关键字
-"match_all":{} 全查询
-match_phrase 短语查询，分词后满足所有词的结果，设置slop设置词之间的距离
-multi_match 可以指定多个字段中query
+1.简单查询
+1.match 会对输入进行分词并在字段中搜索
+2.term 查询关键词不会分词
+2.1terms 查询批量关键字
+3."match_all":{} 全查询
+4.match_phrase 短语查询，分词后满足所有词的结果，设置slop设置词之间的距离
+5.multi_match 可以指定多个字段中query
 stored_fields 指定返回的字段
 sort 数组存放排序字典 
 range 指定字段gte lte 范围 boost权重
 wildcard 通配符查询
 组合查询
-布尔查询包括filter,mast,should,must_not
+布尔查询包括filter,must,should,must_not
 （倒排索引会把大写全部转小写（？））
+
+
+1。关键字全文索引 +其他普通查询 用bool查询+multiquery
+```java
+boolQuery.must(
+  QueryBuilders.multiMatchQuery(rentSearch.getKeywords(),
+          HouseIndexKey.TITLE,
+          HouseIndexKey.TRAFFIC,
+          HouseIndexKey.DISTRICT,
+          HouseIndexKey.ROUND_SERVICE,
+          HouseIndexKey.SUBWAY_LINE_NAME,
+          HouseIndexKey.SUBWAY_STATION_NAME
+  ));
+```
+面积范围查询rangeQuery,也添加到boolQuery.filter
+具体字段的关键字查询用termQuery,也加到boolQuery.filter
+
+2。自动补全
+索引字段类型
+```json
+"suggest": {
+  "type": "completion"
+},
+```
+填充：对索引中的所有分析字段用分词器在java中手动分词 返回值是List<Token>
+遍历Token，筛选长度>2的非数字，包装成List<Suggest>,并且把一些keyword字段也遍历放入
+
+查询：用SuggestBuilder设定字段并搜索关键字和条数，再用search字段搜索，返回值result.getEntries()是CompletionSuggeestion.Entry, .getText().string()可以获得词，记得去重
+```java
+CompletionSuggestionBuilder suggestion = SuggestBuilders.completionSuggestion("suggest").prefix(prefix).size(5);
+
+SuggestBuilder suggestBuilder = new SuggestBuilder();
+suggestBuilder.addSuggestion("autocomplete", suggestion);
+
+SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+        .setTypes(INDEX_TYPE)
+        .suggest(suggestBuilder);
+```
+
+
+
+问题：这些suggest都是在每个房子的suggest字段里
+  好处是一个房子上架下架，这些提示会跟着消失/出现，还应该有一个热词索引单独用来查询
+
+3.聚合
+```java
+SearchRequestBuilder requestBuilder = this.esClient.prepareSearch(INDEX_NAME)
+    .setTypes(INDEX_TYPE)
+    .setQuery(boolQuery)
+    .addAggregation(
+            AggregationBuilders.terms(HouseIndexKey.AGG_DISTRICT)
+            .field(HouseIndexKey.DISTRICT)
+    ).setSize(0);
+```
+terms后面要起名。不要数据只要数量
+获取结果
+```java
+SearchResponse response = requestBuilder.get();
+if (response.status() == RestStatus.OK) {
+    Terms terms = response.getAggregations().get(HouseIndexKey.AGG_DISTRICT);
+    if (terms.getBuckets() != null && !terms.getBuckets().isEmpty()) {
+        return ServiceResult.of(terms.getBucketByKey(district).getDocCount());
+    }
+```
+
 
 
 
@@ -2354,3 +2427,10 @@ wildcard 通配符查询
 
 
 ### Redis zset热门统计
+https://stackoverflow.com/questions/12846028/how-to-cap-a-leaderboard-in-redis-to-only-n-elements
+add的时候调用`ZSCORE hot_houre_key 1 houseId` 
+  并且移除掉除了最后10个最大的`ZREMRANGEBYRANK hot_houre_key 0 -10`
+get的时候`ZREVRANGE hot_houre_key 0 -1 WITHSCORES `
+
+### tomcat最大线程数
+maxThreads规定的是最大的线程数目，并不是实际running的CPU数量；实际上，maxThreads的大小比CPU核心数量要大得多。这是因为，处理请求的线程真正用于计算的时间可能很少，大多数时间可能在阻塞，如等待数据库返回数据、等待硬盘读写数据等。因此，在某一时刻，只有少数的线程真正的在使用物理CPU，大多数线程都在等待；因此线程数远大于物理核心数才是合理的。
