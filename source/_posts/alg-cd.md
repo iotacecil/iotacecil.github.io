@@ -1,10 +1,9 @@
 ---
-title: 国内公司面试高频题
+title: 面试高频题
 date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
-<<<<<<< HEAD
 ### 730 统计不同回文子字符串 bd
 {% note %}
 输入：
@@ -43,8 +42,8 @@ public ListNode reverseKGroup(ListNode head, int k) {
         // 关键
         head = cur;
     }  
-    return head;   
-=======
+    return head;  
+```
 
 ### 124 二叉树最大路径和
 {% note %}
@@ -70,7 +69,6 @@ private int maxhelp(TreeNode root){
     max = Math.max(max,root.val+left+right);
     // 选择大的一条路径向上递归
     return Math.max(left,right)+root.val;
->>>>>>> refs/remotes/origin/hexo-edit
 }
 ```
 
