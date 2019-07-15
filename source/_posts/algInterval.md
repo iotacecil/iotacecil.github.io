@@ -300,13 +300,9 @@ public List<Interval> merge(List<Interval> intervals) {
         }
         else if(rst.get(rst.size()-1).end>=interval.start){
             // 不用新建 只需要更新栈顶
-            // Interval newInter = rst.get(rst.size()-1);
-            // rst.remove(rst.size()-1);
-            // newInter.end = Math.max(newInter.end,interval.end);
-            // rst.add(newInter);
             rst.get(rst.size()-1).end =Math.max(rst.get(rst.size()-1).end,interval.end); 
         }else{
-            rst.add(interval );
+            rst.add(interval);
         }
     }
     return rst;

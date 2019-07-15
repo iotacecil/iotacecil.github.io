@@ -4,6 +4,20 @@ date: 2019-01-07 19:27:02
 tags: [项目流程]
 category: [项目流程]
 ---
+查看suggest的ql
+```json
+http://127.0.0.1:9200/shoufang/_search
+{
+  "_source" : {
+    "includes" : [
+      "suggest"
+    ],
+    "excludes" : [ ]
+  }
+}
+
+```
+
 ### Elasticsearch 搭建
 不能以root启动
 ```shell

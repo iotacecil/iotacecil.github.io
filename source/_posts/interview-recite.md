@@ -2321,13 +2321,19 @@ spring.rabbitmq.listener.simple.max-concurrency= 10
 
 如何用redis list实现mq
 
-<<<<<<< HEAD
+
 生产端可靠性投递：Confirm模式，消费端的幂等
 return模式 消息不可达监听 补偿处理
 MQ限流 QOS
-=======
+
 死信队列，通过exchange路由到死信队列
->>>>>>> refs/remotes/origin/hexo-edit
+
+#### 生产者确认
+confirm模式最大的好处在于他是异步的，一旦发布一条消息，生产者应用程序就可以在等信道返回确认的同时继续发送下一条消息，当消息最终得到确认之后，生产者应用便可以通过回调方法来处理该确认消息，如果RabbitMQ因为自身内部错误导致消息丢失，就会发送一条nack消息，生产者应用程序同样可以在回调方法中处理该nack消息。
+
+#### 消费者确认
+RabbitMQ会等待消费者显式发回ack信号后才从内存(和磁盘，如果是持久化消息的话)中移去消息。否则，RabbitMQ会在队列中消息被消费后立即删除它。RabbitMQ会一直持有消息直到消费者显式调用basicAck为止。
+
 
 ### 12.消息中间件的作用
 1）解耦 基于数据的接口层
@@ -2385,8 +2391,11 @@ delta：内容、索引都在磁盘
 Connection处理进程，Channel处理进程，队列处理进程，消息持久化进程
 
 
+
+
+
 ### ES
-<<<<<<< HEAD
+
 倒排索引，倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
 倒排索引压缩编码
 
@@ -2394,7 +2403,7 @@ suggest：有3种term、phrase可以修正拼写错误，autocomplete自动补�
 term基于编辑距离
 phrase基于n-gram方法的短语计算逻辑
 autocompletion前缀匹配：数据结构FST，索引过程中创建FST数据结构，并存储在索引种，在需要时载入内存
-=======
+
 text会解析生成倒排索引，倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
 倒排索引压缩编码
 geo-point类型
@@ -2484,18 +2493,15 @@ if (response.status() == RestStatus.OK) {
 
 
 
-<<<<<<< HEAD
 ### 拓扑排序
 DFS：当出度为0的时候将当前点加入栈中，递归到上一层，所有出度都访问过后入栈。缺点是先要判断DAG
-=======
+
 
 可以设置from和size做分页
 
 
 ### Redis zset热门统计
-<<<<<<< HEAD
->>>>>>> refs/remotes/origin/hexo-edit
-=======
+
 https://stackoverflow.com/questions/12846028/how-to-cap-a-leaderboard-in-redis-to-only-n-elements
 add的时候调用`ZSCORE hot_houre_key 1 houseId` 
   并且移除掉除了最后10个最大的`ZREMRANGEBYRANK hot_houre_key 0 -10`
@@ -2503,4 +2509,4 @@ get的时候`ZREVRANGE hot_houre_key 0 -1 WITHSCORES `
 
 ### tomcat最大线程数
 maxThreads规定的是最大的线程数目，并不是实际running的CPU数量；实际上，maxThreads的大小比CPU核心数量要大得多。这是因为，处理请求的线程真正用于计算的时间可能很少，大多数时间可能在阻塞，如等待数据库返回数据、等待硬盘读写数据等。因此，在某一时刻，只有少数的线程真正的在使用物理CPU，大多数线程都在等待；因此线程数远大于物理核心数才是合理的。
->>>>>>> refs/remotes/origin/hexo-edit
+
