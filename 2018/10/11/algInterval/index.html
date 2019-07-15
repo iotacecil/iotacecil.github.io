@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="435 去掉最少区间使区间不重叠1Arrays.sort(intervals,(a,b)-&amp;gt;&amp;#123;a.end!=b.end?(a.end-b.end):(a.start-b.start)&amp;#125;); 性能很慢44ms换 提升到2ms 打败了100%123456Arrays.sort(intervals,new Comparator&amp;lt;Inteval&amp;gt;()&amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-06T02:55:21.807Z">
+<meta property="og:updated_time" content="2019-07-15T09:09:01.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="algInterval">
 <meta name="twitter:description" content="435 去掉最少区间使区间不重叠1Arrays.sort(intervals,(a,b)-&amp;gt;&amp;#123;a.end!=b.end?(a.end-b.end):(a.start-b.start)&amp;#125;); 性能很慢44ms换 提升到2ms 打败了100%123456Arrays.sort(intervals,new Comparator&amp;lt;Inteval&amp;gt;()&amp;#123;">
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-03-06T10:55:21+08:00">
-                2019-03-06
+              <time title="更新于" itemprop="dateModified" datetime="2019-07-15T17:09:01+08:00">
+                2019-07-15
               </time>
             
           </span>
@@ -404,7 +404,7 @@
 </blockquote>
 <p>方法1：O(nLogn) 需要O(n)空间<br>1.按起点排序，<br>2.push第一个interval<br>3.for全部interval：<br>  a.不交叉，push<br>  b.交叉,更新栈顶的end</p>
 <p>59ms 27%<br><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Interval&gt; <span class="title">merge</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(intervals==<span class="keyword">null</span>||intervals.size()&lt;<span class="number">2</span>)<span class="keyword">return</span> intervals;</span><br><span class="line">    intervals.sort((a,b)-&gt;a.start-b.start);</span><br><span class="line">    List&lt;Interval&gt; rst = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(Interval interval:intervals)&#123;</span><br><span class="line">        <span class="keyword">if</span>(rst.size()&lt;<span class="number">1</span>)&#123;       </span><br><span class="line">            rst.add(interval);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(rst.get(rst.size()-<span class="number">1</span>).end&gt;=interval.start)&#123;</span><br><span class="line">            <span class="comment">// 不用新建 只需要更新栈顶</span></span><br><span class="line">            <span class="comment">// Interval newInter = rst.get(rst.size()-1);</span></span><br><span class="line">            <span class="comment">// rst.remove(rst.size()-1);</span></span><br><span class="line">            <span class="comment">// newInter.end = Math.max(newInter.end,interval.end);</span></span><br><span class="line">            <span class="comment">// rst.add(newInter);</span></span><br><span class="line">            rst.get(rst.size()-<span class="number">1</span>).end =Math.max(rst.get(rst.size()-<span class="number">1</span>).end,interval.end); </span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            rst.add(interval );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rst;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Interval&gt; <span class="title">merge</span><span class="params">(List&lt;Interval&gt; intervals)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(intervals==<span class="keyword">null</span>||intervals.size()&lt;<span class="number">2</span>)<span class="keyword">return</span> intervals;</span><br><span class="line">    intervals.sort((a,b)-&gt;a.start-b.start);</span><br><span class="line">    List&lt;Interval&gt; rst = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(Interval interval:intervals)&#123;</span><br><span class="line">        <span class="keyword">if</span>(rst.size()&lt;<span class="number">1</span>)&#123;       </span><br><span class="line">            rst.add(interval);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(rst.get(rst.size()-<span class="number">1</span>).end&gt;=interval.start)&#123;</span><br><span class="line">            <span class="comment">// 不用新建 只需要更新栈顶</span></span><br><span class="line">            rst.get(rst.size()-<span class="number">1</span>).end =Math.max(rst.get(rst.size()-<span class="number">1</span>).end,interval.end); </span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            rst.add(interval);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rst;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </div></div></p>
 <p>方法2：分解成<code>start[],end[]</code><br>思想：后一个区间的start(i+1)一定要大于前一个区间的end(i)<br>98% 10ms<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">starts:   1    2    8    15</span><br><span class="line">               i    i+1</span><br><span class="line">ends:     3    6    10    18</span><br><span class="line">          j</span><br></pre></td></tr></table></figure></p>
@@ -442,8 +442,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/11/algDSbase/" rel="next" title="二叉树、链表基础操作">
-                <i class="fa fa-chevron-left"></i> 二叉树、链表基础操作
+              <a href="/2018/10/11/Interview-alg/" rel="next" title="每日Review">
+                <i class="fa fa-chevron-left"></i> 每日Review
               </a>
             
           </div>
@@ -531,7 +531,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

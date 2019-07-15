@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="Elasticsearch 搭建不能以root启动1234groupadd elasticsearchuseradd elasticsearch -g elasticsearch -p elasticsearchchown  -R elasticsearch.elasticsearch *su elasticsearch 安装es插件12345678910111213141516171819wge">
+<meta name="description" content="查看suggest的ql123456789http://127.0.0.1:9200/shoufang/_search&amp;#123;  &quot;_source&quot; : &amp;#123;    &quot;includes&quot; : [      &quot;suggest&quot;    ],    &quot;excludes&quot; : [ ]  &amp;#125;&amp;#125; Elasticsearch 搭建不能以root启动1234groupadd ela">
 <meta name="keywords" content="项目流程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="es搜房网">
 <meta property="og:url" content="http://blog.iotaa.xyz/2019/01/07/proHouse/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="Elasticsearch 搭建不能以root启动1234groupadd elasticsearchuseradd elasticsearch -g elasticsearch -p elasticsearchchown  -R elasticsearch.elasticsearch *su elasticsearch 安装es插件12345678910111213141516171819wge">
+<meta property="og:description" content="查看suggest的ql123456789http://127.0.0.1:9200/shoufang/_search&amp;#123;  &quot;_source&quot; : &amp;#123;    &quot;includes&quot; : [      &quot;suggest&quot;    ],    &quot;excludes&quot; : [ ]  &amp;#125;&amp;#125; Elasticsearch 搭建不能以root启动1234groupadd ela">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-11T07:58:26.365Z">
+<meta property="og:updated_time" content="2019-07-15T08:24:31.836Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="es搜房网">
-<meta name="twitter:description" content="Elasticsearch 搭建不能以root启动1234groupadd elasticsearchuseradd elasticsearch -g elasticsearch -p elasticsearchchown  -R elasticsearch.elasticsearch *su elasticsearch 安装es插件12345678910111213141516171819wge">
+<meta name="twitter:description" content="查看suggest的ql123456789http://127.0.0.1:9200/shoufang/_search&amp;#123;  &quot;_source&quot; : &amp;#123;    &quot;includes&quot; : [      &quot;suggest&quot;    ],    &quot;excludes&quot; : [ ]  &amp;#125;&amp;#125; Elasticsearch 搭建不能以root启动1234groupadd ela">
 
 
 
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-07-11T15:58:26+08:00">
-                2019-07-11
+              <time title="更新于" itemprop="dateModified" datetime="2019-07-15T16:24:31+08:00">
+                2019-07-15
               </time>
             
           </span>
@@ -393,7 +393,8 @@
       
 
       
-        <h3 id="Elasticsearch-搭建"><a href="#Elasticsearch-搭建" class="headerlink" title="Elasticsearch 搭建"></a>Elasticsearch 搭建</h3><p>不能以root启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">groupadd elasticsearch</span><br><span class="line">useradd elasticsearch -g elasticsearch -p elasticsearch</span><br><span class="line">chown  -R elasticsearch.elasticsearch *</span><br><span class="line">su elasticsearch</span><br></pre></td></tr></table></figure></p>
+        <p>查看suggest的ql<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:9200/shoufang/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"_source"</span> : &#123;</span><br><span class="line">    <span class="attr">"includes"</span> : [</span><br><span class="line">      <span class="string">"suggest"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"excludes"</span> : [ ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Elasticsearch-搭建"><a href="#Elasticsearch-搭建" class="headerlink" title="Elasticsearch 搭建"></a>Elasticsearch 搭建</h3><p>不能以root启动<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">groupadd elasticsearch</span><br><span class="line">useradd elasticsearch -g elasticsearch -p elasticsearch</span><br><span class="line">chown  -R elasticsearch.elasticsearch *</span><br><span class="line">su elasticsearch</span><br></pre></td></tr></table></figure></p>
 <p>安装es插件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/mobz/elasticsearch-head/archive/master.zip</span><br><span class="line"><span class="meta">#</span> 安装nodejs</span><br><span class="line">sudo yum install nodejs</span><br><span class="line">cd elasticsearch-head</span><br><span class="line">npm install</span><br><span class="line"><span class="meta">#</span> 两个进程跨域</span><br><span class="line">cd elasticsearch-5.5.2</span><br><span class="line">vim config/elasticsearch.yml</span><br><span class="line"><span class="meta">#</span> 最后加 并且绑定ip</span><br><span class="line">http.cors.enable: true</span><br><span class="line">http.cors.allow-origin: "*"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span># 启动es</span><br><span class="line">./elasticsearch -d</span><br><span class="line"><span class="meta">#</span># 启动head</span><br><span class="line">npm run start</span><br><span class="line">ps aux | grep ‘elastic’</span><br><span class="line"></span><br><span class="line">sysctl -w vm.max_map_count=262144</span><br></pre></td></tr></table></figure></p>
 <p>改limit需要重启(?)</p>
 <p>堆大小检查：JVM堆大小调整可能会出现停顿，应把Xms和Xmx设成相同<br>文件描述符： 每个分片有很多段，每个段有很多文件。<br><code>ulimit -n 65536</code> 只对当前终端生效<br><code>/etc/security/limits.conf</code> 配置<code>* - nofile 65536</code><br>最大线程数nproc<br>最大虚拟内存：使用mmap映射部分索引到进程地址空间，保证es进程有足够的地址空间as为unlimited<br>最大文件大小 fsize 设置为unlimited<br>！！虚拟内存区域最大数：<br>确保内核允许创建262144个【内存映射区】<br><code>sysctl -w vm.max_map_count=262144</code> 临时，重启后失效<br><code>/etc/sysctl.conf</code>添加<code>vm.max_map_count=262144</code> 然后执行<code>sysctl -p</code>立即 永久生效</p>
@@ -711,7 +712,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
