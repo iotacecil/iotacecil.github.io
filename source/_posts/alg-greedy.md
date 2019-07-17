@@ -4,19 +4,6 @@ date: 2019-03-21 18:59:20
 tags: [alg]
 categories: [算法备忘]
 ---
-
-<<<<<<< HEAD
-### 316 !!!Remove Duplicate Letters 删掉重复字符保证原顺序的   最小字典序 1081 不同字符的最小子序列
-去除字符串中重复的字母，使得每个字母只出现一次。需保证返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
-{% note %}
-输入: "cbacdcbc"
-输出: "acdb"
-{% endnote %}
-=======
-
-### 316 Remove Duplicate Letters 删掉重复字符保证原顺序的   最小字典序
->>>>>>> refs/remotes/origin/hexo-edit
-
 ### 122 买卖任意次数的股票
 {% note %}
 Input: [7,1,5,3,6,4]
