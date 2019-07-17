@@ -16,7 +16,22 @@ https://docs.qq.com/sheet/DUGZ6cEtrUFJsSGxP
 Input: 1->2->3->4->5->NULL, m = 2, n = 4
 Output: 1->4->3->2->5->NULL
 {% endnote %}
+
+头插法
+start = 2 翻转m-n条边
+
 ```java
+1->2->3->4->5->NULL
+/*
+pre = 1
+start = 2,next = 3
+头插3：保存3，删除3，用dumy头插：修改3.next头插，dumy.next=3
+2->4,3->2,1->3
+0->1->3->2->4->5
+start不变，next是4
+头插4：
+*/
+
 public ListNode reverseBetween(ListNode head, int m, int n) {
     if(head == null || n == m)return head;
     ListNode dumy = new ListNode(0);
@@ -27,13 +42,9 @@ public ListNode reverseBetween(ListNode head, int m, int n) {
     }
     ListNode start = pre.next;
     for (int i = 0; i <n-m ; i++) {
-        //3 下一个要反转到前面的
         ListNode next = start.next;
-        //2->4 接上后面不动的
-       start.next = next.next;
-       //3->2 反转到最前面接上反转部分
+        start.next = next.next;
         next.next = pre.next;
-        //1->3 之前不动部分接上新换上来的节点
         pre.next = next;
     }
     return dumy.next;
