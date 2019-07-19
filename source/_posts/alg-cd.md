@@ -5,6 +5,27 @@ tags: [alg]
 categories: [算法备忘]
 ---
 
+ 
+### 杨氏矩阵 nxn个数字放入nxn的杨氏矩阵
+1 2 3 4
+
+2x2
+
+1 2   1 3   
+3 4   2 4
+
+
+
+
+### 670 最大交换 交换数字中两位得到的最大值
+{% note %}
+输入: 2736
+输出: 7236
+解释: 交换数字2和数字7。
+{% endnote %}
+预处理一遍记录0-9每个数字最后出现的位置
+从左到右遍历每个数字，查9-0位置在这个数字之后的数字，return交换 
+
 ### 星期计算 吉姆拉尔森
 指定日期（Y年M月D日）的星期（W），可以先用公式①计算出当年元旦的星期，再计算距离当年元旦的天数，得到以下公式：
 W = ( Y – 1 +（Y – 1）/ 4 –（Y – 1）/ 100 +（Y – 1）/ 400 +Days) % 7
@@ -314,7 +335,33 @@ For k = 2, you should return: 2->1->4->3->5
 For k = 3, you should return: 3->2->1->4->5
 {% endnote %}
 
-迭代
+迭代头插
+```java
+public ListNode reverseKGroup(ListNode head, int k) {
+    ListNode dumy = new ListNode(0);
+    dumy.next = head;
+    ListNode pre = dumy;
+    while(true){
+        ListNode fontk = pre;
+        for(int i =0;i<k;i++){
+            fontk = fontk.next;
+            if(fontk == null)return dumy.next;
+        }
+        ListNode last = pre.next;
+
+        for(int i =0;i<k-1;i++){
+            ListNode next = last.next;
+            last.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+        }
+        pre = last;
+
+    }
+}
+```
+
+
 
 ```java
 public ListNode reverseKGroup(ListNode head, int k) {
