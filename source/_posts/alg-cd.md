@@ -5,7 +5,87 @@ tags: [alg]
 categories: [算法备忘]
 ---
 
- 
+### 快速排序非递归
+```java
+private  void quicksort(int[] arr,int left,int right){
+    Deque<Integer> stk = new ArrayDeque<>();
+    if (left<=right){
+        stk.push(right);
+        stk.push(left);
+        while (!stk.isEmpty()) {
+            int l = stk.pop();
+            int r = stk.pop();
+            if(l>=r)continue;
+          //  int pivot = arr[r];
+            int i = l-1;int j = r;
+            while (true){
+                while (++i < j && arr[i] <= arr[r]);
+                while (--j > i && arr[j] >= arr[r]);
+                if(i>=j)break;
+                else {
+                    swap(arr,i,j);
+                }
+            }
+            swap(arr,i,r);
+            stk.push(i-1);stk.push(l);
+            stk.push(r);stk.push(i+1);
+        }
+    }
+}
+```
+
+
+### 173 二叉搜索树最小值迭代器 中序遍历
+用 next() 将返回二叉搜索树中的下一个最小的数。
+next() 和 hasNext() 操作的时间复杂度是 O(1)，并使用 O(h) 内存，其中 h 是树的高度。
+```java
+class BSTIterator {
+Deque<TreeNode> stk;
+private void pushleft(TreeNode root){
+    while(root!=null){
+        stk.push(root);
+        root = root.left;
+    }
+}
+public BSTIterator(TreeNode root) {
+    stk = new ArrayDeque<>();
+    pushleft(root);
+}
+
+/** @return the next smallest number */
+public int next() {
+    TreeNode top = stk.pop();
+    if(top.right!=null){
+        pushleft(top.right);
+    }
+    return top.val;
+}
+
+/** @return whether we have a next smallest number */
+public boolean hasNext() {
+    return !stk.isEmpty();
+}
+}
+```
+
+### 卡特兰数
+http://www.voidcn.com/article/p-klibltgz-dg.html
+递归式如下：h(n)= h(0)\*h(n-1)+h(1)\*h(n-2) + ... + h(n-1)h(0) (其中n>=2，h(0) = h(1) = 1) 该递推关系的解为：h(n)=C(2n,n)/(n+1) (n=1,2,3,...)
+h(0)=1,h(1)=1,h(2)=2,h(3)=5,h(4)=14,h(5)=42
+
+#### hdu 1134 2n个人围城一圈,两两握手,没有交叉，问有多少种方式。
+第一个人可以和第2,4,6，..，2（n-1），2n，即必须保证和他握手的那个人两边是偶数，
+即为：h(n)=h(0)\*h(n-1)+h(1)\*h(n-2)+...+h(n-1)\*h0=(4\*n-2)/(n+1) \*h(n-1),h(0)=1,h(1)=1.
+
+#### hdu 1133 找零排队
+有2n个人排成一行进入剧场。入场费5元。其中只有n个人有一张5元钞票，另外n人只有10元钞票，剧院无其它钞票，问有多少中方法使得只要有10元的人 买 票，售票处就有5元的钞票找零？(将持5元者到达视作将5元入栈，持10元者到达视作使栈中某5元出栈)
+
+#### 不同形状的二叉树个数
+先去一个点作为顶点,然后左边依次可以取0至N-1个相对应的,右边是N-1到0个,两两配对相乘,就是
+h(0)*h(n-1) + h(2)*h(n-2) +  + h(n-1)h(0)=h(n))（能构成h（N）个）。
+
+### 一个环，有n个点, 问从0点出发，经过k步回到原点有多少种方法
+
 ### 杨氏矩阵 nxn个数字放入nxn的杨氏矩阵
 1 2 3 4
 
@@ -603,6 +683,28 @@ return lastp==0;
 ```
 
 ### 45 jump game最少跳跃次数
+{% note %}
+输入: [2,3,1,1,4]
+输出: 2
+解释: 跳到最后一个位置的最小跳跃数是 2。
+     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+{% endnote %}
+```java
+public int jump(int[] nums) {
+    int end = 0;
+    int maxPosition = 0; 
+    int steps = 0;
+    for(int i = 0; i < nums.length - 1; i++){
+        //找能跳的最远的
+        maxPosition = Math.max(maxPosition, nums[i] + i); 
+        if( i == end){ //遇到边界，就更新边界，并且步数加一
+            end = maxPosition;
+            steps++;
+        }
+    }
+    return steps;
+}
+```
 
 ### 754 向左向右走1-n步到达target，求最小n
 {% note %}
