@@ -4,6 +4,400 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+
+### 快速排序非递归
+```java
+private  void quicksort(int[] arr,int left,int right){
+    Deque<Integer> stk = new ArrayDeque<>();
+    if (left<=right){
+        stk.push(right);
+        stk.push(left);
+        while (!stk.isEmpty()) {
+            int l = stk.pop();
+            int r = stk.pop();
+            if(l>=r)continue;
+          //  int pivot = arr[r];
+            int i = l-1;int j = r;
+            while (true){
+                while (++i < j && arr[i] <= arr[r]);
+                while (--j > i && arr[j] >= arr[r]);
+                if(i>=j)break;
+                else {
+                    swap(arr,i,j);
+                }
+            }
+            swap(arr,i,r);
+            stk.push(i-1);stk.push(l);
+            stk.push(r);stk.push(i+1);
+        }
+    }
+}
+```
+
+
+### 173 二叉搜索树最小值迭代器 中序遍历
+用 next() 将返回二叉搜索树中的下一个最小的数。
+next() 和 hasNext() 操作的时间复杂度是 O(1)，并使用 O(h) 内存，其中 h 是树的高度。
+```java
+class BSTIterator {
+Deque<TreeNode> stk;
+private void pushleft(TreeNode root){
+    while(root!=null){
+        stk.push(root);
+        root = root.left;
+    }
+}
+public BSTIterator(TreeNode root) {
+    stk = new ArrayDeque<>();
+    pushleft(root);
+}
+
+/** @return the next smallest number */
+public int next() {
+    TreeNode top = stk.pop();
+    if(top.right!=null){
+        pushleft(top.right);
+    }
+    return top.val;
+}
+
+/** @return whether we have a next smallest number */
+public boolean hasNext() {
+    return !stk.isEmpty();
+}
+}
+```
+
+### 卡特兰数
+http://www.voidcn.com/article/p-klibltgz-dg.html
+递归式如下：h(n)= h(0)\*h(n-1)+h(1)\*h(n-2) + ... + h(n-1)h(0) (其中n>=2，h(0) = h(1) = 1) 该递推关系的解为：h(n)=C(2n,n)/(n+1) (n=1,2,3,...)
+h(0)=1,h(1)=1,h(2)=2,h(3)=5,h(4)=14,h(5)=42
+
+#### hdu 1134 2n个人围城一圈,两两握手,没有交叉，问有多少种方式。
+第一个人可以和第2,4,6，..，2（n-1），2n，即必须保证和他握手的那个人两边是偶数，
+即为：h(n)=h(0)\*h(n-1)+h(1)\*h(n-2)+...+h(n-1)\*h0=(4\*n-2)/(n+1) \*h(n-1),h(0)=1,h(1)=1.
+
+#### hdu 1133 找零排队
+有2n个人排成一行进入剧场。入场费5元。其中只有n个人有一张5元钞票，另外n人只有10元钞票，剧院无其它钞票，问有多少中方法使得只要有10元的人 买 票，售票处就有5元的钞票找零？(将持5元者到达视作将5元入栈，持10元者到达视作使栈中某5元出栈)
+
+#### 不同形状的二叉树个数
+先去一个点作为顶点,然后左边依次可以取0至N-1个相对应的,右边是N-1到0个,两两配对相乘,就是
+h(0)*h(n-1) + h(2)*h(n-2) +  + h(n-1)h(0)=h(n))（能构成h（N）个）。
+
+### 一个环，有n个点, 问从0点出发，经过k步回到原点有多少种方法
+
+### 杨氏矩阵 nxn个数字放入nxn的杨氏矩阵
+1 2 3 4
+
+2x2
+
+1 2   1 3   
+3 4   2 4
+
+
+
+
+### 670 最大交换 交换数字中两位得到的最大值
+{% note %}
+输入: 2736
+输出: 7236
+解释: 交换数字2和数字7。
+{% endnote %}
+预处理一遍记录0-9每个数字最后出现的位置
+从左到右遍历每个数字，查9-0位置在这个数字之后的数字，return交换 
+
+### 星期计算 吉姆拉尔森
+指定日期（Y年M月D日）的星期（W），可以先用公式①计算出当年元旦的星期，再计算距离当年元旦的天数，得到以下公式：
+W = ( Y – 1 +（Y – 1）/ 4 –（Y – 1）/ 100 +（Y – 1）/ 400 +Days) % 7
+ 例如：计算2001年3月5日是星期几（W表示）？
+Days = 31（1月）+ 28（2月）+ 4（3月）= 64
+ W = [ 2001（Y）-1 +（2001 / 4 – 2001 / 100 + 2001 / 400）+ Days] % 7= 1
+即2001年3月5日是星期二
+
+### 约瑟夫环问题
+https://www.nowcoder.com/questionTerminal/f78a359491e64a50bce2d89cff857eb6
+
+### 毒药问题
+有16瓶水，其中只有一瓶水有毒，小白鼠喝一滴之后一小时会死。请问最少用（） 只小白鼠，在1小时内一定可以找出至少14瓶无毒的水？
+https://www.nowcoder.com/questionTerminal/a09c0eecbf684b0cba2ad0be32b7988e?orderByHotValue=1&difficulty=00001&mutiTagIds=134&page=2&onlyReference=false
+
+问题：找14瓶无毒的，只有一瓶有毒的，可以有2瓶不知道有毒没毒。
+思路：2只，两个圈，一个重叠，一共能标示4种状态
+3只，3个圈，两两重叠+3，公共重叠+1，一共能标识8种状态
+4只，新加入的圆能把原来的区域都变成2份再加上新的圆它自己，7x2+1 +1 =16
+也就是说3位、4位能够表示的状态数量，每一位就是一个大圈，是一只小白鼠。
+可以确定每一种状态是否有毒。
+
+
+
+#### 458 毒药
+1000个水桶，1个有毒药，喝了15分钟死，一小时内搞清哪个有毒最少需要多少只猪
+5只 
+4个水桶，1个有毒药，喝了15分钟死，30分钟搞清哪个有毒最少需要多少只猪
+2只 2轮
+
+假设有 n 只水桶，猪饮水中毒后会在 m 分钟内死亡，你需要多少猪（x）就能在 p 分钟内找出 “有毒” 水桶？这 n 只水桶里有且仅有一只有毒的桶。
+思路：2只猪可以把桶放成一个二维的矩形，每一轮2只确定一行和一列，找到一个坐标。
+如果3只猪，可以把桶放成三维X X X ，用三只每一轮确定一个位置。
+
+1 2
+3 4
+第一轮喝 1，2 另一个1，3，都死说明1，不然说明2或者3.不死说明4.
+
+1  2  3
+4  5  6
+7  8  9
+
+第一轮1 2 3， 另一个 1，4 ，7
+三只猪，测两次，可以测27桶
+
+求数组的维度，我们知道了数组的总个数，所以要尽量增加数组的长宽，尽量减少维度。
+
+数组的长宽其实都是测试的次数+1（因为全部测完了都没发生，下一轮不用测肯定在），所以我们首先要确定能测的次数，通过总测试时间除以毒发时间，再加上1就是测试次数。
+$$log_{T+1}(N)$$
+
+```java
+public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+    return (int)Math.ceil(Math.log(buckets)/Math.log(minutesToTest / minutesToDie + 1));
+}
+```
+
+正常思路：
+如果2只，4个桶，一轮
+都不喝0,A喝1，B喝2，AB喝3，
+00      01    10     11
+有x个猪可以表示2^x个状态。
+如果有t次尝试，用t位二进制去表示bucket。
+
+如果8个桶，15分钟死，有40分钟
+可以测试2轮，用3位二进制表示桶
+Math.log(8, 3).ceil
+
+### 石子合并 tc
+一堆有x个石子的石子堆和一堆有y个石子的石子堆合并将得到一堆x+y个石子的石子堆，这次合并得分为x\*y，当只剩下一堆石子的时候游戏结束。 最大得分多少。
+{% note %}
+3
+1 2 3
+{% endnote %}
+2 + [3 3] = 2+9 =11
+[1,7]+6 = 7+6 = 11
+其实与顺序无关
+
+
+### 539 判断4点是否是正方形
+{% note %}
+输入: p1 = [0,0], p2 = [1,1], p3 = [1,0], p4 = [0,1]
+输出: True
+{% endnote %}
+
+思路：4个点两两的距离，一共C42=6, 其中有4条是正方形的边长，2条是对角线。
+简化一点，从1个点出发3条边，有2条边长，一条对角线，可以不用判断面积，对角线是边的根号2倍，平方就是2倍
+边界条件，多个点是重叠的情况，
+```java
+public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
+    int[] dis = new int[6];
+    int[][] points = new int[4][2];
+    points[0] = p1;
+    points[1] = p2;
+    points[2] = p3;
+    points[3] = p4;
+    int cnt = 0;
+    for(int i = 0;i<3;i++){
+        for(int j = i+1;j<4;j++){
+            int dis2 = (points[i][0]-points[j][0])*(points[i][0]-points[j][0]) + (points[i][1]-points[j][1])*(points[i][1]-points[j][1]);
+            dis[cnt++] = dis2;
+        }
+    }
+    Arrays.sort(dis);
+    return dis[0]>0&&dis[0]*2 ==dis[5];
+}
+```
+
+### 判断D点是否在三角形内
+设线段端点为从 A(x1, y1)到 B(x2, y2), 线外一点 P(x0，y0)，
+判断该点位于有向线 A→B 的那一侧。 
+a = ( x2-x1, y2-y1) 
+b = (x0-x1, y0-y1) 
+a x b = | a | | b | sinφ (φ为两向量的夹角) 
+| a | | b |  ≠ 0 时， a x b  决定点 P的位置 
+所以  a x b  的 z 方向大小决定 P位置 
+(x2-x1)(y0-y1) – (y2-y1)(x0-x1)  > 0   左侧 
+(x2-x1)(y0-y1) – (y2-y1)(x0-x1)  < 0   右侧 
+(x2-x1)(y0-y1) – (y2-y1)(x0-x1)  = 0   线段上 
+
+思路，计算边AB,BC,CA 顺时针的边和 点D的叉积是不是都>=0
+```java
+// AB:（B.x-A.x，B.y-A.y)
+// AC: (C.x-A.x，C.y-A.y)
+double Product(point A, point B,point C){
+    return (B.x - A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y);
+}
+boolean isIn(point A,point B,point C,point D){
+    if(Product(A, B, D) >= 0 && Product(B, C, D) >=0 && Product(C,A,D) >=0){
+        return true;
+    }
+    return false;
+}
+```
+
+### lc84直方图中的最大矩形poj2559 
+{% note %}
+Input: [2,1,5,6,2,3]
+Output: 10
+{% endnote %}
+
+栈：比当前i高的未来都会入栈，而之前比i高的都会出栈计算出结果，而且栈中之前的肯定都矮，也就是说，i如果是栈中唯一元素，宽度一定可以延伸到数组最左。
+技巧：-1，每次计算宽度的时候，先pop，宽度的左端点是栈的peek(),比栈顶小的左边位置
+```java
+public int largestRectangleArea(int[] heights) {
+    Deque<Integer> stk = new ArrayDeque<>();
+    int n = heights.length;
+    int rst = 0;
+    stk.push(-1);
+    for(int i =0;i<n;i++){
+        while(stk.peek()!=-1 && heights[i]<=heights[stk.peek()] ){
+            int h = heights[stk.pop()];
+            int left = stk.peek();
+            int w = i-1-left;
+            rst = Math.max(rst,w*h);
+        }
+        stk.push(i);
+    }
+    
+    while(stk.peek()!=-1){
+        int h = heights[stk.pop()];
+        int left = stk.peek();
+        int w = n-1-left;
+        rst = Math.max(rst,w*h); 
+    }
+    return rst;
+}
+```
+
+
+挑战p335
+思路：以当前位置的高度为最终高度，如果左右比当前值更大，则这个矩形宽可以左右扩展。
+定义
+L[i] 找到以当前高度最大矩形的左边界，就是比hi更高的最左位置
+R[i] 右边界，比hi更高的最右
+        0 1 2 3 4 5
+height [2,1,5,6,2,3]
+left   [0,0,2,3,2,5]
+right  [0,5,3,3,5,5]
+rst    [2,6,10,6,8,3]
+递增栈 保持栈顶是挡住比当前hi小的元素的下标
+```java
+public int largestRectangleArea(int[] h) {
+    int rst = 0;
+    int n = h.length;
+    int[] stk = new int[n];
+    int[] L = new int[n];
+    int[] R = new int[n];
+    int t = 0;
+    for (int i = 0; i <h.length ; i++) {
+        while (t>0 && h[stk[t-1]]>=h[i])t--;
+        L[i] = t ==0?0:(stk[t-1] + 1);
+        stk[t++] = i;
+    }
+    t = 0;
+    for (int i = n-1; i >=0 ; i--) {
+        while (t>0 && h[stk[t-1]]>=h[i])t--;
+        R[i] = t ==0?n-1:(stk[t-1]-1);
+        stk[t++] = i;
+    }
+    for(int i = 0;i<n;i++){
+        rst = Math.max(rst,h[i]*(R[i]-L[i]+1));
+    }
+    return rst;
+}
+```
+
+
+### 15 3sum a + b + c = 0
+> Given array nums = [-1, 0, 1, 2, -1, -4],
+A solution set is:
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+关键：去重技巧
+```java
+//75%
+public List<List<Integer>> threeSum(int[] num) {
+    Arrays.sort(num);
+    List<List<Integer>> res = new ArrayList<>();
+    for (int i = 0; i <num.length-2; i++) {
+        //关键去重
+        if(i==0||(i>0&&num[i]!=num[i-1])){
+            int lo = i+1,hi=num.length-1,sum = 0-num[i];
+            //关键
+            while (lo<hi){
+                if(num[lo]+num[hi] == sum){
+                    res.add(Arrays.asList(num[i],num[lo],num[hi]));
+                    //去重
+                    while (lo<hi&&num[lo]==num[lo+1])lo++;
+                    while (lo<hi&&num[hi]==num[hi-1])hi--;
+                    lo++;hi--;
+                }else if(num[lo]+num[hi]<sum)lo++;
+                else hi--;
+            }
+        }
+      }
+      return res;
+}
+```
+
+### 215 Kth Largest Element in an Array
+{% note %}
+Input: [3,2,1,5,6,4] and k = 2
+Output: 5
+{% endnote %}
+
+用快排用头中尾的中位数最快。
+找第k个最大，就是找下标为k = len-k = 4的数字
+
+```java
+public int findKthLargest(int[] nums, int k) {
+        int n = nums.length;
+        int h = n-1;
+        int l = 0;
+        //l=0,h=0
+        while(l<h){
+            // 从大到小排序 
+            // 每次拿l试试能放到第几个上
+            int mid = piv(nums,l,h);
+            if(mid==k-1)return nums[mid];
+            // k=1 return 2
+            else if(mid >k-1){
+                h = mid-1;
+            }else l = mid+1;
+        }
+        return nums[l];
+        
+    }
+    //3 2 1 5 4
+    //  4     2
+    //  4 5 1 2
+    //5 4 3 1 2  return 2  
+    private int piv(int[] nums,int l,int h){
+        //i=0,j=1
+        int i = l;int j = h+1;
+        int p = nums[l];
+        while(true){ 
+            //左大 右小
+            while(++i<j && nums[i]>=p);
+            while(--j>i && nums[j]<=p);
+
+                if(i>=j)break;
+                else swap(nums,i,j);
+        }
+        swap(nums,j,l);
+        return j;
+    }
+```
+
+
 ### 730 统计不同回文子字符串 bd
 {% note %}
 输入：
@@ -20,6 +414,34 @@ Given this linked list: 1->2->3->4->5
 For k = 2, you should return: 2->1->4->3->5
 For k = 3, you should return: 3->2->1->4->5
 {% endnote %}
+
+迭代头插
+```java
+public ListNode reverseKGroup(ListNode head, int k) {
+    ListNode dumy = new ListNode(0);
+    dumy.next = head;
+    ListNode pre = dumy;
+    while(true){
+        ListNode fontk = pre;
+        for(int i =0;i<k;i++){
+            fontk = fontk.next;
+            if(fontk == null)return dumy.next;
+        }
+        ListNode last = pre.next;
+
+        for(int i =0;i<k-1;i++){
+            ListNode next = last.next;
+            last.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+        }
+        pre = last;
+
+    }
+}
+```
+
+
 
 ```java
 public ListNode reverseKGroup(ListNode head, int k) {
@@ -42,7 +464,8 @@ public ListNode reverseKGroup(ListNode head, int k) {
         // 关键
         head = cur;
     }  
-    return head;  
+    return head; 
+    } 
 ```
 
 ### 124 二叉树最大路径和
@@ -260,6 +683,28 @@ return lastp==0;
 ```
 
 ### 45 jump game最少跳跃次数
+{% note %}
+输入: [2,3,1,1,4]
+输出: 2
+解释: 跳到最后一个位置的最小跳跃数是 2。
+     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+{% endnote %}
+```java
+public int jump(int[] nums) {
+    int end = 0;
+    int maxPosition = 0; 
+    int steps = 0;
+    for(int i = 0; i < nums.length - 1; i++){
+        //找能跳的最远的
+        maxPosition = Math.max(maxPosition, nums[i] + i); 
+        if( i == end){ //遇到边界，就更新边界，并且步数加一
+            end = maxPosition;
+            steps++;
+        }
+    }
+    return steps;
+}
+```
 
 ### 754 向左向右走1-n步到达target，求最小n
 {% note %}

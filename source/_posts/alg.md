@@ -176,47 +176,6 @@ Output: 6
 {% endnote %}
 想象成每一行为底的直方图
 
-### lc84直方图中的最大矩形poj2559 
-{% note %}
-Input: [2,1,5,6,2,3]
-Output: 10
-{% endnote %}
-挑战p335
-思路：以当前位置的高度为最终高度，如果左右比当前值更大，则这个矩形宽可以左右扩展。
-定义
-L[i] 找到以当前高度最大矩形的左边界，就是比hi更高的最左位置
-R[i] 右边界，比hi更高的最右
-        0 1 2 3 4 5
-height [2,1,5,6,2,3]
-left   [0,0,2,3,2,5]
-right  [0,5,3,3,5,5]
-rst    [2,6,10,6,8,3]
-递增栈 保持栈顶是挡住比当前hi小的元素的下标
-```java
-public int largestRectangleArea(int[] h) {
-    int rst = 0;
-    int n = h.length;
-    int[] stk = new int[n];
-    int[] L = new int[n];
-    int[] R = new int[n];
-    int t = 0;
-    for (int i = 0; i <h.length ; i++) {
-        while (t>0 && h[stk[t-1]]>=h[i])t--;
-        L[i] = t ==0?0:(stk[t-1] + 1);
-        stk[t++] = i;
-    }
-    t = 0;
-    for (int i = n-1; i >=0 ; i--) {
-        while (t>0 && h[stk[t-1]]>=h[i])t--;
-        R[i] = t ==0?n-1:(stk[t-1]-1);
-        stk[t++] = i;
-    }
-    for(int i = 0;i<n;i++){
-        rst = Math.max(rst,h[i]*(R[i]-L[i]+1));
-    }
-    return rst;
-}
-```
 
 
 
@@ -387,49 +346,6 @@ public boolean canCross(int[] stones) {
 }
 ```
 
-
-### 458 毒药
-1000个水桶，1个有毒药，喝了15分钟死，一小时内搞清哪个有毒最少需要多少只猪
-5只 
-4个水桶，1个有毒药，喝了15分钟死，30分钟搞清哪个有毒最少需要多少只猪
-2只 2轮
-
-假设有 n 只水桶，猪饮水中毒后会在 m 分钟内死亡，你需要多少猪（x）就能在 p 分钟内找出 “有毒” 水桶？这 n 只水桶里有且仅有一只有毒的桶。
-思路：2只猪可以把桶放成一个二维的矩形，每一轮2只确定一行和一列，找到一个坐标。
-如果3只猪，可以把桶放成三维X X X ，用三只每一轮确定一个位置。
-
-1 2
-3 4
-第一轮喝 1，2 另一个1，3，都死说明1，不然说明2或者3.不死说明4.
-
-1  2  3
-4  5  6
-7  8  9
-
-第一轮1 2 3， 另一个 1，4 ，7
-三只猪，测两次，可以测27桶
-
-求数组的维度，我们知道了数组的总个数，所以要尽量增加数组的长宽，尽量减少维度。
-
-数组的长宽其实都是测试的次数+1（因为全部测完了都没发生，下一轮不用测肯定在），所以我们首先要确定能测的次数，通过总测试时间除以毒发时间，再加上1就是测试次数。
-$$log_{T+1}(N)$$
-
-```java
-public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
-    return (int)Math.ceil(Math.log(buckets)/Math.log(minutesToTest / minutesToDie + 1));
-}
-```
-
-正常思路：
-如果2只，4个桶，一轮
-都不喝0,A喝1，B喝2，AB喝3，
-00      01    10     11
-有x个猪可以表示2^x个状态。
-如果有t次尝试，用t位二进制去表示bucket。
-
-如果8个桶，15分钟死，有40分钟
-可以测试2轮，用3位二进制表示桶
-Math.log(8, 3).ceil
 
 
 ### 407 二维数组存水
@@ -2302,21 +2218,6 @@ public int triangleNumber(int[] nums) {
 }
 ```
 
-### 判断点D是否在三角形ABC内
-思路，计算边AB,BC,CA 顺时针的边和 点D的叉积是不是都>=0
-```java
-// 计算AB 和 AC的叉积 边AB和点C的叉积
-double Product(point A, point B,point C){
-    return (B.x - A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y);
-}
-boolean isIn(point A,point B,point C,point D){
-    if(Product(A, B, D) >= 0 && Product(B, C, D) >=0 && Product(C,A,D) >=0){
-        return true;
-    }
-    return false;
-}
-```
-
 
 ### 812 最大三角形面积
 {% note %}
@@ -3311,45 +3212,6 @@ out: 3 (2,9) (3,7) (4,5)
 x相差4，y相差8 求分成（/）最多多少份，x,y都是整数
 
 
-
-
----
-
-
-### 15 3sum a + b + c = 0
-> Given array nums = [-1, 0, 1, 2, -1, -4],
-A solution set is:
-[
-  [-1, 0, 1],
-  [-1, -1, 2]
-]
-
-关键：去重技巧
-```java
-//75%
-public List<List<Integer>> threeSum(int[] num) {
-    Arrays.sort(num);
-    List<List<Integer>> res = new ArrayList<>();
-    for (int i = 0; i <num.length-2; i++) {
-        //关键去重
-        if(i==0||(i>0&&num[i]!=num[i-1])){
-            int lo = i+1,hi=num.length-1,sum = 0-num[i];
-            //关键
-            while (lo<hi){
-                if(num[lo]+num[hi] == sum){
-                    res.add(Arrays.asList(num[i],num[lo],num[hi]));
-                    //去重
-                    while (lo<hi&&num[lo]==num[lo+1])lo++;
-                    while (lo<hi&&num[hi]==num[hi-1])hi--;
-                    lo++;hi--;
-                }else if(num[lo]+num[hi]<sum)lo++;
-                else hi--;
-            }
-        }
-      }
-      return res;
-}
-```
 
 ### lt 1487 2sum 最接近target
 

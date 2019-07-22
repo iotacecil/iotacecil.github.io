@@ -149,44 +149,6 @@ public static void main(String[] args) {
 }
 ```
  
-
-### 215 Kth Largest Element in an Array
-{% note %}
-Input: [3,2,1,5,6,4] and k = 2
-Output: 5
-{% endnote %}
-
-用快排用头中尾的中位数最快。
-找第k个最大，就是找下标为k = len-k = 4的数字
-
-```java
-public  int findKthLargest(int[] nums,int k){
-     k = nums.length-k;
-     int l = 0;
-     int r = nums.length-1;
-     while(l<r){
-         int idx = part(nums,l,r);
-         if(idx<k)l=idx+1;
-         else if(idx>k) r = idx-1;
-         else break;
-     }
-     return nums[k];
-}
-// 闭区间[l,r],r作为pivot
-private int part(int[] nums,int l,int r){
-    int i = l-1;
-    int j = r;
-    while(true){
-        while(++i<j&&nums[i]<nums[r]);
-        while(--j>i&&nums[r]<nums[j]);
-        if(i>=j)break;
-        swap(nums,i,j);
-    }
-    swap(nums,r,i);
-    return i;
-}
-```
-
 ### 376. Wiggle Subsequence 最长摇摆序列
 {% note %}
 Input: [1,17,5,10,13,15,10,5,16,8]
