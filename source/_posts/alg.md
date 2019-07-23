@@ -1169,26 +1169,7 @@ public boolean isInterleave(String s1, String s2, String s3) {
 }
 ```
 
-### 316 !!删除重复字母，输出字典序最小的（按原顺序）
-{% note %}
-Input: "bcabc"
-Output: "abc"
-{% endnote %}
-pdd原题
-不会
 
-```java
-public String removeDuplicateLetters(String s) {
-    int[] cnt = new int[26];
-    int pos = 0; // the position for the smallest s[i]
-    for (int i = 0; i < s.length(); i++) cnt[s.charAt(i) - 'a']++;
-    for (int i = 0; i < s.length(); i++) {
-        if (s.charAt(i) < s.charAt(pos)) pos = i;
-        if (--cnt[s.charAt(i) - 'a'] == 0) break;
-    }
-    return s.length() == 0 ? "" : s.charAt(pos) + removeDuplicateLetters(s.substring(pos + 1).replaceAll("" + s.charAt(pos), ""));
-}
-```
 
 ### 677 优美排列，相邻两个数的差有k种的数组
 {% note %}
@@ -1448,25 +1429,6 @@ Output:
 2.奇数-1变偶数&(~1)
 3.判断奇数(&1)>0
 
-
-### ！！！516 最长回文子序列
-```java
-public static int longestPalindromeSubseq(String s) {
-    int[][] dp = new int[s.length()][s.length()];
-
-    for (int i = s.length() - 1; i >= 0; i--) {
-        dp[i][i] = 1;
-        for (int j = i+1; j < s.length(); j++) {
-            if (s.charAt(i) == s.charAt(j)) {
-                dp[i][j] = dp[i+1][j-1] + 2;
-            } else {
-                dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
-            }
-        }
-    }
-    return dp[0][s.length()-1];
-}
-```
 
 
 ### ！5 最长回文串 lt893

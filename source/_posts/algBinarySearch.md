@@ -17,14 +17,33 @@ return --lo;
 有效区间宽度缩小到0才终止。
 正确性：A[0,lo)中元素<=e,A[hi,n)中元素都>e
 
-### 658 K个最接近的元素
+### 658 K个最接近的元素 二分查找左端点
 从数组中找到最靠近 x（两数之差最小）的 k 个数
 结果按升序.
 如果有两个数与 x 的差值一样，优先选择数值较小的那个数。
-
->输入: [1,2,3,4,5], k=4, x=-1
+{% note %}
+输入: [1,2,3,4,5], k=4, x=-1
 输出: [1,2,3,4]
-
+{% endnote %}
+```java
+public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int n = arr.length;
+        int l = 0;int h = n-k;
+        while(l<h){
+            int mid = (l+h)/2;
+            // l<h h<n-k l<n-1-k
+            // 如果左端点的差值大,左端点太小了
+            if(x-arr[mid] > arr[mid+k]-x){
+                l=mid+1;
+            }else h=mid;
+        }
+        List<Integer> rst = new ArrayList<>();
+        for(int i = l;i<l+k;i++){
+            rst.add(arr[i]);
+        }
+        return rst;
+    }
+```
 
 
 ### 378 矩阵从左到右从上到下有序，找第k小的元素(唯品B 考到)

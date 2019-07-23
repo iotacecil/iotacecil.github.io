@@ -4,6 +4,28 @@ date: 2019-05-29 20:39:39
 tags: [alg]
 categories: [算法备忘]
 ---
+https://corvo.myseu.cn/2018/02/01/2018-02-01-%E9%9D%A2%E8%AF%95%E6%99%BA%E5%8A%9B%E9%A2%98%E7%9B%AE/
+
+### 非递归全排列
+```java
+List<List<Integer>> permute(int[]num){
+   List<List<Integer>> rst = new LinkedList<>();
+    rst.add(new LinkedList<>());
+    for(int n:num){
+        int size = rst.size();
+        while (size-->0){
+            List<Integer> tmp = rst.get(0);
+            rst.remove(0);
+            for (int i = 0; i <=tmp.size() ; i++) {
+                List<Integer> t = new LinkedList<>(tmp);
+                t.add(i,n);
+                rst.add(t);
+            }
+        }
+    }
+    return rst;
+}
+```
 
 ### 快速排序非递归
 ```java
@@ -69,7 +91,7 @@ public boolean hasNext() {
 ```
 
 ### 卡特兰数
-http://www.voidcn.com/article/p-klibltgz-dg.html
+https://blog.csdn.net/u014097230/article/details/44244793
 递归式如下：h(n)= h(0)\*h(n-1)+h(1)\*h(n-2) + ... + h(n-1)h(0) (其中n>=2，h(0) = h(1) = 1) 该递推关系的解为：h(n)=C(2n,n)/(n+1) (n=1,2,3,...)
 h(0)=1,h(1)=1,h(2)=2,h(3)=5,h(4)=14,h(5)=42
 
@@ -84,7 +106,16 @@ h(0)=1,h(1)=1,h(2)=2,h(3)=5,h(4)=14,h(5)=42
 先去一个点作为顶点,然后左边依次可以取0至N-1个相对应的,右边是N-1到0个,两两配对相乘,就是
 h(0)*h(n-1) + h(2)*h(n-2) +  + h(n-1)h(0)=h(n))（能构成h（N）个）。
 
+### 一个圆，被分成N个部分，用K种颜色给每个部分上色，要求相邻区域颜色不能相同。有多少种上色方案？
+https://www.cnblogs.com/ranjiewen/p/8539095.html
+
 ### 一个环，有n个点, 问从0点出发，经过k步回到原点有多少种方法
+k=1  0种
+k=2  2种
+d(k, j)表示从点j 走k步到达原点0的方法数
+d(k, j) = d(k-1, j-1) + d(k-1, j+1);
+由于是环的问题， j-1, j+1可能会超出 0到n-1的范围，因此，我们将递推式改成如下
+d(k, j) = d(k-1, (j-1+n)%n) + d(k-1, (j+1)%n);
 
 ### 杨氏矩阵 nxn个数字放入nxn的杨氏矩阵
 1 2 3 4
@@ -183,6 +214,47 @@ Math.log(8, 3).ceil
 [1,7]+6 = 7+6 = 11
 其实与顺序无关
 
+### 316 !!删除重复字母，输出字典序最小的（按原顺序） pdd
+{% note %}
+Input: "bcabc"
+Output: "abc"
+{% endnote %}
+
+关键：visit标记已经在栈中的直接跳过
+ccabbc,如果之前标记过的visit被pop了，之后的c还是能正常入栈的。
+```java
+ public String removeDuplicateLetters(String s) {
+        int[] ch = new int[26];
+        int n = s.length();
+        for(char c : s.toCharArray()){ 
+            ch[c-'a']++;
+        }
+        Deque<Character> stk = new ArrayDeque<>();
+        boolean[] visited = new boolean[26];
+        for(int i = 0;i<s.length();i++){
+                        
+
+            char cur = s.charAt(i);
+            ch[cur-'a']--;
+            
+            if(visited[cur-'a'])continue;
+            while(!stk.isEmpty() && ch[stk.peek()-'a']>0 && cur<stk.peek()){
+        char tmp = stk.pop();
+             visited[tmp-'a'] = false;                                                                   
+            }
+            stk.push(cur);
+            visited[cur-'a'] = true;
+    
+            
+        }
+        StringBuilder sb = new StringBuilder();
+        for(Character c:stk){
+            sb.insert(0,c);
+        }
+        
+        return sb.toString();
+    }
+```
 
 ### 539 判断4点是否是正方形
 {% note %}
