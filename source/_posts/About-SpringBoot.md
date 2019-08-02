@@ -4,6 +4,40 @@ date: 2018-03-06 07:51:17
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 循环依赖
+https://www.baeldung.com/circular-dependencies-in-spring
+例子 用构造函数 互相注入（创建的时候用到一个没有创建完的bean）
+```java
+@Component
+public class CircularDependencyA {
+ 
+    private CircularDependencyB circB;
+ 
+    @Autowired
+    public CircularDependencyA(CircularDependencyB circB) {
+        this.circB = circB;
+    }
+}
+@Component
+public class CircularDependencyB {
+ 
+    private CircularDependencyA circA;
+ 
+    @Autowired
+    public CircularDependencyB(CircularDependencyA circA) {
+        this.circA = circA;
+    }
+}
+```
+
+报错
+```
+BeanCurrentlyInCreationException: Error creating bean with name 'circularDependencyA':
+Requested bean is currently in creation: Is there an unresolvable circular reference?
+```
+
+解决：1.`@Lazy` 2.用set方法注入
+
 
 @Configuration注解的类通过简单地在调用同一个类中其他的@Bean方法来定义bean之间的依赖关系。
 

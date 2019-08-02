@@ -192,42 +192,7 @@ public int wiggleMaxLength(int[] nums) {
 ```
 
 
-### ！974 和整除k的子数组个数
-{% note %}
-Input: A = [4,5,0,-2,-3,1], K = 5
-Output: 7
-Explanation: There are 7 subarrays with a sum divisible by K = 5:
-`[4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]`
-{% endnote %}
 
-1)用前缀和可以快速得到区间和
-`P = [0,4,9,9,7,4,5]`,
-2）如果`(sums[i] - sums[j]) % K == 0`，说明sums[i]和sums[j]都是K的倍数，所以得出sums[i] % K == sums[j] % K
-例如：%K ==0的位置 [0]和[6] 得到子数组`[4, 5, 0, -2, -3, 1]`
-同余的如果有4个，两两组合的位置数有C(4,2)=6
-
-注意：presum为负数的时候，取模应该`(p % K + K) % K`
--1 % 5 = -1, but we need the positive mod 4
-例如presum[1] = -1  presum[4] = 4
-```java
-public int subarraysDivByK(int[] A, int K) {
-    int n = A.length;
-    int rst = 0;
-    int[] presum = new int[n+1];
-    //[1]-[0] = pre[0:1)
-    for(int i =0;i<n;i++){
-        presum[i+1] = presum[i]+A[i];
-    }
-    int[] mod = new int[K];
-    for(int p:presum){
-        mod[((p%K)+K)%K]++;
-    }
-    for(int c:mod){
-        rst += (c*(c-1))/2;
-    }
-    return rst;
-}
-```
 
 ### 209最小连续子数组 和>=K 的长度
 {% note %}
