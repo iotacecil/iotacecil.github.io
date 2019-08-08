@@ -308,6 +308,10 @@ QUIC协议已经标准化为Http3协议。基于UDP，但提供了可靠性和�
 ### 5.nginx
 10w以上的并发连接
 
+####nginx master和worker怎么通信：
+https://www.oschina.net/question/12_13663
+
+
 #### Nginx是如何工作的？是如何配置的？
 工作模式：
 进程模式：一个master进程管理worker进程，监听连接请求。worker进程处理业务请求，每个worker可以并行处理数千个并发连接和请求。
@@ -360,9 +364,6 @@ nginx限流是漏桶法
 单进程，非阻塞异步IO，通过回调高度用户 事件驱动 超过5w
 主进程现在只要专心处理一些与I/O无关的逻辑处理
 
-**Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈**
-
-linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
 
 ### 8.为什么是三次握手
 三次握手的过程：
@@ -598,6 +599,28 @@ URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。
 
 
 ### 23 IO模型
+异步IO是内核等待内核缓存区数据就绪，然后由内核负责将数据拷贝到用户空间缓冲区，再发送实现完成信号，而同步IO是发送内核缓冲区数据就绪信号，将数据copy到用户缓冲区还是由应用程序进行io系统调用实现。同步IO又包括阻塞IO、非阻塞IO、IO多路复用和信号IO模式。
+
+#### 阻塞和非阻塞：
+https://www.jianshu.com/p/dfd940e7fca2
+阻塞IO：等待数据（收到一个完整的TCP包）和系统内核拷贝到用户内核都阻塞了。
+非阻塞IO：内核数据没准备好直接返回错误，需要轮询。
+非阻塞IO需要和IO通知机制一起使用。
+I/O通知机制：1） I/O复用函数【向内核注册一组事件】，内核通过I/O复用函数把就绪事件通知给应用程序。 I/O复用函数本身是阻塞的，可以同时监听多个I/O事件。
+2）SIGIO信号。
+
+accept()为什么会阻塞？
+即使用多线程，serverSocket.accept()询问操作系统的客户端连接accept()还是单线程的，系统级别的【同步】网络I/O模型。
+阻塞，非阻塞是程序级别的，同步非同步时操作系统级别的。
+
+多路复用IO模型：操作系统在一个端口上同时接受多个客户端I/O事件。
+事件驱动IO。select阻塞轮询所有socket，可以同时处理多个连接，（连接数不高的话不一定比多线程阻塞IO好）优势不在于单个连接处理更快，在于能处理更多的连接。而且单线程执行，事件探测和事件响应在一起。
+以上三个都属于同步IO，都会阻塞进程。
+select/poll/epoll都需要等待读写时间就绪后读写，异步IO会把数据从内核拷贝到用户。
+epoll是根据每个fd上面的callback函数实现的。而且有mmap内核空间和用户空间同处一块内存空间。
+
+#### 如何理解 nio是同步非阻塞
+
 操作系统会创建一个由文件系统管理的socket对象（如下图）。这个socket对象包含了发送缓冲区、接收缓冲区、等待队列等成员。
 等待队列是个非常重要的结构，它指向所有需要等待该socket事件的进程。
 
@@ -647,20 +670,6 @@ IO多路复用模型（事件驱动模型）：可以一次性检测多个连接
 
 
 
-非阻塞IO需要和IO通知机制一起使用。
-I/O通知机制：1） I/O复用函数【向内核注册一组事件】，内核通过I/O复用函数把就绪事件通知给应用程序。 I/O复用函数本身是阻塞的，可以同时监听多个I/O事件。
-2）SIGIO信号。
-
-accept()为什么会阻塞？
-即使用多线程，serverSocket.accept()询问操作系统的客户端连接accept()还是单线程的，系统级别的【同步】网络I/O模型。
-阻塞，非阻塞是程序级别的，同步非同步时操作系统级别的。
-
-多路复用IO模型：操作系统在一个端口上同时接受多个客户端I/O事件。
-事件驱动IO。select阻塞轮询所有socket，可以同时处理多个连接，（连接数不高的话不一定比多线程阻塞IO好）优势不在于单个连接处理更快，在于能处理更多的连接。而且单线程执行，事件探测和事件响应在一起。
-以上三个都属于同步IO，都会阻塞进程。
-select/poll/epoll都需要等待读写时间就绪后读写，异步IO会把数据从内核拷贝到用户。
-epoll是根据每个fd上面的callback函数实现的。而且有mmap内核空间和用户空间同处一块内存空间。
-
 #### 如何理解 nio是同步非阻塞
 由一个专门的线程(Selector)来处理所有的IO事件，并负责分发。
 事件驱动机制：事件到的时候触发，而不是同步的去监视事件。
@@ -690,6 +699,19 @@ reactor模型要求主线程只负责监听文件描述上是否有事件发生�
 异步I/O 订阅-通知：立即返回，内核完成数据准备+拷贝数据之后发送给用户进程一个信号。
 Proactor实现异步I/O，产生I/O调用的用户进程不会等待I/O发生，具体I/O操作由操作系统完成。
 异步I/O需要操作系统支持，Linux异步I/O为AIO，Windows为IOCP。
+
+### 24 Reactor模式！！！
+
+Java提供了2种异步编程模型
+1.回调 事件的Listener
+2.Future
+
+#### 观察者模式 发布订阅模式 事件通知机制 Promise模式
+一对多关系。
+网页事件绑定、UI事件监听机制全都是观察者模式。
+
+#### 好处
+
 
 
 
@@ -859,15 +881,13 @@ CFS设定了进程占用CPU最小时间，如果进程太多，调度周期会�
 2）反射Class.forName
 3）作为父类，子类被初始化
 4）调用main
-5）`MethodHandle`
-
-
-
-
+5）`MethodHandle`？？
 
 每个类都会使用 当前类加载器（自己的类加载器）加载依赖的其它对象
 线程类加载器：继承父线程的上下文类加载器，运行初始线程上下文类加载器是Applicaton
 mysql的Connection接口是JDK内置的rt.jar，由bootstrap类加载器加载的，但是厂商的实现是applicaton类加载器加载的，双亲委托模型
+
+
 
 ### 2.垃圾回收机制
 新生代有什么算法
@@ -893,8 +913,8 @@ Survivor为什么要有2个：
 并行收集器：对应young和old两个收集器 吞吐量优先 JVM的默认垃圾回收器 多线程进行垃圾回收
 并发收集器：CMS、G1 停顿时间优先
 
-CMS7个步骤 标记清除算法， `-XX:CMSFullGCsBeforeCompaction=n` 压缩
-1初始标记STW root和年轻代到老年代的引用
+#### CMS7个步骤 标记清除算法， `-XX:CMSFullGCsBeforeCompaction=n` 压缩
+1.初始标记STW root和年轻代到老年代的引用
 2.并发标记
 3.重新标记STW 包括young和old 可以先执行young gc`-XX:+CMSScavengeBeforeRemark`
 4.并发清理
@@ -904,6 +924,8 @@ HBase年轻代 并行回收ParallelGC 老年代CMS并发收集器
 
 
 Socket缓冲区：每个Socket连接都有Receive和Send两个缓冲区，分别占用大约37KB和25KB的内存。
+
+#### G1算法
 
 #### 什么时候对象会被回收？如果互相引用
 http://blog.jobbole.com/109170/
@@ -922,10 +944,22 @@ ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
 
 资源管理，如果数据库连接对象被收回，但是没有调用close，数据库连接的资源不会释放，数据库连接就少一个了，要放在try()里。
 
+#### gcroot是什么
+GC会收集那些不是GC roots且没有被GC roots引用的对象。
+Class - 由系统类加载器(system class loader)加载的对象，这些类是不能够被回收的，他们可以以静态字段的方式保存持有其它对象。我们需要注意的一点就是，通过用户自定义的类加载器加载的类，除非相应的Java.lang.Class实例以其它的某种（或多种）方式成为roots，否则它们并不是roots，.
+Thread - 活着的线程
+Stack Local - Java方法的local变量或参数
+JNI Local - JNI方法的local变量或参数
+JNI Global - 全局JNI引用
+Monitor Used - 用于同步的监控对象
+Held by JVM - 用于JVM特殊目的由GC保留的对象，但实际上这个与JVM的实现是有关的。可能已知的一些类型是：系统类加载器、一些JVM知道的重要的异常类、一些用于处理异常的预分配对象以及一些自定义的类加载器等。
+
 #### full GC
 1）System.gc()方法的调用
 2）老年代空间
 3）Minor GC后超过老年代可用空间
+
+full GC：当准备要触发一次young GC时，如果发现统计数据说之前young GC的平均晋升大小比目前old gen剩余的空间大，则不会触发young GC而是转为触发full GC（因为HotSpot VM的GC里，除了CMS的concurrent collection之外，其它能收集old gen的GC都会同时收集整个GC堆，包括young gen，所以不需要事先触发一次单独的young GC）；或者，如果有perm gen的话，要在perm gen分配空间但已经没有足够空间时，也要触发一次full GC；或者System.gc()、heap dump带GC，默认也是触发full GC。
 
 ### 3.Object有哪些方法
 还有`getClass()` 和`finalize`
@@ -1046,6 +1080,84 @@ String 存在JVM哪里
 原来在永久代里的字符串常量池移到了堆中。而且元空间替代了永久代。
 本来永久代使用的是JVM内存，而元空间使用的是本地内存，字符串常量不会有性能问题（intern）和内存溢出。
 
+### 13 !!!线程安全的单例模式
+单元素枚举类是实现Singleton的最佳方法
+```java
+public enum Singleton{
+
+    //定义1个枚举的元素，即为单例类的1个实例
+    INSTANCE;
+
+    // 隐藏了1个空的、私有的 构造方法
+    // private Singleton () {}
+
+}
+// 获取单例的方式：
+Singleton singleton = Singleton.INSTANCE;
+```
+
+【初始化占位类模式】
+如果是静态初始化对象不需要显示同步。
+静态初始化：JVM在类初始化阶段执行，在类加载后并在线程执行前。JVM会获取锁确保这个类已经被加载。任何一个线程调用`getInstance`的时候会使静态内部类被加载和初始化。
+```java
+public class Singleton {  
+    private static class SingletonHolder {  
+        private static final Singleton INSTANCE = new Singleton();  
+    }  
+    private Singleton (){}  
+    public static final Singleton getInstance() {  
+        return SingletonHolder.INSTANCE; 
+    }  
+}
+```
+
+用反射强行调用私有构造函数可以创建多个实例。防止序列化：重写私有的`readReslove()` 当反序列化readObject()的时候会直接调用readReslove替换原本的返回值。
+
+双重检查锁已经被广泛地废弃了！
+
+#### 懒加载 （根本没必要）
+如果这个类有多个静态变量，还是应该用懒加载。
+不然类只在主动调用的时候加载，其实已经是懒加载了。
+
+懒加载 推迟高开销的对象初始化操作。
+同步 double checked locking 
+只希望在第一次创建 实例的时候进行同步
+【创建对象分为3个步骤】：
+1）分配内存
+2）初始化对象
+3）obj指向内存地址
+关键：（2）、（3）会被重排序（因为理论上单线程不会有错，而且能提高性能），导致obj不未空，但还没初始化，所以volatile禁止重排序。
+如果两个操作之间没有happens-before则JVM可以重排序。
+Volatile变量规则。对一个volatile修饰的变量，对他的写操作先行发生于读操作。
+
+特别对于有final字段的对象，构造函数完成的时候才完成final的写入。
+初始化安全：防止对对象的初始引用被重排序到构造过程之前。
+
+```java
+public class LazySingle(){
+    private volatile static LazySingle obj = null;
+    private LazySingle(){}
+    public static getInstance(){
+        if(obj == null){
+            // 1.只有一个线程能进来
+            synchronized(LazySingle.class){
+                if(obj == null){
+                    obj = new LazySingle();}}}
+        return obj;
+}}
+```
+
+“Monitor”是BLOCKED线程正在等待获取对象上的锁的状态
+
+方法2：静态内部类
+
+### 14.java线程栈大小
+https://www.zhihu.com/question/27844575
+**Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈**
+
+linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
+
+
 ## 5.分布式
 
 使用过zookpeeper吗
@@ -1075,6 +1187,8 @@ commit;
 ### 2.XA事务 分布式事务
 事务管理器（Mysql客户端）和资源管理器（Mysql数据库）之间用两阶段提交，等所有参与全局事务的都能提交再提交
 用JAVA JTA API
+
+JTA事务是什么???
 
 ## 6.数据结构
 ### 1.二叉平衡树的应用 红黑树原理
@@ -1110,7 +1224,7 @@ Kruskal算法，存在相同权值的边。O(mlogm) m为边树，与顶点数无
 复杂度：
 
 ### 4.Hash碰撞的方法
-1）开放地址法（Nginx的散列表） 开放地址法分： 线性探测法（会聚集）、平方探测、双散列
+1）开放地址法（Nginx的散列表？？） 开放地址法分： 线性探测法（会聚集）、平方探测、双散列
 2）链地址法
 
 不成功平均查找长度，要按照冲突解决方法查找到当前位置为空位置。最后/散列函数的mod（hash函数的分类个数）
@@ -1215,8 +1329,6 @@ AQS利用CAS原子操作维护自身的状态，结合LockSupport对线程进行
 MCS自旋锁 基于链表 公平自旋锁 在本地属性变量上自旋
 CLH自旋锁 基于链表 公平自旋锁 在前驱结点上自旋
 有N个线程 L个锁 空间需要O(L+N)
-
-
 
 
 ### 4.AQS
@@ -1395,6 +1507,11 @@ StampedLock 是乐观锁，
 
 处理并发过程中的**原子性、可见性、有序性**。
 
+#### volatile 内存屏障
+1.可见性
+2.指令重排序
+借助了 StoreLoad 实现了CPU本地数据的写回，保持了变量全局可见性。
+
 volatile可以保证变量会直接从主存读取，而对变量的更新也会直接写到主存
 变量定义了8种操作顺序的规则，能保证代码执行的顺序与程序顺序相同。保证long和double不被拆分。
 定义了8个happen before原则
@@ -1500,7 +1617,18 @@ redis集群一致性hash如何解决分布不均匀
 
 ### 4.redis 高可用 sentinel
 
-### 5.Redis分片
+### 5.Redis分片/Redis集群/Redis分布式
+`cluster meet ip port`
+每个节点会维护一个`clusterState`,里面有`clusterNode *slot[16387]`数组，当A meet B的时候，
+A会把B创建一个Node加在state `dict *node`里。
+B收到后也会创建A的Node添加到state。发送pong
+A收到pong发送ping。
+然后A用Gossip协议让A知道的其他node都向B发meet。
+
+接收到命令的计算key属于哪个槽，只要O(1)时间查询state就知道是不是本node负责的key，不是就负责路由。发送Moved让客户端自动转向。
+
+`clusterState`里还有`zskiplist *slots_to_key` 用跳跃表score是槽的号码，记录所有键值，就可以用范围查询每个slot的key
+
 添加or删除节点只会影响到这个点逆时针遇到的第一个节点之间的所有数据节点受影响
 
 
@@ -2033,28 +2161,6 @@ CSRF 盗取用户cookie或者session伪造请求
 3）重定向
 
 
-### 38 I/O模型五种详解
-异步IO是内核等待内核缓存区数据就绪，然后由内核负责将数据拷贝到用户空间缓冲区，再发送实现完成信号，而同步IO是发送内核缓冲区数据就绪信号，将数据copy到用户缓冲区还是由应用程序进行io系统调用实现。同步IO又包括阻塞IO、非阻塞IO、IO多路复用和信号IO模式。
-
-#### 阻塞和非阻塞：
-https://www.jianshu.com/p/dfd940e7fca2
-阻塞IO：等待数据（收到一个完整的TCP包）和系统内核拷贝到用户内核都阻塞了。
-非阻塞IO：内核数据没准备好直接返回错误，需要轮询。
-非阻塞IO需要和IO通知机制一起使用。
-I/O通知机制：1） I/O复用函数【向内核注册一组事件】，内核通过I/O复用函数把就绪事件通知给应用程序。 I/O复用函数本身是阻塞的，可以同时监听多个I/O事件。
-2）SIGIO信号。
-
-accept()为什么会阻塞？
-即使用多线程，serverSocket.accept()询问操作系统的客户端连接accept()还是单线程的，系统级别的【同步】网络I/O模型。
-阻塞，非阻塞是程序级别的，同步非同步时操作系统级别的。
-
-多路复用IO模型：操作系统在一个端口上同时接受多个客户端I/O事件。
-事件驱动IO。select阻塞轮询所有socket，可以同时处理多个连接，（连接数不高的话不一定比多线程阻塞IO好）优势不在于单个连接处理更快，在于能处理更多的连接。而且单线程执行，事件探测和事件响应在一起。
-以上三个都属于同步IO，都会阻塞进程。
-select/poll/epoll都需要等待读写时间就绪后读写，异步IO会把数据从内核拷贝到用户。
-epoll是根据每个fd上面的callback函数实现的。而且有mmap内核空间和用户空间同处一块内存空间。
-
-#### 如何理解 nio是同步非阻塞
 
 
 
@@ -2891,7 +2997,11 @@ Connection处理进程，Channel处理进程，队列处理进程，消息持久
 零拷贝减少消息网络传输时间。
 同一主题多分区存储。
 
-### ES
+## ES
+
+### ES是用什么框架写的
+ Lucene：只是一个框架，要充分利用它的功能，需要使用JAVA，并且在程序中集成Lucene，学习成本高，Lucene确实非常复杂。
+ Lucene是Apache的一个全文检索引擎工具包，通过Lucene可以让程序员快速开发一个全文检索功能。Lucene不是搜索引擎，仅仅是一个工具包。
 
 倒排索引，倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
 倒排索引压缩编码

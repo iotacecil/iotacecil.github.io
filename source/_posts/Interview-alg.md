@@ -191,70 +191,7 @@ while(l<r){
 return -1;
 ```
 
-### 40 !!!线程安全的单例模式
-单元素枚举类是实现Singleton的最佳方法
-```java
-public enum Singleton{
 
-    //定义1个枚举的元素，即为单例类的1个实例
-    INSTANCE;
-
-    // 隐藏了1个空的、私有的 构造方法
-    // private Singleton () {}
-
-}
-// 获取单例的方式：
-Singleton singleton = Singleton.INSTANCE;
-```
-
-【初始化占位类模式】
-如果是静态初始化对象不需要显示同步。
-静态初始化：JVM在类初始化阶段执行，在类加载后并在线程执行前。JVM会获取锁确保这个类已经被加载。任何一个线程调用`getInstance`的时候会使静态内部类被加载和初始化。
-```java
-public class Singleton {  
-    private static class SingletonHolder {  
-        private static final Singleton INSTANCE = new Singleton();  
-    }  
-    private Singleton (){}  
-    public static final Singleton getInstance() {  
-        return SingletonHolder.INSTANCE; 
-    }  
-}
-```
-
-用反射强行调用私有构造函数可以创建多个实例。防止序列化：重写私有的`readReslove()` 当反序列化readObject()的时候会直接调用readReslove替换原本的返回值。
-
-双重检查锁已经被广泛地废弃了！
-
-懒加载 推迟高开销的对象初始化操作。
-同步 double checked locking 
-只希望在第一次创建 实例的时候进行同步
-创建对象分为3个步骤：
-1）分配内存
-2）初始化对象
-3）obj指向内存地址
-关键：（2）、（3）会被重排序（因为理论上单线程不会有错，而且能提高性能），导致obj不未空，但还没初始化，所以volatile禁止重排序。
-如果两个操作之间没有happens-before则JVM可以重排序。
-Volatile变量规则。对一个volatile修饰的变量，对他的写操作先行发生于读操作。
-
-特别对于有final字段的对象，构造函数完成的时候才完成final的写入。
-初始化安全：防止对对象的初始引用被重排序到构造过程之前。
-
-```java
-public class LazySingle(){
-    private volatile static LazySingle obj = null;
-    private LazySingle(){}
-    public static getInstance(){
-        if(obj == null){
-            // 1.只有一个线程能进来
-            synchronized(LazySingle.class){
-                if(obj == null){
-                    obj = new LazySingle();}}}
-        return obj;
-}}
-```
-
-方法2：静态内部类
 
 ### 42  2进制字符串转16进制
 ```java
