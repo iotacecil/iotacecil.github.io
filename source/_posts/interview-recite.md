@@ -943,7 +943,7 @@ Survivor为什么要有2个：
 
 #### 7个垃圾收集器
 串行收集器：对应young和old两个收集器
-并行收集器：对应young和old两个收集器 吞吐量优先 JVM的默认垃圾回收器 多线程进行垃圾回收
+并行收集器：对应young和old两个收集器 【吞吐量】优先 JVM的默认垃圾回收器 多线程进行垃圾回收
 并发收集器：CMS、G1 停顿时间优先
 
 #### CMS7个步骤 标记清除算法， `-XX:CMSFullGCsBeforeCompaction=n` 压缩
@@ -1095,6 +1095,7 @@ protected不能修饰外部类
 4.最短进程优先
 
 vmstat 看cs 是context switch 线程上下文切换次数
+左边r和b是cpu运行队列和阻塞队列的长度（运行队列中轻量级线程的实际数量）
 pidstat -w  cswch/s 主动上下文修换 nvcswch/s 被动上下文切换
 上下文切换还包括系统调用。
 us 用户CPU时间
@@ -2570,6 +2571,8 @@ JAVA 中有以下几个『元注解』：
 
 ### tomcat的启动流程
 Tomcat的基本架构和组件，以及请求的整个流程
+一个server有多个service，一个service表示多个连接器和一个容器的绑定，容器是分Engine、Host、Context、Wapper层的，连接器负责处理协议和IO包装成内部request发给容器，Engine找到负责的容器，每个容器都有责任链和链上的处理器，并启动下一容器的执行流。这个web应用有独立的类加载器。隔离WEB-INF下的jar包。
+另外还有线程池模块，每个请求都会分配一个县城处理。
 
 #### Spring 怎么解决循环引用
 Lazy和setter方法注入
