@@ -6,6 +6,128 @@ categories: [算法备忘]
 ---
 https://corvo.myseu.cn/2018/02/01/2018-02-01-%E9%9D%A2%E8%AF%95%E6%99%BA%E5%8A%9B%E9%A2%98%E7%9B%AE/
 
+### lc84直方图中的最大矩形poj2559 
+{% note %}
+Input: [2,1,5,6,2,3]
+Output: 10
+{% endnote %}
+
+栈：比当前i高的未来都会入栈，而之前比i高的都会出栈计算出结果，而且栈中之前的肯定都矮，也就是说，i如果是栈中唯一元素，宽度一定可以延伸到数组最左。
+技巧：-1，每次计算宽度的时候，先pop，宽度的左端点是栈的peek(),比栈顶小的左边位置
+```java
+public int largestRectangleArea(int[] heights) {
+    Deque<Integer> stk = new ArrayDeque<>();
+    int n = heights.length;
+    int rst = 0;
+    stk.push(-1);
+    for(int i =0;i<n;i++){
+        while(stk.peek()!=-1 && heights[i]<=heights[stk.peek()] ){
+            int h = heights[stk.pop()];
+            int left = stk.peek();
+            int w = i-1-left;
+            rst = Math.max(rst,w*h);
+        }
+        stk.push(i);
+    }
+    
+    while(stk.peek()!=-1){
+        int h = heights[stk.pop()];
+        int left = stk.peek();
+        int w = n-1-left;
+        rst = Math.max(rst,w*h); 
+    }
+    return rst;
+}
+```
+
+
+挑战p335
+思路：以当前位置的高度为最终高度，如果左右比当前值更大，则这个矩形宽可以左右扩展。
+定义
+L[i] 找到以当前高度最大矩形的左边界，就是比hi更高的最左位置
+R[i] 右边界，比hi更高的最右
+        0 1 2 3 4 5
+height [2,1,5,6,2,3]
+left   [0,0,2,3,2,5]
+right  [0,5,3,3,5,5]
+rst    [2,6,10,6,8,3]
+递增栈 保持栈顶是挡住比当前hi小的元素的下标
+```java
+public int largestRectangleArea(int[] h) {
+    int rst = 0;
+    int n = h.length;
+    int[] stk = new int[n];
+    int[] L = new int[n];
+    int[] R = new int[n];
+    int t = 0;
+    for (int i = 0; i <h.length ; i++) {
+        while (t>0 && h[stk[t-1]]>=h[i])t--;
+        L[i] = t ==0?0:(stk[t-1] + 1);
+        stk[t++] = i;
+    }
+    t = 0;
+    for (int i = n-1; i >=0 ; i--) {
+        while (t>0 && h[stk[t-1]]>=h[i])t--;
+        R[i] = t ==0?n-1:(stk[t-1]-1);
+        stk[t++] = i;
+    }
+    for(int i = 0;i<n;i++){
+        rst = Math.max(rst,h[i]*(R[i]-L[i]+1));
+    }
+    return rst;
+}
+```
+
+### 85 最大矩形
+ {% note %}
+ Input:
+
+  ["1","0","1","0","0"],
+  ["1","0","1","1","1"],
+  ["1","1","1","1","1"],
+  ["1","0","0","1","0"]
+
+Output: 6
+ {% endnote %}
+
+
+### 1092 最短公共序列
+{% note %}
+包含str1和str2的最短序列
+Input: str1 = "abac", str2 = "cab"
+Output: "cabac"
+{% endnote %}
+思路，求出LCS之后，从右下角开始，如果最后一个字符匹配，这个字符应该加入结果，i--,j--。
+如果不匹配，说明这个dp是从上/左抄的，把不匹配的那个（不是抄的）加入结果i--;直到推到左上。
+
+
+### 718 最长重复子数组
+{% note %}
+Input:
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+Output: 3
+Explanation: 
+The repeated subarray with maximum length is [3, 2, 1].
+{% endnote %}
+```java
+public int findLength(int[] A, int[] B) {
+    int n = A.length;
+    int m = B.length;
+    int max = 0;
+    int[][] dp = new int[n+1][m+1];  
+    for(int i = 1;i<=n;i++){
+        for(int j =1;j<=m;j++){
+            if(A[i-1]==B[j-1]){
+                dp[i][j] = dp[i-1][j-1]+1;
+                max = Math.max(max,dp[i][j]);
+            }
+        }
+    }     
+    return max;
+}
+```
+
 ### ！974 和整除k的子数组个数
 {% note %}
 Input: A = [4,5,0,-2,-3,1], K = 5
@@ -387,77 +509,7 @@ boolean isIn(point A,point B,point C,point D){
 }
 ```
 
-### lc84直方图中的最大矩形poj2559 
-{% note %}
-Input: [2,1,5,6,2,3]
-Output: 10
-{% endnote %}
 
-栈：比当前i高的未来都会入栈，而之前比i高的都会出栈计算出结果，而且栈中之前的肯定都矮，也就是说，i如果是栈中唯一元素，宽度一定可以延伸到数组最左。
-技巧：-1，每次计算宽度的时候，先pop，宽度的左端点是栈的peek(),比栈顶小的左边位置
-```java
-public int largestRectangleArea(int[] heights) {
-    Deque<Integer> stk = new ArrayDeque<>();
-    int n = heights.length;
-    int rst = 0;
-    stk.push(-1);
-    for(int i =0;i<n;i++){
-        while(stk.peek()!=-1 && heights[i]<=heights[stk.peek()] ){
-            int h = heights[stk.pop()];
-            int left = stk.peek();
-            int w = i-1-left;
-            rst = Math.max(rst,w*h);
-        }
-        stk.push(i);
-    }
-    
-    while(stk.peek()!=-1){
-        int h = heights[stk.pop()];
-        int left = stk.peek();
-        int w = n-1-left;
-        rst = Math.max(rst,w*h); 
-    }
-    return rst;
-}
-```
-
-
-挑战p335
-思路：以当前位置的高度为最终高度，如果左右比当前值更大，则这个矩形宽可以左右扩展。
-定义
-L[i] 找到以当前高度最大矩形的左边界，就是比hi更高的最左位置
-R[i] 右边界，比hi更高的最右
-        0 1 2 3 4 5
-height [2,1,5,6,2,3]
-left   [0,0,2,3,2,5]
-right  [0,5,3,3,5,5]
-rst    [2,6,10,6,8,3]
-递增栈 保持栈顶是挡住比当前hi小的元素的下标
-```java
-public int largestRectangleArea(int[] h) {
-    int rst = 0;
-    int n = h.length;
-    int[] stk = new int[n];
-    int[] L = new int[n];
-    int[] R = new int[n];
-    int t = 0;
-    for (int i = 0; i <h.length ; i++) {
-        while (t>0 && h[stk[t-1]]>=h[i])t--;
-        L[i] = t ==0?0:(stk[t-1] + 1);
-        stk[t++] = i;
-    }
-    t = 0;
-    for (int i = n-1; i >=0 ; i--) {
-        while (t>0 && h[stk[t-1]]>=h[i])t--;
-        R[i] = t ==0?n-1:(stk[t-1]-1);
-        stk[t++] = i;
-    }
-    for(int i = 0;i<n;i++){
-        rst = Math.max(rst,h[i]*(R[i]-L[i]+1));
-    }
-    return rst;
-}
-```
 
 
 ### 15 3sum a + b + c = 0
@@ -1773,6 +1825,11 @@ public int lengthOfLongestSubstring(String s) {
     return max==-1?s.length():max;
 }
 ```
+
+
+### 小易的字典
+n个'a'和m个'z', 并且所有单词按照字典序排列。小易现在希望你能帮他找出第k个单词是什么。
+
 
 ### 440 ！字典序的第k小 计数！
 1-n的第k小
