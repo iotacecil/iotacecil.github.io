@@ -6,6 +6,7 @@ categories: [算法备忘]
 ---
 https://corvo.myseu.cn/2018/02/01/2018-02-01-%E9%9D%A2%E8%AF%95%E6%99%BA%E5%8A%9B%E9%A2%98%E7%9B%AE/
 
+<<<<<<< HEAD
 ### lc84直方图中的最大矩形poj2559 
 {% note %}
 Input: [2,1,5,6,2,3]
@@ -128,6 +129,20 @@ public int findLength(int[] A, int[] B) {
 }
 ```
 
+=======
+### 相同URL
+十亿=1G
+a,b两个文件各有50亿Url，url64字节，4G内存找相同url
+1.估算一个文件320G
+2.遍历文件a用hash函数把文件拆成500-1000个，每个320-640M 如果hash不均匀继续hash
+3.同样拆分b文件
+4.相同的url一定在相同的hash文件序号里，已经可以读入内存了。
+
+### 高频词
+1G大小文件，每个词16字节，内存1M，最高频100个词
+
+
+>>>>>>> refs/remotes/origin/hexo-edit
 ### ！974 和整除k的子数组个数
 {% note %}
 Input: A = [4,5,0,-2,-3,1], K = 5
@@ -1652,9 +1667,44 @@ private int dfs(int[] boxes,int l,int r,int k,int[][][] dp){
 }
 ```
 
+
+
+### 栈逆序
+2个递归O(n^2)，主递归
+1.把栈底放到栈顶{1,2,3,4,5}->{5,1,2,3,4}保存一下栈顶元素，后4个元素递归
+```java
+public int[] reverseStackRecursively(int[] stack, int top) {
+       if(top==0)return stack;
+       move_bottom_to_top(stack, top);
+       int peek = stack[--top];
+
+       reverseStackRecursively(stack,top );
+       stack[top++] = peek;
+
+       return stack;
+    }
+```
+2.移动到栈顶的递归O（N）：先保存栈顶1，递归假设后面已经移动成了{5,2,3,4}，1和栈顶5交换
+```java
+private void move_bottom_to_top(int[] stk,int top){
+    if(top==0)return;
+    int peek = stk[top - 1];
+    top--;
+    if(top>0){
+        move_bottom_to_top(stk, top);
+        int top2 = stk[--top];
+        stk[top++] = peek;
+        stk[top++] = top2;
+    }else {
+        stk[top++] = peek;
+    }
+}
+```
+
 ---
 ## 问题不大
 
+### 
 
 ### 33 !!旋转数组查找
 {% note %}
