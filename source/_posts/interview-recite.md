@@ -195,8 +195,14 @@ flush链表：在内存中被修改但还没有刷新到磁盘的数据页列表
 2.事务提交只写page cache
 3.提交页不写redo file，等后台刷盘
 
-#### undo log！！！
+#### undo log 实现MVCC！！！
+http://mysql.taobao.org/monthly/2015/04/01/
+Undo记录中存储的是老版本数据，当一个旧的事务需要读取数据时，为了能读取到老版本的数据，需要顺着undo链找到满足其可见性的记录
+每个回滚段又有多个undo log slot
+事务开启时，会专门给他指定一个回滚段，以后该事务用到的undo log页，就从该回滚段上分配
+
 提供回滚和多个行版本控制(MVCC)
+
 undo log一般是逻辑日志，根据每行记录进行记录
 
 delete一条记录时，undo log中会记录一条对应的insert记录，反之亦然，当update一条记录时，它记录一条对应【相反】的update记录。
@@ -236,8 +242,27 @@ doublewrite：内存中的2M buffer，磁盘上共享表空间的128个页（2M�
 
 缓存控制策略：TTL,显式失效/删除，读时失效。
 
-### 分库分表会带来什么问题
+### 15.分库分表会带来什么问题
 跨库join、分布式事务、topK查询
+
+
+### 16.外键
+多对一关系，多个城市对应于一个省份
+城市表中
+```sql
+FOREIGN KEY (`provinceId`) REFERENCES sport_province(`id`)
+ ON DELETE CASCADE ON UPDATE CASCADE
+ ON DELETE set null ON UPDATE set null
+ ON DELETE no action ON UPDATE no action
+```
+on delete cascade 删除主表sport_province会一同删除从表sport_city中的数据 
+on update cascade更新主表sport_province会一同更新从表sport_city中的provinceId
+
+on delete set null 删除主表sport_province，从表sport_city中的数据不会删除，provinceId会置为null。
+on update set null更新主表sport_province，从表sport_city中的provinceId会置为null。
+
+on delete no action 不能删除主表。 
+on update no action 不能更新主表。
 
 ---
 ## 2.网络 web服务器
@@ -628,7 +653,6 @@ URL定位资源，用HTTP动词（GET,POST,DELETE,DETC）描述操作。
 
 
 ### 23 IO模型
-<<<<<<< HEAD
 异步IO是内核等待内核缓存区数据就绪，然后由内核负责将数据拷贝到用户空间缓冲区，再发送实现完成信号，而同步IO是发送内核缓冲区数据就绪信号，将数据copy到用户缓冲区还是由应用程序进行io系统调用实现。同步IO又包括阻塞IO、非阻塞IO、IO多路复用和信号IO模式。
 
 #### 阻塞和非阻塞：
@@ -650,9 +674,6 @@ select/poll/epoll都需要等待读写时间就绪后读写，异步IO会把数�
 epoll是根据每个fd上面的callback函数实现的。而且有mmap内核空间和用户空间同处一块内存空间。
 
 #### 如何理解 nio是同步非阻塞
-=======
->>>>>>> refs/remotes/origin/hexo-edit
-
 操作系统会创建一个由文件系统管理的socket对象（如下图）。这个socket对象包含了发送缓冲区、接收缓冲区、等待队列等成员。
 等待队列是个非常重要的结构，它指向所有需要等待该socket事件的进程。
 
@@ -700,7 +721,10 @@ IO多路复用模型（事件驱动模型）：可以一次性检测多个连接
 3.中断程序操作epoll对象而不是进程。回调函数，将收到的socket加入就绪队列
 4.当程序执行到epoll_wait时，如果rdlist已经引用了socket，那么epoll_wait直接返回，如果rdlist为空，阻塞进程。
 
-
+#### epoll 和 select的区别
+select是一个系统调用，而epoll是个模块，由三个系统调用组成
+http://armsword.com/2014/03/07/linux-io-multiplexing/
+首先，其不用每次调用都向内核拷贝事件描述信息，在第一次调用后，事件信息就会与对应的epoll描述符关联起来。另外epoll不是通过轮询，而是通过在等待的描述符上注册回调函数，当事件发生时，回调函数负责把发生的事件存储在就绪事件链表中，最后写到用户空间。
 
 #### 如何理解 nio是同步非阻塞
 由一个专门的线程(Selector)来处理所有的IO事件，并负责分发。
@@ -744,6 +768,19 @@ Java提供了2种异步编程模型
 网页事件绑定、UI事件监听机制全都是观察者模式。
 
 #### 好处
+
+### 25 端口复用 SO_REUSEADDR
+```c
+ s = socket(AF_INET,SOCK_STREAM,0);
+
+setsockopt(s,SOL_SOCKET,SO_REUSEADDR,&buf,1));
+
+server.sin_family=AF_INET;
+
+server.sin_port=htons(80);
+
+server.sin_addr.s_addr=htonl(“127.0.0.1”);
+```
 
 
 
@@ -1078,7 +1115,11 @@ Atomic内部用native方法，使用了硬件支持的CAS
 可以对 类、变量、方法、构造方法访问控制
 private不能修饰外部类
 protected不能修饰外部类
+protected修饰的变量子类在其他包中也可以访问，但是default情况下的变量子类只能在同级包中才可以访问。
+
 非访问修饰符：static final abstract synchronized volatile
+
+protected【同包内的类】  和所有子类可见！！！
 
 ### 11.线程/进程调度方式
 适用于批处理系统：吞吐量、周转时间、CPU利用率 再考虑公平
@@ -1190,6 +1231,8 @@ https://www.zhihu.com/question/27844575
 **Java 中每开启一个线程需要耗用 1MB 的 JVM 内存空间用于作为线程栈**
 
 linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
+
+### 15.clone和hashCode
 
 
 ## 5.分布式
@@ -1332,6 +1375,10 @@ hashmap也是尾插 保留了顺序，不会死循环。
 
 currentHashMap原理：1.7分段锁，降低锁定程度，1.8CAS自旋锁
 value 和 next都是volatile
+
+是强一致的，1.7是弱一致，1.7的next是final的只能头插
+读不加锁，写如果数组位置为空，CAS添加，如果不空，对头节点加锁并尾插。
+扩容会置位，其它线程一起帮助扩容。
 
 
 ### 3.CAS算法原理？优缺点？
@@ -1650,6 +1697,12 @@ redis集群一致性hash如何解决分布不均匀
 如果主从连接断了，先重连，从服务器发送runid和offset，主服务器发送buffer中的部分数据。
 
 ### 4.redis 高可用 sentinel
+https://juejin.im/post/5b7d226a6fb9a01a1e01ff64
+功能：监控、通知、自动故障转移。客户端应用 在初始化时连接的是 Sentinel 节点集合，从中获取 主节点 的信息。
+一个sentinel收不到ping叫主观下线，其它sentinel超过半数也收不到ping叫客观下线。
+然后选举，从节点复制。
+如果没有半数，客观下线移除，主观下线sentinel收到ping也移除。
+Sentinel 无法保证 强一致性
 
 ### 5.Redis分片/Redis集群/Redis分布式
 `cluster meet ip port`
@@ -1785,6 +1838,55 @@ zset中的dict创建了一个从成员到分值的映射，程序可用O(1)的�
 3) **杜绝缓冲区溢出** （c如果没分配够空间就直接覆盖了)
 4) 减少内存重分配（空间预分配和惰性空间释放）
 5）二进制安全（可以存图片等特殊格式），c字符串中不能包含空字符。
+
+
+### 14. redis内存碎片怎么管理
+info可以看到
+```
+used_memory:1038744104 # 分配的内存，redis数据内存占用
+used_memory_rss:5811122176 # 进程占用的物理内存总量
+mem_fragmentation_ratio:5.59 # used_memory_rss/used_memory比值，内存碎片率
+mem_allocator:libc
+```
+大于1说明是碎片多 <1说明物理内存到swap了，可能会变得很卡。
+
+Redis有自己的内存分配器，当key-value对象被移除时，Redis不会马上向操作系统释放其占用内存
+
+Redis的内存主要包括：对象内存+缓冲内存+自身内存+内存碎片。 
+可选的分配器有jemalloc、glibc、tcmalloc默认jemalloc 
+出现高内存碎片问题的情况：大量的更新操作，比如append、setrange；大量的过期键删除，释放的空间无法得到有效利用 
+解决办法：数据对齐，安全重启（高可用/主从切换）。
+
+内存溢出策略：默认拒绝写入。LRU对有超时时间的，LRU对所有key，随机对超时/所有key。
+redis的每个obj会记录lru时间。还有应用计数。
+
+现在有碎片整理功能了
+```shell
+# Enabled active defragmentation
+# 碎片整理总开关
+# activedefrag yes
+
+# Minimum amount of fragmentation waste to start active defrag
+# 内存碎片达到多少的时候开启整理
+active-defrag-ignore-bytes 100mb
+
+# Minimum percentage of fragmentation to start active defrag
+# 碎片率达到百分之多少开启整理
+active-defrag-threshold-lower 10
+
+# Maximum percentage of fragmentation at which we use maximum effort
+# 碎片率小余多少百分比开启整理
+active-defrag-threshold-upper 100
+
+# Minimal effort for defrag in CPU percentage
+active-defrag-cycle-min 25
+
+# Maximal effort for defrag in CPU percentage
+active-defrag-cycle-max 75
+```
+
+
+
 
 ## 软工和测试
 ### 白盒测试是什么
@@ -3050,7 +3152,8 @@ Connection处理进程，Channel处理进程，队列处理进程，消息持久
  Lucene：只是一个框架，要充分利用它的功能，需要使用JAVA，并且在程序中集成Lucene，学习成本高，Lucene确实非常复杂。
  Lucene是Apache的一个全文检索引擎工具包，通过Lucene可以让程序员快速开发一个全文检索功能。Lucene不是搜索引擎，仅仅是一个工具包。
 
-倒排索引，倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
+#### 倒排索引
+倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
 倒排索引压缩编码
 
 suggest：有3种term、phrase可以修正拼写错误，autocomplete自动补全
