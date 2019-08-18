@@ -6,6 +6,88 @@ categories: [算法备忘]
 ---
 https://corvo.myseu.cn/2018/02/01/2018-02-01-%E9%9D%A2%E8%AF%95%E6%99%BA%E5%8A%9B%E9%A2%98%E7%9B%AE/
 
+### ali笔试题
+某张试卷有20题，做对一个得5分，做错一个得-3分，不做得0分。问：最后得分有几种情况？
+https://blog.csdn.net/u013447515/article/details/65626527
+https://blog.csdn.net/lblovelm/article/details/81504010
+https://blog.csdn.net/qq_40910541/article/details/88545308
+https://blog.csdn.net/handsomewangjg/article/details/48002103
+https://blog.csdn.net/li775085737/article/details/80849610
+https://blog.csdn.net/HLGsteel/article/details/62331765
+https://blog.csdn.net/weixin_42610564/article/details/89281422
+https://blog.csdn.net/THmen/article/details/79529355
+
+### 鱼丸肉丸
+M个鱼丸N个肉丸分到K个碗中，允许空碗，鱼丸肉丸不在同一个碗。共有多少种装法，
+M=N=1,K=3 只有1种装法(1,1,0)或者(1,0,1)(0,1,1)都一样
+
+### 分奖金
+题目大概是这样，小明和小华分奖金有独特的方法，由一个程序来决定奖金的归属，首先产生一列数组，值在0到1之间，p1,p2,…pn,首先是以p1概率小明抽到全部奖金，若没有，则小华以p2概率抽奖金,以此类推，一旦奖金分配，则程序停止，如果n次还没有分配出去，则从p1从新开始，若上轮最后一次是某人，则这轮开始是另一个人，直到100轮，若还是没有分配出去，则放弃奖金
+输入N+1行，第一行是整数n,然后n行是n个概率
+-
+
+### 涂色
+你要在一个nxm的格子图上涂色，你每次可以选择一个未涂色的格子涂上你开始选定的那种颜色。同时为了美观，我们要求你涂色的格子不能相邻，也就是说，不能有公共边，现在问你，在采取最优策略的情况下，你最多能涂多少个格子？
+
+给定格子图的长n和宽m。请返回最多能涂的格子数目。
+测试样例：
+{% note %}
+1,2
+返回：1
+输入 3 5
+输出 8
+{% endnote %}
+(n\*m+1)/2;
+
+### 148 链表排序
+```java
+private ListNode findMiddle(ListNode head){
+    ListNode fast = head;
+    ListNode slow = head;
+    ListNode pre = null;
+    while(fast!=null &&fast.next!=null){
+        pre = slow;
+        fast = fast.next.next;
+        slow = slow.next;
+    }
+    return pre;
+}
+public ListNode sortList(ListNode head) {
+    if(head==null || head.next==null)return head;
+    ListNode mid = findMiddle(head);
+
+    ListNode right =mid.next;
+//        System.out.println(right.val);
+    mid.next = null;
+    ListNode l = sortList(head);
+    ListNode r = sortList(right);
+    return merge(l,r);
+}
+private ListNode merge(ListNode l,ListNode r){
+    ListNode dumy = new ListNode(0);
+    ListNode p = dumy;
+    while(l!=null && r!=null){
+        if(l.val < r.val){
+            p.next = l;
+            l = l.next;
+        }else{
+            p.next = r;
+            r = r.next;
+        }
+        p = p.next;
+    }
+    if(l!=null){
+        p.next = l;
+
+    }
+    if(r!=null){
+        p.next = r;
+
+    }
+    return dumy.next;
+}
+```
+
 ### 放苹果
 把M个同样的苹果放在N个同样的盘子里，允许有的盘子空着不放，问共有多少种不同的分法？
 如果N>M问题可转化为F(m,m)
@@ -344,7 +426,7 @@ Days = 31（1月）+ 28（2月）+ 4（3月）= 64
  W = [ 2001（Y）-1 +（2001 / 4 – 2001 / 100 + 2001 / 400）+ Days] % 7= 1
 即2001年3月5日是星期二
 
-### 约瑟夫环问题
+### 约瑟夫环问题 每隔2个删除1个
 https://www.nowcoder.com/questionTerminal/f78a359491e64a50bce2d89cff857eb6
 
 ### 毒药问题

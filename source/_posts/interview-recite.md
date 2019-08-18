@@ -62,7 +62,7 @@ using index & using where：
 逻辑角度：主键、单列索引、多列索引、空间索引、覆盖索引（？）
 
 
-### 4.数据库隔离界别
+### 4.数据库隔离级别
 
 ### 5.mybatis和jdbc比有什么好处
 1)动态sql
@@ -263,6 +263,13 @@ on update set null更新主表sport_province，从表sport_city中的provinceId�
 
 on delete no action 不能删除主表。 
 on update no action 不能更新主表。
+
+
+### 17 mysql怎么存储数据 一个节点多大
+https://www.cnblogs.com/leefreeman/p/8315844.html
+在计算机中磁盘存储数据最小单元是扇区，一个扇区的大小是512字节，而文件系统（例如XFS/EXT4）他的最小单元是块，一个块的大小是4k，而对于我们的InnoDB存储引擎也有自己的最小储存单元——页（Page），一个页的大小是16K。
+nnodb的所有数据文件（后缀为ibd的文件），他的大小始终都是16384（16k）的整数倍。 
+
 
 ---
 ## 2.网络 web服务器
@@ -1234,6 +1241,43 @@ linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
 
 ### 15.clone和hashCode
 
+### 16 class文件有什么
+
+### 21 内存溢出OOM和内存泄漏memory leak
+`jstat`
+
+### 22 四种引用类型
+强引用，软引用，弱引用，虚引用
+软引用：内存不够二次回收
+弱引用：回收 
+弱引用应用：优惠券 `WeakHashMap<Coupan, <List<WeakReference <User>>>`
+    `weakCoupanHM.put(coupan1,weakUserList);`
+当某个优惠券（假设对应于coupan2对象）失效时，我们可以从coupanList里去除该对象，coupan2上就没有强引用了，只有weakCoupanHM对该对象还有个弱引用，这样coupan2对象能在下次垃圾回收时被回收，从而weakCoupanHM里就看不到了。
+
+当某个用户（假设user1）注销账号时，它会被从List<User>类型的userList对象中被移除。
+    
+虚引用：要和引用队列一起使用，用于跟踪垃圾回收的过程
+
+### 23 Java线程状态
+6种
+New， Runnable， Timed Waiting， Waiting，Blocked，Terminated
+创建线程 new状态
+调用start方法后j进入Runnable状态，不能马上运行，要先进入就绪状态等待线程调度（Ready），获取到CPU后到Running状态
+如果运行中获取锁失败Blocked状态，获取到后再变成就绪状态 
+调用`Thread.join` 或者`LockSupport.park`方法会进入Waiting可以通过notify或者unpark回到就绪状态。
+
+
+所以我们把"新建(NEW)"和"终止(TERMINATED)"两种状态去掉，那么Java定义的线程状态还有4种：1. RUNNABLE2. BLOCKED3. WAITING4. TIMED_WAITING这四种状态怎么对应到"就绪"、"阻塞"、"运行"这三种状态里呢：1. RUNNABLE，对应"就绪"和"运行"两种状态，也就是说处于就绪和运行状态的线程在java.lang.Thread中都表现为"RUNNABLE"2. BLOCKED，对应"阻塞"状态，此线程需要获得某个锁才能继续执行，而这个锁目前被其他线程持有，所以进入了被动的等待状态，直到抢到了那个锁，才会再次进入"就绪"状态3. WAITING，对应"阻塞"状态，代表此线程正处于无限期的主动等待中，直到有人唤醒它，它才会再次进入就绪状态4. TIMED_WAITING，对应"阻塞"状态，代表此线程正处于有限期的主动等待中，要么有人唤醒它，要么等待够了一定时间之后，才会再次进入就绪状态
+
+
+### 24 运行时找不到方法、类
+
+### 25 GC多久一次 一次多久
+如何查看GC情况
+
+### 
+
+
 
 ## 5.分布式
 
@@ -1589,6 +1633,7 @@ StampedLock 是乐观锁，
 处理并发过程中的**原子性、可见性、有序性**。
 
 #### volatile 内存屏障
+https://www.zhihu.com/question/65372648
 1.可见性
 2.指令重排序
 借助了 StoreLoad 实现了CPU本地数据的写回，保持了变量全局可见性。
@@ -2099,32 +2144,6 @@ columns with the same name of associate tables will appear once only.
 
 控制文件：Oracle服务器在启动期间用来标识物理文件和数据库结构的二进制文件
 
-### 21 内存溢出OOM和内存泄漏memory leak
-`jstat`
-
-### 22 四种引用类型
-强引用，软引用，弱引用，虚引用
-软引用：内存不够二次回收
-弱引用：回收 
-弱引用应用：优惠券 `WeakHashMap<Coupan, <List<WeakReference <User>>>`
-    `weakCoupanHM.put(coupan1,weakUserList);`
-当某个优惠券（假设对应于coupan2对象）失效时，我们可以从coupanList里去除该对象，coupan2上就没有强引用了，只有weakCoupanHM对该对象还有个弱引用，这样coupan2对象能在下次垃圾回收时被回收，从而weakCoupanHM里就看不到了。
-
-当某个用户（假设user1）注销账号时，它会被从List<User>类型的userList对象中被移除。
-    
-虚引用：要和引用队列一起使用，用于跟踪垃圾回收的过程
-
-### 23 Java线程状态
-6种
-New， Runnable， Timed Waiting， Waiting，Blocked，Terminated
-创建线程 new状态
-调用start方法后j进入Runnable状态，不能马上运行，要先进入就绪状态等待线程调度（Ready），获取到CPU后到Running状态
-如果运行中获取锁失败Blocked状态，获取到后再变成就绪状态 
-调用`Thread.join` 或者`LockSupport.park`方法会进入Waiting可以通过notify或者unpark回到就绪状态。
-
-
-所以我们把"新建(NEW)"和"终止(TERMINATED)"两种状态去掉，那么Java定义的线程状态还有4种：1. RUNNABLE2. BLOCKED3. WAITING4. TIMED_WAITING这四种状态怎么对应到"就绪"、"阻塞"、"运行"这三种状态里呢：1. RUNNABLE，对应"就绪"和"运行"两种状态，也就是说处于就绪和运行状态的线程在java.lang.Thread中都表现为"RUNNABLE"2. BLOCKED，对应"阻塞"状态，此线程需要获得某个锁才能继续执行，而这个锁目前被其他线程持有，所以进入了被动的等待状态，直到抢到了那个锁，才会再次进入"就绪"状态3. WAITING，对应"阻塞"状态，代表此线程正处于无限期的主动等待中，直到有人唤醒它，它才会再次进入就绪状态4. TIMED_WAITING，对应"阻塞"状态，代表此线程正处于有限期的主动等待中，要么有人唤醒它，要么等待够了一定时间之后，才会再次进入就绪状态
-
 
 
 
@@ -2544,6 +2563,9 @@ const是函数类型的一部分，在实现部分也要带该关键字。
 #### java static
 static方法不能被覆盖override：因为方法覆盖是运行时动态绑定的，static是编译时静态绑定的。
 
+### setAccessible()
+https://www.jianshu.com/p/2bc886dd7a8a
+
 ### Hashtable 和 HashMap的区别
 Hashtable不允许键或者值是null
 hashMap线程不安全，遍历的时候会有环死循环
@@ -2573,6 +2595,7 @@ JNI(Java Native Interface)调用non-Java程序（C或C++），finalize()的工�
 任何对象的finalize只会被调用一次
 
 ### final finally finalize的区别
+final的方法不能被重写
 
 ### Exception和Error的区别
 
@@ -3152,7 +3175,12 @@ Connection处理进程，Channel处理进程，队列处理进程，消息持久
  Lucene：只是一个框架，要充分利用它的功能，需要使用JAVA，并且在程序中集成Lucene，学习成本高，Lucene确实非常复杂。
  Lucene是Apache的一个全文检索引擎工具包，通过Lucene可以让程序员快速开发一个全文检索功能。Lucene不是搜索引擎，仅仅是一个工具包。
 
-#### 倒排索引
+### 大量导入 translog
+https://blog.csdn.net/u013850277/article/details/88904303
+https://www.elastic.co/guide/cn/elasticsearch/guide/cn/translog.html
+
+#### 倒排索引的原理
+https://zhuanlan.zhihu.com/p/33671444
 倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
 倒排索引压缩编码
 
