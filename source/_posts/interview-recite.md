@@ -533,6 +533,10 @@ https://juejin.im/post/5ba0bb05e51d450e6f2e38a0
 3.不在则会通过【arp缓存】查询IP的网卡地址
 4.不存在的话会通过[arp广播]询问目的IP的mac地址
 5.同一个网段的Ping：A得到mac地址后，把B的MAC地址封装到ICMP包中，向主机B发送一个回显请求
+
+如果A主机192.168.1.1/16，如果B主机192.168.2.1/24
+如果Aping B：A用A的子网掩码觉得B是同一网段B能接收到ICMP包，但是B比对自己的子网掩码觉得不是同一网段不发送回应。
+
 不同网段：
 3.发送arp找网关MAC
 4.把目的MAC是网关，目的IP是主机C的ICMP包
@@ -1242,8 +1246,10 @@ linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
 ### 15.clone和hashCode
 
 ### 16 class文件有什么
+https://juejin.im/post/5c0932cee51d45090a1da07e#heading-1
 
 ### 21 内存溢出OOM和内存泄漏memory leak
+https://www.jianshu.com/p/54b5da7c6816
 `jstat`
 
 ### 22 四种引用类型
@@ -1403,6 +1409,7 @@ go的调度器分为：内核线程M，P内核处理器，G goroutine 协程 用
 Java 第三方协程框架
 
 #### 2.currentHashMap
+https://my.oschina.net/pingpangkuangmo/blog/817973
 https://blog.csdn.net/qq_33256688/article/details/79938886  
 1.7之前是头插，1.8之后是尾插
 hashmap为了避免尾部遍历，链表插入使用头插，不然rehash要每次都遍历到链表尾。
