@@ -102,7 +102,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-08-25T11:02:44.739Z">
+<meta property="og:updated_time" content="2019-08-26T09:55:17.003Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/Signal.mdhttp://w">
@@ -352,8 +352,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-25T19:02:44+08:00">
-                2019-08-25
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-26T17:55:17+08:00">
+                2019-08-26
               </time>
             
           </span>
@@ -1077,7 +1077,8 @@
 <p>零拷贝减少消息网络传输时间。<br>同一主题多分区存储。</p>
 <h2 id="ES"><a href="#ES" class="headerlink" title="ES"></a>ES</h2><h3 id="ES是用什么框架写的"><a href="#ES是用什么框架写的" class="headerlink" title="ES是用什么框架写的"></a>ES是用什么框架写的</h3><p> Lucene：只是一个框架，要充分利用它的功能，需要使用JAVA，并且在程序中集成Lucene，学习成本高，Lucene确实非常复杂。<br> Lucene是Apache的一个全文检索引擎工具包，通过Lucene可以让程序员快速开发一个全文检索功能。Lucene不是搜索引擎，仅仅是一个工具包。</p>
 <h3 id="大量导入-translog"><a href="#大量导入-translog" class="headerlink" title="大量导入 translog"></a>大量导入 translog</h3><p><a href="https://blog.csdn.net/u013850277/article/details/88904303" target="_blank" rel="noopener">https://blog.csdn.net/u013850277/article/details/88904303</a><br><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/translog.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/translog.html</a></p>
-<h4 id="倒排索引的原理"><a href="#倒排索引的原理" class="headerlink" title="倒排索引的原理"></a>倒排索引的原理</h4><p><a href="https://zhuanlan.zhihu.com/p/33671444" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/33671444</a><br>倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数<br>倒排索引压缩编码</p>
+<h4 id="倒排索引的原理"><a href="#倒排索引的原理" class="headerlink" title="倒排索引的原理"></a>倒排索引的原理</h4><p><a href="https://zhuanlan.zhihu.com/p/33671444" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/33671444</a><br>倒排索引的好处：多关键字查询时，在倒排表中先完成查询的并、交等逻辑运算，把记录查询转换成地址集合的运算，得到结果后再存取记录，提高查找速度。</p>
+<p>倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数<br>倒排索引压缩编码</p>
 <p>suggest：有3种term、phrase可以修正拼写错误，autocomplete自动补全<br>term基于编辑距离<br>phrase基于n-gram方法的短语计算逻辑<br>autocompletion前缀匹配：数据结构FST，索引过程中创建FST数据结构，并存储在索引种，在需要时载入内存</p>
 <p>text会解析生成倒排索引，倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数<br>倒排索引压缩编码<br>geo-point类型</p>
 <p>_search查询类型：<br>1.简单查询<br>1.match 会对输入进行分词并在字段中搜索<br>2.term 查询关键词不会分词<br>2.1terms 查询批量关键字<br>3.”match_all”:{} 全查询<br>4.match_phrase 短语查询，分词后满足所有词的结果，设置slop设置词之间的距离<br>5.multi_match 可以指定多个字段中query<br>stored_fields 指定返回的字段<br>sort 数组存放排序字典<br>range 指定字段gte lte 范围 boost权重<br>wildcard 通配符查询<br>组合查询<br>布尔查询包括filter,must,should,must_not<br>（倒排索引会把大写全部转小写（？））</p>
