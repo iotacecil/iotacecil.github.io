@@ -3181,6 +3181,8 @@ https://www.elastic.co/guide/cn/elasticsearch/guide/cn/translog.html
 
 #### 倒排索引的原理
 https://zhuanlan.zhihu.com/p/33671444
+倒排索引的好处：多关键字查询时，在倒排表中先完成查询的并、交等逻辑运算，把记录查询转换成地址集合的运算，得到结果后再存取记录，提高查找速度。
+
 倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
 倒排索引压缩编码
 
