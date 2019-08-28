@@ -990,6 +990,11 @@ Survivor为什么要有2个：
 并行收集器：对应young和old两个收集器 【吞吐量】优先 JVM的默认垃圾回收器 多线程进行垃圾回收
 并发收集器：CMS、G1 停顿时间优先
 
+G1和CMS的最大区别：
+G1是新生代老年代都是用的算法，CMS只能和parnew一起用，
+G1是标记整理（region之间的复制）cms是标记清除有碎片，
+G1有停顿时间预测模型。
+
 #### CMS7个步骤 标记清除算法， `-XX:CMSFullGCsBeforeCompaction=n` 压缩
 1.初始标记STW root和年轻代到老年代的引用
 2.并发标记
@@ -1242,6 +1247,8 @@ linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
 ### 15.clone和hashCode
 
 ### 16 class文件有什么
+一个class文件对应一个ClassFile结构
+
 
 ### 21 内存溢出OOM和内存泄漏memory leak
 `jstat`
@@ -1273,7 +1280,7 @@ New， Runnable， Timed Waiting， Waiting，Blocked，Terminated
 ### 24 运行时找不到方法、类
 
 ### 25 GC多久一次 一次多久
-如何查看GC情况
+如何查看GC情况jstat jconsole
 
 ### 
 
@@ -1396,7 +1403,7 @@ DispatcherServlet:初始化9大组件
 非抢占式用户态线程
 与进程和线程的区别：通过抢占式调度
 内核态异步编程：内核线程（轻量级进程LWP，用户可操作的内核态线程）
-大量内核态县城会干扰内核调度 影响其他应用
+大量内核态线程会干扰内核调度 影响其他应用
 go的调度器分为：内核线程M，P内核处理器，G goroutine 协程 用户态线程
 通过P，把无限多的G均分到有限的M上。
 
@@ -1857,6 +1864,9 @@ typedef struct dictht {
  跳跃表中的所有节点都按分值从小到大来排序。沿途访问过的所有层的跨度累计起来， 得到的结果就是目标节点在跳跃表中的排位。
 添加节点：程序都根据幂次定律 （power law，越大的数出现的概率越小） 随机生成一个介于 1 和 32 之间的值作为 level 数组的大小， 这个大小就是层的“高度”。
 
+跳跃表的删除：
+
+
 
 ### 11.redis set的整数集合
 https://zcheng.ren/sourcecodeanalysis/theannotatedredissourceintset/#%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0
@@ -1930,7 +1940,9 @@ active-defrag-cycle-min 25
 active-defrag-cycle-max 75
 ```
 
-
+### 15.redis事务
+https://redisbook.readthedocs.io/en/latest/feature/transaction.html
+EXEC的时候执行事务队列中的所有命令：除非当前事务执行完毕，否则服务器不会中断事务，也不会执行其他客户端的其他命令。
 
 
 ## 软工和测试
