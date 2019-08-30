@@ -1251,12 +1251,11 @@ linux的线程栈大小可以使用ulimit -s内核线程栈的默认大小为8M
 ### 15.clone和hashCode
 
 ### 16 class文件有什么
-<<<<<<< HEAD
+
 https://juejin.im/post/5c0932cee51d45090a1da07e#heading-1
-=======
 一个class文件对应一个ClassFile结构
 
->>>>>>> refs/remotes/origin/hexo-edit
+
 
 ### 21 内存溢出OOM和内存泄漏memory leak
 https://www.jianshu.com/p/54b5da7c6816
@@ -1378,7 +1377,7 @@ ApplicationContext是实例化所有bean，而BeanFactory是延迟初始化。
 
 
 
-#### 2.IOC和DI的区别
+### 2.IOC和DI的区别
 控制反转
 IOC是将创建对象的工作交给Spring容器，对象是被动的被Spring容器创建，即为“反转”，“控制”即为Spring容器控制对象的创建
 DI 依赖注入
@@ -1390,9 +1389,9 @@ Spring创建对象的过程中，将对象依赖的属性注入到对象中，�
 构造函数注入
 工厂方法注入
 
-#### 3.Springboot的启动流程
+### 3.Springboot的启动流程
 
-#### 4.SpringMVC工作原理
+### 4.SpringMVC工作原理
 1）servlet一共三个层次 
 HttpServletBean:直接继承java的HttpServlet，将Servlet中的配置参数设置到相应的属性。
 
@@ -1406,6 +1405,9 @@ DispatcherServlet:初始化9大组件
   3）handlerAdapter处理，先执行拦截器。Last-Modified
   4）processDispatchResult处理View
 
+
+### 5. 如何注入私有成员变量
+https://blog.csdn.net/u012280292/article/details/80416691
 
 ## 8.并发
 ### 1.协程 轻量化 用户态调度 切换代价比线程上下文切换低
@@ -3204,6 +3206,9 @@ https://www.elastic.co/guide/cn/elasticsearch/guide/cn/translog.html
 #### 倒排索引的原理
 https://zhuanlan.zhihu.com/p/33671444
 倒排索引的好处：多关键字查询时，在倒排表中先完成查询的并、交等逻辑运算，把记录查询转换成地址集合的运算，得到结果后再存取记录，提高查找速度。
+
+Lucene提供了5个基础类，Document描述文档，文档有多个属性Field。
+Analyzer负责分词、分此后提交给IndexWriter建立索引，并把索引对象持久化到Directory中。（文件系统/内存）。
 
 倒排列表中每个节点存储document地址、文中出现位置、用TF-IDF计算的分数
 倒排索引压缩编码

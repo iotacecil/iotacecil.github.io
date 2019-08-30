@@ -125,6 +125,21 @@ public int hammingWeight(int n) {
 }
 ```
 
+```c
+int bitcount(unsigned int n)
+{
+unsigned int tmp;
+
+tmp = n
+    - ((n >> 1) & 033333333333)
+    - ((n >> 2) & 011111111111);
+
+tmp = (tmp + (tmp >> 3)) & 030707070707
+
+return (tmp%63);
+}
+```
+
 ### 268 Missing Number 0-n个数字放进长度n-1的数组，少了哪个
 {% note %}
 Input: [3,0,1]
