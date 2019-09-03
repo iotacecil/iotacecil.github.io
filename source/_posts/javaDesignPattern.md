@@ -4,6 +4,21 @@ date: 2018-10-23 13:30:49
 tags: [java]
 category: [java源码8+netMVCspring+ioNetty+数据库+并发]
 ---
+### 桥接模式
+解决多个变化维度
+
+### 访问者模式
+二次多态实现。对编译完的类结构添加新方法。
+缺点是添加的Visitor接口必须知道原来的Element类有多少个子类
+
+
+
+### 命令模式
+封装命令为一个对象，发送者和消费者解耦
+命令队列模式
+
+
+
 依赖关系 虚线，指向被使用的 （参数关系、返回值）
 ![umlyilai.jpg](https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/umlyilai.jpg)
 
