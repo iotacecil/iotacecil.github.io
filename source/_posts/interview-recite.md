@@ -2344,6 +2344,7 @@ CSRF 盗取用户cookie或者session伪造请求
 
 
 ### 39异常 Error 和 Exception的区别
+派生于Error或者RuntimeException的异常称为unchecked异常，所有其他的异常成为checked异常
 1）Error是JVM负责的
 2）RuntimeException 是程序负责的
 3）checked Exception 是编译器负责的
