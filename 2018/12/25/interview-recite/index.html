@@ -102,7 +102,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-08-30T10:13:27.602Z">
+<meta property="og:updated_time" content="2019-09-04T11:01:58.709Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/Signal.mdhttp://w">
@@ -352,8 +352,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-30T18:13:27+08:00">
-                2019-08-30
+              <time title="更新于" itemprop="dateModified" datetime="2019-09-04T19:01:58+08:00">
+                2019-09-04
               </time>
             
           </span>
@@ -880,7 +880,7 @@
 <h3 id="34-XSS攻击，跨站脚本攻击"><a href="#34-XSS攻击，跨站脚本攻击" class="headerlink" title="34 XSS攻击，跨站脚本攻击"></a>34 XSS攻击，跨站脚本攻击</h3><p>网站没有对用户提交数据进行转义处理或者过滤不足的缺点，进而添加一些恶意的脚本代码（HTML、JavaScript）到Web页面中去，使别的用户访问都会执行相应的嵌入代码。<br>解决方法：<br>1）cookie设置成http Only 不让前端<code>document.cookie</code>拿到<br>2）对输入多做一些检查 对 html危险字符转义</p>
 <p>CSRF 盗取用户cookie或者session伪造请求<br>1)每次提交加随机数token<br>2）检查referer</p>
 <h3 id="35-防止表单重复提交"><a href="#35-防止表单重复提交" class="headerlink" title="35 防止表单重复提交"></a>35 防止表单重复提交</h3><p>1）submit方法最后把按钮disable掉<br>2）用token<br>3）重定向</p>
-<h3 id="39异常-Error-和-Exception的区别"><a href="#39异常-Error-和-Exception的区别" class="headerlink" title="39异常 Error 和 Exception的区别"></a>39异常 Error 和 Exception的区别</h3><p>1）Error是JVM负责的<br>2）RuntimeException 是程序负责的<br>3）checked Exception 是编译器负责的<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg" alt="ErrirException.jpg"></p>
+<h3 id="39异常-Error-和-Exception的区别"><a href="#39异常-Error-和-Exception的区别" class="headerlink" title="39异常 Error 和 Exception的区别"></a>39异常 Error 和 Exception的区别</h3><p>派生于Error或者RuntimeException的异常称为unchecked异常，所有其他的异常成为checked异常<br>1）Error是JVM负责的<br>2）RuntimeException 是程序负责的<br>3）checked Exception 是编译器负责的<br><img src="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg" alt="ErrirException.jpg"></p>
 <p>异常处理机制：<br>在堆上创建异常  try catch中有return之前都会先执行finally的return</p>
 <h3 id="java进程间通信"><a href="#java进程间通信" class="headerlink" title="java进程间通信"></a>java进程间通信</h3><p>java 线程通信：wait notify，共享变量的synchronize，Lock同步机制<br>全局变量<br>2个线程之间的单向数据连接 NIO pipe 写sink 读source。<br>java线程同步的方法</p>
 <h3 id="45-布隆过滤器"><a href="#45-布隆过滤器" class="headerlink" title="45 布隆过滤器"></a>45 布隆过滤器</h3><p>黑名单<br>如果数据量有8G，hash冗余要保证16G<br>构造：使用16/8 = 2G 可以表示16G个bit位。<br>set：用8个随机函数，得到0-16G中8个随机数，并将这8位设置为1。<br>get：同样用这8个随机函数，查看这8位是否都为1。</p>
