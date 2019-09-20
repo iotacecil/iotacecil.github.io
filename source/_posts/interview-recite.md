@@ -16,6 +16,105 @@ https://www.nowcoder.com/discuss/111311
 架构扫盲
 https://github.com/doocs/advanced-java
 
+## Spring
+
+### Spring 里单例中的prototype和prototype中的单例
+一个作用域为Singleton的Bean（设为A）依赖于一个作用域为prototype的Bean（设为B）。由于A是单例的，只有一次初始化的机会，它的依赖关系也只在初始化阶段被设置，但它所依赖的B每次都会创建一个全新的实例，这将使A中的B不能及时得到更新。这样将导致如果客户端多次请求A，并调用A中B的某个方法（或获取A中B的某个属性），服务端总是返回同一个B，但客户端直接请求B却能获得最新的对象，这就产生了对象不同步的情况。
+办法有二：
+部分放弃依赖注入：当A每次需要B时，主动向容器请求新的Bean实例，即可保证每次注入的B都是最新的实例。
+利用方法注入。
+
+### Spring里面的单例是怎么线程安全的
+Spring对一些（如RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等）中非线程安全状态的bean采用ThreadLocal进行处理，让它们也成为线程安全的状态，因此有状态的Bean就可以在多线程中共享了。
+
+
+### BeanFactory和FactoryBean的区别
+BeanFactory是IOC容器的接口。
+FactoryBean工厂Bean是一个接口，是适配器。简单工厂模式和装饰模式。
+当类无法new创建实例的时候，如静态工厂访问的bean，可以作为其它bean的工厂。
+当在IOC容器中的Bean实现了FactoryBean后，通过getBean(String BeanName)获取到的Bean对象并不是FactoryBean的实现类对象，而是这个实现类中的getObject()方法返回的对象。
+直接访问FactoryBean的实现类，就要getBean(&BeanName)，在BeanName之前加上&。
+用法：
+继承这个接口的Bean，里面有个成员对象是目标bean，用InitializingBean接口的afterPropertiesSet中给这个成员对象用静态工厂方法创建实例。再getObject中返回这个实例。
+
+
+### 事务的隔离级别
+1.default底层数据库的默认级别
+2.读未提交 3.已提交4.可重复读5.串行化
+
+### 事务的传播行为
+1.require，支持一个已经存在的事务。如果没有事务，开一个新事务
+2.supports，支持一个已经存在的事务。如果没有事务，则以非事务方式执行
+3.mandatory，支持一个已经存在的事务。如果没有活动事务，抛出异常。
+4.requires_new，始终开始新的事务。如果活动事务已经存在，将其暂停。
+5.not_supported，不支持活动事务，始终以非事务方式执行，并暂停现有事务。
+6.never，即使存在活动事务，始终以非事务方式运行，如果存在活动事务抛出异常。
+7.nested，如果存在活动事务，嵌套事务中运行，如果没有和required一样。
+
+## Mybatis 
+
+### resultmap和resulttype的区别
+使用resultType进行输出映射，只有查询出来的列名和pojo中的属性名一致，该列才可以映射成功。只要查询出来的列名和pojo中的属性有一个一致，就会创建pojo对象。
+如果查询出来的列名和pojo的属性名不一致，通过定义一个resultMap对列名和pojo属性名之间作一个映射关系。
+
+### 缓存在哪
+
+### 和jdbc的区别
+
+### 如何防止sql注入
+
+
+## Http
+
+### Http如何控制超时
+
+### post和get的区别 安全性
+
+## JVM
+
+### 分配堆内存怎么保证线程安全
+1.TLAB
+为了保证Java对象的内存分配的安全性，同时提升效率，每个线程在Java堆中可以预先分配一小块内存，这部分内存称之为TLAB（Thread Local Allocation Buffer），这块内存的分配时线程独占的，读取、使用、回收是线程共享的。
+
+可以通过设置-XX:+/-UseTLAB参数来指定是否开启TLAB分配。
+
+2.CAS和失败重试的方式保证更新操作的原子性
+
+### 代理模式
+实现延迟加载，封装 xml读取、数据库连接等初始化操作，初始化加载代理类代理类什么都不做。
+真的需要数据库查询再加载数据库连接。
+
+### 队列
+LinkedBlockedQueue是2个锁
+
+### ThreadLocal内存泄漏
+
+### 内存屏障
+
+### Spring的类加载器
+
+
+### G1的过程
+
+## Java
+
+### 如何用自己的String替换掉JDK的String
+
+### == equals hashcode的联系
+== 栈中的值进行比较的
+equals是==
+hashcode
+
+## ES怎么保证一致性
+协调节点路由请求到主分片，成功写入所有副本后再返回成功
+每个写操作会有seq_no序号
+ES有一个全局检查点：是所有已经对其的序号，主分配推荐全局检查点，一旦所有副本都超出给定序号，更新全局检查点。副本维护本地检查点。
+写一致的默认策略是quorum，多数分片，可以是主/副分片。
+
+优化加大translog flush间隔。加大index refresh 1s间隔：降低segment merge频率，refresh会产生新的lucene段。如果不要那么实时性。
+
+
+---
 
 ## 1.数据库
 
@@ -1029,7 +1128,7 @@ JIT编译时会在安全点记录下很多OopMap(一个对象内 偏移量：类
 GC的时候扫描对应偏移量
 
 类回收：
-ClassLoader已经被回收，Class对象没有引用，所有实例被回收。
+1.ClassLoader已经被回收，2.Class对象没有引用，3.所有实例被回收。
 
 资源管理，如果数据库连接对象被收回，但是没有调用close，数据库连接的资源不会释放，数据库连接就少一个了，要放在try()里。
 
@@ -1045,8 +1144,10 @@ Held by JVM - 用于JVM特殊目的由GC保留的对象，但实际上这个与J
 
 #### full GC
 1）System.gc()方法的调用
-2）老年代空间
+2）老年代空间不足
 3）Minor GC后超过老年代可用空间
+4）分配很大的对象没有足够的空间
+5）CMS promotion failed：年轻代gc survivor放不下，老年代也放不在
 
 full GC：当准备要触发一次young GC时，如果发现统计数据说之前young GC的平均晋升大小比目前old gen剩余的空间大，则不会触发young GC而是转为触发full GC（因为HotSpot VM的GC里，除了CMS的concurrent collection之外，其它能收集old gen的GC都会同时收集整个GC堆，包括young gen，所以不需要事先触发一次单独的young GC）；或者，如果有perm gen的话，要在perm gen分配空间但已经没有足够空间时，也要触发一次full GC；或者System.gc()、heap dump带GC，默认也是触发full GC。
 
