@@ -565,7 +565,7 @@ public class User implements UserDetails {
     private Date lastUpdateTime;
     private String avatar;
     }
-    // 注意不在数据库中的属性，不持久化，避免jap检查
+    // 注意不在数据库中的属性，不持久化，避免jpa检查
     @Transient
     private List<GrantedAuthority> authorityList;
 

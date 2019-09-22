@@ -264,11 +264,14 @@ id(x[0])==id(y[0])递归调用
 #### 读文件
 1. 读文件的最佳方式`for line in open()`,readlines将整个文件加载到内存
 2. while True：line = f.readline()比迭代器的for慢，因为迭代器以C语言速度运行，while循环版本通过py虚拟机运行python字节码
+
 ##### 迭代
 1. for循环开始时，通过iter内置函数从迭代对象获得一个迭代器。返回的对象有__next__方法。
 2. 文件对象就是自己的迭代器。有自己的next方法
 3. iter()启动迭代
+
 #### 注解
+
 #### 内置作用域
 - import builtins dir(builtins)
 前一半是内置的异常，后一半是内置的函数
