@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Learn &amp; practice">
 <meta property="og:description" content="方法默认参数是不可变对象12345678&amp;gt;&amp;gt;&amp;gt; def add_end(L=[]):...     L.append(&apos;END&apos;)...     return L...&amp;gt;&amp;gt;&amp;gt; add_end()[&apos;END&apos;]&amp;gt;&amp;gt;&amp;gt; add_end()[&apos;END&apos;, &apos;END&apos;] 正确方法：12345def add_end(L=None):    if L is">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-04T01:28:38.278Z">
+<meta property="og:updated_time" content="2019-09-22T14:30:04.800Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python modules">
 <meta name="twitter:description" content="方法默认参数是不可变对象12345678&amp;gt;&amp;gt;&amp;gt; def add_end(L=[]):...     L.append(&apos;END&apos;)...     return L...&amp;gt;&amp;gt;&amp;gt; add_end()[&apos;END&apos;]&amp;gt;&amp;gt;&amp;gt; add_end()[&apos;END&apos;, &apos;END&apos;] 正确方法：12345def add_end(L=None):    if L is">
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-09-04T09:28:38+08:00">
-                2018-09-04
+              <time title="更新于" itemprop="dateModified" datetime="2019-09-22T22:30:04+08:00">
+                2019-09-22
               </time>
             
           </span>
@@ -491,12 +491,14 @@
 </ol>
 <h4 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h4><ol>
 <li>读文件的最佳方式<code>for line in open()</code>,readlines将整个文件加载到内存</li>
-<li>while True：line = f.readline()比迭代器的for慢，因为迭代器以C语言速度运行，while循环版本通过py虚拟机运行python字节码<h5 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h5></li>
+<li>while True：line = f.readline()比迭代器的for慢，因为迭代器以C语言速度运行，while循环版本通过py虚拟机运行python字节码</li>
+</ol>
+<h5 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h5><ol>
 <li>for循环开始时，通过iter内置函数从迭代对象获得一个迭代器。返回的对象有<strong>next</strong>方法。</li>
 <li>文件对象就是自己的迭代器。有自己的next方法</li>
-<li>iter()启动迭代<h4 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h4><h4 id="内置作用域"><a href="#内置作用域" class="headerlink" title="内置作用域"></a>内置作用域</h4></li>
+<li>iter()启动迭代</li>
 </ol>
-<ul>
+<h4 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h4><h4 id="内置作用域"><a href="#内置作用域" class="headerlink" title="内置作用域"></a>内置作用域</h4><ul>
 <li>import builtins dir(builtins)<br>前一半是内置的异常，后一半是内置的函数</li>
 <li>LEGB法则python将最后扫描B模块 所以不需要导入</li>
 </ul>
