@@ -102,7 +102,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/ErrirException.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheone.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/cacheupdate.jpg">
-<meta property="og:updated_time" content="2019-09-21T07:05:01.495Z">
+<meta property="og:updated_time" content="2019-10-08T12:49:15.769Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试卡片">
 <meta name="twitter:description" content="https://github.com/randian666/algorithm-studyhttps://www.nowcoder.com/discuss/50571?type=2&amp;amp;order=0&amp;amp;pos=21&amp;amp;page=2https://github.com/xuelangZF/CS_Offer/blob/master/Linux_OS/Signal.mdhttp://w">
@@ -352,8 +352,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-09-21T15:05:01+08:00">
-                2019-09-21
+              <time title="更新于" itemprop="dateModified" datetime="2019-10-08T20:49:15+08:00">
+                2019-10-08
               </time>
             
           </span>
@@ -396,7 +396,8 @@
 <h3 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h3><p>1.default底层数据库的默认级别<br>2.读未提交 3.已提交4.可重复读5.串行化</p>
 <h3 id="事务的传播行为"><a href="#事务的传播行为" class="headerlink" title="事务的传播行为"></a>事务的传播行为</h3><p>1.require，支持一个已经存在的事务。如果没有事务，开一个新事务<br>2.supports，支持一个已经存在的事务。如果没有事务，则以非事务方式执行<br>3.mandatory，支持一个已经存在的事务。如果没有活动事务，抛出异常。<br>4.requires_new，始终开始新的事务。如果活动事务已经存在，将其暂停。<br>5.not_supported，不支持活动事务，始终以非事务方式执行，并暂停现有事务。<br>6.never，即使存在活动事务，始终以非事务方式运行，如果存在活动事务抛出异常。<br>7.nested，如果存在活动事务，嵌套事务中运行，如果没有和required一样。</p>
 <h2 id="Mybatis"><a href="#Mybatis" class="headerlink" title="Mybatis"></a>Mybatis</h2><h3 id="resultmap和resulttype的区别"><a href="#resultmap和resulttype的区别" class="headerlink" title="resultmap和resulttype的区别"></a>resultmap和resulttype的区别</h3><p>使用resultType进行输出映射，只有查询出来的列名和pojo中的属性名一致，该列才可以映射成功。只要查询出来的列名和pojo中的属性有一个一致，就会创建pojo对象。<br>如果查询出来的列名和pojo的属性名不一致，通过定义一个resultMap对列名和pojo属性名之间作一个映射关系。</p>
-<h3 id="缓存在哪"><a href="#缓存在哪" class="headerlink" title="缓存在哪"></a>缓存在哪</h3><h3 id="和jdbc的区别"><a href="#和jdbc的区别" class="headerlink" title="和jdbc的区别"></a>和jdbc的区别</h3><h3 id="如何防止sql注入"><a href="#如何防止sql注入" class="headerlink" title="如何防止sql注入"></a>如何防止sql注入</h3><h2 id="Http"><a href="#Http" class="headerlink" title="Http"></a>Http</h2><h3 id="Http如何控制超时"><a href="#Http如何控制超时" class="headerlink" title="Http如何控制超时"></a>Http如何控制超时</h3><h3 id="post和get的区别-安全性"><a href="#post和get的区别-安全性" class="headerlink" title="post和get的区别 安全性"></a>post和get的区别 安全性</h3><h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><h3 id="分配堆内存怎么保证线程安全"><a href="#分配堆内存怎么保证线程安全" class="headerlink" title="分配堆内存怎么保证线程安全"></a>分配堆内存怎么保证线程安全</h3><p>1.TLAB<br>为了保证Java对象的内存分配的安全性，同时提升效率，每个线程在Java堆中可以预先分配一小块内存，这部分内存称之为TLAB（Thread Local Allocation Buffer），这块内存的分配时线程独占的，读取、使用、回收是线程共享的。</p>
+<h3 id="缓存在哪"><a href="#缓存在哪" class="headerlink" title="缓存在哪"></a>缓存在哪</h3><p>一级缓存SqlSession级别<br>二级缓存mapper级别 可能不在内存</p>
+<h3 id="和jdbc的区别"><a href="#和jdbc的区别" class="headerlink" title="和jdbc的区别"></a>和jdbc的区别</h3><h3 id="如何防止sql注入"><a href="#如何防止sql注入" class="headerlink" title="如何防止sql注入"></a>如何防止sql注入</h3><h2 id="Http"><a href="#Http" class="headerlink" title="Http"></a>Http</h2><h3 id="Http如何控制超时"><a href="#Http如何控制超时" class="headerlink" title="Http如何控制超时"></a>Http如何控制超时</h3><h3 id="post和get的区别-安全性"><a href="#post和get的区别-安全性" class="headerlink" title="post和get的区别 安全性"></a>post和get的区别 安全性</h3><h2 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h2><h3 id="分配堆内存怎么保证线程安全"><a href="#分配堆内存怎么保证线程安全" class="headerlink" title="分配堆内存怎么保证线程安全"></a>分配堆内存怎么保证线程安全</h3><p>1.TLAB<br>为了保证Java对象的内存分配的安全性，同时提升效率，每个线程在Java堆中可以预先分配一小块内存，这部分内存称之为TLAB（Thread Local Allocation Buffer），这块内存的分配时线程独占的，读取、使用、回收是线程共享的。</p>
 <p>可以通过设置-XX:+/-UseTLAB参数来指定是否开启TLAB分配。</p>
 <p>2.CAS和失败重试的方式保证更新操作的原子性</p>
 <h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p>实现延迟加载，封装 xml读取、数据库连接等初始化操作，初始化加载代理类代理类什么都不做。<br>真的需要数据库查询再加载数据库连接。</p>
