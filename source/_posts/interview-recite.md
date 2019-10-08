@@ -58,6 +58,8 @@ FactoryBean工厂Bean是一个接口，是适配器。简单工厂模式和装�
 如果查询出来的列名和pojo的属性名不一致，通过定义一个resultMap对列名和pojo属性名之间作一个映射关系。
 
 ### 缓存在哪
+一级缓存SqlSession级别
+二级缓存mapper级别 可能不在内存
 
 ### 和jdbc的区别
 
