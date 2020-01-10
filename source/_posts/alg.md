@@ -34,6 +34,8 @@ https://www.nowcoder.com/test/4575457/summary
 10^8 用O(n)
 10^7 O(nlogn)
 
+除法如何取模？大数取模？
+
 ### 420 强密码检验器
 {% note %}
 由至少6个，至多20个字符组成。

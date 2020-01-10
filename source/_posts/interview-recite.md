@@ -23,8 +23,53 @@ https://github.com/doocs/advanced-java
 办法有二：
 部分放弃依赖注入：当A每次需要B时，主动向容器请求新的Bean实例，即可保证每次注入的B都是最新的实例。
 利用方法注入。
+`<lookup-method>`标签`@Lookup`注解
+{% fold %}
+```java
+@Component
+@Scope("prototype")
+public class B {
+    @Autowired
+    A a;
+    public void Bfun(){
+        System.out.println("A in B: " + a);
+    }
 
-### Spring里面的单例是怎么线程安全的
+}
+
+@Component
+@Scope("singleton")
+public abstract class A {
+    @Lookup
+    public abstract B b();
+    public void Afun(){
+        B b = b();
+        System.out.println("B in A: "+b);
+    }
+}
+
+ConfigurableApplicationContext context = SpringApplication.run(SpringlearnApplication.class, args);
+A a =(A) context.getBean(A.class);
+A ap =(A) context.getBean(A.class);
+System.out.println(a+" "+ap);
+a.Afun();
+ap.Afun();
+
+B b = (B) context.getBean(B.class);
+B bp = (B) context.getBean(B.class);
+System.out.println(b+" "+bp);
+b.Bfun();
+bp.Bfun();
+```
+com.spring.springlearn.A$$EnhancerBySpringCGLIB$$1b52cac0@6f330eb9 com.spring.springlearn.A$$EnhancerBySpringCGLIB$$1b52cac0@6f330eb9
+B in A: com.spring.springlearn.B@341a8659
+B in A: com.spring.springlearn.B@4943defe
+com.spring.springlearn.B@5eefa415 com.spring.springlearn.B@181d7f28
+A in B: com.spring.springlearn.A$$EnhancerBySpringCGLIB$$1b52cac0@6f330eb9
+A in B: com.spring.springlearn.A$$EnhancerBySpringCGLIB$$1b52cac0@6f330eb9
+{% endfold %}
+
+### Spring里面的单例是怎么线程安全的prototype
 Spring对一些（如RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等）中非线程安全状态的bean采用ThreadLocal进行处理，让它们也成为线程安全的状态，因此有状态的Bean就可以在多线程中共享了。
 
 
@@ -37,6 +82,8 @@ FactoryBean工厂Bean是一个接口，是适配器。简单工厂模式和装�
 用法：
 继承这个接口的Bean，里面有个成员对象是目标bean，用InitializingBean接口的afterPropertiesSet中给这个成员对象用静态工厂方法创建实例。再getObject中返回这个实例。
 
+### 事务如何保证多次获取到是同一个连接 如何保存Connection
+`bindResource` key是DataSource，value是连接保存在ThreadLocal
 
 ### 事务的隔离级别
 1.default底层数据库的默认级别
@@ -57,7 +104,8 @@ FactoryBean工厂Bean是一个接口，是适配器。简单工厂模式和装�
 使用resultType进行输出映射，只有查询出来的列名和pojo中的属性名一致，该列才可以映射成功。只要查询出来的列名和pojo中的属性有一个一致，就会创建pojo对象。
 如果查询出来的列名和pojo的属性名不一致，通过定义一个resultMap对列名和pojo属性名之间作一个映射关系。
 
-### 缓存在哪
+### mybatis缓存在哪
+一级缓存是 SqlSession，二级缓存是mapper级别缓存。
 
 ### 和jdbc的区别
 
@@ -98,12 +146,29 @@ LinkedBlockedQueue是2个锁
 
 ## Java
 
+### 反射修改字符串不产生新的对象!
+```java
+Field f = String.class.getDeclaredField("value");
+f.setAccessible(true);
+char[] v = (char[]) f.get(s1);
+v[0] = 'x';
+System.out.println(v);
+```
+
 ### 如何用自己的String替换掉JDK的String
 
 ### == equals hashcode的联系
 == 栈中的值进行比较的
 equals是==
 hashcode
+
+### .class和getClass()的区别
+.class编译时确定，getclass（）运行时根据实际实例确定。
+```java
+F a = new C();
+a.getClass().getName();// C
+a.class.getName(); //F
+```
 
 ## ES怎么保证一致性
 协调节点路由请求到主分片，成功写入所有副本后再返回成功
@@ -1047,6 +1112,7 @@ CFS设定了进程占用CPU最小时间，如果进程太多，调度周期会�
 ## 4.java基础
 ### 1.Java 类加载的过程
 将编译好的类文件中的字节码文件加载到内存中，放在方法区内并创建Class对象。
+
 双亲委派原则：每个加载器对应不同的加载目录。先检查这个类是否加载过，不然调用父加载器的loadClass，如果父加载器（在搜索范围内没这个类）抛出异常，调用自己的findClass()。
 
 好处：避免类的重复加载，避免核心API被纂改。无论哪个类加载器要加载。都委派给启动类加载器，类随类加载器有层级关系，Objet都是同一个类。
@@ -1067,12 +1133,21 @@ CFS设定了进程占用CPU最小时间，如果进程太多，调度周期会�
 5）`MethodHandle`？？
 
 每个类都会使用 当前类加载器（自己的类加载器）加载依赖的其它对象
+
+https://www.jianshu.com/p/05ec26e25627
 线程类加载器：继承父线程的上下文类加载器，运行初始线程上下文类加载器是Applicaton
 mysql的Connection接口是JDK内置的rt.jar，由bootstrap类加载器加载的，但是厂商的实现是applicaton类加载器加载的，双亲委托模型
+
+类加载器如何回收？
 
 
 
 ### 2.垃圾回收机制
+Minor GC执行时间不到50ms；
+Minor GC执行不频繁，约10秒一次；
+Full GC执行时间不到1s；
+Full GC执行频率不算频繁，不低于10分钟1次；
+
 新生代有什么算法
 Minor GC Eden清空。
 Survivor为什么要有2个：
@@ -2266,6 +2341,8 @@ BCNF：表的部分主键依赖于非主键部分 应该拆分。
 主键约束PRIMARY KEY - NOT NULL 和 UNIQUE 的结合。
 唯一约束UNIQUE  默认值约束DEFAULT  非空约束NOT NULL 外键约束FOREIGN KEY CHECK （CHECK (P_Id>0)）
 
+！唯一索引不能有重复空串，但是把所有空串变成NULL就可以了
+
 ### 20 自然连接 NATURAL JOIN
 columns with the same name of associate tables will appear once only.
 自然连接是指关系R和S在所有公共属性(common attribute)上的等接(Equijoin). 但在得到的结果中公共属性只保留一次, 其余删除.
@@ -2609,6 +2686,7 @@ https://www.nowcoder.com/ta/review-c/review?tpId=22&tqId=31356&query=&asc=true&o
 8、指针和引用使用++运算符的意义不一样；
 
 9、如果返回动态内存分配的对象或者内存，必须使用指针，引用可能引起内存泄露。
+用引用返回一个函数值的最大好处是，在内存中不产生被返回值的副本。
 
 ### 2.静态全局变量、静态局部变量
 https://www.nowcoder.com/ta/review-c/review?tpId=22&tqId=31342&query=&asc=true&order=&page=20
@@ -2688,6 +2766,12 @@ const是函数类型的一部分，在实现部分也要带该关键字。
 常成员函数可以对类的数据成员进行修改
 常成员函数只能由常对象调用
 常成员函数不能访问类的数据成员
+
+### 前向申明
+类A要将类B的对象(或者指正)作为自己的成员使用，并且类B将类A的对象(或者指针)作为自己可以访问的数据，那么这个时候要在a.h中include b.h,同时在b.h 中要include a.h，但是相互包含是不可以的，这个时候就要用到类的前向声明了。
+可以用于定义指向这个类型的指针和引用。
+
+---
 
 #### java static
 static方法不能被覆盖override：因为方法覆盖是运行时动态绑定的，static是编译时静态绑定的。
@@ -3445,4 +3529,5 @@ maxThreads规定的是最大的线程数目，并不是实际running的CPU数量
   “Memory mapped region for shared libraries” ，这段区域就是在内存映射文件的时候将某一段的虚拟地址和文件对象的某一部分建立起映射关系，此时并没有拷贝数据到内存中去，而是当进程代码第一次引用这段代码内的虚拟地址时，触发了缺页异常，这时候OS根据映射关系直接将文件的相关部分数据拷贝到进程的用户私有空间中去
 
 
-   DirectMemory的内存只有在 JVM执行 full gc 的时候才会被回收
+DirectMemory的内存只有在 JVM执行 full gc 的时候才会被回收
+http://www.ruanyifeng.com/blog/2016/08/http.html

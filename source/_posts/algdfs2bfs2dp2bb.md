@@ -193,10 +193,14 @@ if(idxchar-'A'>=0&&idxchar-'A'<26||idxchar-'a'>=0&&idxchar-'a'<26){
 $C(n,r) = P(n,r)/r!$
 
 ### 46 permutations
+全排列：康托编码
+https://soulmachine.gitbooks.io/algorithm-essentials/content/java/linear-list/array/permutation-sequence.html
+
+
 生成全排列的算法: 移动高位
 1的全排列只有1，
 1，2的全排列考虑2 放在1前，1后
-1，2，3的全排列考虑3 放在 1，2 的全排列的左中右3个位置 一共3*2 = 6种
+1，2，3的全排列考虑3 放在 1，2 的全排列的左中右3个位置 一共3\*2 = 6种
 
 给定{1..n-1}的排列，存在n种方法将n插入得到{1..n}的排列
 n个球放入r个盒子里
