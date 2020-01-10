@@ -104,8 +104,14 @@ FactoryBean工厂Bean是一个接口，是适配器。简单工厂模式和装�
 使用resultType进行输出映射，只有查询出来的列名和pojo中的属性名一致，该列才可以映射成功。只要查询出来的列名和pojo中的属性有一个一致，就会创建pojo对象。
 如果查询出来的列名和pojo的属性名不一致，通过定义一个resultMap对列名和pojo属性名之间作一个映射关系。
 
+<<<<<<< HEAD
 ### mybatis缓存在哪
 一级缓存是 SqlSession，二级缓存是mapper级别缓存。
+=======
+### 缓存在哪
+一级缓存SqlSession级别
+二级缓存mapper级别 可能不在内存
+>>>>>>> refs/remotes/origin/hexo-edit
 
 ### 和jdbc的区别
 

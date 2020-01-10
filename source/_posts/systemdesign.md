@@ -8,6 +8,21 @@ https://soulmachine.gitbooks.io/system-design/content/cn/api-rate-limiting.html
 https://wizardforcel.gitbooks.io/system-design-primer/4.html#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B8%BB%E9%A2%98%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B
 https://www.educative.io/collection/page/5668639101419520/5649050225344512/5668600916475904
 
+### 敏感词/违禁词过滤
+https://cnodejs.org/topic/584514b23ebad99b336b1d92
+使用bloom-filter算法，将敏感词打散到内存位数组中，每次将消息放进去看是否匹配到；
+细节：特殊字符过滤、换行过滤
+
+### 文章抄袭检测
+构建文本指纹
+https://www.infoq.cn/article/how-web-article-utomatically-determine-plagiarism
+
+百度的去重算法最简单，就是直接找出此文章的最长的n句话，做一遍hash签名。n一般取3。 工程实现巨简单，据说准确率和召回率都能到达80%以上。
+
+k-gram字符串匹配算法,逐字符的对比作业文档之间的字符串,当文档间相同的字符串长度达到阈值时,则计入重复度中。
+
+基于编辑距离的句子相似度计算方法
+
 ### 需求分析5W1H8C法
 https://www.kancloud.cn/yunhua_lee/oobaodian/110896
 How:用例分析法：NEA法
