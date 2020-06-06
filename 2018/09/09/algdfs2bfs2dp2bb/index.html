@@ -95,7 +95,7 @@
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/numbst3.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/catalannum.jpg">
 <meta property="og:image" content="https://iota-1254040271.cos.ap-shanghai.myqcloud.com/image/catalanformu.jpg">
-<meta property="og:updated_time" content="2019-07-01T02:05:45.097Z">
+<meta property="og:updated_time" content="2020-06-06T04:54:14.433Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="dfs-dp-回溯 &amp; speedup">
 <meta name="twitter:description" content="60 Permutation Sequence 字典序第k个排列Input: n = 3, k = 3Output: “213” Bellman-Ford复杂度O（VE）还可以用于检查负圈。全部初始化为0而不是INF。如果第n（N个顶点的循环)还更新了 有负圈 Dijkstra：Bellman 用d[i]+edge（i,j)更新d[j]但是d[i]并不是最短，所以浪费。思想：找到最短距离已经确定的">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-07-01T10:05:45+08:00">
-                2019-07-01
+              <time title="更新于" itemprop="dateModified" datetime="2020-06-06T12:54:14+08:00">
+                2020-06-06
               </time>
             
           </span>
@@ -424,7 +424,8 @@
 <h3 id="93-分解Ip地址"><a href="#93-分解Ip地址" class="headerlink" title="93 分解Ip地址"></a>93 分解Ip地址</h3><p>dfs<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(List&lt;String&gt; rst,String s,<span class="keyword">int</span> idx,String cur,<span class="keyword">int</span> cnt)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cnt&gt;<span class="number">4</span>)<span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(cnt==<span class="number">4</span>&amp;&amp;idx==s.length())&#123;</span><br><span class="line">        rst.add(cur);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(idx+i&gt;s.length())<span class="keyword">break</span>;</span><br><span class="line">        String tmp = s.substring(idx,idx+i);</span><br><span class="line">        <span class="keyword">if</span>((tmp.startsWith(<span class="string">"0"</span>)&amp;&amp;tmp.length()&gt;<span class="number">1</span>)||(i==<span class="number">3</span>&amp;&amp;Integer.parseInt(tmp)&gt;=<span class="number">256</span>))<span class="keyword">continue</span>;</span><br><span class="line">        dfs(rst,s,idx+i,cur+tmp+(cnt==<span class="number">3</span>?<span class="string">""</span>:<span class="string">"."</span>),cnt+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="784-大小写字母的permutation"><a href="#784-大小写字母的permutation" class="headerlink" title="784 大小写字母的permutation"></a>784 大小写字母的permutation</h3><p><code>&#39;a&#39;-&#39;A&#39;=32</code>所以就是<code>(1&lt;&lt;5)</code>的位置是0或1，但是不会变快<br>小写和数字都加上这一位继续dfs，大写要<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(idxchar-<span class="string">'A'</span>&gt;=<span class="number">0</span>&amp;&amp;idxchar-<span class="string">'A'</span>&lt;<span class="number">26</span>||idxchar-<span class="string">'a'</span>&gt;=<span class="number">0</span>&amp;&amp;idxchar-<span class="string">'a'</span>&lt;<span class="number">26</span>)&#123;</span><br><span class="line">    idxchar = (<span class="keyword">char</span>)(idxchar^(<span class="number">1</span>&lt;&lt;<span class="number">5</span>));</span><br><span class="line">    dfs(s,idx+<span class="number">1</span>,cur+idxchar);</span><br><span class="line">    idxchar = (<span class="keyword">char</span>)(idxchar^(<span class="number">1</span>&lt;&lt;<span class="number">5</span>));</span><br><span class="line">&#125;</span><br><span class="line">    dfs(s,idx+<span class="number">1</span>,cur+idxchar);</span><br></pre></td></tr></table></figure></p>
 <p>$C(n,r) = P(n,r)/r!$</p>
-<h3 id="46-permutations"><a href="#46-permutations" class="headerlink" title="46 permutations"></a>46 permutations</h3><p>生成全排列的算法: 移动高位<br>1的全排列只有1，<br>1，2的全排列考虑2 放在1前，1后<br>1，2，3的全排列考虑3 放在 1，2 的全排列的左中右3个位置 一共3*2 = 6种</p>
+<h3 id="46-permutations"><a href="#46-permutations" class="headerlink" title="46 permutations"></a>46 permutations</h3><p>全排列：康托编码<br><a href="https://soulmachine.gitbooks.io/algorithm-essentials/content/java/linear-list/array/permutation-sequence.html" target="_blank" rel="noopener">https://soulmachine.gitbooks.io/algorithm-essentials/content/java/linear-list/array/permutation-sequence.html</a></p>
+<p>生成全排列的算法: 移动高位<br>1的全排列只有1，<br>1，2的全排列考虑2 放在1前，1后<br>1，2，3的全排列考虑3 放在 1，2 的全排列的左中右3个位置 一共3*2 = 6种</p>
 <p>给定{1..n-1}的排列，存在n种方法将n插入得到{1..n}的排列<br>n个球放入r个盒子里<br>分步递推：$P(n,r)=nP(n-1,r-1)$<br>分类递推：不选第一个球，方案数$P(n-1,r)$,选第一个球方案数$rP(n-1,r-1)$-&gt;$P(n,r)=P(n-1,r)+rP(n-1,r-1)$<br>O(2^n)复杂度 3ms<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(tmp.size()==nums.length)&#123;         </span><br><span class="line">    rst.add(<span class="keyword">new</span> ArrayList&lt;Integer&gt;(tmp));</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>一定要复制一份tmp，不然tmp是对象最后tmp会被remove为空<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>;i&lt;nums.length;i++)&#123;</span><br><span class="line">    <span class="comment">//dfs的marked</span></span><br><span class="line">    <span class="keyword">if</span>(tmp.contains(nums[i]))<span class="keyword">continue</span>;</span><br><span class="line">    tmp.add(nums[i]);</span><br><span class="line">    help(rst,nums,tmp);</span><br><span class="line">    tmp.remove(tmp.size()-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>O(n!)复杂度 只能处理10个数字<br>不用contains 用markd数组 3ms<br><div><div class="fold_hider"><div class="close hider_title">展开代码</div></div><div class="fold">
@@ -530,8 +531,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/05/activiti/" rel="next" title="activiti和项目整理">
-                <i class="fa fa-chevron-left"></i> activiti和项目整理
+              <a href="/2018/09/07/need2Learn/" rel="next" title="need2Learn">
+                <i class="fa fa-chevron-left"></i> need2Learn
               </a>
             
           </div>
@@ -619,7 +620,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">89</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -641,7 +642,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -694,7 +695,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

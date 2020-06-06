@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="114 Flatten Binary Tree to Linked List123456789101112131415161718in:    1   / \  2   5 / \   \3   4   6out:1 \  2   \    3     \      4       \        5         \          6 用一个全局变量保存右边flatten好的根节点，移动">
+<meta name="description" content="297 序列化/反序列化二叉树1234567891011121314151617181920212223242526272829303132333435private static final String spliter = &quot;,&quot;; private static final String NN = &quot;X&quot;; public String serialize(TreeNode root)&amp;#123">
 <meta name="keywords" content="alg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="alg-tree">
 <meta property="og:url" content="http://blog.iotaa.xyz/2019/03/29/alg-tree/index.html">
 <meta property="og:site_name" content="Learn &amp; practice">
-<meta property="og:description" content="114 Flatten Binary Tree to Linked List123456789101112131415161718in:    1   / \  2   5 / \   \3   4   6out:1 \  2   \    3     \      4       \        5         \          6 用一个全局变量保存右边flatten好的根节点，移动">
+<meta property="og:description" content="297 序列化/反序列化二叉树1234567891011121314151617181920212223242526272829303132333435private static final String spliter = &quot;,&quot;; private static final String NN = &quot;X&quot;; public String serialize(TreeNode root)&amp;#123">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-01T08:25:06.267Z">
+<meta property="og:updated_time" content="2020-06-06T04:54:14.417Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="alg-tree">
-<meta name="twitter:description" content="114 Flatten Binary Tree to Linked List123456789101112131415161718in:    1   / \  2   5 / \   \3   4   6out:1 \  2   \    3     \      4       \        5         \          6 用一个全局变量保存右边flatten好的根节点，移动">
+<meta name="twitter:description" content="297 序列化/反序列化二叉树1234567891011121314151617181920212223242526272829303132333435private static final String spliter = &quot;,&quot;; private static final String NN = &quot;X&quot;; public String serialize(TreeNode root)&amp;#123">
 
 
 
@@ -337,8 +337,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-01T16:25:06+08:00">
-                2019-04-01
+              <time title="更新于" itemprop="dateModified" datetime="2020-06-06T12:54:14+08:00">
+                2020-06-06
               </time>
             
           </span>
@@ -393,7 +393,8 @@
       
 
       
-        <h3 id="114-Flatten-Binary-Tree-to-Linked-List"><a href="#114-Flatten-Binary-Tree-to-Linked-List" class="headerlink" title="114 Flatten Binary Tree to Linked List"></a>114 Flatten Binary Tree to Linked List</h3><div class="note "><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">in:</span><br><span class="line">    1</span><br><span class="line">   / \</span><br><span class="line">  2   5</span><br><span class="line"> / \   \</span><br><span class="line">3   4   6</span><br><span class="line">out:</span><br><span class="line">1</span><br><span class="line"> \</span><br><span class="line">  2</span><br><span class="line">   \</span><br><span class="line">    3</span><br><span class="line">     \</span><br><span class="line">      4</span><br><span class="line">       \</span><br><span class="line">        5</span><br><span class="line">         \</span><br><span class="line">          6</span><br></pre></td></tr></table></figure></div>
+        <h3 id="297-序列化-反序列化二叉树"><a href="#297-序列化-反序列化二叉树" class="headerlink" title="297 序列化/反序列化二叉树"></a>297 序列化/反序列化二叉树</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String spliter = <span class="string">","</span>;</span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String NN = <span class="string">"X"</span>;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> String <span class="title">serialize</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">     StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">      buildString(root,sb);</span><br><span class="line">     <span class="keyword">return</span> sb.toString();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">buildString</span><span class="params">(TreeNode node,StringBuilder sb)</span></span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(node == <span class="keyword">null</span>)&#123;</span><br><span class="line">         sb.append(NN).append(spliter);</span><br><span class="line">     &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">         sb.append(node.val).append(spliter);</span><br><span class="line">         buildString(node.left,sb);</span><br><span class="line">         buildString(node.right,sb);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> TreeNode <span class="title">deserialize</span><span class="params">(String data)</span></span>&#123;</span><br><span class="line">     Deque&lt;String&gt; nodes = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">     nodes.addAll(Arrays.asList(data.split(spliter)));</span><br><span class="line">     <span class="keyword">return</span> buildTree(nodes);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">private</span> TreeNode <span class="title">buildTree</span><span class="params">(Deque&lt;String&gt; nodes)</span></span>&#123;</span><br><span class="line">     String val = nodes.remove();</span><br><span class="line">     <span class="keyword">if</span>(val.equals(NN))<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">     <span class="keyword">else</span>&#123;</span><br><span class="line">         TreeNode node = <span class="keyword">new</span> TreeNode(Integer.valueOf(val));</span><br><span class="line">         node.left = buildTree(nodes);</span><br><span class="line">         node.right = buildTree(nodes);</span><br><span class="line">         <span class="keyword">return</span> node;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="652-重复子树"><a href="#652-重复子树" class="headerlink" title="652 重复子树"></a>652 重复子树</h3><h3 id="114-Flatten-Binary-Tree-to-Linked-List"><a href="#114-Flatten-Binary-Tree-to-Linked-List" class="headerlink" title="114 Flatten Binary Tree to Linked List"></a>114 Flatten Binary Tree to Linked List</h3><div class="note "><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">in:</span><br><span class="line">    1</span><br><span class="line">   / \</span><br><span class="line">  2   5</span><br><span class="line"> / \   \</span><br><span class="line">3   4   6</span><br><span class="line">out:</span><br><span class="line">1</span><br><span class="line"> \</span><br><span class="line">  2</span><br><span class="line">   \</span><br><span class="line">    3</span><br><span class="line">     \</span><br><span class="line">      4</span><br><span class="line">       \</span><br><span class="line">        5</span><br><span class="line">         \</span><br><span class="line">          6</span><br></pre></td></tr></table></figure></div>
 <p>用一个全局变量保存右边flatten好的根节点，移动到当前flatten节点的右边。<br>后序遍历，并且先右节点再左节点。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">TreeNode prev = <span class="keyword">null</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatten</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(root == <span class="keyword">null</span>)<span class="keyword">return</span>;</span><br><span class="line">    flatten(root.right);</span><br><span class="line">    flatten(root.left);</span><br><span class="line">    root.right = prev;</span><br><span class="line">    root.left = <span class="keyword">null</span>;</span><br><span class="line">    prev = root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="513-Find-Bottom-Left-Tree-Value"><a href="#513-Find-Bottom-Left-Tree-Value" class="headerlink" title="513. Find Bottom Left Tree Value"></a>513. Find Bottom Left Tree Value</h3><div class="note "><p>Input:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    1</span><br><span class="line">   / \</span><br><span class="line">  2   3</span><br><span class="line"> /   / \</span><br><span class="line">4   5   6</span><br><span class="line">   /</span><br><span class="line">  7</span><br></pre></td></tr></table></figure></p>
 <p>Output:<br>7</p></div>
@@ -517,7 +518,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">89</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -539,7 +540,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -572,7 +573,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#114-Flatten-Binary-Tree-to-Linked-List"><span class="nav-number">1.</span> <span class="nav-text">114 Flatten Binary Tree to Linked List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#513-Find-Bottom-Left-Tree-Value"><span class="nav-number">2.</span> <span class="nav-text">513. Find Bottom Left Tree Value</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#297-序列化-反序列化二叉树"><span class="nav-number">1.</span> <span class="nav-text">297 序列化/反序列化二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#652-重复子树"><span class="nav-number">2.</span> <span class="nav-text">652 重复子树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#114-Flatten-Binary-Tree-to-Linked-List"><span class="nav-number">3.</span> <span class="nav-text">114 Flatten Binary Tree to Linked List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#513-Find-Bottom-Left-Tree-Value"><span class="nav-number">4.</span> <span class="nav-text">513. Find Bottom Left Tree Value</span></a></li></ol></div>
             
 
           </div>
@@ -592,7 +593,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
